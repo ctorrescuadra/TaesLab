@@ -1,0 +1,8 @@
+key,description,fuel,product,type
+CALD,Caldera,COMB+AIR,B1-B7,PRODUCTIVE
+TURB,Turbina,B1-B2-B3,WT,PRODUCTIVE
+BC,Bomba Condensados,WBC,B5-B4,PRODUCTIVE
+DESG,Desgasificador,B2+B5,B6,PRODUCTIVE
+BA,Bomba Alimentacion,WBA,B7-B6,PRODUCTIVE
+GEN,Generador,WT,WN+WBC+WBA,PRODUCTIVE
+COND,Condensador,B3-B4,QCON,DISSIPATIVE

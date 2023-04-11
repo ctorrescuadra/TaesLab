@@ -1,0 +1,713 @@
+{
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B14",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "GN",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "WTA1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WTA2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WTB1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WTB2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WP1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WP2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WN",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QC",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "CALD",
+        "description": "Caldera",
+        "fuel": "GN",
+        "product": "(B1-B11)+(B4-B3)",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TVA1",
+        "description": "Turbina Alta 1",
+        "fuel": "B1-B2-B12",
+        "product": "WTA1",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TVA2",
+        "description": "Turbina Alta 2",
+        "fuel": "B2-B3",
+        "product": "WTA2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TVB1",
+        "description": "Turbina Baja 1",
+        "fuel": "B4-B5-B14",
+        "product": "WTB1",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TVB2",
+        "description": "Turbina Baja 2",
+        "fuel": "B5-B6",
+        "product": "WTB2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "DESG",
+        "description": "Desgasificador",
+        "fuel": "B8+B13+B14",
+        "product": "B9",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PHTR",
+        "description": "Precalentador",
+        "fuel": "B12-B13",
+        "product": "B11-B10",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PMP1",
+        "description": "Bomba 1",
+        "fuel": "WP1",
+        "product": "B8-B7",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PMP2",
+        "description": "Bomba 2",
+        "fuel": "WP2",
+        "product": "B10-B9",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "ALTR",
+        "description": "Alternador",
+        "fuel": "WTA1+WTA2+WTB1+WTB2",
+        "product": "WN+WP1+WP2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "COND",
+        "description": "Condensador",
+        "fuel": "B6-B7",
+        "product": "QC",
+        "type": "DISSIPATIVE"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Reference",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 119669
+          },
+          {
+            "key": "B2",
+            "value": 72941
+          },
+          {
+            "key": "B3",
+            "value": 62368
+          },
+          {
+            "key": "B4",
+            "value": 81615
+          },
+          {
+            "key": "B5",
+            "value": 54430
+          },
+          {
+            "key": "B6",
+            "value": 7492
+          },
+          {
+            "key": "B7",
+            "value": 105.4
+          },
+          {
+            "key": "B8",
+            "value": 130.1
+          },
+          {
+            "key": "B9",
+            "value": 7205
+          },
+          {
+            "key": "B10",
+            "value": 8158
+          },
+          {
+            "key": "B11",
+            "value": 16346
+          },
+          {
+            "key": "B12",
+            "value": 11581
+          },
+          {
+            "key": "B13",
+            "value": 2207
+          },
+          {
+            "key": "B14",
+            "value": 8580
+          },
+          {
+            "key": "GN",
+            "value": 286333
+          },
+          {
+            "key": "WTA1",
+            "value": 33159
+          },
+          {
+            "key": "WTA2",
+            "value": 9893
+          },
+          {
+            "key": "WTB1",
+            "value": 17639
+          },
+          {
+            "key": "WTB2",
+            "value": 42466
+          },
+          {
+            "key": "WP1",
+            "value": 28.84
+          },
+          {
+            "key": "WP2",
+            "value": 1065
+          },
+          {
+            "key": "WN",
+            "value": 100000
+          },
+          {
+            "key": "QC",
+            "value": 7386.6
+          }
+        ]
+      },
+      {
+        "stateId": "TV89",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 120857
+          },
+          {
+            "key": "B2",
+            "value": 73841
+          },
+          {
+            "key": "B3",
+            "value": 63159
+          },
+          {
+            "key": "B4",
+            "value": 82454
+          },
+          {
+            "key": "B5",
+            "value": 55082
+          },
+          {
+            "key": "B6",
+            "value": 7599
+          },
+          {
+            "key": "B7",
+            "value": 106.5
+          },
+          {
+            "key": "B8",
+            "value": 131.5
+          },
+          {
+            "key": "B9",
+            "value": 7276
+          },
+          {
+            "key": "B10",
+            "value": 8239
+          },
+          {
+            "key": "B11",
+            "value": 16508
+          },
+          {
+            "key": "B12",
+            "value": 11695
+          },
+          {
+            "key": "B13",
+            "value": 2224
+          },
+          {
+            "key": "B14",
+            "value": 8677
+          },
+          {
+            "key": "GN",
+            "value": 288733
+          },
+          {
+            "key": "WTA1",
+            "value": 33116
+          },
+          {
+            "key": "WTA2",
+            "value": 9926
+          },
+          {
+            "key": "WTB1",
+            "value": 17622
+          },
+          {
+            "key": "WTB2",
+            "value": 42504
+          },
+          {
+            "key": "WP1",
+            "value": 29.14
+          },
+          {
+            "key": "WP2",
+            "value": 1076
+          },
+          {
+            "key": "WN",
+            "value": 100000
+          },
+          {
+            "key": "QC",
+            "value": 7492.5
+          }
+        ]
+      },
+      {
+        "stateId": "ALT97",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 120916
+          },
+          {
+            "key": "B2",
+            "value": 73701
+          },
+          {
+            "key": "B3",
+            "value": 63018
+          },
+          {
+            "key": "B4",
+            "value": 82466
+          },
+          {
+            "key": "B5",
+            "value": 54997
+          },
+          {
+            "key": "B6",
+            "value": 7570
+          },
+          {
+            "key": "B7",
+            "value": 106.5
+          },
+          {
+            "key": "B8",
+            "value": 131.5
+          },
+          {
+            "key": "B9",
+            "value": 7280
+          },
+          {
+            "key": "B10",
+            "value": 8243
+          },
+          {
+            "key": "B11",
+            "value": 16516
+          },
+          {
+            "key": "B12",
+            "value": 11702
+          },
+          {
+            "key": "B13",
+            "value": 2230
+          },
+          {
+            "key": "B14",
+            "value": 8669
+          },
+          {
+            "key": "GN",
+            "value": 289318
+          },
+          {
+            "key": "WTA1",
+            "value": 33505
+          },
+          {
+            "key": "WTA2",
+            "value": 9996
+          },
+          {
+            "key": "WTB1",
+            "value": 17823
+          },
+          {
+            "key": "WTB2",
+            "value": 42909
+          },
+          {
+            "key": "WP1",
+            "value": 29.14
+          },
+          {
+            "key": "WP2",
+            "value": 1076
+          },
+          {
+            "key": "WN",
+            "value": 100000
+          },
+          {
+            "key": "QC",
+            "value": 7463.5
+          }
+        ]
+      },
+      {
+        "stateId": "CND8",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 121830
+          },
+          {
+            "key": "B2",
+            "value": 74258
+          },
+          {
+            "key": "B3",
+            "value": 63494
+          },
+          {
+            "key": "B4",
+            "value": 83089
+          },
+          {
+            "key": "B5",
+            "value": 55834
+          },
+          {
+            "key": "B6",
+            "value": 10159
+          },
+          {
+            "key": "B7",
+            "value": 193.9
+          },
+          {
+            "key": "B8",
+            "value": 219.3
+          },
+          {
+            "key": "B9",
+            "value": 7335
+          },
+          {
+            "key": "B10",
+            "value": 8305
+          },
+          {
+            "key": "B11",
+            "value": 16641
+          },
+          {
+            "key": "B12",
+            "value": 11790
+          },
+          {
+            "key": "B13",
+            "value": 2247
+          },
+          {
+            "key": "B14",
+            "value": 8315
+          },
+          {
+            "key": "GN",
+            "value": 291505
+          },
+          {
+            "key": "WTA1",
+            "value": 33758
+          },
+          {
+            "key": "WTA2",
+            "value": 10071
+          },
+          {
+            "key": "WTB1",
+            "value": 17958
+          },
+          {
+            "key": "WTB2",
+            "value": 41391
+          },
+          {
+            "key": "WP1",
+            "value": 29.49
+          },
+          {
+            "key": "WP2",
+            "value": 1084
+          },
+          {
+            "key": "WN",
+            "value": 100000
+          },
+          {
+            "key": "QC",
+            "value": 9965.1
+          }
+        ]
+      },
+      {
+        "stateId": "T490",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 119357
+          },
+          {
+            "key": "B2",
+            "value": 72833
+          },
+          {
+            "key": "B3",
+            "value": 62368
+          },
+          {
+            "key": "B4",
+            "value": 82199
+          },
+          {
+            "key": "B5",
+            "value": 54830
+          },
+          {
+            "key": "B6",
+            "value": 7547
+          },
+          {
+            "key": "B7",
+            "value": 106.2
+          },
+          {
+            "key": "B8",
+            "value": 131.1
+          },
+          {
+            "key": "B9",
+            "value": 7267
+          },
+          {
+            "key": "B10",
+            "value": 8228
+          },
+          {
+            "key": "B11",
+            "value": 16487
+          },
+          {
+            "key": "B12",
+            "value": 11687
+          },
+          {
+            "key": "B13",
+            "value": 2246
+          },
+          {
+            "key": "B14",
+            "value": 8630
+          },
+          {
+            "key": "GN",
+            "value": 287555
+          },
+          {
+            "key": "WTA1",
+            "value": 32840
+          },
+          {
+            "key": "WTA2",
+            "value": 9783
+          },
+          {
+            "key": "WTB1",
+            "value": 17765
+          },
+          {
+            "key": "WTB2",
+            "value": 42779
+          },
+          {
+            "key": "WP1",
+            "value": 29.05
+          },
+          {
+            "key": "WP2",
+            "value": 1074
+          },
+          {
+            "key": "WN",
+            "value": 100000
+          },
+          {
+            "key": "QC",
+            "value": 7440.8
+          }
+        ]
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "QC",
+      "type": "RESOURCES",
+      "recycle": 0
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 11,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  }
+}

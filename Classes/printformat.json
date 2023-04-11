@@ -1,0 +1,786 @@
+
+{
+	"tables": [
+		{
+			"id": 1,
+			"description": "Flows Exergy Cost",
+			"columns": 8,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "B",
+					"header": "B",
+					"type": 4
+				},
+				{
+					"name": "C",
+					"header": "B*",
+					"type": 4
+				},
+				{
+					"name": "CE",
+					"header": "Be*",
+					"type": 4
+				},
+				{
+					"name": "CR",
+					"header": "Br*",
+					"type": 4
+				},
+				{
+					"name": "c",
+					"header": "k*",
+					"type": 5
+				},
+				{
+					"name": "cE",
+					"header": "ke*",
+					"type": 5
+				},
+				{
+					"name": "cR",
+					"header": "kr*",
+					"type": 5
+				}
+			]
+		},
+		{
+			"id": 2,
+			"description": "Flows Generalized Cost",
+			"columns": 10,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "B",
+					"header": "B",
+					"type": 4
+				},
+				{
+					"name": "C",
+					"header": "C",
+					"type": 6
+				},
+				{
+					"name": "CE",
+					"header": "CE",
+					"type": 6
+				},
+				{
+					"name": "CZ",
+					"header": "Cz",
+					"type": 6
+				},
+				{
+					"name": "CR",
+					"header": "Cr",
+					"type": 6
+				},
+				{
+					"name": "c",
+					"header": "c",
+					"type": 7
+				},
+				{
+					"name": "cE",
+					"header": "ce",
+					"type": 7
+				},
+				{
+					"name": "cZ",
+					"header": "cz",
+					"type": 7
+				},
+				{
+					"name": "cR",
+					"header": "cr",
+					"type": 7
+				}
+			]
+		},
+		{
+			"id": 3,
+			"description": "Process Exergy Cost",
+			"columns": 6,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "CP",
+					"header": "P*",
+					"type": 4
+				},
+				{
+					"name": "CPE",
+					"header": "Pe*",
+					"type": 4
+				},
+				{
+					"name": "CPR",
+					"header": "Pr*",
+					"type": 4
+				},
+				{
+					"name": "CF",
+					"header": "F*",
+					"type": 4
+				},
+				{
+					"name": "CR",
+					"header": "R*",
+					"type": 4
+				}
+			]
+		},
+		{
+			"id": 4,
+			"description": "Process Unit Exergy Cost",
+			"columns": 7,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "cP",
+					"header": "kP*",
+					"type": 5
+				},
+				{
+					"name": "cPE",
+					"header": "kPe*",
+					"type": 5
+				},
+				{
+					"name": "cPR",
+					"header": "kPr*",
+					"type": 5
+				},
+				{
+					"name": "cF",
+					"header": "kF*",
+					"type": 5
+				},
+				{
+					"name": "cR",
+					"header": "kR*",
+					"type": 5
+				},
+				{
+					"name": "k",
+					"header": "k",
+					"type": 5
+				}
+			]
+		},
+		{
+			"id": 5,
+			"description": "Process Generalized Cost",
+			"columns": 8,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "CP",
+					"header": "CP",
+					"type": 6
+				},
+				{
+					"name": "CPE",
+					"header": "CPe",
+					"type": 6
+				},
+				{
+					"name": "CPZ",
+					"header": "CPz",
+					"type": 6
+				},
+				{
+					"name": "CPR",
+					"header": "CPr",
+					"type": 6
+				},
+				{
+					"name": "CF",
+					"header": "CF",
+					"type": 6
+				},
+				{
+					"name": "CR",
+					"header": "CR",
+					"type": 6
+				},
+				{
+					"name": "Z",
+					"header": "Z",
+					"type": 6
+				}
+			]
+		},
+		{
+			"id": 6,
+			"description": "Process Generalized Unit Cost",
+			"columns": 7,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "cP",
+					"header": "cP",
+					"type": 7
+				},
+				{
+					"name": "cPE",
+					"header": "cPe",
+					"type": 7
+				},
+				{
+					"name": "cPZ",
+					"header": "cPz",
+					"type": 7
+				},
+				{
+					"name": "cPR",
+					"header": "cPr",
+					"type": 7
+				},
+				{
+					"name": "cF",
+					"header": "cF",
+					"type": 7
+				},
+				{
+					"name": "cR",
+					"header": "cR",
+					"type": 7
+				}
+			]
+		},
+		{
+			"id": 7,
+			"description": "Diagnosis Summary",
+			"columns": 7,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "MF",
+					"header": "MF",
+					"type": 8
+				},
+				{
+					"name": "DI",
+					"header": "DI",
+					"type": 8
+				},
+				{
+					"name": "DPs",
+					"header": "DPs",
+					"type": 8
+				},
+				{
+					"name": "MFC",
+					"header": "MF*",
+					"type": 8
+				},
+				{
+					"name": "MRC",
+					"header": "MR*",
+					"type": 8
+				},
+				{
+					"name": "DCPs",
+					"header": "DPs*",
+					"type": 8
+				}
+			]
+		},
+		{
+			"id": 8,
+			"description": "Processes Table",
+			"columns": 5,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "description",
+					"header": "Description",
+					"type": 2
+				},
+				{
+					"name": "fuel",
+					"header": "Fuel",
+					"type": 2
+				},
+				{
+					"name": "product",
+					"header": "Product",
+					"type": 2
+				},
+				{
+					"name": "type",
+					"header": "Type",
+					"type": 2
+				}
+			]
+		},
+		{
+			"id": 9,
+			"description": "Streams Table",
+			"columns": 3,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "definition",
+					"header": "Definition",
+					"type": 2
+				},
+				{
+					"name": "type",
+					"header": "Type",
+					"type": 2
+				}
+			]
+		},
+		{
+			"id": 10,
+			"description": "Flows Table",
+			"columns": 4,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "from",
+					"header": "From",
+					"type": 2
+				},
+				{
+					"name": "to",
+					"header": "To",
+					"type": 2
+				},
+				{
+					"name": "type",
+					"header": "Type",
+					"type": 2
+				}
+			]
+		},
+		{
+			"id": 11,
+			"description": "Processes Exergy Table",
+			"columns": 5,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "vF",
+					"header": "F",
+					"type": 3
+				},
+				{
+					"name": "vP",
+					"header": "P",
+					"type": 3
+				},
+				{
+					"name": "vI",
+					"header": "I",
+					"type": 3
+				},
+				{
+					"name": "vK",
+					"header": "k",
+					"type": 5
+				}
+			]
+		},
+		{
+			"id": 12,
+			"description": "Streams Exergy Table",
+			"columns": 3,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "E",
+					"header": "E",
+					"type": 3
+				},
+				{
+					"name": "ET",
+					"header": "ET",
+					"type": 3
+				}
+			]
+		},
+		{
+			"id": 13,
+			"description": "Flows Exergy Table",
+			"columns": 4,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "from",
+					"header": "From",
+					"type": 2
+				},
+				{
+					"name": "to",
+					"header": "To",
+					"type": 2
+				},
+				{
+					"name": "B",
+					"header": "B",
+					"type": 3
+				}
+			]
+		},
+		{
+			"id": 13,
+			"description": "FP Adjacency Table",
+			"columns": 4,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				},
+				{
+					"name": "value",
+					"header": "Value",
+					"type": 3
+				}
+			]
+		},
+		{
+			"id": 14,
+			"description": "Waste Definition Table",
+			"columns": 4,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "type",
+					"header": "Type",
+					"type": 2
+				},
+				{
+					"name": "recycling",
+					"header": "Recycling",
+					"type": 9
+				}
+			]
+		}
+	],
+	"matrices": [
+		{
+			"id": 1,
+			"header": "FP Table",
+			"name": "[FP]=",
+			"type": 3,
+			"graph": 16,
+			"rowTotal": true,
+			"colTotal": true
+		},
+		{
+			"id": 2,
+			"header": "FP Exergy Cost Table",
+			"name": "[FP*]=",
+			"type": 4,
+			"graph": 16,
+			"rowTotal": true,
+			"colTotal": true
+		},
+		{
+			"id": 3,
+			"header": "FPR Exergy Cost Table",
+			"name": "[FPR*]=",
+			"type": 4,
+			"graph": 0,
+			"rowTotal": true,
+			"colTotal": true
+		},
+		{
+			"id": 4,
+			"header": "FP Generalized Exergy Cost Table",
+			"name": "[CFP]=",
+			"type": 6,
+			"graph": 0,
+			"rowTotal": true,
+			"colTotal": true
+		},
+		{
+			"id": 5,
+			"header": "Irreversibility-Cost Table",
+			"name": "<ICT>=",
+			"type": 5,
+			"graph": 7,
+			"rowTotal": true,
+			"colTotal": false
+		},
+		{
+			"id": 6,
+			"header": "Generalized Irreversibility-Cost Table",
+			"name": "<GICT>=",
+			"type": 7,
+			"graph": 3,
+			"rowTotal": true,
+			"colTotal": false
+		},
+		{
+			"id": 7,
+			"header": "Flows Irreversibility-Cost Table",
+			"name": "<fICT>=",
+			"type": 5,
+			"graph": 1,
+			"rowTotal": true,
+			"colTotal": false
+		},
+		{
+			"id": 8,
+			"header": "Flows Generalized Irreversibility-Cost Table",
+			"name": "<fGICT>=",
+			"type": 7,
+			"graph": 1,
+			"rowTotal": true,
+			"colTotal": false
+		},
+		{
+			"id": 9,
+			"header": "Malfunction Table",
+			"name": "[MF]=",
+			"type": 8,
+			"graph": 11,
+			"rowTotal": true,
+			"colTotal": false
+		},
+		{
+			"id": 10,
+			"header": "Malfunction Cost Table",
+			"name": "[DF]=",
+			"type": 8,
+			"graph": 11,
+			"rowTotal": true,
+			"colTotal": false
+		},
+		{
+			"id": 11,
+			"header": "Irreversibility Variation Table",
+			"name": "[DI]=",
+			"type": 8,
+			"graph": 11,
+			"rowTotal": true,
+			"colTotal": false
+		},
+		{
+			"id": 12,
+			"header": "Waste Allocation Table",
+			"name": "[RP]=",
+			"type": 9,
+			"graph": 0,
+			"rowTotal": false,
+			"colTotal": false
+		},
+		{
+			"id": 13,
+			"header": "Direct Cost Recycling Analysis",
+			"name": "[RAD]=",
+			"type": 5,
+			"graph": 0,
+			"rowTotal": false,
+			"colTotal": false
+		},
+		{
+			"id": 14,
+			"header": "Generalized Cost Recycling Analysis",
+			"name": "[RAD]=",
+			"type": 7,
+			"graph": 0,
+			"rowTotal": false,
+			"colTotal": false
+		}
+	],
+	"summary": [
+		{
+			"id": 1,
+			"header": "Processes Direct Exergy Cost",
+			"name": "[DCP]",
+			"type": 4,
+			"graph": 0
+		},
+		{
+			"id": 2,
+			"header": "Processes Direct Unit Exergy Cost",
+			"name": "[DUCP]=",
+			"type": 5,
+			"graph": 1
+		},
+		{
+			"id": 3,
+			"header": "Flows Direct Exergy Cost",
+			"name": "[DCF]",
+			"type": 4,
+			"graph": 0
+		},
+		{
+			"id": 4,
+			"header": "Flows Direct Unit Exergy Cost",
+			"name": "[DUCF]=",
+			"type": 5,
+			"graph": 3
+		},
+		{
+			"id": 5,
+			"header": "Processes Generalized Cost",
+			"name": "[DCP]",
+			"type": 6,
+			"graph": 0
+		},
+		{
+			"id": 6,
+			"header": "Processes Generalized Unit Cost",
+			"name": "[DUCP]=",
+			"type": 7,
+			"graph": 5
+		},
+		{
+			"id": 7,
+			"header": "Flows Generalized Cost",
+			"name": "[DCF]",
+			"type": 6,
+			"graph": 0
+		},
+		{
+			"id": 8,
+			"header": "Flows Generalized Unit Cost",
+			"name": "[DUCF]=",
+			"type": 7,
+			"graph": 7
+		},
+		{
+			"id": 9,
+			"header": "Flows Exergy",
+			"name": "[DUCF]=",
+			"type": 3,
+			"graph": 0
+		},
+		{
+			"id": 10,
+			"header": "Process Unit Consumption",
+			"name": "[DKU]=",
+			"type": 5,
+			"graph": 1
+		}
+	],
+	"format": [
+		{
+			"id": 1,
+			"key": "NUMBER",
+			"format": "%3d",
+			"unit": ""
+		},
+		{
+			"id": 2,
+			"key": "TEXT",
+			"format": "%-s",
+			"unit": ""
+		},
+		{
+			"id": 3,
+			"key": "EXERGY",
+			"format": "%10.1f",
+			"unit": " (kW)"
+		},
+		{
+			"id": 4,
+			"key": "EXERGY_COST",
+			"format": "%10.1f",
+			"unit": " (kW)"
+		},
+		{
+			"id": 5,
+			"key": "UNIT_EXERGY_COST",
+			"format": "%10.4f",
+			"unit": " (J/J)"
+		},
+		{
+			"id": 6,
+			"key": "GENERALIZED_COST",
+			"format": "%10.1f",
+			"unit": " ($/h)"
+		},
+		{
+			"id": 7,
+			"key": "GENERALIZED_UNIT_COST",
+			"format": "%12.4f",
+			"unit": " ($/kWh)"
+		},
+		{
+			"id": 8,
+			"key": "DIAGNOSIS",
+			"format": "%10.2f",
+			"unit": " (kW)"
+		},
+		{
+			"id": 9,
+			"key": "PERCENTAGE",
+			"format": "%10.2f",
+			"unit": " (%)"		
+		}
+	]
+}

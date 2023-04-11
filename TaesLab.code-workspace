@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"csv-preview.numberFormat": "F4",
+		"data.preview.charts.plugin": "highcharts"
+	}
+}

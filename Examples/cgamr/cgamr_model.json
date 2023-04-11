@@ -1,0 +1,212 @@
+{
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "B9",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "CC",
+        "description": "Combustor",
+        "fuel": "B1",
+        "product": "B4-B3",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "AC",
+        "description": "Compressor",
+        "fuel": "B7",
+        "product": "B2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "GT",
+        "description": "Turbine",
+        "fuel": "B4-B5",
+        "product": "B7+B8",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "AP",
+        "description": "Prehater",
+        "fuel": "B5-B6",
+        "product": "B3-B2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "STK",
+        "description": "Stack",
+        "fuel": "B6",
+        "product": "B9",
+        "type": "DISSIPATIVE"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Reference",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 82.073
+          },
+          {
+            "key": "B2",
+            "value": 28.151
+          },
+          {
+            "key": "B3",
+            "value": 46.825
+          },
+          {
+            "key": "B4",
+            "value": 103.407
+          },
+          {
+            "key": "B5",
+            "value": 40.161
+          },
+          {
+            "key": "B6",
+            "value": 19.278
+          },
+          {
+            "key": "B7",
+            "value": 30.592
+          },
+          {
+            "key": "B8",
+            "value": 30
+          },
+          {
+            "key": "B9",
+            "value": 19.278
+          }
+        ]
+      },
+      {
+        "stateId": "Operation",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 82.711
+          },
+          {
+            "key": "B2",
+            "value": 28.511
+          },
+          {
+            "key": "B3",
+            "value": 47.246
+          },
+          {
+            "key": "B4",
+            "value": 104.268
+          },
+          {
+            "key": "B5",
+            "value": 40.496
+          },
+          {
+            "key": "B6",
+            "value": 19.557
+          },
+          {
+            "key": "B7",
+            "value": 31.096
+          },
+          {
+            "key": "B8",
+            "value": 30
+          },
+          {
+            "key": "B9",
+            "value": 19.557
+          }
+        ]
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "B9",
+      "type": "IRREVERSIBILITY",
+      "recycle": 0
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 11,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 11,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 11,
+        "precision": 3,
+        "unit": "($/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 11,
+        "precision": 3,
+        "unit": "($/MWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 11,
+        "precision": 4,
+        "unit": "(MW)"
+      }
+    ]
+  }
+}

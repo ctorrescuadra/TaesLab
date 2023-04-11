@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="root">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="ProductiveStructure">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="flows" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="key" type="keyname"/>
+                                        <xs:element name="type" type="flowType" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="processes" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="key" type="keyname" />
+                                        <xs:element name="description" type="xs:string" />
+                                        <xs:element name="fuel" type="xs:string" />
+                                        <xs:element name="product" type="xs:string" />
+                                        <xs:element name="type" type="productType" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="ExergyStates">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="States" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="exergy" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="key" type="keyname" />
+                                                    <xs:element name="value" type="positiveDecimal" />
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="state" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="WasteDefinition" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="wastes" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="flow" type="keyname" />
+                                        <xs:element name="type" type="wasteAllocation" />
+                                        <xs:element name="recycle" minOccurs="0" type="boundedDecimal" />
+                                        <xs:element name="values" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="process" type="keyname" />
+                                                    <xs:element name="value" type="positiveDecimal" />
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="ResourcesCost" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Samples" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="flows" minOccurs="1" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="key" type="keyname" />
+                                                    <xs:element name="value" type="positiveDecimal" />
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="processes" minOccurs="0" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="key" type="keyname" />
+                                                    <xs:element name="value" type="positiveDecimal" />
+                                                </xs:sequence>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="sample" use="required" />
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Format" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="definitions" maxOccurs="unbounded">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="key" type="formatType" />
+                                        <xs:element name="width" type="xs:positiveInteger" />
+                                        <xs:element name="precision" type="xs:nonNegativeInteger" />
+                                        <xs:element name="unit" type="xs:string" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="keyname">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z][A-Za-z0-9]+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="positiveDecimal">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="boundedDecimal">
+        <xs:restriction base="xs:decimal">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="1"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="wasteAllocation">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DEFAULT"/>
+            <xs:enumeration value="MANUAL"/>
+            <xs:enumeration value="RESOURCES"/>
+            <xs:enumeration value="EXERGY"/>
+            <xs:enumeration value="COST"/>
+            <xs:enumeration value="IRREVERSIBILITY"/>
+            <xs:enumeration value="HYBRID"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="flowType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="INTERNAL"/>
+            <xs:enumeration value="RESOURCE"/>
+            <xs:enumeration value="OUTPUT"/>
+            <xs:enumeration value="WASTE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="productType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PRODUCTIVE"/>
+            <xs:enumeration value="DISSIPATIVE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="formatType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="EXERGY"/>
+            <xs:enumeration value="EXERGY_COST"/>
+            <xs:enumeration value="EXERGY_UNIT_COST"/>
+            <xs:enumeration value="GENERALIZED_COST"/>
+            <xs:enumeration value="GENERALIZED_UNIT_COST"/>
+            <xs:enumeration value="DIAGNOSIS"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

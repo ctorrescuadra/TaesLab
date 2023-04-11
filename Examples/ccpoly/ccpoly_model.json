@@ -1,0 +1,336 @@
+{
+	"ProductiveStructure": {
+		"flows": [
+			{
+				"key": "G1",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "G2",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "G3",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "G4",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "G5",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "G6",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "G7",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "G8",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "V1",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "V2",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "V3",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "V4",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "WAC",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "WGT",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "WST",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "WCP",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "GN",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "WN",
+				"type": "OUTPUT"
+			},
+			{
+				"key": "COLD",
+				"type": "OUTPUT"
+			},
+			{
+				"key": "HEAT",
+				"type": "OUTPUT"
+			},
+			{
+				"key": "G9",
+				"type": "WASTE"
+			},
+			{
+				"key": "QCON",
+				"type": "WASTE"
+			}
+		],
+		"processes": [
+			{
+				"key": "AC",
+				"description": "Air Compressor",
+				"fuel": "WAC",
+				"product": "G2-G1",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "CC",
+				"description": "Combustion chamber",
+				"fuel": "GN",
+				"product": "G3-G2",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "GT",
+				"description": "Gas Turbine",
+				"fuel": "G3-G4-G6",
+				"product": "WGT+WAC",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "HRSG",
+				"description": "HRSG",
+				"fuel": "G4-G5",
+				"product": "V1-V4",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "ST",
+				"description": "Steam Turbine",
+				"fuel": "V1-V2",
+				"product": "WST",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "CP",
+				"description": "Condenser pump",
+				"fuel": "WCP",
+				"product": "V4-V3",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "GEN",
+				"description": "Generator",
+				"fuel": "WGT+WST",
+				"product": "WN+WCP",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "REF",
+				"description": "Refrigerator",
+				"fuel": "G6-G7",
+				"product": "COLD",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "HE",
+				"description": "Heater",
+				"fuel": "G7-G8",
+				"product": "HEAT",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "STCK",
+				"description": "Stack",
+				"fuel": "G5+G8",
+				"product": "G9",
+				"type": "DISSIPATIVE"
+			},
+			{
+				"key": "CND",
+				"description": "Condenser",
+				"fuel": "V2-V3",
+				"product": "QCON",
+				"type": "DISSIPATIVE"
+			}
+		]
+	},
+	"ExergyStates": {
+		"States": [
+			{
+				"stateId": "Reference",
+				"exergy": [
+					{
+						"key": "G1",
+						"value": 0
+					},
+					{
+						"key": "G2",
+						"value": 251434.739778
+					},
+					{
+						"key": "G3",
+						"value": 800981.435528
+					},
+					{
+						"key": "G4",
+						"value": 238347.475611
+					},
+					{
+						"key": "G5",
+						"value": 17248.722222
+					},
+					{
+						"key": "G6",
+						"value": 2973.558
+					},
+					{
+						"key": "G7",
+						"value": 467.4062
+					},
+					{
+						"key": "G8",
+						"value": 241.364
+					},
+					{
+						"key": "V1",
+						"value": 170942.394444
+					},
+					{
+						"key": "V2",
+						"value": 14770.366667
+					},
+					{
+						"key": "V3",
+						"value": 18.433333
+					},
+					{
+						"key": "V4",
+						"value": 257.956944
+					},
+					{
+						"key": "WAC",
+						"value": 261432.5
+					},
+					{
+						"key": "WGT",
+						"value": 256695.1
+					},
+					{
+						"key": "WST",
+						"value": 141167.47
+					},
+					{
+						"key": "WCP",
+						"value": 384.03
+					},
+					{
+						"key": "GN",
+						"value": 718204.1
+					},
+					{
+						"key": "WN",
+						"value": 389521.2886
+					},
+					{
+						"key": "COLD",
+						"value": 500.991
+					},
+					{
+						"key": "HEAT",
+						"value": 91.361025
+					},
+					{
+						"key": "G9",
+						"value": 17490.086222
+					},
+					{
+						"key": "QCON",
+						"value": 14751.933333
+					}
+				]
+			}
+		]
+	},
+	"WasteDefinition": {
+		"wastes": [
+			{
+				"flow": "G9",
+				"type": "MANUAL",
+				"recycle": 0,
+				"values": [
+					{
+						"process": "CC",
+						"value": 1
+					}
+				]
+			},
+			{
+				"flow": "QCON",
+				"type": "MANUAL",
+				"recycle": 0,
+				"values": [
+					{
+						"process": "HRSG",
+						"value": 1
+					}
+				]
+			}
+		]
+	},
+	"Format": {
+		"definitions": [
+			{
+				"key": "EXERGY",
+				"width": 11,
+				"precision": 1,
+				"unit": "(kW)"
+			},
+			{
+				"key": "EXERGY_COST",
+				"width": 11,
+				"precision": 1,
+				"unit": "(kW)"
+			},
+			{
+				"key": "EXERGY_UNIT_COST",
+				"width": 10,
+				"precision": 4,
+				"unit": "(J/J)"
+			},
+			{
+				"key": "GENERALIZED_COST",
+				"width": 10,
+				"precision": 1,
+				"unit": "(kW)"
+			},
+			{
+				"key": "GENERALIZED_UNIT_COST",
+				"width": 10,
+				"precision": 4,
+				"unit": "(J/J)"
+			},
+			{
+				"key": "DIAGNOSIS",
+				"width": 11,
+				"precision": 2,
+				"unit": "(kW)"
+			}
+		]
+	}
+}

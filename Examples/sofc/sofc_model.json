@@ -1,0 +1,1863 @@
+{
+	"ProductiveStructure": {
+		"flows": [
+			{
+				"key": "B1",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "B2",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B3",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B4",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B5",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B6",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B7",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B8",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B9",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B10",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "B11",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B12",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B13",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B14",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B15",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B16",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B17",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B18",
+				"type": "OUTPUT"
+			},
+			{
+				"key": "B19",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "B20",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B21",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B22",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B23",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B24",
+				"type": "WASTE"
+			}
+		],
+		"processes": [
+			{
+				"key": "FCMP",
+				"description": "Fuel Compressor",
+				"fuel": "B16",
+				"product": "B2-B1",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "ACMP",
+				"description": "Air Compressor",
+				"fuel": "B17",
+				"product": "B11-B10",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "FPHT",
+				"description": "Fuel Preheater",
+				"fuel": "B7-B8",
+				"product": "B3-B2",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "MIXR",
+				"description": "Mixer",
+				"fuel": "B3+B21+B22",
+				"product": "B23",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "SOFC",
+				"description": "SOFC Stack",
+				"fuel": "B23-B4",
+				"product": "(B13-B12)+B14",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "ABRN",
+				"description": "After burner",
+				"fuel": "B5+B13",
+				"product": "B6",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "WPHT",
+				"description": "Water preheater",
+				"fuel": "B6-B7",
+				"product": "B21-B20",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "APHT",
+				"description": "Air Preheater",
+				"fuel": "B8-B9",
+				"product": "B12-B11",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "DCAC",
+				"description": "Inverter DC/AC",
+				"fuel": "B14",
+				"product": "B15+B16+B17+B18",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "WPMP",
+				"description": "Water Pump",
+				"fuel": "B15",
+				"product": "B20-B19",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "SPLT",
+				"description": "Splitter",
+				"fuel": "B4",
+				"product": "B5+B22",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "STCK",
+				"description": "Gases Stack",
+				"fuel": "B9",
+				"product": "B24",
+				"type": "DISSIPATIVE"
+			}
+		]
+	},
+	"ExergyStates": {
+		"States": [
+			{
+				"stateId": "Reference",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1136920
+					},
+					{
+						"key": "B2",
+						"value": 1137240
+					},
+					{
+						"key": "B3",
+						"value": 1166570
+					},
+					{
+						"key": "B4",
+						"value": 423650
+					},
+					{
+						"key": "B5",
+						"value": 423230
+					},
+					{
+						"key": "B6",
+						"value": 1634430
+					},
+					{
+						"key": "B7",
+						"value": 1452310
+					},
+					{
+						"key": "B8",
+						"value": 1407150
+					},
+					{
+						"key": "B9",
+						"value": 142917
+					},
+					{
+						"key": "B10",
+						"value": 12871.6
+					},
+					{
+						"key": "B11",
+						"value": 65231
+					},
+					{
+						"key": "B12",
+						"value": 1130230
+					},
+					{
+						"key": "B13",
+						"value": 1329700
+					},
+					{
+						"key": "B14",
+						"value": 493090
+					},
+					{
+						"key": "B15",
+						"value": 1.658
+					},
+					{
+						"key": "B16",
+						"value": 384
+					},
+					{
+						"key": "B17",
+						"value": 60957
+					},
+					{
+						"key": "B18",
+						"value": 421370
+					},
+					{
+						"key": "B19",
+						"value": 3084.02
+					},
+					{
+						"key": "B20",
+						"value": 3085.43
+					},
+					{
+						"key": "B21",
+						"value": 107736
+					},
+					{
+						"key": "B22",
+						"value": 420
+					},
+					{
+						"key": "B23",
+						"value": 1243090
+					},
+					{
+						"key": "B24",
+						"value": 142917
+					}
+				]
+			},
+			{
+				"stateId": "R8500",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1211790
+					},
+					{
+						"key": "B2",
+						"value": 1211820
+					},
+					{
+						"key": "B3",
+						"value": 1241760
+					},
+					{
+						"key": "B4",
+						"value": 446766.76
+					},
+					{
+						"key": "B5",
+						"value": 446320
+					},
+					{
+						"key": "B6",
+						"value": 1799440
+					},
+					{
+						"key": "B7",
+						"value": 1605990
+					},
+					{
+						"key": "B8",
+						"value": 1559870
+					},
+					{
+						"key": "B9",
+						"value": 154400
+					},
+					{
+						"key": "B10",
+						"value": 14320.3
+					},
+					{
+						"key": "B11",
+						"value": 72573
+					},
+					{
+						"key": "B12",
+						"value": 1257430
+					},
+					{
+						"key": "B13",
+						"value": 1480940
+					},
+					{
+						"key": "B14",
+						"value": 508190
+					},
+					{
+						"key": "B15",
+						"value": 176.013
+					},
+					{
+						"key": "B16",
+						"value": 884.34
+					},
+					{
+						"key": "B17",
+						"value": 67817
+					},
+					{
+						"key": "B18",
+						"value": 429320
+					},
+					{
+						"key": "B19",
+						"value": 3273.41
+					},
+					{
+						"key": "B20",
+						"value": 3274.91
+					},
+					{
+						"key": "B21",
+						"value": 114352
+					},
+					{
+						"key": "B22",
+						"value": 446.76
+					},
+					{
+						"key": "B23",
+						"value": 1317780
+					},
+					{
+						"key": "B24",
+						"value": 154400
+					}
+				]
+			},
+			{
+				"stateId": "R8000",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1140510
+					},
+					{
+						"key": "B2",
+						"value": 1140530
+					},
+					{
+						"key": "B3",
+						"value": 1168710
+					},
+					{
+						"key": "B4",
+						"value": 420480.48
+					},
+					{
+						"key": "B5",
+						"value": 420060
+					},
+					{
+						"key": "B6",
+						"value": 1627840
+					},
+					{
+						"key": "B7",
+						"value": 1445930
+					},
+					{
+						"key": "B8",
+						"value": 1402780
+					},
+					{
+						"key": "B9",
+						"value": 141683
+					},
+					{
+						"key": "B10",
+						"value": 12840.9
+					},
+					{
+						"key": "B11",
+						"value": 65076
+					},
+					{
+						"key": "B12",
+						"value": 1127530
+					},
+					{
+						"key": "B13",
+						"value": 1326450
+					},
+					{
+						"key": "B14",
+						"value": 494810
+					},
+					{
+						"key": "B15",
+						"value": 165.659
+					},
+					{
+						"key": "B16",
+						"value": 832.32
+					},
+					{
+						"key": "B17",
+						"value": 60811
+					},
+					{
+						"key": "B18",
+						"value": 423260
+					},
+					{
+						"key": "B19",
+						"value": 3080.85
+					},
+					{
+						"key": "B20",
+						"value": 3082.26
+					},
+					{
+						"key": "B21",
+						"value": 107625
+					},
+					{
+						"key": "B22",
+						"value": 420.48
+					},
+					{
+						"key": "B23",
+						"value": 1240260
+					},
+					{
+						"key": "B24",
+						"value": 141683
+					}
+				]
+			},
+			{
+				"stateId": "R7500",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1069230
+					},
+					{
+						"key": "B2",
+						"value": 1069250
+					},
+					{
+						"key": "B3",
+						"value": 1095670
+					},
+					{
+						"key": "B4",
+						"value": 394204.2
+					},
+					{
+						"key": "B5",
+						"value": 393810
+					},
+					{
+						"key": "B6",
+						"value": 1467780
+					},
+					{
+						"key": "B7",
+						"value": 1297370
+					},
+					{
+						"key": "B8",
+						"value": 1257140
+					},
+					{
+						"key": "B9",
+						"value": 129645
+					},
+					{
+						"key": "B10",
+						"value": 11472.9
+					},
+					{
+						"key": "B11",
+						"value": 58142
+					},
+					{
+						"key": "B12",
+						"value": 1007400
+					},
+					{
+						"key": "B13",
+						"value": 1183740
+					},
+					{
+						"key": "B14",
+						"value": 478540
+					},
+					{
+						"key": "B15",
+						"value": 155.305
+					},
+					{
+						"key": "B16",
+						"value": 780.3
+					},
+					{
+						"key": "B17",
+						"value": 54332
+					},
+					{
+						"key": "B18",
+						"value": 413850
+					},
+					{
+						"key": "B19",
+						"value": 2888.3
+					},
+					{
+						"key": "B20",
+						"value": 2889.62
+					},
+					{
+						"key": "B21",
+						"value": 100899
+					},
+					{
+						"key": "B22",
+						"value": 394.2
+					},
+					{
+						"key": "B23",
+						"value": 1162740
+					},
+					{
+						"key": "B24",
+						"value": 129645
+					}
+				]
+			},
+			{
+				"stateId": "R7000",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 997950
+					},
+					{
+						"key": "B2",
+						"value": 997970
+					},
+					{
+						"key": "B3",
+						"value": 1022620
+					},
+					{
+						"key": "B4",
+						"value": 367927.92
+					},
+					{
+						"key": "B5",
+						"value": 367560
+					},
+					{
+						"key": "B6",
+						"value": 1317520
+					},
+					{
+						"key": "B7",
+						"value": 1158600
+					},
+					{
+						"key": "B8",
+						"value": 1121250
+					},
+					{
+						"key": "B9",
+						"value": 118191
+					},
+					{
+						"key": "B10",
+						"value": 10199.5
+					},
+					{
+						"key": "B11",
+						"value": 51689
+					},
+					{
+						"key": "B12",
+						"value": 895590
+					},
+					{
+						"key": "B13",
+						"value": 1051050
+					},
+					{
+						"key": "B14",
+						"value": 459820
+					},
+					{
+						"key": "B15",
+						"value": 144.952
+					},
+					{
+						"key": "B16",
+						"value": 728.28
+					},
+					{
+						"key": "B17",
+						"value": 48302
+					},
+					{
+						"key": "B18",
+						"value": 401590
+					},
+					{
+						"key": "B19",
+						"value": 2695.75
+					},
+					{
+						"key": "B20",
+						"value": 2696.98
+					},
+					{
+						"key": "B21",
+						"value": 94172
+					},
+					{
+						"key": "B22",
+						"value": 367.92
+					},
+					{
+						"key": "B23",
+						"value": 1085230
+					},
+					{
+						"key": "B24",
+						"value": 118191
+					}
+				]
+			},
+			{
+				"stateId": "R6500",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 926670
+					},
+					{
+						"key": "B2",
+						"value": 926680
+					},
+					{
+						"key": "B3",
+						"value": 949580
+					},
+					{
+						"key": "B4",
+						"value": 341641.64
+					},
+					{
+						"key": "B5",
+						"value": 341300
+					},
+					{
+						"key": "B6",
+						"value": 1175980
+					},
+					{
+						"key": "B7",
+						"value": 1028510
+					},
+					{
+						"key": "B8",
+						"value": 994010
+					},
+					{
+						"key": "B9",
+						"value": 107245
+					},
+					{
+						"key": "B10",
+						"value": 9010.2
+					},
+					{
+						"key": "B11",
+						"value": 45662
+					},
+					{
+						"key": "B12",
+						"value": 791160
+					},
+					{
+						"key": "B13",
+						"value": 927250
+					},
+					{
+						"key": "B14",
+						"value": 438920
+					},
+					{
+						"key": "B15",
+						"value": 134.598
+					},
+					{
+						"key": "B16",
+						"value": 676.26
+					},
+					{
+						"key": "B17",
+						"value": 42670
+					},
+					{
+						"key": "B18",
+						"value": 386790
+					},
+					{
+						"key": "B19",
+						"value": 2503.19
+					},
+					{
+						"key": "B20",
+						"value": 2504.34
+					},
+					{
+						"key": "B21",
+						"value": 87445
+					},
+					{
+						"key": "B22",
+						"value": 341.64
+					},
+					{
+						"key": "B23",
+						"value": 1007710
+					},
+					{
+						"key": "B24",
+						"value": 107245
+					}
+				]
+			},
+			{
+				"stateId": "U89",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1080020
+					},
+					{
+						"key": "B2",
+						"value": 1080040
+					},
+					{
+						"key": "B3",
+						"value": 1106730
+					},
+					{
+						"key": "B4",
+						"value": 344904.91
+					},
+					{
+						"key": "B5",
+						"value": 344560
+					},
+					{
+						"key": "B6",
+						"value": 2105030
+					},
+					{
+						"key": "B7",
+						"value": 1931720
+					},
+					{
+						"key": "B8",
+						"value": 1888700
+					},
+					{
+						"key": "B9",
+						"value": 148923
+					},
+					{
+						"key": "B10",
+						"value": 18040
+					},
+					{
+						"key": "B11",
+						"value": 91423
+					},
+					{
+						"key": "B12",
+						"value": 1584050
+					},
+					{
+						"key": "B13",
+						"value": 1876320
+					},
+					{
+						"key": "B14",
+						"value": 377090
+					},
+					{
+						"key": "B15",
+						"value": 156.863
+					},
+					{
+						"key": "B16",
+						"value": 788.17
+					},
+					{
+						"key": "B17",
+						"value": 85432
+					},
+					{
+						"key": "B18",
+						"value": 283328
+					},
+					{
+						"key": "B19",
+						"value": 2917.28
+					},
+					{
+						"key": "B20",
+						"value": 2918.61
+					},
+					{
+						"key": "B21",
+						"value": 101911
+					},
+					{
+						"key": "B22",
+						"value": 344.91
+					},
+					{
+						"key": "B23",
+						"value": 1174420
+					},
+					{
+						"key": "B24",
+						"value": 148923
+					}
+				]
+			},
+			{
+				"stateId": "U86",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1124860
+					},
+					{
+						"key": "B2",
+						"value": 1124880
+					},
+					{
+						"key": "B3",
+						"value": 1152680
+					},
+					{
+						"key": "B4",
+						"value": 400910.91
+					},
+					{
+						"key": "B5",
+						"value": 400510
+					},
+					{
+						"key": "B6",
+						"value": 1674340
+					},
+					{
+						"key": "B7",
+						"value": 1494960
+					},
+					{
+						"key": "B8",
+						"value": 1452150
+					},
+					{
+						"key": "B9",
+						"value": 138621
+					},
+					{
+						"key": "B10",
+						"value": 13445.2
+					},
+					{
+						"key": "B11",
+						"value": 68138
+					},
+					{
+						"key": "B12",
+						"value": 1180590
+					},
+					{
+						"key": "B13",
+						"value": 1390360
+					},
+					{
+						"key": "B14",
+						"value": 483550
+					},
+					{
+						"key": "B15",
+						"value": 163.383
+					},
+					{
+						"key": "B16",
+						"value": 820.9
+					},
+					{
+						"key": "B17",
+						"value": 63673
+					},
+					{
+						"key": "B18",
+						"value": 409390
+					},
+					{
+						"key": "B19",
+						"value": 3038.53
+					},
+					{
+						"key": "B20",
+						"value": 3039.92
+					},
+					{
+						"key": "B21",
+						"value": 106147
+					},
+					{
+						"key": "B22",
+						"value": 400.91
+					},
+					{
+						"key": "B23",
+						"value": 1223230
+					},
+					{
+						"key": "B24",
+						"value": 138621
+					}
+				]
+			},
+			{
+				"stateId": "U83",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1172950
+					},
+					{
+						"key": "B2",
+						"value": 1172970
+					},
+					{
+						"key": "B3",
+						"value": 1201950
+					},
+					{
+						"key": "B4",
+						"value": 461081.08
+					},
+					{
+						"key": "B5",
+						"value": 460620
+					},
+					{
+						"key": "B6",
+						"value": 1559790
+					},
+					{
+						"key": "B7",
+						"value": 1372480
+					},
+					{
+						"key": "B8",
+						"value": 1328500
+					},
+					{
+						"key": "B9",
+						"value": 150356
+					},
+					{
+						"key": "B10",
+						"value": 11859.8
+					},
+					{
+						"key": "B11",
+						"value": 60104
+					},
+					{
+						"key": "B12",
+						"value": 1041380
+					},
+					{
+						"key": "B13",
+						"value": 1222700
+					},
+					{
+						"key": "B14",
+						"value": 511090
+					},
+					{
+						"key": "B15",
+						"value": 170.375
+					},
+					{
+						"key": "B16",
+						"value": 855.99
+					},
+					{
+						"key": "B17",
+						"value": 56165
+					},
+					{
+						"key": "B18",
+						"value": 443850
+					},
+					{
+						"key": "B19",
+						"value": 3168.57
+					},
+					{
+						"key": "B20",
+						"value": 3170.02
+					},
+					{
+						"key": "B21",
+						"value": 110689
+					},
+					{
+						"key": "B22",
+						"value": 461.08
+					},
+					{
+						"key": "B23",
+						"value": 1275560
+					},
+					{
+						"key": "B24",
+						"value": 150356
+					}
+				]
+			},
+			{
+				"stateId": "U80",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1224640
+					},
+					{
+						"key": "B2",
+						"value": 1224670
+					},
+					{
+						"key": "B3",
+						"value": 1254930
+					},
+					{
+						"key": "B4",
+						"value": 525875.87
+					},
+					{
+						"key": "B5",
+						"value": 525350
+					},
+					{
+						"key": "B6",
+						"value": 1488790
+					},
+					{
+						"key": "B7",
+						"value": 1292540
+					},
+					{
+						"key": "B8",
+						"value": 1247070
+					},
+					{
+						"key": "B9",
+						"value": 168271
+					},
+					{
+						"key": "B10",
+						"value": 10651.8
+					},
+					{
+						"key": "B11",
+						"value": 53982
+					},
+					{
+						"key": "B12",
+						"value": 935310
+					},
+					{
+						"key": "B13",
+						"value": 1094950
+					},
+					{
+						"key": "B14",
+						"value": 527840
+					},
+					{
+						"key": "B15",
+						"value": 177.893
+					},
+					{
+						"key": "B16",
+						"value": 893.72
+					},
+					{
+						"key": "B17",
+						"value": 50444
+					},
+					{
+						"key": "B18",
+						"value": 465940
+					},
+					{
+						"key": "B19",
+						"value": 3308.37
+					},
+					{
+						"key": "B20",
+						"value": 3309.88
+					},
+					{
+						"key": "B21",
+						"value": 115573
+					},
+					{
+						"key": "B22",
+						"value": 525.87
+					},
+					{
+						"key": "B23",
+						"value": 1331830
+					},
+					{
+						"key": "B24",
+						"value": 168271
+					}
+				]
+			},
+			{
+				"stateId": "U77",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1280380
+					},
+					{
+						"key": "B2",
+						"value": 1280400
+					},
+					{
+						"key": "B3",
+						"value": 1312040
+					},
+					{
+						"key": "B4",
+						"value": 595805.81
+					},
+					{
+						"key": "B5",
+						"value": 595210
+					},
+					{
+						"key": "B6",
+						"value": 1436780
+					},
+					{
+						"key": "B7",
+						"value": 1230550
+					},
+					{
+						"key": "B8",
+						"value": 1183320
+					},
+					{
+						"key": "B9",
+						"value": 191778
+					},
+					{
+						"key": "B10",
+						"value": 9577.67
+					},
+					{
+						"key": "B11",
+						"value": 48538
+					},
+					{
+						"key": "B12",
+						"value": 840990
+					},
+					{
+						"key": "B13",
+						"value": 981360
+					},
+					{
+						"key": "B14",
+						"value": 539970
+					},
+					{
+						"key": "B15",
+						"value": 185.997
+					},
+					{
+						"key": "B16",
+						"value": 934.39
+					},
+					{
+						"key": "B17",
+						"value": 45357
+					},
+					{
+						"key": "B18",
+						"value": 482880
+					},
+					{
+						"key": "B19",
+						"value": 3459.08
+					},
+					{
+						"key": "B20",
+						"value": 3460.67
+					},
+					{
+						"key": "B21",
+						"value": 120838
+					},
+					{
+						"key": "B22",
+						"value": 595.81
+					},
+					{
+						"key": "B23",
+						"value": 1392480
+					},
+					{
+						"key": "B24",
+						"value": 191778
+					}
+				]
+			},
+			{
+				"stateId": "S35",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1081050
+					},
+					{
+						"key": "B2",
+						"value": 1081070
+					},
+					{
+						"key": "B3",
+						"value": 1102520
+					},
+					{
+						"key": "B4",
+						"value": 462366
+					},
+					{
+						"key": "B5",
+						"value": 300538
+					},
+					{
+						"key": "B6",
+						"value": 1615080
+					},
+					{
+						"key": "B7",
+						"value": 1541670
+					},
+					{
+						"key": "B8",
+						"value": 1505630
+					},
+					{
+						"key": "B9",
+						"value": 150883
+					},
+					{
+						"key": "B10",
+						"value": 13612.9
+					},
+					{
+						"key": "B11",
+						"value": 68988
+					},
+					{
+						"key": "B12",
+						"value": 1195320
+					},
+					{
+						"key": "B13",
+						"value": 1408100
+					},
+					{
+						"key": "B14",
+						"value": 485600
+					},
+					{
+						"key": "B15",
+						"value": 0.66961
+					},
+					{
+						"key": "B16",
+						"value": 788.92
+					},
+					{
+						"key": "B17",
+						"value": 64467
+					},
+					{
+						"key": "B18",
+						"value": 410630
+					},
+					{
+						"key": "B19",
+						"value": 1245.32
+					},
+					{
+						"key": "B20",
+						"value": 1245.89
+					},
+					{
+						"key": "B21",
+						"value": 40294
+					},
+					{
+						"key": "B22",
+						"value": 161828
+					},
+					{
+						"key": "B23",
+						"value": 1284050
+					},
+					{
+						"key": "B24",
+						"value": 150883
+					}
+				]
+			},
+			{
+				"stateId": "S40",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1072530
+					},
+					{
+						"key": "B2",
+						"value": 1072550
+					},
+					{
+						"key": "B3",
+						"value": 1092440
+					},
+					{
+						"key": "B4",
+						"value": 472519
+					},
+					{
+						"key": "B5",
+						"value": 283511
+					},
+					{
+						"key": "B6",
+						"value": 1617720
+					},
+					{
+						"key": "B7",
+						"value": 1559260
+					},
+					{
+						"key": "B8",
+						"value": 1524920
+					},
+					{
+						"key": "B9",
+						"value": 152806
+					},
+					{
+						"key": "B10",
+						"value": 13763.4
+					},
+					{
+						"key": "B11",
+						"value": 69751
+					},
+					{
+						"key": "B12",
+						"value": 1208530
+					},
+					{
+						"key": "B13",
+						"value": 1424020
+					},
+					{
+						"key": "B14",
+						"value": 482930
+					},
+					{
+						"key": "B15",
+						"value": 0.52942
+					},
+					{
+						"key": "B16",
+						"value": 782.71
+					},
+					{
+						"key": "B17",
+						"value": 65180
+					},
+					{
+						"key": "B18",
+						"value": 407310
+					},
+					{
+						"key": "B19",
+						"value": 984.59
+					},
+					{
+						"key": "B20",
+						"value": 985.04
+					},
+					{
+						"key": "B21",
+						"value": 31169.3
+					},
+					{
+						"key": "B22",
+						"value": 189008
+					},
+					{
+						"key": "B23",
+						"value": 1294490
+					},
+					{
+						"key": "B24",
+						"value": 152806
+					}
+				]
+			},
+			{
+				"stateId": "S45",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1064010
+					},
+					{
+						"key": "B2",
+						"value": 1064030
+					},
+					{
+						"key": "B3",
+						"value": 1082060
+					},
+					{
+						"key": "B4",
+						"value": 484569
+					},
+					{
+						"key": "B5",
+						"value": 266513
+					},
+					{
+						"key": "B6",
+						"value": 1622930
+					},
+					{
+						"key": "B7",
+						"value": 1579120
+					},
+					{
+						"key": "B8",
+						"value": 1546820
+					},
+					{
+						"key": "B9",
+						"value": 155006
+					},
+					{
+						"key": "B10",
+						"value": 13937.6
+					},
+					{
+						"key": "B11",
+						"value": 70633
+					},
+					{
+						"key": "B12",
+						"value": 1223830
+					},
+					{
+						"key": "B13",
+						"value": 1442440
+					},
+					{
+						"key": "B14",
+						"value": 479520
+					},
+					{
+						"key": "B15",
+						"value": 0.38953
+					},
+					{
+						"key": "B16",
+						"value": 776.49
+					},
+					{
+						"key": "B17",
+						"value": 66005
+					},
+					{
+						"key": "B18",
+						"value": 403140
+					},
+					{
+						"key": "B19",
+						"value": 724.43
+					},
+					{
+						"key": "B20",
+						"value": 724.76
+					},
+					{
+						"key": "B21",
+						"value": 22303.1
+					},
+					{
+						"key": "B22",
+						"value": 218056
+					},
+					{
+						"key": "B23",
+						"value": 1306750
+					},
+					{
+						"key": "B24",
+						"value": 155006
+					}
+				]
+			},
+			{
+				"stateId": "S50",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1055490
+					},
+					{
+						"key": "B2",
+						"value": 1055510
+					},
+					{
+						"key": "B3",
+						"value": 1071280
+					},
+					{
+						"key": "B4",
+						"value": 499092
+					},
+					{
+						"key": "B5",
+						"value": 249546
+					},
+					{
+						"key": "B6",
+						"value": 1632040
+					},
+					{
+						"key": "B7",
+						"value": 1602470
+					},
+					{
+						"key": "B8",
+						"value": 1572690
+					},
+					{
+						"key": "B9",
+						"value": 157587
+					},
+					{
+						"key": "B10",
+						"value": 14148.3
+					},
+					{
+						"key": "B11",
+						"value": 71701
+					},
+					{
+						"key": "B12",
+						"value": 1242330
+					},
+					{
+						"key": "B13",
+						"value": 1464720
+					},
+					{
+						"key": "B14",
+						"value": 474970
+					},
+					{
+						"key": "B15",
+						"value": 0.249942
+					},
+					{
+						"key": "B16",
+						"value": 770.27
+					},
+					{
+						"key": "B17",
+						"value": 67003
+					},
+					{
+						"key": "B18",
+						"value": 397700
+					},
+					{
+						"key": "B19",
+						"value": 464.83
+					},
+					{
+						"key": "B20",
+						"value": 465.04
+					},
+					{
+						"key": "B21",
+						"value": 13795.6
+					},
+					{
+						"key": "B22",
+						"value": 249546
+					},
+					{
+						"key": "B23",
+						"value": 1321380
+					},
+					{
+						"key": "B24",
+						"value": 157587
+					}
+				]
+			},
+			{
+				"stateId": "S55",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 1046960
+					},
+					{
+						"key": "B2",
+						"value": 1046990
+					},
+					{
+						"key": "B3",
+						"value": 1059930
+					},
+					{
+						"key": "B4",
+						"value": 516919
+					},
+					{
+						"key": "B5",
+						"value": 232614
+					},
+					{
+						"key": "B6",
+						"value": 1647610
+					},
+					{
+						"key": "B7",
+						"value": 1631660
+					},
+					{
+						"key": "B8",
+						"value": 1605130
+					},
+					{
+						"key": "B9",
+						"value": 160738
+					},
+					{
+						"key": "B10",
+						"value": 14419.9
+					},
+					{
+						"key": "B11",
+						"value": 73078
+					},
+					{
+						"key": "B12",
+						"value": 1266180
+					},
+					{
+						"key": "B13",
+						"value": 1493450
+					},
+					{
+						"key": "B14",
+						"value": 468600
+					},
+					{
+						"key": "B15",
+						"value": 0.110659
+					},
+					{
+						"key": "B16",
+						"value": 764.05
+					},
+					{
+						"key": "B17",
+						"value": 68289
+					},
+					{
+						"key": "B18",
+						"value": 390170
+					},
+					{
+						"key": "B19",
+						"value": 205.799
+					},
+					{
+						"key": "B20",
+						"value": 205.893
+					},
+					{
+						"key": "B21",
+						"value": 5808.73
+					},
+					{
+						"key": "B22",
+						"value": 284305
+					},
+					{
+						"key": "B23",
+						"value": 1339170
+					},
+					{
+						"key": "B24",
+						"value": 160738
+					}
+				]
+			}
+		]
+	},
+	"WasteDefinition": {
+		"wastes": [
+			{
+				"flow": "B24",
+				"type": "MANUAL",
+				"recycle": 0,
+				"values": [
+					{
+						"process": "DCAC",
+						"value": 1
+					}
+				]
+			}
+		]
+	},
+	"Format": {
+		"definitions": [
+			{
+				"key": "EXERGY",
+				"width": 11,
+				"precision": 1,
+				"unit": "(W)"
+			},
+			{
+				"key": "EXERGY_COST",
+				"width": 11,
+				"precision": 1,
+				"unit": "(W)"
+			},
+			{
+				"key": "EXERGY_UNIT_COST",
+				"width": 10,
+				"precision": 4,
+				"unit": "(J/J)"
+			},
+			{
+				"key": "GENERALIZED_COST",
+				"width": 11,
+				"precision": 1,
+				"unit": "(W)"
+			},
+			{
+				"key": "GENERALIZED_UNIT_COST",
+				"width": 10,
+				"precision": 4,
+				"unit": "(J/J)"
+			},
+			{
+				"key": "DIAGNOSIS",
+				"width": 11,
+				"precision": 2,
+				"unit": "(W)"
+			}
+		]
+	}
+}

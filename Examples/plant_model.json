@@ -1,0 +1,319 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"$ref": "#/definitions/DataModel",
+	"definitions": {
+		"DataModel": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"ProductiveStructure": {
+					"$ref": "#/definitions/ProductiveStructure"
+				},
+				"ExergyStates": {
+					"$ref": "#/definitions/ExergyStates"
+				},
+				"WasteDefinition": {
+					"$ref": "#/definitions/WasteDefinition"
+				},
+				"ResourcesCost": {
+					"$ref": "#/definitions/ResourcesCost"
+				},
+				"Format": {
+					"$ref": "#/definitions/Format"
+				}
+			},
+			"required": [
+				"ProductiveStructure",
+				"ExergyStates"
+			]
+		},
+		"ProductiveStructure": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"flows": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Flow"
+					}
+				},
+				"processes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Process"
+					}
+				}
+			},
+			"required": [
+				"flows",
+				"processes"
+			]
+		},
+		"Flow": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"$ref": "#/definitions/Keys"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"INTERNAL",
+						"RESOURCE",
+						"OUTPUT",
+						"WASTE"
+					]
+				}
+			},
+			"required": [
+				"key",
+				"type"
+			]
+		},
+		"Process": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"$ref": "#/definitions/Keys"
+				},
+				"description": {
+					"type": "string"
+				},
+				"fuel": {
+					"type": "string"
+				},
+				"product": {
+					"type": "string"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"PRODUCTIVE",
+						"DISSIPATIVE"
+					]
+				}
+			},
+			"required": [
+				"key",
+				"description",
+				"fuel",
+				"product",
+				"type"
+			]
+		},
+		"ExergyStates": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"States": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/State"
+					}
+				}
+			},
+			"required": [
+				"States"
+			]
+		},
+		"State": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"stateId": {
+					"type": "string"
+				},
+				"exergy": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Values"
+					}
+				}
+			},
+			"required": [
+				"exergy",
+				"stateId"
+			]
+		},
+		"Format": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"definitions": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/FormatDefinition"
+					}
+				}
+			},
+			"required": [
+				"definitions"
+			]
+		},
+		"FormatDefinition": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"type": "string",
+					"enum": [
+						"EXERGY",
+						"EXERGY_COST",
+						"EXERGY_UNIT_COST",
+						"GENERALIZED_COST",
+						"GENERALIZED_UNIT_COST",
+						"DIAGNOSIS"
+					]
+				},
+				"width": {
+					"type": "integer",
+					"minimum": 1
+				},
+				"precision": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"unit": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"key",
+				"precision",
+				"unit",
+				"width"
+			]
+		},
+		"ResourcesCost": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"Samples": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Sample"
+					}
+				}
+			},
+			"required": [
+				"Samples"
+			]
+		},
+		"Sample": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"sampleId": {
+					"type": "string"
+				},
+				"flows": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Values"
+					}
+				},
+				"processes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Values"
+					}
+				}
+			},
+			"required": [
+				"sampleId",
+				"flows"
+			]
+		},
+		"WasteDefinition": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"wastes": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/Wastes"
+					}
+				}
+			},
+			"required": [
+				"wastes"
+			]
+		},
+		"Wastes": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"flow": {
+					"$ref": "#/definitions/Keys"
+				},
+				"type": {
+					"type": "string",
+					"enum": [
+						"DEFAULT",
+						"MANUAL",
+						"RESOURCES",
+						"EXERGY",
+						"COST",
+						"IRREVERSIBILITY",
+						"HYBRID"
+					]
+				},
+				"recycle": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 1
+				},
+				"values": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/WasteAllocation"
+					}
+				}
+			},
+			"required": [
+				"flow",
+				"type"
+			]
+		},
+		"WasteAllocation": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"process": {
+					"$ref": "#/definitions/Keys"
+				},
+				"value": {
+					"type": "number",
+					"minimum": 0
+				}
+			},
+			"required": [
+				"process",
+				"value"
+			]
+		},
+		"Values": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"key": {
+					"$ref": "#/definitions/Keys"
+				},
+				"value": {
+					"type": "number",
+					"minimum": 0
+				}
+			},
+			"required": [
+				"key",
+				"value"
+			]
+		},
+		"Keys": {
+			"type": "string",
+			"pattern": "^[A-Z][A-Za-z0-9]+$"
+		}
+	}
+}

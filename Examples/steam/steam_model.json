@@ -1,0 +1,270 @@
+{
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B14",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "B15",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B16",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "BOIL",
+        "description": "Boiler",
+        "fuel": "B15",
+        "product": "(B1-B8)+(B3-B2)",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HTRB",
+        "description": "HP Turbine",
+        "fuel": "B1-B2-B9",
+        "product": "B10",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "LTRB",
+        "description": "LP Turbine",
+        "fuel": "B3-B4",
+        "product": "B11",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "LPMP",
+        "description": "LP Pump",
+        "fuel": "B12",
+        "product": "B6-B5",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "DRTR",
+        "description": "Dereator",
+        "fuel": "B6+B9",
+        "product": "B7",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HPMP",
+        "description": "LP Pump",
+        "fuel": "B13",
+        "product": "B8-B7",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "GEN",
+        "description": "Generator",
+        "fuel": "B10+B11",
+        "product": "B12+B13+B14",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "COND",
+        "description": "Condenser",
+        "fuel": "B4-B5",
+        "product": "B16",
+        "type": "DISSIPATIVE"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Reference",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 51121
+          },
+          {
+            "key": "B2",
+            "value": 35868
+          },
+          {
+            "key": "B3",
+            "value": 42109
+          },
+          {
+            "key": "B4",
+            "value": 5459
+          },
+          {
+            "key": "B5",
+            "value": 118.7
+          },
+          {
+            "key": "B6",
+            "value": 218.6
+          },
+          {
+            "key": "B7",
+            "value": 2359
+          },
+          {
+            "key": "B8",
+            "value": 2639
+          },
+          {
+            "key": "B9",
+            "value": 4696
+          },
+          {
+            "key": "B10",
+            "value": 9739
+          },
+          {
+            "key": "B11",
+            "value": 31517
+          },
+          {
+            "key": "B12",
+            "value": 115.9
+          },
+          {
+            "key": "B13",
+            "value": 314.6
+          },
+          {
+            "key": "B14",
+            "value": 40000
+          },
+          {
+            "key": "B15",
+            "value": 129713
+          },
+          {
+            "key": "B16",
+            "value": 5340
+          }
+        ]
+      },
+      {
+        "stateId": "Operation",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 49259
+          },
+          {
+            "key": "B2",
+            "value": 36252
+          },
+          {
+            "key": "B3",
+            "value": 42560
+          },
+          {
+            "key": "B4",
+            "value": 5517
+          },
+          {
+            "key": "B5",
+            "value": 120
+          },
+          {
+            "key": "B6",
+            "value": 220.9
+          },
+          {
+            "key": "B7",
+            "value": 1269
+          },
+          {
+            "key": "B8",
+            "value": 1530
+          },
+          {
+            "key": "B9",
+            "value": 2835
+          },
+          {
+            "key": "B10",
+            "value": 9384
+          },
+          {
+            "key": "B11",
+            "value": 31854
+          },
+          {
+            "key": "B12",
+            "value": 117.2
+          },
+          {
+            "key": "B13",
+            "value": 296.3
+          },
+          {
+            "key": "B14",
+            "value": 40000
+          },
+          {
+            "key": "B15",
+            "value": 130587
+          },
+          {
+            "key": "B16",
+            "value": 5397
+          }
+        ]
+      }
+    ]
+  }
+}

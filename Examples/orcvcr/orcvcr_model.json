@@ -1,0 +1,526 @@
+{
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WP",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "QBLR",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "QEVP",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "WVEXP",
+        "type": "WASTE"
+      },
+      {
+        "key": "QCND",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "BLR",
+        "description": "Boiler",
+        "fuel": "QBLR",
+        "product": "B1-B4",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TRB",
+        "description": "Turbine",
+        "fuel": "B1-B2",
+        "product": "WC",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PMP",
+        "description": "Pump",
+        "fuel": "WP",
+        "product": "B4-B3",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "CMP",
+        "description": "Compresor",
+        "fuel": "WC",
+        "product": "B8-B7",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "EVAP",
+        "description": "Evaporator",
+        "fuel": "B6-B7",
+        "product": "QEVP",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "VEXP",
+        "description": "Expansion Valve",
+        "fuel": "B5-B6",
+        "product": "WVEXP",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "CND",
+        "description": "Condeser",
+        "fuel": "(B2-B3)+(B8-B5)",
+        "product": "QCND",
+        "type": "DISSIPATIVE"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Main",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 85.04
+          },
+          {
+            "key": "B2",
+            "value": 43.54
+          },
+          {
+            "key": "B3",
+            "value": 38.58
+          },
+          {
+            "key": "B4",
+            "value": 40.31
+          },
+          {
+            "key": "B5",
+            "value": 43.79
+          },
+          {
+            "key": "B6",
+            "value": 41.06
+          },
+          {
+            "key": "B7",
+            "value": 23.09
+          },
+          {
+            "key": "B8",
+            "value": 48.44
+          },
+          {
+            "key": "WC",
+            "value": 31.55
+          },
+          {
+            "key": "WP",
+            "value": 2.028
+          },
+          {
+            "key": "QBLR",
+            "value": 63.34
+          },
+          {
+            "key": "QEVP",
+            "value": 13.24
+          },
+          {
+            "key": "WVEXP",
+            "value": 2.7299999999999969
+          },
+          {
+            "key": "QCND",
+            "value": 9.6099999999999923
+          }
+        ]
+      },
+      {
+        "stateId": "ETAT75",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 91.1
+          },
+          {
+            "key": "B2",
+            "value": 46.79
+          },
+          {
+            "key": "B3",
+            "value": 41.33
+          },
+          {
+            "key": "B4",
+            "value": 43.18
+          },
+          {
+            "key": "B5",
+            "value": 43.79
+          },
+          {
+            "key": "B6",
+            "value": 41.06
+          },
+          {
+            "key": "B7",
+            "value": 23.09
+          },
+          {
+            "key": "B8",
+            "value": 48.44
+          },
+          {
+            "key": "WC",
+            "value": 31.55
+          },
+          {
+            "key": "WP",
+            "value": 2.173
+          },
+          {
+            "key": "QBLR",
+            "value": 67.85
+          },
+          {
+            "key": "QEVP",
+            "value": 13.24
+          },
+          {
+            "key": "WVEXP",
+            "value": 2.7299999999999969
+          },
+          {
+            "key": "QCND",
+            "value": 10.109999999999992
+          }
+        ]
+      },
+      {
+        "stateId": "R134a",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 128.3
+          },
+          {
+            "key": "B2",
+            "value": 82.92
+          },
+          {
+            "key": "B3",
+            "value": 78.03
+          },
+          {
+            "key": "B4",
+            "value": 81.8
+          },
+          {
+            "key": "B5",
+            "value": 67.66
+          },
+          {
+            "key": "B6",
+            "value": 64.61
+          },
+          {
+            "key": "B7",
+            "value": 46.65
+          },
+          {
+            "key": "B8",
+            "value": 72.45
+          },
+          {
+            "key": "WC",
+            "value": 32
+          },
+          {
+            "key": "WP",
+            "value": 4.408
+          },
+          {
+            "key": "QBLR",
+            "value": 69.14
+          },
+          {
+            "key": "QEVP",
+            "value": 13.24
+          },
+          {
+            "key": "WVEXP",
+            "value": 3.0499999999999972
+          },
+          {
+            "key": "QCND",
+            "value": 9.6800000000000068
+          }
+        ]
+      },
+      {
+        "stateId": "R227ea",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 108.3
+          },
+          {
+            "key": "B2",
+            "value": 61.8
+          },
+          {
+            "key": "B3",
+            "value": 55.61
+          },
+          {
+            "key": "B4",
+            "value": 59.18
+          },
+          {
+            "key": "B5",
+            "value": 55.39
+          },
+          {
+            "key": "B6",
+            "value": 51.27
+          },
+          {
+            "key": "B7",
+            "value": 33.45
+          },
+          {
+            "key": "B8",
+            "value": 60.3
+          },
+          {
+            "key": "WC",
+            "value": 33.42
+          },
+          {
+            "key": "WP",
+            "value": 4.177
+          },
+          {
+            "key": "QBLR",
+            "value": 75.65
+          },
+          {
+            "key": "QEVP",
+            "value": 13.24
+          },
+          {
+            "key": "WVEXP",
+            "value": 4.1199999999999974
+          },
+          {
+            "key": "QCND",
+            "value": 11.099999999999994
+          }
+        ]
+      },
+      {
+        "stateId": "R1234ze",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 105.6
+          },
+          {
+            "key": "B2",
+            "value": 61.73
+          },
+          {
+            "key": "B3",
+            "value": 56.9
+          },
+          {
+            "key": "B4",
+            "value": 59.76
+          },
+          {
+            "key": "B5",
+            "value": 56.31
+          },
+          {
+            "key": "B6",
+            "value": 53.17
+          },
+          {
+            "key": "B7",
+            "value": 35.38
+          },
+          {
+            "key": "B8",
+            "value": 61.02
+          },
+          {
+            "key": "WC",
+            "value": 31.91
+          },
+          {
+            "key": "WP",
+            "value": 3.352
+          },
+          {
+            "key": "QBLR",
+            "value": 67.56
+          },
+          {
+            "key": "QEVP",
+            "value": 13.24
+          },
+          {
+            "key": "WVEXP",
+            "value": 3.1400000000000006
+          },
+          {
+            "key": "QCND",
+            "value": 9.539999999999992
+          }
+        ]
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "WVEXP",
+        "type": "RESOURCES",
+        "recycle": 0,
+        "values": {
+          "process": "CMP",
+          "value": 1
+        }
+      },
+      {
+        "flow": "QCND",
+        "type": "RESOURCES",
+        "recycle": 0,
+        "values": []
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": {
+      "sampleId": "Base",
+      "flows": [
+        {
+          "key": "QBLR",
+          "value": 0.01
+        },
+        {
+          "key": "WP",
+          "value": 8
+        }
+      ],
+      "processes": [
+        {
+          "key": "BLR",
+          "value": 7.004190200308444
+        },
+        {
+          "key": "TRB",
+          "value": 31.339050557925784
+        },
+        {
+          "key": "PMP",
+          "value": 1.1903198604744736
+        },
+        {
+          "key": "CMP",
+          "value": 27.027583117112073
+        },
+        {
+          "key": "EVAP",
+          "value": 9.1349685240054317
+        },
+        {
+          "key": "VEXP",
+          "value": 0.22823067200820557
+        },
+        {
+          "key": "CND",
+          "value": 13.370209054875414
+        }
+      ]
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kW)"
+      }
+    ]
+  }
+}

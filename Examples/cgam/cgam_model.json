@@ -1,0 +1,550 @@
+{
+	"ProductiveStructure": {
+		"flows": [
+			{
+				"key": "B1",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "B2",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B3",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B4",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B5",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B6",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B7",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "B8",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "B9",
+				"type": "OUTPUT"
+			},
+			{
+				"key": "WN",
+				"type": "OUTPUT"
+			},
+			{
+				"key": "WC",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "NG",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "QG",
+				"type": "WASTE"
+			}
+		],
+		"processes": [
+			{
+				"key": "COMB",
+				"description": "Combustor",
+				"fuel": "NG",
+				"product": "B4-B3",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "COMP",
+				"description": "Compressor",
+				"fuel": "WC",
+				"product": "B2-B1",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "TURB",
+				"description": "Turbine",
+				"fuel": "B4-B5",
+				"product": "WC+WN",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "HEAT",
+				"description": "Preheater",
+				"fuel": "B2+B5",
+				"product": "B6+B3",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "HRSG",
+				"description": "HRSG",
+				"fuel": "B6-B7",
+				"product": "B9-B8",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "STCK",
+				"description": "Stack",
+				"fuel": "B7",
+				"product": "QG",
+				"type": "DISSIPATIVE"
+			}
+		]
+	},
+	"ExergyStates": {
+		"States": [
+			{
+				"stateId": "REF",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 0
+					},
+					{
+						"key": "B2",
+						"value": 28.511
+					},
+					{
+						"key": "B3",
+						"value": 47.246
+					},
+					{
+						"key": "B4",
+						"value": 104.268
+					},
+					{
+						"key": "B5",
+						"value": 40.496
+					},
+					{
+						"key": "B6",
+						"value": 19.557
+					},
+					{
+						"key": "B7",
+						"value": 2.092
+					},
+					{
+						"key": "B8",
+						"value": 0
+					},
+					{
+						"key": "B9",
+						"value": 12.626
+					},
+					{
+						"key": "WN",
+						"value": 30
+					},
+					{
+						"key": "WC",
+						"value": 31.096
+					},
+					{
+						"key": "NG",
+						"value": 82.711
+					},
+					{
+						"key": "QG",
+						"value": 2.092
+					}
+				]
+			},
+			{
+				"stateId": "T1180",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 0
+					},
+					{
+						"key": "B2",
+						"value": 29.338
+					},
+					{
+						"key": "B3",
+						"value": 47.84
+					},
+					{
+						"key": "B4",
+						"value": 105.253
+					},
+					{
+						"key": "B5",
+						"value": 40.502
+					},
+					{
+						"key": "B6",
+						"value": 19.815
+					},
+					{
+						"key": "B7",
+						"value": 2.207
+					},
+					{
+						"key": "B8",
+						"value": 0
+					},
+					{
+						"key": "B9",
+						"value": 12.745
+					},
+					{
+						"key": "WN",
+						"value": 30
+					},
+					{
+						"key": "WC",
+						"value": 31.998
+					},
+					{
+						"key": "NG",
+						"value": 83.674
+					},
+					{
+						"key": "QG",
+						"value": 2.207
+					}
+				]
+			},
+			{
+				"stateId": "ETG87",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 0
+					},
+					{
+						"key": "B2",
+						"value": 29.096
+					},
+					{
+						"key": "B3",
+						"value": 48.499
+					},
+					{
+						"key": "B4",
+						"value": 106.398
+					},
+					{
+						"key": "B5",
+						"value": 41.747
+					},
+					{
+						"key": "B6",
+						"value": 20.064
+					},
+					{
+						"key": "B7",
+						"value": 2.116
+					},
+					{
+						"key": "B8",
+						"value": 0
+					},
+					{
+						"key": "B9",
+						"value": 12.97
+					},
+					{
+						"key": "WN",
+						"value": 30
+					},
+					{
+						"key": "WC",
+						"value": 31.734
+					},
+					{
+						"key": "NG",
+						"value": 83.964
+					},
+					{
+						"key": "QG",
+						"value": 2.116
+					}
+				]
+			},
+			{
+				"stateId": "ECMP84",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 0
+					},
+					{
+						"key": "B2",
+						"value": 29.063
+					},
+					{
+						"key": "B3",
+						"value": 47.89
+					},
+					{
+						"key": "B4",
+						"value": 105.588
+					},
+					{
+						"key": "B5",
+						"value": 41.009
+					},
+					{
+						"key": "B6",
+						"value": 19.986
+					},
+					{
+						"key": "B7",
+						"value": 2.087
+					},
+					{
+						"key": "B8",
+						"value": 0
+					},
+					{
+						"key": "B9",
+						"value": 12.931
+					},
+					{
+						"key": "WN",
+						"value": 30
+					},
+					{
+						"key": "WC",
+						"value": 31.87
+					},
+					{
+						"key": "NG",
+						"value": 83.688
+					},
+					{
+						"key": "QG",
+						"value": 2.087
+					}
+				]
+			},
+			{
+				"stateId": "RP84",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 0
+					},
+					{
+						"key": "B2",
+						"value": 28.311
+					},
+					{
+						"key": "B3",
+						"value": 47.364
+					},
+					{
+						"key": "B4",
+						"value": 104.389
+					},
+					{
+						"key": "B5",
+						"value": 40.84
+					},
+					{
+						"key": "B6",
+						"value": 19.532
+					},
+					{
+						"key": "B7",
+						"value": 2.11
+					},
+					{
+						"key": "B8",
+						"value": 0
+					},
+					{
+						"key": "B9",
+						"value": 12.599
+					},
+					{
+						"key": "WN",
+						"value": 30
+					},
+					{
+						"key": "WC",
+						"value": 30.891
+					},
+					{
+						"key": "NG",
+						"value": 82.711
+					},
+					{
+						"key": "QG",
+						"value": 2.11
+					}
+				]
+			},
+			{
+				"stateId": "PINCH10",
+				"exergy": [
+					{
+						"key": "B1",
+						"value": 0
+					},
+					{
+						"key": "B2",
+						"value": 28.511
+					},
+					{
+						"key": "B3",
+						"value": 47.246
+					},
+					{
+						"key": "B4",
+						"value": 104.268
+					},
+					{
+						"key": "B5",
+						"value": 40.496
+					},
+					{
+						"key": "B6",
+						"value": 19.557
+					},
+					{
+						"key": "B7",
+						"value": 2.186
+					},
+					{
+						"key": "B8",
+						"value": 0
+					},
+					{
+						"key": "B9",
+						"value": 12.512
+					},
+					{
+						"key": "WN",
+						"value": 30
+					},
+					{
+						"key": "WC",
+						"value": 31.096
+					},
+					{
+						"key": "NG",
+						"value": 82.711
+					},
+					{
+						"key": "QG",
+						"value": 2.186
+					}
+				]
+			}
+		]
+	},
+	"WasteDefinition": {
+		"wastes": [
+			{
+				"flow": "QG",
+				"type": "DEFAULT",
+				"recycle": 0,
+				"values": [
+					{
+						"process": "COMB",
+						"value": 0.76
+					},
+					{
+						"process": "COMP",
+						"value": 0.08
+					},
+					{
+						"process": "TURB",
+						"value": 0.08
+					},
+					{
+						"process": "HEAT",
+						"value": 0.08
+					}
+				]
+			}
+		]
+	},
+	"ResourcesCost": {
+		"Samples": [
+			{
+				"sampleId": "Base",
+				"flows": [
+					{
+						"key": "NG",
+						"value": 20
+					}
+				],
+				"processes": [
+					{
+						"key": "COMB",
+						"value": 3.6
+					},
+					{
+						"key": "COMP",
+						"value": 32.5
+					},
+					{
+						"key": "TURB",
+						"value": 46
+					},
+					{
+						"key": "HEAT",
+						"value": 20
+					},
+					{
+						"key": "HRSG",
+						"value": 29
+					}
+				]
+			}
+		]
+	},
+	"Format": {
+		"definitions": [
+			{
+				"key": "EXERGY",
+				"width": 11,
+				"precision": 3,
+				"unit": "(MW)"
+			},
+			{
+				"key": "EXERGY_COST",
+				"width": 11,
+				"precision": 3,
+				"unit": "(MW)"
+			},
+			{
+				"key": "EXERGY_UNIT_COST",
+				"width": 11,
+				"precision": 4,
+				"unit": "(J/J)"
+			},
+			{
+				"key": "GENERALIZED_COST",
+				"width": 11,
+				"precision": 3,
+				"unit": "($/h)"
+			},
+			{
+				"key": "GENERALIZED_UNIT_COST",
+				"width": 11,
+				"precision": 3,
+				"unit": "($/MWh)"
+			},
+			{
+				"key": "DIAGNOSIS",
+				"width": 11,
+				"precision": 4,
+				"unit": "(MW)"
+			}
+		]
+	}
+}

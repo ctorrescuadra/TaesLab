@@ -1,0 +1,601 @@
+{
+	"ProductiveStructure": {
+		"flows": [
+			{
+				"key": "A1",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "A2",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "A3",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "A4",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "V5",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "V6",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "V7",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "V8",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "GN",
+				"type": "RESOURCE"
+			},
+			{
+				"key": "WC",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "WTG",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "WTV",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "WB",
+				"type": "INTERNAL"
+			},
+			{
+				"key": "WN",
+				"type": "OUTPUT"
+			},
+			{
+				"key": "QG",
+				"type": "WASTE"
+			},
+			{
+				"key": "QC",
+				"type": "WASTE"
+			}
+		],
+		"processes": [
+			{
+				"key": "COMB",
+				"description": "Combustor",
+				"fuel": "GN",
+				"product": "A2-A1",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "COMP",
+				"description": "Compresor",
+				"fuel": "WC",
+				"product": "A1",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "TGAS",
+				"description": "Turbina Gas",
+				"fuel": "A2-A3",
+				"product": "WTG+WC",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "HRSG",
+				"description": "HRSG",
+				"fuel": "A3-A4",
+				"product": "V6-V5",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "TVAP",
+				"description": "Turbina de vapor",
+				"fuel": "V6-V7",
+				"product": "WTV",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "PUMP",
+				"description": "Bomba alimentacion",
+				"fuel": "WB",
+				"product": "V5-V8",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "ALTN",
+				"description": "Alternador",
+				"fuel": "WTG+WTV",
+				"product": "WB+WN",
+				"type": "PRODUCTIVE"
+			},
+			{
+				"key": "STCK",
+				"description": "Chimenea",
+				"fuel": "A4",
+				"product": "QG",
+				"type": "DISSIPATIVE"
+			},
+			{
+				"key": "COND",
+				"description": "Condensador",
+				"fuel": "V7-V8",
+				"product": "QC",
+				"type": "DISSIPATIVE"
+			}
+		]
+	},
+	"ExergyStates": {
+		"States": [
+			{
+				"stateId": "Reference",
+				"exergy": [
+					{
+						"key": "A1",
+						"value": 71507
+					},
+					{
+						"key": "A2",
+						"value": 216960
+					},
+					{
+						"key": "A3",
+						"value": 69697
+					},
+					{
+						"key": "A4",
+						"value": 7775
+					},
+					{
+						"key": "V5",
+						"value": 438.5
+					},
+					{
+						"key": "V6",
+						"value": 52447
+					},
+					{
+						"key": "V7",
+						"value": 4050
+					},
+					{
+						"key": "V8",
+						"value": 63.1
+					},
+					{
+						"key": "GN",
+						"value": 223624
+					},
+					{
+						"key": "WC",
+						"value": 77290
+					},
+					{
+						"key": "WTG",
+						"value": 61022
+					},
+					{
+						"key": "WTV",
+						"value": 41465
+					},
+					{
+						"key": "WB",
+						"value": 437.5
+					},
+					{
+						"key": "WN",
+						"value": 100000
+					},
+					{
+						"key": "QG",
+						"value": 7775
+					},
+					{
+						"key": "QC",
+						"value": 3986.9
+					}
+				]
+			},
+			{
+				"stateId": "TG1",
+				"exergy": [
+					{
+						"key": "A1",
+						"value": 72653
+					},
+					{
+						"key": "A2",
+						"value": 218948
+					},
+					{
+						"key": "A3",
+						"value": 70336
+					},
+					{
+						"key": "A4",
+						"value": 7846
+					},
+					{
+						"key": "V5",
+						"value": 442.6
+					},
+					{
+						"key": "V6",
+						"value": 52927
+					},
+					{
+						"key": "V7",
+						"value": 4087
+					},
+					{
+						"key": "V8",
+						"value": 63.68
+					},
+					{
+						"key": "GN",
+						"value": 224719
+					},
+					{
+						"key": "WC",
+						"value": 78933
+					},
+					{
+						"key": "WTG",
+						"value": 60647
+					},
+					{
+						"key": "WTV",
+						"value": 41845
+					},
+					{
+						"key": "WB",
+						"value": 441.5
+					},
+					{
+						"key": "WN",
+						"value": 100000
+					},
+					{
+						"key": "QG",
+						"value": 7846
+					},
+					{
+						"key": "QC",
+						"value": 4023.32
+					}
+				]
+			},
+			{
+				"stateId": "TV1",
+				"exergy": [
+					{
+						"key": "A1",
+						"value": 71850
+					},
+					{
+						"key": "A2",
+						"value": 218002
+					},
+					{
+						"key": "A3",
+						"value": 70032
+					},
+					{
+						"key": "A4",
+						"value": 7812
+					},
+					{
+						"key": "V5",
+						"value": 440.7
+					},
+					{
+						"key": "V6",
+						"value": 52699
+					},
+					{
+						"key": "V7",
+						"value": 4096
+					},
+					{
+						"key": "V8",
+						"value": 63.4
+					},
+					{
+						"key": "GN",
+						"value": 224698
+					},
+					{
+						"key": "WC",
+						"value": 77661
+					},
+					{
+						"key": "WTG",
+						"value": 61315
+					},
+					{
+						"key": "WTV",
+						"value": 41174
+					},
+					{
+						"key": "WB",
+						"value": 439.6
+					},
+					{
+						"key": "WN",
+						"value": 100000
+					},
+					{
+						"key": "QG",
+						"value": 7812
+					},
+					{
+						"key": "QC",
+						"value": 4032.6
+					}
+				]
+			},
+			{
+				"stateId": "ALT2",
+				"exergy": [
+					{
+						"key": "A1",
+						"value": 72247
+					},
+					{
+						"key": "A2",
+						"value": 219207
+					},
+					{
+						"key": "A3",
+						"value": 70419
+					},
+					{
+						"key": "A4",
+						"value": 7855
+					},
+					{
+						"key": "V5",
+						"value": 443.1
+					},
+					{
+						"key": "V6",
+						"value": 52990
+					},
+					{
+						"key": "V7",
+						"value": 4092
+					},
+					{
+						"key": "V8",
+						"value": 63.75
+					},
+					{
+						"key": "GN",
+						"value": 225940
+					},
+					{
+						"key": "WC",
+						"value": 78091
+					},
+					{
+						"key": "WTG",
+						"value": 61654
+					},
+					{
+						"key": "WTV",
+						"value": 41894
+					},
+					{
+						"key": "WB",
+						"value": 442
+					},
+					{
+						"key": "WN",
+						"value": 100000
+					},
+					{
+						"key": "QG",
+						"value": 7855
+					},
+					{
+						"key": "QC",
+						"value": 4028.25
+					}
+				]
+			},
+			{
+				"stateId": "Prueba",
+				"exergy": [
+					{
+						"key": "A1",
+						"value": 68818
+					},
+					{
+						"key": "A2",
+						"value": 203917
+					},
+					{
+						"key": "A3",
+						"value": 66513
+					},
+					{
+						"key": "A4",
+						"value": 6552
+					},
+					{
+						"key": "V5",
+						"value": 234.8
+					},
+					{
+						"key": "V6",
+						"value": 48646
+					},
+					{
+						"key": "V7",
+						"value": 4882
+					},
+					{
+						"key": "V8",
+						"value": 84.63
+					},
+					{
+						"key": "GN",
+						"value": 210706
+					},
+					{
+						"key": "WC",
+						"value": 74441
+					},
+					{
+						"key": "WTG",
+						"value": 54470
+					},
+					{
+						"key": "WTV",
+						"value": 37545
+					},
+					{
+						"key": "WB",
+						"value": 174.7
+					},
+					{
+						"key": "WN",
+						"value": 90000
+					},
+					{
+						"key": "QG",
+						"value": 6552
+					},
+					{
+						"key": "QC",
+						"value": 4760
+					}
+				]
+			}
+		]
+	},
+	"WasteDefinition": {
+		"wastes": [
+			{
+				"flow": "QG",
+				"type": "MANUAL",
+				"recycle": 0,
+				"values": [
+					{
+						"process": "COMB",
+						"value": 1
+					}
+				]
+			},
+			{
+				"flow": "QC",
+				"type": "MANUAL",
+				"recycle": 0,
+				"values": [
+					{
+						"process": "HRSG",
+						"value": 1
+					}
+				]
+			}
+		]
+	},
+	"ResourcesCost": {
+		"Samples": [
+			{
+				"sampleId": "Base",
+				"flows": [
+					{
+						"key": "GN",
+						"value": 1.32
+					}
+				],
+				"processes": [
+					{
+						"key": "COMB",
+						"value": 58.8
+					},
+					{
+						"key": "COMP",
+						"value": 21371.4
+					},
+					{
+						"key": "TGAS",
+						"value": 17377.8
+					},
+					{
+						"key": "HRSG",
+						"value": 12220.2
+					},
+					{
+						"key": "TVAP",
+						"value": 2126.4
+					},
+					{
+						"key": "PUMP",
+						"value": 7.8
+					},
+					{
+						"key": "ALTN",
+						"value": 592.8
+					},
+					{
+						"key": "COND",
+						"value": 314.4
+					},
+					{
+						"key": "STCK",
+						"value": 25.2
+					}
+				]
+			}
+		]
+	},
+	"Format": {
+		"definitions": [
+			{
+				"key": "EXERGY",
+				"width": 11,
+				"precision": 1,
+				"unit": "(kW)"
+			},
+			{
+				"key": "EXERGY_COST",
+				"width": 11,
+				"precision": 1,
+				"unit": "(kW)"
+			},
+			{
+				"key": "EXERGY_UNIT_COST",
+				"width": 10,
+				"precision": 4,
+				"unit": "(J/J)"
+			},
+			{
+				"key": "GENERALIZED_COST",
+				"width": 10,
+				"precision": 1,
+				"unit": "(kW)"
+			},
+			{
+				"key": "GENERALIZED_UNIT_COST",
+				"width": 10,
+				"precision": 4,
+				"unit": "(J/J)"
+			},
+			{
+				"key": "DIAGNOSIS",
+				"width": 11,
+				"precision": 2,
+				"unit": "(kW)"
+			}
+		]
+	}
+}

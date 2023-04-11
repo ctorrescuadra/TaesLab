@@ -1,0 +1,6 @@
+key,description,fuel,product,type
+BOIL,Boiler,B1,B2-B5,PRODUCTIVE
+TURB,Turbine,B2-B3,B6,PRODUCTIVE
+PUMP,Pump,B8,B5-B4,PRODUCTIVE
+GEN,Alternador,B6,B7+B8+B9,PRODUCTIVE
+COND,Condenser,B7+B3,B10,DISSIPATIVE

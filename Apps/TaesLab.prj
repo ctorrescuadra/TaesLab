@@ -1,0 +1,182 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration file="C:\Users\ctorr\Documents\Proyectos\ExIOLab\Apps\TaesLab.prj" location="C:\Users\ctorr\Documents\Proyectos\ExIOLab\Apps" name="TaesLab" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>TaesLab</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company />
+    <param.summary />
+    <param.description />
+    <param.screenshot />
+    <param.guid />
+    <param.installpath.string>\TaesLab\</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\TaesLab\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\TaesLab\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\TaesLab\for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}\TaesLab</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>true</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <param.native.matlab>false</param.native.matlab>
+    <param.checkbox>false</param.checkbox>
+    <param.example />
+    <param.help.text>Syntax 
+	  -? 
+	 
+ Input Arguments 
+	 -?  print help on how to use the application 
+	 input arguments</param.help.text>
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.summary />
+      <param.description />
+      <param.screenshot />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.install.notes />
+      <param.target.install.notes />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.log.file />
+      <param.native.matlab />
+      <param.checkbox />
+      <param.example />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\TaesLab.mlapp</file>
+    </fileset.main>
+    <fileset.resources>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\printformat.json</file>
+    </fileset.resources>
+    <fileset.package />
+    <fileset.depfun>
+      <file>${PROJECT_ROOT}\Resources\TaesLab.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Base\SaveDataModel.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cDiagnosis.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cDiagnosisR.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cDiagramFP.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cDictionary.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cExergyModel.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cMessageLog.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cModelData.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cModelFPR.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cModelResults.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cModelTables.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cParseStream.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cProcessModel.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cProductiveStructure.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cQueue.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadExergy.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadFormat.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadModel.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadModelCSV.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadModelJSON.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadModelStruct.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadModelTable.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadModelXLS.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadModelXML.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadProductiveStructure.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadResources.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cReadWaste.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cRecyclingAnalysis.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cResultGraph.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cResultId.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cResultInfo.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cResultTableBuilder.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cSparseRow.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cStack.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cStatusLogger.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cTable.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cTableCell.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cTableData.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cTableMatrix.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cTableResult.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cThermoeconomicModel.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cType.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\cViewTable.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\icon16\ps.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\icon16\ta.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\icon16\td.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Classes\icon16\ts.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\bfs.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\checkModel.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\divideCol.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\divideRow.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\exportCSV.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\exportXLS.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\importMAT.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\isMatlab.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\isNumCellArray.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\isOctave.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\log2str.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\readModel.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\scaleCol.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\scaleRow.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\strContains.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\vDivide.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\ExIOLab\Functions\zerotol.m</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}\TaesLab\for_testing" name="TaesLab.exe" optional="false">C:\Users\ctorr\Documents\Proyectos\ExIOLab\Apps\TaesLab\for_testing\TaesLab.exe</file>
+      <file location="${PROJECT_ROOT}\TaesLab\for_testing" name="readme.txt" optional="true">C:\Users\ctorr\Documents\Proyectos\ExIOLab\Apps\TaesLab\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\TaesLab\for_testing" name="splash.png" optional="false">C:\Users\ctorr\Documents\Proyectos\ExIOLab\Apps\TaesLab\for_testing\splash.png</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>C:\Program Files\MATLAB\R2022b</root>
+      <toolboxes />
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.0</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
