@@ -32,6 +32,11 @@ classdef (Sealed) cResultInfo < cModelTables
             obj.status=info.status;
         end
 
+        function setProperties(obj,model,state)
+            setProperties@cModelTables(obj,model,state);
+            cellfun(@(x) setState(x,state),obj.tableIndex);
+        end
+
         function res=getFuelImpact(obj)
         % get the Fuel Impact as a string including format and unit
             res='WARNING: Fuel Impact NOT Available';
@@ -109,6 +114,49 @@ classdef (Sealed) cResultInfo < cModelTables
             end
         end
 
+        function log=graphSummary(obj,graph,var)
+        % Plot summary tables
+        %   Input:
+        %      graph - Data to plot
+        %      var - Variables to plot
+        %
+            %Check input arguments
+            log=cStatusLogger(true);
+            if obj.Id ~= cType.ResultId.SUMMARY_RESULTS
+                log.messageLog(cType.ERROR,'Invalid cResultInfo object %s',obj.Name);
+                return
+            end
+            info=obj.Info;
+            if nargin==1
+                graph=cType.SummaryTables.FLOW_DIRECT_UNIT_COST;
+                var=info.getDefaultFlowVariables;
+            end
+            tbl=obj.getTable(graph);
+            if ~isValid(tbl) || ~tbl.isGraphTable
+                log.messageLog(cType.ERROR,'Invalid graph type: %s',graph);
+                return
+            end
+            if (nargin==2) && ~tbl.isFlowsTable
+                log.messageLog(cType.ERROR,'Variables are required for this type: %s',graph);
+                return
+            end
+            if nargin==2
+                var=info.getDefaultFlowVariables;
+            end
+            if tbl.isFlowsTable
+                idx=info.getFlowIndex(var);
+            else
+                idx=info.getProcessIndex(var);
+            end
+            if cType.isEmpty(idx)
+                log.messageLog(cType.ERROR,'Invalid Variable Names');
+                return
+            end
+            % Plot the table
+            graphSummary(tbl,idx);
+        end
+        
+
         function log=showDiagramFP(obj)
         % Show the FP table digraph [only Matlab]
             log=cStatusLogger(cType.VALID);
@@ -174,13 +222,6 @@ classdef (Sealed) cResultInfo < cModelTables
             grid on
         end
 
-        function plotSummary(obj,varargin)
-            log=graphSummary(obj,varargin{:});
-            if ~isValid(log)
-                log.printLogger;
-            end
-        end
-
         function res=flowsDiagram(obj,opt)
         % Show the flows diagram of the productive structure
         %   Input:
@@ -201,9 +242,7 @@ classdef (Sealed) cResultInfo < cModelTables
             end
             opt=opt & isMatlab;
             % Get the characteristic matrix of flows
-            x=obj.Info.AdjacencyMatrix;
-            mI=eye(obj.Info.NrOfStreams,"logical");
-            A=x.AE*(mI+x.AF(:,1:end-1)*x.AP(1:end-1,:))*x.AS;
+            A=obj.Info.StructuralMatrix;
             [idx,jdx]=find(A);
             nodenames=obj.Info.FlowKeys;
             source=nodenames(idx);

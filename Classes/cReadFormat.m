@@ -196,18 +196,25 @@ classdef cReadFormat < cStatusLogger
 			name=obj.cfgSummary(id).name;
 		end
 
-		function val=getMatrixGraph(obj,id)
+		function val=getMatrixGraphType(obj,id)
 		% get the type of graph for matrix tables
 		%  Input:
 		%   id - Matrix id
 			val=obj.cfgMatrices(id).graph;
 		end
 
-		function val=getSummaryGraph(obj,id)
+		function val=getMatrixGraphOptions(obj,id)
 		% get the type of graph for matrix tables
 		%  Input:
 		%   id - Matrix id
-			val=obj.cfgSummary(id).graph;
+			val=obj.cfgMatrices(id).options;
+		end
+
+		function val=getSummaryGraphOptions(obj,id)
+		% get the type of graph for matrix tables
+		%  Input:
+		%   id - Matrix id
+			val=obj.cfgSummary(id).options;
 		end
 
 		function [row,col]=getMatrixTotal(obj,id)

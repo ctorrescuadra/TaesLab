@@ -258,7 +258,6 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             end
             % Create cResultInfo object
             res=cResultInfo(ms,tbl);
-            res.setProperties(ms.ModelName,'SUMMARY');
         end
     end
 
@@ -542,7 +541,8 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             p.Description=obj.getMatrixDescription(id);    
             p.Unit=obj.getMatrixUnit(id);
             p.Format=obj.getMatrixFormat(id);
-            p.GraphType=obj.getMatrixGraph(id);
+            p.GraphType=obj.getMatrixGraphType(id);
+            p.GraphOptions=obj.getMatrixGraphOptions(id);
             res.setProperties(p);
         end
 
@@ -551,7 +551,8 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             p.Description=obj.getSummaryDescription(id);    
             p.Unit=obj.getSummaryUnit(id);
             p.Format=obj.getSummaryFormat(id);
-            p.GraphType=obj.getSummaryGraph(id);
+            p.GraphType=cType.GraphType.SUMMARY;
+            p.GraphOptions=obj.getSummaryGraphOptions(id);
             res.setProperties(p);
         end
     end

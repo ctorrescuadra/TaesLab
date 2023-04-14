@@ -33,6 +33,7 @@ classdef (Sealed) cTableCell < cTableResult
             obj.Data=data;
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
+            obj.GraphType=cType.GraphType.NONE;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames);
             obj.Values=[obj.ColNames;[obj.RowNames',obj.Data]];

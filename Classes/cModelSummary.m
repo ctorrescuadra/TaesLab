@@ -2,11 +2,9 @@ classdef cModelSummary < cResultId
 %   cModelSummary obtain the summary cost tables
     properties(GetAccess=public,SetAccess=private)
         NrOfStates      % Number of States
-        ModelName       % Model Name
         StateNames      % States Names
         ExergyData      % Exergy Data
         UnitConsumption % Process Unit Consumption Values
-        SummaryResults  % cResultInfo object containing the Cost Summary
         CostValues      % Cost Values cell array
     end
     properties(Access=private)
@@ -64,30 +62,33 @@ classdef cModelSummary < cResultId
                 pku(:,j)=rstates{j}.UnitConsumption';
             end
             obj.status=true;
-            fmt=model.getFormat;
             tmp=model.DataModel.getTableModel;
             obj.ExergyData=cell2mat(tmp.Tables.Exergy.Data);
             obj.UnitConsumption=pku;
-            obj.ModelName=model.DataModel.ModelName;
             obj.StateNames=model.getStateNames;
-            obj.SummaryResults=getSummaryResults(fmt,obj);
-            obj.ps=model.Results.ProductiveStructure.Info;
+            obj.ps=model.productiveStructure.Info;
         end
 
         function res=getDefaultFlowVariables(obj)
-            Id=obj.ps.SystemOutput.flows;
-            res={obj.ps.Flows(Id).key};
+        % get the output flows index
+            id=obj.ps.SystemOutput.flows;
+            res={obj.ps.Flows(id).key};
         end
 
         function res=getFlowIndex(obj,keys)
+        % get the flows index 
             res=obj.ps.getFlowId(keys);
         end
 
         function res=getProcessIndex(obj,keys)
+        % get the processes index
             res=obj.ps.getProcessId(keys);
         end
+    end
 
+    methods(Access=private)
         function setValues(obj,TableId,StateId,val)
+        % Set the cost values
             obj.CostValues{TableId}(:,StateId)=val;
         end
     end

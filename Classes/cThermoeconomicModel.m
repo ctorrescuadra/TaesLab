@@ -4,6 +4,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %   - Read and check a thermoeconomic data model
 %   - Compute direct and generalized exergy cost
 %   - Compare two thermoeconomic states (thermoeconomic diagnosis)
+%   - Analize Recycling effects (recycling analysis)
 %   - Save the data model and results in diferent formats, for further analysis
 %  Methods:
 %   obj.setState(value)
@@ -589,15 +590,20 @@ classdef cThermoeconomicModel < cStatusLogger
         % Summary Results methods
         %
         function res=summaryResults(obj)
-            if isempty(obj.Summary)
-                smr=cModelSummary(obj);
-                obj.Summary=smr.SummaryResults;
-                obj.printDebugInfo('Summary Results Activated');
-            end
-            res=obj.Summary;
+        % Get the summary tables
+            ms=cModelSummary(obj);
+            res=getSummaryResults(obj.fmt,ms);
+            res.setProperties(obj.ModelName,'SUMMARY');
+            obj.Summary=res;
         end
+
         function printSummary(obj,table)
-            res=obj.summaryResults;
+        % Print the summary tables
+            if isempty(obj.Summary)
+                res=obj.summaryResults;
+            else
+                res=obj.Summary;
+            end
             switch nargin
             case 1
                 printResults(res)
@@ -605,10 +611,32 @@ classdef cThermoeconomicModel < cStatusLogger
                 printTable(res,table)
             end
         end
+
         function saveSummary(obj,filename)
-            res=obj.summaryResults;
+        % Save the summary tables into a filename
+            if isempty(obj.Summary)
+                res=obj.summaryResults;
+            else
+                res=obj.Summary;
+            end
             res.saveResults(filename);
         end
+
+        function graphSummary(obj,varargin)
+        % Save the summary tables into a filename
+            if isempty(obj.Summary)
+                res=obj.summaryResults;
+            else
+                res=obj.Summary;
+            end
+            log=res.graphSummary(varargin{:});
+            if ~isValid(log)
+                log.printLogger;
+            end
+        end
+
+        
+
         %%%
         % Waste Analysis methods
         %

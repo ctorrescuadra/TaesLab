@@ -533,7 +533,8 @@
 			"header": "FP Table",
 			"name": "[FP]=",
 			"type": 3,
-			"graph": 16,
+			"graph": 3,
+			"options": 0,
 			"rowTotal": true,
 			"colTotal": true
 		},
@@ -542,7 +543,8 @@
 			"header": "FP Exergy Cost Table",
 			"name": "[FP*]=",
 			"type": 4,
-			"graph": 16,
+			"graph": 3,
+			"options": 0,
 			"rowTotal": true,
 			"colTotal": true
 		},
@@ -552,6 +554,7 @@
 			"name": "[FPR*]=",
 			"type": 4,
 			"graph": 0,
+			"options": 0,
 			"rowTotal": true,
 			"colTotal": true
 		},
@@ -561,6 +564,7 @@
 			"name": "[CFP]=",
 			"type": 6,
 			"graph": 0,
+			"options": 0,
 			"rowTotal": true,
 			"colTotal": true
 		},
@@ -569,7 +573,8 @@
 			"header": "Irreversibility-Cost Table",
 			"name": "<ICT>=",
 			"type": 5,
-			"graph": 7,
+			"graph": 1,
+			"options": 1,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -578,7 +583,8 @@
 			"header": "Generalized Irreversibility-Cost Table",
 			"name": "<GICT>=",
 			"type": 7,
-			"graph": 3,
+			"graph": 1,
+			"options": 5,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -588,6 +594,7 @@
 			"name": "<fICT>=",
 			"type": 5,
 			"graph": 1,
+			"options": 3,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -597,6 +604,7 @@
 			"name": "<fGICT>=",
 			"type": 7,
 			"graph": 1,
+			"options": 7,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -605,7 +613,8 @@
 			"header": "Malfunction Table",
 			"name": "[MF]=",
 			"type": 8,
-			"graph": 11,
+			"graph": 2,
+			"options": 0,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -614,7 +623,8 @@
 			"header": "Malfunction Cost Table",
 			"name": "[DF]=",
 			"type": 8,
-			"graph": 11,
+			"graph": 2,
+			"options": 0,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -623,7 +633,8 @@
 			"header": "Irreversibility Variation Table",
 			"name": "[DI]=",
 			"type": 8,
-			"graph": 11,
+			"graph": 2,
+			"options": 0,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -633,6 +644,7 @@
 			"name": "[RP]=",
 			"type": 9,
 			"graph": 0,
+			"options": 0,
 			"rowTotal": false,
 			"colTotal": false
 		},
@@ -641,7 +653,8 @@
 			"header": "Direct Cost Recycling Analysis",
 			"name": "[RAD]=",
 			"type": 5,
-			"graph": 0,
+			"graph": 4,
+			"options": 3,
 			"rowTotal": false,
 			"colTotal": false
 		},
@@ -650,7 +663,8 @@
 			"header": "Generalized Cost Recycling Analysis",
 			"name": "[RAD]=",
 			"type": 7,
-			"graph": 0,
+			"graph": 4,
+			"options": 7,
 			"rowTotal": false,
 			"colTotal": false
 		}
@@ -661,70 +675,80 @@
 			"header": "Processes Direct Exergy Cost",
 			"name": "[DCP]",
 			"type": 4,
-			"graph": 0
+			"graph": 0,
+			"options": 0
 		},
 		{
 			"id": 2,
 			"header": "Processes Direct Unit Exergy Cost",
 			"name": "[DUCP]=",
 			"type": 5,
-			"graph": 1
+			"graph": 5,
+			"options": 1
 		},
 		{
 			"id": 3,
 			"header": "Flows Direct Exergy Cost",
 			"name": "[DCF]",
 			"type": 4,
-			"graph": 0
+			"graph": 0,
+			"options": 0
 		},
 		{
 			"id": 4,
 			"header": "Flows Direct Unit Exergy Cost",
 			"name": "[DUCF]=",
 			"type": 5,
-			"graph": 3
+			"graph": 5,
+			"options": 3
 		},
 		{
 			"id": 5,
 			"header": "Processes Generalized Cost",
 			"name": "[DCP]",
 			"type": 6,
-			"graph": 0
+			"graph": 0,
+			"options": 0
 		},
 		{
 			"id": 6,
 			"header": "Processes Generalized Unit Cost",
 			"name": "[DUCP]=",
 			"type": 7,
-			"graph": 5
+			"graph": 5,
+			"options": 5
 		},
 		{
 			"id": 7,
 			"header": "Flows Generalized Cost",
 			"name": "[DCF]",
 			"type": 6,
-			"graph": 0
+			"graph": 0,
+			"options": 0
 		},
 		{
 			"id": 8,
 			"header": "Flows Generalized Unit Cost",
 			"name": "[DUCF]=",
 			"type": 7,
-			"graph": 7
+			"graph": 5,
+			"options": 7
 		},
 		{
 			"id": 9,
 			"header": "Flows Exergy",
 			"name": "[DUCF]=",
 			"type": 3,
-			"graph": 0
+			"graph": 0,
+			"options": 0
 		},
 		{
 			"id": 10,
 			"header": "Process Unit Consumption",
 			"name": "[DKU]=",
 			"type": 5,
-			"graph": 1
+			"graph": 5,
+			"options": 1
 		}
 	],
 	"format": [

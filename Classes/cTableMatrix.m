@@ -27,7 +27,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         ColSum			% Column summary true/false
     end
     properties (GetAccess=public,SetAccess=private)
-        GraphType       % Graph Type
+        GraphOptions       % Graph Type
     end
     methods
         function obj=cTableMatrix(data,rowNames,colNames,rowSum,colSum)
@@ -72,6 +72,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.Unit=p.Unit;
             obj.Format=p.Format;
             obj.GraphType=p.GraphType;
+            obj.GraphOptions=p.GraphOptions;
         end
 
         function res=formatData(obj)
@@ -147,9 +148,21 @@ classdef (Sealed) cTableMatrix < cTableResult
         %%%%
         % Graphic Interface functions
         %%%%
-        function res=isGraphTable(obj)
-        % Determine if table has a graphic representation
-            res=bitget(obj.GraphType,1);
+        function res=isUnitCostTable(obj)
+            res=bitget(obj.GraphOptions,1);
+        end
+
+        function res=isFlowsTable(obj)
+            res=bitget(obj.GraphOptions,2);
+        end
+
+        function res=isGeneralCostTable(obj)
+            res=bitget(obj.GraphOptions,3);
+        end
+
+        function graphSummary(obj,idx)
+            fig=cGraphSummary(obj,idx);
+            fig.showGraph;
         end
 
         function res=isDigraph(obj)

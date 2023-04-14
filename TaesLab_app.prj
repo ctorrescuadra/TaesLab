@@ -1,45 +1,88 @@
-<deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2631771601" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab" name="TaesLab" target="target.mlapps" target-name="Package App">
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration build-checksum="4273876864" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab_app.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab" name="TaesLab_app" preferred-package-location="C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab_app\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>TaesLab</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
     <param.authnamewatermark>César Torres Cuadra</param.authnamewatermark>
     <param.email>ctorresc@unizar.es</param.email>
     <param.company>Universidad de Zaragoza</param.company>
-    <param.icon>${PROJECT_ROOT}\TaesLab_resources\icon_24.png</param.icon>
-    <param.icons>
-      <file>${PROJECT_ROOT}\TaesLab_resources\icon_48.png</file>
-      <file>${PROJECT_ROOT}\TaesLab_resources\icon_24.png</file>
-      <file>${PROJECT_ROOT}\TaesLab_resources\icon_16.png</file>
-    </param.icons>
-    <param.summary>Thermoeconomic Analysis of Energy System</param.summary>
-    <param.description>Matlab Application for Thermoeconomic Analysis of Energy Systems</param.description>
-    <param.screenshot />
-    <param.version>1.1</param.version>
-    <param.products.name />
-    <param.products.id />
-    <param.products.version />
-    <param.platforms />
-    <param.output>${PROJECT_ROOT}</param.output>
-    <param.guid>67d42bdd-e9fb-4079-b947-f06cbe418536</param.guid>
+    <param.summary>Thermoeconomic Analysis of Energy System Matlab Application</param.summary>
+    <param.description />
+    <param.screenshot>${PROJECT_ROOT}\Apps\Resources\Splash_TAES.png</param.screenshot>
+    <param.guid />
+    <param.installpath.string>\Universidad de Zaragoza\TaesLab\</param.installpath.string>
+    <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
+    <param.logo>${PROJECT_ROOT}\Apps\Resources\Taes_Install.png</param.logo>
+    <param.install.notes />
+    <param.target.install.notes />
+    <param.intermediate>${PROJECT_ROOT}\TaesLab_app\for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}\TaesLab_app\for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}\TaesLab_app\for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}\TaesLab_app</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>true</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file>taeslog.txt</param.log.file>
+    <param.native.matlab>false</param.native.matlab>
+    <param.checkbox>false</param.checkbox>
+    <param.example />
+    <param.help.text>Syntax 
+	  -? 
+	 
+ Input Arguments 
+	 -?  print help on how to use the application 
+	 input arguments</param.help.text>
     <unset>
-      <param.authnamewatermark />
-      <param.email />
-      <param.company />
-      <param.screenshot />
-      <param.products.name />
-      <param.products.id />
-      <param.products.version />
-      <param.platforms />
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.description />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.install.notes />
+      <param.target.install.notes />
+      <param.intermediate />
+      <param.files.only />
       <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.native.matlab />
+      <param.checkbox />
+      <param.example />
     </unset>
     <fileset.main>
       <file>${PROJECT_ROOT}\Apps\TaesLab.mlapp</file>
     </fileset.main>
+    <fileset.resources>
+      <file>${PROJECT_ROOT}\Classes\printformat.json</file>
+    </fileset.resources>
+    <fileset.package>
+      <file>${PROJECT_ROOT}\Apps\Resources\TaesLab.ico</file>
+    </fileset.package>
     <fileset.depfun>
-      <file>${PROJECT_ROOT}\Apps\Resources\ps.png</file>
-      <file>${PROJECT_ROOT}\Apps\Resources\ta.png</file>
       <file>${PROJECT_ROOT}\Apps\Resources\TaesLab.png</file>
-      <file>${PROJECT_ROOT}\Apps\Resources\td.png</file>
-      <file>${PROJECT_ROOT}\Apps\Resources\ts.png</file>
       <file>${PROJECT_ROOT}\Base\SaveDataModel.m</file>
       <file>${PROJECT_ROOT}\Classes\cDiagnosis.m</file>
       <file>${PROJECT_ROOT}\Classes\cDiagnosisR.m</file>
@@ -50,6 +93,7 @@
       <file>${PROJECT_ROOT}\Classes\cModelData.m</file>
       <file>${PROJECT_ROOT}\Classes\cModelFPR.m</file>
       <file>${PROJECT_ROOT}\Classes\cModelResults.m</file>
+      <file>${PROJECT_ROOT}\Classes\cModelSummary.m</file>
       <file>${PROJECT_ROOT}\Classes\cModelTables.m</file>
       <file>${PROJECT_ROOT}\Classes\cParseStream.m</file>
       <file>${PROJECT_ROOT}\Classes\cProcessModel.m</file>
@@ -83,6 +127,11 @@
       <file>${PROJECT_ROOT}\Classes\cThermoeconomicModel.m</file>
       <file>${PROJECT_ROOT}\Classes\cType.m</file>
       <file>${PROJECT_ROOT}\Classes\cViewTable.m</file>
+      <file>${PROJECT_ROOT}\Classes\cWasteTable.m</file>
+      <file>${PROJECT_ROOT}\Classes\icon16\ps.png</file>
+      <file>${PROJECT_ROOT}\Classes\icon16\ta.png</file>
+      <file>${PROJECT_ROOT}\Classes\icon16\td.png</file>
+      <file>${PROJECT_ROOT}\Classes\icon16\ts.png</file>
       <file>${PROJECT_ROOT}\Functions\bfs.m</file>
       <file>${PROJECT_ROOT}\Functions\checkModel.m</file>
       <file>${PROJECT_ROOT}\Functions\divideCol.m</file>
@@ -91,6 +140,7 @@
       <file>${PROJECT_ROOT}\Functions\exportXLS.m</file>
       <file>${PROJECT_ROOT}\Functions\importMAT.m</file>
       <file>${PROJECT_ROOT}\Functions\isMatlab.m</file>
+      <file>${PROJECT_ROOT}\Functions\isNumCellArray.m</file>
       <file>${PROJECT_ROOT}\Functions\isOctave.m</file>
       <file>${PROJECT_ROOT}\Functions\log2str.m</file>
       <file>${PROJECT_ROOT}\Functions\readModel.m</file>
@@ -100,12 +150,10 @@
       <file>${PROJECT_ROOT}\Functions\vDivide.m</file>
       <file>${PROJECT_ROOT}\Functions\zerotol.m</file>
     </fileset.depfun>
-    <fileset.resources>
-      <file>${PROJECT_ROOT}\Classes\printformat.json</file>
-    </fileset.resources>
-    <fileset.package />
     <build-deliverables>
-      <file location="C:\Users\ctorr\Documents\Proyectos" name="TaesLab" optional="false">C:\Users\ctorr\Documents\Proyectos\TaesLab</file>
+      <file location="${PROJECT_ROOT}\TaesLab_app\for_testing" name="readme.txt" optional="true">C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab_app\for_testing\readme.txt</file>
+      <file location="${PROJECT_ROOT}\TaesLab_app\for_testing" name="splash.png" optional="false">C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab_app\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\TaesLab_app\for_testing" name="TaesLab.exe" optional="false">C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab_app\for_testing\TaesLab.exe</file>
     </build-deliverables>
     <workflow />
     <matlab>

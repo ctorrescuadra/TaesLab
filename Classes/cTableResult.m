@@ -13,8 +13,10 @@ classdef (Abstract) cTableResult < cTable
 % See also cTable, cTableMatrix, cTableCell
 %
     properties (GetAccess=public, SetAccess=protected)
-        Format  % Cell array with data format (optional)
-        Unit    % Cell array with data units (optional)
+        State   % State values
+        Format  % Format of the table cells
+        Unit    % Units of the table cell
+        GraphType % Graph Type associated to table
     end
     methods    
         function res=getFormattedCell(obj,fmt)
@@ -40,6 +42,15 @@ classdef (Abstract) cTableResult < cTable
             end
             vt=cViewTable(obj,state);
             vt.showTable
+        end
+
+        function res=isGraphTable(obj)
+        % Check if the table has a graph associated
+            res=(obj.GraphType ~= cType.GraphType.NONE);
+        end
+
+        function setState(obj,state)
+            obj.State=state;
         end
     end
 end

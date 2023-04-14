@@ -142,6 +142,7 @@ classdef cType
 			'PROCESS_ICT','dict','PROCESS_GENERALIZED_ICT','gict','FLOW_ICT','dfict','FLOW_GENERALIZED_ICT','gfict',...
 			'DIAGNOSIS','dgn','MALFUNCTION','mf','MALFUNCTION_COST','mfc','IRREVERSIBILITY_VARIATION','dit',...
 			'WASTE_DEFINITION','wd','WASTE_ALLOCATION','wa','WASTE_RECYCLING_DIRECT','rad','WASTE_RECYCLING_GENERAL','rag');
+        GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5);
         % File Extension
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt');
@@ -317,7 +318,7 @@ classdef cType
 		function res=getInputTables()
 		% Get the names of the Input Tables as cell
 			res=transpose(struct2cell(cType.InputTables));
-		end
+        end
 
 		function res=checkTextKey(text)
 		% Check if an element key (flow/process) has a correct format

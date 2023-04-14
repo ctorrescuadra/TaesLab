@@ -179,6 +179,13 @@ classdef (Sealed) cProductiveStructure < cReadProductiveStructure
             res=struct('iAF',iAF,'iAP',iAP);
         end
 
+		function res=StructuralMatrix(obj)
+		% Get the Structural Theory Flows Adjacency table
+			x=obj.AdjacencyMatrix;
+			mI=eye(obj.NrOfStreams,"logical");
+			res=x.AE*(mI+x.AF(:,1:end-1)*x.AP(1:end-1,:))*x.AS;
+		end
+
 		function res=getConfigInfo(obj)
 		% Get the Productive Structure Config info
 			res=struct('NrOfFlows',obj.NrOfFlows,'NrOfProcesses',obj.NrOfProcesses,...
