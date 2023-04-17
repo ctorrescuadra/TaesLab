@@ -7,7 +7,6 @@ classdef cWasteTable < cResultId
         typeId         % Type Id for processing wastes
 		Processes      % Dissipative processes
 		Flows          % Waste flows
-		Streams        % Waste Streams
 		Values         % Cost allocation ratios
 		RecycleRatio   % Ratio of recycling
 	end

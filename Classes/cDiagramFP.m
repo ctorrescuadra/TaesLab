@@ -1,10 +1,8 @@
 classdef (Sealed) cDiagramFP < cResultId
 % cDiagramFP build the FP digraph of the thermoeconomic state of the plant
 %   Methods:
-%       obj=cDiagramFP(tbl)  
-%       obj=cDiagramFP(res)
+%       obj=cDiagramFP(tbl)
 %       res=obj.getDigraph [Only Matlab]
-%       res=obj.saveDiagram(filename)
 %       obj.plotDiagram [Only Matlab]
 %
 	properties (GetAccess=public, SetAccess=private)
@@ -23,23 +21,14 @@ classdef (Sealed) cDiagramFP < cResultId
 	end
 
 	methods
-		function obj = cDiagramFP(arg)
+		function obj = cDiagramFP(tbl)
         % Create an instance of cDiagramFP from a digraph table or a cResultInfo object
         %   Input:
         %     arg - cTableMatrix or cResultInfo objects
 			% Check Input
             obj=obj@cResultId(cType.ResultId.DIAGRAM_FP);
-            if  isa(arg,'cTableMatrix') && arg.isDigraph
-                tbl=arg;
-            elseif isa(arg,'cResultInfo')
-                tbl=cDiagramFP.getTable(arg);
-            else 
-				obj.messageLog(cType.ERROR,'Invalid input arguments');
-                return
-            end
-            if ~isValid(tbl)
-                obj.addLogger(tbl);
-                obj.messageLog(cType.ERROR,'There is NOT Table FP available');
+            if ~isValid(tbl) || ~isDigraph(tbl)
+                obj.messageLog(cType.ERROR,'Table %s is not valid',tbl.Key);
                 return
             end
     		% Get matrix and nodes
@@ -66,7 +55,7 @@ classdef (Sealed) cDiagramFP < cResultId
             obj.target=[vtarget,itarget,wtarget];
             obj.values=[vval';ival;wval];
             obj.unit=tbl.Unit;
-            obj.descr=tbl.Description;
+            obj.descr=[tbl.Description,' [',tbl.State,']'];
             obj.Nodes=[vsource,nodes,wtarget];
 			obj.NrOfEdges=numel(obj.values);
 			obj.NrOfNodes=numel(obj.Nodes);
@@ -96,16 +85,11 @@ classdef (Sealed) cDiagramFP < cResultId
             end
         end
 
-        function plotDiagram(obj,state)
+        function plotDiagram(obj)
         % Plot the diagram FP [Only Matlab]
             if isOctave
                 return
-            end
-            if isempty(state)
-                name=obj.descr;
-            else
-                name=sprintf('%s [%s]',obj.descr,state);
-            end         
+            end      
             dg=obj.getDigraph;
             % Create figure and colormap
             figure('menubar','none',...
@@ -115,24 +99,9 @@ classdef (Sealed) cDiagramFP < cResultId
             colormap(red2blue);
             % Plot the digraph with colobar     
             plot(dg,"Layout","auto","EdgeCData",dg.Edges.Weight,"EdgeColor","flat");
-            title(name);
+            title(obj.descr);
             c=colorbar;
             c.Label.String=['Exergy',obj.unit];
-        end
-    end
-
-    methods(Static,Access=private)
-        function res=getTable(arg)
-        % get the table from cResultInfo object
-            res=cStatusLogger(cType.VALID);
-            switch arg.Id
-                case cType.ResultId.THERMOECONOMIC_STATE
-                    res=arg.Tables.tfp;
-                case cType.ResultId.THERMOECONOMIC_ANALYSIS
-                    res=arg.Tables.dcfp;
-                otherwise
-                    res.messageLog(cType.ERROR,'Invalid Result Id: %s',arg.Name);
-            end
         end
     end
 end

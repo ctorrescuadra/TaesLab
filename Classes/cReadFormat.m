@@ -94,6 +94,18 @@ classdef cReadFormat < cStatusLogger
 		%   id - Variable type
 			unit=obj.cfgTypes(id).unit;
 		end
+
+		function res=getTableKey(obj,id)
+			res=obj.cfgTables(id).key;
+		end
+
+		function res=getMatrixKey(obj,id)
+			res=obj.cfgMatrices(id).key;
+		end
+
+		function res=getSummaryKey(obj,id)
+			res=obj.cfgSummary(id).key;
+		end
 			
 		function res=getTableDescription(obj,id)
 		% get the table desciption

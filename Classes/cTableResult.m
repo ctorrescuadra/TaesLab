@@ -17,6 +17,7 @@ classdef (Abstract) cTableResult < cTable
         Format  % Format of the table cells
         Unit    % Units of the table cell
         GraphType % Graph Type associated to table
+        Key     % Table key (name)
     end
     methods    
         function res=getFormattedCell(obj,fmt)
@@ -44,7 +45,7 @@ classdef (Abstract) cTableResult < cTable
             vt.showTable
         end
 
-        function res=isGraphTable(obj)
+        function res=isGraph(obj)
         % Check if the table has a graph associated
             res=(obj.GraphType ~= cType.GraphType.NONE);
         end

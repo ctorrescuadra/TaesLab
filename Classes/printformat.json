@@ -3,6 +3,7 @@
 	"tables": [
 		{
 			"id": 1,
+			"key": "dfcost",
 			"description": "Flows Exergy Cost",
 			"columns": 8,
 			"fields": [
@@ -50,6 +51,7 @@
 		},
 		{
 			"id": 2,
+			"key": "gfcost",
 			"description": "Flows Generalized Cost",
 			"columns": 10,
 			"fields": [
@@ -107,6 +109,7 @@
 		},
 		{
 			"id": 3,
+			"key": "dcost",
 			"description": "Process Exergy Cost",
 			"columns": 6,
 			"fields": [
@@ -144,6 +147,7 @@
 		},
 		{
 			"id": 4,
+			"key": "ducost",
 			"description": "Process Unit Exergy Cost",
 			"columns": 7,
 			"fields": [
@@ -186,6 +190,7 @@
 		},
 		{
 			"id": 5,
+			"key": "gcost",
 			"description": "Process Generalized Cost",
 			"columns": 8,
 			"fields": [
@@ -233,6 +238,7 @@
 		},
 		{
 			"id": 6,
+			"key": "gucost",
 			"description": "Process Generalized Unit Cost",
 			"columns": 7,
 			"fields": [
@@ -275,6 +281,7 @@
 		},
 		{
 			"id": 7,
+			"key": "dgn",
 			"description": "Diagnosis Summary",
 			"columns": 7,
 			"fields": [
@@ -317,6 +324,7 @@
 		},
 		{
 			"id": 8,
+			"key": "process",
 			"description": "Processes Table",
 			"columns": 5,
 			"fields": [
@@ -349,6 +357,7 @@
 		},
 		{
 			"id": 9,
+			"key": "stream",
 			"description": "Streams Table",
 			"columns": 3,
 			"fields": [
@@ -371,6 +380,7 @@
 		},
 		{
 			"id": 10,
+			"key": "flow",
 			"description": "Flows Table",
 			"columns": 4,
 			"fields": [
@@ -398,6 +408,7 @@
 		},
 		{
 			"id": 11,
+			"key": "eprocess",
 			"description": "Processes Exergy Table",
 			"columns": 5,
 			"fields": [
@@ -430,6 +441,7 @@
 		},
 		{
 			"id": 12,
+			"key": "estream",
 			"description": "Streams Exergy Table",
 			"columns": 3,
 			"fields": [
@@ -452,6 +464,7 @@
 		},
 		{
 			"id": 13,
+			"key": "eflow",
 			"description": "Flows Exergy Table",
 			"columns": 4,
 			"fields": [
@@ -479,6 +492,7 @@
 		},
 		{
 			"id": 13,
+			"key": "atfp",
 			"description": "FP Adjacency Table",
 			"columns": 4,
 			"fields": [
@@ -506,6 +520,7 @@
 		},
 		{
 			"id": 14,
+			"key": "wdt",
 			"description": "Waste Definition Table",
 			"columns": 4,
 			"fields": [
@@ -530,8 +545,8 @@
 	"matrices": [
 		{
 			"id": 1,
+			"key": "tfp",
 			"header": "FP Table",
-			"name": "[FP]=",
 			"type": 3,
 			"graph": 3,
 			"options": 0,
@@ -540,8 +555,8 @@
 		},
 		{
 			"id": 2,
+			"key": "dcfp",
 			"header": "FP Exergy Cost Table",
-			"name": "[FP*]=",
 			"type": 4,
 			"graph": 3,
 			"options": 0,
@@ -550,8 +565,8 @@
 		},
 		{
 			"id": 3,
+			"key": "dcfpr",
 			"header": "FPR Exergy Cost Table",
-			"name": "[FPR*]=",
 			"type": 4,
 			"graph": 0,
 			"options": 0,
@@ -560,8 +575,8 @@
 		},
 		{
 			"id": 4,
+			"key": "gcfp",
 			"header": "FP Generalized Exergy Cost Table",
-			"name": "[CFP]=",
 			"type": 6,
 			"graph": 0,
 			"options": 0,
@@ -570,8 +585,8 @@
 		},
 		{
 			"id": 5,
+			"key": "dict",
 			"header": "Irreversibility-Cost Table",
-			"name": "<ICT>=",
 			"type": 5,
 			"graph": 1,
 			"options": 1,
@@ -580,8 +595,8 @@
 		},
 		{
 			"id": 6,
+			"key": "gict",
 			"header": "Generalized Irreversibility-Cost Table",
-			"name": "<GICT>=",
 			"type": 7,
 			"graph": 1,
 			"options": 5,
@@ -590,8 +605,8 @@
 		},
 		{
 			"id": 7,
+			"key": "dfict",
 			"header": "Flows Irreversibility-Cost Table",
-			"name": "<fICT>=",
 			"type": 5,
 			"graph": 1,
 			"options": 3,
@@ -600,8 +615,8 @@
 		},
 		{
 			"id": 8,
+			"key": "gfict",
 			"header": "Flows Generalized Irreversibility-Cost Table",
-			"name": "<fGICT>=",
 			"type": 7,
 			"graph": 1,
 			"options": 7,
@@ -610,8 +625,8 @@
 		},
 		{
 			"id": 9,
+			"key": "mf",
 			"header": "Malfunction Table",
-			"name": "[MF]=",
 			"type": 8,
 			"graph": 2,
 			"options": 0,
@@ -620,8 +635,8 @@
 		},
 		{
 			"id": 10,
+			"key": "mfc",
 			"header": "Malfunction Cost Table",
-			"name": "[DF]=",
 			"type": 8,
 			"graph": 2,
 			"options": 0,
@@ -630,8 +645,8 @@
 		},
 		{
 			"id": 11,
+			"key": "dit",
 			"header": "Irreversibility Variation Table",
-			"name": "[DI]=",
 			"type": 8,
 			"graph": 2,
 			"options": 0,
@@ -640,8 +655,8 @@
 		},
 		{
 			"id": 12,
+			"key": "rp",
 			"header": "Waste Allocation Table",
-			"name": "[RP]=",
 			"type": 9,
 			"graph": 0,
 			"options": 0,
@@ -650,8 +665,8 @@
 		},
 		{
 			"id": 13,
+			"key": "rad",
 			"header": "Direct Cost Recycling Analysis",
-			"name": "[RAD]=",
 			"type": 5,
 			"graph": 4,
 			"options": 3,
@@ -660,8 +675,8 @@
 		},
 		{
 			"id": 14,
+			"key": "rag",
 			"header": "Generalized Cost Recycling Analysis",
-			"name": "[RAD]=",
 			"type": 7,
 			"graph": 4,
 			"options": 7,
@@ -672,80 +687,80 @@
 	"summary": [
 		{
 			"id": 1,
+			"key": "dcp",
 			"header": "Processes Direct Exergy Cost",
-			"name": "[DCP]",
 			"type": 4,
 			"graph": 0,
 			"options": 0
 		},
 		{
 			"id": 2,
+			"key": "dpuc",
 			"header": "Processes Direct Unit Exergy Cost",
-			"name": "[DUCP]=",
 			"type": 5,
 			"graph": 5,
 			"options": 1
 		},
 		{
 			"id": 3,
+			"key": "dfc",
 			"header": "Flows Direct Exergy Cost",
-			"name": "[DCF]",
 			"type": 4,
 			"graph": 0,
 			"options": 0
 		},
 		{
 			"id": 4,
+			"key": "dfuc",
 			"header": "Flows Direct Unit Exergy Cost",
-			"name": "[DUCF]=",
 			"type": 5,
 			"graph": 5,
 			"options": 3
 		},
 		{
 			"id": 5,
+			"key": "gpc",
 			"header": "Processes Generalized Cost",
-			"name": "[DCP]",
 			"type": 6,
 			"graph": 0,
 			"options": 0
 		},
 		{
 			"id": 6,
+			"key": "gpuc",
 			"header": "Processes Generalized Unit Cost",
-			"name": "[DUCP]=",
 			"type": 7,
 			"graph": 5,
 			"options": 5
 		},
 		{
 			"id": 7,
+			"key": "gfc",
 			"header": "Flows Generalized Cost",
-			"name": "[DCF]",
 			"type": 6,
 			"graph": 0,
 			"options": 0
 		},
 		{
 			"id": 8,
+			"key": "gfuc",
 			"header": "Flows Generalized Unit Cost",
-			"name": "[DUCF]=",
 			"type": 7,
 			"graph": 5,
 			"options": 7
 		},
 		{
 			"id": 9,
+			"key": "exergy",
 			"header": "Flows Exergy",
-			"name": "[DUCF]=",
 			"type": 3,
 			"graph": 0,
 			"options": 0
 		},
 		{
 			"id": 10,
+			"key": "pku",
 			"header": "Process Unit Consumption",
-			"name": "[DKU]=",
 			"type": 5,
 			"graph": 5,
 			"options": 1

@@ -15,7 +15,7 @@ classdef cReadWaste < cStatusLogger
 		function obj=cReadWaste(data,ps)
 		% Class constructor
 		%	ps - cProductiveStructure object
-		%	data - waste definition data from cReadDataModel
+		%	data - waste definition data from cReadModel
 		%
 			% Check input arguments
 			obj=obj@cStatusLogger(cType.VALID);
@@ -121,7 +121,7 @@ classdef cReadWaste < cStatusLogger
 			end
 		end
 
-		function res=getWasteDefinition(obj);
+		function res=getWasteDefinition(obj)
 		% get waste definition struct
 			res=obj.wd;
 		end

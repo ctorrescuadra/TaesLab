@@ -538,7 +538,7 @@ classdef ThermoeconomicPanel < handle
 				assignin('base', 'CostTables', res);
 				if obj.Options.ShowGraph
 					if isOctave
-						viewGraph(ota.Tables.dict,ota.State);
+						graphCost(ota)
 					else
 						ViewResults(ota);
 					end
@@ -562,7 +562,7 @@ classdef ThermoeconomicPanel < handle
 				assignin('base', 'DiagnosisTables', res);
 				if obj.Options.ShowGraph
 					if isOctave
-						viewGraph(otd.Tables.mfc,otd.State);
+						graphDiagnosis(otd);
 					else
 						ViewResults(otd);
 					end

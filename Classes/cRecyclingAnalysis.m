@@ -24,7 +24,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
     end
 
     methods
-        function obj = cRecyclingAnalysis(fpm,wt,rsc)
+        function obj = cRecyclingAnalysis(fpm,rsc)
         % Create an instance of cRecyclingAnalysis
         %   Input:
         %       fpm - cModelFPR object
@@ -37,12 +37,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
                 obj.messageLog(cType.ERROR,'Invalid FPR model');
                 return
             end
-            if ~isa(wt,'cReadWaste') || ~wt.isValid
-                obj.addLogger(wt);
-                obj.messageLog(cType.ERROR,'Invalid FPR model');
-                return
-            end
-            if nargin==3
+            if nargin==2
                 if  ~isa(rsc,'cReadResources') || ~rsc.isValid
                     rsc.printLogger;
                     obj.addLogger(rsc);
@@ -59,13 +54,13 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
             obj.OutputFlows={obj.ps.Flows(obj.outputId).key};
             % Assign object variables
             obj.modelFP=fpm;
-            obj.wasteTable=wt;
+            obj.wasteTable=fpm.WasteData;
             obj.status=cType.VALID;
         end
 
         function doAnalysis(obj,wkey)
         % Do the recycled analysis for waste wkey
-            wId=obj.wasteTable.getWasteIndex(wkey);
+            wId=obj.modelFP.WasteData.getWasteIndex(wkey);
             if isempty(wId)
                 obj.messageLog(cType.ERROR,'Invalid waste key %s',wkey);
                 return
@@ -78,7 +73,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
             wrc=obj.wasteTable.RecycleRatio(wId); % Save original value
             for i=1:size(x,1)
                 obj.wasteTable.setRecycleRatio(wId,x(i));
-                sol.setWasteOperators(obj.wasteTable);
+                sol.setWasteOperators;
                 if obj.directCost
                     ucost=sol.getDirectProcessUnitCost;
                     fc=sol.getDirectFlowsCost(ucost);

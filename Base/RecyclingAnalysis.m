@@ -48,22 +48,11 @@ function sol = RecyclingAnalysis(model,varargin)
 	    sol.printError(cType.ERROR,'Model must have waste')
         return
     end
-    wt=model.readWaste;
-    if ~wt.isValid
-        wt.printLogger;
+    wd=model.readWaste;
+    if ~wd.isValid
+        wd.printLogger;
         sol.printError('Invalid waste model');
         return
-    end
-    % Check Waste Key
-    if isempty(param.WasteFlow)
-        wid=wt.Flows(1);
-        param.WasteFlow=model.ProductiveStructure.Flows(wid).key;
-    else
-        wid=wt.getWasteIndex(param.WasteFlow);
-        if isempty(wid)
-            sol.printError('Invalid waste key %s',param.WasteFlow);
-            return
-        end
     end
     % Read exergy values
     if isempty(param.State)
@@ -81,6 +70,19 @@ function sol = RecyclingAnalysis(model,varargin)
         mfp.printLogger;
         mfp.printError('Invalid Model FPR. See error log');
     end
+    % Check Waste Key
+    mfp.setWasteData(wd);
+    wt=mfp.WasteData;
+    if isempty(param.WasteFlow)
+        wid=wt.Flows(1);
+        param.WasteFlow=model.ProductiveStructure.Flows(wid).key;
+    else
+        wid=wt.getWasteIndex(param.WasteFlow);
+        if isempty(wid)
+            sol.printError('Invalid waste key %s',param.WasteFlow);
+            return
+        end
+    end
     % Read external resources and get results
 	pct=cType.getCostTables(param.CostTables);
 	param.DirectCost=bitget(pct,cType.DIRECT);
@@ -93,9 +95,9 @@ function sol = RecyclingAnalysis(model,varargin)
 			rsc.printError('Invalid resources cost values. See Error Log');
 			return
         end
-        ra=cRecyclingAnalysis(mfp,wt,rsc);
+        ra=cRecyclingAnalysis(mfp,rsc);
     else
-        ra=cRecyclingAnalysis(mfp,wt);
+        ra=cRecyclingAnalysis(mfp);
     end
     % Execute recycling analysis
     if isValid(ra)

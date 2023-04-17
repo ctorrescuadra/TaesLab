@@ -77,8 +77,9 @@ classdef (Sealed) cResultInfo < cModelTables
             if nargin<2
                 graph=cType.Tables.PROCESS_ICT;
             end
-            if obj.existTable(graph)  
-                viewGraph(obj.Tables.(graph),obj.State);
+            if obj.existTable(graph)
+                g=cGraphResults(obj.Tables.(graph));
+                g.graphCost;
             else
                 log.messageLog(cType.ERROR,'Table %s is NOT available',graph);
                 return
@@ -107,7 +108,8 @@ classdef (Sealed) cResultInfo < cModelTables
                 graph=cType.Tables.MALFUNCTION_COST;
             end
             if obj.existTable(graph)  
-                viewGraph(obj.Tables.(graph),obj.State);
+                g=cGraphResults(obj.Tables.(graph));
+                g.graphDiagnosis;
             else
                 log.messageLog(cType.ERROR,'Invalid Table %s',graph);
                 return
@@ -132,7 +134,7 @@ classdef (Sealed) cResultInfo < cModelTables
                 var=info.getDefaultFlowVariables;
             end
             tbl=obj.getTable(graph);
-            if ~isValid(tbl) || ~tbl.isGraphTable
+            if ~isValid(tbl) || ~isGraph(tbl)
                 log.messageLog(cType.ERROR,'Invalid graph type: %s',graph);
                 return
             end
@@ -153,26 +155,8 @@ classdef (Sealed) cResultInfo < cModelTables
                 return
             end
             % Plot the table
-            graphSummary(tbl,idx);
-        end
-        
-
-        function log=showDiagramFP(obj)
-        % Show the FP table digraph [only Matlab]
-            log=cStatusLogger(cType.VALID);
-            if isOctave
-                log.messageLog(cType.WARNING,'Function not implemented')
-                return
-            end
-            if obj.Id~=cType.ResultId.DIAGRAM_FP
-                obj.printWarning('Invalid Result Id: %s',obj.Name);
-                return
-            end
-            if ~isValid(obj.Info)
-                obj.PrintError('Invalid Diagram FP');
-                return
-            end
-            obj.Info.plotDiagram(obj.State);
+            g=cGraphResults(tbl,idx);
+            g.graphSummary;
         end
 
         function log=graphRecycling(obj,graph)
@@ -191,35 +175,40 @@ classdef (Sealed) cResultInfo < cModelTables
             end
             tbl=obj.getTable(graph);
             if ~isValid(tbl)
-                obj.printError('Invalid graph option %s',graph);
+                obj.printError('Invalid graph table %s',graph);
                 return
             end
             wasteFlow=obj.Info.wasteFlow;
-            unit=['Cost ',tbl.Unit];
-            outputFlows=obj.Info.OutputFlows;
-            x=(0:10:100);
-            switch graph
-            case cType.Tables.WASTE_RECYCLING_DIRECT
-                y=obj.Info.dValues(:,2:end);
-                yl=[1,Inf];
-            case cType.Tables.WASTE_RECYCLING_GENERAL
-                y=obj.Info.gValues(:,2:end);
-                yl=[0,Inf];
-            otherwise
-                log.messageLog(cType.WARNING,'Invalid type of graph');
+            g=cGraphResults(tbl,wasteFlow);
+            g.graphRecycling;
+        end
+        
+        function log=showDiagramFP(obj)
+        % Show the FP table digraph [only Matlab]
+            log=cStatusLogger(cType.VALID);
+            if isOctave
+                log.messageLog(cType.WARNING,'Function not implemented')
                 return
             end
-            figure('name','Recycling Analysis','numbertitle','off','Color',[1 1 1]); 
-            plot(x,y,'Marker','diamond');
-            title(['Recycling Cost Analysis [',obj.State,'/',wasteFlow,']']);
-            xlabel('Recycling (%)');
-            ylabel(unit);
-            xlim([0.,100]);
-            xticks(x);
-            tmp=ylim;yl(2)=tmp(2);ylim(yl);
-            hl=legend(outputFlows);
-            set(hl,'Orientation','horizontal','Location','southoutside');
-            grid on
+            switch obj.Id
+            case cType.ResultId.THERMOECONOMIC_STATE
+                graph=cType.Tables.TABLE_FP;
+            case cType.ResultId.THERMOECONOMIC_ANALYSIS
+                graph=cType.Tables.COST_TABLE_FP;
+            case cType.ResultId.DIAGRAM_FP
+                obj.Info.plotDiagram;
+                return;
+            otherwise
+                obj.printWarning('Invalid Result Id: %s',obj.Name);
+                return
+            end
+            tbl=obj.getTable(graph);
+            if ~isValid(tbl)
+                obj.printError('Invalid graph table %s',graph);
+                return
+            end
+            g=cDiagramFP(tbl);
+            g.plotDiagram;
         end
 
         function res=flowsDiagram(obj,opt)
@@ -260,20 +249,20 @@ classdef (Sealed) cResultInfo < cModelTables
         end
 
         function log=saveDiagramFP(obj,filename)
-            % Save the Adjacency matrix of the Diagram FP in a file
-            % The following file types are availables (XLSX,CSV,MAT)
-            %  Input:
-            %   filename - Name of the file
-            %  Output:
-            %   log - cStatusLogger object containing the status and error messages
-                log=cStatusLogger(cType.VALID);
-                if obj.Id==cType.ResultId.DIAGRAM_FP
-                    log=saveResults(obj,filename);
-                else
-                    log.printError(cType.ERROR,'Result object is NOT a DIAGRAM_FP');
-                    return
-                end
+        % Save the Adjacency matrix of the Diagram FP in a file
+        % The following file types are availables (XLSX,CSV,MAT)
+        %  Input:
+        %   filename - Name of the file
+        %  Output:
+        %   log - cStatusLogger object containing the status and error messages
+            log=cStatusLogger(cType.VALID);
+            if obj.Id==cType.ResultId.DIAGRAM_FP
+                log=saveResults(obj,filename);
+            else
+                log.printError(cType.ERROR,'Result object is NOT a DIAGRAM_FP');
+                return
             end
+        end
 
         function res=saveAdjacencyTable(obj,filename)
         % Save the adjacency table of the actual model state

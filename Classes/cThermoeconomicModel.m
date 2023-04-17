@@ -472,7 +472,10 @@ classdef cThermoeconomicModel < cStatusLogger
             printResults(obj.Results);
         end
 
-        function log=graphDiagramFP(obj,graph)
+        %%%
+        % Graphical methods
+        %
+        function log=showDiagramFP(obj,graph)
         % Show the diagram FP graph (only Matlab)
             log=cStatusLogger(cType.VALID);
             mt=obj.getModelTables;
@@ -480,12 +483,12 @@ classdef cThermoeconomicModel < cStatusLogger
                 graph=cType.Tables.TABLE_FP;
             end
             tbl=mt.getTable(graph);
-            if ~isValid(tbl)
-                log.printWarning('FP Diagram not available');
+            if ~isValid(tbl) || ~isDigraph(tbl)
+                log.printWarning('Table %s is not a Digraph',tbl.Key);
                 return
             end
-            res=cDiagramFP(tbl);
-            plotDiagram(res,obj.State);
+            g=cDiagramFP(tbl);
+            g.plotDiagram;
         end
 
         function log = graphCost(obj,graph)
@@ -634,8 +637,6 @@ classdef cThermoeconomicModel < cStatusLogger
                 log.printLogger;
             end
         end
-
-        
 
         %%%
         % Waste Analysis methods

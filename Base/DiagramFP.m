@@ -1,4 +1,4 @@
-function sol=ShowDiagramFP(model,varargin)
+function sol=DiagramFP(model,varargin)
 % ShowDiagramFP - shows the Diagram FP of a plant State
 % 	INPUT:
 %		model - cReadModel Object containing the model information
@@ -15,7 +15,6 @@ function sol=ShowDiagramFP(model,varargin)
 	p = inputParser;
 	p.addRequired('model',checkModel);
 	p.addParameter('State','',@ischar);
-    p.addParameter('ShowGraph',false,@islogical);
 	try
 		p.parse(model,varargin{:});
 	catch err
@@ -51,7 +50,4 @@ function sol=ShowDiagramFP(model,varargin)
 	pm=cProcessModel(rex);
     sol=getDiagramFP(fmt,pm);
     sol.setProperties(model.ModelName,param.State);
-    if param.ShowGraph
-	    sol.Info.plotDiagram(param.State);
-    end
 end

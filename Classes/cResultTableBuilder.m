@@ -527,6 +527,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         function res=createCellTable(obj,id,data,rowNames,colNames)
         % Create a cell table and set parameters from cPrintConfig
             res=cTableCell(data,rowNames,colNames);
+            p.key=obj.getTableKey(id);
             p.Description=obj.getTableDescription(id);    
             p.Unit=obj.getTableUnits(id);
             p.Format=obj.getTableFormat(id);
@@ -538,6 +539,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         % Create a matrix table and set parameters from cPrintConfig
             [rTotal,cTotal]=obj.getMatrixTotal(id);
             res=cTableMatrix(data,rowNames,colNames,rTotal,cTotal);
+            p.key=obj.getMatrixKey(id);
             p.Description=obj.getMatrixDescription(id);    
             p.Unit=obj.getMatrixUnit(id);
             p.Format=obj.getMatrixFormat(id);
@@ -548,6 +550,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
 
         function res=createSummaryTable(obj,id,data,rowNames,colNames)
             res=cTableMatrix(data,rowNames,colNames,false,false);
+            p.key=obj.getSummaryKey(id);
             p.Description=obj.getSummaryDescription(id);    
             p.Unit=obj.getSummaryUnit(id);
             p.Format=obj.getSummaryFormat(id);

@@ -10,9 +10,8 @@ classdef (Sealed) cTableMatrix < cTableResult
 %       res=obj.getColumnFormat
 %       res=obj.getDescriptionLabel
 %       obj.printFormatted
-%       obj.isGraphTable
+%       obj.isGraph
 %       obj.isDigraph
-%       obj.viewGraph
 %   Methods Inhereted from cTableResult
 %       res=obj.getFormattedCell(fmt)
 %       obj.ViewTable(state)
@@ -68,6 +67,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         
         function setProperties(obj,p)
         % Set the table properties: Description, Unit, Format, GraphType
+            obj.Key=p.key;
             obj.Description=p.Description;
             obj.Unit=p.Unit;
             obj.Format=p.Format;
@@ -160,25 +160,10 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=bitget(obj.GraphOptions,3);
         end
 
-        function graphSummary(obj,idx)
-            fig=cGraphSummary(obj,idx);
-            fig.showGraph;
-        end
-
         function res=isDigraph(obj)
         % Determine if table has a digraph representation       
-            res=bitget(obj.GraphType,5);
+            res=(obj.GraphType==cType.GraphType.DIAGRAM_FP);
         end
 
-        function viewGraph(obj,state)
-        % Represent the table as a bar plot
-            if nargin==1
-                state='';
-            end
-            fig=cResultGraph(obj,state);
-            if fig.isValid
-                fig.showGraph;
-            end
-        end
     end
 end
