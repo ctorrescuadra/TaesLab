@@ -282,7 +282,7 @@ classdef cModelTables < cStatusLogger
             end
             tidx=obj.getIndexTable;
             if isOctave
-                [fId,status]=oct2xls(tidx.Data,fId,'Index');
+                [fId,status]=oct2xls(tidx.Values,fId,'Index');
                 if ~status || isempty(fId)
                     log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
                 end

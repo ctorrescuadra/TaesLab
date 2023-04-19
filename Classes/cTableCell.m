@@ -70,10 +70,16 @@ classdef (Sealed) cTableCell < cTableResult
 
         function res=getMatlabTable(obj)
         % Return as matlab table if apply
+            res=getMatlabTable@cTable(obj);
             if isMatlab
-                res=getMatlabTable@cTable(obj);
                 res.Properties.VariableNames=obj.FieldNames(2:end);
                 res.Properties.VariableUnits=obj.Unit(2:end);
+                res.Properties.VariableDescriptions=obj.ColNames(2:end);
+                res=addprop(res,["State","GraphType","Name","Format"],["table","table","table","variable"]);
+                res.Properties.CustomProperties.State=obj.State;
+                res.Properties.CustomProperties.GraphType=obj.GraphType;
+                res.Properties.CustomProperties.Name=obj.Key;
+                res.Properties.CustomProperties.Format=obj.Format(3:end);
             end
         end
 

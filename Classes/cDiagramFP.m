@@ -55,7 +55,6 @@ classdef (Sealed) cDiagramFP < cResultId
             obj.target=[vtarget,itarget,wtarget];
             obj.values=[vval';ival;wval];
             obj.unit=tbl.Unit;
-            obj.descr=[tbl.Description,' [',tbl.State,']'];
             obj.Nodes=[vsource,nodes,wtarget];
 			obj.NrOfEdges=numel(obj.values);
 			obj.NrOfNodes=numel(obj.Nodes);
@@ -83,6 +82,10 @@ classdef (Sealed) cDiagramFP < cResultId
             if isMatlab
                 res=digraph(obj.source,obj.target,obj.values,"omitselfloops");
             end
+        end
+
+        function setDescription(obj,tbl)
+            obj.descr=[tbl.Description,' [',tbl.State,']'];
         end
 
         function plotDiagram(obj)

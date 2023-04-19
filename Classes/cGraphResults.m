@@ -20,7 +20,7 @@ classdef cGraphResults < cStatusLogger
 				return
 			end
 			obj.Type=tbl.GraphType;
-			switch obj.Type
+            switch obj.Type
 			case cType.GraphType.COST
 				obj.setGraphCostParameters(tbl);
 			case cType.GraphType.DIAGNOSIS
@@ -32,7 +32,8 @@ classdef cGraphResults < cStatusLogger
 			otherwise
 				obj.messageLog('Invalid Graph Type %d',obj.GraphType);
 				return
-			end
+            end
+            obj.status=cType.VALID;
 		end
 
 		function graphCost(obj)

@@ -1,4 +1,4 @@
-function sol=DiagramFP(model,varargin)
+function res=DiagramFP(model,varargin)
 % ShowDiagramFP - shows the Diagram FP of a plant State
 % 	INPUT:
 %		model - cReadModel Object containing the model information
@@ -9,7 +9,7 @@ function sol=DiagramFP(model,varargin)
 %		res - cResultInfo object contains the results of the exergy analysis for the required state
 % See also cProcessModel, cResultInfo
 %
-	sol=cStatusLogger(); 
+	res=cStatusLogger(); 
 	checkModel=@(x) isa(x,'cReadModel');
 	% Check input parameters
 	p = inputParser;
@@ -18,8 +18,8 @@ function sol=DiagramFP(model,varargin)
 	try
 		p.parse(model,varargin{:});
 	catch err
-		sol.printError(err.message);
-        sol.printError('Usage: ExergyCostCalculator(model,param)');
+		res.printError(err.message);
+        res.printError('Usage: ExergyCostCalculator(model,param)');
 		return
 	end
 	param=p.Results;
@@ -40,14 +40,15 @@ function sol=DiagramFP(model,varargin)
 	if isempty(param.State)
 		param.State=model.getStateName(1);
 	end
-	rex=model.readExergy(param.State);
-	if ~isValid(rex)
-		rex.printLogger;
-		rex.printError('Exergy Values are NOT correct. See error log');
+	ex=model.readExergy(param.State);
+	if ~isValid(ex)
+		ex.printLogger;
+		ex.printError('Exergy Values are NOT correct. See error log');
 		return
 	end
 	% Set Results
-	pm=cProcessModel(rex);
-    sol=getDiagramFP(fmt,pm);
-    sol.setProperties(model.ModelName,param.State);
+	pm=cProcessModel(ex);
+    res=getDiagramFP(fmt,pm);
+    res.setProperties(model.ModelName,param.State);
+	res.Info.setDescription(res.Tables.tfp);
 end

@@ -19,7 +19,6 @@ classdef (Sealed) cModelResults < cStatusLogger
 
     properties (Access=private)
         index         % Cell array of cResultInfo
-        activeIndex   % Active index (not null)
     end
 
     methods
@@ -45,11 +44,6 @@ classdef (Sealed) cModelResults < cStatusLogger
             else
                 res=obj.ThermoeconomicState.State;
             end
-        end
-
-        function res=get.activeIndex(obj)
-        % get not null cResultInfo cell array
-            res=obj.index(~cellfun(@isempty,obj.index));
         end
 
         function set.ThermoeconomicState(obj,arg)
@@ -126,10 +120,15 @@ classdef (Sealed) cModelResults < cStatusLogger
             end
         end
 
+        function res=getActiveIndex(obj)
+        % Get not null cResultInfo cell array
+            res=obj.index(~cellfun(@isempty,obj.index));
+        end
+
         function res=getModelTables(obj)
         % Get a cModelTables object with all tables of the active model
             tables=struct();
-            tmp=obj.activeIndex;
+            tmp=obj.getActiveIndex;
             for k=1:numel(tmp)
                 dm=tmp{k};
                 list=dm.getListOfTables;

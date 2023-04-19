@@ -52,4 +52,8 @@ function model=ThermoeconomicTool(filename,varargin)
         model=cThermoeconomicModel(data,p.Results);
     else
         model.addLogger(data);
-    end    
+    end
+    if ~model.isValid
+        model.printLogger;
+    end
+end

@@ -4,6 +4,7 @@ classdef (Sealed) cTableMatrix < cTableResult
 %   Methods:
 %       obj=cTableCell(data,rowNames,colNames,RowSum,ColSum)
 %       obj.setProperties
+%       obj.getMatrix
 %       res=obj.formatData
 %       res=obj.getMatlabTable
 %       res=obj.getFormatedStruct(fmt)
@@ -73,6 +74,11 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.Format=p.Format;
             obj.GraphType=p.GraphType;
             obj.GraphOptions=p.GraphOptions;
+        end
+
+        function res=getMatrix(obj)
+        % Get the table data as Array
+            res=cell2mat(obj.Data);
         end
 
         function res=formatData(obj)
@@ -163,6 +169,21 @@ classdef (Sealed) cTableMatrix < cTableResult
         function res=isDigraph(obj)
         % Determine if table has a digraph representation       
             res=(obj.GraphType==cType.GraphType.DIAGRAM_FP);
+        end
+
+        function res=getMatlabTable(obj)
+        % Return as matlab table if apply
+            res=getMatlabTable@cTable(obj);
+            if isMatlab
+                res=addprop(res,["State","GraphType","GraphOptions","Name","Format","Units"],...
+                    ["table","table","table","table","table","table"]);
+                res.Properties.CustomProperties.State=obj.State;
+                res.Properties.CustomProperties.GraphType=obj.GraphType;
+                res.Properties.CustomProperties.GraphOptions=obj.GraphOptions;
+                res.Properties.CustomProperties.Name=obj.Key;
+                res.Properties.CustomProperties.Format=obj.Format;
+                res.Properties.CustomProperties.Units=obj.Unit;
+            end
         end
 
     end
