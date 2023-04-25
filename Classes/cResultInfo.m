@@ -75,7 +75,6 @@ classdef (Sealed) cResultInfo < cModelTables
             if (obj.Id~=cType.ResultId.THERMOECONOMIC_ANALYSIS) && ...
                 (obj.Id~=cType.ResultId.EXERGY_COST_CALCULATOR)
                 log.printError('Invalid Result Id: %s',obj.Name);
-                log.status=cType.ERROR;
                 return
             end  
             if nargin<2
@@ -86,7 +85,6 @@ classdef (Sealed) cResultInfo < cModelTables
                 g.graphCost;
             else
                 log.printError('Table %s is NOT available',graph);
-                log.status=cType.ERROR;
                 return
             end
         end
@@ -107,7 +105,6 @@ classdef (Sealed) cResultInfo < cModelTables
             end
             if obj.Id~=cType.ResultId.THERMOECONOMIC_DIAGNOSIS
                 log.printError('Invalid Result Id: %s',obj.Name);
-                log.status=cType.ERROR;
                 return
             end  
             if nargin<2
@@ -118,7 +115,6 @@ classdef (Sealed) cResultInfo < cModelTables
                 g.graphDiagnosis;
             else
                 log.printError('Table %s is NOT available',graph);
-                log.status=cType.ERROR;
                 return
             end
         end
@@ -130,10 +126,9 @@ classdef (Sealed) cResultInfo < cModelTables
         %      var - Variables to plot
         %
             %Check input arguments
-            log=cStatusLogger(true);
+            log=cStatusLogger(cType.VALID);
             if obj.Id ~= cType.ResultId.SUMMARY_RESULTS
                 log.printError('Invalid cResultInfo object %s',obj.Name);
-                log.status=cType.ERROR;
                 return
             end
             info=obj.Info;
@@ -144,12 +139,10 @@ classdef (Sealed) cResultInfo < cModelTables
             tbl=obj.getTable(graph);
             if ~isValid(tbl) || ~isGraph(tbl)
                 log.printError('Invalid graph type: %s',graph);
-                log.status=cType.ERROR;
                 return
             end
             if (nargin==2) && ~tbl.isFlowsTable
                 log.printError('Variables are required for this type: %s',graph);
-                log.status=cType.ERROR;
                 return
             end
             if nargin==2
@@ -175,11 +168,11 @@ classdef (Sealed) cResultInfo < cModelTables
         %       graph - Name of the table to graph
             log=cStatusLogger(cType.VALID);
             if obj.Id~=cType.ResultId.RECYCLING_ANALYSIS
-                obj.printError('Invalid Result Id: %s',obj.Name);
+                log.printError('Invalid Result Id: %s',obj.Name);
                 return
             end
             if ~isValid(obj.Info)
-                obj.printError('Invalid Recycling Analysis');
+                log.printError('Invalid Recycling Analysis');
                 return
             end
             if nargin==1 || isempty(graph)
@@ -194,13 +187,34 @@ classdef (Sealed) cResultInfo < cModelTables
             g=cGraphResults(tbl,wasteFlow);
             g.graphRecycling;
         end
-        
+
+        function log = graphWasteAllocation(obj,wkey)
+        % Show a pie chart of the waste allocation table
+        %   Input:
+        %       wkey - waste flow key
+            log=cStatusLogger(cType.VALID);
+            if obj.Id~=cType.ResultId.WASTE_ALLOCATION
+                log.printError('Invalid Result Id: %s',obj.Name);
+                return
+            end
+            if nargin==2
+                wid=obj.Info.getWasteId(wkey);
+                if isempty(wid)
+                    log.printError('Invalid waste flow key %s',wkey);
+                    return
+                else
+                    wid=1;
+                end
+            end
+            g=cGraphResults(obj.Tables.wa,wid);
+            g.graphWasteAllocation;
+        end
+
         function log=showDiagramFP(obj)
         % Show the FP table digraph [only Matlab]
             log=cStatusLogger(cType.VALID);
             if isOctave
                 log.printError('Function not implemented')
-                log.status=cType.ERROR;
                 return
             end
             switch obj.Id
@@ -212,14 +226,12 @@ classdef (Sealed) cResultInfo < cModelTables
                 obj.Info.plotDiagram;
                 return;
             otherwise
-                obj.printWarning('Invalid Result Id: %s',obj.Name);
-                log.status=cType.ERROR;
+                log.printWarning('Invalid Result Id: %s',obj.Name);
                 return
             end
             tbl=obj.getTable(graph);
             if ~isValid(tbl)
-                obj.printError('Invalid graph table %s',graph);
-                log.status=cType.ERROR;
+                log.printError('Invalid graph table %s',graph);
                 return
             end
             g=cDiagramFP(tbl);
@@ -237,7 +249,7 @@ classdef (Sealed) cResultInfo < cModelTables
                 opt=false;
             end
             if obj.Id~=cType.ResultId.PRODUCTIVE_STRUCTURE
-                obj.printWarning('Invalid Result Id: %s',obj.Name);
+                log.printWarning('Invalid Result Id: %s',obj.Name);
                 return
             end
             if ~isValid(obj.Info)
@@ -275,7 +287,6 @@ classdef (Sealed) cResultInfo < cModelTables
                 log=saveResults(obj,filename);
             else
                 log.printError(cType.ERROR,'Result object is NOT a DIAGRAM_FP');
-                log.status=cType.ERROR;
                 return
             end
         end
@@ -292,12 +303,10 @@ classdef (Sealed) cResultInfo < cModelTables
                 res=getAdjacencyTable(obj.Info);
             else
                 log.printError('Invalid ResultInfo');
-                log.status=cType.ERROR;
                 return
             end
             if ~cType.checkFileWrite(filename)
                 log.printError('Invalid file name: %s',filename);
-                log.status=cType.ERROR;
                 return
             end
             fileType=cType.getFileType(filename);
@@ -308,7 +317,6 @@ classdef (Sealed) cResultInfo < cModelTables
                     slog=exportXLS(res,filename);
             otherwise
                 log.printError('File extension %s is not supported',filename);
-                log.status=cType.ERROR;
                 return
             end
             log.addLogger(slog);

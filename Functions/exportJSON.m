@@ -12,13 +12,11 @@ function log=exportJSON(data,filename)
         return
     end
     if ~cType.checkFileWrite(filename)
-        message=sprintf('Invalid filename extension %s',filename);
-        log.messageLog(cType.ERROR,message)
+        log.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.JSON)
-        message=sprintf('Invalid filename extension %s',filename);
-        log.messageLog(cType.ERROR,message)
+        log.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
         return
     end
 	try
@@ -26,8 +24,7 @@ function log=exportJSON(data,filename)
 		fid=fopen(filename,'wt');
 		fwrite(fid,text);
 		fclose(fid);
-        message=sprintf('File %s has been saved',filename);
-        log.messageLog(cType.INFO,message);
+        log.messageLog(cType.INFO,'File %s has been saved',filename);
 	catch err
         log.messageLog(cType.ERROR,err.message);
         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);

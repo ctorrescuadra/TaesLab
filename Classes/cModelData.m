@@ -115,12 +115,11 @@ classdef cModelData < cStatusLogger
         %   log: cStatusLog class containing error messages ans status
             log=cStatusLogger(cType.VALID);
             if isOctave
-                log.messageLog(cType.ERROR,'Save XML files is not yet implemented')
+                log.messageLog(cType.ERROR,'Save XML files is not yet implemented');
 	            return
             end
             if ~cType.checkFileWrite(filename)
-                message=sprintf('Invalid file name %s',filename);
-                log.messageLog(cType.ERROR,message);
+                log.messageLog(cType.ERROR,'Invalid file name %s',filename);
                 return
             end
             try
@@ -143,8 +142,7 @@ classdef cModelData < cStatusLogger
         %   log: cStatusLog class containing error messages ans status
             log=cStatusLogger(cType.VALID);
             if ~cType.checkFileWrite(filename)
-                message=sprintf('Invalid file name %s',filename);
-                log.messageLog(message);
+                log.messageLog(cType.ERROR,'Invalid file name %s',filename);
                 return
             end
             try
@@ -158,8 +156,7 @@ classdef cModelData < cStatusLogger
                 return
             end
             if log.isValid
-                message=sprintf('Data Model available on file %s',filename);
-                log.messageLog(cType.INFO,message);
+                log.messageLog(cType.INFO,'Data Model available on file %s',filename);
             end
         end
     end

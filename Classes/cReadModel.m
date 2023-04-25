@@ -151,16 +151,14 @@ classdef (Abstract) cReadModel < cStatusLogger
 				state=obj.getStateName(1);
 			end	
 			if ~obj.existState(state)	
-				message=sprintf('Invalid Exergy sample %s',state);
-				res.messageLog(cType.ERROR,message);
+				res.messageLog(cType.ERROR,'Invalid Exergy sample %s',state);
 				return
 			end
 			idx=obj.getStateId(state);
 			data=obj.ModelData.ExergyStates.States(idx);
 			M=numel(data.exergy);
 			if M~=ps.NrOfFlows
-				message=sprintf('Invalid number of exergy values %d',M);
-				res.messageLog(cType.ERROR,message);
+				res.messageLog('Invalid number of exergy values %d',M);
 			else
 				res=cReadExergy(data,ps);
 			end
@@ -174,8 +172,7 @@ classdef (Abstract) cReadModel < cStatusLogger
 				data=obj.ModelData.WasteDefinition;
 				NR=numel(data.wastes);
                 if NR~=ps.NrOfWastes
-					message=sprintf('Invalid number of wastes %d',NR);
-					res.messageLog(cType.ERROR,message);
+					res.messageLog(cType.ERROR,'Invalid number of wastes %d',NR);
 					return
                 end
 			else
@@ -195,8 +192,7 @@ classdef (Abstract) cReadModel < cStatusLogger
             end
 			if obj.isResourceCost
                 if ~obj.existSample(sample)	
-					message=sprintf('Invalid Resource sample %s',ssmple);
-					res.messageLog(cType.ERROR,message);
+					res.messageLog(cType.ERROR,'Invalid Resource sample %s',sample);
 					return
                 end
 				idx=obj.getSampleId(sample);
@@ -242,7 +238,7 @@ classdef (Abstract) cReadModel < cStatusLogger
 						log.messageLog(cType.WARNING,'Format Configuration is NOT valid. Default is used')
 					otherwise
 						log.addLogger(rfmt);
-						log.messageLog('Format Configuration is NOT valid. See error log');
+						log.messageLog(cType.ERROR,'Format Configuration is NOT valid. See error log');
 				end
 				status= status & rfmt.status;
 			else
@@ -308,7 +304,7 @@ classdef (Abstract) cReadModel < cStatusLogger
         function log=saveAsMAT(obj,filename)
             log=cStatusLogger(cType.VALID);
             if isOctave
-                log.messageLog('This function is not yet implemented')
+				log.messageLog(cType.ERROR,'Save MAT files is not implemented in Octave');
 	            return
             end
 			if nargin==1 % Default name
@@ -324,8 +320,7 @@ classdef (Abstract) cReadModel < cStatusLogger
             % Save the object
             try
 				save(filename,'obj');
-                message=sprintf('Data Model available on file %s',filename);
-                log.messageLog(cType.INFO,message);
+                log.messageLog(cType.INFO,'Data Model available on file %s',filename);
 			catch err
                 log.messageLog(cType.ERROR,err.message);
                 log.messageLog(cType.ERROR,'File %s cannot be written',filename);
@@ -337,13 +332,11 @@ classdef (Abstract) cReadModel < cStatusLogger
 			log=cStatusLogger;
 			% Check inputs
 			if ~isValid(obj)
-				message=sprintf('Invalid data model %s',obj.ModelName);
-				log.messageLog(cType.ERROR,message);
+				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
                 return
 			end
             if ~cType.checkFileWrite(filename)
-                message=sprintf('Invalid file name %s',filename);
-				log.messageLog(cType.ERROR,message);
+				log.messageLog(cType.ERROR,'Invalid file name %s',filename);
                 return
             end
 			% Save data model depending of fileType
@@ -362,8 +355,7 @@ classdef (Abstract) cReadModel < cStatusLogger
 				case cType.FileType.MAT
 					log=obj.saveAsMAT(filename);
 				otherwise
-					message=sprintf('File extension %s is not supported',filename);
-					log.messageLog(cType.WARNING,message);
+					messagelog.messageLog(cType.WARNING,'File extension %s is not supported',filename);
 			end
         end                
     end

@@ -1,4 +1,4 @@
-function sol = RecyclingAnalysis(model,varargin)
+function res = RecyclingAnalysis(model,varargin)
 % RecyclingAnalysis provide a recycling analysis of the plant
 %   Given a waste flow calculates the cost of output flows (final products
 %   and wastes) when it is recycled from 0 to %100.
@@ -12,7 +12,7 @@ function sol = RecyclingAnalysis(model,varargin)
 %           cRecyclingAnalysis info.
 % See also cReadModel, cRecyclingAnalysis, cResultInfo
 %
-    sol=cStatusLogger();
+    res=cStatusLogger();
     checkModel=@(x) isa(x,'cReadModel');
     %Check and initialize parameters
     p = inputParser;
@@ -24,8 +24,8 @@ function sol = RecyclingAnalysis(model,varargin)
     try
         p.parse(model,varargin{:});
     catch err
-        sol.printError(err.message);
-        sol.printError('Usage: cRecyclingAnalysis(model,param)')
+        res.printError(err.message);
+        res.printError('Usage: cRecyclingAnalysis(model,param)')
         return
     end
     % 
@@ -33,42 +33,42 @@ function sol = RecyclingAnalysis(model,varargin)
     % Check Productive Structure
     if ~model.isValid
 	    model.printLogger;
-	    sol.printError('Invalid Thermoeconomic Model');
+	    res.printError('Invalid Thermoeconomic Model');
 	    return
     end
     % Read format definition
     fmt=model.readFormat;
 	if fmt.isError
 		fmt.printLogger;
-		fmt.printError('Format Definition is NOT correct. See error log');
+		res.printError('Format Definition is NOT correct. See error log');
 		return
 	end
     % Read waste info
     if model.NrOfWastes<1
-	    sol.printError(cType.ERROR,'Model must have waste')
+	    res.printError(cType.ERROR,'Model must have waste')
         return
     end
     wd=model.readWaste;
     if ~wd.isValid
         wd.printLogger;
-        sol.printError('Invalid waste model');
+        res.printError('Invalid waste model');
         return
     end
     % Read exergy values
     if isempty(param.State)
         param.State=model.getStateName(1);
     end
-	rex=model.readExergy(param.State);
-	if ~rex.isValid
-        rex.printLogger;
-        sol.printError('Invalid Exergy Values. See error log');
+	ex=model.readExergy(param.State);
+	if ~ex.isValid
+        ex.printLogger;
+        res.printError('Invalid Exergy Values. See error log');
         return
 	end
 	% Compute thermoeconomic model using the selected algorithm
-    mfp=cModelFPR(rex);
+    mfp=cModelFPR(ex);
     if ~isValid(mfp)
         mfp.printLogger;
-        mfp.printError('Invalid Model FPR. See error log');
+        res.printError('Invalid Model FPR. See error log');
     end
     % Check Waste Key
     mfp.setWasteData(wd);
@@ -79,7 +79,7 @@ function sol = RecyclingAnalysis(model,varargin)
     else
         wid=wt.getWasteIndex(param.WasteFlow);
         if isempty(wid)
-            sol.printError('Invalid waste key %s',param.WasteFlow);
+            res.printError('Invalid waste key %s',param.WasteFlow);
             return
         end
     end
@@ -92,7 +92,7 @@ function sol = RecyclingAnalysis(model,varargin)
         rsc.setResources(mfp);
         if ~rsc.isValid
 			rsc.printLogger;
-			rsc.printError('Invalid resources cost values. See Error Log');
+			res.printError('Invalid resources cost values. See Error Log');
 			return
         end
         ra=cRecyclingAnalysis(mfp,rsc);
@@ -102,7 +102,10 @@ function sol = RecyclingAnalysis(model,varargin)
     % Execute recycling analysis
     if isValid(ra)
         ra.doAnalysis(param.WasteFlow)
-        sol=getRecyclingAnalysisResults(fmt,ra,param);
-        sol.setProperties(model.ModelName,param.State);
+        res=getRecyclingAnalysisResults(fmt,ra,param);
+        res.setProperties(model.ModelName,param.State);
+    else
+        ra.printLogger;
+        res.printError('Invalid Recycling Analysis. See Error Log');
     end
 end

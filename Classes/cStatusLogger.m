@@ -170,6 +170,7 @@ classdef cStatusLogger < handle
 		%   error - error code
 		%   text - text message
 			message=obj.createMessage(error,varargin{:});
+			obj.status=error;
 			disp(message);
 		end
 	end

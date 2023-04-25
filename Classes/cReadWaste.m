@@ -84,9 +84,9 @@ classdef cReadWaste < cStatusLogger
 					if isfield(wd(i),'values')
                         wval=wd(i).values;
                         if ~all(isfield(wval,{'process','value'})) 
-								message=sprintf('Values fields missing for waste %s',wd(i).flow);
-								obj.messageLog(cType.ERROR,message);
-								return
+							message=sprintf('Values fields missing for waste %s',wd(i).flow);
+							obj.messageLog(cType.ERROR,message);
+							return
                         end
                         for j=1:length(wval)
 							jp=ps.getProcessId(wval(j).process);

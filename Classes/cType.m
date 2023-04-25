@@ -102,7 +102,9 @@ classdef cType
 		OptionalData=3:5;
         % Default Results file
         RESULT_FILE='ModelResults';
-	    % Format config file
+		SUMMARY_FILE='SummaryResults';
+		DIAGRAM_FILE='DiagramFP';
+		% Format config file
 		CFGFILE='printformat.json';
         % Cell Tables
 		CellTable=struct('FLOW_EXERGY_COST',1,'FLOW_GENERALIZED_COST',2,'PROCESS_COST',3,...
@@ -142,7 +144,7 @@ classdef cType
 			'PROCESS_ICT','dict','PROCESS_GENERALIZED_ICT','gict','FLOW_ICT','dfict','FLOW_GENERALIZED_ICT','gfict',...
 			'DIAGNOSIS','dgn','MALFUNCTION','mf','MALFUNCTION_COST','mfc','IRREVERSIBILITY_VARIATION','dit',...
 			'WASTE_DEFINITION','wd','WASTE_ALLOCATION','wa','WASTE_RECYCLING_DIRECT','rad','WASTE_RECYCLING_GENERAL','rag');
-        GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5);
+        GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5,'WASTE_ALLOCATION',6);
         % File Extension
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt');

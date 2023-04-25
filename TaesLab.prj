@@ -1,9 +1,9 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2631771601" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab" name="TaesLab" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="1318775921" file="D:\Documents\Termoeconomia\TaesLab\TaesLab.prj" location="D:\Documents\Termoeconomia\TaesLab" name="TaesLab" target="target.mlapps" target-name="Package App">
     <param.appname>TaesLab</param.appname>
     <param.authnamewatermark>César Torres Cuadra</param.authnamewatermark>
     <param.email>ctorresc@unizar.es</param.email>
-    <param.company>Universidad de Zaragoza</param.company>
+    <param.company>Instituto CIRCE. Universidad de Zaragoza</param.company>
     <param.icon>${PROJECT_ROOT}\TaesLab_resources\icon_24.png</param.icon>
     <param.icons>
       <file>${PROJECT_ROOT}\TaesLab_resources\icon_48.png</file>
@@ -12,44 +12,41 @@
     </param.icons>
     <param.summary>Thermoeconomic Analysis of Energy System</param.summary>
     <param.description>Matlab Application for Thermoeconomic Analysis of Energy Systems</param.description>
-    <param.screenshot />
-    <param.version>1.1</param.version>
+    <param.screenshot>${PROJECT_ROOT}\Apps\Resources\Splash_TAES.png</param.screenshot>
+    <param.version>1.2</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
     <param.platforms />
-    <param.output>${PROJECT_ROOT}</param.output>
+    <param.output>D:\Documents\Termoeconomia\TaesLab_install</param.output>
     <param.guid>67d42bdd-e9fb-4079-b947-f06cbe418536</param.guid>
     <unset>
       <param.authnamewatermark />
       <param.email />
       <param.company />
-      <param.screenshot />
       <param.products.name />
       <param.products.id />
       <param.products.version />
       <param.platforms />
-      <param.output />
     </unset>
     <fileset.main>
       <file>${PROJECT_ROOT}\Apps\TaesLab.mlapp</file>
     </fileset.main>
     <fileset.depfun>
-      <file>${PROJECT_ROOT}\Apps\Resources\ps.png</file>
-      <file>${PROJECT_ROOT}\Apps\Resources\ta.png</file>
+      <file>${PROJECT_ROOT}\Apps\Resources\sr.png</file>
       <file>${PROJECT_ROOT}\Apps\Resources\TaesLab.png</file>
-      <file>${PROJECT_ROOT}\Apps\Resources\td.png</file>
-      <file>${PROJECT_ROOT}\Apps\Resources\ts.png</file>
       <file>${PROJECT_ROOT}\Base\SaveDataModel.m</file>
       <file>${PROJECT_ROOT}\Classes\cDiagnosis.m</file>
       <file>${PROJECT_ROOT}\Classes\cDiagnosisR.m</file>
       <file>${PROJECT_ROOT}\Classes\cDiagramFP.m</file>
       <file>${PROJECT_ROOT}\Classes\cDictionary.m</file>
       <file>${PROJECT_ROOT}\Classes\cExergyModel.m</file>
+      <file>${PROJECT_ROOT}\Classes\cGraphResults.m</file>
       <file>${PROJECT_ROOT}\Classes\cMessageLog.m</file>
       <file>${PROJECT_ROOT}\Classes\cModelData.m</file>
       <file>${PROJECT_ROOT}\Classes\cModelFPR.m</file>
       <file>${PROJECT_ROOT}\Classes\cModelResults.m</file>
+      <file>${PROJECT_ROOT}\Classes\cModelSummary.m</file>
       <file>${PROJECT_ROOT}\Classes\cModelTables.m</file>
       <file>${PROJECT_ROOT}\Classes\cParseStream.m</file>
       <file>${PROJECT_ROOT}\Classes\cProcessModel.m</file>
@@ -68,7 +65,6 @@
       <file>${PROJECT_ROOT}\Classes\cReadResources.m</file>
       <file>${PROJECT_ROOT}\Classes\cReadWaste.m</file>
       <file>${PROJECT_ROOT}\Classes\cRecyclingAnalysis.m</file>
-      <file>${PROJECT_ROOT}\Classes\cResultGraph.m</file>
       <file>${PROJECT_ROOT}\Classes\cResultId.m</file>
       <file>${PROJECT_ROOT}\Classes\cResultInfo.m</file>
       <file>${PROJECT_ROOT}\Classes\cResultTableBuilder.m</file>
@@ -83,6 +79,11 @@
       <file>${PROJECT_ROOT}\Classes\cThermoeconomicModel.m</file>
       <file>${PROJECT_ROOT}\Classes\cType.m</file>
       <file>${PROJECT_ROOT}\Classes\cViewTable.m</file>
+      <file>${PROJECT_ROOT}\Classes\cWasteTable.m</file>
+      <file>${PROJECT_ROOT}\Classes\icon16\ps.png</file>
+      <file>${PROJECT_ROOT}\Classes\icon16\ta.png</file>
+      <file>${PROJECT_ROOT}\Classes\icon16\td.png</file>
+      <file>${PROJECT_ROOT}\Classes\icon16\ts.png</file>
       <file>${PROJECT_ROOT}\Functions\bfs.m</file>
       <file>${PROJECT_ROOT}\Functions\checkModel.m</file>
       <file>${PROJECT_ROOT}\Functions\divideCol.m</file>
@@ -91,6 +92,7 @@
       <file>${PROJECT_ROOT}\Functions\exportXLS.m</file>
       <file>${PROJECT_ROOT}\Functions\importMAT.m</file>
       <file>${PROJECT_ROOT}\Functions\isMatlab.m</file>
+      <file>${PROJECT_ROOT}\Functions\isNumCellArray.m</file>
       <file>${PROJECT_ROOT}\Functions\isOctave.m</file>
       <file>${PROJECT_ROOT}\Functions\log2str.m</file>
       <file>${PROJECT_ROOT}\Functions\readModel.m</file>
@@ -105,7 +107,7 @@
     </fileset.resources>
     <fileset.package />
     <build-deliverables>
-      <file location="C:\Users\ctorr\Documents\Proyectos" name="TaesLab" optional="false">C:\Users\ctorr\Documents\Proyectos\TaesLab</file>
+      <file location="D:\Documents\Termoeconomia" name="TaesLab_install" optional="false">D:\Documents\Termoeconomia\TaesLab_install</file>
     </build-deliverables>
     <workflow />
     <matlab>

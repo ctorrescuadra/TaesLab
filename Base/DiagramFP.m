@@ -1,5 +1,5 @@
 function res=DiagramFP(model,varargin)
-% ShowDiagramFP - shows the Diagram FP of a plant State
+% DiagramFP - shows the Diagram FP of a plant State
 % 	INPUT:
 %		model - cReadModel Object containing the model information
 %   	varargin - an optional structure contains additional parameters:
@@ -26,14 +26,14 @@ function res=DiagramFP(model,varargin)
 	% Check Productive Structure
 	if ~model.isValid
 		model.printLogger;
-		model.printError('Invalid Productive Structure. See error log');
+		res.printError('Invalid Productive Structure. See error log');
 		return
 	end	
 	% Check format definition
 	fmt=model.readFormat;
 	if fmt.isError
 		fmt.printLogger;
-		fmt.printError('Format Definition is NOT correct. See error log');
+		res.printError('Format Definition is NOT correct. See error log');
 		return
 	end	
 	% Read and check exergy values
@@ -43,7 +43,7 @@ function res=DiagramFP(model,varargin)
 	ex=model.readExergy(param.State);
 	if ~isValid(ex)
 		ex.printLogger;
-		ex.printError('Exergy Values are NOT correct. See error log');
+		res.printError('Exergy Values are NOT correct. See error log');
 		return
 	end
 	% Set Results

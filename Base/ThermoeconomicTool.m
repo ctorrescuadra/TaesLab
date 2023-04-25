@@ -40,7 +40,7 @@ function model=ThermoeconomicTool(filename,varargin)
         p.addParameter('ResourceSample','',@ischar);
         p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
         p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
-        p.addParameter('ModelSummary',false,@islogical)
+        p.addParameter('Summary',false,@islogical)
         p.addParameter('Debug',true,@islogical);
         try
             p.parse(varargin{:});

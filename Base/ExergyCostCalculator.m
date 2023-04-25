@@ -1,4 +1,4 @@
-function sol=ExergyCostCalculator(model,varargin)
+function res=ExergyCostCalculator(model,varargin)
 % ExergyCostCalculator Calculates the exergy cost values of a thermoeconomic model
 % 	INPUT:
 %   	model - cReadModel object whose contains the thermoeconomic data model
@@ -25,7 +25,7 @@ function sol=ExergyCostCalculator(model,varargin)
 %       		gfict: Flows Irreversibility generalized cost table 
 % See also  cReadModel, cExergyCost, cResultInfo
 %
-	sol=cStatusLogger();
+	res=cStatusLogger();
 	checkModel=@(x) isa(x,'cReadModel');
     %Check input parameters
     p = inputParser;
@@ -36,38 +36,38 @@ function sol=ExergyCostCalculator(model,varargin)
     try
 		p.parse(model,varargin{:});
     catch err
-		sol.printError(err.message);
-        sol.printError('Usage: ExergyCostCalculator(model,param)');
+		res.printError(err.message);
+        res.printError('Usage: ExergyCostCalculator(model,param)');
         return
     end
     param=p.Results;
     % Check productive structure
     if ~model.isValid
 		model.printLogger;
-		model.printError('Invalid Productive Structure. See error log');
+		res.printError('Invalid Productive Structure. See error log');
 		return
     end
     % Check CostTable parameter
     if ~model.checkCostTables(param.CostTables)
-        sol.messageLog(cType.ERROR,'Invalid CostTable parameter %s',param.CostTables);
-        sol.printLogger;
+		model.printLogger;
+        res.printError('Invalid CostTable parameter %s',param.CostTables);
         return
     end
     % Read print formatted configuration
 	fmt=model.readFormat;
 	if fmt.isError
 		fmt.printLogger;
-		fmt.printError('Format Definition is NOT correct. See error log');
+		res.printError('Format Definition is NOT correct. See error log');
 		return
 	end		
     % Read exergy
 	if isempty(param.State)
 		param.State=model.getStateName(1);
 	end
-	rex=model.readExergy(param.State);
-	if ~rex.isValid
-		rex.printLogger;
-		rex.printError('Invalid Exergy Values. See error log');
+	ex=model.readExergy(param.State);
+	if ~ex.isValid
+		ex.printLogger;
+		res.printError('Invalid Exergy Values. See error log');
 		return
 	end	
 	% Read Waste definition and compute waste operator
@@ -75,16 +75,16 @@ function sol=ExergyCostCalculator(model,varargin)
 		wt=model.readWaste;
         if ~wt.isValid
 			wt.printLogger;
-			wt.printError('Invalid waste definition data. See error log');
+			res.printError('Invalid waste definition data. See error log');
 			return
         end
-	    ect=cExergyCost(rex,wt);
+	    ect=cExergyCost(ex,wt);
     else
-        ect=cExergyCost(rex);
+        ect=cExergyCost(ex);
     end
     if ~ect.isValid
 		ect.printLogger;
-		ect.printError('Invalid Exergy Cost Computation. See error log')
+		res.printError('Invalid Exergy Cost Computation. See error log')
 		return
     end
     % Read external resources and get results
@@ -96,11 +96,11 @@ function sol=ExergyCostCalculator(model,varargin)
 		rsc.setResources(ect);
         if ~rsc.isValid
 			rsc.printLogger;
-			rsc.printError('Invalid resources cost values. See error log');
+			res.printError('Invalid resources cost values. See error log');
 			return
         end
 		param.ResourcesCost=rsc;
 	end
-	sol=getExergyCostResults(fmt,ect,param);
-	sol.setProperties(model.ModelName,param.State);
+	res=getExergyCostResults(fmt,ect,param);
+	res.setProperties(model.ModelName,param.State);
 end

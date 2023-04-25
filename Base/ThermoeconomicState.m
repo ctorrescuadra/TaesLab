@@ -1,4 +1,4 @@
-function sol=ThermoeconomicState(model,varargin)
+function res=ThermoeconomicState(model,varargin)
 % ThermoeconomicState - shows the exergy values of a thermoeconomic state for a giving model 
 % 	INPUT:
 %		model - cReadModel Object containing the model information
@@ -14,7 +14,7 @@ function sol=ThermoeconomicState(model,varargin)
 %         	tfp - Exergy Fuel-Product table
 % See also cReadModel, cProcessModel, cModelResults
 %
-	sol=cStatusLogger(); 
+	res=cStatusLogger(); 
 	checkModel=@(x) isa(x,'cReadModel');
 	% Check input parameters
 	p = inputParser;
@@ -23,35 +23,40 @@ function sol=ThermoeconomicState(model,varargin)
 	try
 		p.parse(model,varargin{:});
 	catch err
-		sol.printError(err.message);
-        sol.printError('Usage: ExergyCostCalculator(model,param)');
+		res.printError(err.message);
+        res.printError('Usage: ExergyCostCalculator(model,param)');
 		return
 	end
 	param=p.Results;
 	% Check Productive Structure
 	if ~model.isValid
 		model.printLogger;
-		model.printError('Invalid Productive Structure. See error log');
+		res.printError('Invalid Productive Structure. See error log');
 		return
 	end	
 	fmt=model.readFormat;
 	if fmt.isError
 		fmt.printLogger;
-		fmt.printError('Format Definition is NOT correct. See error log');
+		res.printError('Format Definition is NOT correct. See error log');
 		return
 	end	
 	% Read and check exergy values
 	if isempty(param.State)
 		param.State=model.getStateName(1);
 	end
-	rex=model.readExergy(param.State);
-	if ~isValid(rex)
-		rex.printLogger;
-		rex.printError('Exergy Values are NOT correct. See error log');
+	ex=model.readExergy(param.State);
+	if ~isValid(ex)
+		ex.printLogger;
+		res.printError('Exergy Values are NOT correct. See error log');
 		return
 	end
-	pm=cProcessModel(rex);
+	pm=cProcessModel(ex);
 	% Set Results
-	sol=getExergyResults(fmt,pm);
-    sol.setProperties(model.ModelName,param.State);
+	if isValid(pm)
+		res=getExergyResults(fmt,pm);
+    	res.setProperties(model.ModelName,param.State);
+	else
+		pm.printLogger;
+		res.printError('Invalid Process Model. See error log');
+	end
 end

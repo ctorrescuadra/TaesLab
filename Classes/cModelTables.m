@@ -74,27 +74,29 @@ classdef cModelTables < cStatusLogger
             end
         end
 
-        function printTable(obj,name)
+        function log=printTable(obj,name)
         % Print an individual table
         %   Input:
         %       name - Name of the table
+            log=cStatusLogger;
             res=obj.getTable(name);
             if isValid(res)
                 res.printFormatted;
             else
-                obj.printError('Table %s do NOT exists',name);
+                log.printError('Table %s do NOT exists',name);
             end
         end
 
-        function viewTable(obj,name)
+        function log=viewTable(obj,name)
         % view an individual table as a GUI Table
         %   Input:
         %       name - Name of the table
+            log=cStatusLogger;
             res=obj.getTable(name);
             if isValid(res)
                 res.viewTable(obj.State);
             else
-                obj.printError('Table %s do NOT exists',name);
+                log.printError('Table %s do NOT exists',name);
             end
         end
 
@@ -143,7 +145,9 @@ classdef cModelTables < cStatusLogger
 
         function printResults(obj)
         % Print the formated tables on console
-            if ~obj.isResultTable
+            log=cStatusLogger;
+            if ~isValid(obj) || ~obj.isResultTable
+                log.printError('Invalid object to print')
                 return
             end
             cellfun(@(x) printFormatted(x),obj.tableIndex);
@@ -156,9 +160,12 @@ classdef cModelTables < cStatusLogger
         % Output:
         %   log - cStatusLog object with save status and error messages
             log=cStatusLogger(cType.VALID);
+            if ~isValid(obj)
+                log.printError('Invalid object to save')
+                return
+            end
             if ~cType.checkFileWrite(filename)
-                message=sprintf('Invalid file name: %s',filename);
-                log.messageLog(cType.ERROR,message);
+                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
                 return
             end
             fileType=cType.getFileType(filename);
@@ -169,15 +176,15 @@ classdef cModelTables < cStatusLogger
                     slog=obj.saveAsXLS(filename);
                 case cType.FileType.TXT
                     slog=obj.saveAsTXT(filename);
+                case cType.FileType.MAT
+                    slog=obj.saveAsMAT(filename);
             otherwise
-                message=sprintf('File extension %s is not supported',filename);
-                log.messageLog(cType.ERROR,message);
+                log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
                 return
             end
             log.addLogger(slog);
             if log.isValid
-                message=sprintf('%s available in file %s',obj.Name,filename);
-                log.messageLog(cType.INFO,message);
+                log.messageLog(cType.INFO,'%s available in file %s',obj.Name,filename);
             end
         end
         
@@ -190,6 +197,7 @@ classdef cModelTables < cStatusLogger
         %   res - Result tables in the selected format
         %
             narginchk(2,3);
+            res=cStatusLogger;
             if (nargin==2) || ~isa(fmt,'logical') || ~obj.isResultTable
                 fmt=false;
             end
@@ -201,7 +209,7 @@ classdef cModelTables < cStatusLogger
             case cType.VarMode.TABLE
                 res=obj.getResultAsTable;
             otherwise
-                obj.printWarning('VarMode undefined');
+                res.printWarning('VarMode undefined');
             end
         end
         
@@ -228,8 +236,7 @@ classdef cModelTables < cStatusLogger
                 fclose (fid);
             catch err
                 log.messageLog(cType.ERROR,err.message)
-                message=sprintf('Writting file info %s',filename);
-                log.messageLog(cType.ERROR,message);
+                log.messageLog('Writting file info %s',filename);
                 return
             end
             if ~exist(folder,'dir')
@@ -250,8 +257,7 @@ classdef cModelTables < cStatusLogger
                 slog=tbl.exportCSV(fname);
                 if ~slog.isValid
                     log.addLogger(slog);
-                    message=sprintf('file %s is NOT saved',fname);
-                    log.messageLog(cType.ERROR,message);
+                    log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
                 end
             end
         end
@@ -332,13 +338,27 @@ classdef cModelTables < cStatusLogger
                 fId = fopen (filename, 'wt');
             catch err
                 log.messageLog(cType.ERROR,err.message)
-                message=sprintf('Open file %s',filename);
-                log.messageLog(cType.ERROR,message);
+                log.messageLog(cType.ERROR,'Open file %s',filename);
                 return
             end
             % Print tables into file
             cellfun(@(x) printFormatted(x,fId),obj.tableIndex);
             fclose(fId);
+        end
+
+        function log=saveAsMAT(obj,filename)
+        % save the results into a MAT file
+            log=cStatusLogger(cType.VALID);
+            if isOctave
+                log.messageLog(cType.ERROR,'This file type is not available for Octave');
+            end
+            try
+                save(filename,'obj');
+            catch err
+                obj.messageLog(cType.ERROR,err.message);
+                obj.messageLog(cType.ERROR,'File %s has NOT been saved', filename);
+                return    
+            end
         end
     end
     methods(Access=protected)

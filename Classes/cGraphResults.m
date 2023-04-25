@@ -15,8 +15,9 @@ classdef cGraphResults < cStatusLogger
 
     methods
         function obj = cGraphResults(tbl,options)
+		% Constructor
 			if ~isValid(tbl) || ~isGraph(tbl)
-				obj.messageLog('Invalid Graph Table %s',obj.key);
+				obj.messageLog(cType.ERROR,'Invalid Graph Table %s',obj.key);
 				return
 			end
 			obj.Type=tbl.GraphType;
@@ -29,15 +30,17 @@ classdef cGraphResults < cStatusLogger
 				obj.setGraphSummaryParameters(tbl,options)
 			case cType.GraphType.RECYCLING
 				obj.setGraphRecyclingParameters(tbl,options)
+			case cType.GraphType.WASTE_ALLOCATION
+				obj.setGraphWasteAllocationParameters(tbl,options)
 			otherwise
-				obj.messageLog('Invalid Graph Type %d',obj.GraphType);
+				obj.messageLog(cType.ERROR,'Invalid Graph Type %d',obj.GraphType);
 				return
             end
             obj.status=cType.VALID;
 		end
 
 		function graphCost(obj)
-		% Plot the graph
+		% Plot the ICT graph cost
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
@@ -55,6 +58,7 @@ classdef cGraphResults < cStatusLogger
 		end
 
 		function graphDiagnosis(obj)
+		% Plot diagnosis graphs
             if isOctave
                 graphDiagnosis_OC(obj)
             else
@@ -63,7 +67,7 @@ classdef cGraphResults < cStatusLogger
         end
 
 		function graphSummary(obj)
-		% Plot the graph
+		% Plot the summary graph
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 			'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
@@ -80,6 +84,7 @@ classdef cGraphResults < cStatusLogger
 		end
 
 		function graphRecycling(obj)
+		% Plot the graph recycling
 			f=figure('name',obj.Name,'numbertitle','off',...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
@@ -92,6 +97,19 @@ classdef cGraphResults < cStatusLogger
 			hl=legend(obj.Legend);
 			set(hl,'Orientation','horizontal','Location','southoutside');
 		end
+
+		function graphWasteAllocation(obj)
+		% Plot the waste allocation pie chart
+			f=figure('name',obj.Name,'numbertitle','off',...
+				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
+			ax=axes(f);
+			pie(obj.xValues,'%5.1f');
+			title(ax,obj.Title,'fontsize',14);
+			hl=legend(obj.Legend);
+			set(hl,'Orientation','horizontal','Location','southoutside');
+		end
+
+		
 	end
    
 	methods(Access=private)
@@ -160,6 +178,20 @@ classdef cGraphResults < cStatusLogger
 			else
 				obj.BaseLine=1.0;
 			end
+		end
+
+        function setGraphWasteAllocationParameters(obj,tbl,idx)
+			obj.Name='Waste Allocation Analysis';
+			obj.Title=[tbl.Description ' [',tbl.State,'/',tbl.ColNames{idx+1},']'];
+			x=cell2mat(tbl.Data(:,idx));
+			jdx=find(x>1.0);
+			obj.xValues=x(jdx);
+            obj.Legend=tbl.RowNames(jdx);
+			obj.yValues=[];
+			obj.xLabel='';
+			obj.yLabel='';
+			obj.BaseLine=0.0;
+            obj.Categories={};
 		end
 
 		function graphDiagnosis_OC(obj)

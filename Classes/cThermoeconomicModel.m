@@ -66,7 +66,6 @@ classdef cThermoeconomicModel < cStatusLogger
         DataModel      % Data Model
         ModelName      % Model File Name
         Results        % Results of the model
-        Summary        % Results summary
     end
 
     properties(Access=public)
@@ -75,6 +74,7 @@ classdef cThermoeconomicModel < cStatusLogger
         ResourceSample         % Active resource cost sample
         CostTables             % Select Tables to obtain
         DiagnosisMethod        % Method to calculate fuel impact of wastes
+        Summary=false;         % Calculate Summary Results
     end
 
     properties(Access=private)
@@ -84,6 +84,7 @@ classdef cThermoeconomicModel < cStatusLogger
         rsc                % readResource object
         fp0                % Actual reference cModelFPR
         fp1                % Actual operation cModelFRR
+        msr                % Model Summary results
         debug              % debug info control
         directCost=true    % Direct cost are obtained
         generalCost=false  % General cost are obtained
@@ -115,7 +116,7 @@ classdef cThermoeconomicModel < cStatusLogger
             p.addParameter('ResourceSample','',@ischar);
             p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
             p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
-            p.addParameter('ModelSummary',false,@islogical)
+            p.addParameter('Summary',false,@islogical)
             p.addParameter('Debug',false,@islogical);
             try
                 p.parse(varargin{:});
@@ -124,14 +125,14 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.printError('Usage: cThermoeconomicModel(model,param)');
                 return
             end
-            param=p.Results;
- 
+            param=p.Results; 
             % Update Variables
             obj.DataModel=model;
             obj.ModelName=model.ModelName;
             obj.debug=param.Debug;
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
+            obj.Summary=param.Summary;
             % Read Waste Definition
             if model.NrOfWastes > 0
                 wd=model.readWaste;
@@ -166,14 +167,16 @@ classdef cThermoeconomicModel < cStatusLogger
             elseif model.existState(param.State)
                 obj.State=param.State;
             else
-                obj.printWarning('Invalid state %s',param.State);
+                obj.printError('Invalid state %s',param.State);
+                return
             end
             if isempty(param.ReferenceState)
                 obj.ReferenceState=model.States{1};
             elseif model.existState(param.State)
                 obj.ReferenceState=param.ReferenceState;
             else
-                obj.printWarning('Invalid state %s',param.RefeenceState);
+                obj.printError('Invalid state %s',param.RefeenceState);
+                return
             end
             % Read print formatted configuration
             fmt=model.readFormat;
@@ -190,8 +193,8 @@ classdef cThermoeconomicModel < cStatusLogger
                 elseif model.existSample(param.ResourceSample)
                     obj.ResourceSample=param.ResourceSample;
                 else % Default is used
-                    obj.printWarning('Invalid ResourceSample %s',param.ResourceSample);
-                    obj.ResourceSample=model.ResourceSamples{1};
+                    obj.printError('Invalid ResourceSample %s',param.ResourceSample);
+                    return
                 end
             end   
             % Create Results container
@@ -203,10 +206,8 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.activeSet=true;
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
+            obj.setSummaryResults;
             obj.setThermoeconomicDiagnosis;
-            if param.ModelSummary
-                obj.Summary=obj.summaryResults;
-            end
         end
         %%%
         % Set (assign) Methods
@@ -250,7 +251,16 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.setThermoeconomicDiagnosis;
             end
         end
-        % Set functions
+
+        function set.Summary(obj,value)
+        % Set Summary parameter
+            if obj.Summary~=value
+                obj.Summary=value;
+                obj.setSummaryResults;
+            end
+        end
+
+        % Set methods
         function setState(obj,state)
             obj.State=state;
         end
@@ -266,6 +276,10 @@ classdef cThermoeconomicModel < cStatusLogger
         function setDiagnosisMethod(obj,method)
             obj.DiagnosisMethod=method;
         end
+        function setSummary(obj,value)
+            obj.Summary=value;
+        end
+
         %%%
         % get cResultInfo object
         function res=productiveStructure(obj)
@@ -289,6 +303,11 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=thermoeconomicDiagnosis(obj)
         % Get the diagnosis tables
             res=obj.Results.ThermoeconomicDiagnosis;
+        end
+
+        function res=summaryResults(obj)
+        % Get the summary Results
+            res=obj.msr;
         end
 
         function res=getFuelImpact(obj)
@@ -319,7 +338,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %       wkey - key of the analyzed waste
             res=cStatusLogger(cType.ERROR);
             if ~obj.isWaste
-                obj.printWarning('Model do not has wastes');
+                res.printError('Model do not has wastes');
                 return
             end
             if obj.isGeneralCost
@@ -349,6 +368,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 'IsResourceCost',log2str(obj.isResourceCost),...
                 'IsDiagnosis',log2str(obj.isDiagnosis),...
                 'DiagnosisMethod',obj.DiagnosisMethod,...
+                'Summary',log2str(obj.Summary),...
                 'Debug',log2str(obj.debug));
             disp(s);
         end
@@ -396,14 +416,8 @@ classdef cThermoeconomicModel < cStatusLogger
             res=logical(obj.DataModel.isWaste);
         end
 
-        % General Summary functions
-        function res=getFormat(obj)
-        % get the cResultTableBuilder object
-            res=obj.fmt;
-        end
-        
-        function res=getStates(obj)
-        % get the cModelFPR object of each state
+        function res=getResultStates(obj)
+        % Get the cModelFPR object of each state
             res=obj.rstate;
         end
 
@@ -417,15 +431,41 @@ classdef cThermoeconomicModel < cStatusLogger
         %%%
         % Result presentation methods
         %
-        function res=getResults(obj)
-        % Get active results as a cell table
-            res=obj.Results.getActiveIndex;
-        end
-
         function res=getModelTables(obj)
         % Get a cModelTable with the results tables
             res=obj.Results.getModelTables;
         end
+
+        function printResults(obj)
+        % Print the result tables on console
+            mt=obj.getModelTables;
+            printResults(mt);
+        end
+
+        function printSummary(obj,table)
+        % Print the summary tables
+            if ~obj.Summary
+                obj.setSummary(true);
+            end
+            switch nargin
+            case 1
+                printResults(obj.msr)
+            case 2
+                printTable(obj.msr,table)
+            end
+        end
+
+        function log=printWasteAllocation(obj)
+        % print on console the waste allocation table
+            log=cStatusLogger(cType.VALID);
+            res=obj.wasteAllocation;
+            if isValid(res)
+                printResults(res);
+            else
+                log.printWarning('Invalid waste allocation result');
+            end
+        end
+
         function res=getIndexTable(obj)
         % Get the tables index of the result model
             mt=obj.getModelTables;
@@ -454,6 +494,9 @@ classdef cThermoeconomicModel < cStatusLogger
             mt.viewTable(name);
         end
 
+        %%%
+        % Save Results methods
+        %
         function log=saveResults(obj,filename)
         % Save results in a file 
         % The following types are availables (XLSX, CSV, MAT)
@@ -461,9 +504,18 @@ classdef cThermoeconomicModel < cStatusLogger
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
-            log=saveResults(obj.Results,filename);
+            mt=obj.getModelTables;
+            log=saveResults(mt,filename);
         end
 
+        function log=saveSummary(obj,filename)
+        % Save the summary tables into a filename
+            if ~obj.Summary
+                obj.setSummary(true);
+            end
+            log=saveResults(obj.msr,filename);
+        end
+    
         function log=saveDataModel(obj,filename)
         % Save the data model in a file
         % The following file types are availables (JSON,XML,XLSX,CSV,MAT)
@@ -502,15 +554,9 @@ classdef cThermoeconomicModel < cStatusLogger
             ts=obj.thermoeconomicState;
             if isempty(ts) || ~isValid(ts)
                 log.printWarning('Thermoeconoic State is not available');
-                log.status=cType.ERROR;
                 return
             end
             log=saveAdjacencyTable(obj.thermoeconomicState,filename);
-            end
-
-        function printResults(obj)
-        % Print the result tables on console 
-            printResults(obj.Results);
         end
 
         %%%
@@ -527,7 +573,6 @@ classdef cThermoeconomicModel < cStatusLogger
             tbl=mt.getTable(graph);
             if ~isValid(tbl) || ~isGraph(tbl)
                 log.printWarning('Invalid graph table %s',graph);
-                log.status=cType.ERROR;
                 return
             end
             if isDigraph(tbl)
@@ -548,36 +593,42 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
+        function log=graphSummary(obj,varargin)
+        % Save the summary tables into a filename
+        %   Input:
+        %       varagin - See cResultInfo/graphSummary
+            if ~obj.Summary
+                obj.setSummary(true);
+            end
+            log=graphSummary(obj.msr,varargin{:});
+        end
+
         function log=showDiagramFP(obj,graph)
         % Show the diagram FP graph (only Matlab)
         %   Input:
-        %       graph - Table name to represent (tfp or dcfp)
+        %    graph - Table name to represent
+        %       cType.Tables.TABLE_FP (tfp)
+        %       cType.Tables.COST_TABLE_FP (dcfp)
         %   Output:
         %       log - cStatusLogger object containing the status and error messages     
             log=cStatusLogger(cType.VALID);
             if isOctave
                 log.printError('Function NOT inmplemented in Octave');
-                log.status=cType.ERROR;
                 return
             end
-            mt=obj.getModelTables;
             if nargin==1
                 graph=cType.Tables.TABLE_FP;
             end
-            tbl=mt.getTable(graph);
-            if ~isValid(tbl) || ~isDigraph(tbl)
-                log.printWarning('Table %s is not a Digraph',graph);
-                log.status=cType.ERROR;
+            switch graph
+            case cType.Tables.TABLE_FP
+                res=obj.thermoeconomicState;
+            case cType.Tables.COST_TABLE_FP
+                res=obj.thermoeconomicAnalysis;
+            otherwise   
+                log.printWarning('Invalid Graph Table %s ',graph);
                 return
             end
-            g=cDiagramFP(tbl);
-            if g.isValid
-                g.plotDiagram;
-            else
-                g.printLogger;
-                log.printError('Invalid FP Diagram');
-                log.status=cType.ERROR;
-            end
+            log=showDiagramFP(res);
         end
 
         function log = graphCost(obj,graph)
@@ -593,7 +644,6 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.thermoeconomicAnalysis;
             if isempty(res) || ~isValid(res)
                 log.printWarning('Thermoeconomic Analysis Results not available');
-                log.status=cType.ERROR;
                 return
             end
             if nargin==1
@@ -614,7 +664,6 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.thermoeconomicDiagnosis;
             if isempty(res) || ~isValid(res)
                 log.printWarning('Diagnosis Results not available');
-                log.status=cType.ERROR;
                 return
             end
             if nargin==1
@@ -623,7 +672,7 @@ classdef cThermoeconomicModel < cStatusLogger
             log=graphDiagnosis(res,graph);
         end
 
-        function log=graphRecycling(obj,wkey,graph)
+        function log = graphRecycling(obj,wkey,graph)
         % graphRecycling show a graph of the cost of the output flows of the
         % system depending on the recycled exergy of a selected waste
         %   Input:
@@ -634,20 +683,31 @@ classdef cThermoeconomicModel < cStatusLogger
             log=cStatusLogger(cType.VALID);
             if nargin<2
                 log.printWarning('A waste flow key is required');
-                log.status=cType.ERROR;
                 return
             end
             res=obj.recyclingAnalysis(wkey);
             if  ~isValid(res)
                 log.printWarning('Recycling Analysis not available');
-                log.status=cType.ERROR;
                 return
             end
             if nargin==2
                 graph=cType.Tables.WASTE_RECYCLING_DIRECT;
             end
             log=graphRecycling(res,graph);
-        end        
+        end 
+        
+        function log = graphWasteAllocation(obj,varargin)
+        % Show a pie chart with the waste allocation
+        %   Input:
+        %       varargin - waste key
+            log=cStatusLogger;
+            res=obj.wasteAllocation;
+            if isValid(res)
+                log=graphWasteAllocation(res,varargin{:});
+            else
+                log.messageLog(cType.ERROR,'Invalid waste allocation result');
+            end
+        end
 
         function res=flowsDiagram(obj,opt)
         % Show the flows diagram of the productive structure
@@ -655,63 +715,18 @@ classdef cThermoeconomicModel < cStatusLogger
         %       opt - (true/false) show the digraph plot
         %   Output:
         %       res - Adjacency table of the graph
-            res=[];
+            res=cStatusLogger;
             if nargin==1
                 opt=false;
             end
             ps=obj.productiveStructure;
             if isempty(ps) || ~isValid(ps)
-                obj.printWarning('Productive Structure not available');
+                obj.printError('Productive Structure not available');
                 return
             end
             res=flowsDiagram(ps,opt);
         end
-        %%%
-        % Summary Results methods
-        %
-        function res=summaryResults(obj)
-        % Get the summary tables
-            ms=cModelSummary(obj);
-            res=getSummaryResults(obj.fmt,ms);
-            res.setProperties(obj.ModelName,'SUMMARY');
-            obj.Summary=res;
-        end
-
-        function printSummary(obj,table)
-        % Print the summary tables
-            if isempty(obj.Summary)
-                res=obj.summaryResults;
-            else
-                res=obj.Summary;
-            end
-            switch nargin
-            case 1
-                printResults(res)
-            case 2
-                printTable(res,table)
-            end
-        end
-
-        function saveSummary(obj,filename)
-        % Save the summary tables into a filename
-            if isempty(obj.Summary)
-                res=obj.summaryResults;
-            else
-                res=obj.Summary;
-            end
-            res.saveResults(filename);
-        end
-
-        function log=graphSummary(obj,varargin)
-        % Save the summary tables into a filename
-            if isempty(obj.Summary)
-                res=obj.summaryResults;
-            else
-                res=obj.Summary;
-            end
-            log=res.graphSummary(varargin{:});
-        end
-
+        
         %%%
         % Waste Analysis methods
         %
@@ -719,53 +734,62 @@ classdef cThermoeconomicModel < cStatusLogger
         % Show waste information
             res=getWasteResults(obj.fmt,obj.fp1.WasteData);
             res.setProperties(obj.ModelName,obj.State)
-            printResults(res);
         end
 
-        function setWasteType(obj,key,wtype)
+        function log=setWasteType(obj,key,wtype)
         % Set the waste type allocation method
         %  Input
         %   id - Waste id
         %   wtype - waste allocation type (see cType)
-        % 
+        %
+            log=cStatusLogger(cType.VALID);
             wt=obj.fp1.WasteData;
             if ~wt.setType(key,wtype)  
-                obj.printWarning('Invalid waste type %s - %s',key,wtype);
+                log.printError('Invalid waste type %s - %s',key,wtype);
+                return
             end
             obj.fp1.setWasteOperators;
             obj.setThermoeconomicAnalysis;
+            obj.setSummaryResults;
             if obj.isDiagnosis
                 obj.setThermoeconomicDiagnosis;
             end
         end
 
-        function setWasteValues(obj,key,val)
+        function log=setWasteValues(obj,key,val)
         % Set the waste table values
         % Input
         %  id - Waste key
         %  val - vector containing the waste values
+            log=cStatusLogger(cType.VALID);
             wt=obj.fp1.WasteData;
             if ~wt.setValues(key,val)
-                obj.printWarning('Invalid waste allocation values');
+                log.prinError('Invalid waste %s allocation values',key);
+                return
             end
             obj.fp1.setWasteOperators;
             obj.setThermoeconomicAnalysis;
+            obj.setSummaryResults;
             if obj.isDiagnosis
                 obj.setThermoeconomicDiagnosis;
             end
         end
 
-        function setWasteRecycled(obj,key,val)
+        
+        function log=setWasteRecycled(obj,key,val)
         % Set the waste table values
         % Input
         %  id - Waste id
         %  val - vector containing the waste values
+            log=cStatusLogger(cType.VALID);
             wt=obj.fp1.WasteData;
             if ~wt.setRecycleRatio(key,val)
-                obj.printWarning('Invalid waste recycling values');      
+                log.printError('Invalid waste %s recycling values',key);
+                return 
             end
             obj.fp1.setWasteOperators;
             obj.setThermoeconomicAnalysis;
+            obj.setSummaryResults;
             if obj.isDiagnosis
                 obj.setThermoeconomicDiagnosis;
             end
@@ -780,14 +804,15 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=setFlowResources(obj,c0)
         % Set the resources cost of the flows
         %   Z - array containing the flows cost
-            res=[];
+            res=cStatusLogger;
             setFlowResources(obj.rsc,c0);
             if setFlowResources(obj.rsc,c0)
                 obj.setThermoeconomicAnalysis;
+                obj.setSummaryResults;
                 res=obj.rsc;
             else
                 printLogger(obj.rsc);
-                obj.printWarning('Invalid Resources Values');
+                res.printError('Invalid Resources Values');
             end
         end
 
@@ -795,26 +820,28 @@ classdef cThermoeconomicModel < cStatusLogger
         % Set resource flow cost value
         %   key - key of the resource flow
         %   value - resource cost value
-            res=[];
+            res=cStatusLogger;
             if setResourcesFlowValue(obj.rsc,key,value)
                 obj.setThermoeconomicAnalysis;
+                obj.setSummaryResults;
                 res=obj.rsc;
             else
                 printLogger(obj.rsc);
-                obj.printWarning('Invalid Resources Value %s',key);
+                res.printError('Invalid Resources Value %s',key);
             end
         end
 
         function res=setProcessResources(obj,Z)
         % Set the recource cost of the processes
         %   Z - array containing the processes cost
-            res=[];
+            res=cStatusLogger;
             if setProcessResources(obj.rsc,Z)
                 obj.setThermoeconomicAnalysis;
+                obj.setSummaryResults;
                 res=obj.rsc;
             else
                 printLogger(obj.rsc);
-                obj.printWarning('Invalid Resources Values');
+                res.printError('Invalid Resources Values');
             end
         end
 
@@ -858,7 +885,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.printDebugInfo('Compute Thermoeconomic Analysis for State: %s',obj.State);
             else
                 obj.fp1.printLogger;
-                obj.printWarning('Thermoeconomic Analysis cannot be calculated')
+                obj.fp1.printError('Thermoeconomic Analysis cannot be calculated')
             end 
         end
 
@@ -886,21 +913,38 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.printDebugInfo('Compute Thermoeconomic Diagnosis for State: %s',obj.State);
             else
                 sol.printLogger;
-                obj.printWarning('Thermoeconomic Diagnosis cannot be calculated');
+                sol.printWarning('Thermoeconomic Diagnosis cannot be calculated');
                 obj.Results.ThermoeconomicDiagnosis=[];
+            end
+        end
+
+        function res=setSummaryResults(obj)
+            if ~obj.activeSet
+                return
+            end
+            if obj.Summary
+                tmp=cModelSummary(obj);
+                res=getSummaryResults(obj.fmt,tmp);
+                res.setProperties(obj.ModelName,obj.State);
+                obj.msr=res;
+                obj.printDebugInfo('Summary Results have been Activated');
+            else
+                obj.msr=[];
+                obj.printDebugInfo('Summary Results have been Desactivated');
             end
         end
         %%%
         % Internal set methods
         function res=checkState(obj,state)
         % Ckeck the state information
-            res=false;     
+            res=false;
+            log=cStatusLogger;    
             if ~obj.DataModel.existState(state)
-                obj.printWarning('Invalid state %s',state);
+                log.printWarning('Invalid state %s',state);
                 return
             end
             if strcmp(obj.State,state)
-                obj.printWarning('No state change. The new state is equal to the previous one');
+                log.printWarning('No state change. The new state is equal to the previous one');
                 return
             end
             res=true;
@@ -915,12 +959,13 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkReferenceState(obj,state)
         % Check the reference state value
             res=false;
+            log=cStatusLogger;
             if ~obj.DataModel.existState(state)
-                obj.printWarning('Invalid state %s',state);
+                log.printWarning('Invalid state %s',state);
                 return
             end
             if strcmp(obj.ReferenceState,state)
-                obj.printWarning('Reference and Operation State are the same');
+                log.printWarning('Reference and Operation State are the same');
                 return
             end
             idx=obj.DataModel.getStateId(state);
@@ -931,15 +976,14 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function res=checkResourceSample(obj,sample)
         % Check the resource sample value
-            res=true;
+            res=false;
+            log=cStatusLogger;
             if ~obj.DataModel.existSample(sample)
-                obj.printWarning('Invalid resource sample %s',sample);
-                res=false;
+                log.printWarning('Invalid resource sample %s',sample);
                 return       
             end
             if isempty(sample) || strcmp(obj.ResourceSample,sample)
-                obj.printWarning('No sample change. The new sample is equal to the previous one');
-                res=false;
+                log.printWarning('No sample change. The new sample is equal to the previous one');
                 return
             end
             % Read resources and check if are valid
@@ -947,9 +991,9 @@ classdef cThermoeconomicModel < cStatusLogger
             cz.setResources(obj.fp1);
             if cz.isValid
                 obj.rsc=cz;
+                res=true;
             else
-                obj.printWarning('Invalid Resources Sample %s',obj.ResourceSample);
-                res=false;
+                log.printWarning('Invalid Resources Sample %s',obj.ResourceSample);
                 return
             end
         end
@@ -964,17 +1008,18 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
+            log=cStatusLogger;
             pct=cType.getCostTables(value);
             if cType.isEmpty(pct)
-                obj.printWarning('Invalid Cost Tables parameter value: %s',value);
+                log.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end
             if strcmp(obj.CostTables,value)
-                obj.printWarning('No parameter change. The new state is equal to the previous one');
+                log.printWarning('No parameter change. The new state is equal to the previous one');
                 return
             end
             if bitget(pct,cType.GENERALIZED) && ~obj.isResourceCost
-                obj.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
+                log.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
                 return
             end
             res=true;
@@ -994,12 +1039,13 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkDiagnosisMethod(obj,value)
         % Check Diagnosis Method parameter
             res=false;
+            log=cStatusLogger;
             if ~cType.checkDiagnosisMethod(value)
-                obj.printWarning('Invalid Diagnosis Method parameter value: %s',value);
+                log.printWarning('Invalid Diagnosis Method parameter value: %s',value);
                 return
             end
             if strcmp(obj.DiagnosisMethod,value)
-                obj.printWarning('No parameter change. The new state is equal to the previous one');
+                log.printWarning('No parameter change. The new state is equal to the previous one');
                 return
             end
             res=true;

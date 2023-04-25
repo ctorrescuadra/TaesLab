@@ -520,7 +520,7 @@
 		},
 		{
 			"id": 14,
-			"key": "wdt",
+			"key": "wd",
 			"description": "Waste Definition Table",
 			"columns": 4,
 			"fields": [
@@ -655,10 +655,10 @@
 		},
 		{
 			"id": 12,
-			"key": "rp",
+			"key": "wa",
 			"header": "Waste Allocation Table",
 			"type": 9,
-			"graph": 0,
+			"graph": 6,
 			"options": 0,
 			"rowTotal": false,
 			"colTotal": false

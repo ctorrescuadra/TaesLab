@@ -39,7 +39,7 @@ classdef cModelSummary < cResultId
                 end
                 values{i}=zeros(NrOfRows,obj.NrOfStates);
             end
-            rstates=model.getStates;
+            rstates=model.getResultStates;
             pku=zeros(NrOfProcesses,obj.NrOfStates);
             for j=1:obj.NrOfStates
                 cost=rstates{j}.getDirectProcessCost;

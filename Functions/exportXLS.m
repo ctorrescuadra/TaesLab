@@ -12,13 +12,11 @@ function log=exportXLS(data,filename)
         return
     end
     if ~cType.checkFileWrite(filename)
-        message=sprintf('Invalid file name %s',filename);
-        obj.messageLog(cType.ERROR,message)
+        obj.messageLog(cType.ERROR,'Invalid file name %s',filename)
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.XLSX)
-        message=sprintf('Invalid filename extension %s',filename);
-        obj.messageLog(cType.ERROR,message)
+        obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
         return
     end
     if isOctave

@@ -55,14 +55,11 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
-                        message=sprintf('Reading sheet %s:%s',cfgfile,wsht);
-					    obj.messageLog(cType.ERROR,message);
+					    obj.messageLog(cType.ERROR,'Error reading sheet %s:%s',cfgfile,wsht);
                         return
                     end
                 else
-                    message=sprintf('sheet %s:%s does not exists',cfgfile,wsht);
-					obj.messageLog(cType.ERROR,message);
-                    return
+					obj.messageLog(cType.ERROR,'sheet %s:%s does not exists',cfgfile,wsht);
                 end
             end
             % Read optional tables 
@@ -75,8 +72,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
-                        message=sprintf('Reading sheet %s:%s',cfgfile,wsht);
-					    obj.messageLog(cType.ERROR,message);
+					    obj.messageLog(cType.ERROR,'Eror reading sheet %s:%s',cfgfile,wsht);
                     end
                 end  
             end
@@ -113,8 +109,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 		        end
             else %Matlab
                 if ~exist(xls,'file')
-                    message=sprintf('File %s not found',xls);
-                    tbl.messageLog(cType.ERROR,message);
+                    tbl.messageLog(cType.ERROR,'File %s not found',xls);
                     return
                 end
                 % Read file and store into a cell
