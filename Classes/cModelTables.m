@@ -78,7 +78,7 @@ classdef cModelTables < cStatusLogger
         % Print an individual table
         %   Input:
         %       name - Name of the table
-            log=cStatusLogger;
+            log=cStatus();
             res=obj.getTable(name);
             if isValid(res)
                 res.printFormatted;
@@ -91,7 +91,7 @@ classdef cModelTables < cStatusLogger
         % view an individual table as a GUI Table
         %   Input:
         %       name - Name of the table
-            log=cStatusLogger;
+            log=cStatus();
             res=obj.getTable(name);
             if isValid(res)
                 res.viewTable(obj.State);
@@ -145,7 +145,7 @@ classdef cModelTables < cStatusLogger
 
         function printResults(obj)
         % Print the formated tables on console
-            log=cStatusLogger;
+            log=cStatus();
             if ~isValid(obj) || ~obj.isResultTable
                 log.printError('Invalid object to print')
                 return
@@ -161,7 +161,7 @@ classdef cModelTables < cStatusLogger
         %   log - cStatusLog object with save status and error messages
             log=cStatusLogger(cType.VALID);
             if ~isValid(obj)
-                log.printError('Invalid object to save')
+                log.messageLog(cType.ERROR,'Invalid object to save')
                 return
             end
             if ~cType.checkFileWrite(filename)

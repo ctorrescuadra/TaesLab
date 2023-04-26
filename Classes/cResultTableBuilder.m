@@ -398,7 +398,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             data=cell(nrows,ncols);
             for i=1:wt.NrOfWastes
                 data{i,1}=wt.Type{i};
-                data{i,2}=wt.RecycleRatio(i);
+                data{i,2}=100*wt.RecycleRatio(i);
             end
             res=obj.createCellTable(id,data,rowNames,colNames);
         end

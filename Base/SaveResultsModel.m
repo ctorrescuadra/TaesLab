@@ -8,7 +8,7 @@ function SaveResultsModel(results,filename)
 %       filename - name of the output file (with extension)
 % See also cModelResults
 %
-    log=cStatusLogger();
+    log=cStatus();
     % Check Input parameters
     if (nargin~=2) || ~ischar(filename)
         log.printError('Usage: SaveResultsModel(results,filename)');

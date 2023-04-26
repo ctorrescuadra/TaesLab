@@ -80,7 +80,6 @@ classdef cThermoeconomicModel < cStatusLogger
     properties(Access=private)
         rstate             % cModelFPR object cell array
         fmt                % readFormat object
-        wd                 % readWaste object
         rsc                % readResource object
         fp0                % Actual reference cModelFPR
         fp1                % Actual operation cModelFRR
@@ -133,18 +132,6 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
             obj.Summary=param.Summary;
-            % Read Waste Definition
-            if model.NrOfWastes > 0
-                wd=model.readWaste;
-                if ~wd.isValid
-                    obj.addLogger(wd);
-                    obj.messageLog(cType.ERROR,'Invalid waste definition data. See error log');
-                    return
-                end
-                obj.wd=wd;
-            else % no wastes
-                obj.wd=cStatusLogger;
-            end
             % Load Exergy values (all states)
             states=model.States;
             obj.rstate=cell(1,model.NrOfStates);
@@ -156,6 +143,12 @@ classdef cThermoeconomicModel < cStatusLogger
                     return
                 end
                 if obj.isWaste
+                    wd=model.readWaste;
+                    if ~wd.isValid
+                        obj.addLogger(wd);
+                        obj.messageLog(cType.ERROR,'Invalid waste definition data. See error log');
+                        return
+                    end
                     obj.rstate{i}=cModelFPR(rex,wd);
                 else
                     obj.rstate{i}=cModelFPR(rex);
@@ -336,7 +329,7 @@ classdef cThermoeconomicModel < cStatusLogger
         % Get the Recycling Analysis cResultInfo object
         %   Input:
         %       wkey - key of the analyzed waste
-            res=cStatusLogger(cType.ERROR);
+            res=cStatus();
             if ~obj.isWaste
                 res.printError('Model do not has wastes');
                 return
@@ -457,12 +450,12 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function log=printWasteAllocation(obj)
         % print on console the waste allocation table
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             res=obj.wasteAllocation;
             if isValid(res)
                 printResults(res);
             else
-                log.printWarning('Invalid waste allocation result');
+                log.printError('Invalid waste allocation result');
             end
         end
 
@@ -533,10 +526,10 @@ classdef cThermoeconomicModel < cStatusLogger
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatus();
             res=obj.diagramFP;
             if isempty(res) || ~isValid(res)
-                log.addLogger(res)
+                res.printLogger(res)
                 log.printError('Result object not available');
                 return
             end
@@ -550,7 +543,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %       filename - Name of the file
         %   Output:
         %       res - Adjacency table
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             ts=obj.thermoeconomicState;
             if isempty(ts) || ~isValid(ts)
                 log.printWarning('Thermoeconoic State is not available');
@@ -568,11 +561,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %       graph - Table name to represent
         %   Output:
         %       log - cStatusLogger object containing the status and error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             mt=obj.getModelTables;
             tbl=mt.getTable(graph);
             if ~isValid(tbl) || ~isGraph(tbl)
-                log.printWarning('Invalid graph table %s',graph);
+                log.printError('Invalid graph table %s',graph);
                 return
             end
             if isDigraph(tbl)
@@ -580,10 +573,6 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             else
                 g=cGraphResults(tbl);
-                if ~isValid(g)
-                    log.addLogger(g);
-                    return
-                end
             end
             switch tbl.GraphType
             case cType.GraphType.COST
@@ -611,7 +600,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %       cType.Tables.COST_TABLE_FP (dcfp)
         %   Output:
         %       log - cStatusLogger object containing the status and error messages     
-            log=cStatusLogger(cType.VALID);
+            log=cStatus();
             if isOctave
                 log.printError('Function NOT inmplemented in Octave');
                 return
@@ -640,7 +629,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %     cType.Graph.FLOW_COST (dfict)
         %     cType.GraphMatrixTable.FLOW_GENERALIZED_COST (gfict)
         %
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             res=obj.thermoeconomicAnalysis;
             if isempty(res) || ~isValid(res)
                 log.printWarning('Thermoeconomic Analysis Results not available');
@@ -660,7 +649,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %    cType.Graph.MALFUNCTION_COST (mfc)
         %    cType.Graph.IRREVERSIBILITY (dit)
         %  
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             res=obj.thermoeconomicDiagnosis;
             if isempty(res) || ~isValid(res)
                 log.printWarning('Diagnosis Results not available');
@@ -680,7 +669,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %       graph - (optional) grap type
         %           cType.Tables.WASTE_RECYCLING_DIRECT (Default)
         %           cType.Tables.WASTE_RECYCLING_GENERAL    
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             if nargin<2
                 log.printWarning('A waste flow key is required');
                 return
@@ -700,12 +689,12 @@ classdef cThermoeconomicModel < cStatusLogger
         % Show a pie chart with the waste allocation
         %   Input:
         %       varargin - waste key
-            log=cStatusLogger;
+            log=cStatus();
             res=obj.wasteAllocation;
             if isValid(res)
                 log=graphWasteAllocation(res,varargin{:});
             else
-                log.messageLog(cType.ERROR,'Invalid waste allocation result');
+                log.printError(cType.ERROR,'Invalid waste allocation result');
             end
         end
 
@@ -715,13 +704,13 @@ classdef cThermoeconomicModel < cStatusLogger
         %       opt - (true/false) show the digraph plot
         %   Output:
         %       res - Adjacency table of the graph
-            res=cStatusLogger;
+            res=cStatus();
             if nargin==1
                 opt=false;
             end
             ps=obj.productiveStructure;
             if isempty(ps) || ~isValid(ps)
-                obj.printError('Productive Structure not available');
+                res.printError('Productive Structure not available');
                 return
             end
             res=flowsDiagram(ps,opt);
@@ -742,7 +731,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %   id - Waste id
         %   wtype - waste allocation type (see cType)
         %
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             wt=obj.fp1.WasteData;
             if ~wt.setType(key,wtype)  
                 log.printError('Invalid waste type %s - %s',key,wtype);
@@ -761,7 +750,7 @@ classdef cThermoeconomicModel < cStatusLogger
         % Input
         %  id - Waste key
         %  val - vector containing the waste values
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             wt=obj.fp1.WasteData;
             if ~wt.setValues(key,val)
                 log.prinError('Invalid waste %s allocation values',key);
@@ -781,7 +770,7 @@ classdef cThermoeconomicModel < cStatusLogger
         % Input
         %  id - Waste id
         %  val - vector containing the waste values
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             wt=obj.fp1.WasteData;
             if ~wt.setRecycleRatio(key,val)
                 log.printError('Invalid waste %s recycling values',key);
@@ -804,7 +793,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=setFlowResources(obj,c0)
         % Set the resources cost of the flows
         %   Z - array containing the flows cost
-            res=cStatusLogger;
+            res=cStatus();
             setFlowResources(obj.rsc,c0);
             if setFlowResources(obj.rsc,c0)
                 obj.setThermoeconomicAnalysis;
@@ -820,7 +809,7 @@ classdef cThermoeconomicModel < cStatusLogger
         % Set resource flow cost value
         %   key - key of the resource flow
         %   value - resource cost value
-            res=cStatusLogger;
+            res=cStatus();
             if setResourcesFlowValue(obj.rsc,key,value)
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryResults;
@@ -834,7 +823,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=setProcessResources(obj,Z)
         % Set the recource cost of the processes
         %   Z - array containing the processes cost
-            res=cStatusLogger;
+            res=cStatus();
             if setProcessResources(obj.rsc,Z)
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryResults;
@@ -938,7 +927,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkState(obj,state)
         % Ckeck the state information
             res=false;
-            log=cStatusLogger;    
+            log=cStatus();    
             if ~obj.DataModel.existState(state)
                 log.printWarning('Invalid state %s',state);
                 return
@@ -959,7 +948,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkReferenceState(obj,state)
         % Check the reference state value
             res=false;
-            log=cStatusLogger;
+            log=cStatus();
             if ~obj.DataModel.existState(state)
                 log.printWarning('Invalid state %s',state);
                 return
@@ -977,7 +966,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkResourceSample(obj,sample)
         % Check the resource sample value
             res=false;
-            log=cStatusLogger;
+            log=cStatus();
             if ~obj.DataModel.existSample(sample)
                 log.printWarning('Invalid resource sample %s',sample);
                 return       
@@ -1008,7 +997,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
-            log=cStatusLogger;
+            log=cStatus();
             pct=cType.getCostTables(value);
             if cType.isEmpty(pct)
                 log.printWarning('Invalid Cost Tables parameter value: %s',value);
@@ -1039,7 +1028,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkDiagnosisMethod(obj,value)
         % Check Diagnosis Method parameter
             res=false;
-            log=cStatusLogger;
+            log=cStatus();
             if ~cType.checkDiagnosisMethod(value)
                 log.printWarning('Invalid Diagnosis Method parameter value: %s',value);
                 return

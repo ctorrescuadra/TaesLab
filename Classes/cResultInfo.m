@@ -66,7 +66,7 @@ classdef (Sealed) cResultInfo < cModelTables
         %     cType.GraphMatrixTable.FLOW_GENERALIZED_COST (gfict)
         %
             % Check input
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             if ~isValid(obj)
                 log.printError('Invalid Result object',obj.Name);
                 log.addLogger(obj);
@@ -97,7 +97,7 @@ classdef (Sealed) cResultInfo < cModelTables
         %    cType.Graph.MALFUNCTION_COST (mfc)
         %    cType.Graph.IRREVERSIBILITY (dit)
         %  
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             if ~isValid(obj)
                 log.printError('Invalid Result object %s',obj.Name);
                 log.addLogger(obj);
@@ -126,7 +126,7 @@ classdef (Sealed) cResultInfo < cModelTables
         %      var - Variables to plot
         %
             %Check input arguments
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             if obj.Id ~= cType.ResultId.SUMMARY_RESULTS
                 log.printError('Invalid cResultInfo object %s',obj.Name);
                 return
@@ -166,7 +166,7 @@ classdef (Sealed) cResultInfo < cModelTables
         % Show the recycling graph
         %   Input:
         %       graph - Name of the table to graph
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             if obj.Id~=cType.ResultId.RECYCLING_ANALYSIS
                 log.printError('Invalid Result Id: %s',obj.Name);
                 return
@@ -192,19 +192,19 @@ classdef (Sealed) cResultInfo < cModelTables
         % Show a pie chart of the waste allocation table
         %   Input:
         %       wkey - waste flow key
-            log=cStatusLogger(cType.VALID);
-            if obj.Id~=cType.ResultId.WASTE_ALLOCATION
+            log=cStatus(cType.VALID);
+            if obj.Id~=cType.ResultId.WASTE_ANALYSIS
                 log.printError('Invalid Result Id: %s',obj.Name);
                 return
             end
             if nargin==2
-                wid=obj.Info.getWasteId(wkey);
+                wid=obj.Info.getWasteIndex(wkey);
                 if isempty(wid)
                     log.printError('Invalid waste flow key %s',wkey);
                     return
-                else
-                    wid=1;
                 end
+            else
+                wid=1;
             end
             g=cGraphResults(obj.Tables.wa,wid);
             g.graphWasteAllocation;
@@ -212,7 +212,7 @@ classdef (Sealed) cResultInfo < cModelTables
 
         function log=showDiagramFP(obj)
         % Show the FP table digraph [only Matlab]
-            log=cStatusLogger(cType.VALID);
+            log=cStatus(cType.VALID);
             if isOctave
                 log.printError('Function not implemented')
                 return
@@ -226,7 +226,7 @@ classdef (Sealed) cResultInfo < cModelTables
                 obj.Info.plotDiagram;
                 return;
             otherwise
-                log.printWarning('Invalid Result Id: %s',obj.Name);
+                log.printError('Invalid Result Id: %s',obj.Name);
                 return
             end
             tbl=obj.getTable(graph);
@@ -249,7 +249,7 @@ classdef (Sealed) cResultInfo < cModelTables
                 opt=false;
             end
             if obj.Id~=cType.ResultId.PRODUCTIVE_STRUCTURE
-                log.printWarning('Invalid Result Id: %s',obj.Name);
+                log.printError('Invalid Result Id: %s',obj.Name);
                 return
             end
             if ~isValid(obj.Info)
@@ -282,11 +282,11 @@ classdef (Sealed) cResultInfo < cModelTables
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatus();
             if obj.Id==cType.ResultId.DIAGRAM_FP
                 log=saveResults(obj,filename);
             else
-                log.printError(cType.ERROR,'Result object is NOT a DIAGRAM_FP');
+                log.printError('Result object is NOT a DIAGRAM_FP');
                 return
             end
         end
