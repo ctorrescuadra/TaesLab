@@ -318,11 +318,15 @@ classdef cThermoeconomicModel < cStatusLogger
             fprintf('%s\n',res);
         end
 
-        function res=diagramFP(obj)
+        function res=diagramFP(obj,varargin)
         % Get the Diagram FP cResultInfo object
-            res=getDiagramFP(obj.fmt,obj.thermoeconomicState.Info);
+            if nargin==1
+                option=cType.Tables.TABLE_FP;
+            else
+                option=varargin{1};
+            end
+            res=getDiagramFP(obj.fmt,obj.fp1,option);
             res.setProperties(obj.ModelName,obj.State);
-            res.Info.setDescription(res.Tables.tfp);
         end
 
         function res=recyclingAnalysis(obj,wkey)
@@ -528,28 +532,12 @@ classdef cThermoeconomicModel < cStatusLogger
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
             res=obj.diagramFP;
-            if isempty(res) || ~isValid(res)
+            if ~isValid(res)
                 res.printLogger(res)
                 log.printError('Result object not available');
                 return
             end
             log=saveResults(res,filename);
-        end
-
-        function log=saveAdjacencyTable(obj,filename)
-        % Save the adjacency table of the actual model state
-        % to use with a graph application (as yEd)
-        %   Input:
-        %       filename - Name of the file
-        %   Output:
-        %       res - Adjacency table
-            log=cStatus(cType.VALID);
-            ts=obj.thermoeconomicState;
-            if isempty(ts) || ~isValid(ts)
-                log.printWarning('Thermoeconoic State is not available');
-                return
-            end
-            log=saveAdjacencyTable(obj.thermoeconomicState,filename);
         end
 
         %%%
@@ -608,13 +596,10 @@ classdef cThermoeconomicModel < cStatusLogger
             if nargin==1
                 graph=cType.Tables.TABLE_FP;
             end
-            switch graph
-            case cType.Tables.TABLE_FP
-                res=obj.thermoeconomicState;
-            case cType.Tables.COST_TABLE_FP
-                res=obj.thermoeconomicAnalysis;
-            otherwise   
-                log.printWarning('Invalid Graph Table %s ',graph);
+            res=obj.diagramFP(graph);
+            if ~isValid(res)
+                res.printLogger(res)
+                log.printError('Result object not available');
                 return
             end
             log=showDiagramFP(res);
@@ -696,24 +681,6 @@ classdef cThermoeconomicModel < cStatusLogger
             else
                 log.printError(cType.ERROR,'Invalid waste allocation result');
             end
-        end
-
-        function res=flowsDiagram(obj,opt)
-        % Show the flows diagram of the productive structure
-        %   Input:
-        %       opt - (true/false) show the digraph plot
-        %   Output:
-        %       res - Adjacency table of the graph
-            res=cStatus();
-            if nargin==1
-                opt=false;
-            end
-            ps=obj.productiveStructure;
-            if isempty(ps) || ~isValid(ps)
-                res.printError('Productive Structure not available');
-                return
-            end
-            res=flowsDiagram(ps,opt);
         end
         
         %%%

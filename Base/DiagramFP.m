@@ -50,5 +50,4 @@ function res=DiagramFP(model,varargin)
 	pm=cProcessModel(ex);
     res=getDiagramFP(fmt,pm);
     res.setProperties(model.ModelName,param.State);
-	res.Info.setDescription(res.Tables.tfp);
 end

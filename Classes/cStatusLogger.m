@@ -20,7 +20,6 @@ classdef cStatusLogger < cStatus
 %
 	properties(Access=protected)
 		logger      % cQueue containinig object messages
-		objectId    % class object identifier
 	end
 	
 	methods
@@ -29,7 +28,6 @@ classdef cStatusLogger < cStatus
         % Initialize class to manage errors, logger and objectId
 			obj=obj@cStatus(varargin{:});
 			obj.logger=cQueue();
-			obj.objectId=randi(intmax,"int32");
 		end
 		
 		function messageLog(obj,error,varargin)

@@ -53,6 +53,10 @@ classdef (Sealed) cTableCell < cTableResult
             obj.FieldNames=p.FieldNames;
         end
 
+        function setGraphType(obj,value)
+            obj.GraphType=value;
+        end
+
         function res=formatData(obj)
         % Apply format to data
             N=obj.NrOfRows;

@@ -43,7 +43,7 @@ classdef (Sealed) cResultInfo < cModelTables
         function res=getFuelImpact(obj)
         % get the Fuel Impact as a string including format and unit
             res='WARNING: Fuel Impact NOT Available';
-            if ~isempty(obj) && isValid(obj) && obj.Id==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
                 format=obj.Tables.dit.Format;
                 unit=obj.Tables.dit.Unit;
                 tfmt=['Fuel Impact:',format,' ',unit];
@@ -68,13 +68,12 @@ classdef (Sealed) cResultInfo < cModelTables
             % Check input
             log=cStatus(cType.VALID);
             if ~isValid(obj)
-                log.printError('Invalid Result object',obj.Name);
-                log.addLogger(obj);
+                log.printError('Invalid Result object',obj.ResultName);
                 return                
             end
-            if (obj.Id~=cType.ResultId.THERMOECONOMIC_ANALYSIS) && ...
-                (obj.Id~=cType.ResultId.EXERGY_COST_CALCULATOR)
-                log.printError('Invalid Result Id: %s',obj.Name);
+            if (obj.ResultId~=cType.ResultId.THERMOECONOMIC_ANALYSIS) && ...
+                (obj.ResultId~=cType.ResultId.EXERGY_COST_CALCULATOR)
+                log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end  
             if nargin<2
@@ -99,12 +98,11 @@ classdef (Sealed) cResultInfo < cModelTables
         %  
             log=cStatus(cType.VALID);
             if ~isValid(obj)
-                log.printError('Invalid Result object %s',obj.Name);
-                log.addLogger(obj);
+                log.printError('Invalid Result object %s',obj.ResultName);
                 return                
             end
-            if obj.Id~=cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                log.printError('Invalid Result Id: %s',obj.Name);
+            if obj.ResultId~=cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end  
             if nargin<2
@@ -127,8 +125,16 @@ classdef (Sealed) cResultInfo < cModelTables
         %
             %Check input arguments
             log=cStatus(cType.VALID);
-            if obj.Id ~= cType.ResultId.SUMMARY_RESULTS
-                log.printError('Invalid cResultInfo object %s',obj.Name);
+            if ~isValid(obj)
+                log.printError('Invalid Result object %s',obj.ResultName);
+                return                
+            end
+            if ~isValid(obj)
+                log.printError('Invalid Result object %s',obj.ResultName);
+                return                
+            end
+            if obj.ResultId ~= cType.ResultId.SUMMARY_RESULTS
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return
             end
             info=obj.Info;
@@ -167,8 +173,12 @@ classdef (Sealed) cResultInfo < cModelTables
         %   Input:
         %       graph - Name of the table to graph
             log=cStatus(cType.VALID);
-            if obj.Id~=cType.ResultId.RECYCLING_ANALYSIS
-                log.printError('Invalid Result Id: %s',obj.Name);
+            if ~isValid(obj)
+                log.printError('Invalid object %s',obj.ResultName);
+                return
+            end
+            if obj.ResultId~=cType.ResultId.RECYCLING_ANALYSIS
+                log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end
             if ~isValid(obj.Info)
@@ -193,8 +203,13 @@ classdef (Sealed) cResultInfo < cModelTables
         %   Input:
         %       wkey - waste flow key
             log=cStatus(cType.VALID);
-            if obj.Id~=cType.ResultId.WASTE_ANALYSIS
-                log.printError('Invalid Result Id: %s',obj.Name);
+            if ~isValid(obj)
+                log.printError('Invalid object %s',obj.ResultName);
+                return
+            end
+    
+            if obj.ResultId~=cType.ResultId.WASTE_ANALYSIS
+                log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end
             if nargin==2
@@ -217,25 +232,12 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Function not implemented')
                 return
             end
-            switch obj.Id
-            case cType.ResultId.THERMOECONOMIC_STATE
-                graph=cType.Tables.TABLE_FP;
-            case cType.ResultId.THERMOECONOMIC_ANALYSIS
-                graph=cType.Tables.COST_TABLE_FP;
-            case cType.ResultId.DIAGRAM_FP
-                obj.Info.plotDiagram;
-                return;
-            otherwise
-                log.printError('Invalid Result Id: %s',obj.Name);
+            if obj.ResultId ~= cType.ResultId.DIAGRAM_FP
+                log.printError('Invalid Result Object %s', obj.ResultName);
                 return
             end
-            tbl=obj.getTable(graph);
-            if ~isValid(tbl)
-                log.printError('Invalid graph table %s',graph);
-                return
-            end
-            g=cDiagramFP(tbl);
-            g.plotDiagram;
+            g=cGraphResults(obj.Tables.atfp);
+            g.showDigraph;
         end
 
         function res=flowsDiagram(obj,opt)
@@ -248,8 +250,8 @@ classdef (Sealed) cResultInfo < cModelTables
             if nargin==1
                 opt=false;
             end
-            if obj.Id~=cType.ResultId.PRODUCTIVE_STRUCTURE
-                log.printError('Invalid Result Id: %s',obj.Name);
+            if obj.ResultId~=cType.ResultId.PRODUCTIVE_STRUCTURE
+                log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end
             if ~isValid(obj.Info)
@@ -272,22 +274,6 @@ classdef (Sealed) cResultInfo < cModelTables
                     'resize','on','numbertitle','off');
                 plot(dg,'Layout','force');
                 title('Flows Digraph');
-            end
-        end
-
-        function log=saveDiagramFP(obj,filename)
-        % Save the Adjacency matrix of the Diagram FP in a file
-        % The following file types are availables (XLSX,CSV,MAT)
-        %  Input:
-        %   filename - Name of the file
-        %  Output:
-        %   log - cStatusLogger object containing the status and error messages
-            log=cStatus();
-            if obj.Id==cType.ResultId.DIAGRAM_FP
-                log=saveResults(obj,filename);
-            else
-                log.printError('Result object is NOT a DIAGRAM_FP');
-                return
             end
         end
 

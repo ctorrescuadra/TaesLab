@@ -491,9 +491,9 @@
 			]
 		},
 		{
-			"id": 13,
+			"id": 14,
 			"key": "atfp",
-			"description": "FP Adjacency Table",
+			"description": "Diagram FP",
 			"columns": 4,
 			"fields": [
 				{
@@ -519,7 +519,35 @@
 			]
 		},
 		{
-			"id": 14,
+			"id": 15,
+			"key": "adcfp",
+			"description": "Cost Diagram FP",
+			"columns": 4,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				},
+				{
+					"name": "value",
+					"header": "Value",
+					"type": 3
+				}
+			]
+		},		
+		{
+			"id": 16,
 			"key": "wd",
 			"description": "Waste Definition Table",
 			"columns": 4,

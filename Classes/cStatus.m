@@ -64,7 +64,7 @@ classdef cStatus < handle
         end
     end
 	
-	methods(Access=private)
+	methods(Access=protected)
 		function message=createMessage(obj,error,varargin)
 		% Get the text message depending of error code
 		% Input:

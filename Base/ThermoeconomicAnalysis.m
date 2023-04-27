@@ -79,7 +79,7 @@ function res=ThermoeconomicAnalysis(model,varargin)
     if(model.NrOfWastes>0)
 		wt=model.readWaste;
 		if wt.isValid
-            fpm=cModelFPR(rex,wt);
+            fpm=cModelFPR(ex,wt);
         else
 			wt.printLogger;
 			res.printError('Invalid waste definition data. See error log');

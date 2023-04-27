@@ -1,4 +1,4 @@
-classdef cModelTables < cStatusLogger
+classdef cModelTables < cResultId
     % cModelTable is a class container of the cTable objects
     %   It stores the tables of the data model and application results
     %   the class provide methos to save and analize the results tables
@@ -16,8 +16,6 @@ classdef cModelTables < cStatusLogger
     %       obj.getResultTables(var,fmt)
     %
     properties (GetAccess=public, SetAccess=protected)
-        Id           % Id of the table container or resultId
-        Name         % Name of the container
         Tables       % Struct containing the tables
         NrOfTables   % Number of tables
         ModelName    % Model Name
@@ -34,12 +32,12 @@ classdef cModelTables < cStatusLogger
         %  Input:
         %   tableId - Id of the table (see cType)
         %   tables - struct containig the tables
+            obj=obj@cResultId(tableId);
             obj.Tables=tables;
             obj.tableIndex=struct2cell(tables);
             obj.NrOfTables=numel(obj.tableIndex);
             obj.State='';
             obj.ModelName='';
-            obj.setResultId(tableId);
             obj.status=cType.VALID;
         end
 
@@ -52,13 +50,13 @@ classdef cModelTables < cStatusLogger
         end
 
         function setResultId(obj,id)
-            obj.Id=id;
-            obj.Name=cType.Results{id};
+            obj.ResultId=id;
+            obj.ResultName=cType.Results{id};
         end
 
         function status=isResultTable(obj)
         % Determine if the tables are results
-            status=(obj.Id~=cType.ResultId.DATA_MODEL);
+            status=(obj.ResultId~=cType.ResultId.DATA_MODEL);
         end
         
         function status=existTable(obj,name)
@@ -184,7 +182,7 @@ classdef cModelTables < cStatusLogger
             end
             log.addLogger(slog);
             if log.isValid
-                log.messageLog(cType.INFO,'%s available in file %s',obj.Name,filename);
+                log.messageLog(cType.INFO,'%s available in file %s',obj.ResultName,filename);
             end
         end
         
@@ -253,7 +251,7 @@ classdef cModelTables < cStatusLogger
             % Save each table in a file
             for i=1:obj.NrOfTables
                 tbl=obj.tableIndex{i};
-                fname=strcat(folder,filesep,list{i},ext);
+                fname=strcat(folder,filesep,tbl.Key,ext);
                 slog=tbl.exportCSV(fname);
                 if ~slog.isValid
                     log.addLogger(slog);
@@ -291,6 +289,7 @@ classdef cModelTables < cStatusLogger
                 [fId,status]=oct2xls(tidx.Values,fId,'Index');
                 if ~status || isempty(fId)
                     log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
+                    return
                 end
             else
                 try
@@ -298,23 +297,24 @@ classdef cModelTables < cStatusLogger
                 catch err
                     log.messageLog(cType.ERROR,err.message);
                     log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
+                    return
                 end
             end
 
             for i=1:obj.NrOfTables
-                data=obj.tableIndex{i}.Values;
-                sheet=list{i};
+                tbl=obj.tableIndex{i};
+                
                 if isOctave
-                    [fId,status]=oct2xls(data,fId,sheet);
+                    [fId,status]=oct2xls(tbl.Values,fId,tbl.Key);
                     if ~status || isempty(fId)
-                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',sheet);
+                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Key);
                     end
                 else
                     try
-                        writecell(data,fId,'Sheet',sheet);
+                        writecell(tbl.Values,fId,'Sheet',tbl.Key);
                     catch err
                         log.messageLog(cType.ERROR,err.message);
-                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',sheet);
+                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Key);
                     end
                 end
             end

@@ -32,6 +32,10 @@ classdef cGraphResults < cStatusLogger
 				obj.setGraphRecyclingParameters(tbl,options)
 			case cType.GraphType.WASTE_ALLOCATION
 				obj.setGraphWasteAllocationParameters(tbl,options)
+            case cType.GraphType.DIGRAPH
+                if isMatlab
+				    obj.setDigraphParameters(tbl);
+                end
 			otherwise
 				obj.messageLog(cType.ERROR,'Invalid Graph Type %d',obj.GraphType);
 				return
@@ -109,7 +113,18 @@ classdef cGraphResults < cStatusLogger
 			set(hl,'Orientation','horizontal','Location','southoutside');
 		end
 
-		
+		function showDigraph(obj)
+		% Plot digraph   
+			figure('menubar','none','name',obj.Name, ...
+				'resize','on','numbertitle','off');
+			r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
+			colormap(red2blue);
+					% Plot the digraph with colobar     
+			plot(obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
+			title(obj.Title,'fontsize',14);
+			c=colorbar;
+			c.Label.String=obj.xLabel;
+		end
 	end
    
 	methods(Access=private)
@@ -189,6 +204,21 @@ classdef cGraphResults < cStatusLogger
             obj.Legend=tbl.RowNames(jdx);
 			obj.yValues=[];
 			obj.xLabel='';
+			obj.yLabel='';
+			obj.BaseLine=0.0;
+            obj.Categories={};
+		end
+
+		function setDigraphParameters(obj,tbl)
+			obj.Name=tbl.Description;
+			obj.Title=[tbl.Description ' [',tbl.State,']'];
+			source=tbl.Data(:,1);
+			target=tbl.Data(:,2);
+			values=cell2mat(tbl.Data(:,3));
+			obj.xValues=digraph(source,target,values,"omitselfloops");
+            obj.Legend={};
+			obj.yValues=[];
+			obj.xLabel=['Exergy ' tbl.Unit{end}];
 			obj.yLabel='';
 			obj.BaseLine=0.0;
             obj.Categories={};

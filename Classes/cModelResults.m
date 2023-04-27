@@ -1,4 +1,4 @@
-classdef (Sealed) cModelResults < cStatusLogger
+classdef (Sealed) cModelResults < cResultId
     %cModelResults is a class container of the model results
     %  This class contains the results of the cThermoeconomicModel class
     %  cModelResults methods
@@ -25,7 +25,8 @@ classdef (Sealed) cModelResults < cStatusLogger
         function obj = cModelResults(data)
         %cModelResults Construct an instance of this class
         %  Initialize the results model from data model
-            if isa(data,'cResultInfo') && (data.Id==cType.ResultId.PRODUCTIVE_STRUCTURE)
+            obj=obj@cResultId(cType.ResultId.RESULT_MODEL)
+            if isa(data,'cResultInfo') && (data.ResultId==cType.ResultId.PRODUCTIVE_STRUCTURE)
                 obj.ProductiveStructure=data;
             else
                 obj.messageLog(cType.ERROR,'Invalid input parameter');
