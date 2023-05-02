@@ -452,17 +452,6 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
-        function log=printWasteAllocation(obj)
-        % print on console the waste allocation table
-            log=cStatus(cType.VALID);
-            res=obj.wasteAllocation;
-            if isValid(res)
-                printResults(res);
-            else
-                log.printError('Invalid waste allocation result');
-            end
-        end
-
         function res=getIndexTable(obj)
         % Get the tables index of the result model
             mt=obj.getModelTables;
@@ -674,13 +663,8 @@ classdef cThermoeconomicModel < cStatusLogger
         % Show a pie chart with the waste allocation
         %   Input:
         %       varargin - waste key
-            log=cStatus();
-            res=obj.wasteAllocation;
-            if isValid(res)
-                log=graphWasteAllocation(res,varargin{:});
-            else
-                log.printError(cType.ERROR,'Invalid waste allocation result');
-            end
+            res=obj.thermoeconomicAnalysis;
+            log=graphWasteAllocation(res,varargin{:});
         end
         
         %%%
@@ -689,7 +673,8 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=wasteAllocation(obj)
         % Show waste information
             res=getWasteResults(obj.fmt,obj.fp1.WasteData);
-            res.setProperties(obj.ModelName,obj.State)
+            res.setProperties(obj.ModelName,obj.State);
+            printResults(res);
         end
 
         function log=setWasteType(obj,key,wtype)
@@ -756,7 +741,9 @@ classdef cThermoeconomicModel < cStatusLogger
             res=getWasteFlows(obj.DataModel);
         end
 
+        %%%
         % Resource Cost Methods
+        %
         function res=setFlowResources(obj,c0)
         % Set the resources cost of the flows
         %   Z - array containing the flows cost

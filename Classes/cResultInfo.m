@@ -208,12 +208,17 @@ classdef (Sealed) cResultInfo < cModelTables
                 return
             end
     
-            if obj.ResultId~=cType.ResultId.WASTE_ANALYSIS
+            if obj.ResultId==cType.ResultId.WASTE_ANALYSIS
+                wt=obj.Info;
+            elseif obj.ResultId==cType.ResultId.EXERGY_COST_CALCULATOR || ...
+                   obj.ResultId==cType.ResultId.THERMOECONOMIC_ANALYSIS
+                wt=obj.Info.WasteData;
+            else
                 log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end
             if nargin==2
-                wid=obj.Info.getWasteIndex(wkey);
+                wid=wt.getWasteIndex(wkey);
                 if isempty(wid)
                     log.printError('Invalid waste flow key %s',wkey);
                     return

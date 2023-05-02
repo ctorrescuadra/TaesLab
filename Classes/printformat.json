@@ -4,6 +4,7 @@
 		{
 			"id": 1,
 			"key": "dfcost",
+			"number": false,
 			"description": "Flows Exergy Cost",
 			"columns": 8,
 			"fields": [
@@ -52,6 +53,7 @@
 		{
 			"id": 2,
 			"key": "gfcost",
+			"number": false,
 			"description": "Flows Generalized Cost",
 			"columns": 10,
 			"fields": [
@@ -110,6 +112,7 @@
 		{
 			"id": 3,
 			"key": "dcost",
+			"number": false,
 			"description": "Process Exergy Cost",
 			"columns": 6,
 			"fields": [
@@ -148,6 +151,7 @@
 		{
 			"id": 4,
 			"key": "ducost",
+			"number": false,
 			"description": "Process Unit Exergy Cost",
 			"columns": 7,
 			"fields": [
@@ -191,6 +195,7 @@
 		{
 			"id": 5,
 			"key": "gcost",
+			"number": false,
 			"description": "Process Generalized Cost",
 			"columns": 8,
 			"fields": [
@@ -239,6 +244,7 @@
 		{
 			"id": 6,
 			"key": "gucost",
+			"number": false,
 			"description": "Process Generalized Unit Cost",
 			"columns": 7,
 			"fields": [
@@ -282,6 +288,7 @@
 		{
 			"id": 7,
 			"key": "dgn",
+			"number": false,
 			"description": "Diagnosis Summary",
 			"columns": 7,
 			"fields": [
@@ -325,6 +332,7 @@
 		{
 			"id": 8,
 			"key": "process",
+			"number": true,
 			"description": "Processes Table",
 			"columns": 5,
 			"fields": [
@@ -358,6 +366,7 @@
 		{
 			"id": 9,
 			"key": "stream",
+			"number": true,
 			"description": "Streams Table",
 			"columns": 3,
 			"fields": [
@@ -381,6 +390,7 @@
 		{
 			"id": 10,
 			"key": "flow",
+			"number": true,
 			"description": "Flows Table",
 			"columns": 4,
 			"fields": [
@@ -409,6 +419,7 @@
 		{
 			"id": 11,
 			"key": "eprocess",
+			"number": false,
 			"description": "Processes Exergy Table",
 			"columns": 5,
 			"fields": [
@@ -442,6 +453,7 @@
 		{
 			"id": 12,
 			"key": "estream",
+			"number": false,
 			"description": "Streams Exergy Table",
 			"columns": 3,
 			"fields": [
@@ -465,6 +477,7 @@
 		{
 			"id": 13,
 			"key": "eflow",
+			"number": false,
 			"description": "Flows Exergy Table",
 			"columns": 4,
 			"fields": [
@@ -493,6 +506,7 @@
 		{
 			"id": 14,
 			"key": "atfp",
+			"number": false,
 			"description": "Diagram FP",
 			"columns": 4,
 			"fields": [
@@ -521,6 +535,7 @@
 		{
 			"id": 15,
 			"key": "adcfp",
+			"number": false,
 			"description": "Cost Diagram FP",
 			"columns": 4,
 			"fields": [
@@ -549,6 +564,7 @@
 		{
 			"id": 16,
 			"key": "wd",
+			"number": true,
 			"description": "Waste Definition Table",
 			"columns": 4,
 			"fields": [

@@ -116,6 +116,9 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %       gfict: generalized irreversibility cost table of flows
         %       gict:  generalized irreversibility cost table of processes
             tbl=struct();
+            if ect.isWaste
+                tbl.wa=obj.getWasteAllocation(ect.WasteData);
+            end
             if options.DirectCost
                 dfcost=ect.getDirectFlowsCost;
                 [dcost,udcost]=ect.getDirectProcessCost(dfcost);
@@ -153,6 +156,9 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %           generalized cost is required
         %
             tbl=struct();
+            if mfp.isWaste
+                tbl.wa=obj.getWasteAllocation(mfp.WasteData);
+            end
             if options.DirectCost
                 dcost=mfp.getDirectProcessCost;
                 udcost=mfp.getDirectProcessUnitCost;
@@ -562,6 +568,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             p.Unit=obj.getTableUnits(id);
             p.Format=obj.getTableFormat(id);
             p.FieldNames=obj.getFieldNames(id);
+            p.ShowNumber=obj.showNumber(id);
             res.setProperties(p);
         end
             

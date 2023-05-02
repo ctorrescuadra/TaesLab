@@ -25,7 +25,7 @@ classdef (Sealed) cModelResults < cResultId
         function obj = cModelResults(data)
         %cModelResults Construct an instance of this class
         %  Initialize the results model from data model
-            obj=obj@cResultId(cType.ResultId.RESULT_MODEL)
+            obj=obj@cResultId(cType.ResultId.RESULT_MODEL);
             if isa(data,'cResultInfo') && (data.ResultId==cType.ResultId.PRODUCTIVE_STRUCTURE)
                 obj.ProductiveStructure=data;
             else
@@ -90,7 +90,7 @@ classdef (Sealed) cModelResults < cResultId
                     tables.(list{i})=dm.Tables.(list{i});
                 end
             end
-            res=cModelTables(cType.ResultId.RESULT_MODEL,tables);
+            res=cModelTables(obj.ResultId,tables);
             res.setProperties(obj.ModelName,obj.State);
         end
     end

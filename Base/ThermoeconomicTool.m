@@ -31,7 +31,7 @@ function model=ThermoeconomicTool(filename,varargin)
     end
     % Check Data Model file
     data=checkModel(filename);
-    printLogger(data)
+    printLogger(data);
     % Check optional parameters and create cThermoeconomicModel obeject
     if isValid(data)
         p = inputParser;

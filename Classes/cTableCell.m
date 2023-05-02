@@ -20,6 +20,7 @@ classdef (Sealed) cTableCell < cTableResult
 %
     properties (GetAccess=public,SetAccess=private)
         FieldNames  % Cell array with field names (optional)
+        ShowNumber  % logical variable indicating if line number is printed
     end
 	
     methods
@@ -51,6 +52,7 @@ classdef (Sealed) cTableCell < cTableResult
             obj.Unit=p.Unit;
             obj.Format=p.Format;
             obj.FieldNames=p.FieldNames;
+            obj.ShowNumber=p.ShowNumber;
         end
 
         function setGraphType(obj,value)
@@ -79,11 +81,12 @@ classdef (Sealed) cTableCell < cTableResult
                 res.Properties.VariableNames=obj.FieldNames(2:end);
                 res.Properties.VariableUnits=obj.Unit(2:end);
                 res.Properties.VariableDescriptions=obj.ColNames(2:end);
-                res=addprop(res,["State","GraphType","Name","Format"],["table","table","table","variable"]);
+                res=addprop(res,["State","GraphType","Name","ShowNumber","Format"],["table","table","table","table","variable"]);
                 res.Properties.CustomProperties.State=obj.State;
                 res.Properties.CustomProperties.GraphType=obj.GraphType;
                 res.Properties.CustomProperties.Name=obj.Key;
-                res.Properties.CustomProperties.Format=obj.Format(3:end);
+                res.Properties.CustomProperties.Format=obj.Format(2:end);
+                res.Properties.CustomProperties.ShowNumber=obj.ShowNumber;
             end
         end
 
@@ -114,43 +117,44 @@ classdef (Sealed) cTableCell < cTableResult
             if nargin==1
                 fId=1;
             end
-            ncols=obj.NrOfCols+1;
-            hfmt=cell(1,ncols);
-            sfmt=cell(1,ncols);
-            % first column id
-            sfmt{1}=[' ',obj.Format{1},' '];
-            tmp=regexp(sfmt{1},'[0-9]+','match');
-            hfmt{1}=[' %',tmp{1},'s '];
-            % second column key
-            tmp={obj.ColNames{1},obj.RowNames{1:end}};
-            len=max(cellfun(@length,tmp))+1;
-            hfmt{2}=[' %-',num2str(len),'s'];
-            sfmt{2}=hfmt{2};
-            % rest of columns
-            for j=3:ncols
-                if ischar(obj.Data{1,j-2})
-                    tmp={obj.ColNames{j-1},obj.Data{:,j-2}};
+            hfmt=cell(1,obj.NrOfCols);
+            sfmt=cell(1,obj.NrOfCols);
+            for j=1:obj.NrOfCols
+                if ischar(obj.Values{2,j})
+                    tmp=obj.Values(:,j);
                     len=max(cellfun(@length,tmp))+1;
                     hfmt{j}=[' %-',num2str(len),'s'];
                     sfmt{j}=hfmt{j};
                 else
                     tmp=regexp(obj.Format{j},'[0-9]+','match');
-                    hfmt{j}=[' %',tmp{1},'s'];
+                    hfmt{j}=[' %-',tmp{1},'s'];
                     sfmt{j}=[' ',obj.Format{j}];
                 end
             end
-            hformat=[hfmt{:}];
-            sformat=[sfmt{:}];
-            % Print formatted table
-            header=sprintf(hformat,'Id',obj.ColNames{:});   
-			fprintf(fId,'\n');
+            % Determine output depending of table definition
+            if obj.ShowNumber
+                sfmt0=[' ',cType.FORMAT_ID,' '];
+                tmp=regexp(sfmt0,'[0-9]+','match');
+                hfmt0=[' %',tmp{1},'s '];
+                hformat=[hfmt0, hfmt{:}];
+                sformat=[sfmt0, sfmt{:}];
+                header=sprintf(hformat,'Id',obj.ColNames{:});
+                data=[num2cell(1:obj.NrOfRows)' obj.Values(2:end,:)];
+           else
+                hformat=[hfmt{:}];
+                sformat=[sfmt{:}];
+                header=sprintf(hformat,obj.ColNames{:});
+                data=obj.Values(2:end,:);
+            end
+            % Print formatted table   
+            fprintf(fId,'\n');
             fprintf(fId,'%s\n',obj.getDescriptionLabel);
             fprintf(fId,'\n');
-			fprintf(fId,'%s\n',header);
+            fprintf(fId,'%s\n',header);
             lines=repmat('-',1,length(header)+1);
-			fprintf(fId,'%s\n',lines);
+            fprintf(fId,'%s\n',lines);
             for i=1:obj.NrOfRows
-				fprintf(fId,sformat,i,obj.RowNames{i},obj.Data{i,:});
+                fprintf(fId,sformat,data{i,:});
                 fprintf(fId,'\n');
             end	
             fprintf(fId,'\n');

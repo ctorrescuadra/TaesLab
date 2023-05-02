@@ -253,7 +253,7 @@ classdef cGraphResults < cStatusLogger
 		% Show the diagnosis graph (Matlab version)
 		%
 			M=numel(obj.Legend);
-			f = figure('NumberTitle','off','Name',obj.Name,...
+			f = figure('numbertitle','off','Name',obj.Name,...
 				'units','normalized','position',[0.1 0.1 0.4 0.6],'color',[1,1,1]);
 			ax = axes(f,'Position',[0.1 0.1 0.85 0.8]);
 			cm=colormap(jet(M));

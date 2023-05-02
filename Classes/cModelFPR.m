@@ -106,7 +106,7 @@ classdef cModelFPR < cProcessModel
 				obj.messageLog(cType.ERROR,'Invalid cModelFPR object');
 				return	
 			end
-			if obj.NrOfWastes<1
+			if obj.isWaste
 				obj.messageLog(cType.ERROR,'Model must define waste flows');
 				return
 			end

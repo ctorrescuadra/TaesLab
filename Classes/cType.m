@@ -69,6 +69,7 @@ classdef cType
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		FUEL='FUEL'       % Fuel type option text
 		PRODUCT='PRODUCT' % Product type option text
+		FORMAT_ID='%3d'   % Line number format
 		% Types of processes
 		Process=struct('PRODUCTIVE',0,'ENVIRONMENT',2,'DISSIPATIVE',4);
         % Types of Streams 

@@ -96,17 +96,33 @@ classdef cReadFormat < cStatusLogger
 		end
 
 		function res=getTableKey(obj,id)
+		% get the key of a TableCell
+		%  Input:
+		%   id - Table id
 			res=obj.cfgTables(id).key;
 		end
 
 		function res=getMatrixKey(obj,id)
+		% get the key of a TableMatrix
+		%  Input:
+		%   id - Table id
 			res=obj.cfgMatrices(id).key;
 		end
 
 		function res=getSummaryKey(obj,id)
+		% get the the key of a TableSummary
+		%  Input:
+		%   id - Table id
 			res=obj.cfgSummary(id).key;
 		end
-			
+		
+		function res=showNumber(obj,id)
+		% Indicate if the id number is printing
+		%  Input:
+		%   id - Table id
+			res=obj.cfgTables(id).number;
+		end
+
 		function res=getTableDescription(obj,id)
 		% get the table desciption
 		%  Input:
@@ -154,8 +170,7 @@ classdef cReadFormat < cStatusLogger
 		%  Input:
 		%   id - Table id
 			idx=[obj.cfgTables(id).fields.type];
-			types=obj.cfgTypes(idx);
-			format={obj.cfgTypes(1).format,types(:).format};
+			format={obj.cfgTypes(idx).format};
         end
 
         function format=getMatrixFormat(obj,id)
