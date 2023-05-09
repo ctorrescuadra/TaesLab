@@ -320,6 +320,10 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function res=diagramFP(obj,varargin)
         % Get the Diagram FP cResultInfo object
+        %   Input:
+        %       table - FP table 
+        %   Output:
+        %       res - cResultInfo 
             if nargin==1
                 option=cType.Tables.TABLE_FP;
             else
@@ -333,6 +337,10 @@ classdef cThermoeconomicModel < cStatusLogger
         % Get the Recycling Analysis cResultInfo object
         %   Input:
         %       wkey - key of the analyzed waste
+        %   Output
+        %       res - cResultInfo (RECYCLING_ANALYSIS) containing the 
+        %           recycling analysis tables:
+
             res=cStatus();
             if ~obj.isWaste
                 res.printError('Model do not has wastes');
@@ -354,7 +362,20 @@ classdef cThermoeconomicModel < cStatusLogger
             else
                 ra.printLogger;
             end
+            val=obj.fp1.WasteData.getRecycleRatio(wkey);
+            setWasteRecycled(obj,wkey,val);
         end
+
+        function res=productiveDiagram(obj)
+        % Get the productive diagrams cResultInfo object
+        %   Output:
+        %       res - cResultInfo (PRODUCTIVE_STRUCTURE) containing the 
+        %           productive tables
+            res=getProductiveDiagram(obj.fmt,obj.productiveStructure.Info);
+            res.setProperties(obj.ModelName,'SUMMARY');
+            res.setResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
+        end
+
         %%%
         % Utility methods
         %
@@ -446,9 +467,9 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             switch nargin
             case 1
-                printResults(obj.msr)
+                printResults(obj.msr);
             case 2
-                printTable(obj.msr,table)
+                printTable(obj.msr,table);
             end
         end
 
@@ -483,7 +504,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %%%
         % Save Results methods
         %
-        function log=saveResults(obj,filename)
+        function log=saveResultsModel(obj,filename)
         % Save results in a file 
         % The following types are availables (XLSX, CSV, MAT)
         %  Input:
@@ -496,6 +517,11 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function log=saveSummary(obj,filename)
         % Save the summary tables into a filename
+        % The following file types are availables (JSON,XML,XLSX,CSV,MAT)
+        %  Input:
+        %   filename - Name of the file
+        %  Output:
+        %   log - cStatusLogger object containing the status and error messages
             if ~obj.Summary
                 obj.setSummary(true);
             end
@@ -514,13 +540,30 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function log=saveDiagramFP(obj,filename)
         % Save the Adjacency matrix of the Diagram FP in a file
-        % The following file types are availables (JSON,XML,XLSX,CSV,MAT)
+        % The following file types are availables (XLSX,CSV,MAT)
         %  Input:
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
             res=obj.diagramFP;
+            if ~isValid(res)
+                res.printLogger(res)
+                log.printError('Result object not available');
+                return
+            end
+            log=saveResults(res,filename);
+        end
+
+        function log=saveProductiveDiagram(obj,filename)
+        % Save the proctive diagram adjacency tables into a file
+        % The following file types are availables (XLSX,CSV,MAT)
+        %  Input:
+        %   filename - Name of the file
+        %  Output:
+        %   log - cStatusLogger object containing the status and error messages
+            log=cStatus();
+            res=obj.productiveDiagram;
             if ~isValid(res)
                 res.printLogger(res)
                 log.printError('Result object not available');
@@ -665,6 +708,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %       varargin - waste key
             res=obj.thermoeconomicAnalysis;
             log=graphWasteAllocation(res,varargin{:});
+        end
+
+        function log = showFlowsDiagram(obj)
+            res=obj.productiveDiagram;
+            log=res.showFlowsDiagram;
         end
         
         %%%
@@ -818,6 +866,7 @@ classdef cThermoeconomicModel < cStatusLogger
             % Read resources
             options=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);
             if obj.isGeneralCost
+                obj.rsc.setResources(obj.fp1);
                 options.ResourcesCost=obj.rsc;
             end
             % Get cModelResults info
@@ -868,7 +917,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if obj.Summary
                 tmp=cModelSummary(obj);
                 res=getSummaryResults(obj.fmt,tmp);
-                res.setProperties(obj.ModelName,obj.State);
+                res.setProperties(obj.ModelName,'SUMMARY');
                 obj.msr=res;
                 obj.printDebugInfo('Summary Results have been Activated');
             else

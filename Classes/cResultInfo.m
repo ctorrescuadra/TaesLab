@@ -11,9 +11,7 @@ classdef (Sealed) cResultInfo < cModelTables
 %       obj.graphSummary(graph_id)
 %       obj.graphRecycling(graph_id)
 %       obj.showDiagramFP()
-%       obj.flowsDiagram(opt)
-%       obj.saveDiagramFP(filename)
-%       obj.saveAdjacencyTable(filename)
+%       obj.showsFlowsDiagram(opt)
 %   Methods inhereted from cModelTables
 %       log=obj.saveResults(name)
 %       res=obj.printResults(obj)
@@ -36,7 +34,12 @@ classdef (Sealed) cResultInfo < cModelTables
         end
 
         function setProperties(obj,model,state)
+        % Set model and state properties
+        %   Input:
+        %       model - Model name
+        %       state - state of the results
             setProperties@cModelTables(obj,model,state);
+            % Assign the state value to all the tables of the object
             cellfun(@(x) setState(x,state),obj.tableIndex);
         end
 
@@ -120,15 +123,16 @@ classdef (Sealed) cResultInfo < cModelTables
         function log=graphSummary(obj,graph,var)
         % Plot summary tables
         %   Input:
-        %      graph - Data to plot
-        %      var - Variables to plot
+        %       graph - type of graph to plot
+        %           cType.SummaryTables.UNIT_CONSUMPTION (pku)
+        %           cType.SummaryTables.PROCESS_DIRECT_UNIT_COST (dpuc)
+        %           cType.SummaryTables.FLOW_DIRECT_UNIT_COST (dfuc)
+        %           cType.SummaryTables.PROCESS_GENERALIZED_UNIT_COST (gpuc)
+        %           cType.SummaryTables.FLOW_GENERALIZED_UNIT_COST (gfuc)
+        %       var - Variables to plot
         %
             %Check input arguments
             log=cStatus(cType.VALID);
-            if ~isValid(obj)
-                log.printError('Invalid Result object %s',obj.ResultName);
-                return                
-            end
             if ~isValid(obj)
                 log.printError('Invalid Result object %s',obj.ResultName);
                 return                
@@ -137,10 +141,9 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return
             end
-            info=obj.Info;
             if nargin==1
                 graph=cType.SummaryTables.FLOW_DIRECT_UNIT_COST;
-                var=info.getDefaultFlowVariables;
+                var=obj.Info.getDefaultFlowVariables;
             end
             tbl=obj.getTable(graph);
             if ~isValid(tbl) || ~isGraph(tbl)
@@ -152,12 +155,12 @@ classdef (Sealed) cResultInfo < cModelTables
                 return
             end
             if nargin==2
-                var=info.getDefaultFlowVariables;
+                var=obj.Info.getDefaultFlowVariables;
             end
             if tbl.isFlowsTable
-                idx=info.getFlowIndex(var);
+                idx=obj.Info.getFlowIndex(var);
             else
-                idx=info.getProcessIndex(var);
+                idx=obj.Info.getProcessIndex(var);
             end
             if cType.isEmpty(idx)
                 log.printError('Invalid Variable Names');
@@ -172,18 +175,17 @@ classdef (Sealed) cResultInfo < cModelTables
         % Show the recycling graph
         %   Input:
         %       graph - Name of the table to graph
+        %           cType.Graph.WASTE_RECYCLING_DIRECT (rag)
+        %           cType.Graph.WASTE_RECYCLING_GENERALIZED (rag)
+        %
             log=cStatus(cType.VALID);
-            if ~isValid(obj)
-                log.printError('Invalid object %s',obj.ResultName);
-                return
-            end
             if obj.ResultId~=cType.ResultId.RECYCLING_ANALYSIS
                 log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end
-            if ~isValid(obj.Info)
-                log.printError('Invalid Recycling Analysis');
-                return
+            if ~isValid(obj)
+                log.printError('Invalid Result object %s',obj.ResultName);
+                return                
             end
             if nargin==1 || isempty(graph)
                 graph=cType.Tables.WASTE_RECYCLING_DIRECT;
@@ -245,78 +247,19 @@ classdef (Sealed) cResultInfo < cModelTables
             g.showDigraph;
         end
 
-        function res=flowsDiagram(obj,opt)
-        % Show the flows diagram of the productive structure
-        %   Input:
-        %       opt - (true/false) show the digraph plot
-        %   Output:
-        %       res - Flow graph adjacency matrix
-            res=[];
-            if nargin==1
-                opt=false;
-            end
-            if obj.ResultId~=cType.ResultId.PRODUCTIVE_STRUCTURE
-                log.printError('Invalid Result Id: %s',obj.ResultName);
+        function log=showFlowsDiagram(obj)
+        % Show the flows diagram of the productive structure [Only Matlab]
+            log=cStatus(cType.VALID);
+            if isOctave
+                log.printError('Function not implemented')
                 return
             end
-            if ~isValid(obj.Info)
-                obj.printError('Invalid Productive Structure');
+            if obj.ResultId ~= cType.ResultId.PRODUCTIVE_DIAGRAM
+                log.printError('Invalid Result Object %s', obj.ResultName);
                 return
             end
-            opt=opt & isMatlab;
-            % Get the characteristic matrix of flows
-            A=obj.Info.StructuralMatrix;
-            [idx,jdx]=find(A);
-            nodenames=obj.Info.FlowKeys;
-            source=nodenames(idx);
-            target=nodenames(jdx);
-            res=[{'source','target'};[source',target']];
-            % Plot the graph
-            if opt
-                dg=digraph(source,target,'omitselfloops');
-                figure('menubar','none',...
-                    'name','Productive Structure Diagram', ...
-                    'resize','on','numbertitle','off');
-                plot(dg,'Layout','force');
-                title('Flows Digraph');
-            end
-        end
-
-        function log=saveAdjacencyTable(obj,filename)
-        % Save the adjacency table of the actual model state
-        % to use with a graph application (as yEd)
-        %   Input:
-        %       filename - Name of the file
-        %   Output:
-        %       res - Adjacency table            
-            log=cStatusLogger(cType.VALID);
-            if isValid(obj.Info) && isa(obj.Info,'cExergyModel')
-                res=getAdjacencyTable(obj.Info);
-            else
-                log.printError('Invalid ResultInfo');
-                return
-            end
-            if ~cType.checkFileWrite(filename)
-                log.printError('Invalid file name: %s',filename);
-                return
-            end
-            fileType=cType.getFileType(filename);
-            switch fileType
-                case cType.FileType.CSV
-                    slog=exportCSV(res,filename);
-                case cType.FileType.XLSX
-                    slog=exportXLS(res,filename);
-            otherwise
-                log.printError('File extension %s is not supported',filename);
-                return
-            end
-            log.addLogger(slog);
-            if log.isValid
-                log.printInfo('File %s has been saved',filename);
-            else
-                log.printLogger;
-                log.printError('File %s has NOT been saved',filename)
-            end
+            g=cGraphResults(obj.Tables.fat);
+            g.showDigraph;
         end
     end
 end

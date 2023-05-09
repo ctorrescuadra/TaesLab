@@ -13,11 +13,10 @@ classdef (Abstract) cTableResult < cTable
 % See also cTable, cTableMatrix, cTableCell
 %
     properties (GetAccess=public, SetAccess=protected)
-        State   % State values
-        Format  % Format of the table cells
-        Unit    % Units of the table cell
+        State     % State value
+        Format    % Format of the table cells
+        Unit      % Units of the table cell
         GraphType % Graph Type associated to table
-        Key     % Table key (name)
     end
     methods    
         function res=getFormattedCell(obj,fmt)

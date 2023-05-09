@@ -41,7 +41,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %   data - format data struct
         %   ps - productive structure object
             obj=obj@cReadFormat(data);
-            if ~isa(ps,'cProductiveStructure') || ps.isError
+            if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
 				obj.messageLog(cType.ERROR,'No valid Productive Structure provided');
                 return
             end
@@ -52,8 +52,10 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         
         function res=getProductiveStructureResults(obj,ps)
         % Generate the productive structure tables
-        %  Output
-        %   res - cModelResults object containing the cProductiveStructure info and the result tables:    
+        %  Input:
+        %   ps - cProductiveStructure object
+        %  Output:
+        %   res - cResultInfo object (PRODUCTIVE_STRUCTURE) with the result tables:    
         %     flows: plant flows
         %     streams: plant productive groups
         %     processes: plant processes
@@ -76,7 +78,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %  Input:
         %   e - cProcessModel object
         %  Output:
-        %   res - cModelResults object containing the cProcess info and the result tables:
+        %   res - cResultInfo object (THERMOECONOMIC_STATE) with the result tables:
         %     eflows: Exergy values of the flows
         %     estreams: Exergy values of the productive groups
         %     eprocesses: Exergy values of the processes
@@ -102,7 +104,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %       ResourceCost - [optional] cReadResources object if
         %       generalized cost is required
         %  Output:
-        %   res - cModelResults object containing the cExergyCost info and the result tables
+        %   res - cResultInfo object (EXERGY_COST_CALCULATION) with the result tables
         %    Direct Cost Tables:
         %       dfcost: direct exergy cost of flows
         %       dcost: direct exergy cost of processes
@@ -117,7 +119,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %       gict:  generalized irreversibility cost table of processes
             tbl=struct();
             if ect.isWaste
-                tbl.wa=obj.getWasteAllocation(ect.WasteData);
+                tbl.wa=obj.getWasteAllocation(ect.WasteTable);
             end
             if options.DirectCost
                 dfcost=ect.getDirectFlowsCost;
@@ -148,17 +150,17 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         function res=getThermoeconomicAnalysisResults(obj,mfp,options)
         % Get a structure containing the tables for Thermoeconomic Analysis function
         %   Input:
-        %   pm - ProcessModel object
-        %   options - structure containing the fields
-        %       DirectCost - Direct Cost Tables will be obtained
-        %       GeneralCost - General Cost Tables will be obtained
-        %       ResourceCost - [optional] cReadResources object if
-        %           generalized cost is required
+        %       pm - ProcessModel object
+        %       options - structure containing the fields
+        %           DirectCost - Direct Cost Tables will be obtained
+        %           GeneralCost - General Cost Tables will be obtained
+        %           ResourceCost - [optional] cReadResources object if
+        %               generalized cost is required
+        %   Output:
+        %       res - cResultInfo object (THERMOECONOMIC_ANALYSIS) with the result tables
         %
             tbl=struct();
-            if mfp.isWaste
-                tbl.wa=obj.getWasteAllocation(mfp.WasteData);
-            end
+
             if options.DirectCost
                 dcost=mfp.getDirectProcessCost;
                 udcost=mfp.getDirectProcessUnitCost;
@@ -174,6 +176,10 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
                 tbl.dcfpr=obj.getTableFP(cType.MatrixTable.COST_TABLE_FPR,dcfpr);
                 tbl.dict=obj.getProcessICTable(cType.MatrixTable.PROCESS_ICT,dict);
                 tbl.dfict=obj.getFlowICTable(cType.MatrixTable.FLOW_ICT,dfict);
+                if mfp.isWaste
+                    tbl.dcfpr=obj.getTableFP(cType.MatrixTable.COST_TABLE_FPR,dcfpr);
+                    tbl.wa=obj.getWasteAllocation(mfp.WasteData);
+                end
             end
             if options.GeneralCost
                 cz=options.ResourcesCost;
@@ -186,9 +192,9 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
                 tbl.gcost=obj.getProcessCostTable(cType.CellTable.PROCESS_GENERALIZED_COST,gcost);
                 tbl.gucost=obj.getProcessCostTable(cType.CellTable.PROCESS_GENERALIZED_UNIT_COST,ugcost);
                 tbl.gfcost=obj.getFlowCostTable(cType.CellTable.FLOW_GENERALIZED_COST,gfcost);
-                tbl.gcfp=obj.getTableFP(cType.MatrixTable.GENERALIZED_COST_TABLE,gcfp);
                 tbl.gict=obj.getProcessICTable(cType.MatrixTable.PROCESS_GENERALIZED_ICT,gict);
                 tbl.gfict=obj.getFlowICTable(cType.MatrixTable.FLOW_GENERALIZED_ICT,gfict);
+                tbl.gcfp=obj.getTableFP(cType.MatrixTable.GENERALIZED_COST_TABLE,gcfp);
             end
             res=cResultInfo(mfp,tbl);
         end
@@ -196,7 +202,13 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         function res=getDiagnosisResults(obj,dgn)
         % Get a structure with the tables for ThermoeconomicDiagnosis function
         %   Input:
-        %   dgn - cDiagnosis object
+        %       dgn - cDiagnosis object
+        %   Output:
+        %       res - cResultInfo object (THERMOECONOMIC_DIAGNOSIS) with the result tables
+        %           dgn: Diagnosis Summary
+        %           mf: Malfunction Table
+        %           mfc: Malfunction cost table
+        %           dit: Irreversibiliy Variation table
             tbl.dgn=obj.getDiagnosisSummary(dgn);
             tbl.mf=obj.getMalfunctionTable(dgn.MalfunctionTable);
             tbl.mfc=obj.getMalfunctionCostTable(dgn.MalfunctionCostTable);
@@ -207,8 +219,14 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         function res=getDiagramFP(obj,mfp,option)
         % Get a structure with the FP tables
         %   Input:
-        %   pm: cProcessModel object
+        %       mfp - cModelFPR object
+        %       option - table to analyze
+        %   Output:
+        %       res - cResultInfo object (DIAGRAM_FP) with the Diagram FP tables
             res=cStatusLogger();
+            if nargin==2 
+                option=cType.Tables.TABLE_FP;
+            end
             switch option
                 case cType.Tables.TABLE_FP
                 values=mfp.TableFP;
@@ -229,7 +247,11 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         function res=getRecyclingAnalysisResults(obj,ra,param)
         % Get a structure with the tables of cRecyclingAnalisys function
         %   Input:
-        %   ra: cRecyclingAnalysis object
+        %       ra: cRecyclingAnalysis object
+        %   Output:
+        %       res - cResultInfo object (RECYCLING_ANALYSIS) with the tables
+        %           rad - Recycling Analysis direct cost
+        %           rag - Recycling Analysis generalized cost
             colNames=horzcat('Recycle (%)',ra.OutputFlows);
             tmp=int8(100*ra.dValues(:,1));
             rowNames=arrayfun(@(x) sprintf('%6d',x),tmp,'UniformOutput',false);
@@ -246,11 +268,40 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             res=cResultInfo(ra,tbl);
         end
 
+        function res=getProductiveDiagram(obj,ps)
+        % Get the productive diagram tables
+        %   Input:
+        %       ps - Productive Structure
+        %   Output:
+        %       res - cResultInfo object (PRODUCTIVE_DIAGRAM)    
+            id=cType.CellTable.FLOWS_DIAGRAM;
+            A=ps.StructuralMatrix;
+            nodes=obj.flowKeys;
+            tbl.fat=obj.getProductiveTable(id,A,nodes);
+            id=cType.CellTable.PRODUCTIVE_DIAGRAM;
+            A=ps.ProductiveMatrix;
+            nodes=[obj.streamKeys,obj.flowKeys,obj.processKeys(1:end-1)];
+            tbl.pat=obj.getProductiveTable(id,A,nodes);
+            res=cResultInfo(ps,tbl);      
+        end
+
         function res=getSummaryResults(obj,ms)
         % Get the cResultInfo for Summary Results
         %   Input:
         %       ms - cModelSummary object
-        %
+        %   Output:
+        %       res - cResultInfo object (SUMMARY_RESULTS) with the tables
+        %           exergy - Exergy values of the model state
+        %           puk - Unit consumptions of processes
+        %           dpc - Direct cost of processes
+        %           dpuc - Direct unit cost of processes
+        %           dfc - Direct cost of flows
+        %           dfuc - Direct unit cost of flows
+        %           gpc - Generalized cost of processes
+        %           gpuc - Generalized unit cost of processes
+        %           gfc - Generalized cost of flows
+        %           gfuc - Generalized unit cost of flows
+
             colNames=horzcat('Key',ms.StateNames);
             % Exergy Tables
             id=cType.SummaryId.EXERGY;
@@ -424,6 +475,23 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             res.setGraphType(cType.GraphType.DIGRAPH);
 		end
 
+        function res=getProductiveTable(obj,id,A,nodes)
+        % Get the productive tables
+        %   Input:
+        %     id - table id (printconfig.json)
+        %     A - adjacency matrix
+        %     nodes - node names
+            [idx,jdx,~]=find(A);
+            source=nodes(idx);
+            target=nodes(jdx);
+            data=[source', target'];
+            M=numel(source);
+            rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
+            colNames=obj.getTableHeader(id);
+			res=obj.createCellTable(id,data,rowNames,colNames);
+            res.setGraphType(cType.GraphType.DIGRAPH);
+        end
+
         function res=getWasteDefinition(obj,wt)
             id=cType.CellTable.WASTE_DEFINITION;
             flw=obj.flowKeys;
@@ -586,6 +654,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         end
 
         function res=createSummaryTable(obj,id,data,rowNames,colNames)
+        % Create a summary table (as cTableMatrix and set parameters)
             res=cTableMatrix(data,rowNames,colNames,false,false);
             p.key=obj.getSummaryKey(id);
             p.Description=obj.getSummaryDescription(id);    

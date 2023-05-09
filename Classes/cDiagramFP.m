@@ -28,7 +28,7 @@ classdef (Sealed) cDiagramFP < cResultId
 			% Check Input
             obj=obj@cResultId(cType.ResultId.DIAGRAM_FP);
             if ~isValid(tbl) || ~isDigraph(tbl)
-                obj.messageLog(cType.ERROR,'Table %s is not valid',tbl.Key);
+                obj.messageLog(cType.ERROR,'Table %s is not valid',tbl.Name);
                 return
             end
     		% Get matrix and nodes

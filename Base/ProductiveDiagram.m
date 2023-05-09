@@ -1,13 +1,12 @@
-function res=ShowProductiveStructure(data)
+function res=ProductiveDiagram(data)
 % ShowProductiveStructure - shows information about the productive structure of a plant
 % 	INPUT:
 %		data - cReadModel object containing the data model information
 % 	OUTPUT:
 %		res - cResultInfo object containing productive structure info.
 %		The following tables are obtained
-%		  	flows - Flows definition table
-%         	streams - Streams definition tables
-%         	processes - Processes definition tables
+%		  	fat - Flows adjacency matrix
+%         	pat - Productive adjacency matrix
 % See also cReadModel, cProductiveStructure, cResultInfo
 %
 	res=cStatusLogger();
@@ -37,7 +36,8 @@ function res=ShowProductiveStructure(data)
 		res.printError('Format Definition is NOT correct. See error log');
 		return
 	end
-	% Get Productive Structure info
-	res=getProductiveStructureResults(fmt,data.ProductiveStructure);
-	res.setProperties(data.ModelName,data.getStateName(1));
+	% Get Productive Diagram info
+	res=getProductiveDiagram(fmt,data.ProductiveStructure);
+	res.setProperties(data.ModelName,'SUMMARY');
+    res.setResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
 end

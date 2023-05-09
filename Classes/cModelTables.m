@@ -4,10 +4,12 @@ classdef cModelTables < cResultId
     %   the class provide methos to save and analize the results tables
     %   Methods:  
     %       obj.setProperties(model,state)
-    %       obj.isResultTable
-    %       obj.existTable(tbl)
-    %       obj.getTable(tbl)
-    %       obj.getTableValues(tbl)
+    %       obj.setResultId(id)
+    %       status=obj.isResultTable
+    %       status=obj.existTable(tbl)
+    %       tbj=obj.getTable(tbl)
+    %       obj.printTable(tbl)
+    %       obj.viewTable(tbl)
     %       obj.getListOfTables
     %       obj.getIndexTable
     %       obj.printIndexTable
@@ -50,6 +52,9 @@ classdef cModelTables < cResultId
         end
 
         function setResultId(obj,id)
+        % Set ResultId
+        %   Input:
+        %       Id - ResultId of the object
             obj.ResultId=id;
             obj.ResultName=cType.Results{id};
         end
@@ -66,6 +71,8 @@ classdef cModelTables < cResultId
 
         function res = getTable(obj,name)
         % Get the table called name
+        %   Input:
+        %       name - Name of the table
             res = cStatusLogger;
             if obj.existTable(name)
                 res=obj.Tables.(name);
@@ -76,7 +83,7 @@ classdef cModelTables < cResultId
         % Print an individual table
         %   Input:
         %       name - Name of the table
-            log=cStatus();
+            log=cStatus(cType.VALID);
             res=obj.getTable(name);
             if isValid(res)
                 res.printFormatted;
@@ -103,43 +110,34 @@ classdef cModelTables < cResultId
             res=fieldnames(obj.Tables);
         end
 
-        function res=getTableValues(obj,name)
-        % Get the values of the table called name as cell array
-            res={};
-            tbl=getTable(obj,name);
-            if tbl.isValid
-                res=tbl.Values;
-            end
-        end
-
         function res=getIndexTable(obj)
-            % Get a cTableData object with the tables and descripcion
-                N=obj.NrOfTables+1;
-                data=cell(obj.NrOfTables+1,2);
-                data(1,:)={'Key','Description'};
-                tnames=fieldnames(obj.Tables);
-                data(2:end,1)=tnames;
-                for i=2:N
-                    data{i,2}=obj.Tables.(data{i,1}).Description;
-                end
-                res=cTableData(data);
+        % Get a cTableData object with the table names and descripcion
+            N=obj.NrOfTables+1;
+            data=cell(obj.NrOfTables+1,2);
+            data(1,:)={'Key','Description'};
+            tnames=obj.getListOfTables;
+            data(2:end,1)=tnames;
+            for i=2:N
+                data{i,2}=obj.Tables.(data{i,1}).Description;
             end
+            res=cTableData(data);
+        end
     
-            function printIndexTable(obj)
-            % Print the index table in console
-                tbl=obj.getIndexTable;
-                len1=max(cellfun(@length,tbl.RowNames))+1;
-                len2=max(cellfun(@length,tbl.Data(:,1)))+1;
-                hfmt=['%-',num2str(len1),'s %-',num2str(len2),'s\n'];
-                lines=repmat('-',1,len1+len2+2);
-                fprintf('\n')
-                fprintf(hfmt,tbl.ColNames{:});
-                fprintf('%s\n',lines);
-                for i=1:tbl.NrOfRows
-                    fprintf(hfmt,tbl.RowNames{i},tbl.Data{i,1});
-                end
-                fprintf('\n');
+        function printIndexTable(obj)
+        % Print the index table in console
+            tbl=obj.getIndexTable;
+            len1=max(cellfun(@length,tbl.RowNames))+1;
+            len2=max(cellfun(@length,tbl.Data(:,1)))+1;
+            hfmt=['%-',num2str(len1),'s %-',num2str(len2),'s\n'];
+            lines=repmat('-',1,len1+len2+2);
+            fprintf('\n')
+            fprintf(hfmt,tbl.ColNames{:});
+            fprintf('%s\n',lines);
+            for i=1:tbl.NrOfRows
+                fprintf(hfmt,tbl.RowNames{i},tbl.Data{i,1});
             end
+            fprintf('\n');
+        end
 
         function printResults(obj)
         % Print the formated tables on console
@@ -200,6 +198,8 @@ classdef cModelTables < cResultId
                 fmt=false;
             end
             switch mode
+            case cType.VarMode.NONE
+                res=obj;
             case cType.VarMode.CELL
                 res=obj.getResultAsCell(fmt);
             case cType.VarMode.STRUCT
@@ -219,7 +219,7 @@ classdef cModelTables < cResultId
         %   log - cStatusLog object with save status and error messages
             log=cStatusLogger(cType.VALID);
             % Check Input
-            list=fieldnames(obj.Tables);
+            list=obj.getListOfTables;
             if numel(list)<1
                 log.messageLog(cType.ERROR,'No tables to save');
                 return
@@ -251,7 +251,7 @@ classdef cModelTables < cResultId
             % Save each table in a file
             for i=1:obj.NrOfTables
                 tbl=obj.tableIndex{i};
-                fname=strcat(folder,filesep,tbl.Key,ext);
+                fname=strcat(folder,filesep,tbl.Name,ext);
                 slog=tbl.exportCSV(fname);
                 if ~slog.isValid
                     log.addLogger(slog);
@@ -302,19 +302,18 @@ classdef cModelTables < cResultId
             end
 
             for i=1:obj.NrOfTables
-                tbl=obj.tableIndex{i};
-                
+                tbl=obj.tableIndex{i};              
                 if isOctave
-                    [fId,status]=oct2xls(tbl.Values,fId,tbl.Key);
+                    [fId,status]=oct2xls(tbl.Values,fId,tbl.Name);
                     if ~status || isempty(fId)
-                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Key);
+                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
                     end
                 else
                     try
-                        writecell(tbl.Values,fId,'Sheet',tbl.Key);
+                        writecell(tbl.Values,fId,'Sheet',tbl.Name);
                     catch err
                         log.messageLog(cType.ERROR,err.message);
-                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Key);
+                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
                     end
                 end
             end
@@ -372,7 +371,7 @@ classdef cModelTables < cResultId
             if (nargin==1) || ~isa(fmt,'logical') || ~obj.isResultTable
                 fmt=false;
             end
-            list=fieldnames(obj.Tables);
+            list=obj.getListOfTables;
             for i=1:length(list)
                 res.(list{i})=getFormattedCell(obj.tableIndex{i},fmt);
             end
@@ -388,7 +387,7 @@ classdef cModelTables < cResultId
             if (nargin==1) || ~isa(fmt,'logical') || ~obj.isResultTable
                 fmt=false;
             end
-            list=fieldnames(obj.Tables);
+            list=obj.getListOfTables;
             for i=1:length(list)
                 res.(list{i})=getFormattedStruct(obj.tableIndex{i},fmt);
             end
@@ -401,7 +400,7 @@ classdef cModelTables < cResultId
         %
             if isMatlab
                 res=struct();
-                list=fieldnames(obj.Tables);
+                list=obj.getListOfTables;
                 for i=1:length(list)
                     res.(list{i})=getMatlabTable(obj.tableIndex{i});
                 end

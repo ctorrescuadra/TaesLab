@@ -31,5 +31,11 @@ classdef cTableData < cTable
                 obj.messageLog(cType.ERROR,message);
             end
         end
+
+        function setDescription(obj,text)
+        % Set Table Description and Name
+            obj.Description=text;
+            obj.Name=text;
+        end
     end
 end

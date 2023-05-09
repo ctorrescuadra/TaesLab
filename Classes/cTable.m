@@ -17,13 +17,9 @@ classdef (Abstract) cTable < cStatusLogger
         Data			% Data values
         Values          % Table values
         Description=''  % Table Descripcion
+        Name=''         % Table Name
     end
     methods   
-        function setDescription(obj,text)
-        % Set Table Description
-            obj.Description=text;
-        end
-        
         function status = checkTableSize(obj)
         % Check the size of the table
             status = (size(obj.Data,1)==obj.NrOfRows) && (size(obj.Data,2)==obj.NrOfCols-1);
@@ -42,6 +38,7 @@ classdef (Abstract) cTable < cStatusLogger
             else
                 res=cell2table(obj.Data,'VariableNames',obj.ColNames(2:end),'RowNames',obj.RowNames');
                 res.Properties.Description=obj.Description;
+                res.Properties.CustomProperties.Name=obj.Name;
             end
         end
 

@@ -70,6 +70,8 @@ classdef cType
 		FUEL='FUEL'       % Fuel type option text
 		PRODUCT='PRODUCT' % Product type option text
 		FORMAT_ID='%3d'   % Line number format
+		% Node types
+		NodeType=struct('STREAM',1,'FLOW',2,'PROCESS',3);
 		% Types of processes
 		Process=struct('PRODUCTIVE',0,'ENVIRONMENT',2,'DISSIPATIVE',4);
         % Types of Streams 
@@ -81,8 +83,8 @@ classdef cType
         % Types of Resources
 		Resources=struct('FLOW',1,'PROCESS',2);
 		% Variable Display Options
-        VarMode=struct('CELL',1,'STRUCT',2,'TABLE',3);
-		DEFAULT_VARMODE='CELL';
+        VarMode=struct('NONE',1,'CELL',2,'STRUCT',3,'TABLE',4);
+		DEFAULT_VARMODE='NONE';
         % Cost Table options
         CostTables=struct('DIRECT',1,'GENERALIZED',2,'ALL',3);
 		DEFAULT_COST_TABLES='DIRECT';
@@ -112,7 +114,7 @@ classdef cType
 			'PROCESS_UNIT_COST',4,'PROCESS_GENERALIZED_COST',5,'PROCESS_GENERALIZED_UNIT_COST',6,...
 			'DIAGNOSIS',7,'PROCESS_TABLE',8,'STREAM_TABLE',9,'FLOW_TABLE',10,...
 			'PROCESS_EXERGY',11,'STREAM_EXERGY',12,'FLOW_EXERGY',13,'DIAGRAM_FP',14,...
-			'COST_DIAGRAM_FP',15,'WASTE_DEFINITION',16);
+			'COST_DIAGRAM_FP',15,'WASTE_DEFINITION',16,'FLOWS_DIAGRAM',17,'PRODUCTIVE_DIAGRAM',18);
 		% Matrix Tables
 		MatrixTable=struct('TABLE_FP',1,'COST_TABLE_FP',2,'COST_TABLE_FPR',3,'GENERALIZED_COST_TABLE',4,...
 			'PROCESS_ICT',5,'PROCESS_GENERALIZED_ICT',6,'FLOW_ICT',7,'FLOW_GENERALIZED_ICT',8,...
@@ -133,11 +135,11 @@ classdef cType
         % Result Id types 
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
             'THERMOECONOMIC_DIAGNOSIS',4,'EXERGY_COST_CALCULATOR',5,'WASTE_ANALYSIS',6,'DIAGRAM_FP',7,...
-			'RECYCLING_ANALYSIS',8,'SUMMARY_RESULTS',9,'DATA_MODEL',10,'RESULT_MODEL',11);
+			'PRODUCTIVE_DIAGRAM',8,'RECYCLING_ANALYSIS',9,'SUMMARY_RESULTS',10,'RESULT_MODEL',11,'DATA_MODEL',12);
 		% Names for cModelResults	
 		Results={'Productive Structure','Thermoeconomic State','Thermoeconomic Analysis',...
 			'Thermoeconomic Diagnosis','Exergy Cost Calculator','Waste Analysis','Diagram FP',...
-			'Recycling Analysis','Summary Results','Data Model','Model Results'};
+			'Productive Diagram','Recycling Analysis','Summary Results','Model Results','Data Model'};
 		Tables=struct('FLOW_TABLE','flows','PROCESS_TABLE','processes','STREAM_TABLE','streama',...
 			'FLOW_EXERGY','eflows','PROCESS_EXERGY','eprocesses','STREAM_EXERGY','estreams',...
 			'TABLE_FP','tfp','DIAGRAM_FP','atfp','COST_DIAGRAM_FP','atcfp',...
@@ -146,13 +148,15 @@ classdef cType
 			'COST_TABLE_FP','dcfp','COST_TABLE_FPR','dcfpr','GENERALIZED_COST_TABLE','gcfp',...
 			'PROCESS_ICT','dict','PROCESS_GENERALIZED_ICT','gict','FLOW_ICT','dfict','FLOW_GENERALIZED_ICT','gfict',...
 			'DIAGNOSIS','dgn','MALFUNCTION','mf','MALFUNCTION_COST','mfc','IRREVERSIBILITY_VARIATION','dit',...
-			'WASTE_DEFINITION','wd','WASTE_ALLOCATION','wa','WASTE_RECYCLING_DIRECT','rad','WASTE_RECYCLING_GENERAL','rag');
+			'WASTE_DEFINITION','wd','WASTE_ALLOCATION','wa','WASTE_RECYCLING_DIRECT','rad','WASTE_RECYCLING_GENERAL','rag',...
+			'FLOWS_DIAGRAM','fat','PRODUCTIVE_DIAGRAM','pat');
         GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5,'WASTE_ALLOCATION',6,'DIGRAPH',7);
         % File Extension
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt');
 		% Icon Files
-		IconFile=struct('ProductiveStructure','ps.png','ThermoeconomicState','ts.png','ThermoeconomicAnalysis','ta.png','ThermoeconomicDiagnosis','td.png');
+		IconFile=struct('ProductiveStructure','ps.png','ThermoeconomicState','ts.png','ThermoeconomicAnalysis','ta.png',...
+            'ThermoeconomicDiagnosis','td.png','SummaryResults','gs.png');
         % Taess app welcome image
 		TaesImage='TaesLab.png';
         % Taess app Resources folder

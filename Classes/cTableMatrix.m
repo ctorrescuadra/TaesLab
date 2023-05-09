@@ -68,7 +68,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         
         function setProperties(obj,p)
         % Set the table properties: Description, Unit, Format, GraphType
-            obj.Key=p.key;
+            obj.Name=p.key;
             obj.Description=p.Description;
             obj.Unit=p.Unit;
             obj.Format=p.Format;
@@ -180,7 +180,7 @@ classdef (Sealed) cTableMatrix < cTableResult
                 res.Properties.CustomProperties.State=obj.State;
                 res.Properties.CustomProperties.GraphType=obj.GraphType;
                 res.Properties.CustomProperties.GraphOptions=obj.GraphOptions;
-                res.Properties.CustomProperties.Name=obj.Key;
+                res.Properties.CustomProperties.Name=obj.Name;
                 res.Properties.CustomProperties.Format=obj.Format;
                 res.Properties.CustomProperties.Units=obj.Unit;
             end

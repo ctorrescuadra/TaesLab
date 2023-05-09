@@ -89,6 +89,10 @@ function res = RecyclingAnalysis(model,varargin)
 	param.GeneralCost=bitget(pct,cType.GENERALIZED);
     if model.isResourceCost && param.GeneralCost
 		rsc=model.readResources(param.ResourceSample);
+        if ~isValid(rsc)
+            printLogger(rsc);
+            return
+        end
         rsc.setResources(mfp);
         if ~rsc.isValid
 			rsc.printLogger;

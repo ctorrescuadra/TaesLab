@@ -47,7 +47,7 @@ classdef (Sealed) cTableCell < cTableResult
 		
         function setProperties(obj,p)
         % Set table properties: Description, Unit, Format, FieldNames
-            obj.Key=p.key;
+            obj.Name=p.key;
             obj.Description=p.Description;
             obj.Unit=p.Unit;
             obj.Format=p.Format;
@@ -65,7 +65,7 @@ classdef (Sealed) cTableCell < cTableResult
             M=obj.NrOfCols-1;
             res=cell(N,M);
             for j=1:M
-                fmt=obj.Format{j+2};
+                fmt=obj.Format{j+1};
                 if strContains(fmt,'f') % Octave - MATLAB compatibility
                     res(:,j)=cellfun(@(x) sprintf(fmt,x),obj.Data(:,j),'UniformOutput',false);
                 else
@@ -84,7 +84,6 @@ classdef (Sealed) cTableCell < cTableResult
                 res=addprop(res,["State","GraphType","Name","ShowNumber","Format"],["table","table","table","table","variable"]);
                 res.Properties.CustomProperties.State=obj.State;
                 res.Properties.CustomProperties.GraphType=obj.GraphType;
-                res.Properties.CustomProperties.Name=obj.Key;
                 res.Properties.CustomProperties.Format=obj.Format(2:end);
                 res.Properties.CustomProperties.ShowNumber=obj.ShowNumber;
             end
@@ -127,7 +126,7 @@ classdef (Sealed) cTableCell < cTableResult
                     sfmt{j}=hfmt{j};
                 else
                     tmp=regexp(obj.Format{j},'[0-9]+','match');
-                    hfmt{j}=[' %-',tmp{1},'s'];
+                    hfmt{j}=[' %',tmp{1},'s'];
                     sfmt{j}=[' ',obj.Format{j}];
                 end
             end

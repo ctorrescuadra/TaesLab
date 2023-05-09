@@ -21,13 +21,13 @@ classdef (Sealed) cExergyCost < cExergyModel
 		WasteTable          % Waste Table Info
 		mL                  % Production Operator
 		opR                 % Waste Operator
+        isWaste=false       % Waste is well defined
 	end
 
 	properties (Access=private)
 		mV,mF,mF0,mP,mR     % Extended table matrices
 		c0					% Unit cost of resources	
         dprocess            % Dissipative processes list
-		isWaste=false       % Waste is well defined
 	end
 
 	methods

@@ -18,15 +18,15 @@ if model.NrOfStates>1
 end
 % Use Resources Cost
 if model.isResourceCost
-	[idx,param.CostTables]=optionChoice('Select Output Tables:',cType.CostTablesOptions);
-    if (idx>1) && model.NrOfResourceSamples>1
+	[oct,param.CostTables]=optionChoice('Select Output Tables:',cType.CostTablesOptions);
+    if bitget(oct,cType.GENERALIZED) && model.NrOfResourceSamples>1
 		[~,param.ResourceSample]=optionChoice('Select Resource Sample:',model.ResourceSamples);
 	else
 		param.ResourceSample=model.ResourceSamples{1};
     end
 end
 % Solve and show results
-options.VarMode=cType.VarMode.CELL;
+options.VarMode=cType.VarMode.NONE;
 options.VarFormat=false;
 res=ThermoeconomicAnalysis(model,param);
 if res.isValid

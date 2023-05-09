@@ -18,9 +18,9 @@ if model.NrOfStates>1
 	[~,param.State]=optionChoice('Select State:',model.States);
 end
 % Get TableFP
-options.VarMode=cType.VarMode.CELL;
+options.VarMode=cType.VarMode.NONE;
 options.VarFormat=false;
-res=ShowDiagramFP(model,param);
-if ~obj.isError
-	sol=outputResults(obj,options);
+res=DiagramFP(model,param);
+if ~res.isError
+	tbl=outputResults(res,options);
 end

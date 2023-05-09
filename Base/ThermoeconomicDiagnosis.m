@@ -74,21 +74,21 @@ function res=ThermoeconomicDiagnosis(model,varargin)
         res.printError('Invalid Operation State values. See error log');
         return
     end
-    % Read Waste, compute Model FP and make diagnosis
-    fp0=cModelFPR(rex0);
-    fp1=cModelFPR(rex1);
     pdm=cType.getDiagnosisMethod(param.DiagnosisMethod);
-    if  (model.isWaste) && (pdm==cType.Diagnosis.WASTE_INTERNAL)
-		wt=model.readWaste;
-        if ~wt.isValid
-            wt.printLogger;
+    % Read Waste, compute Model FP and make diagnosis
+    if  (model.isWaste)  && (pdm==cType.Diagnosis.WASTE_INTERNAL)
+		wd=model.readWaste;
+        if ~wd.isValid
+            wd.printLogger;
             res.printError('Invalid waste definition. See error log');
             return
         end
-        fp0.setWasteOperators(wt)
-        fp1.setWasteOperators(wt)
+        fp0=cModelFPR(rex0,wd);
+        fp1=cModelFPR(rex1,wd);
         dgn=cDiagnosisR(fp0,fp1);
     else
+        fp0=cModelFPR(rex0);
+        fp1=cModelFPR(rex1);
         dgn=cDiagnosis(fp0,fp1);
     end
     % Get diagnosis results

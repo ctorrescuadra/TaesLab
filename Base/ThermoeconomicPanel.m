@@ -20,7 +20,6 @@ classdef ThermoeconomicPanel < handle
 		mfile_text      % Model file widget
 		open_button     % Open Data Model widget
 		save_buttom     % Save Result widget
-		cost_popup      % Select Method widget
         ofile_text      % Output filename widget
         state_popup     % Select State widget
         sample_popup    % Select Resources widget
@@ -28,19 +27,24 @@ classdef ThermoeconomicPanel < handle
         tables_popup    % Select CostTables widget
 		tdm_popup       % Diagnosis method widget
         vf_checkbox     % Select VarFormat widget
-		sh_checkbox     % Show in consoloe widget
-		gr_checkbox     % Select file button
+		sh_checkbox     % Show in console widget
+		gr_checkbox     % Select file button widget
+        sr_checkbox     % Summary Results widget
 		mn_ps           % Table Productive Structure menu widget
 		mn_ts           % Thermoeconomic State menu widget
 		mn_ta           % Thermoeconomic Analysis menu widget
         mn_td           % Thermoeconomic Diagnosis menu widget
+        mn_gs           % Summary Results menu widget
         mn_vr           % View Model Results menu widget
 		mn_sr  			% Save Result menu widget
-        mn_sd           % Save Data Model menu widget        
+        mn_sd           % Save Data Model menu widget
+        mn_sg           % Save General Summary menu widget
+        mn_fp           % Save Diagram FP menu widget
 		tb_ps			% Productive Structure tool bar widget
 		tb_ts           % Thermoeconomic State tool bar widget
         tb_ta			% Thermoeconomic Analysis tool bar widget
         tb_td			% Thermoeconomic Diagnosis tool bar widgt
+        tb_gs           % General Summary Results tool bar widget
     end
 
 	properties(GetAccess=public,SetAccess=private)
@@ -55,7 +59,7 @@ classdef ThermoeconomicPanel < handle
 			% Initilize non-graphics object variables
 			outputFileName=strcat(cType.RESULT_FILE,'.xlsx');
 			obj.Options=struct('Printer',false,...
-				'VarMode',cType.VarMode.CELL, ...
+				'VarMode',cType.VarMode.NONE, ...
 				'ResultFile',[pwd,filesep,outputFileName],...
 				'VarFormat',false,...
 				'ShowGraph',false);
@@ -84,18 +88,27 @@ classdef ThermoeconomicPanel < handle
             obj.tb_td = uipushtool (tb, 'cdata', cType.getIcon('ThermoeconomicDiagnosis'),...
 			    'tooltipstring','Thermoeconomic Diagnosis',...
 			    'clickedcallback', @(src,evt) obj.thermoeconomicDiagnosis(src,evt));
+            obj.tb_gs = uipushtool (tb, 'cdata', cType.getIcon('SummaryResults'),...
+			    'tooltipstring','General Summary',...
+			    'clickedcallback', @(src,evt) obj.summaryResults(src,evt));
 			% Menus
             f=uimenu (hf,'label', '&File', 'accelerator', 'f');
             e=uimenu (hf,'label', '&Tools', 'accelerator', 't');
             uimenu (hf,'label', '&Help', 'accelerator', 'h');
 			uimenu (f, 'label', 'Open', 'accelerator', 'o', ...
 				'callback', @(src,evt) obj.getFile(src,evt));
-			obj.mn_sr=uimenu (f, 'label', 'Save Result', 'accelerator', 's',...
-				'callback', @(src,evt) obj.saveResult(src,evt));
-            obj.mn_sd=uimenu (f, 'label', 'Save DataModel', 'accelerator', 'd',...
-				'callback', @(src,evt) obj.saveDataModel(src,evt));
-			uimenu (f, 'label', 'Close', 'accelerator', 'q', ...
+            uimenu (f, 'label', 'Close', 'accelerator', 'q', ...
 				'callback', 'close (gcf)');
+            s=uimenu (f,'label','Save','accelerator','s');
+			obj.mn_sr=uimenu (s, 'label', 'Model Results',...
+				'callback', @(src,evt) obj.saveResult(src,evt));
+            obj.mn_sd=uimenu (s, 'label', 'Data Model',...
+				'callback', @(src,evt) obj.saveDataModel(src,evt));
+            obj.mn_sg=uimenu (s, 'label', 'Summary',...
+				'callback', @(src,evt) obj.saveSummary(src,evt));
+            obj.mn_fp=uimenu (s, 'label', 'Diagram FP',...
+				'callback', @(src,evt) obj.saveDiagramFP(src,evt));
+
 			obj.mn_ps=uimenu (e, 'label', 'Productive Structure',...
 				'callback', @(src,evt) obj.productiveStructure(src,evt));
 			obj.mn_ts=uimenu (e, 'label', 'Thermoeconomic State',...
@@ -104,6 +117,8 @@ classdef ThermoeconomicPanel < handle
 				'callback', @(src,evt) obj.thermoeconomicAnalysis(src,evt));
 			obj.mn_td=uimenu (e, 'label', 'Thermoeconomic Diagnosis',...
 				'callback', @(src,evt) obj.thermoeconomicDiagnosis(src,evt));
+            obj.mn_gs=uimenu (e, 'label', 'Summary Results',...
+				'callback', @(src,evt) obj.summaryResults(src,evt));
             obj.mn_vr=uimenu (e, 'label', 'View Results Model',...
 				'callback', @(src,evt) obj.viewResultsModel(src,evt));
 				
@@ -125,7 +140,7 @@ classdef ThermoeconomicPanel < handle
                    'string', 'Data Model File:',...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Select data model file',...
-                   'position', [0.08 0.82 0.35 0.05]);
+                   'position', [0.08 0.84 0.35 0.05]);
 
             uicontrol (hf,'style', 'text',...
                    'units', 'normalized',...
@@ -133,7 +148,7 @@ classdef ThermoeconomicPanel < handle
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Select Operation State for Analysis',...
-                   'position', [0.08 0.75 0.35 0.05]);
+                   'position', [0.08 0.77 0.35 0.05]);
 
 			uicontrol (hf,'style', 'text',...
                    'units', 'normalized',...
@@ -141,7 +156,7 @@ classdef ThermoeconomicPanel < handle
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Select Resource Sample for Analysis',...
-                   'position', [0.08 0.68 0.35 0.05]);
+                   'position', [0.08 0.70 0.35 0.05]);
 
             uicontrol (hf,'style', 'text',...
                    'units', 'normalized',...
@@ -149,7 +164,7 @@ classdef ThermoeconomicPanel < handle
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Select Cost Tables',...
-                   'position', [0.08 0.61 0.35 0.05]);
+                   'position', [0.08 0.63 0.35 0.05]);
 
             uicontrol (hf,'style', 'text',...
                    'units', 'normalized',...
@@ -157,7 +172,16 @@ classdef ThermoeconomicPanel < handle
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Diagnosis Method',...
-                   'position', [0.08 0.54 0.35 0.05]);
+                   'position', [0.08 0.56 0.35 0.05]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Summary Results:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Summary Results',...
+                   'position', [0.08 0.49 0.35 0.05]);
+
 
 			% Labels output parameters
             uicontrol (hf,'style', 'text',...
@@ -206,40 +230,45 @@ classdef ThermoeconomicPanel < handle
 					'fontname','Verdana','fontsize',10,...
 					'string', ' Not Model Available',...
 					'horizontalalignment', 'left',...
-					'position', [0.35 0.82 0.35 0.05]);
+					'position', [0.35 0.84 0.35 0.05]);
 
 			obj.open_button = uicontrol (hf,'style', 'pushbutton',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
-					'string','Open',...
-					'enable','on',...
+					'string','Open',....
 					'callback', @(src,evt) obj.getFile(src,evt),...
-					'position', [0.75 0.82 0.1 0.05]);
+					'position', [0.75 0.84 0.1 0.05]);
 
 			obj.state_popup = uicontrol (hf,'style', 'popupmenu',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) obj.getState(src,evt),...
-					'position', [0.35 0.75 0.35 0.05]);
+					'position', [0.35 0.77 0.35 0.05]);
 
  			obj.sample_popup = uicontrol (hf,'style', 'popupmenu',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) obj.getSample(src,evt),...
-					'position', [0.35 0.68 0.35 0.05]);
+					'position', [0.35 0.70 0.35 0.05]);
 
 			 obj.tables_popup = uicontrol (hf,'style', 'popupmenu',...
 					'units', 'normalized',...
 					'string', cType.CostTablesOptions,...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) obj.getTables(src,evt),...
-					'position', [0.35 0.61 0.35 0.05]);
+					'position', [0.35 0.63 0.35 0.05]);
 
 			obj.tdm_popup = uicontrol (hf,'style', 'popupmenu',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) obj.getDiagnosisMethod(src,evt),...
-					'position', [0.35 0.54 0.35 0.05]);
+					'position', [0.35 0.56 0.35 0.05]);
+
+            obj.sr_checkbox = uicontrol (hf,'style', 'checkbox',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'callback', @(src,evt) obj.activateSummary(src,evt),...
+					'position', [0.35 0.49 0.35 0.05]);
 
 			obj.ofile_text = uicontrol (hf,'style', 'text',...
 					'units', 'normalized',...
@@ -253,7 +282,6 @@ classdef ThermoeconomicPanel < handle
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'string','Save',...
-					'enable','inactive',...
 					'callback', @(src,evt) obj.saveResult(src,evt),...
 					'position', [0.75 0.30 0.1 0.05]);
 
@@ -261,7 +289,7 @@ classdef ThermoeconomicPanel < handle
 					'units', 'normalized',...
 					'string', cType.VarModeOptions,...
 					'fontname','Verdana','fontsize',9,...
-					'value',cType.VarMode.CELL,...
+					'value',cType.VarMode.NONE,...
 					'callback', @(src,evt) obj.getVarMode(src,evt),...
 					'position', [0.35 0.23 0.35 0.05]);
 
@@ -320,18 +348,19 @@ classdef ThermoeconomicPanel < handle
 			% Read and Check Data Model
 			data=checkModel(file);
 			if isValid(data) %Assign parameters
-				tm=cThermoeconomicModel(data);
+				tm=cThermoeconomicModel(data,'Debug',false);
 				set(obj.mfile_text,'backgroundcolor',[0.95 1 0.95]);
-				set(obj.cost_popup,'enable','off');
 				set(obj.mn_ts,'enable','on');
 				set(obj.mn_ta,'enable','on');
 				set(obj.mn_ps,'enable','on');
                 set(obj.mn_vr,'enable','on');
 				set(obj.mn_sr,'enable','on');
                 set(obj.mn_sd,'enable','on');
+                set(obj.mn_fp,'enable','on');
 				set(obj.tb_ts,'enable','on');
                 set(obj.tb_ta,'enable','on');
                 set(obj.tb_ps,'enable','on');
+                set(obj.sr_checkbox,'enable','on');
 				set(obj.save_buttom,'enable','on');
 				obj.stateNames=tm.getStateNames;
 				set(obj.state_popup,'enable','on','string',obj.stateNames);
@@ -354,7 +383,21 @@ classdef ThermoeconomicPanel < handle
 			end
 			set(obj.log,'string',logtext);
 			data.printLogger;
-		end
+        end
+
+        function activateSummary(obj,~,~)
+		% Get activate Summary callback
+			val=get(obj.sr_checkbox,'value');
+			if val
+				obj.Model.Summary=true;
+                set(obj.tb_gs,'enable','on');
+                set(obj.mn_sg,'enable','on');
+			else
+				obj.Model.Summary=false;
+                set(obj.tb_gs,'enable','off');
+                set(obj.mn_sg,'enable','off');
+			end
+        end
 
         function getTables(obj,~,~)
 		% Select Cost Table callback
@@ -442,7 +485,7 @@ classdef ThermoeconomicPanel < handle
 			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files';'*.mat','MAT Files'},'Select File',default_file);
             cd(path);
             if ext % File has been selected
-				slog=saveResults(obj.Model,file);
+				slog=saveResultsModel(obj.Model,file);
                 if isValid(slog)
 				    obj.Options.ResultFile=file;
 				    set(obj.ofile_text,'string',file);
@@ -474,6 +517,43 @@ classdef ThermoeconomicPanel < handle
             end
             set(obj.log,'string',logtext);
         end
+
+        function saveSummary(obj,~,~)
+            default_file='SummaryResults.xlsx';
+			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files';'*.mat','MAT Files'},'Select File',default_file);
+            cd(path);
+            if ext % File has been selected
+				slog=saveSummary(obj.Model,file);
+                if isValid(slog)
+				    set(obj.ofile_text,'string',file);
+				    logtext=sprintf(' INFO: Summary Results Available in file %s',file);			    
+                else
+                    logtext=sprintf(' ERROR: Summary Result file %s could NOT be saved', file);
+                    printLogger(slog);
+                    obj.Model.addLogger(slog);
+                end
+            end
+            set(obj.log,'string',logtext);
+        end
+
+        function saveDiagramFP(obj,~,~)
+            default_file='DiagramFP.xlsx';
+			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files';'*.mat','MAT Files'},'Select File',default_file);
+            cd(path);
+            if ext % File has been selected
+				slog=saveDiagramFP(obj.Model,file);
+                if isValid(slog)
+				    set(obj.ofile_text,'string',file);
+				    logtext=sprintf(' INFO: Diagram FP Available in file %s',file);			    
+                else
+                    logtext=sprintf(' ERROR: Diagram FP file %s could NOT be saved', file);
+                    printLogger(slog);
+                    obj.Model.addLogger(slog);
+                end
+            end
+            set(obj.log,'string',logtext);
+        end
+
 		%%%%%%%%%%%%%%%%%%%%%%%
 		% Methods
 		%%%%%%%%%%%%%%%%%%%%%%%
@@ -490,7 +570,7 @@ classdef ThermoeconomicPanel < handle
 				assignin('base', 'ProductiveStructure', res);
 				if obj.Options.ShowGraph
 					if isOctave
-						viewTable(ps.Tables.flows,ots.State);
+						viewTable(ps.Tables.flows,'SUMMARY');
 					else
 						ViewResults(ps);
 					end
@@ -573,10 +653,33 @@ classdef ThermoeconomicPanel < handle
 			set(obj.log,'string',logtext);
         end
 
+        function summaryResults(obj,~,~)
+            set(obj.log,'string','');
+            srt=obj.Model.summaryResults;
+			if srt.isValid
+				if obj.Options.Printer
+					printResults(srt);
+				end
+				res=getResultTables(srt,obj.Options.VarMode,obj.Options.VarFormat);
+				logtext=sprintf(' INFO: Results Available in Variable Summary Results');
+				assignin('base', 'SummaryResults', res);
+				if obj.Options.ShowGraph
+					if isOctave
+						graphSummary(srt);
+					else
+						ViewResults(srt);
+					end
+				end
+			else
+				logtext=' ERROR: Summary Results Values are not available';
+			end
+			set(obj.log,'string',logtext);
+        end
+
         function viewResultsModel(obj,~,~)
-            assignin('base', 'ModelResuls', obj.Results);
-            if isMatlab
-                ViewResults(obj.Results);
+            assignin('base', 'model', obj.Model);
+            if isMatlab  
+                ViewResults(obj.Model);
             end
         end
 
@@ -590,15 +693,22 @@ classdef ThermoeconomicPanel < handle
             set(obj.mn_vr,'enable','off');
 			set(obj.mn_sr,'enable','off');
             set(obj.mn_sd,'enable','off');
+            set(obj.mn_sg,'enable','off');
+            set(obj.mn_gs,'enable','off');
+            set(obj.mn_fp,'enable','off');
 			set(obj.tb_ts,'enable','off');
 			set(obj.tb_ta,'enable','off');
 			set(obj.tb_ps,'enable','off');
 			set(obj.tb_td,'enable','off');
+            set(obj.tb_gs,'enable','off');
 			set(obj.save_buttom,'enable','off');
+            set(obj.sr_checkbox,'enable','off');
+            set(obj.save_buttom,'enable','off');
 			set(obj.tables_popup,'value',cType.CostTables.DIRECT,'enable','off');
 			set(obj.tdm_popup,'string',{'NONE'},'value',cType.Diagnosis.NONE,'enable','off');
 			set(obj.state_popup,'string',{'Reference'},'value',1,'enable','off');
 			set(obj.sample_popup,'string',{'Base'},'value',1,'enable','off');
+            set(obj.open_button,'enable','on');
 		end
 	end
 end

@@ -186,6 +186,17 @@ classdef (Sealed) cProductiveStructure < cReadProductiveStructure
 			res=x.AE*(mI+x.AF(:,1:end-1)*x.AP(1:end-1,:))*x.AS;
 		end
 
+		function res=ProductiveMatrix(obj)
+		% Get the Productive Adjacency Matrix
+			x=obj.AdjacencyMatrix;
+			N=obj.NrOfProcesses;
+			M=obj.NrOfFlows;
+			NS=obj.NrOfStreams;
+			res=[zeros(NS,NS), x.AS, x.AF(:,1:end-1);...
+				 x.AE, zeros(M,M), zeros(M,N);...
+				 x.AP(1:end-1,:), zeros(N,M), zeros(N,N)];
+		end
+
 		function res=getConfigInfo(obj)
 		% Get the Productive Structure Config info
 			res=struct('NrOfFlows',obj.NrOfFlows,'NrOfProcesses',obj.NrOfProcesses,...

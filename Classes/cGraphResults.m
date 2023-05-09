@@ -11,16 +11,18 @@ classdef cGraphResults < cStatusLogger
         yLabel      % Y-axis label
         BaseLine    % Base Line
         Legend      % Legend Categories
+		isColorbar  % Colorbar activated
     end
 
     methods
         function obj = cGraphResults(tbl,options)
 		% Constructor
 			if ~isValid(tbl) || ~isGraph(tbl)
-				obj.messageLog(cType.ERROR,'Invalid Graph Table %s',obj.key);
+				obj.messageLog(cType.ERROR,'Invalid Graph Table %s',tbl.Name);
 				return
 			end
 			obj.Type=tbl.GraphType;
+            obj.isColorbar=false;
             switch obj.Type
 			case cType.GraphType.COST
 				obj.setGraphCostParameters(tbl);
@@ -54,11 +56,11 @@ classdef cGraphResults < cStatusLogger
 			set(ax,'xtick',obj.xValues,'xticklabel',obj.Categories,'fontsize',12);
 			xlabel(ax,obj.xLabel,'fontsize',12);
 			ylabel(ax,obj.yLabel,'fontsize',12);
-			set(ax,'ygrid','on');
-			set(ax,'xgrid','off')
+			set(ax,'ygrid','on','fontsize',12);
+			set(ax,'xgrid','off','fontsize',12)
 			box(ax,'on');
 			hl=legend(obj.Legend);
-			set(hl,'location','northeastoutside','orientation','vertical');
+			set(hl,'location','northeastoutside','orientation','vertical','fontsize',10);
 		end
 
 		function graphDiagnosis(obj)
@@ -94,6 +96,7 @@ classdef cGraphResults < cStatusLogger
 			ax=axes(f);
 			plot(obj.xValues,obj.yValues,'Marker','diamond');
 			title(ax,obj.Title,'fontsize',14);
+			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			xlabel(ax,obj.xLabel,'fontsize',12);
 			ylabel(ax,obj.yLabel,'fontsize',12);
 			set(ax,'xgrid','off','ygrid','on');
@@ -107,7 +110,7 @@ classdef cGraphResults < cStatusLogger
 			f=figure('name',obj.Name,'numbertitle','off',...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
-			pie(obj.xValues,'%5.1f');
+			pie(obj.xValues,'%5.1f%%');
 			title(ax,obj.Title,'fontsize',14);
 			hl=legend(obj.Legend);
 			set(hl,'Orientation','horizontal','Location','southoutside');
@@ -115,15 +118,20 @@ classdef cGraphResults < cStatusLogger
 
 		function showDigraph(obj)
 		% Plot digraph   
-			figure('menubar','none','name',obj.Name, ...
-				'resize','on','numbertitle','off');
-			r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
-			colormap(red2blue);
-					% Plot the digraph with colobar     
-			plot(obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
+			figure('name',obj.Name,'numbertitle','off',...
+				'resize','on','color',[1 1 1]);
+			if obj.isColorbar
+				r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
+				colormap(red2blue);
+				% Plot the digraph with colobar     
+				plot(obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
+                c=colorbar;
+			    c.Label.String=obj.xLabel;
+				c.Label.FontSize=10;
+			else
+				plot(obj.xValues,"Layout","auto");
+			end
 			title(obj.Title,'fontsize',14);
-			c=colorbar;
-			c.Label.String=obj.xLabel;
 		end
 	end
    
@@ -188,7 +196,7 @@ classdef cGraphResults < cStatusLogger
 			obj.xLabel='Recycling (%)';
 			obj.yLabel=['Unit Cost ',tbl.Unit];
 			obj.Legend=tbl.ColNames(2:end);
-			if tbl.isGeneralCostTable || tbl.isFlowsTable
+			if tbl.isGeneralCostTable
 				obj.BaseLine=0.0;
 			else
 				obj.BaseLine=1.0;
@@ -214,8 +222,13 @@ classdef cGraphResults < cStatusLogger
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
 			source=tbl.Data(:,1);
 			target=tbl.Data(:,2);
-			values=cell2mat(tbl.Data(:,3));
-			obj.xValues=digraph(source,target,values,"omitselfloops");
+			if tbl.NrOfCols==3
+				obj.xValues=digraph(source,target,"omitselfloops");
+			else
+			    values=cell2mat(tbl.Data(:,3));
+			    obj.xValues=digraph(source,target,values,"omitselfloops");
+			    obj.isColorbar=true;
+			end
             obj.Legend={};
 			obj.yValues=[];
 			obj.xLabel=['Exergy ' tbl.Unit{end}];
@@ -271,14 +284,14 @@ classdef cGraphResults < cStatusLogger
 			bs.BaseValue=obj.BaseLine;
 			bs.LineStyle='-';
 			bs.Color=[0.6,0.6,0.6];
-			set(ax,'XTick',obj.xValues,'XTickLabel',obj.Categories,'FontSize',9);
-			title(ax,obj.Title,'FontSize',12);
-			xlabel(ax,obj.xLabel,'fontsize',10);
-			ylabel(ax,obj.yLabel,'fontsize',10);
+			set(ax,'XTick',obj.xValues,'XTickLabel',obj.Categories,'FontSize',11);
+			title(ax,obj.Title,'FontSize',14);
+			xlabel(ax,obj.xLabel,'fontsize',12);
+			ylabel(ax,obj.yLabel,'fontsize',12);
 			box(ax,'on');
 			set(ax,'ygrid','on','xgrid','off')
 			hold(ax,'off');
-			hl=legend(ax,obj.Legend,'FontSize',8);
+			hl=legend(ax,obj.Legend,'FontSize',10);
 			set(hl,'location','northeastoutside','orientation','vertical');
 		end
     end

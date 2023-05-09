@@ -584,6 +584,54 @@
 					"type": 9
 				}
 			]
+		},
+		{
+			"id": 17,
+			"key": "fat",
+			"number": false,
+			"description": "Flows Diagram",
+			"columns": 3,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				}
+			]
+		},
+		{
+			"id": 18,
+			"key": "pat",
+			"number": false,
+			"description": "Productive Diagram",
+			"columns": 3,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				}
+			]
 		}
 	],
 	"matrices": [

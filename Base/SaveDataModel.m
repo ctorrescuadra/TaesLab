@@ -7,7 +7,7 @@ function SaveDataModel(arg,filename)
 %       filename - name of the output file (with extension)
 % See also cReadModel
 %
-    log=cStatus();
+    log=cStatus(cType.VALID);
     % Check Input Parameters
     if (nargin~=2) || ~ischar(filename)
         log.printError('Usage: SaveDataModel(model,filename)');

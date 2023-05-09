@@ -26,9 +26,9 @@ if model.isResourceCost
 	end
 end
 % Solve and show results
-options.VarMode=cType.VarMode.CELL;
+options.VarMode=cType.VarMode.NONE;
 options.VarFormat=false;
-obj=ExergyCostCalculator(model,param);
-if obj.isValid
-	res=outputResults(obj,options);
+res=ExergyCostCalculator(model,param);
+if res.isValid
+	tbl=outputResults(res,options);
 end

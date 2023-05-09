@@ -329,7 +329,7 @@ classdef (Abstract) cReadModel < cStatusLogger
 
 		function log=saveDataModel(obj,filename)
 		% Save data model depending of filename extension
-			log=cStatusLogger;
+			log=cStatusLogger(cType.VALID);
 			% Check inputs
 			if ~isValid(obj)
 				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
@@ -355,8 +355,11 @@ classdef (Abstract) cReadModel < cStatusLogger
 				case cType.FileType.MAT
 					log=obj.saveAsMAT(filename);
 				otherwise
-					messagelog.messageLog(cType.WARNING,'File extension %s is not supported',filename);
+					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
 			end
+            if log.isValid
+                log.messageLog(cType.INFO,'Data Model available in file %s',filename);
+            end
         end                
     end
 

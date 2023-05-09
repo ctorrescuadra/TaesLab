@@ -15,6 +15,16 @@ param=struct();
 if model.NrOfStates>1
 	[~,param.State]=optionChoice('Select State:',model.States);
 end
+% Use Resources Cost
+if model.isResourceCost
+	[oct,param.CostTables]=optionChoice('Select Cost Tables', cType.CostTablesOptions);
+	if bitget(oct,cType.GENERALIZED) && model.NrOfResourceSamples>1
+		[~,param.ResourceSample]=optionChoice('Select Resource Sample:',model.ResourceSamples);
+	else
+		param.ResourceSample=model.ResourceSamples{1};
+	end
+end
+% Select Waste Flows
 if model.NrOfWastes>1
     [~,param.WasteFlow]=optionChoice('Select Waste Flow:',model.getWasteFlows);
 end

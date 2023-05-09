@@ -27,6 +27,7 @@ classdef cResultId < cStatusLogger
         % get the result name 
             res=cType.Results{obj.ResultId};
         end
+        
         function res=eq(obj1,obj2)
         % Check if two class object are equal. Overload eq operator
             res=(obj1.objectId==obj2.objectId);

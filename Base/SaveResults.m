@@ -1,5 +1,5 @@
-function SaveResultsModel(model,filename)
-% SaveResultModel saves the model results into a file
+function SaveResults(res,filename)
+% SaveResults saves a cResultInfo into a file
 %   The type of file depends on the file extension
 %   *.csv, *.xlsx and *.mat are allowed
 %   It calls cResultInfo method saveResults
@@ -11,14 +11,14 @@ function SaveResultsModel(model,filename)
     log=cStatus(cType.VALID);
     % Check Input parameters
     if (nargin~=2) || ~cType.checkFileWrite(filename)
-        log.printError('Usage: SaveResultsModel(results,filename)');
+        log.printError('Usage: SaveResults(res,filename)');
         return
     end
     % Save the results
-    if isa(model,'cThermoeconomicModel')
-        log=saveResultsModel(model,filename);
+    if isa(res,'cResultInfo')
+        log=saveResults(res,filename);
         printLogger(log);
     else
-        log.printError('Invalid model. It sould be a cThermoeconomicModel object');
+        log.printError('Invalid model. It sould be a cResultInfo object');
     end
 end

@@ -5,16 +5,16 @@
 % Prompt some parameters interactively
 %
 % Select data file model
-model=selectDataModel();
-if model.isError
-	model.printLogger;
-	model.printError('Invalid data model. See error log');
+data=selectDataModel();
+if data.isError
+	data.printLogger;
+	data.printError('Invalid data model. See error log');
 	return
 end
 % Show results
-options.VarMode=cType.VarMode.CELL;
+options.VarMode=cType.VarMode.NONE;
 options.VarFormat=false;
-res=ShowProductiveStructure(model);
+res=ProductiveStructure(model);
 if ~res.isError
-	tbl=outputResults(obj,options);
+	tbl=outputResults(res,options);
 end
