@@ -1,70 +1,76 @@
-function res = RecyclingAnalysis(model,varargin)
+function res = RecyclingAnalysis(data,varargin)
 % RecyclingAnalysis provide a recycling analysis of the plant
 %   Given a waste flow calculates the cost of output flows (final products
 %   and wastes) when it is recycled from 0 to %100.
 %   INPUT:
-%       model - cReadModel object
+%       data - cReadModel object
 %       varargin 
 %           State: Operation state
 %           WasteFlow: WasteFlow key to recycle
+%           CostTables: Select the recycling tables to obtain
+%               DIRECT - Only Direct cost are selected
+%               GENERALIZED - Only Generalized costs are selected
+%               ALL - Both Direct and Generalized are slected
 %   OUTPUT:
-%       res - cResultInfo object with the recicling table and
-%           cRecyclingAnalysis info.
+%       res - cResultInfo object with the recicling tables:
+%           cType.Tables.WASTE_RECYCLING_DIRECT (rad)
+%           cType.Tables.WASTE_RECYCLING_GENERAL (rag)
+%       and cRecyclingAnalysis Info      
 % See also cReadModel, cRecyclingAnalysis, cResultInfo
 %
     res=cStatusLogger();
     checkModel=@(x) isa(x,'cReadModel');
     %Check and initialize parameters
     p = inputParser;
-    p.addRequired('model',checkModel);
+    p.addRequired('data',checkModel);
     p.addParameter('State','',@ischar);
     p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('WasteFlow','',@ischar);
     try
-        p.parse(model,varargin{:});
+        p.parse(data,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: cRecyclingAnalysis(model,param)')
+        res.printError('Usage: cRecyclingAnalysis(data,param)')
         return
     end
     % 
     param=p.Results;
     % Check Productive Structure
-    if ~model.isValid
-	    model.printLogger;
+    if ~data.isValid
+	    data.printLogger;
 	    res.printError('Invalid Thermoeconomic Model');
 	    return
     end
     % Read format definition
-    fmt=model.readFormat;
+    fmt=data.readFormat;
 	if fmt.isError
 		fmt.printLogger;
 		res.printError('Format Definition is NOT correct. See error log');
 		return
 	end
     % Read waste info
-    if model.NrOfWastes<1
+    if data.NrOfWastes<1
 	    res.printError(cType.ERROR,'Model must have waste')
         return
     end
-    wd=model.readWaste;
+    wd=data.readWaste;
     if ~wd.isValid
         wd.printLogger;
-        res.printError('Invalid waste model');
+        res.printError('Invalid waste data');
         return
     end
     % Read exergy values
     if isempty(param.State)
-        param.State=model.getStateName(1);
+        param.State=data.getStateName(1);
     end
-	ex=model.readExergy(param.State);
+	ex=data.readExergy(param.State);
 	if ~ex.isValid
         ex.printLogger;
         res.printError('Invalid Exergy Values. See error log');
         return
 	end
-	% Compute thermoeconomic model using the selected algorithm
+	% Compute the Model FPR
     mfp=cModelFPR(ex);
     if ~isValid(mfp)
         mfp.printLogger;
@@ -87,8 +93,8 @@ function res = RecyclingAnalysis(model,varargin)
 	pct=cType.getCostTables(param.CostTables);
 	param.DirectCost=bitget(pct,cType.DIRECT);
 	param.GeneralCost=bitget(pct,cType.GENERALIZED);
-    if model.isResourceCost && param.GeneralCost
-		rsc=model.readResources(param.ResourceSample);
+    if data.isResourceCost && param.GeneralCost
+		rsc=data.readResources(param.ResourceSample);
         if ~isValid(rsc)
             printLogger(rsc);
             return
@@ -107,7 +113,7 @@ function res = RecyclingAnalysis(model,varargin)
     if isValid(ra)
         ra.doAnalysis(param.WasteFlow)
         res=getRecyclingAnalysisResults(fmt,ra,param);
-        res.setProperties(model.ModelName,param.State);
+        res.setProperties(data.ModelName,param.State);
     else
         ra.printLogger;
         res.printError('Invalid Recycling Analysis. See Error Log');

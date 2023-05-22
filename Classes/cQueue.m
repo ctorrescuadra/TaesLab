@@ -90,13 +90,9 @@ classdef cQueue < handle
 			obj.iterator=obj.iterator+1;
 		end
 
-		function res=size(obj,dim)
+		function res=size(obj,varargin)
 		% get queue size. Overload size function
-			if nargin==1
-				res=size(obj.buffer);
-			else
-				res=size(obj.buffer,dim);
-			end
+			res=size(obj.buffer,varargin{:});
 		end
 
 		function res=length(obj)

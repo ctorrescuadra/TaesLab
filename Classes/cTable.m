@@ -37,6 +37,7 @@ classdef (Abstract) cTable < cStatusLogger
                 res=obj;
             else
                 res=cell2table(obj.Data,'VariableNames',obj.ColNames(2:end),'RowNames',obj.RowNames');
+                res=addprop(res,"Name","table");
                 res.Properties.Description=obj.Description;
                 res.Properties.CustomProperties.Name=obj.Name;
             end

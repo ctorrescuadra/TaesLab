@@ -1,7 +1,7 @@
-function res=ThermoeconomicDiagnosis(model,varargin)
+function res=ThermoeconomicDiagnosis(data,varargin)
 % ThermoeconomicDiagnosis Compares a thermoeconomic state with reference state, and get the diagnosis tables
 %   INPUT:
-% 	    model - cReadModel object containing the thermoeconomic data model
+% 	    data - cReadModel object containing the thermoeconomic data model
 %       varargin - an optional structure contains additional parameters:
 %           ReferenceState - Reference State for diagnosis. If not provided first state is used.
 %           State - Operation State for diagnosis. If not provided second state is used
@@ -16,15 +16,15 @@ function res=ThermoeconomicDiagnosis(model,varargin)
     % Check input parameters
 	checkModel=@(x) isa(x,'cReadModel');
     p = inputParser;
-    p.addRequired('model',checkModel);
+    p.addRequired('data',checkModel);
     p.addParameter('ReferenceState','',@ischar)
 	p.addParameter('State','',@ischar);
     p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
     try
-        p.parse(model,varargin{:});
+        p.parse(data,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: ExergyCostCalculator(model,param)');
+        res.printError('Usage: ExergyCostCalculator(data,param)');
         return
     end
     param=p.Results;
@@ -33,42 +33,42 @@ function res=ThermoeconomicDiagnosis(model,varargin)
         return
     end
     % Read productive structure
-    if ~model.isValid
-        model.printLogger;
-        res.printError('Invalid data model. See Error log');
+    if ~data.isValid
+        data.printLogger;
+        res.printError('Invalid data data. See Error log');
         return
     end
      % Check if there are two states is defined
-    if ~model.isDiagnosis
-        model.printLogger;
+    if ~data.isDiagnosis
+        data.printLogger;
         res.printError('There is NOT two states defined');
         return
     end
     if isempty(param.ReferenceState)
-        param.ReferenceState=model.getStateName(1);
+        param.ReferenceState=data.getStateName(1);
     end
     if isempty(param.State)
-        param.State=model.getStateName(2);
+        param.State=data.getStateName(2);
     end
     if strcmp(param.ReferenceState,param.State)
         res.printError('Reference and Operation States are the same')
         return
     end
 	% Read print formatted configuration
-    fmt=model.readFormat;
+    fmt=data.readFormat;
 	if fmt.isError
 		fmt.printLogger;
 		res.printError('Format Definition is NOT correct. See error log');
 		return
 	end	
     % Read reference and operation  exergy values
-    rex0=model.readExergy(param.ReferenceState);
+    rex0=data.readExergy(param.ReferenceState);
     if ~rex0.isValid
         rex0.printLogger;
         res.printError('Invalid Reference State values. See error log');
         return
     end
-    rex1=model.readExergy(param.State);
+    rex1=data.readExergy(param.State);
     if ~rex1.isValid
         rex1.printLogger;
         res.printError('Invalid Operation State values. See error log');
@@ -76,8 +76,8 @@ function res=ThermoeconomicDiagnosis(model,varargin)
     end
     pdm=cType.getDiagnosisMethod(param.DiagnosisMethod);
     % Read Waste, compute Model FP and make diagnosis
-    if  (model.isWaste)  && (pdm==cType.Diagnosis.WASTE_INTERNAL)
-		wd=model.readWaste;
+    if  (data.isWaste)  && (pdm==cType.Diagnosis.WASTE_INTERNAL)
+		wd=data.readWaste;
         if ~wd.isValid
             wd.printLogger;
             res.printError('Invalid waste definition. See error log');
@@ -94,7 +94,7 @@ function res=ThermoeconomicDiagnosis(model,varargin)
     % Get diagnosis results
     if dgn.isValid
         res=getDiagnosisResults(fmt,dgn);
-        res.setProperties(model.ModelName,param.State);
+        res.setProperties(data.ModelName,param.State);
     else
         dgn.printLogger;
         res.printError('Invalid diagnosis analysis. See error log');

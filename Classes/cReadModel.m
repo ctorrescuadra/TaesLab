@@ -126,6 +126,10 @@ classdef (Abstract) cReadModel < cStatusLogger
 
 		function res=getWasteFlows(obj)
 		% Get a cell array of the waste flows
+			res={};
+			if ~obj.isWaste
+				return;
+			end
 			ps=obj.ProductiveStructure;
 			idx=ps.Waste.flows;
 			res={ps.Flows(idx).key};
@@ -320,7 +324,6 @@ classdef (Abstract) cReadModel < cStatusLogger
             % Save the object
             try
 				save(filename,'obj');
-                log.messageLog(cType.INFO,'Data Model available on file %s',filename);
 			catch err
                 log.messageLog(cType.ERROR,err.message);
                 log.messageLog(cType.ERROR,'File %s cannot be written',filename);

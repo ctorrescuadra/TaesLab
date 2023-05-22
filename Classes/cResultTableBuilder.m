@@ -231,13 +231,13 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
                 case cType.Tables.TABLE_FP
                 values=mfp.TableFP;
                 tbl.tfp=obj.getTableFP(cType.MatrixTable.TABLE_FP,values);
-                tbl.atfp=obj.getAdjacencyTableFP(cType.CellTable.DIAGRAM_FP,values);
+                tbl.atfp=obj.getAdjacencyTableFP(cType.CellTable.DIAGRAM_FP,tbl.tfp);
                 case cType.Tables.COST_TABLE_FP
                 values=mfp.getCostTableFP;
                 tbl.tfp=obj.getTableFP(cType.MatrixTable.COST_TABLE_FP,values);
-                tbl.atfp=obj.getAdjacencyTableFP(cType.CellTable.COST_DIAGRAM_FP,values);
+                tbl.atfp=obj.getAdjacencyTableFP(cType.CellTable.COST_DIAGRAM_FP,tbl.tfp);
             otherwise
-                res.messageLog(cType.ERROR,'Invalid object %s',arg.ResultName);
+                res.messageLog(cType.ERROR,'Invalid object %s',option);
                 return
             end
             res=cResultInfo(mfp,tbl);
@@ -446,33 +446,16 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             res=obj.createMatrixTable(id,values,rowNames,colNames);
         end
 
-        function res=getAdjacencyTableFP(obj,id,mFP)
+        function res=getAdjacencyTableFP(obj,id,tFP)
         % Generate the FP adjacency matrix
         %  Input:
         %   id - Table Id
         %   mFP - Table FP values
-            nodes=obj.processKeys;
-            [idx,jdx,ival]=find(mFP(1:end-1,1:end-1));
-            isource=nodes(idx);
-            itarget=nodes(jdx);
-            % Build Resources Edges
-            [~,jdx,vval]=find(mFP(end,1:end-1));
-            vsource=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
-            vtarget=nodes(jdx);
-            % Build Output edges
-            [idx,~,wval]=find(mFP(1:end-1,end));
-            wtarget=arrayfun(@(x) sprintf('OUT%d',x),1:numel(idx),'UniformOutput',false);
-            wsource=nodes(idx);
-            % Build object
-            source=[vsource,isource,wsource];
-            target=[vtarget,itarget,wtarget];
-            values=[vval';ival;wval];
-            data=[source', target', num2cell(values)];
-            M=size(values,1);
+            data=getAdjacencyTableFP(tFP);
+            M=size(data,1);
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
             colNames=obj.getTableHeader(id);
 			res=obj.createCellTable(id,data,rowNames,colNames);
-            res.setGraphType(cType.GraphType.DIGRAPH);
 		end
 
         function res=getProductiveTable(obj,id,A,nodes)

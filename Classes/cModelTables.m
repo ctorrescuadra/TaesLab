@@ -1,17 +1,10 @@
 classdef cModelTables < cResultId
     % cModelTable is a class container of the cTable objects
     %   It stores the tables of the data model and application results
-    %   the class provide methos to save and analize the results tables
     %   Methods:  
-    %       obj.setProperties(model,state)
-    %       obj.setResultId(id)
-    %       status=obj.isResultTable
-    %       status=obj.existTable(tbl)
     %       tbj=obj.getTable(tbl)
     %       obj.printTable(tbl)
     %       obj.viewTable(tbl)
-    %       obj.getListOfTables
-    %       obj.getIndexTable
     %       obj.printIndexTable
     %       obj.printResults
     %       obj.saveResults(filename)
@@ -29,12 +22,13 @@ classdef cModelTables < cResultId
     end
 
     methods
-        function obj = cModelTables(tableId,tables)
+        function obj = cModelTables(Id,tables)
         % Construct an instance of this class
+        %   Usage: cModelTables(tableId, tables)
         %  Input:
-        %   tableId - Id of the table (see cType)
+        %   Id - ResultId of the table group (see cType)
         %   tables - struct containig the tables
-            obj=obj@cResultId(tableId);
+            obj=obj@cResultId(Id);
             obj.Tables=tables;
             obj.tableIndex=struct2cell(tables);
             obj.NrOfTables=numel(obj.tableIndex);
@@ -44,7 +38,7 @@ classdef cModelTables < cResultId
         end
 
         function setProperties(obj,model,state)
-        % set model and state values
+        % Set model and state values
             obj.ModelName=model;
             if nargin==3
                 obj.State=state;
@@ -53,8 +47,6 @@ classdef cModelTables < cResultId
 
         function setResultId(obj,id)
         % Set ResultId
-        %   Input:
-        %       Id - ResultId of the object
             obj.ResultId=id;
             obj.ResultName=cType.Results{id};
         end
@@ -69,18 +61,29 @@ classdef cModelTables < cResultId
             status=isfield(obj.Tables,name);
         end
 
+        function res=getListOfTables(obj)
+        % Get the list of tables as cell array
+            res=fieldnames(obj.Tables);
+        end
+
         function res = getTable(obj,name)
         % Get the table called name
+        %   Usage: 
+        %       res=obj.getTable(name)
         %   Input:
         %       name - Name of the table
+        %   Output:
+        %       res - cTableResult object 
             res = cStatusLogger;
             if obj.existTable(name)
                 res=obj.Tables.(name);
             end
         end
 
-        function log=printTable(obj,name)
+        function printTable(obj,name)
         % Print an individual table
+        %   Usage:
+        %       obj.printTable(table)
         %   Input:
         %       name - Name of the table
             log=cStatus(cType.VALID);
@@ -92,22 +95,19 @@ classdef cModelTables < cResultId
             end
         end
 
-        function log=viewTable(obj,name)
-        % view an individual table as a GUI Table
+        function viewTable(obj,name)
+        % View an individual table as a GUI Table
+        %   Usage:
+        %       obj.viewTable(table)
         %   Input:
         %       name - Name of the table
-            log=cStatus();
+            log=cStatus(cType.VALID);
             res=obj.getTable(name);
             if isValid(res)
-                res.viewTable(obj.State);
+                res.viewTable;
             else
                 log.printError('Table %s do NOT exists',name);
             end
-        end
-
-        function res=getListOfTables(obj)
-        % Get the list of tables as cell array
-            res=fieldnames(obj.Tables);
         end
 
         function res=getIndexTable(obj)
@@ -125,6 +125,8 @@ classdef cModelTables < cResultId
     
         function printIndexTable(obj)
         % Print the index table in console
+        %   Usage:
+        %       obj.printIndexTable
             tbl=obj.getIndexTable;
             len1=max(cellfun(@length,tbl.RowNames))+1;
             len2=max(cellfun(@length,tbl.Data(:,1)))+1;
@@ -141,6 +143,8 @@ classdef cModelTables < cResultId
 
         function printResults(obj)
         % Print the formated tables on console
+        %   Usage:
+        %       obj.printResults
             log=cStatus();
             if ~isValid(obj) || ~obj.isResultTable
                 log.printError('Invalid object to print')
@@ -151,10 +155,12 @@ classdef cModelTables < cResultId
 
         function log=saveResults(obj,filename)
         % Save result tables in different file formats depending on file extension
-        % Input:
-        %   filename - File name. Extensión is used to determine the save mode.
-        % Output:
-        %   log - cStatusLog object with save status and error messages
+        %   Usage:
+        %       log=obj.saveResults(filename)
+        %   Input:
+        %       filename - File name. Extensión is used to determine the save mode.
+        %   Output:
+        %       log - cStatusLogger object with error messages
             log=cStatusLogger(cType.VALID);
             if ~isValid(obj)
                 log.messageLog(cType.ERROR,'Invalid object to save')
@@ -172,8 +178,6 @@ classdef cModelTables < cResultId
                     slog=obj.saveAsXLS(filename);
                 case cType.FileType.TXT
                     slog=obj.saveAsTXT(filename);
-                case cType.FileType.MAT
-                    slog=obj.saveAsMAT(filename);
             otherwise
                 log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
                 return
@@ -186,12 +190,17 @@ classdef cModelTables < cResultId
         
         function res=getResultTables(obj,mode,fmt)
         % Get the result tables in different format mode
-        %  Input:
-        %   mode - Select the output object: CELL, STRUCT or TABLE.
-        %   fmt  - (true/false) Applied defined format
-        %  Output
-        %   res - Result tables in the selected format
-        %
+        %   Usage: 
+        %       res = obj.getResultTables(mode, fmt)
+        %   Input:
+        %       mode - Select the output object. The valid values are:
+        %           cType.VarMode.NONE: Return a struct with the cTable objects
+	    %           cType.VarMode.CELL: Return a struct with cell values
+	    %           cType.VarMode.STRUCT: Return a struct with structured array values
+	    %           cType.VarModel.TABLE: Return a struct of Matlab tables
+        %       fmt  - true/false value, indicating if the table format is applied to the output. By default the value is false.
+        %   Output
+        %       res - Result tables in the selected format
             narginchk(2,3);
             res=cStatusLogger;
             if (nargin==2) || ~isa(fmt,'logical') || ~obj.isResultTable
@@ -213,10 +222,12 @@ classdef cModelTables < cResultId
         
         function log=saveAsCSV(obj,filename)
         % Save result tables as CSV files, each table in a file
-        %  Input:
-        %   filename - Name of the file where the csv file information is stored
-        %  Output:
-        %   log - cStatusLog object with save status and error messages
+        %   Usage:
+        %       log=obj.saveAsCSV(filename)
+        %   Input:
+        %       filename - Name of the file where the csv file information is stored
+        %   Output:
+        %       log - cStatusLog object with error messages
             log=cStatusLogger(cType.VALID);
             % Check Input
             list=obj.getListOfTables;
@@ -262,10 +273,12 @@ classdef cModelTables < cResultId
             
         function log=saveAsXLS(obj,filename)
         % Save the result tables in a Excel file, each table in a worksheet.
+        %   Usage:
+        %       log=obj.saveASXLS(filename)
         %  Input:
-        %   filename - name of the worksheet file
+        %       filename - name of the worksheet file
         %  Output:
-        %   log - cStatusLog object with save status and error messages
+        %       log - cStatusLog object with error messages
             log=cStatusLogger(cType.VALID);
             % Check Input     
             list=obj.getListOfTables;
@@ -300,7 +313,6 @@ classdef cModelTables < cResultId
                     return
                 end
             end
-
             for i=1:obj.NrOfTables
                 tbl=obj.tableIndex{i};              
                 if isOctave
@@ -327,10 +339,12 @@ classdef cModelTables < cResultId
 
         function log=saveAsTXT(obj,filename)
         % Save the result tables if a formatted text file
-        %  Input:
-        %   filename - name of the worksheet file
-        %  Output:
-        %   log - cStatusLog object with save status and error messages
+        %   Usage:
+        %       log=saveAsTXT(filename)
+        %   Input:
+        %       filename - name of the worksheet file
+        %   Output:
+        %       log - cStatusLog object with save status and error messages
             log=cStatusLogger(cType.VALID);
             % Open text file
             try
@@ -344,29 +358,11 @@ classdef cModelTables < cResultId
             cellfun(@(x) printFormatted(x,fId),obj.tableIndex);
             fclose(fId);
         end
-
-        function log=saveAsMAT(obj,filename)
-        % save the results into a MAT file
-            log=cStatusLogger(cType.VALID);
-            if isOctave
-                log.messageLog(cType.ERROR,'This file type is not available for Octave');
-            end
-            try
-                save(filename,'obj');
-            catch err
-                obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,'File %s has NOT been saved', filename);
-                return    
-            end
-        end
     end
+
     methods(Access=protected)
         function res=getResultAsCell(obj,fmt)
         % Converts Result Tables into cell arrays to display on the variable editor
-        % Input:
-        %   fmt - (true/false) indicate is the values are formated or not
-        % Output:
-        %   res - Struct of cell arrays with the result tables values
             res=struct();
             if (nargin==1) || ~isa(fmt,'logical') || ~obj.isResultTable
                 fmt=false;
@@ -379,10 +375,6 @@ classdef cModelTables < cResultId
 
         function res=getResultAsStruct(obj,fmt)
         % Converts tables result values into arrays of structs, to display on the variable editor
-        % Input:
-        %   fmt - (true/false) indicate is the values are formated or not
-        % Output:
-        %   res - Struct of struct arrays with the result tables values
             res=struct();
             if (nargin==1) || ~isa(fmt,'logical') || ~obj.isResultTable
                 fmt=false;
@@ -395,9 +387,6 @@ classdef cModelTables < cResultId
 
         function res=getResultAsTable(obj)
         % Get the tables. In case of matlab it is converted to Matlab tables.
-        % Output:
-        %   res - Struct of tables/matlab tables with the result tables values
-        %
             if isMatlab
                 res=struct();
                 list=obj.getListOfTables;
@@ -405,7 +394,7 @@ classdef cModelTables < cResultId
                     res.(list{i})=getMatlabTable(obj.tableIndex{i});
                 end
             else
-                res=obj;
+                res=obj.Tables;
             end
         end
     end

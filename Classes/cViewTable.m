@@ -21,15 +21,12 @@ classdef cViewTable < cStatusLogger
 	end
 
 	methods 
-		function obj=cViewTable(tbl,state)
+		function obj=cViewTable(tbl)
 		% cViewTable - object constructor
 		% 	Input:
 		%	 tbl - cResultTable object
 		%    state - Thermoeconomic state name
 			obj=obj@cStatusLogger(cType.VALID);
-			if nargin==1
-				state='';
-			end
 			% Parameters depending of software platform
 			if isOctave
 				param=struct('ColumnWidth',80,'RowWidth',20,...
@@ -41,7 +38,7 @@ classdef cViewTable < cStatusLogger
 				'FontName','FixedWidth','FontSize',12);
 			end
 			% Set object properties
-			obj.descr=[tbl.Description,' [',state,'] ']; 
+			obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
 			% Set the window size and position
 			ss=get(groot,'ScreenSize');
 			obj.xsize=min(param.xScale*ss(3),tbl.NrOfCols*param.ColumnWidth-param.xoffset);

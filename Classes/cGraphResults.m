@@ -15,8 +15,9 @@ classdef cGraphResults < cStatusLogger
     end
 
     methods
-        function obj = cGraphResults(tbl,options)
-		% Constructor
+        function obj = cGraphResults(tbl, varargin)
+		% Constructor. Create the object with the graph properties  
+            obj.status=cType.VALID;
 			if ~isValid(tbl) || ~isGraph(tbl)
 				obj.messageLog(cType.ERROR,'Invalid Graph Table %s',tbl.Name);
 				return
@@ -29,20 +30,24 @@ classdef cGraphResults < cStatusLogger
 			case cType.GraphType.DIAGNOSIS
 				obj.setGraphDiagnosisParameters(tbl);
 			case cType.GraphType.SUMMARY
-				obj.setGraphSummaryParameters(tbl,options)
+				obj.setGraphSummaryParameters(tbl,varargin{:})
 			case cType.GraphType.RECYCLING
-				obj.setGraphRecyclingParameters(tbl,options)
+				obj.setGraphRecyclingParameters(tbl,varargin{:})
 			case cType.GraphType.WASTE_ALLOCATION
-				obj.setGraphWasteAllocationParameters(tbl,options)
+				obj.setGraphWasteAllocationParameters(tbl,varargin{:})
             case cType.GraphType.DIGRAPH
                 if isMatlab
 				    obj.setDigraphParameters(tbl);
                 end
+            case cType.GraphType.DIAGRAM_FP
+                if isMatlab
+                    obj.setProcessDiagramParameters(tbl);
+                end
 			otherwise
-				obj.messageLog(cType.ERROR,'Invalid Graph Type %d',obj.GraphType);
+				obj.messageLog(cType.ERROR,'Invalid Graph Type %d',obj.Type);
 				return
             end
-            obj.status=cType.VALID;
+ 
 		end
 
 		function graphCost(obj)
@@ -117,27 +122,28 @@ classdef cGraphResults < cStatusLogger
 		end
 
 		function showDigraph(obj)
-		% Plot digraph   
-			figure('name',obj.Name,'numbertitle','off',...
-				'resize','on','color',[1 1 1]);
+		% Plot Productive and FP digraphs
+			f=figure('name',obj.Name, 'numbertitle','off', ...
+				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
+			ax=axes(f);
+			% Plot the digraph with colobar     
 			if obj.isColorbar
 				r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 				colormap(red2blue);
-				% Plot the digraph with colobar     
-				plot(obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
-                c=colorbar;
+				plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
+                c=colorbar(ax);
 			    c.Label.String=obj.xLabel;
-				c.Label.FontSize=10;
+				c.Label.FontSize=12;
 			else
-				plot(obj.xValues,"Layout","auto");
+				plot(ax,obj.xValues,"Layout","auto","interpreter","none");
 			end
-			title(obj.Title,'fontsize',14);
+			title(ax,obj.Title,'fontsize',14);
 		end
 	end
    
 	methods(Access=private)
 		function setGraphCostParameters(obj,tbl)
-        % Create the object with the graph properties      
+        % Set the properties of GraphCost   
             obj.Name=tbl.Description;
             obj.Title=[tbl.Description,' [',tbl.State,']'];
             obj.Categories=tbl.ColNames(2:end);
@@ -158,7 +164,7 @@ classdef cGraphResults < cStatusLogger
         end
 
 		function setGraphDiagnosisParameters(obj,tbl)
-		% Create the object with the graph properties      
+		% Set the properties of diagnosis graph      
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description,' [',tbl.State,']'];
 			obj.Categories=tbl.ColNames(2:end);
@@ -171,7 +177,15 @@ classdef cGraphResults < cStatusLogger
 		end
 
 		function setGraphSummaryParameters(obj,tbl,idx)
-		% Create the object with the graph properties
+		% Set the properties of graph Summary
+            if nargin<3
+                obj.messageLog(cType.ERROR,'Parameters Missing');
+                return
+            end
+            if ~isnumeric(idx)
+                obj.messageLog(cType.ERROR,'Invalid Parameter');
+                return
+            end
 			obj.Name='Cost Summary';
 			obj.Title=tbl.Description;
 			obj.Categories=tbl.ColNames(2:end);
@@ -188,6 +202,11 @@ classdef cGraphResults < cStatusLogger
 		end
 
 		function setGraphRecyclingParameters(obj,tbl,label)
+		% Set the properties of graph recycling
+            if nargin<3
+                obj.messageLog(cType.ERROR,'Parameters Missing');
+                return
+            end
 			obj.Name='Recycling Cost Analysis';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',label,']'];
 			obj.Categories={};
@@ -204,6 +223,19 @@ classdef cGraphResults < cStatusLogger
 		end
 
         function setGraphWasteAllocationParameters(obj,tbl,idx)
+		% Set the parameters of Waste Allocation pie chart
+            if nargin<3
+				obj.messageLog(cType.ERROR,'Parameters missing');
+                return
+            end
+            if ~isnumeric(idx) || ~isscalar(idx) 
+                obj.messageLog(cType.ERROR,'Invalid parameter');
+                return
+            end
+            if (tbl.NrOfCols <= idx) || (idx < 1)
+                obj.messageLog(cType.ERROR,'Invalid parameter');
+                return
+            end
 			obj.Name='Waste Allocation Analysis';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',tbl.ColNames{idx+1},']'];
 			x=cell2mat(tbl.Data(:,idx));
@@ -215,20 +247,29 @@ classdef cGraphResults < cStatusLogger
 			obj.yLabel='';
 			obj.BaseLine=0.0;
             obj.Categories={};
-		end
+        end
+
+        function setProcessDiagramParameters(obj,tbl)
+        % Set the Diagram FP paramaters
+            obj.Name=tbl.Description;
+			obj.Title=[tbl.Description ' [',tbl.State,']'];
+            obj.xValues=getDigraphFP(tbl);
+            obj.isColorbar=true;
+            obj.Legend={};
+			obj.yValues=[];
+			obj.xLabel=['Exergy ' tbl.Unit];
+			obj.yLabel='';
+			obj.BaseLine=0.0;
+            obj.Categories={};
+        end
 
 		function setDigraphParameters(obj,tbl)
+		% Set the parameters of a digraph
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
 			source=tbl.Data(:,1);
 			target=tbl.Data(:,2);
-			if tbl.NrOfCols==3
-				obj.xValues=digraph(source,target,"omitselfloops");
-			else
-			    values=cell2mat(tbl.Data(:,3));
-			    obj.xValues=digraph(source,target,values,"omitselfloops");
-			    obj.isColorbar=true;
-			end
+			obj.xValues=digraph(source,target,"omitselfloops");
             obj.Legend={};
 			obj.yValues=[];
 			obj.xLabel=['Exergy ' tbl.Unit{end}];

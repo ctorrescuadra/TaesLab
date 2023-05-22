@@ -21,13 +21,12 @@ classdef (Sealed) cTableMatrix < cTableResult
 %       res=obj.getStructData
 %   See also cTableResult, cTable
 %
-
     properties (Access=private)
         RowSum			% Row summary true/false
         ColSum			% Column summary true/false
     end
     properties (GetAccess=public,SetAccess=private)
-        GraphOptions       % Graph Type
+        GraphOptions    % Graph Type
     end
     methods
         function obj=cTableMatrix(data,rowNames,colNames,rowSum,colSum)
@@ -48,6 +47,9 @@ classdef (Sealed) cTableMatrix < cTableResult
                 colNames{ncols}='Total';
                 data=[data,zerotol(sum(data,2))];
             end
+            if colSum && rowSum
+                data(end,end)=0.0;
+            end
             obj.Data=num2cell(data);
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
@@ -56,9 +58,6 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.RowSum=rowSum;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames); 
-            if colSum && rowSum
-                obj.Data{end,end}=0;
-            end
             obj.status=obj.checkTableSize;
             if ~obj.isValid
                 message=sprintf('Invalid table size (%d,%d)',size(data,1),size(data,2));
@@ -171,20 +170,53 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=(obj.GraphType==cType.GraphType.DIAGRAM_FP);
         end
 
+        function res=getAdjacencyTableFP(obj)
+        % Get cell array with the FP Adjacency Table
+            mFP=cell2mat(obj.Data(1:end-1,1:end-1));
+            nodes=obj.RowNames(1:end-2);
+			% Build Internal Edges
+            [idx,jdx,ival]=find(mFP(1:end-1,1:end-1));
+            isource=nodes(idx);
+            itarget=nodes(jdx);
+            % Build Resources Edges
+            [~,jdx,vval]=find(mFP(end,1:end-1));
+            vsource=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
+            vtarget=nodes(jdx);
+            % Build Output edges
+            [idx,~,wval]=find(mFP(1:end-1,end));
+            wtarget=arrayfun(@(x) sprintf('OUT%d',x),1:numel(idx),'UniformOutput',false);
+            wsource=nodes(idx);
+            source=[vsource,isource,wsource];
+            target=[vtarget,itarget,wtarget];
+            values=[vval';ival;wval];
+            res=[source', target', num2cell(values)];
+        end
+
+        function res=getDigraphFP(obj)
+        % get Matlab digraph from table FP
+            res=[];
+            if ~isMatlab || ~isDigraph(obj)
+                return
+            end
+            tbl=getAdjacencyTableFP(obj);
+            source=tbl(:,1);
+            target=tbl(:,2);
+            values=cell2mat(tbl(:,3));
+            res=digraph(source,target,values,"omitselfloops");
+        end
+
         function res=getMatlabTable(obj)
         % Return as matlab table if apply
             res=getMatlabTable@cTable(obj);
             if isMatlab
-                res=addprop(res,["State","GraphType","GraphOptions","Name","Format","Units"],...
-                    ["table","table","table","table","table","table"]);
+                res=addprop(res,["State","GraphType","GraphOptions","Format","Units"],...
+                    ["table","table","table","table","table"]);
                 res.Properties.CustomProperties.State=obj.State;
                 res.Properties.CustomProperties.GraphType=obj.GraphType;
                 res.Properties.CustomProperties.GraphOptions=obj.GraphOptions;
-                res.Properties.CustomProperties.Name=obj.Name;
                 res.Properties.CustomProperties.Format=obj.Format;
                 res.Properties.CustomProperties.Units=obj.Unit;
             end
         end
-
     end
 end

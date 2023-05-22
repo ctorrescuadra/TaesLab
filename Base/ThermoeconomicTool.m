@@ -3,9 +3,6 @@ function model=ThermoeconomicTool(filename,varargin)
 %  INPUT:
 %   filename - data model filename
 %   varargin - optional parameters
-%  OUTPUT:
-%   model - cThermoeconomicTool object
-%   varargin - optional parameters
 %       State: Operation state name
 %       ReferenceState: Reference State name
 %       ResourceSample: Resource Sample name
@@ -17,6 +14,10 @@ function model=ThermoeconomicTool(filename,varargin)
 %           NONE - Deactivate diagnosis
 %           WASTE_OUTPUT - Consider waste as output
 %           WASTE_INTERNAL - Allocate waste increase to productive processes 
+%       Summary - Activate Summary Results
+%       Debug - Print Debug information during execution
+%  OUTPUT:
+%   model - cThermoeconomicTool object
 %  See also cThermoeconomicTool
 %
     model=cStatusLogger();

@@ -1,8 +1,8 @@
-function res=ThermoeconomicAnalysis(model,varargin)
+function res=ThermoeconomicAnalysis(data,varargin)
 % ThermoeconomicAnalysis - provides a termoeconomic analysis of a thermoeconomic state of the plant.
 % It calculates the exergy cost, Fuel-Product Irreversibility-Cost tables
 %   INPUT:
-% 	    model - cReadModel object whose contains the thermoeconomic data model
+% 	    data - cReadModel object whose contains the thermoeconomic data model
 %       varargin - an optional structure contains additional parameters:   
 %   	    State - Thermoeconomic state id. If missing first sample is taken   
 %           CostTables - Indicate which cost tables are calculated
@@ -35,31 +35,31 @@ function res=ThermoeconomicAnalysis(model,varargin)
 	checkModel=@(x) isa(x,'cReadModel');
     % Check input parameters
     p = inputParser;
-    p.addRequired('model',checkModel);
+    p.addRequired('data',checkModel);
 	p.addParameter('State','',@ischar);
 	p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     try
-		p.parse(model,varargin{:});
+		p.parse(data,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: ThermoeconomicAnalysis(model,param)');
+        res.printError('Usage: ThermoeconomicAnalysis(data,param)');
         return
     end
     param=p.Results;
     % Read productive structure
-    if ~model.isValid
-		model.printLogger;
+    if ~data.isValid
+		data.printLogger;
         res.printError('Invalid Productive Structure. See error log');
         return
     end
     % Check CostTable parameter
-    if ~model.checkCostTables(param.CostTables)
+    if ~data.checkCostTables(param.CostTables)
         res.printError('Invalid CostTable parameter %s',param.CostTables);
         return
     end
     % Read print formatted configuration
-    fmt=model.readFormat;
+    fmt=data.readFormat;
 	if fmt.isError
 		fmt.printLogger;
 		res.printError('Format Definition is NOT correct. See error log');
@@ -67,17 +67,17 @@ function res=ThermoeconomicAnalysis(model,varargin)
 	end	
     % Read exergy
     if isempty(param.State)
-		param.State=model.getStateName(1);
+		param.State=data.getStateName(1);
     end
-	ex=model.readExergy(param.State);
+	ex=data.readExergy(param.State);
     if ~ex.isValid
 		ex.printLogger;
         res.printError('Invalid exergy values. See error log');
         return
     end
     % Read Waste and compute Model FP
-    if(model.NrOfWastes>0)
-		wt=model.readWaste;
+    if(data.NrOfWastes>0)
+		wt=data.readWaste;
 		if wt.isValid
             fpm=cModelFPR(ex,wt);
         else
@@ -97,8 +97,8 @@ function res=ThermoeconomicAnalysis(model,varargin)
 	pct=cType.getCostTables(param.CostTables);
 	param.DirectCost=bitget(pct,cType.DIRECT);
 	param.GeneralCost=bitget(pct,cType.GENERALIZED);
-    if model.isResourceCost && param.GeneralCost
-		rsc=model.readResources(param.ResourceSample);
+    if data.isResourceCost && param.GeneralCost
+		rsc=data.readResources(param.ResourceSample);
         rsc.setResources(fpm);
         if ~rsc.isValid
 			rsc.printLogger;
@@ -108,5 +108,5 @@ function res=ThermoeconomicAnalysis(model,varargin)
         param.ResourcesCost=rsc;
     end
     res=getThermoeconomicAnalysisResults(fmt,fpm,param);
-    res.setProperties(model.ModelName,param.State);
+    res.setProperties(data.ModelName,param.State);
 end

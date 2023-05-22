@@ -7,7 +7,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %   - Analize Recycling effects (recycling analysis)
 %   - Get Summary Results
 %   - Save the data model and results in diferent formats, for further analysis
-%  Methods:
+% Methods:
 %   Set Methods
 %       obj.setState(value)
 %       obj.setReferenceState(value)
@@ -23,9 +23,10 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.fuelImpact
 %       res=obj.recyclingAnalysis
 %       res=obj.diagramFP
+%       res=obj.productiveDiagram
 %       res=obj.summaryResults
 %   Model Info Methods
-%       res=obj.showParameters
+%       res=obj.showProperties
 %       res=obj.getStateNames
 %       res=obj.getResourceSamples
 %       res=obj.getWasteFlows
@@ -276,12 +277,13 @@ classdef cThermoeconomicModel < cStatusLogger
         %%%
         % get cResultInfo object
         function res=productiveStructure(obj)
-        % Get the productive structure tables and info
+        % Get the Productive Structure cResultInfo object
             res=obj.Results.ProductiveStructure;
         end
 
         function res=thermoeconomicState(obj,state)
-        % Get the exergy and fuel product tables
+        % Get the Thermoeconomic State cResultInfo object
+        % containing the exergy and fuel product table
             if nargin==2
                 obj.State=state;
             end
@@ -289,48 +291,41 @@ classdef cThermoeconomicModel < cStatusLogger
         end
 
         function res=thermoeconomicAnalysis(obj)
-        % Get the direct and generalized cost tables
+        % Get the Thermoeconomic Analysis cResultInfo object
+        % containing the direct and generalized cost tables
             res=obj.Results.ThermoeconomicAnalysis;
         end
 
         function res=thermoeconomicDiagnosis(obj)
-        % Get the diagnosis tables
+        % Get the Thermoeconomic Diagnosis cResultInfo object
             res=obj.Results.ThermoeconomicDiagnosis;
         end
 
         function res=summaryResults(obj)
-        % Get the summary Results
-            res=obj.msr;
-        end
-
-        function res=getFuelImpact(obj)
-        % Get the fuel impact of the actual diagnosis state
-            res='WARNING: Fuel Impact NOT Available';
-            dgn=obj.Results.ThermoeconomicDiagnosis;
-            if ~isempty(dgn) && isa(dgn,'cResultInfo')
-                res=getFuelImpact(dgn);
+        % Get the Summary Results cResultInfo object
+            if ~obj.Summary
+                obj.setSummary(true);
             end
-        end
-
-        function fuelImpact(obj)
-        % Print the fuel impact of the actual diagnosis statate
-            res=obj.getFuelImpact;
-            fprintf('%s\n',res);
+            res=obj.msr;
         end
 
         function res=diagramFP(obj,varargin)
         % Get the Diagram FP cResultInfo object
         %   Input:
-        %       table - FP table 
+        %       varargin - Optional FP table name
+        %           cType.Tables.TABLE_FP (default)
+        %           cType.Tables.COST_TABLE_FP       %
         %   Output:
-        %       res - cResultInfo 
+        %       res - cResultInfo (DIAGRAM_FP)
             if nargin==1
                 option=cType.Tables.TABLE_FP;
             else
                 option=varargin{1};
             end
             res=getDiagramFP(obj.fmt,obj.fp1,option);
-            res.setProperties(obj.ModelName,obj.State);
+            if isValid(res)
+                res.setProperties(obj.ModelName,obj.State);
+            end
         end
 
         function res=recyclingAnalysis(obj,wkey)
@@ -369,23 +364,38 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=productiveDiagram(obj)
         % Get the productive diagrams cResultInfo object
         %   Output:
-        %       res - cResultInfo (PRODUCTIVE_STRUCTURE) containing the 
-        %           productive tables
+        %       res - cResultInfo (PRODUCTIVE_STRUCTURE) 
             res=getProductiveDiagram(obj.fmt,obj.productiveStructure.Info);
             res.setProperties(obj.ModelName,'SUMMARY');
             res.setResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
         end
 
+        function res=getFuelImpact(obj)
+        % Get the fuel impact (value and unit) of the actual diagnosis state
+            res='WARNING: Fuel Impact NOT Available';
+            dgn=obj.Results.ThermoeconomicDiagnosis;
+            if ~isempty(dgn) && isa(dgn,'cResultInfo')
+                res=getFuelImpact(dgn);
+            end
+        end
+    
+        function fuelImpact(obj)
+        % Print the fuel impact of the actual diagnosis statate
+            res=obj.getFuelImpact;
+            fprintf('%s\n',res);
+        end
+
         %%%
         % Utility methods
         %
-        function showParameters(obj)
+        function showProperties(obj)
         % Show the values of the actual parameters of the model
             s=struct('State',obj.State,'ReferenceState',obj.ReferenceState,...
                 'ResourceSample',obj.ResourceSample,'CostTables',obj.CostTables,...
+                'DiagnosisMethod',obj.DiagnosisMethod,...
                 'IsResourceCost',log2str(obj.isResourceCost),...
                 'IsDiagnosis',log2str(obj.isDiagnosis),...
-                'DiagnosisMethod',obj.DiagnosisMethod,...
+                'IsWaste',log2str(obj.isWaste),...
                 'Summary',log2str(obj.Summary),...
                 'Debug',log2str(obj.debug));
             disp(s);
@@ -434,6 +444,11 @@ classdef cThermoeconomicModel < cStatusLogger
             res=logical(obj.DataModel.isWaste);
         end
 
+        function res=getWasteFlows(obj)
+        % get waste flows list (cell aarray)
+            res=getWasteFlows(obj.DataModel);
+        end
+
         function res=getResultStates(obj)
         % Get the cModelFPR object of each state
             res=obj.rstate;
@@ -449,14 +464,9 @@ classdef cThermoeconomicModel < cStatusLogger
         %%%
         % Result presentation methods
         %
-        function res=getModelTables(obj)
-        % Get a cModelTable with the results tables
-            res=obj.Results.getModelTables;
-        end
-
         function printResults(obj)
         % Print the result tables on console
-            mt=obj.getModelTables;
+            mt=obj.Results.getModelTables;
             printResults(mt);
         end
 
@@ -473,15 +483,9 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
-        function res=getIndexTable(obj)
-        % Get the tables index of the result model
-            mt=obj.getModelTables;
-            res=mt.getIndexTable;
-        end
-
         function printIndexTable(obj)
         % Print tables index of the result model
-            mt=obj.getModelTables;
+            mt=obj.Results.getModelTables;
             mt.printIndexTable;
         end
 
@@ -489,16 +493,24 @@ classdef cThermoeconomicModel < cStatusLogger
         % Print an individual table
         %   Input:
         %       name - Name of the table
-            mt=obj.getModelTables;
+            mt=obj.Results.getModelTables;
             mt.printTable(name);
         end
 
-        function viewTable(obj,name)
-        % View an individual table in a GUI Table
+        function viewResultsTable(obj,name)
+        % View a table in a GUI Table
         %   Input:
         %       name - Name of the table
-            mt=obj.getModelTables;
+            mt=obj.Results.getModelTables;
             mt.viewTable(name);
+        end
+
+        function viewSummaryTable(obj,name)
+        % View a summary table in a GUI Table
+            if ~obj.Summary
+                obj.setSummary(true);
+            end
+            viewTable(obj.msr,name);
         end
 
         %%%
@@ -511,7 +523,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
-            mt=obj.getModelTables;
+            mt=obj.Results.getModelTables;
             log=saveResults(mt,filename);
         end
 
@@ -538,17 +550,20 @@ classdef cThermoeconomicModel < cStatusLogger
             log=saveDataModel(obj.DataModel,filename);
         end
 
-        function log=saveDiagramFP(obj,filename)
+        function log=saveDiagramFP(obj,filename,varargin)
         % Save the Adjacency matrix of the Diagram FP in a file
         % The following file types are availables (XLSX,CSV,MAT)
         %  Input:
         %   filename - Name of the file
+        %   varargin - optional parameter indicanting the type of FP table
+        %       cType.Tables.TABLE_FP (default)
+        %       cType.Tables.COST_TABLE_FP
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
-            res=obj.diagramFP;
+            res=obj.diagramFP(varargin{:});
             if ~isValid(res)
-                res.printLogger(res)
+                printLogger(res)
                 log.printError('Result object not available');
                 return
             end
@@ -575,44 +590,17 @@ classdef cThermoeconomicModel < cStatusLogger
         %%%
         % Graphical methods
         %
-        function log=graphResults(obj,graph)
-        % Shows the graphs (bar plots) associated to the model results
+        function graphSummary(obj,varargin)
+        % Show a barplot of the summary cost tables
         %   Input:
-        %       graph - Table name to represent
-        %   Output:
-        %       log - cStatusLogger object containing the status and error messages
-            log=cStatus(cType.VALID);
-            mt=obj.getModelTables;
-            tbl=mt.getTable(graph);
-            if ~isValid(tbl) || ~isGraph(tbl)
-                log.printError('Invalid graph table %s',graph);
-                return
-            end
-            if isDigraph(tbl)
-                log=showDiagramFP(obj,graph);
-                return
-            else
-                g=cGraphResults(tbl);
-            end
-            switch tbl.GraphType
-            case cType.GraphType.COST
-                g.graphCost;
-            case cType.GraphType.DIAGNOSIS
-                g.graphDiagnosis;
-            end
-        end
-
-        function log=graphSummary(obj,varargin)
-        % Save the summary tables into a filename
-        %   Input:
-        %       varagin - See cResultInfo/graphSummary
+        %       varargin - See cResultInfo/graphSummary
             if ~obj.Summary
                 obj.setSummary(true);
             end
-            log=graphSummary(obj.msr,varargin{:});
+            graphSummary(obj.msr,varargin{:});
         end
 
-        function log=showDiagramFP(obj,graph)
+        function showDiagramFP(obj,graph)
         % Show the diagram FP graph (only Matlab)
         %   Input:
         %    graph - Table name to represent
@@ -628,24 +616,35 @@ classdef cThermoeconomicModel < cStatusLogger
             if nargin==1
                 graph=cType.Tables.TABLE_FP;
             end
-            res=obj.diagramFP(graph);
+            switch graph
+            case cType.Tables.TABLE_FP
+                res=obj.thermoeconomicState;
+            case cType.Tables.COST_TABLE_FP
+                res=obj.thermoeconomicAnalysis;
+            otherwise
+                log.printWarning('Invalid DiagramFP graph %s',graph);
+            end
             if ~isValid(res)
                 res.printLogger(res)
                 log.printError('Result object not available');
                 return
             end
-            log=showDiagramFP(res);
+            showDiagramFP(res);
         end
 
-        function log = graphCost(obj,graph)
-        % graphCost shows a barplot with the irreversibilty cost table values for a given state 
-        % Input:   
-        %   graph: Select the graph to plot
-        %     cType.Graph.PROCESS_COST (dict)
-        %     cType.Graph.PROCESS_GENERALIZED_COST (gict)
-        %     cType.Graph.FLOW_COST (dfict)
-        %     cType.GraphMatrixTable.FLOW_GENERALIZED_COST (gfict)
-        %
+        function graphCost(obj,graph)
+        % Shows a barplot with the irreversibilty cost table values for a given state
+        %   Usage:
+        %     obj.graphCost(graph)
+        %   Input:   
+        %   graph - table name to plot. Valid Values: 
+        %     cType.Tables.PROCESS_COST (dict)
+        %     cType.Tables.PROCESS_GENERALIZED_COST (gict)
+        %     cType.Tables.FLOW_COST (dfict)
+        %     cType.Tables.FLOW_GENERALIZED_COST (gfict)
+        %   If graph is ommited first valid value is used.
+        % Output:
+        %   log - cStatusLogger info
             log=cStatus(cType.VALID);
             res=obj.thermoeconomicAnalysis;
             if isempty(res) || ~isValid(res)
@@ -655,17 +654,19 @@ classdef cThermoeconomicModel < cStatusLogger
             if nargin==1
                 graph=cType.Tables.PROCESS_ICT;
             end
-            log=graphCost(res,graph);
+            graphCost(res,graph);
         end
 
-        function log=graphDiagnosis(obj,graph)
-        % graphDiagnosis shows a barplot of diagnosis table values for a given state 
-        % Input:
-        %  graph - type of graph to plot
-        %    cType.Graph.MALFUNCTION (mf)
-        %    cType.Graph.MALFUNCTION_COST (mfc)
-        %    cType.Graph.IRREVERSIBILITY (dit)
-        %  
+        function graphDiagnosis(obj,graph)
+        % Shows a barplot of diagnosis table values for a given state
+        %   Usage:
+        %       obj.graphDiagnosis(graph)
+        %   Input:
+        %       graph - table name to plot. Valid values
+        %           cType.Graph.MALFUNCTION_COST (mfc)
+        %           cType.Graph.MALFUNCTION (mf)
+        %           cType.Graph.IRREVERSIBILITY (dit)
+        %       If graph is ommited first valid value is used.
             log=cStatus(cType.VALID);
             res=obj.thermoeconomicDiagnosis;
             if isempty(res) || ~isValid(res)
@@ -675,17 +676,20 @@ classdef cThermoeconomicModel < cStatusLogger
             if nargin==1
                 graph=cType.Tables.MALFUNCTION_COST;
             end
-            log=graphDiagnosis(res,graph);
+            graphDiagnosis(res,graph);
         end
 
-        function log = graphRecycling(obj,wkey,graph)
+        function graphRecycling(obj,wkey,graph)
         % graphRecycling show a graph of the cost of the output flows of the
         % system depending on the recycled exergy of a selected waste
+        %   Usage:
+        %       obj.graphRecycling(wkey,graph)
         %   Input:
         %       wkey - Waste key
-        %       graph - (optional) grap type
-        %           cType.Tables.WASTE_RECYCLING_DIRECT (Default)
-        %           cType.Tables.WASTE_RECYCLING_GENERAL    
+        %       graph - (optional) table name 
+        %           cType.Tables.WASTE_RECYCLING_DIRECT (rad)
+        %           cType.Tables.WASTE_RECYCLING_GENERAL (rag) 
+        %   If graph is ommited first valid value is used.  
             log=cStatus(cType.VALID);
             if nargin<2
                 log.printWarning('A waste flow key is required');
@@ -699,20 +703,26 @@ classdef cThermoeconomicModel < cStatusLogger
             if nargin==2
                 graph=cType.Tables.WASTE_RECYCLING_DIRECT;
             end
-            log=graphRecycling(res,graph);
+            graphRecycling(res,graph);
         end 
         
-        function log = graphWasteAllocation(obj,varargin)
+        function graphWasteAllocation(obj,varargin)
         % Show a pie chart with the waste allocation
+        %   Usage:
+        %       graphWasteAllocation(wkey)
         %   Input:
-        %       varargin - waste key
+        %       wkey - (optional) waste key.
+        %       If not selected first waste is selected
             res=obj.thermoeconomicAnalysis;
-            log=graphWasteAllocation(res,varargin{:});
+            graphWasteAllocation(res,varargin{:});
         end
 
-        function log = showFlowsDiagram(obj)
+        function showFlowsDiagram(obj)
+        % Show the flow diagram of a system
+        %   Usage:
+        %       obj.showFlowsDiagram
             res=obj.productiveDiagram;
-            log=res.showFlowsDiagram;
+            res.showFlowsDiagram;
         end
         
         %%%
@@ -784,11 +794,6 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
-        function res=getWasteFlows(obj)
-        % get waste flows list (cell aarray)
-            res=getWasteFlows(obj.DataModel);
-        end
-
         %%%
         % Resource Cost Methods
         %
@@ -843,8 +848,8 @@ classdef cThermoeconomicModel < cStatusLogger
     end
 
     methods(Access=private)
-        %%%
-        % Internal computations
+    %%%
+    % Internal computations
         function res=setStateInfo(obj)
         % Trigger exergy analysis
             idx=obj.DataModel.getStateId(obj.State);
@@ -911,6 +916,7 @@ classdef cThermoeconomicModel < cStatusLogger
         end
 
         function res=setSummaryResults(obj)
+        % Obtain Summary Results
             if ~obj.activeSet
                 return
             end
@@ -919,8 +925,8 @@ classdef cThermoeconomicModel < cStatusLogger
                 res=getSummaryResults(obj.fmt,tmp);
                 res.setProperties(obj.ModelName,'SUMMARY');
                 obj.msr=res;
-                obj.printDebugInfo('Summary Results have been Activated');
-            else
+                obj.printDebugInfo('Summary Results have been Calculated');
+            elseif ~isempty(obj.msr)
                 obj.msr=[];
                 obj.printDebugInfo('Summary Results have been Desactivated');
             end
@@ -969,7 +975,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkResourceSample(obj,sample)
         % Check the resource sample value
             res=false;
-            log=cStatus();
+            log=cStatus(cType.VALID);
             if ~obj.DataModel.existSample(sample)
                 log.printWarning('Invalid resource sample %s',sample);
                 return       

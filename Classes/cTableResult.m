@@ -32,15 +32,17 @@ classdef (Abstract) cTableResult < cTable
             end
         end
 
-        function viewTable(obj,state)
+        function setState(obj,state)
+        % Set state value
+            obj.State=state;
+        end
+
+        function viewTable(obj)
         % View the values of the table (tbl) in a uitable graphic object
         %  Input:
         %   state - (optional) state name
         %
-            if nargin==1
-                state='';
-            end
-            vt=cViewTable(obj,state);
+            vt=cViewTable(obj);
             vt.showTable
         end
 
@@ -49,8 +51,36 @@ classdef (Abstract) cTableResult < cTable
             res=(obj.GraphType ~= cType.GraphType.NONE);
         end
 
-        function setState(obj,state)
-            obj.State=state;
+        function showGraph(obj,varargin)
+        % Show the graph associated to the table
+            log=cStatus(cType.VALID);
+            if obj.isGraph
+                g=cGraphResults(obj,varargin{:});
+                if ~isValid(g)
+                    g.printLogger;
+                    return
+                end
+                switch obj.GraphType
+                    case cType.GraphType.COST
+                        g.graphCost;
+                    case cType.GraphType.DIAGNOSIS
+                        g.graphDiagnosis;
+                    case cType.GraphType.SUMMARY
+                        g.graphSummary;
+                    case cType.GraphType.DIAGRAM_FP
+                        g.showDigraph;
+                    case cType.GraphType.DIGRAPH
+                        g.showDigraph;
+                    case cType.GraphType.RECYCLING
+                        g.graphRecycling;
+                    case cType.GraphType.WASTE_ALLOCATION
+                        g.graphWasteAllocation;
+                    otherwise
+                        log.printWarning('Table %s has not a valid graph type',obj.Name);
+                end 
+            else
+                log.printWarning('Table %s has not a graph associated',obj.Name);
+            end
         end
     end
 end

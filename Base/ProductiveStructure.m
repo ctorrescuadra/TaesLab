@@ -13,11 +13,11 @@ function res=ProductiveStructure(data)
 	res=cStatusLogger();
     % Check input parameters
     if nargin~=1
-        res.printError('Usage: ShowProductiveStructure(model)');
+        res.printError('Usage: ShowProductiveStructure(data)');
         return
     end
     if ~isa(data,'cReadModel')
-        res.printError('Invalid model. It should be a cReadModel object');
+        res.printError('Invalid data. It should be a cReadModel object');
         return
     end
 	% Check Productive Structure

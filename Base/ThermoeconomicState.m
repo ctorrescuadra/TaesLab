@@ -1,10 +1,8 @@
-function res=ThermoeconomicState(model,varargin)
-% ThermoeconomicState - shows the exergy values of a thermoeconomic state for a giving model 
+function res=ThermoeconomicState(data,state)
+% ThermoeconomicState - shows the exergy values of a thermoeconomic state for a giving data 
 % 	INPUT:
-%		model - cReadModel Object containing the model information
-%   	varargin - an optional structure contains additional parameters:
-%			State - Indicate a state to get exergy values.
-%               If not provided, first state is used
+%		data - cReadModel Object containing the data information
+%   	state - char[] indicates a state of the plant
 % 	OUTPUT:
 %		res - cResultsInfo object contains the results of the exergy analysis for the required state
 %   	The following tables are obtained:
@@ -12,39 +10,31 @@ function res=ThermoeconomicState(model,varargin)
 %         	estreams - exergy of the streams
 %         	eprocesses - exergy table of the processes
 %         	tfp - Exergy Fuel-Product table
-% See also cReadModel, cProcessModel, cModelResults
+% See also cReadModel, cProcessModel, cResultInfo
 %
 	res=cStatusLogger(); 
-	checkModel=@(x) isa(x,'cReadModel');
-	% Check input parameters
-	p = inputParser;
-	p.addRequired('model',checkModel);
-	p.addParameter('State','',@ischar);
-	try
-		p.parse(model,varargin{:});
-	catch err
-		res.printError(err.message);
-        res.printError('Usage: ExergyCostCalculator(model,param)');
-		return
+	if nargin~=2 || ~isa(data,'cReadModel') || ~ischar(state)
+		res.printError('Usage: ThermoeconomicState(data, state)');
 	end
-	param=p.Results;
 	% Check Productive Structure
-	if ~model.isValid
-		model.printLogger;
+	if ~data.isValid
+		data.printLogger;
 		res.printError('Invalid Productive Structure. See error log');
 		return
-	end	
-	fmt=model.readFormat;
+	end
+	% Check if exist state
+	if ~data.existState(state)
+		res.printError('The state %s not exists',state);
+		return
+	end
+	fmt=data.readFormat;
 	if fmt.isError
 		fmt.printLogger;
 		res.printError('Format Definition is NOT correct. See error log');
 		return
 	end	
 	% Read and check exergy values
-	if isempty(param.State)
-		param.State=model.getStateName(1);
-	end
-	ex=model.readExergy(param.State);
+	ex=data.readExergy(state);
 	if ~isValid(ex)
 		ex.printLogger;
 		res.printError('Exergy Values are NOT correct. See error log');
@@ -54,7 +44,7 @@ function res=ThermoeconomicState(model,varargin)
 	% Set Results
 	if isValid(pm)
 		res=getExergyResults(fmt,pm);
-    	res.setProperties(model.ModelName,param.State);
+    	res.setProperties(data.ModelName,param.State);
 	else
 		pm.printLogger;
 		res.printError('Invalid Process Model. See error log');

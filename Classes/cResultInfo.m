@@ -1,20 +1,24 @@
 classdef (Sealed) cResultInfo < cModelTables
-% cModelResults This class store the results of ExIoLab and provide methods to:
+% cResultsInfo This class store the results on internal memory and provide methods to:
 %   - Show the results in console
 %   - Show the results in workspace
 %   - Show the results in graphic user interfaces
 %   - Save the results in files: XLSX, CSV and MAT
+%   The diferent types (ResultId) of cResultInfo object are defined in cType.ResultId 
 %   Methods:
 %       obj.getFuelImpact
-%       obj.graphCost(graph_id)
-%       obj.graphDiagnosis(graph_id)
-%       obj.graphSummary(graph_id)
-%       obj.graphRecycling(graph_id)
-%       obj.showDiagramFP()
-%       obj.showsFlowsDiagram(opt)
+%       obj.graphCost(table)
+%       obj.graphDiagnosis(table)
+%       obj.graphSummary(table)
+%       obj.graphRecycling(table)
+%       obj.showDiagramFP;
+%       obj.showsFlowsDiagram;
 %   Methods inhereted from cModelTables
-%       log=obj.saveResults(name)
-%       res=obj.printResults(obj)
+%       obj.printTable(tbl)
+%       obj.printResults;
+%       obj.printIndexTable;
+%       obj.viewTable(table);
+%       log=obj.saveResults(filename)
 %       res=obj.getResultTables(varmode,fmt)
 % See: cResultTableBuilder, cTableResult
 %
@@ -59,14 +63,17 @@ classdef (Sealed) cResultInfo < cModelTables
             fprintf('%s\n',obj.getFuelImpact);
         end
 
-        function log = graphCost(obj,graph)
-        % graphCost shows a barplot with the irreversibilty cost table values for a given state 
-        % Input:   
-        %   graph: Select the graph to plot
-        %     cType.Graph.PROCESS_COST (dict)
-        %     cType.Graph.PROCESS_GENERALIZED_COST (gict)
-        %     cType.Graph.FLOW_COST (dfict)
-        %     cType.GraphMatrixTable.FLOW_GENERALIZED_COST (gfict)
+        function graphCost(obj,graph)
+        % Shows a barplot with the irreversibilty cost table values for a given state 
+        %   Usage:
+        %       obj.graphCost(graph)
+        %   Input:   
+        %       graph - (optional) table name to plot
+        %           cType.Graph.PROCESS_COST (dict)
+        %           cType.Graph.PROCESS_GENERALIZED_COST (gict)
+        %           cType.Graph.FLOW_COST (dfict)
+        %           cType.GraphMatrixTable.FLOW_GENERALIZED_COST (gfict)
+        %       If graph is not selected first option is taken
         %
             % Check input
             log=cStatus(cType.VALID);
@@ -79,25 +86,29 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end  
-            if nargin<2
+            if nargin==1
                 graph=cType.Tables.PROCESS_ICT;
             end
-            if obj.existTable(graph)
-                g=cGraphResults(obj.Tables.(graph));
+            tbl=obj.getTable(graph);
+            if isValid(tbl) && isGraph(tbl)
+                g=cGraphResults(tbl);
                 g.graphCost;
             else
-                log.printError('Table %s is NOT available',graph);
+                log.printError('Invalid graph type: %s',graph);
                 return
             end
         end
         
-        function log=graphDiagnosis(obj,graph)
-        % graphDiagnosis shows a barplot of diagnosis table values for a given state 
-        % Input:
-        %  graph - type of graph to plot
-        %    cType.Graph.MALFUNCTION (mf)
-        %    cType.Graph.MALFUNCTION_COST (mfc)
-        %    cType.Graph.IRREVERSIBILITY (dit)
+        function graphDiagnosis(obj,graph)
+        % Shows a barplot of diagnosis table values for a given state 
+        %   Usage:
+        %       obj.graphDiagnosis(graph)
+        %   Input:
+        %       graph - (optional) table name to plot
+        %           cType.Graph.MALFUNCTION (mf)
+        %           cType.Graph.MALFUNCTION_COST (mfc)
+        %           cType.Graph.IRREVERSIBILITY (dit)
+        %       If graph is not selected first option is taken
         %  
             log=cStatus(cType.VALID);
             if ~isValid(obj)
@@ -108,30 +119,32 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end  
-            if nargin<2
+            if nargin==1
                 graph=cType.Tables.MALFUNCTION_COST;
             end
-            if obj.existTable(graph)  
-                g=cGraphResults(obj.Tables.(graph));
+            tbl=obj.getTable(graph);
+            if isValid(tbl) && isGraph(tbl)
+                g=cGraphResults(tbl);
                 g.graphDiagnosis;
             else
-                log.printError('Table %s is NOT available',graph);
+                log.printError('Invalid graph type: %s',graph);
                 return
             end
         end
 
-        function log=graphSummary(obj,graph,var)
-        % Plot summary tables
+        function graphSummary(obj,graph,var)
+        % Plot summary tables.
         %   Input:
-        %       graph - type of graph to plot
+        %       graph - (optional) type of graph to plot
         %           cType.SummaryTables.UNIT_CONSUMPTION (pku)
         %           cType.SummaryTables.PROCESS_DIRECT_UNIT_COST (dpuc)
-        %           cType.SummaryTables.FLOW_DIRECT_UNIT_COST (dfuc)
+        %           cType.SummaryTables.FLOW_UNIT_COST (dfuc)
         %           cType.SummaryTables.PROCESS_GENERALIZED_UNIT_COST (gpuc)
         %           cType.SummaryTables.FLOW_GENERALIZED_UNIT_COST (gfuc)
-        %       var - Variables to plot
+        %       var - (optional) Cell Array indicating the keys of the variables to plot
+        %       If var is not selected only the output flows are show if apply.
         %
-            %Check input arguments
+        % Check input arguments
             log=cStatus(cType.VALID);
             if ~isValid(obj)
                 log.printError('Invalid Result object %s',obj.ResultName);
@@ -142,7 +155,7 @@ classdef (Sealed) cResultInfo < cModelTables
                 return
             end
             if nargin==1
-                graph=cType.SummaryTables.FLOW_DIRECT_UNIT_COST;
+                graph=cType.SummaryTables.FLOW_UNIT_COST;
                 var=obj.Info.getDefaultFlowVariables;
             end
             tbl=obj.getTable(graph);
@@ -171,10 +184,12 @@ classdef (Sealed) cResultInfo < cModelTables
             g.graphSummary;
         end
 
-        function log=graphRecycling(obj,graph)
-        % Show the recycling graph
+        function graphRecycling(obj,graph)
+        % Shows the recycling graph
+        %   Usage:
+        %       obj.graphRecycling(obj)
         %   Input:
-        %       graph - Name of the table to graph
+        %       graph - (optional) name of the table to plot
         %           cType.Graph.WASTE_RECYCLING_DIRECT (rag)
         %           cType.Graph.WASTE_RECYCLING_GENERALIZED (rag)
         %
@@ -200,10 +215,13 @@ classdef (Sealed) cResultInfo < cModelTables
             g.graphRecycling;
         end
 
-        function log = graphWasteAllocation(obj,wkey)
-        % Show a pie chart of the waste allocation table
+        function graphWasteAllocation(obj,wkey)
+        % Shows a pie chart of the waste allocation table
+        %   Usage:
+        %       obj.graphWasteAllocation(wkey)
         %   Input:
-        %       wkey - waste flow key
+        %       wkey - (optional) waste key key.
+        %       If not selected first waste is taken.
             log=cStatus(cType.VALID);
             if ~isValid(obj)
                 log.printError('Invalid object %s',obj.ResultName);
@@ -232,23 +250,33 @@ classdef (Sealed) cResultInfo < cModelTables
             g.graphWasteAllocation;
         end
 
-        function log=showDiagramFP(obj)
+        function showDiagramFP(obj)
         % Show the FP table digraph [only Matlab]
+        %   Usage:
+        %       obj.showDiagramFP;
             log=cStatus(cType.VALID);
             if isOctave
                 log.printError('Function not implemented')
                 return
             end
-            if obj.ResultId ~= cType.ResultId.DIAGRAM_FP
-                log.printError('Invalid Result Object %s', obj.ResultName);
-                return
-            end
-            g=cGraphResults(obj.Tables.atfp);
-            g.showDigraph;
+        switch obj.ResultId
+        case cType.ResultId.DIAGRAM_FP
+            tbl=obj.Tables.tfp;
+        case cType.ResultId.THERMOECONOMIC_STATE
+            tbl=obj.Tables.tfp;
+        case cType.ResultId.THERMOECONOMIC_ANALYSIS
+            tbl=obj.Tables.dcfp;
+        otherwise
+            printWarning('Invalid Result Info %s',obj.ResltName)
+        end
+        g=cGraphResults(tbl);
+        g.showDigraph;
         end
 
-        function log=showFlowsDiagram(obj)
+        function showFlowsDiagram(obj)
         % Show the flows diagram of the productive structure [Only Matlab]
+        %   Usage:
+        %       obj.showFlowsDiagram;
             log=cStatus(cType.VALID);
             if isOctave
                 log.printError('Function not implemented')
