@@ -45,38 +45,38 @@
     "processes": [
       {
         "key": "BLR",
-        "description": "Steam Generator",
         "fuel": "QBLR",
         "product": "B1-B6",
-        "type": "PRODUCTIVE"
+        "type": "PRODUCTIVE",
+        "description": "Steam Generator"
       },
       {
         "key": "TRB",
-        "description": "Turbine",
         "fuel": "B1-B2",
         "product": "WN+WP",
-        "type": "PRODUCTIVE"
+        "type": "PRODUCTIVE",
+        "description": "Turbine"
       },
       {
         "key": "IHE",
-        "description": "Internal Heat Exchanger",
         "fuel": "B2-B3",
         "product": "B6-B5",
-        "type": "PRODUCTIVE"
+        "type": "PRODUCTIVE",
+        "description": "Internal Heat Exchanger"
       },
       {
         "key": "PMP",
-        "description": "Pump",
         "fuel": "WP",
         "product": "B5-B4",
-        "type": "PRODUCTIVE"
+        "type": "PRODUCTIVE",
+        "description": "Pump"
       },
       {
         "key": "CND",
-        "description": "Condenser",
         "fuel": "B3-B4",
         "product": "QCND",
-        "type": "DISSIPATIVE"
+        "type": "DISSIPATIVE",
+        "description": "Condenser"
       }
     ]
   },
@@ -123,7 +123,7 @@
           },
           {
             "key": "QCND",
-            "value": 9.338999999999999
+            "value": 9.3389999999999986
           }
         ]
       },
@@ -168,7 +168,7 @@
           },
           {
             "key": "QCND",
-            "value": 27.126000000000006
+            "value": 27.126000000000005
           }
         ]
       },
@@ -258,7 +258,7 @@
           },
           {
             "key": "QCND",
-            "value": 10.409000000000003
+            "value": 10.409000000000002
           }
         ]
       },
@@ -348,7 +348,7 @@
           },
           {
             "key": "QCND",
-            "value": 9.939999999999998
+            "value": 9.9399999999999977
           }
         ]
       }
@@ -362,35 +362,66 @@
     }
   },
   "ResourcesCost": {
-    "Samples": {
-      "sampleId": "Base",
-      "flows": {
-        "key": "QBLR",
-        "value": 0.01
+    "Samples": [
+      {
+        "sampleId": "Internal",
+        "flows": {
+          "key": "QBLR",
+          "value": 0
+        },
+        "processes": [
+          {
+            "key": "BLR",
+            "value": 6.51
+          },
+          {
+            "key": "TRB",
+            "value": 151.75
+          },
+          {
+            "key": "IHE",
+            "value": 2.56
+          },
+          {
+            "key": "PMP",
+            "value": 2.11
+          },
+          {
+            "key": "CND",
+            "value": 10.75
+          }
+        ]
       },
-      "processes": [
-        {
-          "key": "BLR",
-          "value": 6.511254659374707
+      {
+        "sampleId": "External",
+        "flows": {
+          "key": "QBLR",
+          "value": 0.5
         },
-        {
-          "key": "TRB",
-          "value": 151.74747299158845
-        },
-        {
-          "key": "IHE",
-          "value": 2.559103015243924
-        },
-        {
-          "key": "PMP",
-          "value": 2.114526295926953
-        },
-        {
-          "key": "CND",
-          "value": 10.746746638323956
-        }
-      ]
-    }
+        "processes": [
+          {
+            "key": "BLR",
+            "value": 6.51
+          },
+          {
+            "key": "TRB",
+            "value": 151.75
+          },
+          {
+            "key": "IHE",
+            "value": 2.56
+          },
+          {
+            "key": "PMP",
+            "value": 2.11
+          },
+          {
+            "key": "CND",
+            "value": 10.75
+          }
+        ]
+      }
+    ]
   },
   "Format": {
     "definitions": [

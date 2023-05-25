@@ -359,9 +359,6 @@ classdef (Abstract) cReadModel < cStatusLogger
 					log=obj.saveAsMAT(filename);
 				otherwise
 					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
-			end
-            if log.isValid
-                log.messageLog(cType.INFO,'Data Model available in file %s',filename);
             end
         end                
     end

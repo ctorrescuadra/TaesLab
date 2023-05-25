@@ -6,6 +6,14 @@
 	],
 	"settings": {
 		"csv-preview.numberFormat": "F4",
-		"data.preview.charts.plugin": "highcharts"
+		"data.preview.charts.plugin": "highcharts",
+		"json.schemas": [
+			{
+				"fileMatch": [
+					"*_model.json"
+				],
+				"url": "./Examples/Templates/plant_model.json"
+			}
+		],
 	}
 }

@@ -1,8 +1,10 @@
-function res=ThermoeconomicState(data,state)
-% ThermoeconomicState - shows the exergy values of a thermoeconomic state for a giving data 
+function res=ThermoeconomicState(data,varargin)
+% ThermoeconomicState - shows the exergy values of a thermoeconomic state for a giving model 
 % 	INPUT:
 %		data - cReadModel Object containing the data information
-%   	state - char[] indicates a state of the plant
+%   	varargin - an optional structure contains additional parameters:
+%			State - Indicate a state to get exergy values.
+%               If not provided, first state is used
 % 	OUTPUT:
 %		res - cResultsInfo object contains the results of the exergy analysis for the required state
 %   	The following tables are obtained:
@@ -13,20 +15,25 @@ function res=ThermoeconomicState(data,state)
 % See also cReadModel, cProcessModel, cResultInfo
 %
 	res=cStatusLogger(); 
-	if nargin~=2 || ~isa(data,'cReadModel') || ~ischar(state)
-		res.printError('Usage: ThermoeconomicState(data, state)');
+	checkModel=@(x) isa(x,'cReadModel');
+	% Check input parameters
+	p = inputParser;
+	p.addRequired('data',checkModel);
+	p.addParameter('State','',@ischar);
+	try
+		p.parse(data,varargin{:});
+	catch err
+		res.printError(err.message);
+        res.printError('Usage: ExergyCostCalculator(data,param)');
+		return
 	end
+	param=p.Results;
 	% Check Productive Structure
 	if ~data.isValid
 		data.printLogger;
 		res.printError('Invalid Productive Structure. See error log');
 		return
-	end
-	% Check if exist state
-	if ~data.existState(state)
-		res.printError('The state %s not exists',state);
-		return
-	end
+	end	
 	fmt=data.readFormat;
 	if fmt.isError
 		fmt.printLogger;
@@ -34,7 +41,10 @@ function res=ThermoeconomicState(data,state)
 		return
 	end	
 	% Read and check exergy values
-	ex=data.readExergy(state);
+	if isempty(param.State)
+		param.State=data.getStateName(1);
+	end
+	ex=data.readExergy(param.State);
 	if ~isValid(ex)
 		ex.printLogger;
 		res.printError('Exergy Values are NOT correct. See error log');
