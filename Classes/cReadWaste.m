@@ -116,8 +116,13 @@ classdef cReadWaste < cStatusLogger
 			end
 			% Create the object
 			if obj.isValid
-				obj.wd=struct('ps',ps,'typeId',wasteType,'values',values,'recycle',recycleRatio);
-                obj.wd.type={wd.type};
+				obj.wd=struct();
+				obj.wd.flows={wd.flow};
+				obj.wd.type={wd.type};
+				obj.wd.typeId=wasteType;
+				obj.wd.values=values;
+				obj.wd.recycle=recycleRatio;
+				obj.wd.ps=ps;
 			end
 		end
 

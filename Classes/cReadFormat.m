@@ -55,23 +55,30 @@ classdef cReadFormat < cStatusLogger
                 % Check and save each format definition
                 for i=1:numel(data.format)
                     fmt=data.format(i);
-                    if ( isfloat(fmt.width) && isfloat(fmt.precision) && fmt.width > fmt.precision )
-                        id=cType.Format.(fmt.key);
+					id=cType.getFormatId(fmt.key);
+                    if cType.isEmpty(id)
+						obj.messageLog(cType.ERROR,'Invalid Format Key %s',fmt.key);
+                        continue
+                    end
+                    val1=isfloat(fmt.width) && isfloat(fmt.precision);
+                    val2=(fmt.width>1) && (fmt.precision>0) && (fmt.width > fmt.precision );
+                    if val1 && val2
                         cfmt=strcat('%',num2str(fmt.width),'.',num2str(fmt.precision),'f');
                         config.format(id).unit=fmt.unit;
                         config.format(id).format=cfmt;
                     else
                         obj.messageLog(cType.ERROR,'Bad format defined in %s',fmt.key);
-                        return
                     end
                 end
             else  % No data provided. Default configuration is taken
-                obj.messageLog(cType.VALID,'Default format is used');
+                obj.messageLog(cType.Error,'Invalid Format');
             end
-		    obj.cfgTables=config.tables;
-			obj.cfgMatrices=config.matrices;
-			obj.cfgSummary=config.summary;
-			obj.cfgTypes=config.format;
+			if isValid(obj)
+		    	obj.cfgTables=config.tables;
+				obj.cfgMatrices=config.matrices;
+				obj.cfgSummary=config.summary;
+				obj.cfgTypes=config.format;
+			end
 		end
 
 		function res=get.PrintConfig(obj)

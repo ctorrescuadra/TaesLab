@@ -32,7 +32,6 @@ function model=ThermoeconomicTool(filename,varargin)
     end
     % Check Data Model file
     data=checkModel(filename);
-    printLogger(data);
     % Check optional parameters and create cThermoeconomicModel obeject
     if isValid(data)
         p = inputParser;
@@ -50,11 +49,10 @@ function model=ThermoeconomicTool(filename,varargin)
             model.printError('Usage: ThermoeconomicTool(model_file,param)');
             return
         end
+        data.printLogger;
         model=cThermoeconomicModel(data,p.Results);
     else
-        model.addLogger(data);
+        data.printLogger;
     end
-    if ~model.isValid
-        model.printLogger;
-    end
+    model.addLogger(data);
 end

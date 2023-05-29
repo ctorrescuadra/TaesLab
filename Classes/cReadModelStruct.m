@@ -29,6 +29,10 @@ classdef (Abstract) cReadModelStruct < cReadModel
 		%	sd - cModelData
 			ps=cProductiveStructure(sd.ProductiveStructure);
 			if isValid(ps)
+				% Exist Waste and is not defined, then takes the default value
+                if (ps.NrOfWastes>0) && isempty(sd.WasteDefinition)
+                    sd.setWasteDefinition(ps.WasteData);
+                end
 				obj.ModelData=sd;
 				obj.ProductiveStructure=ps;
 			else
@@ -71,13 +75,11 @@ classdef (Abstract) cReadModelStruct < cReadModel
 			tbl.setDescription(sheet);
 			tables.(sheet)=tbl;
 			% Format table
-			if data.isFormat
-				sheet=cType.InputTables.FORMAT;
-				fmt=data.Format.definitions;
-				tbl=cTableData(fmt);
-				tbl.setDescription(sheet);
-				tables.(sheet)=tbl;
-			end
+			sheet=cType.InputTables.FORMAT;
+			fmt=data.Format.definitions;
+			tbl=cTableData(fmt);
+			tbl.setDescription(sheet);
+			tables.(sheet)=tbl;
 			% Waste tables
 			if (obj.NrOfWastes>0) && obj.isWaste
 				% Waste Definition

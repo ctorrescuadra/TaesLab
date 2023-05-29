@@ -39,5 +39,4 @@ function res=ProductiveDiagram(data)
 	% Get Productive Diagram info
 	res=getProductiveDiagram(fmt,data.ProductiveStructure);
 	res.setProperties(data.ModelName,'SUMMARY');
-    res.setResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
 end

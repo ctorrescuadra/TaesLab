@@ -92,17 +92,18 @@ classdef cType
 		Diagnosis=struct('NONE',1,'WASTE_OUTPUT',2,'WASTE_INTERNAL',3);
 		DEFAULT_DIAGNOSIS='WASTE_OUTPUT';
 		% Input Tables
-		InputTables=struct('FLOWS','Flows','PROCESSES','Processes','EXERGY','Exergy',...
-							'WASTEDEF','WasteDefinition','WASTEALLOC','WasteAllocation',...
-							'RESOURCES','ResourcesCost','FORMAT','Format');
+		InputTables=struct('FLOWS','Flows','PROCESSES','Processes',...
+						   'EXERGY','Exergy','FORMAT','Format',...
+						   'WASTEDEF','WasteDefinition','WASTEALLOC','WasteAllocation',...
+						   'RESOURCES','ResourcesCost');
         % Mandatory Tables
-        MandatoryTables=1:3;
-		OptionalTables=4:7;
+        MandatoryTables=1:4;
+		OptionalTables=5:7;
 		% Data Model
-		DataId=struct('PRODUCTIVE_STRUCTURE',1,'EXERGY_STATES',2,'WASTE',3,'RESOURCES',4,'FORMAT',5);
-		DataElements={'ProductiveStructure','ExergyStates','WasteDefinition','ResourcesCost','Format'};
-		MandatoryData=1:2;
-		OptionalData=3:5;
+		DataId=struct('PRODUCTIVE_STRUCTURE',1,'EXERGY_STATES',2,'FORMAT',3,'WASTE',4,'RESOURCES',5);
+		DataElements={'ProductiveStructure','ExergyStates','Format','WasteDefinition','ResourcesCost'};
+		MandatoryData=1:3;
+		OptionalData=4:5;
         % Default Results file
 		DATA_MODEL_FILE='DataModel';
         RESULT_FILE='ModelResults';
@@ -242,6 +243,11 @@ classdef cType
             res=cType.getTypeId(cType.Resources,text);
         end
 
+		function res=getFormatId(text)
+		% Get internal code of a resources cost type text
+			res=cType.getTypeId(cType.Format,text);
+		end
+
 		function res=getCostTables(text)
 			res=cType.getTypeId(cType.CostTables,text);
 		end
@@ -288,6 +294,11 @@ classdef cType
 		function res=checkVarMode(text)
 		% Check DiagnosisMethod value
 			res=cType.checkTypeKey(cType.VarMode,text);
+		end
+
+		function res=checkFormat(text)
+		% Check DiagnosisMethod value
+			res=cType.checkTypeKey(cType.Format,text);
 		end
 
 		function res=FlowTypeOptions()

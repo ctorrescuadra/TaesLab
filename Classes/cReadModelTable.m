@@ -76,7 +76,6 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.messageLog(cType.ERROR,'Invalid Exergy table');
                 return
             end
-
             tmp=struct();
             fields={'key','value'};
             states=tbl.ColNames(2:end);
@@ -90,7 +89,8 @@ classdef (Abstract) cReadModelTable < cReadModel
             % Get Waste definition
             isWasteDefinition=existTable(tm,cType.InputTables.WASTEDEF);
             isWasteAllocation=existTable(tm,cType.InputTables.WASTEALLOC);
-            if (isWasteDefinition || isWasteAllocation) && (ps.NrOfWastes>0)
+            pswd=obj.WasteData; %Get default waste data
+            if ~isempty(pswd)
                 pswd=ps.WasteData;
                 wf={pswd.wastes.flow};
                 wdef=0;
@@ -216,6 +216,36 @@ classdef (Abstract) cReadModelTable < cReadModel
             if obj.isValid
                 obj.ModelData=cModelData(dm);
                 obj.ProductiveStructure=ps;
+            end
+        end
+    end
+    methods(Access=private)
+        function res=WasteData(obj)
+        % Get default waste data info
+            res=[];
+            % Search Wastes in Flows Table
+            tm=obj.getTableModel;
+            ft=tm.Tables.Flows;
+            fl=[ft.RowNames];
+            fields=[ft.ColNames(2:end)];
+            cid=find(strcmp(fields,'type'),1);
+            if isempty(cid)
+                obj.messageLog(cType.ERROR,'Invalid Flows Table. Type Column NOT defined');
+                return
+            end
+            types=[ft.Data(:,cid)];
+            rid=find(strcmp(types,'WASTE'));
+            NR=numel(rid);
+            if NR>0           
+                wf=[fl(rid)];
+                % Build Waste Data Table
+                wastes=cell(NR,1);
+                for i=1:NR
+                    wastes{i}.flow=wf{i};
+                    wastes{i}.type='DEFAULT';
+                    wastes{i}.recycle=0.0;
+                end
+                res.wastes=cell2mat(wastes);
             end
         end
     end

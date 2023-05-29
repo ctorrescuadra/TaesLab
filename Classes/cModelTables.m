@@ -183,9 +183,9 @@ classdef cModelTables < cResultId
                 return
             end
             log.addLogger(slog);
-            if log.isValid
-                log.messageLog(cType.INFO,'%s available in file %s',obj.ResultName,filename);
-            end
+			if isValid(log)
+				log.messageLog(cType.INFO,'File %s has been saved',filename);
+			end
         end
         
         function res=getResultTables(obj,mode,fmt)

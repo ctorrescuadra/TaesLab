@@ -9,6 +9,10 @@ function res = SummaryResults(data)
         res.printError('Invalid data. It should be a cReadModel object');
         return
     end
-    model=cThermoeconomicModel(data,'Summary',true);
-    res=model.summaryResults;
+    if data.NrOfStates>1
+        model=cThermoeconomicModel(data,'Summary',true);
+        res=model.summaryResults;
+    else
+        res.printWarning('Summary Results requires more than one State');
+    end
 end

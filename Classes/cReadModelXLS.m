@@ -60,6 +60,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                     end
                 else
 					obj.messageLog(cType.ERROR,'sheet %s:%s does not exists',cfgfile,wsht);
+                    return
                 end
             end
             % Read optional tables 
@@ -72,7 +73,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,'Eror reading sheet %s:%s',cfgfile,wsht);
+					    obj.messageLog(cType.ERROR,'Error reading sheet %s:%s',cfgfile,wsht);
                     end
                 end  
             end
@@ -82,10 +83,10 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
             obj.ModelName=name;
             tableModel=cModelTables(cType.ResultId.DATA_MODEL,tables);
             tableModel.setProperties(name);
+            obj.Tables=tableModel;
             % Build Data Model
-           obj.buildDataModel(tableModel);
+            obj.buildDataModel(tableModel);
             if obj.isValid
-                obj.Tables=tableModel;
                 obj.setModelProperties;
             end
         end 

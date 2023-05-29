@@ -46,7 +46,7 @@ classdef cReadProductiveStructure < cResultId
                 obj.messageLog(cType.ERROR,'Invalid flows data. Fields Missing');
 				return
             end
-            if ~all(isfield(data.processes,{'key','description','fuel','product','type'}))
+            if ~all(isfield(data.processes,{'key','fuel','product','type'}))
 				obj.messageLog(cType.ERROR,'Invalid Processes data. Fields Missing');
 				return
             end
@@ -171,7 +171,7 @@ classdef cReadProductiveStructure < cResultId
 			end             
             % Create process struct
             obj.cprc{id}=struct('id',id,'key',data.key,'type',data.type,'typeId',ptype,...
-				'description',data.description,'fuel',data.fuel,'product',data.product,...
+				'fuel',data.fuel,'product',data.product,...
                 'fuelStreams',[],'productStreams',[]);
         end
 
@@ -204,7 +204,7 @@ classdef cReadProductiveStructure < cResultId
 				key=sprintf('%s%d',scode,order);
                 [finp,fout]=obj.getStreamFlows(ns,expr,fp);
                 if isValid(obj)
-				    obj.cstr{ns}=struct('id',ns,'key',key,'description',expr,...
+				    obj.cstr{ns}=struct('id',ns,'key',key,'definition',expr,...
 				    'type',stype,'typeId',fp,'process',id,'InputFlows',finp,'OutputFlows',fout);
                 else
                     return
@@ -345,7 +345,7 @@ classdef cReadProductiveStructure < cResultId
                         end
                 	    pstr(ires)=ns;
 				end
-				obj.cstr{ns}=struct('id',ns,'key',scode,'description',descr,'type',stype,'typeId',ftype,'process',N1,...
+				obj.cstr{ns}=struct('id',ns,'key',scode,'definition',descr,'type',stype,'typeId',ftype,'process',N1,...
 					'InputFlows',fe,'OutputFlows',fs);	
 			end
             % Update number of streams and wastes
@@ -353,7 +353,7 @@ classdef cReadProductiveStructure < cResultId
             obj.NrOfWastes=iwst;
 			% Create environment process record
             obj.cprc{N1}=struct('id',N1,'key','ENV','type','ENVIRONMENT','typeId',cType.Process.ENVIRONMENT,...
-				'description','Environment','fuel',fdesc(2:end),'product',pdesc(2:end), ...
+				'fuel',fdesc(2:end),'product',pdesc(2:end), ...
                 'fuelStreams',fstr(1:iout),'productStreams',pstr(1:ires));
         end
 

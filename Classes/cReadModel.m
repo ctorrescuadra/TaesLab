@@ -28,7 +28,6 @@ classdef (Abstract) cReadModel < cStatusLogger
 		NrOfResourceSamples  % Number of Resources Samples
 		ResourceSamples      % Resources samples Dictionary
 		isWaste=0            % Waste Information is defined
-		isFormat=0           % Format Information is defined
 		isResourceCost=0     % Resource Cost is defined
 		isDiagnosis          % Diagnosis is posible (two states defined)
 		isTableModel         % Indicates if is a table model
@@ -211,11 +210,7 @@ classdef (Abstract) cReadModel < cStatusLogger
 		
 		function res=readFormat(obj)
 		% Get a cResultTableBuilder object with the tables format definition
-            if obj.isFormat
-				data.format=obj.ModelData.Format.definitions;		
-            else
-				data=struct();
-            end
+			data.format=obj.ModelData.Format.definitions;		
             res=cResultTableBuilder(data,obj.ProductiveStructure);
 		end
 
@@ -233,22 +228,13 @@ classdef (Abstract) cReadModel < cStatusLogger
 			status=obj.status;
 			% Read and Check Format configuration
 			rfmt=obj.readFormat;
-			if obj.isFormat
-				switch rfmt.status
-					case cType.VALID
-						log.messageLog(cType.INFO,'Format Configuration is valid');
-					case cType.WARNING
-						log.addLogger(rfmt);
-						log.messageLog(cType.WARNING,'Format Configuration is NOT valid. Default is used')
-					otherwise
-						log.addLogger(rfmt);
-						log.messageLog(cType.ERROR,'Format Configuration is NOT valid. See error log');
-				end
-				status= status & rfmt.status;
+			if isValid(rfmt)
+				log.messageLog(cType.INFO,'Format Configuration is valid');
 			else
-				log.messageLog(cType.INFO,'Format Configuration is not available. Default is used');
+				log.addLogger(rfmt);
+				log.messageLog(cType.ERROR,'Format Configuration is NOT valid. See error log');
 			end
-				
+			status= status & rfmt.status;			
 			% Read and check Exergy Values
 			states=obj.States;
 			for i=1:obj.NrOfStates
@@ -359,7 +345,10 @@ classdef (Abstract) cReadModel < cStatusLogger
 					log=obj.saveAsMAT(filename);
 				otherwise
 					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
-            end
+			end
+			if isValid(log)
+				log.messageLog(cType.INFO,'File %s has been saved',filename);
+			end
         end                
     end
 
@@ -370,7 +359,6 @@ classdef (Abstract) cReadModel < cStatusLogger
         	% Optional variables
 			obj.isWaste=sd.isWaste;
 			obj.isResourceCost=sd.isResourceCost;
-			obj.isFormat=sd.isFormat;
 			% Define States and Resource Samples
 			obj.States={sd.ExergyStates.States(:).stateId};
             if obj.isResourceCost

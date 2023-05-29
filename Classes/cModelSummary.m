@@ -22,6 +22,10 @@ classdef cModelSummary < cResultId
                 obj.messageLog(cType.ERROR,'Invalid Thermoeconomic Model');
                 return
             end
+            if model.DataModel.NrOfStates<2
+                  obj.messageLog(cType.ERROR,'Summary Requires more than one State');
+                  return
+            end
             NrOfFlows=model.DataModel.NrOfFlows;
             NrOfProcesses=model.DataModel.NrOfProcesses;
             obj.NrOfStates=model.DataModel.NrOfStates;
@@ -40,7 +44,7 @@ classdef cModelSummary < cResultId
                 values{i}=zeros(NrOfRows,obj.NrOfStates);
             end
             rstates=model.getResultStates;
-            pku=zeros(NrOfProcesses,obj.NrOfStates);
+            pku=zeros(NrOfProcesses+1,obj.NrOfStates);
             for j=1:obj.NrOfStates
                 cost=rstates{j}.getDirectProcessCost;
                 obj.setValues(cType.SummaryId.PROCESS_DIRECT_COST,j,cost.CP');
@@ -59,7 +63,7 @@ classdef cModelSummary < cResultId
                     obj.setValues(cType.SummaryId.FLOW_GENERALIZED_COST,j,fcost.C');
                     obj.setValues(cType.SummaryId.FLOW_GENERALIZED_UNIT_COST,j,fcost.c');
                 end
-                pku(:,j)=rstates{j}.UnitConsumption';
+                pku(:,j)=rstates{j}.ProcessesExergy.vK';
             end
             obj.status=true;
             tmp=model.DataModel.getTableModel;

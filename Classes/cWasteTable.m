@@ -3,10 +3,10 @@ classdef cWasteTable < cResultId
 %
 	properties (GetAccess=public,SetAccess=private)
 		NrOfWastes     % Number of Wastes
+        Flows          % Waste flows
 		Type           % Type processing of wastes (text)
         typeId         % Type Id for processing wastes
-		Processes      % Dissipative processes
-		Flows          % Waste flows
+        Processes      % Dissipative processes
 		Values         % Cost allocation ratios
 		RecycleRatio   % Ratio of recycling
 	end

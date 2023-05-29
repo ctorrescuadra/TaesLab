@@ -375,7 +375,9 @@ classdef ThermoeconomicPanel < handle
 				set(obj.tb_ts,'enable','on');
                 set(obj.tb_ta,'enable','on');
                 set(obj.tb_ps,'enable','on');
-                set(obj.sr_checkbox,'enable','on');
+				if data.NrOfStates>1
+                	set(obj.sr_checkbox,'enable','on');
+				end
 				set(obj.save_buttom,'enable','on');
 				obj.stateNames=tm.getStateNames;
 				set(obj.state_popup,'enable','on','string',obj.stateNames);

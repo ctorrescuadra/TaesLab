@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../plant_model.xsd">
+<root>
     <ProductiveStructure>
         <flows>
             <key>NG</key>
@@ -39,35 +39,30 @@
         </flows>
         <processes>
             <key>COMB</key>
-            <description>Combustor</description>
             <fuel>NG</fuel>
             <product>B3-B2</product>
             <type>PRODUCTIVE</type>
         </processes>
         <processes>
             <key>COMP</key>
-            <description>Compressor</description>
             <fuel>WC</fuel>
             <product>B2</product>
             <type>PRODUCTIVE</type>
         </processes>
         <processes>
             <key>GTRB</key>
-            <description>Turbine</description>
             <fuel>B3-B4</fuel>
             <product>WC+WN</product>
             <type>PRODUCTIVE</type>
         </processes>
         <processes>
             <key>HRSG</key>
-            <description>HRSG</description>
             <fuel>B4-B5</fuel>
             <product>QV</product>
             <type>PRODUCTIVE</type>
         </processes>
         <processes>
             <key>STCK</key>
-            <description>Stack</description>
             <fuel>B5</fuel>
             <product>QG</product>
             <type>DISSIPATIVE</type>
@@ -264,7 +259,7 @@
                 <value>888.2</value>
             </exergy>
         </States>
-        <States state="ECTR">
+        <States state="TGASR">
             <exergy>
                 <key>NG</key>
                 <value>36620</value>
@@ -283,7 +278,7 @@
             </exergy>
             <exergy>
                 <key>B5</key>
-                <value>548.6</value>
+                <value>11707</value>
             </exergy>
             <exergy>
                 <key>WC</key>
@@ -295,14 +290,52 @@
             </exergy>
             <exergy>
                 <key>QV</key>
-                <value>7545</value>
+                <value>0</value>
             </exergy>
             <exergy>
                 <key>QG</key>
-                <value>548.6</value>
+                <value>11707</value>
             </exergy>
         </States>
     </ExergyStates>
+    <Format>
+        <definitions>
+            <key>EXERGY</key>
+            <width>10</width>
+            <precision>1</precision>
+            <unit>(kW)</unit>
+        </definitions>
+        <definitions>
+            <key>EXERGY_COST</key>
+            <width>10</width>
+            <precision>1</precision>
+            <unit>(kW)</unit>
+        </definitions>
+        <definitions>
+            <key>EXERGY_UNIT_COST</key>
+            <width>10</width>
+            <precision>4</precision>
+            <unit>(J/J)</unit>
+        </definitions>
+        <definitions>
+            <key>GENERALIZED_COST</key>
+            <width>10</width>
+            <precision>1</precision>
+            <unit>(c/h)</unit>
+        </definitions>
+        <definitions>
+            <key>GENERALIZED_UNIT_COST</key>
+            <width>10</width>
+            <precision>4</precision>
+            <unit>(c/kWh)</unit>
+        </definitions>
+        <definitions>
+            <key>DIAGNOSIS</key>
+            <width>10</width>
+            <precision>3</precision>
+            <unit>(kW)</unit>
+        </definitions>
+    </Format>
     <WasteDefinition>
         <wastes>
             <flow>QG</flow>
@@ -371,43 +404,31 @@
                 <value>8715.56</value>
             </processes>
         </Samples>
+        <Samples sample="TGASR">
+            <flows>
+                <key>NG</key>
+                <value>1.32</value>
+            </flows>
+            <processes>
+                <key>COMB</key>
+                <value>141.92</value>
+            </processes>
+            <processes>
+                <key>COMP</key>
+                <value>1216.38</value>
+            </processes>
+            <processes>
+                <key>GTRB</key>
+                <value>1662.4</value>
+            </processes>
+            <processes>
+                <key>HRSG</key>
+                <value>0</value>
+            </processes>
+            <processes>
+                <key>STCK</key>
+                <value>0</value>
+            </processes>
+        </Samples>
     </ResourcesCost>
-    <Format>
-        <definitions>
-            <key>EXERGY</key>
-            <width>10</width>
-            <precision>1</precision>
-            <unit>(kW)</unit>
-        </definitions>
-        <definitions>
-            <key>EXERGY_COST</key>
-            <width>10</width>
-            <precision>1</precision>
-            <unit>(kW)</unit>
-        </definitions>
-        <definitions>
-            <key>EXERGY_UNIT_COST</key>
-            <width>10</width>
-            <precision>4</precision>
-            <unit>(J/J)</unit>
-        </definitions>
-        <definitions>
-            <key>GENERALIZED_COST</key>
-            <width>10</width>
-            <precision>1</precision>
-            <unit>(c/h)</unit>
-        </definitions>
-        <definitions>
-            <key>GENERALIZED_UNIT_COST</key>
-            <width>10</width>
-            <precision>4</precision>
-            <unit>(c/kWh)</unit>
-        </definitions>
-        <definitions>
-            <key>DIAGNOSIS</key>
-            <width>10</width>
-            <precision>3</precision>
-            <unit>(kW)</unit>
-        </definitions>
-    </Format>
 </root>

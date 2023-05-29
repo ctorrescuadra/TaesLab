@@ -76,7 +76,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         function res=getExergyResults(obj,pm)
         % Generate the exergy result tables
         %  Input:
-        %   e - cProcessModel object
+        %   pm - cExergyModel object
         %  Output:
         %   res - cResultInfo object (THERMOECONOMIC_STATE) with the result tables:
         %     eflows: Exergy values of the flows
@@ -282,7 +282,8 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             A=ps.ProductiveMatrix;
             nodes=[obj.streamKeys,obj.flowKeys,obj.processKeys(1:end-1)];
             tbl.pat=obj.getProductiveTable(id,A,nodes);
-            res=cResultInfo(ps,tbl);      
+            res=cResultInfo(ps,tbl);
+            res.setResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);    
         end
 
         function res=getSummaryResults(obj,ms)
@@ -311,7 +312,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             % Unit consumption Table
             id=cType.SummaryId.UNIT_CONSUMPTION;
             data=ms.UnitConsumption;
-            rowNames=obj.processKeys(1:end-1);
+            rowNames=obj.processKeys(1:end);
             tbl.pku=createSummaryTable(obj,id,data,rowNames,colNames);
             % Cost Tables
             N=length(ms.CostValues);
@@ -359,7 +360,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             ncols=length(colNames)-1;
             data=cell(nrows,ncols);
             for i=1:nrows
-                data{i,1}=ps.Streams(i).description;
+                data{i,1}=ps.Streams(i).definition;
                 data{i,2}=ps.Streams(i).type;
             end
             res=obj.createCellTable(id,data,rowNames,colNames);
@@ -374,10 +375,9 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             ncols=length(colNames)-1;
             data=cell(nrows,ncols);
             for i=1:nrows
-                data{i,1}=ps.Processes(i).description;
-                data{i,2}=ps.Processes(i).fuel;
-                data{i,3}=ps.Processes(i).product;
-                data{i,4}=ps.Processes(i).type;
+                data{i,1}=ps.Processes(i).fuel;
+                data{i,2}=ps.Processes(i).product;
+                data{i,3}=ps.Processes(i).type;
             end
             res=obj.createCellTable(id,data,rowNames,colNames);
         end

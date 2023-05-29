@@ -132,7 +132,9 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.debug=param.Debug;
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
-            obj.Summary=param.Summary;
+            if obj.summaryEnable
+                obj.Summary=param.Summary;
+            end
             % Load Exergy values (all states)
             states=model.States;
             obj.rstate=cell(1,model.NrOfStates);
@@ -248,7 +250,7 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function set.Summary(obj,value)
         % Set Summary parameter
-            if obj.Summary~=value
+            if obj.checkSummary(value)
                 obj.Summary=value;
                 obj.setSummaryResults;
             end
@@ -303,9 +305,6 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function res=summaryResults(obj)
         % Get the Summary Results cResultInfo object
-            if ~obj.Summary
-                obj.setSummary(true);
-            end
             res=obj.msr;
         end
 
@@ -367,7 +366,6 @@ classdef cThermoeconomicModel < cStatusLogger
         %       res - cResultInfo (PRODUCTIVE_STRUCTURE) 
             res=getProductiveDiagram(obj.fmt,obj.productiveStructure.Info);
             res.setProperties(obj.ModelName,'SUMMARY');
-            res.setResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
         end
 
         function res=getFuelImpact(obj)
@@ -444,6 +442,11 @@ classdef cThermoeconomicModel < cStatusLogger
             res=logical(obj.DataModel.isWaste);
         end
 
+        function res=summaryEnable(obj)
+        % Indicates if summary is available
+            res=obj.DataModel.NrOfStates>1;
+        end
+
         function res=getWasteFlows(obj)
         % get waste flows list (cell aarray)
             res=getWasteFlows(obj.DataModel);
@@ -472,6 +475,11 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function printSummary(obj,table)
         % Print the summary tables
+            log=cStatus();
+            if ~obj.summaryEnable
+                log.printWarning('Summary Requires more than one State');
+                return
+            end
             if ~obj.Summary
                 obj.setSummary(true);
             end
@@ -507,6 +515,11 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function viewSummaryTable(obj,name)
         % View a summary table in a GUI Table
+            log=cStatus();
+            if ~obj.summaryEnable
+                log.printWarning('Summary Requires more than one State');
+                return
+            end
             if ~obj.Summary
                 obj.setSummary(true);
             end
@@ -534,6 +547,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
+            log=cStatus();
+            if ~obj.summaryEnable
+                log.printWarning('Summary Requires more than one State');
+                return
+            end
             if ~obj.Summary
                 obj.setSummary(true);
             end
@@ -594,7 +612,12 @@ classdef cThermoeconomicModel < cStatusLogger
         % Show a barplot of the summary cost tables
         %   Input:
         %       varargin - See cResultInfo/graphSummary
-            if ~obj.Summary
+            log=cStatus();
+            if ~obj.summaryEnable
+                log.printWarning('Summary Requires more than one State');
+                return
+            end
+            if ~obj.Summary 
                 obj.setSummary(true);
             end
             graphSummary(obj.msr,varargin{:});
@@ -910,22 +933,26 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.printDebugInfo('Compute Thermoeconomic Diagnosis for State: %s',obj.State);
             else
                 sol.printLogger;
-                sol.printWarning('Thermoeconomic Diagnosis cannot be calculated');
+                sol.printError('Thermoeconomic Diagnosis cannot be calculated');
                 obj.Results.ThermoeconomicDiagnosis=[];
             end
         end
 
         function res=setSummaryResults(obj)
         % Obtain Summary Results
-            if ~obj.activeSet
+            if ~obj.activeSet || ~obj.summaryEnable
                 return
             end
             if obj.Summary
                 tmp=cModelSummary(obj);
-                res=getSummaryResults(obj.fmt,tmp);
-                res.setProperties(obj.ModelName,'SUMMARY');
-                obj.msr=res;
-                obj.printDebugInfo('Summary Results have been Calculated');
+                if tmp.isValid
+                    res=getSummaryResults(obj.fmt,tmp);
+                    res.setProperties(obj.ModelName,'SUMMARY');
+                    obj.msr=res;
+                    obj.printDebugInfo('Summary Results have been Calculated');
+                else
+                    tmp.printLogger;
+                end
             elseif ~isempty(obj.msr)
                 obj.msr=[];
                 obj.printDebugInfo('Summary Results have been Desactivated');
@@ -1043,6 +1070,23 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if strcmp(obj.DiagnosisMethod,value)
+                log.printWarning('No parameter change. The new state is equal to the previous one');
+                return
+            end
+            res=true;
+        end
+
+        function res=checkSummary(obj,value)
+            res=false;
+            log=cStatus();
+            if ~obj.activeSet
+                return
+            end
+            if ~obj.summaryEnable
+                log.printWarning('Summary requires more than one state',value);
+                return
+            end
+            if obj.Summary==value
                 log.printWarning('No parameter change. The new state is equal to the previous one');
                 return
             end

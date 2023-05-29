@@ -1,9 +1,9 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="4264841323" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab" name="TaesLab" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="866064847" file="D:\Documents\Termoeconomia\TaesLab\TaesLab.prj" location="D:\Documents\Termoeconomia\TaesLab" name="TaesLab" target="target.mlapps" target-name="Package App">
     <param.appname>TaesLab</param.appname>
     <param.authnamewatermark>César Torres Cuadra</param.authnamewatermark>
     <param.email>ctorresc@unizar.es</param.email>
-    <param.company>Universidad de Zaragoza</param.company>
+    <param.company>Instituto CIRCE. Universidad de Zaragoza</param.company>
     <param.icon>${PROJECT_ROOT}\TaesLab_resources\icon_24.png</param.icon>
     <param.icons>
       <file>${PROJECT_ROOT}\TaesLab_resources\icon_48.png</file>
@@ -108,7 +108,7 @@
     </fileset.resources>
     <fileset.package />
     <build-deliverables>
-      <file location="C:\Users\ctorr\Documents\Proyectos" name="TaesLab" optional="false">C:\Users\ctorr\Documents\Proyectos\TaesLab</file>
+      <file location="D:\Documents\Termoeconomia" name="TaesLab" optional="false">D:\Documents\Termoeconomia\TaesLab</file>
     </build-deliverables>
     <workflow />
     <matlab>

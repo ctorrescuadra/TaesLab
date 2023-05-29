@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="4273876864" file="D:\Documents\Termoeconomia\TaesLab\TaesLab_app.prj" location="D:\Documents\Termoeconomia\TaesLab" name="TaesLab_app" preferred-package-location="C:\Users\ctorr\Documents\Proyectos\TaesLab\TaesLab_app\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="1933099231" file="D:\Documents\Termoeconomia\TaesLab\TaesLab_app.prj" location="D:\Documents\Termoeconomia\TaesLab" name="TaesLab_app" preferred-package-location="D:\Documents\Termoeconomia\TaesLab\TaesLab_app\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>TaesLab</param.appname>
     <param.icon>${PROJECT_ROOT}\TaesLab_app_resources\icon.ico</param.icon>
     <param.icons>
@@ -32,7 +32,7 @@
     <param.web.mcr>true</param.web.mcr>
     <param.package.mcr>false</param.package.mcr>
     <param.no.mcr>false</param.no.mcr>
-    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.web.mcr.name>TaesLab_install</param.web.mcr.name>
     <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
     <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
     <param.windows.command.prompt>true</param.windows.command.prompt>
@@ -65,7 +65,6 @@
       <param.web.mcr />
       <param.package.mcr />
       <param.no.mcr />
-      <param.web.mcr.name />
       <param.package.mcr.name />
       <param.no.mcr.name />
       <param.windows.command.prompt />
@@ -87,9 +86,10 @@
       <file>${PROJECT_ROOT}\Apps\Resources\sr.png</file>
       <file>${PROJECT_ROOT}\Apps\Resources\TaesLab.png</file>
       <file>${PROJECT_ROOT}\Base\SaveDataModel.m</file>
+      <file>${PROJECT_ROOT}\Base\SaveDiagramFP.m</file>
+      <file>${PROJECT_ROOT}\Base\SaveResults.m</file>
       <file>${PROJECT_ROOT}\Classes\cDiagnosis.m</file>
       <file>${PROJECT_ROOT}\Classes\cDiagnosisR.m</file>
-      <file>${PROJECT_ROOT}\Classes\cDiagramFP.m</file>
       <file>${PROJECT_ROOT}\Classes\cDictionary.m</file>
       <file>${PROJECT_ROOT}\Classes\cExergyModel.m</file>
       <file>${PROJECT_ROOT}\Classes\cGraphResults.m</file>
@@ -121,6 +121,7 @@
       <file>${PROJECT_ROOT}\Classes\cResultTableBuilder.m</file>
       <file>${PROJECT_ROOT}\Classes\cSparseRow.m</file>
       <file>${PROJECT_ROOT}\Classes\cStack.m</file>
+      <file>${PROJECT_ROOT}\Classes\cStatus.m</file>
       <file>${PROJECT_ROOT}\Classes\cStatusLogger.m</file>
       <file>${PROJECT_ROOT}\Classes\cTable.m</file>
       <file>${PROJECT_ROOT}\Classes\cTableCell.m</file>
@@ -139,8 +140,6 @@
       <file>${PROJECT_ROOT}\Functions\checkModel.m</file>
       <file>${PROJECT_ROOT}\Functions\divideCol.m</file>
       <file>${PROJECT_ROOT}\Functions\divideRow.m</file>
-      <file>${PROJECT_ROOT}\Functions\exportCSV.m</file>
-      <file>${PROJECT_ROOT}\Functions\exportXLS.m</file>
       <file>${PROJECT_ROOT}\Functions\importMAT.m</file>
       <file>${PROJECT_ROOT}\Functions\isMatlab.m</file>
       <file>${PROJECT_ROOT}\Functions\isNumCellArray.m</file>

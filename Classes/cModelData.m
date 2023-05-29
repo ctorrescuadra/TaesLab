@@ -3,7 +3,6 @@ classdef cModelData < cStatusLogger
     %  cModelData methods:
     %    obj.isWaste
     %    obj.isResourcesCost
-    %    obj.isFormat
     %    log=saveAsXML(filename)
     %    log=saveAsJSON(filename)
     %
@@ -45,65 +44,64 @@ classdef cModelData < cStatusLogger
         end
 
         function res=get.ProductiveStructure(obj)
-            % get ProductiveStructure data
-                if obj.isValid
-                    res=obj.dm.ProductiveStructure;
-                else
-                    res=[];
-                end
+        % get ProductiveStructure data
+            if obj.isValid
+                res=obj.dm.ProductiveStructure;
+            else
+                res=[];
             end
+        end
     
-            function res=get.ExergyStates(obj)
-            % get ExergyStates data
-                if obj.isValid
-                    res=obj.dm.ExergyStates;
-                else
-                    res=[];
-                end
+        function res=get.ExergyStates(obj)
+        % get ExergyStates data
+            if obj.isValid
+                res=obj.dm.ExergyStates;
+            else
+                res=[];
             end
+        end
     
-            function res=get.WasteDefinition(obj)
-            % get WasteDefinition data
-                if obj.isValid && obj.isWaste
-                    res=obj.dm.WasteDefinition;
-                else
-                    res=[];
-                end
+        function res=get.WasteDefinition(obj)
+        % get WasteDefinition data
+            if obj.isValid && obj.isWaste
+                res=obj.dm.WasteDefinition;
+            else
+                res=[];
             end
+        end
     
-            function res=get.ResourcesCost(obj)
-            % get ResourcesCost data
-                if obj.isValid && obj.isResourceCost
-                    res=obj.dm.ResourcesCost;
-                else
-                    res=[];
-                end
+        function res=get.ResourcesCost(obj)
+        % get ResourcesCost data
+            if obj.isValid && obj.isResourceCost
+                res=obj.dm.ResourcesCost;
+            else
+                res=[];
             end
+        end    
     
-            function res=get.Format(obj)
-            % get Format data
-                if obj.isValid && obj.isFormat
-                    res=obj.dm.Format;
-                else
-                    res=[];
-                end
+        function res=get.Format(obj)
+        % get Format data
+            if obj.isValid
+                res=obj.dm.Format;
+            else
+                res=[];
             end
+        end
+
+        function setWasteDefinition(obj,wd)
+        % Set Waste Definition private value
+            obj.dm.WasteDefinition=wd;
+        end
 
         function res=isWaste(obj)
-            %isWaste Indicate is optional waste element exists
+        %isWaste Indicate is optional waste element exists
             id=cType.DataId.WASTE;
             res = isfield(obj.dm,cType.DataElements{id});
         end
 
         function res=isResourceCost(obj)
-            %isResources Indicate is optional resources cost element exists
+        %isResources Indicate is optional resources cost element exists
             id=cType.DataId.RESOURCES;
-            res = isfield(obj.dm,cType.DataElements{id});
-        end
-
-        function res=isFormat(obj)
-            %isFormat Indicate is optional format element exists
-            id=cType.DataId.FORMAT;
             res = isfield(obj.dm,cType.DataElements{id});
         end
 
@@ -129,9 +127,6 @@ classdef cModelData < cStatusLogger
                 log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
                 return
             end
-            if log.isValid
-                log.messageLog(cType.INFO,'Data Model available on file %s',filename);
-            end
 		end
 
         function log=saveAsJSON(obj,filename)
@@ -154,9 +149,6 @@ classdef cModelData < cStatusLogger
                 log.messageLog(cType.ERROR,err.message);
                 log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
                 return
-            end
-            if log.isValid
-                log.messageLog(cType.INFO,'Data Model available on file %s',filename);
             end
         end
     end

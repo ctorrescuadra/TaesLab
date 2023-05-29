@@ -38,31 +38,31 @@
         "type": "INTERNAL"
       },
       {
-        "key": "B10",
+        "key": "WT1",
         "type": "INTERNAL"
       },
       {
-        "key": "B11",
+        "key": "WT2",
         "type": "INTERNAL"
       },
       {
-        "key": "B12",
+        "key": "WP1",
         "type": "INTERNAL"
       },
       {
-        "key": "B13",
+        "key": "WP2",
         "type": "INTERNAL"
       },
       {
-        "key": "B14",
+        "key": "WN",
         "type": "OUTPUT"
       },
       {
-        "key": "B15",
+        "key": "NG",
         "type": "RESOURCE"
       },
       {
-        "key": "B16",
+        "key": "QC",
         "type": "WASTE"
       }
     ],
@@ -70,7 +70,7 @@
       {
         "key": "BOIL",
         "description": "Boiler",
-        "fuel": "B15",
+        "fuel": "NG",
         "product": "(B1-B8)+(B3-B2)",
         "type": "PRODUCTIVE"
       },
@@ -78,20 +78,20 @@
         "key": "HTRB",
         "description": "HP Turbine",
         "fuel": "B1-B2-B9",
-        "product": "B10",
+        "product": "WT1",
         "type": "PRODUCTIVE"
       },
       {
         "key": "LTRB",
         "description": "LP Turbine",
         "fuel": "B3-B4",
-        "product": "B11",
+        "product": "WT2",
         "type": "PRODUCTIVE"
       },
       {
         "key": "LPMP",
         "description": "LP Pump",
-        "fuel": "B12",
+        "fuel": "WP1",
         "product": "B6-B5",
         "type": "PRODUCTIVE"
       },
@@ -105,22 +105,22 @@
       {
         "key": "HPMP",
         "description": "LP Pump",
-        "fuel": "B13",
+        "fuel": "WP2",
         "product": "B8-B7",
         "type": "PRODUCTIVE"
       },
       {
         "key": "GEN",
         "description": "Generator",
-        "fuel": "B10+B11",
-        "product": "B12+B13+B14",
+        "fuel": "WT1+WT2",
+        "product": "WP1+WP2+WN",
         "type": "PRODUCTIVE"
       },
       {
         "key": "COND",
         "description": "Condenser",
         "fuel": "B4-B5",
-        "product": "B16",
+        "product": "QC",
         "type": "DISSIPATIVE"
       }
     ]
@@ -167,31 +167,31 @@
             "value": 4696
           },
           {
-            "key": "B10",
+            "key": "WT1",
             "value": 9739
           },
           {
-            "key": "B11",
+            "key": "WT2",
             "value": 31517
           },
           {
-            "key": "B12",
+            "key": "WP1",
             "value": 115.9
           },
           {
-            "key": "B13",
+            "key": "WP2",
             "value": 314.6
           },
           {
-            "key": "B14",
+            "key": "WN",
             "value": 40000
           },
           {
-            "key": "B15",
+            "key": "NG",
             "value": 129713
           },
           {
-            "key": "B16",
+            "key": "QC",
             "value": 5340
           }
         ]
@@ -236,34 +236,74 @@
             "value": 2835
           },
           {
-            "key": "B10",
+            "key": "WT1",
             "value": 9384
           },
           {
-            "key": "B11",
+            "key": "WT2",
             "value": 31854
           },
           {
-            "key": "B12",
+            "key": "WP1",
             "value": 117.2
           },
           {
-            "key": "B13",
+            "key": "WP2",
             "value": 296.3
           },
           {
-            "key": "B14",
+            "key": "WN",
             "value": 40000
           },
           {
-            "key": "B15",
+            "key": "NG",
             "value": 130587
           },
           {
-            "key": "B16",
+            "key": "QC",
             "value": 5397
           }
         ]
+      }
+    ]
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
       }
     ]
   }

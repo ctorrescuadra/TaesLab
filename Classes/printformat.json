@@ -334,16 +334,11 @@
 			"key": "process",
 			"number": true,
 			"description": "Processes Table",
-			"columns": 5,
+			"columns": 4,
 			"fields": [
 				{
 					"name": "key",
 					"header": "Key",
-					"type": 2
-				},
-				{
-					"name": "description",
-					"header": "Description",
 					"type": 2
 				},
 				{
