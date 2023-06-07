@@ -128,11 +128,13 @@ classdef cReadExergy < cStatusLogger
 				end
             end
 			vK=vDivide(vF,vP);
+			vEf=vDivide(vP,vF);
 			vK(bypass)=1;
+			vEf(bypass)=1;
             % Assign values object class
 			obj.ps=ps;
 			obj.FlowsExergy=B;
-			obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK);
+			obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);
 			obj.StreamsExergy=struct('ET',ET,'E',E);
 			obj.ActiveProcesses= ~bypass;
         end

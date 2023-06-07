@@ -45,6 +45,7 @@ classdef cModelSummary < cResultId
             end
             rstates=model.getResultStates;
             pku=zeros(NrOfProcesses+1,obj.NrOfStates);
+            rex=zeros(NrOfFlows,obj.NrOfStates);
             for j=1:obj.NrOfStates
                 cost=rstates{j}.getDirectProcessCost;
                 obj.setValues(cType.SummaryId.PROCESS_DIRECT_COST,j,cost.CP');
@@ -64,10 +65,10 @@ classdef cModelSummary < cResultId
                     obj.setValues(cType.SummaryId.FLOW_GENERALIZED_UNIT_COST,j,fcost.c');
                 end
                 pku(:,j)=rstates{j}.ProcessesExergy.vK';
+                rex(:,j)=rstates{j}.FlowsExergy';
             end
             obj.status=true;
-            tmp=model.DataModel.getTableModel;
-            obj.ExergyData=cell2mat(tmp.Tables.Exergy.Data);
+            obj.ExergyData=rex;
             obj.UnitConsumption=pku;
             obj.StateNames=model.getStateNames;
             obj.ps=model.productiveStructure.Info;

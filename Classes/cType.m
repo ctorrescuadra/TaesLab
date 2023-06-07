@@ -130,7 +130,8 @@ classdef cType
 			'PROCESS_GENERAL_UNIT_COST','gpuc','FLOW_GENERAL_COST','gfc','FLOW_GENERAL_UNIT_COST','gfuc');
 		SummaryTableIndex={'dpc','dpuc','dfc','dfuc','gpc','gpuc','gfc','gfuc'};
 		% Type of columns for uitables
-        colType={'char','numeric'};   
+        colType={'char','numeric'};
+		colWidth=80;  
 		% Types of definet formats
 		Format=struct('NODE',1,'TEXT',2,'EXERGY',3,'EXERGY_COST',4,'EXERGY_UNIT_COST',5,...
 		'GENERALIZED_COST',6,'GENERALIZED_UNIT_COST',7,'DIAGNOSIS',8,'PERCENTAGE',9);

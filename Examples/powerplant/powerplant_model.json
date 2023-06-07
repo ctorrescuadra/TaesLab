@@ -274,7 +274,7 @@
         ]
       },
       {
-        "stateId": "TV89",
+        "stateId": "ETV89",
         "exergy": [
           {
             "key": "B1",
@@ -569,27 +569,27 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 119357
+            "value": 119366
           },
           {
             "key": "B2",
-            "value": 72833
+            "value": 72842
           },
           {
             "key": "B3",
-            "value": 62368
+            "value": 62376
           },
           {
             "key": "B4",
-            "value": 82199
+            "value": 82209
           },
           {
             "key": "B5",
-            "value": 54830
+            "value": 54836
           },
           {
             "key": "B6",
-            "value": 7547
+            "value": 7548
           },
           {
             "key": "B7",
@@ -601,19 +601,19 @@
           },
           {
             "key": "B9",
-            "value": 7267
+            "value": 7268
           },
           {
             "key": "B10",
-            "value": 8228
+            "value": 8238
           },
           {
             "key": "B11",
-            "value": 16487
+            "value": 16495
           },
           {
             "key": "B12",
-            "value": 11687
+            "value": 11684
           },
           {
             "key": "B13",
@@ -621,27 +621,27 @@
           },
           {
             "key": "B14",
-            "value": 8630
+            "value": 8632
           },
           {
             "key": "GN",
-            "value": 287555
+            "value": 287575
           },
           {
             "key": "WTA1",
-            "value": 32840
+            "value": 32843
           },
           {
             "key": "WTA2",
-            "value": 9783
+            "value": 9784
           },
           {
             "key": "WTB1",
-            "value": 17765
+            "value": 17767
           },
           {
             "key": "WTB2",
-            "value": 42779
+            "value": 42784
           },
           {
             "key": "WP1",
@@ -649,7 +649,7 @@
           },
           {
             "key": "WP2",
-            "value": 1074
+            "value": 1085
           },
           {
             "key": "WN",
@@ -657,18 +657,11 @@
           },
           {
             "key": "QC",
-            "value": 7440.8
+            "value": 7441.8
           }
         ]
       }
     ]
-  },
-  "WasteDefinition": {
-    "wastes": {
-      "flow": "QC",
-      "type": "RESOURCES",
-      "recycle": 0
-    }
   },
   "Format": {
     "definitions": [
@@ -709,5 +702,12 @@
         "unit": "(kW)"
       }
     ]
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "QC",
+      "type": "RESOURCES",
+      "recycle": 0
+    }
   }
 }

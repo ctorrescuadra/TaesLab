@@ -1,4 +1,5 @@
 {
+  "ModelName": "gturbo",
   "ProductiveStructure": {
     "flows": [
       {
@@ -129,7 +130,7 @@
         "type": "PRODUCTIVE"
       },
       {
-        "key": "ALTR",
+        "key": "GEN",
         "description": "Alternador",
         "fuel": "WT1+WT2-WC1-WC2",
         "product": "WN",
@@ -316,7 +317,7 @@
         ]
       },
       {
-        "stateId": "T79",
+        "stateId": "ET79",
         "exergy": [
           {
             "key": "B1",
@@ -397,7 +398,7 @@
         ]
       },
       {
-        "stateId": "C79",
+        "stateId": "EC79",
         "exergy": [
           {
             "key": "B1",
@@ -478,7 +479,7 @@
         ]
       },
       {
-        "stateId": "R78",
+        "stateId": "ER78",
         "exergy": [
           {
             "key": "B1",
@@ -559,7 +560,7 @@
         ]
       },
       {
-        "stateId": "T50",
+        "stateId": "T1050",
         "exergy": [
           {
             "key": "B1",
@@ -641,20 +642,6 @@
       }
     ]
   },
-  "WasteDefinition": {
-    "wastes": [
-      {
-        "flow": "QI",
-        "type": "IRREVERSIBILITY",
-        "recycle": 0
-      },
-      {
-        "flow": "QG",
-        "type": "IRREVERSIBILITY",
-        "recycle": 0.9
-      }
-    ]
-  },
   "Format": {
     "definitions": [
       {
@@ -692,6 +679,20 @@
         "width": 10,
         "precision": 3,
         "unit": "(kW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "QI",
+        "type": "IRREVERSIBILITY",
+        "recycle": 0
+      },
+      {
+        "flow": "QG",
+        "type": "IRREVERSIBILITY",
+        "recycle": 0.9
       }
     ]
   }

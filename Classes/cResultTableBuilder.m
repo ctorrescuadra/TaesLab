@@ -433,6 +433,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
             data(:,2)=num2cell(values.vP);
             data(:,3)=num2cell(values.vI);
             data(:,4)=num2cell(values.vK);
+            data(:,5)=num2cell(100*values.vEf);
             res=obj.createCellTable(id,data,rowNames,colNames);
         end
 
@@ -587,7 +588,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %   values - Malfunction table values
             id=cType.MatrixTable.MALFUNCTION_TABLE;
             rowNames=obj.processKeys;
-            colNames=horzcat(' ',rowNames(1:end-1),'DPs');
+            colNames=horzcat(' ',rowNames(1:end-1),'ΔPs');
             res=obj.createMatrixTable(id,values,rowNames,colNames);
         end
             
@@ -597,7 +598,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %   values - Malfunction cost table values
             id=cType.MatrixTable.MALFUNCTION_COST_TABLE;
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
-            colNames=horzcat(' ',obj.processKeys(1:end-1),'DCPs');
+            colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPs*');
             res=obj.createMatrixTable(id,values,rowNames,colNames);
         end
             
@@ -607,7 +608,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %   values - Irreversibility table values
             id=cType.MatrixTable.IRREVERSIBILITY_TABLE;
             rowNames=[obj.processKeys,'MF'];
-            colNames=horzcat(' ',obj.processKeys(1:end-1),'DPs');
+            colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPs');
             res=obj.createMatrixTable(id,values,rowNames,colNames);
         end
 

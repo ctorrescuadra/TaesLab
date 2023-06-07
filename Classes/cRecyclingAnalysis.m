@@ -60,11 +60,14 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
 
         function doAnalysis(obj,wkey)
         % Do the recycled analysis for waste wkey
-            wId=obj.modelFP.WasteData.getWasteIndex(wkey);
+            wd=obj.modelFP.WasteData;
+            wId=wd.getWasteIndex(wkey);
+
             if isempty(wId)
                 obj.messageLog(cType.ERROR,'Invalid waste key %s',wkey);
                 return
             end
+            rwv=wd.Values;
             obj.wasteFlow=wkey;
             x=(0:0.1:1)';
             yd=zeros(size(x,1),size(obj.outputId,2));
@@ -87,7 +90,9 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
             end
             obj.dValues=[x,yd];
             obj.gValues=[x,yg];
-            obj.wasteTable.setRecycleRatio(wId,wrc);
+            % Restore original values
+            wd.setRecycleRatio(wId,wrc);
+            wd.updateValues(rwv);
         end
     end
 end

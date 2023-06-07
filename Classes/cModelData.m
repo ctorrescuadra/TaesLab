@@ -130,7 +130,7 @@ classdef cModelData < cStatusLogger
 		end
 
         function log=saveAsJSON(obj,filename)
-        % save data model as XML file
+        % save data model as JSON file
         %  Input:
         %   filename - name of the output file
         %  Output:

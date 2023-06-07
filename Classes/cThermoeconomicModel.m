@@ -356,8 +356,6 @@ classdef cThermoeconomicModel < cStatusLogger
             else
                 ra.printLogger;
             end
-            val=obj.fp1.WasteData.getRecycleRatio(wkey);
-            setWasteRecycled(obj,wkey,val);
         end
 
         function res=productiveDiagram(obj)

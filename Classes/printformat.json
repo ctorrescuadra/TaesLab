@@ -304,12 +304,12 @@
 				},
 				{
 					"name": "DI",
-					"header": "DI",
+					"header": "\u0394I",
 					"type": 8
 				},
 				{
 					"name": "DPs",
-					"header": "DPs",
+					"header": "\u0394Ps",
 					"type": 8
 				},
 				{
@@ -324,7 +324,7 @@
 				},
 				{
 					"name": "DCPs",
-					"header": "DPs*",
+					"header": "\u0394Ps*",
 					"type": 8
 				}
 			]
@@ -333,7 +333,7 @@
 			"id": 8,
 			"key": "process",
 			"number": true,
-			"description": "Processes Table",
+			"description": "Processes Definition Table",
 			"columns": 4,
 			"fields": [
 				{
@@ -362,7 +362,7 @@
 			"id": 9,
 			"key": "stream",
 			"number": true,
-			"description": "Streams Table",
+			"description": "Productive Groups Definition Table",
 			"columns": 3,
 			"fields": [
 				{
@@ -386,7 +386,7 @@
 			"id": 10,
 			"key": "flow",
 			"number": true,
-			"description": "Flows Table",
+			"description": "Flows Definition Table",
 			"columns": 4,
 			"fields": [
 				{
@@ -416,7 +416,7 @@
 			"key": "eprocess",
 			"number": false,
 			"description": "Processes Exergy Table",
-			"columns": 5,
+			"columns": 6,
 			"fields": [
 				{
 					"name": "key",
@@ -442,6 +442,11 @@
 					"name": "vK",
 					"header": "k",
 					"type": 5
+				},
+				{
+					"name": "vEf",
+					"header": "\u03B7",
+					"type": 9
 				}
 			]
 		},
@@ -449,7 +454,7 @@
 			"id": 12,
 			"key": "estream",
 			"number": false,
-			"description": "Streams Exergy Table",
+			"description": "Productive Groups Exergy Table",
 			"columns": 3,
 			"fields": [
 				{

@@ -103,7 +103,7 @@ classdef (Sealed) cTableCell < cTableResult
 		
         function res=getColumnFormat(obj)
         % Get the format of each column (TEXT or NUMERIC)
-            res=cellfun(@(x) cType.colType(strContains(x,'f')+1),obj.Format(3:end));
+            res=cellfun(@(x) cType.colType(strContains(x,'f')+1),obj.Format(2:end));
         end
 
         function res=getDescriptionLabel(obj)

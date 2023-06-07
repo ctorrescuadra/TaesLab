@@ -81,7 +81,7 @@ function res = RecyclingAnalysis(data,varargin)
     wt=mfp.WasteData;
     if isempty(param.WasteFlow)
         wid=wt.Flows(1);
-        param.WasteFlow=model.ProductiveStructure.Flows(wid).key;
+        param.WasteFlow=data.ProductiveStructure.Flows(wid).key;
     else
         wid=wt.getWasteIndex(param.WasteFlow);
         if isempty(wid)

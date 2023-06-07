@@ -399,6 +399,7 @@ classdef cModelFPR < cProcessModel
 		
 		function res=wasteProcessTable(obj)
 		% Calculate the waste allocation ratios, using ModelFP info.
+            res=[];
 			wt=obj.WasteData;
 			NR=wt.NrOfWastes;
 			N=obj.NrOfProcesses;
