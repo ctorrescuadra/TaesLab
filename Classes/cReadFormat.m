@@ -83,7 +83,7 @@ classdef cReadFormat < cStatusLogger
 
 		function res=get.PrintConfig(obj)
 		% show print configuration
-			res=struct('Tables',obj.cfgTables,'Matrices',obj.cfgMatrices,'Format',obj.cfgTypes);
+			res=struct('Tables',obj.cfgTables,'Matrices',obj.cfgMatrices,'Summary',obj.cfgSummary,'Format',obj.cfgTypes);
         end
     end
 

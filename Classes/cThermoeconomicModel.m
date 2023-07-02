@@ -15,6 +15,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %       obj.setCostTables(value)
 %       obj.setDiagnosisMethod(value)
 %       obj.setDebug(value)
+%       obj.setSumary(value)
 %   Results Info Methods
 %       res=obj.productiveStructure
 %       res=obj.termoeconomicState(state)
@@ -38,19 +39,22 @@ classdef cThermoeconomicModel < cStatusLogger
 %       obj.printIndexTable
 %       obj.printResults
 %       obj.printSummary(tbl)
-%       obj.printTable(tbl)
+%       obj.printResultTable(tbl)
+%   View Table Methods
+%       obj.viewResultTable(tbl)
+%       obj.viewSummaryTable(tbl)
 %   Save Methods
-%       log=obj.saveResults(filename)
+%       log=obj.saveModelResults(filename)
 %       log=obj.saveDataModel(filename)
 %       log=obj.saveDiagramFP(filename)
+%       log=obj.saveProductiveDiagram(filename)
 %       log=obj.saveSummary(filename)
 %   Graph Methods
-%       log=obj.graphResults(graph)
 %       log=obj.graphSummary(graph)
 %       log=obj.graphDiagramFP(graph)
 %       log=obj.graphCost(graph)
 %       log=obj.graphDiagnosis(graph)
-%       res=obj.graphRecycling(wkey)
+%       res=obj.graphRecycling(graph,wkey)
 %       res=obj.flowsDiagram
 %   Waste Methods
 %       res=obj.wasteAllocation

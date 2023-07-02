@@ -1,21 +1,22 @@
 function res = RecyclingAnalysis(data,varargin)
-% RecyclingAnalysis provide a recycling analysis of the plant
-%   Given a waste flow calculates the cost of output flows (final products
-%   and wastes) when it is recycled from 0 to %100.
+% Provide a recycling analysis of the plant
+% Given a waste flow calculates the cost of output flows (final products and wastes)
+% when it is recycled from 0 to %100.
+%   USAGE: 
+%       res = RecyclingAnalysis(data, options)
 %   INPUT:
 %       data - cReadModel object
-%       varargin 
+%       options - A structure containing optional parameters 
 %           State: Operation state
 %           WasteFlow: WasteFlow key to recycle
 %           CostTables: Select the recycling tables to obtain
-%               DIRECT - Only Direct cost are selected
+%               DIRECT - Only Direct cost are selected (default)
 %               GENERALIZED - Only Generalized costs are selected
 %               ALL - Both Direct and Generalized are slected
 %   OUTPUT:
 %       res - cResultInfo object with the recicling tables:
-%           cType.Tables.WASTE_RECYCLING_DIRECT (rad)
-%           cType.Tables.WASTE_RECYCLING_GENERAL (rag)
-%       and cRecyclingAnalysis Info      
+%               cType.Tables.WASTE_RECYCLING_DIRECT (rad)
+%               cType.Tables.WASTE_RECYCLING_GENERAL (rag)
 % See also cReadModel, cRecyclingAnalysis, cResultInfo
 %
     res=cStatusLogger();

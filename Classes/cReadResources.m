@@ -134,9 +134,10 @@ classdef cReadResources < cStatusLogger
 			N=obj.exm.NrOfProcesses;
 			vP=obj.exm.ProcessesExergy.vP(1:N);
 			vF=obj.exm.ProcessesExergy.vF(1:N);
-			obj.Z(idx)=0.0;
-			obj.zP=vDivide(obj.Z,vP);
-			obj.zF=vDivide(obj.Z,vF);
+			ztmp=obj.Z;
+            ztmp(idx)=0.0;
+			obj.zP=vDivide(ztmp,vP);
+			obj.zF=vDivide(ztmp,vF);
             res=true;
 		end
 

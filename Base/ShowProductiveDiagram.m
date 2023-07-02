@@ -1,10 +1,12 @@
 function res=ShowProductiveDiagram(data)
-% ShowProductiveDiagram - shows the productive diagram (Only Matlab)
+% Shows the productive graph (Only Matlab)
+%   USAGE:
+%       res=ShowProductiveDiagram(data)
 % 	INPUT:
 %		data - cReadModel object containing the data model information
 % 	OUTPUT:
 %		res - digraph object
-%   See also cReadModel, cProductiveStructure
+% See also cReadModel, cProductiveStructure
 %
 	res=cStatusLogger();
     if isOctave

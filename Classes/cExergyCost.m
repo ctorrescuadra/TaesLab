@@ -18,7 +18,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         AdjacencyMatrix     % Structure containing the adjacency submatrices
         IncidenceMatrix     % Structure containing the incidence matrices including waste
 		mG	                % Characteristic matrix
-		WasteTable          % Waste Table Info
+		WasteData          % Waste Table Info
 		mL                  % Production Operator
 		opR                 % Waste Operator
         isWaste=false       % Waste is well defined
@@ -60,7 +60,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         function res=get.IncidenceMatrix(obj)
         % Get the incidence matrix including waste allocation
             tmp=obj.ps.IncidenceMatrix;
-            iAR=cSparseRow(obj.WasteTable.Flows,obj.WasteTable.Values,obj.NrOfFlows);
+            iAR=cSparseRow(obj.WasteData.Flows,obj.WasteData.Values,obj.NrOfFlows);
             res=struct('iAF',tmp.iAF,'iAP',tmp.iAP,'iAR',sparse(iAR)');
         end
 
@@ -80,7 +80,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             wt=wd.getWasteTable;
             NR=obj.NrOfWastes;
-            obj.WasteTable=wt;
+            obj.WasteData=wt;
             obj.dprocess=wt.Processes;
             wft=obj.wasteFlowsTable(wt);
             if obj.isValid		

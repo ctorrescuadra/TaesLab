@@ -1,22 +1,24 @@
-function SaveProductiveDiagram(res,filename)
+function SaveProductiveDiagram(model,filename)
 % SaveProductiveDiagram saves the productive adjacency tables into a file
 %   The type of file depends on the file extension
 %   *.csv, *.xlsx and *.mat are allowed
+%   USAGE:
+%       SaveProductiveDiagram(model,filename)
 %   INPUT:
-%       res - cThermoeconomicModel object
+%       model - cThermoeconomicModel object
 %       filename - name of the output file (with extension)
-% See also cResultInfo, cThermoeconomicModel
+% See also cmodelultInfo, cThermoeconomicModel
 %
     log=cStatus(cType.VALID);
     % Check Input parameters
     if (nargin~=2) || ~cType.checkFileWrite(filename)
-        log.printError('Usage: SaveProductiveDiagram(res,filename)');
+        log.printError('Usage: SaveProductiveDiagram(model,filename)');
         return
     end
-    if isa(res,'cThermoeconomicModel')
-        log=saveProductiveDiagram(res,filename);
+    if isa(model,'cThermoeconomicModel')
+        log=saveProductiveDiagram(model,filename);
         printLogger(log);
     else
-        log.printError('Invalid result. It sould be a cThermoeconomicModel object');
+        log.printError('Invalid result model. It sould be a cThermoeconomicModel object');
     end
 end

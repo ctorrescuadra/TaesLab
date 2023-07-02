@@ -46,6 +46,9 @@ classdef cModelSummary < cResultId
             rstates=model.getResultStates;
             pku=zeros(NrOfProcesses+1,obj.NrOfStates);
             rex=zeros(NrOfFlows,obj.NrOfStates);
+            if model.isResourceCost
+                rsc=model.getResourcesCost;
+            end
             for j=1:obj.NrOfStates
                 cost=rstates{j}.getDirectProcessCost;
                 obj.setValues(cType.SummaryId.PROCESS_DIRECT_COST,j,cost.CP');
@@ -55,7 +58,7 @@ classdef cModelSummary < cResultId
                 obj.setValues(cType.SummaryId.FLOW_DIRECT_COST,j,fcost.C');
                 obj.setValues(cType.SummaryId.FLOW_DIRECT_UNIT_COST,j,fcost.c');
                 if model.isResourceCost
-                    rsc=model.getResourcesCost;
+                    rsc.setResources(rstates{j});
                     cost=rstates{j}.getGeneralProcessCost(rsc);
                     obj.setValues(cType.SummaryId.PROCESS_GENERALIZED_COST,j,cost.CP');
                     ucost=rstates{j}.getGeneralProcessUnitCost(rsc);

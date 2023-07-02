@@ -533,11 +533,11 @@
           },
           {
             "key": "QEXP",
-            "value": 3.1400000000000006
+            "value": 3.14
           },
           {
             "key": "QCND",
-            "value": 9.5600000000000023
+            "value": 9.56
           }
         ]
       }
@@ -567,13 +567,13 @@
         "key": "GENERALIZED_COST",
         "width": 10,
         "precision": 1,
-        "unit": "(c/h)"
+        "unit": "(c$/h)"
       },
       {
         "key": "GENERALIZED_UNIT_COST",
         "width": 10,
         "precision": 4,
-        "unit": "(c/kWh)"
+        "unit": "(c$/kWh)"
       },
       {
         "key": "DIAGNOSIS",

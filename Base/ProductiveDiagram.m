@@ -1,5 +1,7 @@
 function res=ProductiveDiagram(data)
-% ShowProductiveStructure - shows information about the productive structure of a plant
+% Get the adjacency tables of the productive structure
+%	USAGE:
+%		res=ProductiveDiagram(data)
 % 	INPUT:
 %		data - cReadModel object containing the data model information
 % 	OUTPUT:

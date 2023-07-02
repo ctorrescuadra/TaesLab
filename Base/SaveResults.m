@@ -3,6 +3,8 @@ function SaveResults(res,filename)
 %   The type of file depends on the file extension
 %   *.csv, *.xlsx and *.mat are allowed
 %   It calls cResultInfo method saveResults
+%   USAGE:
+%       SaveResults(res,filename)
 %   INPUT:
 %       results - cResultInfo or cThermoeconomicModel object
 %       filename - name of the output file (with extension)

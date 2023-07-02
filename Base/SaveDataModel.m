@@ -2,6 +2,8 @@ function SaveDataModel(arg,filename)
 % SaveResultModel saves the data model into a file and log the result
 %   The files *.csv, *.xlsx, *.json, *.xml and *.mat are allowed
 %   It calls cReadModel method saveDataModel
+%   USAGE:
+%       SaveDataModel(arg,filename)
 %   INPUT:
 %       arg - cReadModel or cThermoeconomicModel object
 %       filename - name of the output file (with extension)

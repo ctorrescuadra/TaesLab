@@ -63,11 +63,6 @@ classdef (Abstract) cTable < cStatusLogger
                 log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
             end
         end
-
-        function res=isNumeric(obj)
-        % Determine if the values of the table are numeric
-            res=isNumCellArray(obj.Data);
-        end
         
         function res=size(obj,dim)
         % Overload size function

@@ -1,16 +1,23 @@
 classdef ThermoeconomicPanel < handle
-% ThermoeconomicPanel is graphic user interface to select the thermoeconomic model parameters.
+% Graphic user interface to select the thermoeconomic model parameters.
 % Compatible App for Matlab/Octave
-%  	Execute the basic functions of ExIoLab class cThermoeconomicModel:
-%   	- productiveStructure
-%   	- thermoeconomicState
-%   	- thermoeconomicAnalysis
-%   	- thermoeconomicDiagnosis
-%  	and perform the following operations:
-%   	- Save the results as excel or csv files
-%   	- Show result on console
-%   	- Save variables in the base workspace
-%   	- View Result in tables and graphs
+% Execute the basic functions of class cThermoeconomicModel:
+%   - productiveStructure
+%   - thermoeconomicState
+%   - thermoeconomicAnalysis
+%   - thermoeconomicDiagnosis
+% and perform the following operations:
+%   - Save the results as excel or csv files
+%   - Show result on console
+%   - Save variables in the base workspace
+%   - View Result in tables and graphs
+%
+%	USAGE: app=ThermoeconomicPanel;
+%	OUTPUT:
+%		app - Contains information about the application
+%			Model: cThermoeconomicModel object
+%			Options: Current Parameters of the app
+%			Results: Structure containing the current result values
 % See also cThermoeconomicModel
 %
     properties(Access=private)

@@ -14,7 +14,8 @@ classdef (Sealed) cResultInfo < cModelTables
 %       obj.showDiagramFP;
 %       obj.showsFlowsDiagram;
 %   Methods inhereted from cModelTables
-%       obj.printTable(tbl)
+%       obj.getTable(table)
+%       obj.printTable(table)
 %       obj.printResults;
 %       obj.printIndexTable;
 %       obj.viewTable(table);
@@ -69,10 +70,10 @@ classdef (Sealed) cResultInfo < cModelTables
         %       obj.graphCost(graph)
         %   Input:   
         %       graph - (optional) table name to plot
-        %           cType.Graph.PROCESS_COST (dict)
-        %           cType.Graph.PROCESS_GENERALIZED_COST (gict)
-        %           cType.Graph.FLOW_COST (dfict)
-        %           cType.GraphMatrixTable.FLOW_GENERALIZED_COST (gfict)
+        %           cType.Tables.PROCESS_COST (dict)
+        %           cType.Tables.PROCESS_GENERALIZED_COST (gict)
+        %           cType.Tables.FLOW_COST (dfict)
+        %           cType.Tables.FLOW_GENERALIZED_COST (gfict)
         %       If graph is not selected first option is taken
         %
             % Check input

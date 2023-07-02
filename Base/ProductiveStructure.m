@@ -1,5 +1,7 @@
 function res=ProductiveStructure(data)
-% ShowProductiveStructure - shows information about the productive structure of a plant
+% Show information about the productive structure of a plant
+%	USAGE:
+%		res=ProductiveStructure(data)
 % 	INPUT:
 %		data - cReadModel object containing the data model information
 % 	OUTPUT:

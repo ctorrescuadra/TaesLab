@@ -1,14 +1,16 @@
 function res=DiagramFP(data,varargin)
-% DiagramFP - get the Diagram FP of a plant State
+% Get the Diagram FP of a plant State
+%	USAGE:
+%		res=DiagramFP(data, options)
 % 	INPUT:
 %		data - cReadModel Object containing the data information
-%   	varargin - an optional structure contains additional parameters:
+%   	optiond - a structure contains additional parameters (optional)
 %			State - Indicate a state to get exergy values. If not provided, first state is used
 %			Table - Select table for the Diagram FP
 %				cType.Tables.TABLE_FP (tfp)
 %				cType.Tables.COST_TABLE_FP (dcfp) 
 % 	OUTPUT:
-%		res - cResultInfo object contains the results of the exergy analysis for the required state
+%		res - cResultInfo object contains the adjacency FP table and additional variables
 % See also cModelFPR, cResultInfo
 %
 	res=cStatusLogger(); 

@@ -2,8 +2,10 @@ function SaveSummaryResults(model,filename)
 % SaveSummaryResults saves the summary cost tables into a file
 %   The type of file depends on the file extension
 %   *.csv, *.xlsx and *.mat are allowed
+%   USAGE:
+%       SaveSummaryResults(model,filename)
 %   INPUT:
-%       res - cThermoeconomicModel object
+%       model - cThermoeconomicModel object
 %       filename - name of the output file (with extension)
 % See also cThermoeconomicModel
 %

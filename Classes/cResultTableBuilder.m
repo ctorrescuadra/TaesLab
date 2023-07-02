@@ -119,7 +119,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %       gict:  generalized irreversibility cost table of processes
             tbl=struct();
             if ect.isWaste
-                tbl.wa=obj.getWasteAllocation(ect.WasteTable);
+                tbl.wa=obj.getWasteAllocation(ect.WasteData);
             end
             if options.DirectCost
                 dfcost=ect.getDirectFlowsCost;

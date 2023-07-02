@@ -1,8 +1,11 @@
 function res=ExergyCostCalculator(data,varargin)
-% ExergyCostCalculator Calculates the exergy cost values of a plant
+% Calculates the exergy cost values of a plant state
+% It uses the Structural Theory algorithm to compute the flows cost
+%	USAGE:
+%		res=ExergyCostCalculator(data, options)
 % 	INPUT:
 %   	data - cReadModel object whose contains the thermoeconomic data model
-%   	varargin - optional structure contains additional parameters: 
+%   	options - Structure contains additional parameters (optional)
 %   		State - Thermoeconomic state id. If missing first sample is taken   
 %       	CostTables - Indicate which cost tables are calculated
 %           	DIRECT:  calculates direct exergy cost tables

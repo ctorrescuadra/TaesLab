@@ -72,7 +72,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.messageLog(cType.ERROR,'Invalid number of states')
                 return
             end
-            if ~tbl.isNumeric
+            if ~isNumCellArray(tbl.Data)
                 obj.messageLog(cType.ERROR,'Invalid Exergy table');
                 return
             end
@@ -130,7 +130,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                         obj.messageLog(cType.ERROR,'Invalid Waste Allocation table');
                         return
                     end
-                    if ~tbl.isNumeric
+                    if ~isNumCellArray(tbl.Data)
                         obj.messageLog(cType.ERROR,'Invalid WasteAllocation table');
                     end
                     keys=tbl.ColNames(2:end);

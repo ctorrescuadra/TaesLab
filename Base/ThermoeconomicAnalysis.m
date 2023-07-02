@@ -1,9 +1,11 @@
 function res=ThermoeconomicAnalysis(data,varargin)
-% ThermoeconomicAnalysis - provides a termoeconomic analysis of a thermoeconomic state of the plant.
-% It calculates the exergy cost, Fuel-Product Irreversibility-Cost tables
+% Get the termoeconomic analysis of a plant state.
+% It calculates the exergy cost, Fuel-Product and Irreversibility-Cost tables
+%   USAGE:
+%       res=ThermoeconomicAnalysis(data, options)
 %   INPUT:
 % 	    data - cReadModel object whose contains the thermoeconomic data model
-%       varargin - an optional structure contains additional parameters:   
+%       options - an structure contains additional parameters:   
 %   	    State - Thermoeconomic state id. If missing first sample is taken   
 %           CostTables - Indicate which cost tables are calculated
 %               DIRECT:  calculates direct exergy cost tables

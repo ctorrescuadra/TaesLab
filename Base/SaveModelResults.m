@@ -1,8 +1,9 @@
-function SaveResultsModel(model,filename)
+function SaveModelResults(model,filename)
 % SaveResultModel saves the model results into a file
 %   The type of file depends on the file extension
 %   *.csv, *.xlsx and *.mat are allowed
-%   It calls cResultInfo method saveResults
+%   USAGE:
+%       SaveModelResults(model,filename)
 %   INPUT:
 %       results - cResultInfo or cThermoeconomicModel object
 %       filename - name of the output file (with extension)

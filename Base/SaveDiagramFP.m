@@ -2,13 +2,15 @@ function SaveDiagramFP(model,filename,varargin)
 % SaveDiagramFP saves the Diagram FP adjacency tables into a file
 %   The type of file depends on the file extension
 %   *.csv, *.xlsx and *.mat are allowed
+%   USAGE:
+%       SaveDiagramFP(model,filename,varargin)
 %   INPUT:
 %       model - cThermoeconomicModel object
 %       filename - name of the output file (with extension)
 %       varargin - optional parameter indicanting the type of FP table
 %           cType.Tables.TABLE_FP (default)
 %           cType.Tables.COST_TABLE_FP
-% See also cResultInfo, cThermoeconomicModel
+% See also cThermoeconomicModel
 %
     log=cStatus(cType.VALID);
     % Check Input parameters

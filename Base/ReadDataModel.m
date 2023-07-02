@@ -1,5 +1,7 @@
 function data=ReadDataModel(filename)
 % Read a data model file.
+%   USAGE:
+%       data=ReadDataModel(filename)
 %   INPUT:
 %       filename - data model file name
 %   OUTPUT:

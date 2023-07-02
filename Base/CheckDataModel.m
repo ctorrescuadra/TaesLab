@@ -1,10 +1,11 @@
 function data=CheckDataModel(filename)
-%  CheckDataModel - checks if all elements of the thermoeconomic model are valid, and logs about errors
-%   INPUT:
-%	    data_file - Thermoeconomic data model filename
-%   OUTPUT:
+% Read the data model and check it its elements are valid  
+%  USAGE:
+%       data=CheckDataModel(filename)
+%  INPUT: 
+%	    filename - Thermoeconomic data model filename
+%  OUTPUT:
 %	    data - cReadModel object associated to the data model file
-%	    Log information about Thermoeconomic model validation
 % See also cReadModel
 %	
     data=cStatusLogger();

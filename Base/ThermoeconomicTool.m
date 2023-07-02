@@ -1,8 +1,10 @@
 function model=ThermoeconomicTool(filename,varargin)
-% ThermoeconomicModel - launch function to use the cThermoeconomicModel class 
-%  INPUT:
+% Create a cThermoeconomicModel object from a data model file
+%   USAGE:
+%       model = ThermoeconomicTool(filename, options)
+%   INPUT:
 %   filename - data model filename
-%   varargin - optional parameters
+%   options - optional parameters
 %       State: Operation state name
 %       ReferenceState: Reference State name
 %       ResourceSample: Resource Sample name
@@ -17,8 +19,8 @@ function model=ThermoeconomicTool(filename,varargin)
 %       Summary - Activate Summary Results
 %       Debug - Print Debug information during execution
 %  OUTPUT:
-%   model - cThermoeconomicTool object
-%  See also cThermoeconomicTool
+%   model - cThermoeconomicModel object
+%  See also cThermoeconomicModel
 %
     model=cStatusLogger();
     % Check input parameters
