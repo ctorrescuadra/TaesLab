@@ -14,7 +14,6 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
     end
     properties(Access=private)
         ps           % Productive structure
-        outputId     % Output flows Id
         modelFP      % cModelFPR object
         wasteTable   % cReadWaste object
         resourceCost % cReadResource object
@@ -49,9 +48,6 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
                 obj.resourceCost=rsc;
             end
             obj.ps=fpm.ps;
-            % Get Output Flows Id
-            obj.outputId=obj.ps.SystemOutput.flows;
-            obj.OutputFlows={obj.ps.Flows(obj.outputId).key};
             % Assign object variables
             obj.modelFP=fpm;
             obj.wasteTable=fpm.WasteData;
@@ -62,32 +58,39 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
         % Do the recycled analysis for waste wkey
             wd=obj.modelFP.WasteData;
             wId=wd.getWasteIndex(wkey);
-
             if isempty(wId)
                 obj.messageLog(cType.ERROR,'Invalid waste key %s',wkey);
                 return
             end
+            idx=wd.Flows(wId);
+            % Get Output Flows Id
+            tmp=obj.ps.SystemOutput.flows;
+            outputId=[setdiff(tmp,idx),idx];
+            obj.OutputFlows={obj.ps.Flows(outputId).key};
+            % Save original values
             rwv=wd.Values;
-            obj.wasteFlow=wkey;
-            x=(0:0.1:1)';
-            yd=zeros(size(x,1),size(obj.outputId,2));
-            yg=zeros(size(x,1),size(obj.outputId,2));
-            sol=obj.modelFP;
             wrc=obj.wasteTable.RecycleRatio(wId); % Save original value
+            % Generate the table
+            x=(0:0.1:1)';
+            yd=zeros(size(x,1),size(outputId,2));
+            yg=zeros(size(x,1),size(outputId,2));
+            sol=obj.modelFP;
             for i=1:size(x,1)
                 obj.wasteTable.setRecycleRatio(wId,x(i));
                 sol.setWasteOperators;
                 if obj.directCost
                     ucost=sol.getDirectProcessUnitCost;
                     fc=sol.getDirectFlowsCost(ucost);
-                    yd(i,:)=fc.c(obj.outputId);
+                    yd(i,:)=fc.c(outputId);
                 end
                 if obj.generalCost
                     ucost=sol.getGeneralProcessUnitCost(obj.resourceCost);
                     fc=sol.getGeneralFlowsCost(ucost,obj.resourceCost);
-                    yg(i,:)=fc.c(obj.outputId);
+                    yg(i,:)=fc.c(outputId);
                 end
             end
+            % Set object variables
+            obj.wasteFlow=wkey;
             obj.dValues=[x,yd];
             obj.gValues=[x,yg];
             % Restore original values

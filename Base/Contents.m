@@ -31,7 +31,11 @@
 % Show Graphs
 %   ShowCostGraph           - Show a bar plot of the Irreversibility-Cost tables 
 %   ShowDiagnosisGraph      - Show a bar plot of the Diagnosis tables
-%   ShowProductiveDiagram   - Shows the productive diagram (Only Matlab)
+%   ShowFlowsDiagram        - Show the structural theory flows diagram (Only Matlab)
+%   ShowSummaryGraph        - Show the summary results graph 
+%   ShowProductiveDiagram   - Show the productive diagram (Only Matlab)
+%	ShowRecyclingGraph		- Show the recycling amalysis graph
+%	WasteAllocationGraph    - Show a pie chart with the waste allocation used
 %
 % GUI functions
 %   ThermoeconomicPanel     - Graphic user interface to select the thermoeconomic model parameters.

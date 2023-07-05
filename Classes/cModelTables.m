@@ -89,7 +89,7 @@ classdef cModelTables < cResultId
             log=cStatus(cType.VALID);
             res=obj.getTable(name);
             if isValid(res)
-                res.printFormatted;
+                res.printTable;
             else
                 log.printError('Table %s do NOT exists',name);
             end
@@ -150,7 +150,7 @@ classdef cModelTables < cResultId
                 log.printError('Invalid object to print')
                 return
             end
-            cellfun(@(x) printFormatted(x),obj.tableIndex);
+            cellfun(@(x) printTable(x),obj.tableIndex);
         end
 
         function log=saveResults(obj,filename)
@@ -355,7 +355,7 @@ classdef cModelTables < cResultId
                 return
             end
             % Print tables into file
-            cellfun(@(x) printFormatted(x,fId),obj.tableIndex);
+            cellfun(@(x) printTable(x,fId),obj.tableIndex);
             fclose(fId);
         end
     end

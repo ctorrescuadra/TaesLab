@@ -8,7 +8,7 @@ classdef (Sealed) cTableCell < cTableResult
 %       res=obj.getFormatedStruct(fmt)
 %       res=obj.getColumnFormat
 %       res=obj.getDescriptionLabel
-%       obj.printFormatted
+%       obj.printTable
 %   Methods Inhereted from cTableResult
 %       obj=cTableResult(data,rowNames,colNames)
 %       res=obj.getFormattedCell(fmt)
@@ -111,7 +111,7 @@ classdef (Sealed) cTableCell < cTableResult
             res=obj.Description;
         end
 
-        function printFormatted(obj,fId)
+        function printTable(obj,fId)
         % Print table on console in a pretty formatted way
             if nargin==1
                 fId=1;

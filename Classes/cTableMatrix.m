@@ -10,7 +10,7 @@ classdef (Sealed) cTableMatrix < cTableResult
 %       res=obj.getFormatedStruct(fmt)
 %       res=obj.getColumnFormat
 %       res=obj.getDescriptionLabel
-%       obj.printFormatted
+%       obj.printTable
 %       obj.isGraph
 %       obj.isDigraph
 %   Methods Inhereted from cTableResult
@@ -102,7 +102,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=[obj.Description,' ',obj.Unit];
         end
 
-        function printFormatted(obj,fId)
+        function printTable(obj,fId)
         % Print table on console in a pretty formatted way
             if nargin==1
                 fId=1;

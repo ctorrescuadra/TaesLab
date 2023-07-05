@@ -18,6 +18,10 @@ classdef cGraphResults < cStatusLogger
         function obj = cGraphResults(tbl, varargin)
 		% Constructor. Create the object with the graph properties  
             obj.status=cType.VALID;
+			if ~isa(tbl,'cTableResult')
+				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
+				return
+			end
 			if ~isValid(tbl) || ~isGraph(tbl)
 				obj.messageLog(cType.ERROR,'Invalid Graph Table %s',tbl.Name);
 				return
@@ -47,8 +51,33 @@ classdef cGraphResults < cStatusLogger
 				obj.messageLog(cType.ERROR,'Invalid Graph Type %d',obj.Type);
 				return
             end
- 
-		end
+        end
+
+        function showGraph(obj)
+            switch obj.Type
+			case cType.GraphType.COST
+				obj.graphCost;
+			case cType.GraphType.DIAGNOSIS
+				obj.graphDiagnosis;
+			case cType.GraphType.SUMMARY
+				obj.graphSummary;
+			case cType.GraphType.RECYCLING
+				obj.graphRecycling;
+			case cType.GraphType.WASTE_ALLOCATION
+				obj.graphWasteAllocation;
+            case cType.GraphType.DIGRAPH
+                if isMatlab
+				    obj.showDigraph;
+                end
+            case cType.GraphType.DIAGRAM_FP
+                if isMatlab
+                    obj.showDigraph;
+                end
+			otherwise
+				obj.messageLog(cType.ERROR,'Invalid Graph Type %d',obj.Type);
+				return
+            end   
+        end
 
 		function graphCost(obj)
 		% Plot the ICT graph cost
@@ -203,9 +232,8 @@ classdef cGraphResults < cStatusLogger
 
 		function setGraphRecyclingParameters(obj,tbl,label)
 		% Set the properties of graph recycling
-            if nargin<3
-                obj.messageLog(cType.ERROR,'Parameters Missing');
-                return
+            if nargin==2
+                label=tbl.ColNames{end};
             end
 			obj.Name='Recycling Cost Analysis';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',label,']'];
@@ -222,22 +250,25 @@ classdef cGraphResults < cStatusLogger
 			end
 		end
 
-        function setGraphWasteAllocationParameters(obj,tbl,idx)
+        function setGraphWasteAllocationParameters(obj,tbl,wf)
 		% Set the parameters of Waste Allocation pie chart
-            if nargin<3
+			switch nargin
+			case 2
+				idx=1;
+                wf=tbl.ColNames{idx+1};
+			case 3
+				cols=tbl.ColNames(2:end);
+				idx=find(strcmp(cols,wf),1);
+				if isempty(idx)
+					obj.messageLog(cType.ERROR,'Parameters missing');
+					return
+				end
+			otherwise
 				obj.messageLog(cType.ERROR,'Parameters missing');
-                return
-            end
-            if ~isnumeric(idx) || ~isscalar(idx) 
-                obj.messageLog(cType.ERROR,'Invalid parameter');
-                return
-            end
-            if (tbl.NrOfCols <= idx) || (idx < 1)
-                obj.messageLog(cType.ERROR,'Invalid parameter');
-                return
-            end
+				return
+			end
 			obj.Name='Waste Allocation Analysis';
-			obj.Title=[tbl.Description ' [',tbl.State,'/',tbl.ColNames{idx+1},']'];
+			obj.Title=[tbl.Description ' [',tbl.State,'/',wf,']'];
 			x=cell2mat(tbl.Data(:,idx));
 			jdx=find(x>1.0);
 			obj.xValues=x(jdx);

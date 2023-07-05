@@ -4,6 +4,7 @@ classdef (Abstract) cTableResult < cTable
 %       obj=cTableResult(data,rowNames,colNames)
 %       res=obj.getFormattedCell(fmt)
 %       obj.ViewTable(state)
+%       
 %   Methods inhereted from cTable:
 %       obj.setDescription(text)
 %       status=obj.checkTableSize;
@@ -39,11 +40,12 @@ classdef (Abstract) cTableResult < cTable
 
         function viewTable(obj)
         % View the values of the table (tbl) in a uitable graphic object
-        %  Input:
-        %   state - (optional) state name
-        %
             vt=cViewTable(obj);
-            vt.showTable
+            if isValid(vt)
+                vt.showTable
+            else
+                printLogger(vt);
+            end
         end
 
         function res=isGraph(obj)
@@ -53,33 +55,11 @@ classdef (Abstract) cTableResult < cTable
 
         function showGraph(obj,varargin)
         % Show the graph associated to the table
-            log=cStatus(cType.VALID);
-            if obj.isGraph
-                g=cGraphResults(obj,varargin{:});
-                if ~isValid(g)
-                    g.printLogger;
-                    return
-                end
-                switch obj.GraphType
-                    case cType.GraphType.COST
-                        g.graphCost;
-                    case cType.GraphType.DIAGNOSIS
-                        g.graphDiagnosis;
-                    case cType.GraphType.SUMMARY
-                        g.graphSummary;
-                    case cType.GraphType.DIAGRAM_FP
-                        g.showDigraph;
-                    case cType.GraphType.DIGRAPH
-                        g.showDigraph;
-                    case cType.GraphType.RECYCLING
-                        g.graphRecycling;
-                    case cType.GraphType.WASTE_ALLOCATION
-                        g.graphWasteAllocation;
-                    otherwise
-                        log.printWarning('Table %s has not a valid graph type',obj.Name);
-                end 
+            g=cGraphResults(obj,varargin{:});
+            if isValid(g)
+                g.showGraph;
             else
-                log.printWarning('Table %s has not a graph associated',obj.Name);
+                printLogger(g);
             end
         end
     end

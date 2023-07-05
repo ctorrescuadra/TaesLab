@@ -229,26 +229,24 @@ classdef (Sealed) cResultInfo < cModelTables
                 return
             end
     
-            if obj.ResultId==cType.ResultId.WASTE_ANALYSIS
-                wt=obj.Info;
-            elseif obj.ResultId==cType.ResultId.EXERGY_COST_CALCULATOR || ...
-                   obj.ResultId==cType.ResultId.THERMOECONOMIC_ANALYSIS
-                wt=obj.Info.WasteData;
+            if obj.ResultId==cType.ResultId.WASTE_ANALYSIS || ...
+                obj.ResultId==cType.ResultId.EXERGY_COST_CALCULATOR || ...
+                obj.ResultId==cType.ResultId.THERMOECONOMIC_ANALYSIS
+                tbl=obj.Tables.wa;
             else
                 log.printError('Invalid Result Id: %s',obj.ResultName);
                 return
             end
-            if nargin==2
-                wid=wt.getWasteIndex(wkey);
-                if isempty(wid)
-                    log.printError('Invalid waste flow key %s',wkey);
-                    return
-                end
-            else
-                wid=1;
+            if nargin==1
+                wkey=tbl.ColNames{2};
             end
-            g=cGraphResults(obj.Tables.wa,wid);
-            g.graphWasteAllocation;
+            g=cGraphResults(tbl,wkey);
+            if isValid(g)
+                g.graphWasteAllocation;
+            else
+                log.printError('Invalid waste key %s',wkey);
+                return
+            end
         end
 
         function showDiagramFP(obj)
@@ -289,6 +287,27 @@ classdef (Sealed) cResultInfo < cModelTables
             end
             g=cGraphResults(obj.Tables.fat);
             g.showDigraph;
+        end
+
+        function showGraph(obj,name,varargin)
+        % Show the graph of associated to a table name
+        %   Usage:
+        %       obj.showGraph(name,options)
+        %   Input:
+        %       name - Name of the table
+        %       options - aditional information for tables
+            log=cStatus(cType.VALID);
+            tbl=obj.getTable(name);
+            if ~isValid(tbl)
+                log.printError('Invalid table %s',name);
+                return
+            end
+            g=cGraphResults(tbl,varargin{:});
+            if isValid(g)
+                g.showGraph;
+            else
+                printLogger(g);
+            end
         end
     end
 end
