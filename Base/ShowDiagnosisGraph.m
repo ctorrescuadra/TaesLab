@@ -11,5 +11,10 @@ function ShowDiagnosisGraph(arg,varargin)
 %       If graph is not selected first option is taken
 % See also cResultInfo,cThermoeconomicModel
 %
-    graphDiagnosis(arg,varargin{:});
+    log=cStatus(cType.VALID);
+    if isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')
+        graphDiagnosis(arg,varargin{:});
+    else
+        log.printError('Invalid argument. It sould be a cThermoeconomicModel or cResultInfo object');
+    end   
 end

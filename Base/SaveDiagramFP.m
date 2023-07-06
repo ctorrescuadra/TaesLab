@@ -1,11 +1,11 @@
-function SaveDiagramFP(model,filename,varargin)
+function SaveDiagramFP(arg,filename,varargin)
 % SaveDiagramFP saves the Diagram FP adjacency tables into a file
 %   The type of file depends on the file extension
 %   *.csv, *.xlsx and *.mat are allowed
 %   USAGE:
-%       SaveDiagramFP(model,filename,varargin)
+%       SaveDiagramFP(arg,filename,varargin)
 %   INPUT:
-%       model - cThermoeconomicModel object
+%       arg - cThermoeconomicModel or cResultInfo object
 %       filename - name of the output file (with extension)
 %       varargin - optional parameter indicanting the type of FP table
 %           cType.Tables.TABLE_FP (default)
@@ -15,13 +15,13 @@ function SaveDiagramFP(model,filename,varargin)
     log=cStatus(cType.VALID);
     % Check Input parameters
     if (nargin<2) || ~cType.checkFileWrite(filename)
-        log.printError('Usage: SaveDiagramFP(res,filename)');
+        log.printError('Usage: SaveDiagramFP(arg,filename)');
         return
     end
-    if isa(model,'cThermoeconomicModel')
-        log=saveDiagramFP(model,filename,varargin{:});
+    if isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')
+        log=saveDiagramFP(arg,filename,varargin{:});
         printLogger(log);
     else
-        log.printError('Invalid result. It sould be a cThermoeconomicModel object');
+        log.printError('Invalid result. It sould be a cThermoeconomicModel or cResultInfo object');
     end
 end

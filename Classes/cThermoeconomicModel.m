@@ -50,11 +50,11 @@ classdef cThermoeconomicModel < cStatusLogger
 %       log=obj.saveProductiveDiagram(filename)
 %       log=obj.saveSummary(filename)
 %   Graph Methods
-%       log=obj.graphSummary(graph)
-%       log=obj.graphDiagramFP(graph)
 %       log=obj.graphCost(graph)
 %       log=obj.graphDiagnosis(graph)
-%       res=obj.graphRecycling(graph,wkey)
+%       log=obj.graphSummary(graph)
+%       log=obj.graphDiagramFP(graph)
+%       log=obj.graphWasteAllocation(wkey)
 %       res=obj.flowsDiagram
 %   Waste Methods
 %       res=obj.wasteAllocation
@@ -202,7 +202,7 @@ classdef cThermoeconomicModel < cStatusLogger
             ps=getProductiveStructureResults(fmt,model.ProductiveStructure);
             ps.setProperties(obj.ModelName,'SUMMARY');
             obj.status=cType.VALID;
-            obj.results{cType.ResultId.PRODUCTIVE_STRUCTURE}=ps;
+            obj.setResults(cType.ResultId.PRODUCTIVE_STRUCTURE,ps)
             obj.activeSet=true;
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
@@ -216,6 +216,8 @@ classdef cThermoeconomicModel < cStatusLogger
             if checkState(obj,state)
                 obj.State=state;
                 obj.triggerStateChange;
+                obj.clearResults(cType.ResultId.RESULT_MODEL);
+                obj.clearResults(cType.ResultId.DIAGRAM_FP);
             end
         end
 
@@ -225,6 +227,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.ReferenceState=state;
                 obj.printDebugInfo('Set Reference State: %s',state);
                 obj.setThermoeconomicDiagnosis;
+                obj.clearResults(cType.ResultId.RESULT_MODEL);
             end
         end
 
@@ -233,6 +236,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if obj.checkCostTables(value)
                 obj.CostTables=value;
                 obj.triggerCostTablesChange;
+                obj.clearResults(cType.ResultId.RESULT_MODEL);
             end
         end
 
@@ -241,6 +245,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if obj.checkResourceSample(sample)
                 obj.ResourceSample=sample;
                 obj.triggerResourceSampleChange;
+                obj.clearResults(cType.ResultId.RESULT_MODEL);
             end
         end
 
@@ -249,6 +254,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if obj.checkDiagnosisMethod(value)
                 obj.DiagnosisMethod=value;
                 obj.setThermoeconomicDiagnosis;
+                obj.clearResults(cType.ResultId.RESULT_MODEL);
             end
         end
 
@@ -284,7 +290,7 @@ classdef cThermoeconomicModel < cStatusLogger
         % get cResultInfo object
         function res=productiveStructure(obj)
         % Get the Productive Structure cResultInfo object
-            res=obj.results{cType.ResultId.PRODUCTIVE_STRUCTURE};
+            res=obj.getResults(cType.ResultId.PRODUCTIVE_STRUCTURE);
         end
 
         function res=thermoeconomicState(obj,state)
@@ -293,23 +299,23 @@ classdef cThermoeconomicModel < cStatusLogger
             if nargin==2
                 obj.State=state;
             end
-            res=obj.results{cType.ResultId.THERMOECONOMIC_STATE};
+            res=obj.getResults(cType.ResultId.THERMOECONOMIC_STATE);
         end
 
         function res=thermoeconomicAnalysis(obj)
         % Get the Thermoeconomic Analysis cResultInfo object
         % containing the direct and generalized cost tables
-            res=obj.results{cType.ResultId.THERMOECONOMIC_ANALYSIS};
+            res=obj.getResults(cType.ResultId.THERMOECONOMIC_ANALYSIS);
         end
 
         function res=thermoeconomicDiagnosis(obj)
         % Get the Thermoeconomic Diagnosis cResultInfo object
-        res=obj.results{cType.ResultId.THERMOECONOMIC_DIAGNOSIS};
+        res=obj.getResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
         end
 
         function res=summaryResults(obj)
         % Get the Summary Results cResultInfo object
-            res=obj.results{cType.ResultId.SUMMARY_RESULTS};
+            res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
         end
 
         function res=diagramFP(obj,varargin)
@@ -320,14 +326,18 @@ classdef cThermoeconomicModel < cStatusLogger
         %           cType.Tables.COST_TABLE_FP       %
         %   Output:
         %       res - cResultInfo (DIAGRAM_FP)
+            id=cType.ResultId.DIAGRAM_FP;
+            res=obj.getResults(id);
             if nargin==1
                 option=cType.Tables.TABLE_FP;
             else
                 option=varargin{1};
             end
-            res=getDiagramFP(obj.fmt,obj.fp1,option);
-            if isValid(res)
+            if isempty(res)
+                res=getDiagramFP(obj.fmt,obj.fp1,option);
                 res.setProperties(obj.ModelName,obj.State);
+                obj.setResults(id,res);
+                obj.printDebugInfo('DiagramFP activated')
             end
         end
 
@@ -336,12 +346,12 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Input:
         %       wkey - key of the analyzed waste
         %   Output
-        %       res - cResultInfo (RECYCLING_ANALYSIS) containing the 
-        %           recycling analysis tables:
-
-            res=cStatus();
+        %       res - cResultInfo containing the recycling analysis tables:
+        %           cType.Tables.RECYCLING_ANALISIS_DIRECT
+        %           cType.Tables.RECYCLING_ANALISIS_GENERAL
+            log=cStatus();
             if ~obj.isWaste
-                res.printError('Model do not has wastes');
+                log.printError('Model do not has wastes');
                 return
             end
             if obj.isGeneralCost
@@ -367,11 +377,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Output:
         %       res - cResultInfo (PRODUCTIVE_STRUCTURE) 
             id=cType.ResultId.PRODUCTIVE_DIAGRAM;
-            res=obj.results{id};
+            res=obj.getResults{id};
             if isempty(res)
                 res=getProductiveDiagram(obj.fmt,obj.productiveStructure.Info);
                 res.setProperties(obj.ModelName,'SUMMARY');
-                obj.results{id}=res;
+                obj.stResults(id,res);
                 obj.printDebugInfo('Productive Diagram has been calculated');
             end
         end
@@ -491,7 +501,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if ~obj.Summary
                 obj.setSummary(true);
             end
-            msr=obj.results{cType.ResultId.SUMMARY_RESULTS};
+            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             switch nargin
             case 1
                 printResults(msr);
@@ -529,7 +539,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 log.printWarning('Summary Requires more than one State');
                 return
             end
-            msr=obj.results{cType.ResultId.SUMMARY_RESULTS};
+            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             if ~obj.Summary
                 obj.setSummary(true);
             end
@@ -562,7 +572,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 log.printWarning('Summary Requires more than one State');
                 return
             end
-            msr=obj.results{cType.ResultId.SUMMARY_RESULTS};
+            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             if ~obj.Summary
                 obj.setSummary(true);
             end
@@ -628,7 +638,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 log.printWarning('Summary Requires more than one State');
                 return
             end
-            msr=obj.results{cType.ResultId.SUMMARY_RESULTS};
+            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             if ~obj.Summary 
                 obj.setSummary(true);
             end
@@ -713,33 +723,6 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             graphDiagnosis(res,graph);
         end
-
-        function graphRecycling(obj,wkey,graph)
-        % graphRecycling show a graph of the cost of the output flows of the
-        % system depending on the recycled exergy of a selected waste
-        %   Usage:
-        %       obj.graphRecycling(wkey,graph)
-        %   Input:
-        %       wkey - Waste key
-        %       graph - (optional) table name 
-        %           cType.Tables.WASTE_RECYCLING_DIRECT (rad)
-        %           cType.Tables.WASTE_RECYCLING_GENERAL (rag) 
-        %   If graph is ommited first valid value is used.  
-            log=cStatus(cType.VALID);
-            if nargin<2
-                log.printWarning('A waste flow key is required');
-                return
-            end
-            res=obj.recyclingAnalysis(wkey);
-            if  ~isValid(res)
-                log.printWarning('Recycling Analysis not available');
-                return
-            end
-            if nargin==2
-                graph=cType.Tables.WASTE_RECYCLING_DIRECT;
-            end
-            graphRecycling(res,graph);
-        end 
         
         function graphWasteAllocation(obj,varargin)
         % Show a pie chart with the waste allocation
@@ -881,14 +864,13 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.rsc;
         end
     end
-
     methods(Access=private)
     %%%
     % Internal computations
         function res=getModelTables(obj)
         % Get a cModelTables object with all tables of the active model
             id=cType.ResultId.RESULT_MODEL;
-            res=obj.results{id};
+            res=obj.getResults(id);
             if isempty(res)
                 tables=struct();
                 tmp=obj.results(~cellfun(@isempty,obj.results));
@@ -901,7 +883,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 end
                 res=cModelTables(cType.ResultId.RESULT_MODEL,tables);
                 res.setProperties(obj.ModelName,obj.State);
-                obj.results{id}=res;
+                obj.setResults(id,res);
                 obj.printDebugInfo('Model Tables saved');
             end
         end
@@ -916,9 +898,8 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             res=getExergyResults(obj.fmt,obj.fp1);
             res.setProperties(obj.ModelName,obj.State);
-            obj.results{id}=res;
+            obj.setResults(id,res);
             obj.printDebugInfo('Set State: %s',obj.State);
-            obj.results{cType.ResultId.RESULT_MODEL}=[];
         end
 
         function setThermoeconomicAnalysis(obj)
@@ -937,8 +918,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if obj.fp1.isValid
                 res=getThermoeconomicAnalysisResults(obj.fmt,obj.fp1,options);
 	            res.setProperties(obj.ModelName,obj.State);
-                obj.results{id}=res;
-                obj.results{cType.ResultId.RESULT_MODEL}=[];
+                obj.setResults(id,res);
                 obj.printDebugInfo('Compute Thermoeconomic Analysis for State: %s',obj.State);
             else
                 obj.fp1.printLogger;
@@ -953,7 +933,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if ~obj.isDiagnosis
-                obj.results{id}=[];
+                obj.clearResults(id);
                 return
             end
             % Compute diagnosis analysis
@@ -967,13 +947,12 @@ classdef cThermoeconomicModel < cStatusLogger
             if sol.isValid
                 res=getDiagnosisResults(obj.fmt,sol);
                 res.setProperties(obj.ModelName,obj.State);
-                obj.results{id}=res;
-                obj.results{cType.ResultId.RESULT_MODEL}=[];
+                obj.setResults(id,res);
                 obj.printDebugInfo('Compute Thermoeconomic Diagnosis for State: %s',obj.State);
             else
                 sol.printLogger;
                 sol.printError('Thermoeconomic Diagnosis cannot be calculated');
-                obj.results{id}=[];
+                obj.clearResults(id);
             end
         end
 
@@ -983,19 +962,19 @@ classdef cThermoeconomicModel < cStatusLogger
             if ~obj.activeSet || ~obj.summaryEnable
                 return
             end
-            msr=obj.results{cType.ResultId.SUMMARY_RESULTS};
+            res=obj.getResults(id);
             if obj.Summary
                 tmp=cModelSummary(obj);
                 if tmp.isValid
                     res=getSummaryResults(obj.fmt,tmp);
                     res.setProperties(obj.ModelName,'SUMMARY');
-                    obj.results{id}=res;
+                    obj.setResults(id,res);
                     obj.printDebugInfo('Summary Results have been Calculated');
                 else
                     tmp.printLogger;
                 end
-            elseif ~isempty(msr)
-                obj.results{id}=[];
+            elseif ~isempty(res)
+                obj.clearResults(id);
                 obj.printDebugInfo('Summary Results have been Desactivated');
             end
         end
@@ -1039,7 +1018,6 @@ classdef cThermoeconomicModel < cStatusLogger
             res=true;
         end
  
-
         function res=checkResourceSample(obj,sample)
         % Check the resource sample value
             res=false;
@@ -1132,6 +1110,23 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             res=true;
+        end
+
+        function res=getResults(obj,index)
+        % Get the result info
+            res=obj.results{index};
+        end
+
+        function clearResults(obj,index)
+        % Clear the result info
+            obj.results{index}=[];
+        end
+
+        function setResults(obj,index,res)
+        % Set the result info
+            if isa(res,'cModelTables')
+                obj.results{index}=res;
+            end
         end
 
         function printDebugInfo(obj,varargin)

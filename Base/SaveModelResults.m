@@ -5,9 +5,9 @@ function SaveModelResults(model,filename)
 %   USAGE:
 %       SaveModelResults(model,filename)
 %   INPUT:
-%       results - cResultInfo or cThermoeconomicModel object
+%       model -  cThermoeconomicModel object
 %       filename - name of the output file (with extension)
-% See also cModelResults
+% See also cThermoeconomicModel
 %
     log=cStatus(cType.VALID);
     % Check Input parameters

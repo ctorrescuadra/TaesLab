@@ -21,6 +21,6 @@ function SaveResults(res,filename)
         log=saveResults(res,filename);
         printLogger(log);
     else
-        log.printError('Invalid model. It sould be a cResultInfo object');
+        log.printError('Invalid input. It must be a cResultInfo object');
     end
 end

@@ -1,9 +1,9 @@
 function ShowSummaryGraph(arg,varargin)
 % Show a bar plot of the summary cost for all the plant states
 %   USAGE:
-%       ShowSummaryGraph(res, graph, var)
+%       ShowSummaryGraph(arg, graph, var)
 %   INPUT:
-%       res - cResultInfo or cThermoeconomicModel object
+%       arg - cResultInfo or cThermoeconomicModel object
 %       graph - Name of the table to plot (optional)
 %           cType.SummaryTables.FLOW_UNIT_COST (dfuc)
 %           cType.SummaryTables.FLOW_GENERAL_UNIT_COST (gfuc)
@@ -16,5 +16,10 @@ function ShowSummaryGraph(arg,varargin)
 %		is related to flows by default the output flows are selected.
 % See also cResultInfo,cThermoeconomicModel
 %
-    graphSummary(arg,varargin{:});
+    log=cStatus(cType.VALID);
+    if isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')
+        graphSummary(arg,varargin{:});
+    else
+        log.printError('Invalid argument. It sould be a cThermoeconomicModel or cResultInfo object');
+    end
 end
