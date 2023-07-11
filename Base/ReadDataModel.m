@@ -5,7 +5,7 @@ function data=ReadDataModel(filename)
 %   INPUT:
 %       filename - data model file name
 %   OUTPUT:
-%       data - cReadModel object containing the data model
+%       data - cDataModel object 
 % See also cReadModel, cDataModel
 %
     data=cStatusLogger();

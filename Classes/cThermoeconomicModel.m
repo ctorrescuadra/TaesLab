@@ -101,7 +101,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %     data - cReadModel object 
         %     varargin - optional paramaters (see ThermoeconomicTool)
             if ~isa(data,'cDataModel')
-                obj.messageLog(cType.ERROR,'Invalid data model imput');
+                obj.messageLog(cType.ERROR,'Invalid data model object');
                 printLogger(obj);
                 return
             end

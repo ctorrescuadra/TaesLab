@@ -1,5 +1,5 @@
 classdef cWasteData < cStatusLogger
-% cWasteData Reads and validates the waste definition table.
+% cWasteData gets and validates the waste definition table.
 %   If waste table is not provided, the default waste table from productive
 %   structure is used
 % 	Methods:
@@ -72,7 +72,7 @@ classdef cWasteData < cStatusLogger
 				% Check Recycle Ratio
 				if isfield(wd(i),'recycle')
 					if (wd(i).recycle>1) || (wd(i).recycle<0) 
-						obj.messageLog(cType.WARNING,'Invalid Recycle Ratio');
+						obj.messageLog(cType.ERROR,'Invalid Recycle Ratio');
 					end
 				else
 					wd(i).recycle=0.0;
@@ -110,7 +110,7 @@ classdef cWasteData < cStatusLogger
 					    else %if no values provided set type to DEFAULT
 						    wasteType(i)=cType.WasteAllocation.DEFAULT;
 						    message=sprintf('Waste allocation of flow %s is defined as MANUAL and does not have values defined ',wd(i).flow);
-						    obj.messageLog(cType.WARNING,message);
+						    obj.messageLog(cType.ERROR,message);
 					end             
 				end
 			end

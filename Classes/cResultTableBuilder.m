@@ -1,6 +1,6 @@
 classdef (Sealed) cResultTableBuilder < cFormatData
-% cResultTableBuilder Generates the cModelResults objects for ExIOLab applications.
-%   This class provide methods to obtain the cResultInfo of each application
+% cResultTableBuilder generates the cResultInfo objects for the calculation layer
+%   This class provide methods to obtain the cResultInfo of each function application
 %   Methods:
 %       obj=cResultTableBuilder(cfglocal,ps)
 %       res=obj.getProductiveStructureResults(ps)

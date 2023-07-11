@@ -38,7 +38,18 @@ classdef cViewTable < cStatusLogger
 				'FontName','FixedWidth','FontSize',12);
 			end
 			% Set object properties
-			obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
+			obj.rowNames=tbl.RowNames;
+			obj.colNames=tbl.ColNames(2:end);
+			obj.format=tbl.getColumnFormat;
+			obj.fontname=param.FontName;
+			obj.fontsize=param.FontSize;
+            if isa(obj,'cTableResult')
+			    obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
+                 obj.data=tbl.formatData;
+            else
+                obj.descr=tbl.Description; 
+                 obj.data=tbl.Data;
+            end
 			% Set the window size and position
 			ss=get(groot,'ScreenSize');
 			obj.xsize=min(param.xScale*ss(3),tbl.NrOfCols*param.ColumnWidth-param.xoffset);
@@ -46,12 +57,6 @@ classdef cViewTable < cStatusLogger
 			obj.xpos=(ss(3)-obj.xsize)/2;
 			obj.ypos=(ss(4)-obj.ysize)/2;
 			obj.wcols=repmat({param.ColumnWidth},1,tbl.NrOfCols);
-			obj.data=tbl.formatData;
-			obj.rowNames=tbl.RowNames;
-			obj.colNames=tbl.ColNames(2:end);
-			obj.format=tbl.getColumnFormat;
-			obj.fontname=param.FontName;
-			obj.fontsize=param.FontSize;
 		end
 
 		function showTable(obj)

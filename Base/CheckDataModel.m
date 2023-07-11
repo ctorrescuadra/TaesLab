@@ -5,7 +5,7 @@ function data=CheckDataModel(filename)
 %  INPUT: 
 %	    filename - Thermoeconomic data model filename
 %  OUTPUT:
-%	    data - cReadModel object associated to the data model file
+%	    data - cDataModel object 
 % See also cReadModel, cDataModel
 %	
     data=cStatusLogger();

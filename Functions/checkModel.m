@@ -1,5 +1,5 @@
 function data = checkModel(filename)
-% checkModel read and check a data model.
+% checkModel read and check a data model. Internal Function
 %   INPUT:
 %       filename - name of the data model file
 %   OUTPUT:
@@ -15,6 +15,6 @@ function data = checkModel(filename)
     if isValid(data)
         data.messageLog(cType.INFO,'Data Model %s is valid',data.ModelName);
     else
-        data.messageLog(cType.ERROR,'Data Model %s is NOT valid',data.ModelName);
+        data.messageLog(cType.ERROR,'Data Model File %s is NOT valid',filename);
     end
 end

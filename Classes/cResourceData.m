@@ -1,5 +1,5 @@
 classdef cResourceData < cStatusLogger
-% cResourceData Reads and validates the external cost resources of a system
+% cResourceData gets and validates the external cost resources of a system
 % 	Methods:
 % 		obj=cResourceData(data)
 %		obj.setResources(exm)
@@ -57,7 +57,7 @@ classdef cResourceData < cStatusLogger
 						obj.messageLog(cType.ERROR,message);
 					end
 					if (se(i).value < 0)
-						message=sprintf('Value of resource cost %s is negative %f',se(i).key,data(i).value);
+						message=sprintf('Value of resource cost %s is negative %f',se(i).key,se(i).value);
 						obj.messageLog(cType.ERROR,message);
 					end
 					obj.c0(id)=se(i).value;
@@ -81,7 +81,7 @@ classdef cResourceData < cStatusLogger
 						if (sz(i).value >= 0)
 							obj.Z(id)=sz(i).value;
 						else
-							txt=sprintf('Value of process cost %s is negative: %f',data(i).key,data(i).value);
+							txt=sprintf('Value of process cost %s is negative: %f',sz(i).key,sz(i).value);
 							obj.messageLog(cType.WARNING,txt);
 						end
                     else

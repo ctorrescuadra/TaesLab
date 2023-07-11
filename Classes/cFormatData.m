@@ -1,7 +1,6 @@
 classdef cFormatData < cStatusLogger
-% cFormatData reads the format configuration data, used to display tables of results.
+% cFormatData gets the format configuration data used to display tables of results.
 %	This class implements cResultTableBuilder
-%  	If no format is provided, default configuration file printformat.json is used
 % 	Methods:
 %		res=obj.getFormat(id)
 %		res=obj.getUnit(id)

@@ -28,8 +28,13 @@ classdef cTableData < cTable
         % Set Table Description and Name from cType
         %   Input:
         %       idx - Table index
-            obj.Description=cType.TableDataDescr{idx};
+            obj.Description=cType.TableDataDescription{idx};
             obj.Name=cType.TableDataName{idx};
+        end
+
+        function res=getColumnFormat(obj)
+        % Get the format of each column (TEXT or NUMERIC)
+            res=repmat(cType.colType(1),1,obj.NrOfCols);
         end
     end
 end

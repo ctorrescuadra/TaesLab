@@ -13,9 +13,11 @@ classdef cDataModel < cStatusLogger
 %       res=obj.existSample(sample)
 %       res=obj.getWasteFlows
 %       res=obj.checkCostTables
-%       obj.setModelName(name)
+%       res=obj.getTable(name)
+%       obj.setModelName(name)   
 %       log=obj.saveDataModel(filename)
 %   See also cModelTables, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
+%
     properties(GetAccess=public, SetAccess=private)
         NrOfFlows               % Number of flows
         NrOfProcesses           % Number of processes
@@ -39,20 +41,21 @@ classdef cDataModel < cStatusLogger
     end
 
     methods
-        function obj = cDataModel(rd)
+        function obj = cDataModel(rdm)
         % Creates the cDataModel object
-        %   rd - cReadModel object with the data model
+        %   rdm - cReadModel object with the data model
             % Check Data Structure
             obj=obj@cStatusLogger(cType.VALID);
-            if ~isa(rd,'cReadModel') || ~isValid(rd)
+            if ~isa(rdm,'cReadModel') || ~isValid(rdm)
                 obj.messageLog(cType.ERROR,'Invalid Data Model');
                 return
             end
-            data=rd.ModelData;
+            data=rdm.ModelData;
             obj.isWaste=isfield(data,'WasteDefinition');
             obj.isResourceCost=isfield(data,'ResourcesCost');
             % Check and get Productive Structure
             ps=cProductiveStructure(data.ProductiveStructure);
+            status=ps.status;
             if isValid(ps)
 				obj.messageLog(cType.INFO,'Productive Structure is valid');
             else
@@ -64,6 +67,7 @@ classdef cDataModel < cStatusLogger
             % Check and get Format
             tmp.format=data.Format.definitions;		
             rfmt=cResultTableBuilder(tmp,obj.ProductiveStructure);
+            status = rfmt.status & status;
             if isValid(rfmt)
 				obj.messageLog(cType.INFO,'Format Definition is valid');
             else
@@ -77,6 +81,7 @@ classdef cDataModel < cStatusLogger
             obj.ExergyData=cell(1,obj.NrOfStates);
             for i=1:obj.NrOfStates
                 rex=cExergyData(data.ExergyStates.States(i),ps);
+                status = rex.status & status;
                 if isValid(rex)
 					message=sprintf('Exergy values [%s] are valid',obj.States{i});
 					obj.messageLog(cType.INFO,message);
@@ -88,7 +93,7 @@ classdef cDataModel < cStatusLogger
                 obj.ExergyData{i}=rex;
             end
             % Check Waste
-            if obj.NrOfWastes > 0
+            if ps.NrOfWastes > 0
                 if obj.isWaste
                     tmp=data.WasteDefinition;
                 else
@@ -96,13 +101,14 @@ classdef cDataModel < cStatusLogger
                     obj.messageLog(cType.INFO,'Waste Definition is not available. Default is used');
                 end
 				wd=cWasteData(tmp,ps);
-                if isValid(wd)
-				    message=sprintf('Waste definition is valid');
-					obj.messageLog(cType.INFO,message);
-				else
-					obj.addLogger(wd);
-					message=sprintf('Waste definition is NOT valid. See error log');
-					log.messageLog(cType.ERROR,message);
+                status=wd.status & status;
+                if ~isValid(wd)
+	                obj.addLogger(wd);
+					message=sprintf('Waste Definition is NOT valid. See error log');
+					obj.messageLog(cType.ERROR,message);
+                elseif obj.isWaste
+			        message=sprintf('Waste Definition is valid');
+					obj.messageLog(cType.INFO,message);			
                 end
                 obj.WasteData=wd;
             else
@@ -114,6 +120,7 @@ classdef cDataModel < cStatusLogger
                 obj.ResourceData=cell(1,obj.NrOfResourceSamples);
                 for i=1:obj.NrOfResourceSamples
                     rsc=cResourceData(data.ResourcesCost.Samples(i),ps);
+                    status=rsc.status & status;
                     if isValid(rsc)
 						message=sprintf('Resources Cost sample [%s] is valid',obj.ResourceSamples{i});
 						obj.messageLog(cType.INFO,message);
@@ -127,15 +134,17 @@ classdef cDataModel < cStatusLogger
             else
                obj.messageLog(cType.INFO,'No Resources Cost Data available')
             end
-            obj.ModelData=data;
-            obj.ModelFile=rd.ModelFile;
-            obj.ModelName=rd.ModelName;
+            % Check Data Model
+            obj.status=status;
             if ~obj.isValid
-                obj.messageLog(cType.ERROR,'Data Model %s is NOT Valid',obj.ModelName);
                 return
             end
-            if rd.isTableModel
-                obj.ModelTables=rd.getTableModel;
+            % Set object properties
+            obj.ModelData=data;
+            obj.ModelFile=rdm.ModelFile;
+            obj.ModelName=rdm.ModelName;
+            if rdm.isTableModel
+                obj.ModelTables=rdm.getTableModel;
             else
                 obj.ModelTables=obj.getTableModel;
             end
@@ -265,6 +274,7 @@ classdef cDataModel < cStatusLogger
         end
         
         function res=checkCostTables(obj,value)
+        % Check if the CostTables parameter is valid
             res=false;
             pct=cType.getCostTables(value);
             if cType.isEmpty(pct)
@@ -279,6 +289,11 @@ classdef cDataModel < cStatusLogger
         function setModelName(obj,name)
         % Set the name of the data model
             obj.ModelName=name;
+        end
+
+        function res=getTable(obj,name)
+        % get a cell array with the values of the tables
+            res=getTable(obj.ModelTables,name);
         end
       
 		function log=saveDataModel(obj,filename)
@@ -389,7 +404,7 @@ classdef cDataModel < cStatusLogger
         end
 
         function res=getTableModel(obj)
-        % Get the cTableData with the data model tables
+        % Get the cModelTable with the data model tables
             ps=obj.ProductiveStructure;
 			% Flows Table
             idx=cType.TableDataIndex.FLOWS;
@@ -401,7 +416,7 @@ classdef cDataModel < cStatusLogger
 			tbl.setDescription(idx);
 			tables.(sheet)=tbl;
 			% Process Table
-            idx=cType.TableDataIndex.FLOWS;
+            idx=cType.TableDataIndex.PROCESSES;
             sheet=cType.TableDataName{idx};
             pNames={ps.Processes(1:end-1).key};
             colNames={'key','fuel','product','type'};
@@ -425,11 +440,13 @@ classdef cDataModel < cStatusLogger
 			tbl.setDescription(idx);
 			tables.(sheet)=tbl;
             % Format Table
+            idx=cType.TableDataIndex.FORMAT;
+            sheet=cType.TableDataName{idx};
 			fmt=obj.ModelData.Format.definitions;
             rowNames={fmt(:).key};
             val=struct2cell(fmt)';
 			tbl=cTableData(val(:,2:end),rowNames,fieldnames(fmt)');
-			tbl.setDescription(cType.TableDataIndex.FORMAT);
+			tbl.setDescription(idx);
 			tables.(sheet)=tbl;
             % Resources Cost tables
             idx=cType.TableDataIndex.RESOURCES;
@@ -457,7 +474,7 @@ classdef cDataModel < cStatusLogger
                 rowNames=[rNames,pNames];
                 values=[cflow;cprocess];
 				tbl=cTableData(values,rowNames,colNames);
-				tbl.setDescription(IDX);
+				tbl.setDescription(idx);
 				tables.(sheet)=tbl;
             end
             % Waste Table
@@ -478,7 +495,7 @@ classdef cDataModel < cStatusLogger
                 jdx=find(wd.typeId==0);
                 if ~isempty(jdx)
                     index=cType.TableDataIndex.WASTEALLOC;
-				    sheet=cType.InputTables.WASTEALLOC;
+				    sheet=cType.TableDataName{index};
                     [~,idx]=find(wd.values);idx=unique(idx);
                     colNames=['key',wd.flows(jdx)];
                     rowNames=pNames(idx);

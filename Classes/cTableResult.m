@@ -38,16 +38,6 @@ classdef (Abstract) cTableResult < cTable
             obj.State=state;
         end
 
-        function viewTable(obj)
-        % View the values of the table (tbl) in a uitable graphic object
-            vt=cViewTable(obj);
-            if isValid(vt)
-                vt.showTable
-            else
-                printLogger(vt);
-            end
-        end
-
         function res=isGraph(obj)
         % Check if the table has a graph associated
             res=(obj.GraphType ~= cType.GraphType.NONE);

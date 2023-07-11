@@ -6,7 +6,7 @@ classdef (Abstract) cReadModelTable < cReadModel
 %	See also cReadModel, cReadModelXLS, cReadModelCSV
 %
 	properties (Access=protected)
-		modelTables;
+		modelTables
 	end
     methods
         function res=getTableModel(obj)
@@ -20,10 +20,11 @@ classdef (Abstract) cReadModelTable < cReadModel
         % Build cDataModel and cProductiveStructure from cModelTable object
         %   Input:
         %   tm - cModelTables object
-            obj.status=cType.VALID;
+        %   res - DataModel structure
+            res=[];
             tmp=struct();
             % Productive Structure Tables
-            idx=cTypeTableDataIndex.FLOWS;
+            idx=cType.TableDataIndex.FLOWS;
             ftbl=getTable(tm,cType.TableDataName{idx});
             if isValid(ftbl)
                 tmp.flows=ftbl.getStructData;
@@ -31,7 +32,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
                 return
             end
-            idx=cTypeTableDataIndex.PROCESSES;
+            idx=cType.TableDataIndex.PROCESSES;
             ptbl=getTable(tm,cType.TableDataName{idx});
             if isValid(ptbl)
                 tmp.processes=ptbl.getStructData;
@@ -39,16 +40,9 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
                 return
             end
-            % Get Productive Structure
-            ps=cProductiveStructure(tmp);
-            if ~isValid(ps)
-                obj.addLogger(ps);
-                return
-            end
             res.ProductiveStructure=tmp;
-            obj.status=ps.status;
             % Get Format definition
-            idx=cTypeTableDataIndex.FORMAT;
+            idx=cType.TableDataIndex.FORMAT;
             tbl=getTable(tm,cType.TableDataName{idx});
             if isValid(tbl)
                 if ~isNumCellArray(tbl.Data(:,1:2))
@@ -60,7 +54,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 return
             end
             % Get Exergy states data
-            idx=cTypeTableDataIndex.EXERGY;
+            idx=cType.TableDataIndex.EXERGY;
             tbl=getTable(tm,cType.TableDataName{idx});
             if ~isValid(tbl)
                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
@@ -86,15 +80,14 @@ classdef (Abstract) cReadModelTable < cReadModel
             end
             res.ExergyStates=tmp;
             % Get Waste definition
-            idx=cTypeTableDataIndex.WASTEDEF;
-            twd=cType.TableDataName{idx};
+            index=cType.TableDataIndex.WASTEDEF;
+            twd=cType.TableDataName{index};
             isWasteDefinition=existTable(tm,twd);
-            idx=cTypeTableDataIndex.WASTEALLOC;
-            twa=cType.TableDataName{idx};
+            index=cType.TableDataIndex.WASTEALLOC;
+            twa=cType.TableDataName{index};
             isWasteAllocation=existTable(tm,twa);
-            pswd=obj.WasteData(tm); %Get default waste data
-            if ~isempty(pswd)
-                pswd=ps.WasteData;
+            if  isWasteAllocation || isWasteDefinition
+                pswd=obj.WasteData(tm);
                 wf={pswd.wastes.flow};
                 wdef=0;
                 % Waste Definition
@@ -170,7 +163,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 res.WasteDefinition=pswd;
             end                               
             % Get Resources cost definition
-            idx=cTypeTableDataIndex.RESOURCES;
+            idx=cType.TableDataIndex.RESOURCES;
             tbl=getTable(tm,cType.TableDataName{idx});
             if isValid(tbl)
                 NrOfSamples=tbl.NrOfCols-2;
@@ -207,9 +200,6 @@ classdef (Abstract) cReadModelTable < cReadModel
                     end
                 end
                 res.ResourcesCost=tmp;
-            else
-                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
-                return
             end
         end
     end

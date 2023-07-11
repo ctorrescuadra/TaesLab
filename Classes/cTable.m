@@ -21,6 +21,7 @@ classdef (Abstract) cTable < cStatusLogger
     end
     methods
         function res=get.Values(obj)
+        % get the table Values
             res=[obj.ColNames;[obj.RowNames',obj.Data]];
         end   
         function status = checkTableSize(obj)
@@ -43,6 +44,16 @@ classdef (Abstract) cTable < cStatusLogger
                 res=addprop(res,"Name","table");
                 res.Properties.Description=obj.Description;
                 res.Properties.CustomProperties.Name=obj.Name;
+            end
+        end
+
+        function viewTable(obj)
+        % View the values of the table (tbl) in a uitable graphic object
+            vt=cViewTable(obj);
+            if isValid(vt)
+                vt.showTable
+            else
+                printLogger(vt);
             end
         end
 

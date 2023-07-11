@@ -1,5 +1,5 @@
 classdef cExergyData < cStatusLogger
-% cExergyData Reads exergy values. 
+% cExergyData gets and validates the exergy data values for a state of the plant 
 %  	Check if these values are coherent with the productive
 %  	structure and get the exergy values for flows, streams and processes.
 % Methods:

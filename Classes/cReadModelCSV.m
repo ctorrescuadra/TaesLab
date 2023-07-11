@@ -13,6 +13,7 @@ classdef cReadModelCSV < cReadModelTable
 		%	cfgfile - xlsx file containig the model of the plant
 		% 
             % Read configuration file
+            obj.status=cType.VALID;
 			folder=fileread(cfgfile);
             if ~exist(folder,'dir')
                 obj.messageLog(cType.ERROR,'CSV folder data: %s not exists',folder);

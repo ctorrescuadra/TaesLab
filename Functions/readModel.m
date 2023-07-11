@@ -1,26 +1,26 @@
-function data=readModel(filename)
+function res=readModel(filename)
 % Read a data model file according its extension. Internal Function
 %   INPUT:
 %       filename - data model file name
 %   OUTPUT:
-%       model - cReadModel object
+%       res - cReadModel object
 %
     % Create the model depending de file extension
-    data=cStatusLogger();
+    res=cStatusLogger(cType.VALID);
     fileType=cType.getFileType(filename);
     switch fileType
         case cType.FileType.JSON
-            data=cReadModelJSON(filename);
+            res=cReadModelJSON(filename);
         case cType.FileType.XML
-            data=cReadModelXML(filename);
+            res=cReadModelXML(filename);
         case cType.FileType.CSV
-            data=cReadModelCSV(filename);
+            res=cReadModelCSV(filename);
         case cType.FileType.XLSX
-            data=cReadModelXLS(filename);
+            res=cReadModelXLS(filename);
         case cType.FileType.MAT
-            data=importMAT(filename);  
+            res=importMAT(filename);  
         otherwise
-            data.messageLog(cType.ERROR,'File extension %s is not supported',filename);
+            res.messageLog(cType.ERROR,'File extension %s is not supported',filename);
             return
     end
 end

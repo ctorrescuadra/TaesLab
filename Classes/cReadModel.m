@@ -1,5 +1,5 @@
 classdef (Abstract) cReadModel < cStatusLogger
-% cReadModel Abstract class to implemenent the model reader classes
+% cReadModel abstract class to implemenent the model reader classes
 % See also cReadModelStruct, cReadModelTable
 %
 	properties(GetAccess=public,SetAccess=protected)
@@ -11,7 +11,7 @@ classdef (Abstract) cReadModel < cStatusLogger
 
 	methods	
 		function res=get.isTableModel(obj)
-		% Check if it is a cReadModelTable
+		% Check if is a cReadModelTable
             res=isa(obj,'cReadModelTable');          
 		end
 	end

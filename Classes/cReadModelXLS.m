@@ -13,6 +13,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 		%	cfgfile - xlsx file containig the model of the plant
 		%
             % Read configuration file
+            obj.status=cType.VALID;
             Sheets=cType.TableDataName;
             if isOctave
 				try
@@ -39,11 +40,11 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,'Error reading sheet %s:%s',cfgfile,wsht);
+					    obj.messageLog(cType.ERROR,'Error reading sheet %s',wsht);
                         return
                     end
                 else
-					obj.messageLog(cType.ERROR,'sheet %s:%s does not exists',cfgfile,wsht);
+					obj.messageLog(cType.ERROR,'Sheet %s does not exists',wsht);
                     return
                 end
             end
@@ -57,7 +58,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,'Error reading sheet %s:%s',cfgfile,wsht);
+					    obj.messageLog(cType.ERROR,'Error reading sheet %s',wsht);
                         return
                     end
                 end  

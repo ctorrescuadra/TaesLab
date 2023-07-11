@@ -1,5 +1,5 @@
 classdef cProductiveStructureCheck < cResultId
-% cReadProductiveModel Reads and validates the productive structure configuration file
+% cReadProductiveModel gets and validates the productive structure data model
 % 	Methods:
 % 		obj=readProductiveStructure(data)
 % See also cProductiveStructure
