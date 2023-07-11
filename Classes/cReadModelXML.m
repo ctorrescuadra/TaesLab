@@ -3,25 +3,7 @@ classdef (Sealed) cReadModelXML < cReadModelStruct
 %   This class read a XML file containing the thermoeconomic model data
 %   and store it into a structure data
 %   Methods:
-%       obj=cReadModelJSON(cfgfile)
-%   Methods inhereted fron cReadModelStruct
-%		res=obj.buildDataModel(sd)
-%		res=obj.getTableModel
-%	Methods inhereted from cReadModel
-%		res=obj.getStateName(id)
-%		res=obj.getStateId(name)
-%   	res=obj.existState()
-%   	res=obj.getResourceSample(id)
-%   	res=obj.getSampleId(sample)
-%		res=obj.existSample(sample)
-%	    res=obj.getWasteFlows;
-%		res=obj.checkModel;
-%   	log=obj.saveAsMAT(filename)
-%   	log=obj.saveDataModel(filename)
-%   	res=obj.readExergy(state)
-%   	res=obj.readResources(sample)
-%   	res=obj.readWaste
-%   	res=obj.readFormat
+%       obj=cReadModelXML(cfgfile)
 %   See also cReadModel, cReadModelStruct
 %
 	methods
@@ -30,6 +12,7 @@ classdef (Sealed) cReadModelXML < cReadModelStruct
 		%	cfgfile - xml file containig the model of the plant
 		%
 			%check arguments
+            obj.status=cType.VALID;
             if isOctave 
 		        obj.messageLog(cType.ERROR,'This function is not yet implemented');
                 return
@@ -38,20 +21,17 @@ classdef (Sealed) cReadModelXML < cReadModelStruct
             try
 		        s=readstruct(cfgfile,'AttributeSuffix','Id');
 				f=jsonencode(s);
-				sd=cModelData(jsondecode(f));
+				sd=jsondecode(f);
 		    catch err
                 obj.messageLog(cType.ERROR,err.message);
                 obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
                 return
             end
             % Get model filename
-            [~,name]=fileparts(cfgfile);
-            obj.ModelFile=strcat(pwd,filesep,name,cType.FileExt.XML);
-            obj.ModelName=name;
-            % Check and build Data Model
-            obj.buildDataModel(sd);
-            if obj.isValid
-                obj.setModelProperties;
+            res=obj.checkDataStructure(sd);
+            if res
+                obj.setModelProperties(cfgfile);
+                obj.ModelData=sd;
             end
         end
 	end

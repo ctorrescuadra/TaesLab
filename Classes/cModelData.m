@@ -14,7 +14,7 @@ classdef cModelData < cStatusLogger
         Format                % Format data
     end
 
-    properties(Access=private)
+    properties(Access=public)
         dm    % Structure containing the data model
     end
 

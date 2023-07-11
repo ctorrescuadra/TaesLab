@@ -4,24 +4,8 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 %   and store it into a structure data
 %   Methods:
 %       obj=cReadModelXLS(cfgfile)
-%   Methods inhereted for cReadModelTable
-%		res=obj.buildDataModel(tm)
+%	Methods inhereted from cReadModelTable
 %		res=obj.getTableModel
-%	Methods inhereted from cReadModel
-%		res=obj.getStateName(id)
-%		res=obj.getStateId(name)
-%   	res=obj.existState()
-%   	res=obj.getResourceSample(id)
-%   	res=obj.getSampleId(sample)
-%		res=obj.existSample(sample)
-%	    res=obj.getWasteFlows;
-%		res=obj.checkModel;
-%   	log=obj.saveAsMAT(filename)
-%   	log=obj.saveDataModel(filename)
-%   	res=obj.readExergy(state)
-%   	res=obj.readResources(sample)
-%   	res=obj.readWaste
-%   	res=obj.readFormat
 %   See also cReadModel, cReadModelTable
     methods
         function obj = cReadModelXLS(cfgfile)
@@ -29,7 +13,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 		%	cfgfile - xlsx file containig the model of the plant
 		%
             % Read configuration file
-            Sheets=cType.getInputTables;
+            Sheets=cType.TableDataName;
             if isOctave
 				try
 					xls=xlsopen(cfgfile);
@@ -51,7 +35,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                 if check(i)
                     tbl=cReadModelXLS.importSheet(xls,wsht);
                     if tbl.isValid
-                        tbl.setDescription(wsht)
+                        tbl.setDescription(i)
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
@@ -69,25 +53,23 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                 if check(i)
                     tbl=cReadModelXLS.importSheet(xls,wsht);
                     if tbl.isValid
-                        tbl.setDescription(wsht)
+                        tbl.setDescription(i)
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
 					    obj.messageLog(cType.ERROR,'Error reading sheet %s:%s',cfgfile,wsht);
+                        return
                     end
                 end  
             end
-            % Get model filename
-            [~,name]=fileparts(cfgfile);
-            obj.ModelFile=strcat(pwd,filesep,name,cType.FileExt.CSV);
-            obj.ModelName=name;
-            tableModel=cModelTables(cType.ResultId.DATA_MODEL,tables);
-            tableModel.setProperties(name);
-            obj.Tables=tableModel;
-            % Build Data Model
-            obj.buildDataModel(tableModel);
-            if obj.isValid
-                obj.setModelProperties;
+            % Set Model properties
+            tm=cModelTables(cType.ResultId.DATA_MODEL,tables);
+            dm=obj.getDataModel(tm);
+            if isValid(obj)
+                obj.ModelData=dm;
+                obj.setModelProperties(cfgfile);
+                tm.setProperties(obj.ModelName,'DATA_MODEL');
+                obj.modelTables=tm;
             end
         end 
     end
@@ -120,7 +102,10 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 			        tbl.messageLog(cType.ERROR,err.message);
 		        end
             end
-            tbl=cTableData(values);
+            rowNames=values(2:end,1)';
+            colNames=values(1,:);
+            data=values(2:end,2:end);
+            tbl=cTableData(data,rowNames,colNames);
         end
     end
 end

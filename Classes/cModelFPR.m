@@ -39,7 +39,7 @@ classdef cModelFPR < cProcessModel
 		function obj=cModelFPR(rex,wd)
 		% Model Costructor
 		%	Inputs:
-		%	 rex - cReadExergyObject
+		%	 rex - cExergyDataObject
 			obj=obj@cProcessModel(rex);
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
 			N=obj.NrOfProcesses;
@@ -97,9 +97,9 @@ classdef cModelFPR < cProcessModel
 		function setWasteData(obj,wd)
         % Compute waste tables (tR,mRP,mkR) and waste operators (opCR,opR) 
         %  Input:
-        %   wd - cReadWaste object
-			if ~isa(wd,'cReadWaste') || ~wd.isValid
-				obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cReadWaste object');
+        %   wd - cWasteData object
+			if ~isa(wd,'cWasteData') || ~wd.isValid
+				obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
 				return
 			end
 			if ~obj.isValid

@@ -34,7 +34,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %
     res=cStatusLogger();
     % Check input parameters
-	checkModel=@(x) isa(x,'cReadModel');
+	checkModel=@(x) isa(x,'cDataModel');
     % Check input parameters
     p = inputParser;
     p.addRequired('data',checkModel);
@@ -61,32 +61,16 @@ function res=ThermoeconomicAnalysis(data,varargin)
         return
     end
     % Read print formatted configuration
-    fmt=data.readFormat;
-	if fmt.isError
-		fmt.printLogger;
-		res.printError('Format Definition is NOT correct. See error log');
-		return
-	end	
+    fmt=data.FormatData;
     % Read exergy
     if isempty(param.State)
 		param.State=data.getStateName(1);
     end
-	ex=data.readExergy(param.State);
-    if ~ex.isValid
-		ex.printLogger;
-        res.printError('Invalid exergy values. See error log');
-        return
-    end
+	ex=data.getExergyData(param.State);
     % Read Waste and compute Model FP
     if(data.NrOfWastes>0)
-		wt=data.readWaste;
-		if wt.isValid
-            fpm=cModelFPR(ex,wt);
-        else
-			wt.printLogger;
-			res.printError('Invalid waste definition data. See error log');
-			return
-		end     
+		wt=data.WasteData;
+        fpm=cModelFPR(ex,wt); 
     else
         fpm=cModelFPR(ex);
     end
@@ -100,7 +84,10 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	param.DirectCost=bitget(pct,cType.DIRECT);
 	param.GeneralCost=bitget(pct,cType.GENERALIZED);
     if data.isResourceCost && param.GeneralCost
-		rsc=data.readResources(param.ResourceSample);
+        if isempty(param.ResourceSample)
+			param.ResourceSample=data.getResourceSample(1);
+        end
+		rsc=data.getResourceData(param.ResourceSample);
         rsc.setResources(fpm);
         if ~rsc.isValid
 			rsc.printLogger;

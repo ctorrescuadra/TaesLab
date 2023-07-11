@@ -1,4 +1,4 @@
-classdef cReadProductiveStructure < cResultId
+classdef cProductiveStructureCheck < cResultId
 % cReadProductiveModel Reads and validates the productive structure configuration file
 % 	Methods:
 % 		obj=readProductiveStructure(data)
@@ -28,7 +28,7 @@ classdef cReadProductiveStructure < cResultId
     end
 
     methods
-		function obj = cReadProductiveStructure(data)
+		function obj = cProductiveStructureCheck(data)
 		% Class constructor.
         %   data - flow/process data structure from cReadDataModel
         	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);

@@ -11,7 +11,7 @@ function log=exportXML(data,filename)
         log.messageLog(cType.ERROR,'This function is not yet implemented');
         return
     end
-    if (nargin~=2) || (~ischar(filename)) || ~iscell(data)
+    if (nargin~=2) || (~ischar(filename)) || ~isstruct(data)
         log.messageLog(cType.ERROR,'Invalid input arguments');
         return
     end

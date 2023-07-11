@@ -4,24 +4,8 @@ classdef cReadModelCSV < cReadModelTable
 %   and store it into a structure data
 %   Methods:
 %       obj=cReadModelCSV(cfgfile)
-%   Methods inhereted for cReadModelTable
-%		res=obj.buildDataModel(tm)
+%	Methods inhereted from cReadModelTable
 %		res=obj.getTableModel
-%	Methods inhereted from cReadModel
-%		res=obj.getStateName(id)
-%		res=obj.getStateId(name)
-%   	res=obj.existState()
-%   	res=obj.getResourceSample(id)
-%   	res=obj.getSampleId(sample)
-%		res=obj.existSample(sample)
-%	    res=obj.getWasteFlows;
-%		res=obj.checkModel;
-%   	log=obj.saveAsMAT(filename)
-%   	log=obj.saveDataModel(filename)
-%   	res=obj.readExergy(state)
-%   	res=obj.readResources(sample)
-%   	res=obj.readWaste
-%   	res=obj.readFormat
 %   See also cReadModel, cReadModelTable
     methods
         function obj=cReadModelCSV(cfgfile)
@@ -72,17 +56,14 @@ classdef cReadModelCSV < cReadModelTable
                     end
                 end
             end
-            % Get model filename
-            [~,name]=fileparts(cfgfile);
-            obj.ModelFile=strcat(pwd,filesep,name,cType.FileExt.CSV);
-            obj.ModelName=name;
-            tableModel=cModelTables(cType.ResultId.DATA_MODEL,tables);
-            tableModel.setProperties(name);
-            % Build Data Model
-            obj.buildDataModel(tableModel);
-            if obj.isValid
-                obj.Tables=tableModel;
-                obj.setModelProperties;
+            % Set Model properties
+            tm=cModelTables(cType.ResultId.DATA_MODEL,tables);
+            dm=obj.getDataModel;
+            if isValid(obj)
+                obj.ModelData=dm;
+                obj.setModelProperties(cfgfile);
+                tm.setProperties(obj.ModelName,'DATA_MODEL');
+                obj.tableModel=tm;
             end
         end
     end
@@ -106,7 +87,11 @@ classdef cReadModelCSV < cReadModelTable
                     return
 		        end
             end
-            tbl=cTableData(values);
+            rowNames=values(2:end,1);
+            colNames=values(1,:);
+            data=values(2:end,2:end);
+            tbl=cTableData(data,rowNames,colNames);
+            tbl.setDescription(wsht);
         end
     end
 end

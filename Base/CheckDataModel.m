@@ -6,7 +6,7 @@ function data=CheckDataModel(filename)
 %	    filename - Thermoeconomic data model filename
 %  OUTPUT:
 %	    data - cReadModel object associated to the data model file
-% See also cReadModel
+% See also cReadModel, cDataModel
 %	
     data=cStatusLogger();
     % Check parameters
@@ -19,6 +19,6 @@ function data=CheckDataModel(filename)
         return
     end
     % Read and Check the data model and print logger
-	data=checkModel(filename);
-	data.printLogger;
+    data=checkModel(filename);
+    printLogger(data);
 end

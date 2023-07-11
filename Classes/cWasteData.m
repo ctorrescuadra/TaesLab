@@ -1,9 +1,9 @@
-classdef cReadWaste < cStatusLogger
-% cReadWaste Reads and validates the waste definition table.
+classdef cWasteData < cStatusLogger
+% cWasteData Reads and validates the waste definition table.
 %   If waste table is not provided, the default waste table from productive
 %   structure is used
 % 	Methods:
-% 		obj=cReadWaste(ps,data)
+% 		obj=cWasteData(ps,data)
 %		res=obj.getWasteDefinition;
 %		wt=obj.getWasteTable;
 %
@@ -12,7 +12,7 @@ classdef cReadWaste < cStatusLogger
 	end
     
 	methods
-		function obj=cReadWaste(data,ps)
+		function obj=cWasteData(data,ps)
 		% Class constructor
 		%	ps - cProductiveStructure object
 		%	data - waste definition data from cReadModel

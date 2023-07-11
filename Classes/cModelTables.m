@@ -112,15 +112,13 @@ classdef cModelTables < cResultId
 
         function res=getIndexTable(obj)
         % Get a cTableData object with the table names and descripcion
-            N=obj.NrOfTables+1;
-            data=cell(obj.NrOfTables+1,2);
-            data(1,:)={'Key','Description'};
+            colNames={'Key','Description'};
             tnames=obj.getListOfTables;
-            data(2:end,1)=tnames;
-            for i=2:N
-                data{i,2}=obj.Tables.(data{i,1}).Description;
-            end
-            res=cTableData(data);
+            data=cellfun(@(x) obj.Tables.(x).Description,tnames,'UniformOutput',false);
+            %for i=1:N
+            %    data{i}=obj.Tables.(tnames{i}).Description;
+            %end
+            res=cTableData(data,tnames',colNames);
         end
     
         function printIndexTable(obj)

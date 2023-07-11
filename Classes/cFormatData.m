@@ -1,5 +1,5 @@
-classdef cReadFormat < cStatusLogger
-% cReadFormat reads the format configuration data, used to display tables of results.
+classdef cFormatData < cStatusLogger
+% cFormatData reads the format configuration data, used to display tables of results.
 %	This class implements cResultTableBuilder
 %  	If no format is provided, default configuration file printformat.json is used
 % 	Methods:
@@ -31,7 +31,7 @@ classdef cReadFormat < cStatusLogger
 	end
 	
 	methods
-		function obj=cReadFormat(data)
+		function obj=cFormatData(data)
 		% Class Constructor
 		%	data - format configuration data
 			obj=obj@cStatusLogger(cType.VALID);          

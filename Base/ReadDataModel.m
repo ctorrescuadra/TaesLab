@@ -6,7 +6,7 @@ function data=ReadDataModel(filename)
 %       filename - data model file name
 %   OUTPUT:
 %       data - cReadModel object containing the data model
-% See also cReadModel
+% See also cReadModel, cDataModel
 %
     data=cStatusLogger();
     %Check parameters
@@ -18,14 +18,9 @@ function data=ReadDataModel(filename)
         data.printError('Invalid file name %s', filename);
         return
     end
-    % Read the model and print messages
-    data=readModel(filename);
-    switch data.status
-        case cType.ERROR
-            data.printLogger;
-            data.printError('Invalid data model %s. See error log',filename);
-        case cType.WARNING
-            data.printLogger;
-            data.printWarning('The data model %s is NOT valid. See error log',filename);
+    % Read and Check the data model and print logger
+    data=checkModel(filename);
+    if ~isValid(data)
+	    data.printLogger;
     end
 end

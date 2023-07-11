@@ -1,7 +1,7 @@
 classdef cResultId < cStatusLogger
 % cResultId base class to define the ResultId of the classes which provide results
-% 	It is used in: cReadProductiveStructure, cExergyModel, cModelFPR, cDiagnosis, 
-%	cRecyclingAnalysis, cDiagramFP, cReadWaste
+% 	It is used in: cProductiveStructure, cExergyModel, cModelFPR, cDiagnosis, 
+%	cRecyclingAnalysis, cDiagramFP, cWasteData
 %
 	properties(GetAccess=public,SetAccess=protected)
 		ResultId=cType.ResultId.DATA_MODEL % Result Id

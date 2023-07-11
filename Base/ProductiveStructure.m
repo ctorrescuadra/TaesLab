@@ -18,7 +18,7 @@ function res=ProductiveStructure(data)
         res.printError('Usage: ShowProductiveStructure(data)');
         return
     end
-    if ~isa(data,'cReadModel')
+    if ~isa(data,'cDataModel')
         res.printError('Invalid data. It should be a cReadModel object');
         return
     end
@@ -33,12 +33,7 @@ function res=ProductiveStructure(data)
 		res.printWarning('Productive Structure has errors. See error log');
 	end
 	% Read print format configuration
-    fmt=data.readFormat;
-	if fmt.isError
-		fmt.printLogger;
-		res.printError('Format Definition is NOT correct. See error log');
-		return
-	end
+    fmt=data.FormatData;
 	% Get Productive Structure info
 	res=getProductiveStructureResults(fmt,data.ProductiveStructure);
 	res.setProperties(data.ModelName,'SUMMARY');

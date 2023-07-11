@@ -2,55 +2,41 @@ classdef (Abstract) cReadModelTable < cReadModel
 % cReadModelTable Abstract class to read table data model
 %   This class derives cReadModelCSV and cReadmodelXLS
 %   Methods:
-%		res=obj.buildDataModel(tm)
 %		res=obj.getTableModel
-%	Methods inhereted from cReadModel
-%		res=obj.getStateName(id)
-%		res=obj.getStateId(name)
-%   	res=obj.existState()
-%   	res=obj.getResourceSample(id)
-%   	res=obj.getSampleId(sample)
-%		res=obj.existSample(sample)
-%	    res=obj.getWasteFlows;
-%		res=obj.checkModel;
-%   	log=obj.saveAsMAT(filename)
-%   	log=obj.saveDataModel(filename)
-%   	res=obj.readExergy(state)
-%   	res=obj.readResources(sample)
-%   	res=obj.readWaste
-%   	res=obj.readFormat
 %	See also cReadModel, cReadModelXLS, cReadModelCSV
 %
 	properties (Access=protected)
-		Tables
+		modelTables;
 	end
     methods
         function res=getTableModel(obj)
         % get the cModelTables object with the data model tables
-            res=obj.Tables;
+            res=obj.modelTables;
         end
     end
 
 	methods (Access=protected)  
-        function buildDataModel(obj,tm)
+        function res=getDataModel(obj,tm)
         % Build cDataModel and cProductiveStructure from cModelTable object
         %   Input:
         %   tm - cModelTables object
             obj.status=cType.VALID;
             tmp=struct();
             % Productive Structure Tables
-            ftbl=getTable(tm,cType.InputTables.FLOWS);
+            idx=cTypeTableDataIndex.FLOWS;
+            ftbl=getTable(tm,cType.TableDataName{idx});
             if isValid(ftbl)
                 tmp.flows=ftbl.getStructData;
             else
-                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.InputTables.FLOWS);
+                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
                 return
             end
-            ptbl=getTable(tm,cType.InputTables.PROCESSES);
+            idx=cTypeTableDataIndex.PROCESSES;
+            ptbl=getTable(tm,cType.TableDataName{idx});
             if isValid(ptbl)
                 tmp.processes=ptbl.getStructData;
             else
-                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.InputTables.PROCESSES);
+                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
                 return
             end
             % Get Productive Structure
@@ -59,12 +45,25 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.addLogger(ps);
                 return
             end
-            dm.ProductiveStructure=tmp;
+            res.ProductiveStructure=tmp;
             obj.status=ps.status;
+            % Get Format definition
+            idx=cTypeTableDataIndex.FORMAT;
+            tbl=getTable(tm,cType.TableDataName{idx});
+            if isValid(tbl)
+                if ~isNumCellArray(tbl.Data(:,1:2))
+                    obj.messageLog(cType.ERROR,'Invalid Format table');
+                end
+                res.Format.definitions=tbl.getStructData;
+            else
+                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+                return
+            end
             % Get Exergy states data
-            tbl=getTable(tm,cType.InputTables.EXERGY);
+            idx=cTypeTableDataIndex.EXERGY;
+            tbl=getTable(tm,cType.TableDataName{idx});
             if ~isValid(tbl)
-                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.InputTables.EXERGY);
+                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
                 return
             end
             NrOfStates=tbl.NrOfCols-1;
@@ -85,18 +84,22 @@ classdef (Abstract) cReadModelTable < cReadModel
                 st.exergy=cell2struct(values,fields,2);
                 tmp.States(i,1)=st;
             end
-            dm.ExergyStates=tmp;
+            res.ExergyStates=tmp;
             % Get Waste definition
-            isWasteDefinition=existTable(tm,cType.InputTables.WASTEDEF);
-            isWasteAllocation=existTable(tm,cType.InputTables.WASTEALLOC);
-            pswd=obj.WasteData; %Get default waste data
+            idx=cTypeTableDataIndex.WASTEDEF;
+            twd=cType.TableDataName{idx};
+            isWasteDefinition=existTable(tm,twd);
+            idx=cTypeTableDataIndex.WASTEALLOC;
+            twa=cType.TableDataName{idx};
+            isWasteAllocation=existTable(tm,twa);
+            pswd=obj.WasteData(tm); %Get default waste data
             if ~isempty(pswd)
                 pswd=ps.WasteData;
                 wf={pswd.wastes.flow};
                 wdef=0;
                 % Waste Definition
                 if isWasteDefinition
-                    tbl=getTable(tm,cType.InputTables.WASTEDEF);
+                    tbl=getTable(tm,twd);
                     if (tbl.NrOfCols<2)
                         obj.messageLog(cType.ERROR,'Waste Table. Invalid number of columns');
                         return
@@ -123,7 +126,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 end
                 % Waste Allocation Table
                 if isWasteAllocation
-                    tbl=getTable(tm,cType.InputTables.WASTEALLOC);
+                    tbl=getTable(tm,twa);
                     NR=tbl.NrOfCols-1;
                     % Check Waste Allocation Table
                     if NR<1
@@ -164,19 +167,12 @@ classdef (Abstract) cReadModelTable < cReadModel
                         end
                     end            
                 end
-                dm.WasteDefinition=pswd;
-            end        
-            % Get Format definition
-            if existTable(tm,cType.InputTables.FORMAT)
-                tbl=getTable(tm,cType.InputTables.FORMAT);
-                if ~isNumCellArray(tbl.Data(:,1:2))
-                    obj.messageLog(cType.ERROR,'Invalid Format table');
-                end
-                dm.Format.definitions=tbl.getStructData;
-            end                        
+                res.WasteDefinition=pswd;
+            end                               
             % Get Resources cost definition
-            if existTable(tm,cType.InputTables.RESOURCES)
-                tbl=getTable(tm,cType.InputTables.RESOURCES);
+            idx=cTypeTableDataIndex.RESOURCES;
+            tbl=getTable(tm,cType.TableDataName{idx});
+            if isValid(tbl)
                 NrOfSamples=tbl.NrOfCols-2;
                 % Check ResourcesCost Table
                 if NrOfSamples<1
@@ -210,21 +206,18 @@ classdef (Abstract) cReadModelTable < cReadModel
                         tmp.Samples(i,1).processes=pr;
                     end
                 end
-                dm.ResourcesCost=tmp;
-            end
-            % Add ModelData and ProductiveStructure to the object
-            if obj.isValid
-                obj.ModelData=cModelData(dm);
-                obj.ProductiveStructure=ps;
+                res.ResourcesCost=tmp;
+            else
+                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+                return
             end
         end
     end
     methods(Access=private)
-        function res=WasteData(obj)
+        function res=WasteData(obj,tm)
         % Get default waste data info
             res=[];
             % Search Wastes in Flows Table
-            tm=obj.getTableModel;
             ft=tm.Tables.Flows;
             fl=[ft.RowNames];
             fields=[ft.ColNames(2:end)];

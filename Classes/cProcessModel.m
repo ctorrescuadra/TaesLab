@@ -17,7 +17,7 @@ classdef cProcessModel < cExergyModel
 	methods
 		function obj=cProcessModel(rex)
 		% Algorithm constructor
-		%   rex: cReadExergy object
+		%   rex: cExergyData object
 			obj=obj@cExergyModel(rex);
 			tbl=obj.getFlowProcessTable;
 			obj.mgP=divideCol(tbl.tP,obj.FlowsExergy);

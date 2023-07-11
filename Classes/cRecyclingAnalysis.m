@@ -15,7 +15,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
     properties(Access=private)
         ps           % Productive structure
         modelFP      % cModelFPR object
-        wasteTable   % cReadWaste object
+        wasteTable   % cWasteData object
         resourceCost % cReadResource object
         directCost=true        % Direct cost are calculated
         generalCost=false      % General cost are calculated
@@ -27,7 +27,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
         % Create an instance of cRecyclingAnalysis
         %   Input:
         %       fpm - cModelFPR object
-        %       rsc - (optional) cReadResources object     
+        %       rsc - (optional) cResourceData object     
         %
             obj=obj@cResultId(cType.ResultId.RECYCLING_ANALYSIS);
             % Check input parameters
@@ -37,7 +37,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
                 return
             end
             if nargin==2
-                if  ~isa(rsc,'cReadResources') || ~rsc.isValid
+                if  ~isa(rsc,'cResourcceData') || ~rsc.isValid
                     rsc.printLogger;
                     obj.addLogger(rsc);
                     obj.messageLog(cType.ERROR,'Invalid Resources Cost data');

@@ -9,20 +9,12 @@ classdef cTableData < cTable
 %       res=obj.getMatlabTable [only Matlab]
 %
     methods
-        function obj = cTableData(data)
+        function obj = cTableData(data,rowNames,colNames)
         %cTableData Construct an instance of this class
         %  data could be cell data or struct data
-            if iscell(data)
-                c=data;
-            elseif isstruct(data)
-                c=[fieldnames(data),struct2cell(data)]';
-            else
-                obj.messageLog(cType.ERROR,'Invalid input parameter');
-            end
-            obj.Values=c;
-            obj.RowNames=c(2:end,1)';
-            obj.ColNames=c(1,:);
-            obj.Data=c(2:end,2:end);
+            obj.RowNames=rowNames;
+            obj.ColNames=colNames;
+            obj.Data=data;
             obj.NrOfCols=length(obj.ColNames);
             obj.NrOfRows=length(obj.RowNames);
             obj.status=obj.checkTableSize;
@@ -32,10 +24,12 @@ classdef cTableData < cTable
             end
         end
 
-        function setDescription(obj,text)
-        % Set Table Description and Name
-            obj.Description=text;
-            obj.Name=text;
+        function setDescription(obj,idx)
+        % Set Table Description and Name from cType
+        %   Input:
+        %       idx - Table index
+            obj.Description=cType.TableDataDescr{idx};
+            obj.Name=cType.TableDataName{idx};
         end
     end
 end

@@ -21,7 +21,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %
     res=cStatusLogger();
     % Check input parameters
-	checkModel=@(x) isa(x,'cReadModel');
+	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
     p.addRequired('data',checkModel);
     p.addParameter('ReferenceState','',@ischar)
@@ -62,34 +62,14 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         return
     end
 	% Read print formatted configuration
-    fmt=data.readFormat;
-	if fmt.isError
-		fmt.printLogger;
-		res.printError('Format Definition is NOT correct. See error log');
-		return
-	end	
+    fmt=data.FormatData;
     % Read reference and operation  exergy values
-    rex0=data.readExergy(param.ReferenceState);
-    if ~rex0.isValid
-        rex0.printLogger;
-        res.printError('Invalid Reference State values. See error log');
-        return
-    end
-    rex1=data.readExergy(param.State);
-    if ~rex1.isValid
-        rex1.printLogger;
-        res.printError('Invalid Operation State values. See error log');
-        return
-    end
+    rex0=data.getExergyData(param.ReferenceState);
+    rex1=data.getExergyData(param.State);
     pdm=cType.getDiagnosisMethod(param.DiagnosisMethod);
     % Read Waste, compute Model FP and make diagnosis
     if  (data.isWaste)  && (pdm==cType.Diagnosis.WASTE_INTERNAL)
-		wd=data.readWaste;
-        if ~wd.isValid
-            wd.printLogger;
-            res.printError('Invalid waste definition. See error log');
-            return
-        end
+		wd=data.WasteData;
         fp0=cModelFPR(rex0,wd);
         fp1=cModelFPR(rex1,wd);
         dgn=cDiagnosisR(fp0,fp1);

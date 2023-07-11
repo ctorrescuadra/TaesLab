@@ -33,8 +33,8 @@ classdef (Sealed) cExergyCost < cExergyModel
 	methods
 		function obj=cExergyCost(rex,wt)
 		% Creates the cExergyCost object
-		%   rex - cReadExergy object
-        %   wt - cReadWaste object
+		%   rex - cExergyData object
+        %   wt - cWasteData object
 			obj=obj@cExergyModel(rex);
             obj.ResultId=cType.ResultId.EXERGY_COST_CALCULATOR;
             M=obj.NrOfFlows;
@@ -48,7 +48,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 			obj.c0=mP(end,:);
 			obj.mG=obj.mF*obj.mP+obj.mV;
 			obj.mL=zerotol(inv(full(eye(M)-obj.mG)));
-            if (nargin==2) && isa(wt,'cReadWaste')
+            if (nargin==2) && isa(wt,'cWasteData')
                 obj.setWasteOperators(wt)
             end
 		end
@@ -66,8 +66,8 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function setWasteOperators(obj,wd)
         % Update waste operators mR,opR from waste table
-            if ~isa(wd,'cReadWaste') || ~wd.isValid
-                obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cReadWaste object');
+            if ~isa(wd,'cWasteData') || ~wd.isValid
+                obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
                 return
             end
             if ~obj.isValid

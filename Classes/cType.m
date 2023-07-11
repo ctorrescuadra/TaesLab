@@ -92,11 +92,12 @@ classdef cType
 		Diagnosis=struct('NONE',1,'WASTE_OUTPUT',2,'WASTE_INTERNAL',3);
 		DEFAULT_DIAGNOSIS='WASTE_OUTPUT';
 		% Input Tables
-		InputTables=struct('FLOWS','Flows','PROCESSES','Processes',...
-						   'EXERGY','Exergy','FORMAT','Format',...
-						   'WASTEDEF','WasteDefinition','WASTEALLOC','WasteAllocation',...
-						   'RESOURCES','ResourcesCost');
-        % Mandatory Tables
+		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...
+		'WASTEDEF',5,'WASTEALLOC',6,'RESOURCES',7);
+		TableDataName={'Flows','Processes','Exergy','Format',...
+					   'WasteDefinition','WasteAllocation','ResourcesCost'};
+		TableDataDescr={'Flows Data','Processes Data','Format Data',...
+						'Waste Definition','Waste Allocation','Resources Cost'}
         MandatoryTables=1:4;
 		OptionalTables=5:7;
 		% Data Model
@@ -337,11 +338,6 @@ classdef cType
 		% Get a cell array with the VarMode Type options
 			res=fieldnames(cType.VarMode);
 		end
-
-		function res=getInputTables()
-		% Get the names of the Input Tables as cell
-			res=transpose(struct2cell(cType.InputTables));
-        end
 
 		function res=checkTextKey(text)
 		% Check if an element key (flow/process) has a correct format

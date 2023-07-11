@@ -1,7 +1,7 @@
-classdef cReadResources < cStatusLogger
-% cReadResources Reads and validates the external cost resources of a system
+classdef cResourceData < cStatusLogger
+% cResourceData Reads and validates the external cost resources of a system
 % 	Methods:
-% 		obj=cReadResources(data)
+% 		obj=cResourceData(data)
 %		obj.setResources(exm)
 %		obj.setFlowResources(c0)
 %   	obj.setProcessResources(Z)
@@ -21,7 +21,7 @@ classdef cReadResources < cStatusLogger
 	end
     
 	methods
-		function obj=cReadResources(data,ps)
+		function obj=cResourceData(data,ps)
 		% Class constructor
         %	data - Resources Cost data
 		%

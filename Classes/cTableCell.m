@@ -37,7 +37,6 @@ classdef (Sealed) cTableCell < cTableResult
             obj.GraphType=cType.GraphType.NONE;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames);
-            obj.Values=[obj.ColNames;[obj.RowNames',obj.Data]];
             obj.status=obj.checkTableSize;
             if ~obj.isValid
                 message=sprintf('Invalid table size (%d,%d)',size(data,1),size(data,2));

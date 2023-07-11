@@ -1,4 +1,4 @@
-classdef (Sealed) cResultTableBuilder < cReadFormat
+classdef (Sealed) cResultTableBuilder < cFormatData
 % cResultTableBuilder Generates the cModelResults objects for ExIOLab applications.
 %   This class provide methods to obtain the cResultInfo of each application
 %   Methods:
@@ -11,7 +11,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
 %       res=obj.getThermoeconomicDiagnosisResults(dgn)
 %       res=obj.getDiagramFP(pm)
 %       res=obj.getRecyclingAnalysis(ra)
-% Methods from cReadFormat:
+% Methods from cFormatData:
 %	    res=obj.getFormat(id)
 %	    res=obj.getUnit(id)
 %	    res=obj.getTableDescription(id)
@@ -26,7 +26,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
 %	    res=obj.getMatrixName(id)
 %	    [row,col]=obj.getMatrixTotal(id)
 %       res=obj.PrintConfig;
-% See also cReadFormat, cResultInfo
+% See also cFormatData, cResultInfo
 %
     properties(Access=private)
         flowKeys     % Flow Key names
@@ -40,7 +40,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %  Input:
         %   data - format data struct
         %   ps - productive structure object
-            obj=obj@cReadFormat(data);
+            obj=obj@cFormatData(data);
             if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
 				obj.messageLog(cType.ERROR,'No valid Productive Structure provided');
                 return
@@ -101,7 +101,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %   options - structure containing the fields
         %       DirectCost - Direct Cost Tables will be obtained
         %       GeneralCost - General Cost Tables will be obtained
-        %       ResourceCost - [optional] cReadResources object if
+        %       ResourceCost - [optional] cResourceData object if
         %       generalized cost is required
         %  Output:
         %   res - cResultInfo object (EXERGY_COST_CALCULATION) with the result tables
@@ -154,7 +154,7 @@ classdef (Sealed) cResultTableBuilder < cReadFormat
         %       options - structure containing the fields
         %           DirectCost - Direct Cost Tables will be obtained
         %           GeneralCost - General Cost Tables will be obtained
-        %           ResourceCost - [optional] cReadResources object if
+        %           ResourceCost - [optional] cResourceData object if
         %               generalized cost is required
         %   Output:
         %       res - cResultInfo object (THERMOECONOMIC_ANALYSIS) with the result tables

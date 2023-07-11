@@ -19,7 +19,10 @@ classdef (Abstract) cTable < cStatusLogger
         Description=''  % Table Descripcion
         Name=''         % Table Name
     end
-    methods   
+    methods
+        function res=get.Values(obj)
+            res=[obj.ColNames;[obj.RowNames',obj.Data]];
+        end   
         function status = checkTableSize(obj)
         % Check the size of the table
             status = (size(obj.Data,1)==obj.NrOfRows) && (size(obj.Data,2)==obj.NrOfCols-1);
@@ -52,6 +55,10 @@ classdef (Abstract) cTable < cStatusLogger
         %       log - cStatusLogger with the status and messages
             log=cStatusLogger(cType.VALID);
             data=obj.Values;
+            if ~cType.checkFileExt(filename,cType.FileExt.CSV)
+                obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
+                return
+            end
             try
                 if isOctave
                     cell2csv(filename,data);

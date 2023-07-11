@@ -53,7 +53,6 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.Data=num2cell(data);
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
-            obj.Values=[obj.ColNames;[obj.RowNames',obj.Data]]; 
             obj.ColSum=colSum;
             obj.RowSum=rowSum;
             obj.NrOfRows=length(rowNames);

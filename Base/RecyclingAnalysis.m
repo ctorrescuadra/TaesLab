@@ -20,7 +20,7 @@ function res = RecyclingAnalysis(data,varargin)
 % See also cReadModel, cRecyclingAnalysis, cResultInfo
 %
     res=cStatusLogger();
-    checkModel=@(x) isa(x,'cReadModel');
+    checkModel=@(x) isa(x,'cDataModel');
     %Check and initialize parameters
     p = inputParser;
     p.addRequired('data',checkModel);
@@ -44,18 +44,13 @@ function res = RecyclingAnalysis(data,varargin)
 	    return
     end
     % Read format definition
-    fmt=data.readFormat;
-	if fmt.isError
-		fmt.printLogger;
-		res.printError('Format Definition is NOT correct. See error log');
-		return
-	end
+    fmt=data.FormatData;
     % Read waste info
     if data.NrOfWastes<1
 	    res.printError(cType.ERROR,'Model must have waste')
         return
     end
-    wd=data.readWaste;
+    wd=data.WasteData;
     if ~wd.isValid
         wd.printLogger;
         res.printError('Invalid waste data');
@@ -65,7 +60,7 @@ function res = RecyclingAnalysis(data,varargin)
     if isempty(param.State)
         param.State=data.getStateName(1);
     end
-	ex=data.readExergy(param.State);
+	ex=data.getExergyData(param.State);
 	if ~ex.isValid
         ex.printLogger;
         res.printError('Invalid Exergy Values. See error log');
@@ -95,7 +90,10 @@ function res = RecyclingAnalysis(data,varargin)
 	param.DirectCost=bitget(pct,cType.DIRECT);
 	param.GeneralCost=bitget(pct,cType.GENERALIZED);
     if data.isResourceCost && param.GeneralCost
-		rsc=data.readResources(param.ResourceSample);
+        if isempty(param.ResourceSample)
+			param.ResourceSample=data.getResourceSample(1);
+        end
+		rsc=data.getResourceData(param.ResourceSample);
         if ~isValid(rsc)
             printLogger(rsc);
             return

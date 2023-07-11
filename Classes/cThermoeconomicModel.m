@@ -84,7 +84,7 @@ classdef cThermoeconomicModel < cStatusLogger
     properties(Access=private)
         results        % cResultInfo cell array
         rstate             % cModelFPR object cell array
-        fmt                % readFormat object
+        fmt                % cResultTableBuilder object
         rsc                % readResource object
         fp0                % Actual reference cModelFPR
         fp1                % Actual operation cModelFRR
@@ -95,27 +95,27 @@ classdef cThermoeconomicModel < cStatusLogger
     end
 
     methods
-        function obj=cThermoeconomicModel(model,varargin)
+        function obj=cThermoeconomicModel(data,varargin)
         % Construct an instance of the thermoeconomic model
         %   Input:
-        %     model - cReadModel object 
+        %     data - cReadModel object 
         %     varargin - optional paramaters (see ThermoeconomicTool)
-            if ~isa(model,'cReadModel')
-                obj.messageLog(cType.ERROR,'Invalid data model argument');
+            if ~isa(data,'cDataModel')
+                obj.messageLog(cType.ERROR,'Invalid data model imput');
                 printLogger(obj);
                 return
             end
             % Check Data Model and Productive Structure
-            obj.addLogger(model);
-            if ~model.isValid
-                obj.messageLog(cType.ERROR,'Invalid Thermoeconomic Model. See Log');
+            obj.addLogger(data);
+            if ~data.isValid
+                obj.messageLog(cType.ERROR,'Invalid data model. See Log');
                 printLogger(obj);
                 return
             end
             % Check optional input parameters
             p = inputParser;
-            p.addParameter('State',model.States{1},@ischar);
-            p.addParameter('ReferenceState',model.States{1},@ischar)
+            p.addParameter('State',data.States{1},@ischar);
+            p.addParameter('ReferenceState',data.States{1},@ischar)
             p.addParameter('ResourceSample','',@ischar);
             p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
             p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
@@ -125,13 +125,13 @@ classdef cThermoeconomicModel < cStatusLogger
                 p.parse(varargin{:});
             catch err
                 obj.printError(err.message);
-                obj.printError('Usage: cThermoeconomicModel(model,param)');
+                obj.printError('Usage: cThermoeconomicModel(data,param)');
                 return
             end
             param=p.Results; 
             % Update Variables
-            obj.DataModel=model;
-            obj.ModelName=model.ModelName;
+            obj.DataModel=data;
+            obj.ModelName=data.ModelName;
             obj.debug=param.Debug;
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
@@ -139,22 +139,16 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.Summary=param.Summary;
             end
             % Load Exergy values (all states)
-            states=model.States;
-            obj.rstate=cell(1,model.NrOfStates);
-            for i=1:model.NrOfStates
-                rex=model.readExergy(states{i});
+            obj.rstate=cell(1,data.NrOfStates);
+            for i=1:data.NrOfStates
+                rex=data.ExergyData{i};
                 if ~rex.isValid
                     obj.addLogger(rex);
                     obj.messageLog(cType.ERROR,'Invalid Exergy Values. See error log');
                     return
                 end
                 if obj.isWaste
-                    wd=model.readWaste;
-                    if ~wd.isValid
-                        obj.addLogger(wd);
-                        obj.messageLog(cType.ERROR,'Invalid waste definition data. See error log');
-                        return
-                    end
+                    wd=data.WasteData;
                     obj.rstate{i}=cModelFPR(rex,wd);
                 else
                     obj.rstate{i}=cModelFPR(rex);
@@ -162,34 +156,28 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             % Set Operation and Reference State
             if isempty(param.State)
-                obj.State=model.States{1};
-            elseif model.existState(param.State)
+                obj.State=data.States{1};
+            elseif data.existState(param.State)
                 obj.State=param.State;
             else
                 obj.printError('Invalid state %s',param.State);
                 return
             end
             if isempty(param.ReferenceState)
-                obj.ReferenceState=model.States{1};
-            elseif model.existState(param.State)
+                obj.ReferenceState=data.States{1};
+            elseif data.existState(param.State)
                 obj.ReferenceState=param.ReferenceState;
             else
                 obj.printError('Invalid state %s',param.RefeenceState);
                 return
             end
             % Read print formatted configuration
-            fmt=model.readFormat;
-            if fmt.isError
-                obj.addLogger(fmt);
-                obj.messageLog(cType.ERROR,'Invalid Format Configuration. See error log');
-                return
-            end
-            obj.fmt=fmt;
+            obj.fmt=data.FormatData;
             % Read ResourcesCost
-            if model.isResourceCost
+            if data.isResourceCost
                 if isempty(param.ResourceSample)
-                    obj.ResourceSample=model.ResourceSamples{1};
-                elseif model.existSample(param.ResourceSample)
+                    obj.ResourceSample=data.ResourceSamples{1};
+                elseif data.existSample(param.ResourceSample)
                     obj.ResourceSample=param.ResourceSample;
                 else % Default is used
                     obj.printError('Invalid ResourceSample %s',param.ResourceSample);
@@ -199,7 +187,7 @@ classdef cThermoeconomicModel < cStatusLogger
             % Create Results container
             obj.status=cType.VALID;
             obj.results=cell(1,cType.MAX_RESULT_INFO);
-            ps=getProductiveStructureResults(fmt,model.ProductiveStructure);
+            ps=getProductiveStructureResults(obj.fmt,data.ProductiveStructure);
             ps.setProperties(obj.ModelName,'SUMMARY');
             obj.status=cType.VALID;
             obj.setResults(cType.ResultId.PRODUCTIVE_STRUCTURE,ps)
@@ -1031,7 +1019,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             % Read resources and check if are valid
-            cz=obj.DataModel.readResources(sample);
+            cz=obj.DataModel.getResourceData(sample);
             cz.setResources(obj.fp1);
             if cz.isValid
                 obj.rsc=cz;

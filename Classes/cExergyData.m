@@ -1,9 +1,9 @@
-classdef cReadExergy < cStatusLogger
-% cReadExergy Reads exergy values. 
+classdef cExergyData < cStatusLogger
+% cExergyData Reads exergy values. 
 %  	Check if these values are coherent with the productive
 %  	structure and get the exergy values for flows, streams and processes.
 % Methods:
-% 	obj=cReadExergy(ps, data)
+% 	obj=cExergyData(ps, data)
 %
 	properties(GetAccess=public,SetAccess=private)
 		ps				  % Productive Structure
@@ -15,7 +15,7 @@ classdef cReadExergy < cStatusLogger
     end
     
 	methods
-		function obj=cReadExergy(data,ps)
+		function obj=cExergyData(data,ps)
 		% Class constructor
 		%  ps - cProductiveStructure object
 		%  data - data structure with the exergy flows values

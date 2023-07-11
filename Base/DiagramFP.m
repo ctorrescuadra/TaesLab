@@ -14,7 +14,7 @@ function res=DiagramFP(data,varargin)
 % See also cModelFPR, cResultInfo
 %
 	res=cStatusLogger(); 
-	checkModel=@(x) isa(x,'cReadModel');
+	checkModel=@(x) isa(x,'cDataModel');
 	% Check input parameters
 	p = inputParser;
 	p.addRequired('data',checkModel);
@@ -35,22 +35,12 @@ function res=DiagramFP(data,varargin)
 		return
 	end	
 	% Check format definition
-	fmt=data.readFormat;
-	if fmt.isError
-		fmt.printLogger;
-		res.printError('Format Definition is NOT correct. See error log');
-		return
-	end	
+	fmt=data.FormatData;
 	% Read and check exergy values
 	if isempty(param.State)
 		param.State=data.getStateName(1);
 	end
-	ex=data.readExergy(param.State);
-	if ~isValid(ex)
-		ex.printLogger;
-		res.printError('Exergy Values are NOT correct. See error log');
-		return
-	end
+	ex=data.getExergyData(param.State);
 	% Set Results
 	pm=cModelFPR(ex);
     res=getDiagramFP(fmt,pm,param.Table);

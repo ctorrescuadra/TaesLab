@@ -1,4 +1,4 @@
-classdef (Sealed) cProductiveStructure < cReadProductiveStructure
+classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 % cProductiveStructure provides the information about the productive structure of the plant
 % 	Methods:
 %   	res=obj.WasteData
@@ -36,7 +36,7 @@ classdef (Sealed) cProductiveStructure < cReadProductiveStructure
 		function obj=cProductiveStructure(data)
         % Constructor of productive structure
 		% cfg - readProductiveModel object class
-			obj=obj@cReadProductiveStructure(data);
+			obj=obj@cProductiveStructureCheck(data);
             if ~obj.isValid
 				return
             end

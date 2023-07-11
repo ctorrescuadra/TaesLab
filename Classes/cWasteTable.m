@@ -19,9 +19,9 @@ classdef cWasteTable < cResultId
         function obj = cWasteTable(rwst)
         %cWasteTable Construct an instance of this class
         %   Input:
-        %       rwst - cReadWaste object
+        %       rwst - cWasteData object
             obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
-            if ~isa(rwst,'cReadWaste') || ~rwst.isValid
+            if ~isa(rwst,'cWasteData') || ~rwst.isValid
                 obj.messageLog(cType.ERROR,'Invalid Waste Definition object')
             end
             wd=rwst.getWasteDefinition;

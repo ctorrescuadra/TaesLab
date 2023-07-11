@@ -5,9 +5,9 @@ function SaveDataModel(arg,filename)
 %   USAGE:
 %       SaveDataModel(arg,filename)
 %   INPUT:
-%       arg - cReadModel or cThermoeconomicModel object
+%       arg - cDataModel or cThermoeconomicModel object
 %       filename - name of the output file (with extension)
-% See also cReadModel
+% See also cDataModel, cThermoecononicModel
 %
     log=cStatus(cType.VALID);
     % Check Input Parameters
@@ -15,7 +15,7 @@ function SaveDataModel(arg,filename)
         log.printError('Usage: SaveDataModel(model,filename)');
         return
     end
-    if ~(isa(arg,'cReadModel') || isa(arg,'cThermoeconomicModel'))
+    if ~(isa(arg,'cDataModel') || isa(arg,'cThermoeconomicModel'))
         log.printError('Invalid model. It sould be a cReadModel or cThermoeconomicModel object');
         return
     end
