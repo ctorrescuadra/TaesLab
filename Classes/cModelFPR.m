@@ -7,7 +7,7 @@ classdef cModelFPR < cProcessModel
 %		obj.setWasteOperators
 %		res=obj.getDirectProcessCost
 %		res=obj.getGeneralProcessCost(rsc)
-%   	res=obj.getDirectProcessUnitCost
+%		res=obj.getDirectProcessUnitCost
 %		res=obj.getGeneralProcessUnitCost(rsc)
 %		res=obj.getCostTableFP
 %		res=obj.getCostTableFPR(rsc)
@@ -290,13 +290,6 @@ classdef cModelFPR < cProcessModel
 			end		
 		end
 
-        function res=getProcessResourcesCost(obj,cz)
-		% get the Processes Resources cost given the unit cost of resources
-        %  Input:
-        %   cz - External resources costs
-			res=cz.c0*obj.mL*obj.mgF;
-		end
-
 		function fcost=getDirectFlowsCost(obj,ucost)
 		% get the cost of flows from unit processes cost
 		%  Inputs:
@@ -387,15 +380,6 @@ classdef cModelFPR < cProcessModel
 			end
 			cp=ke/(eye(N)-tmp);
         end
-
-        function c=flowsUnitCost(obj,cp,c0)
-         % Compute the flows unit cost
-			aux=cp*obj.mgP(1:end-1,:);
-			if nargin==3
-				aux=aux+c0;
-			end
-			c=aux*obj.mL;
-		end
 		
 		function res=wasteProcessTable(obj)
 		% Calculate the waste allocation ratios, using ModelFP info.

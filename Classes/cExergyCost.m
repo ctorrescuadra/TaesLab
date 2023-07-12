@@ -31,10 +31,10 @@ classdef (Sealed) cExergyCost < cExergyModel
 	end
 
 	methods
-		function obj=cExergyCost(rex,wt)
+		function obj=cExergyCost(rex,wd)
 		% Creates the cExergyCost object
 		%   rex - cExergyData object
-        %   wt - cWasteData object
+        %   wd - cWasteData object
 			obj=obj@cExergyModel(rex);
             obj.ResultId=cType.ResultId.EXERGY_COST_CALCULATOR;
             M=obj.NrOfFlows;
@@ -48,8 +48,8 @@ classdef (Sealed) cExergyCost < cExergyModel
 			obj.c0=mP(end,:);
 			obj.mG=obj.mF*obj.mP+obj.mV;
 			obj.mL=zerotol(inv(full(eye(M)-obj.mG)));
-            if (nargin==2) && isa(wt,'cWasteData')
-                obj.setWasteOperators(wt)
+            if (nargin==2) && isa(wd,'cWasteData')
+                obj.setWasteOperators(wd)
             end
 		end
 

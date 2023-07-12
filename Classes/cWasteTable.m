@@ -16,23 +16,22 @@ classdef cWasteTable < cResultId
 	end
 
     methods
-        function obj = cWasteTable(rwst)
+        function obj = cWasteTable(wd)
         %cWasteTable Construct an instance of this class
         %   Input:
-        %       rwst - cWasteData object
+        %       wd - cWasteData object
             obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
-            if ~isa(rwst,'cWasteData') || ~rwst.isValid
+            if ~isa(wd,'cWasteData') || ~wd.isValid
                 obj.messageLog(cType.ERROR,'Invalid Waste Definition object')
             end
-            wd=rwst.getWasteDefinition;
             obj.ps=wd.ps;
             obj.NrOfWastes=obj.ps.NrOfWastes;
-            obj.Type=wd.type;
-            obj.typeId=wd.typeId;
+            obj.Type=wd.Type;
+            obj.typeId=wd.TypeId;
             obj.Processes=obj.ps.Waste.processes;
             obj.Flows=obj.ps.Waste.flows;
-            obj.Values=wd.values;
-            obj.RecycleRatio=wd.recycle;
+            obj.Values=wd.Values;
+            obj.RecycleRatio=wd.RecycleRatio;
             obj.status=true;
         end
 

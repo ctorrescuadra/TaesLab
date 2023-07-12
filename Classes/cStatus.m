@@ -13,7 +13,7 @@ classdef cStatus < handle
 % See also cType
 %
 	properties(GetAccess=public,SetAccess=protected)
-		status
+		status	% Status of the object
 	end
 	
 	methods

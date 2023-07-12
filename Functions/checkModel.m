@@ -11,7 +11,7 @@ function data = checkModel(filename)
         data=rdm;
         return
     end
-    data=cDataModel(rdm);
+    data=rdm.getDataModel;
     if isValid(data)
         data.messageLog(cType.INFO,'Data Model %s is valid',data.ModelName);
     else

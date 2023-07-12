@@ -7,8 +7,13 @@ classdef cWasteData < cStatusLogger
 %		res=obj.getWasteDefinition;
 %		wt=obj.getWasteTable;
 %
-	properties (Access=private)
-		wd	% Waste definition struct
+	properties (GetAccess=public,SetAccess=private)
+		Flows			% Waste Flow keys
+		Type        	% Waste Allocation types
+		TypeId      	% Waste Type Id
+		Values      	% Waste Allocation values
+		RecycleRatio    % Recycle Ratio
+		ps              % Productive Structure Handler
 	end
     
 	methods
@@ -116,19 +121,13 @@ classdef cWasteData < cStatusLogger
 			end
 			% Create the object
 			if obj.isValid
-				obj.wd=struct();
-				obj.wd.flows={wd.flow};
-				obj.wd.type={wd.type};
-				obj.wd.typeId=wasteType;
-				obj.wd.values=values;
-				obj.wd.recycle=recycleRatio;
-				obj.wd.ps=ps;
+				obj.Flows={wd.flow};
+				obj.Type={wd.type};
+				obj.TypeId=wasteType;
+				obj.Values=values;
+				obj.RecycleRatio=recycleRatio;
+				obj.ps=ps;
 			end
-		end
-
-		function res=getWasteDefinition(obj)
-		% get waste definition struct
-			res=obj.wd;
 		end
 
 		function res=getWasteTable(obj)

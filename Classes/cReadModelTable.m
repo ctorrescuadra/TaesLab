@@ -16,7 +16,7 @@ classdef (Abstract) cReadModelTable < cReadModel
     end
 
 	methods (Access=protected)  
-        function res=getDataModel(obj,tm)
+        function res=buildDataModel(obj,tm)
         % Build cDataModel and cProductiveStructure from cModelTable object
         %   Input:
         %   tm - cModelTables object

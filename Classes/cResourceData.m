@@ -165,8 +165,8 @@ classdef cResourceData < cStatusLogger
 			pid=obj.exm.ps.Resources.processes;
 			sid=obj.exm.ps.Resources.streams;
 			obj.cs0(sid)=obj.c0(fid);
-            if isa(obj.exm,'cModelFPR')
-				obj.ce=obj.exm.getProcessResourcesCost(obj);
+            if isa(obj.exm,'cProcessModel')
+				obj.ce=obj.exm.getProcessResourceCost(obj.c0);
 			else
 				obj.ce(pid)=obj.c0(fid);
             end

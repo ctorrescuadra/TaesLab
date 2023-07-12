@@ -14,6 +14,11 @@ classdef (Abstract) cReadModel < cStatusLogger
 		% Check if is a cReadModelTable
             res=isa(obj,'cReadModelTable');          
 		end
+
+		function res=getDataModel(obj)
+		% get the data model object
+			res=cDataModel(obj);
+		end
 	end
     methods(Access=protected)
 		function setModelProperties(obj,cfgfile)
