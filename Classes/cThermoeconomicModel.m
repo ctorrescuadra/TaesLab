@@ -85,7 +85,8 @@ classdef cThermoeconomicModel < cStatusLogger
         results        % cResultInfo cell array
         rstate             % cModelFPR object cell array
         fmt                % cResultTableBuilder object
-        rsc                % readResource object
+        rsd                % cResourceData object
+        rsc                % cResourceCost object
         fp0                % Actual reference cModelFPR
         fp1                % Actual operation cModelFRR
         debug              % debug info control
@@ -343,7 +344,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if obj.isGeneralCost
-                ra=cRecyclingAnalysis(obj.fp1,obj.rsc);
+                ra=cRecyclingAnalysis(obj.fp1,obj.rsd);
             else
                 ra=cRecyclingAnalysis(obj.fp1);
             end
@@ -807,7 +808,6 @@ classdef cThermoeconomicModel < cStatusLogger
         % Set the resources cost of the flows
         %   Z - array containing the flows cost
             res=cStatus();
-            setFlowResources(obj.rsc,c0);
             if setFlowResources(obj.rsc,c0)
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryResults;
@@ -850,6 +850,11 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=getResourcesCost(obj)
         % get the actual value of resources
             res=obj.rsc;
+        end
+
+        function res=getResourceData(obj,sample)
+        % get the resource data cost values of sample
+            res=obj.DataModel.getResourceData(sample);
         end
     end
     methods(Access=private)
@@ -899,7 +904,7 @@ classdef cThermoeconomicModel < cStatusLogger
             % Read resources
             options=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);
             if obj.isGeneralCost
-                obj.rsc.setResources(obj.fp1);
+                obj.rsc=cResourceCost(obj.rsd,obj.fp1);
                 options.ResourcesCost=obj.rsc;
             end
             % Get cModelResults info
@@ -1019,15 +1024,8 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             % Read resources and check if are valid
-            cz=obj.DataModel.getResourceData(sample);
-            cz.setResources(obj.fp1);
-            if cz.isValid
-                obj.rsc=cz;
-                res=true;
-            else
-                log.printWarning('Invalid Resources Sample %s',obj.ResourceSample);
-                return
-            end
+            obj.rsd=obj.getResourceData(sample);
+            res=isValid(obj.rsd);
         end
 
         function triggerResourceSampleChange(obj)

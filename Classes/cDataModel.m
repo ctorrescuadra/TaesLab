@@ -51,8 +51,8 @@ classdef cDataModel < cStatusLogger
                 return
             end
             data=rdm.ModelData;
-            obj.isWaste=isfield(data,'WasteDefinition');
-            obj.isResourceCost=isfield(data,'ResourcesCost');
+            obj.isWaste=data.isWaste;
+            obj.isResourceCost=data.isResourceCost;
             % Check and get Productive Structure
             ps=cProductiveStructure(data.ProductiveStructure);
             status=ps.status;
@@ -312,9 +312,9 @@ classdef cDataModel < cStatusLogger
 			fileType=cType.getFileType(filename);
 			switch fileType
 				case cType.FileType.JSON
-					log=obj.saveAsJSON(filename);
+					log=saveAsJSON(obj.ModelData,filename);
                 case cType.FileType.XML
-                    log=obj.saveAsXML(filename);
+                    log=saveAsXML(obj.ModelData,filename);
 				case cType.FileType.CSV
                     log=saveAsCSV(obj.ModelTables,filename);
 				case cType.FileType.XLSX
@@ -353,53 +353,6 @@ classdef cDataModel < cStatusLogger
 			catch err
                 log.messageLog(cType.ERROR,err.message);
                 log.messageLog(cType.ERROR,'File %s cannot be written',filename);
-            end
-        end
-
-        function log=saveAsXML(obj,filename)
-        % save data model as XML file
-        %  Input:
-        %   filename - name of the output file
-        %  Output:
-        %   log: cStatusLog class containing error messages ans status
-            log=cStatusLogger(cType.VALID);
-            if isOctave
-                log.messageLog(cType.ERROR,'Save XML files is not yet implemented');
-	            return
-            end
-            if ~cType.checkFileWrite(filename)
-                log.messageLog(cType.ERROR,'Invalid file name %s',filename);
-                return
-            end
-            try
-			    writestruct(obj.ModelData,filename,'StructNodeName','root','AttributeSuffix','Id');
-            catch err
-                log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
-                return
-            end
-		end
-
-        function log=saveAsJSON(obj,filename)
-        % save data model as JSON file
-        %  Input:
-        %   filename - name of the output file
-        %  Output:
-        %   log: cStatusLog class containing error messages ans status
-            log=cStatusLogger(cType.VALID);
-            if ~cType.checkFileWrite(filename)
-                log.messageLog(cType.ERROR,'Invalid file name %s',filename);
-                return
-            end
-            try
-		        text=jsonencode(obj.ModelData,'PrettyPrint',true);
-		        fid=fopen(filename,'wt');
-		        fwrite(fid,text);
-		        fclose(fid);    
-            catch err
-                log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
-                return
             end
         end
 

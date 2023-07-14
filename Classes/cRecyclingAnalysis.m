@@ -23,7 +23,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
     end
 
     methods
-        function obj = cRecyclingAnalysis(fpm,rsc)
+        function obj = cRecyclingAnalysis(fpm,rsd)
         % Create an instance of cRecyclingAnalysis
         %   Input:
         %       fpm - cModelFPR object
@@ -37,15 +37,15 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
                 return
             end
             if nargin==2
-                if  ~isa(rsc,'cResourcceData') || ~rsc.isValid
-                    rsc.printLogger;
-                    obj.addLogger(rsc);
+                if  ~isa(rsd,'cResourceData') || ~rsd.isValid
+                    rsd.printLogger;
+                    obj.addLogger(rsd);
                     obj.messageLog(cType.ERROR,'Invalid Resources Cost data');
                     return
                 end
                 obj.isResourceCost=true;
                 obj.generalCost=true;
-                obj.resourceCost=rsc;
+                obj.resourceCost=cResourceCost(rsd,fpm);
             end
             obj.ps=fpm.ps;
             % Assign object variables

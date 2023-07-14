@@ -14,7 +14,7 @@ classdef cModelData < cStatusLogger
         Format                % Format data
     end
 
-    properties(Access=public)
+    properties(Access=private)
         dm    % Structure containing the data model
     end
 
@@ -86,11 +86,6 @@ classdef cModelData < cStatusLogger
             else
                 res=[];
             end
-        end
-
-        function setWasteDefinition(obj,wd)
-        % Set Waste Definition private value
-            obj.dm.WasteDefinition=wd;
         end
 
         function res=isWaste(obj)

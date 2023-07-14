@@ -93,18 +93,13 @@ function res = RecyclingAnalysis(data,varargin)
         if isempty(param.ResourceSample)
 			param.ResourceSample=data.getResourceSample(1);
         end
-		rsc=data.getResourceData(param.ResourceSample);
-        if ~isValid(rsc)
-            printLogger(rsc);
-            return
-        end
-        rsc.setResources(mfp);
-        if ~rsc.isValid
-			rsc.printLogger;
-			res.printError('Invalid resources cost values. See Error Log');
+		rsd=data.getResourceData(param.ResourceSample);
+        if ~rsd.isValid
+			rsd.printLogger;
+			res.printError('Invalid Resource Data. See Error Log');
 			return
         end
-        ra=cRecyclingAnalysis(mfp,rsc);
+        ra=cRecyclingAnalysis(mfp,rsd);
     else
         ra=cRecyclingAnalysis(mfp);
     end

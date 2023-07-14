@@ -21,10 +21,9 @@ classdef (Sealed) cReadModelJSON < cReadModelStruct
                 return
             end
             % Check and build Data Model
-            res=obj.checkDataStructure(sd);
-            if res
+            if obj.checkDataStructure(sd)
                 obj.setModelProperties(cfgfile);
-                obj.ModelData=sd;
+                obj.ModelData=cModelData(sd);
             end
         end
     end

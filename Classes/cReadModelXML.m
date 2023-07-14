@@ -27,11 +27,10 @@ classdef (Sealed) cReadModelXML < cReadModelStruct
                 obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
                 return
             end
-            % Get model filename
-            res=obj.checkDataStructure(sd);
-            if res
+            % Set object properties
+            if obj.checkDataStructure(sd)
                 obj.setModelProperties(cfgfile);
-                obj.ModelData=sd;
+                obj.ModelData=cModelData(sd);
             end
         end
 	end
