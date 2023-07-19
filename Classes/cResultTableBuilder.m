@@ -160,7 +160,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       res - cResultInfo object (THERMOECONOMIC_ANALYSIS) with the result tables
         %
             tbl=struct();
-
             if options.DirectCost
                 dcost=mfp.getDirectProcessCost;
                 udcost=mfp.getDirectProcessUnitCost;
@@ -210,9 +209,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %           mfc: Malfunction cost table
         %           dit: Irreversibiliy Variation table
             tbl.dgn=obj.getDiagnosisSummary(dgn);
-            tbl.mf=obj.getMalfunctionTable(dgn.MalfunctionTable);
-            tbl.mfc=obj.getMalfunctionCostTable(dgn.MalfunctionCostTable);
-            tbl.dit=obj.getIrreversibilityTable(dgn.IrreversibilityTable);
+            tbl.mf=obj.getMalfunctionTable(dgn.getMalfunctionTable);
+            tbl.mfc=obj.getMalfunctionCostTable(dgn.getMalfunctionCostTable);
+            tbl.dit=obj.getIrreversibilityTable(dgn.getIrreversibilityTable);
             res=cResultInfo(dgn,tbl);
         end
 
@@ -573,12 +572,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             colNames=obj.getTableHeader(id);
             nrows=length(rowNames);
             data=cell(nrows,6);     
-            data(:,1)=num2cell(dgn.Malfunction);
-            data(:,2)=num2cell(dgn.IrreversibilityVariation);
-            data(:,3)=num2cell(dgn.OutputVariation);
-            data(:,4)=num2cell(dgn.MalfunctionCost);
-            data(:,5)=num2cell(dgn.WasteVariationCost);
-            data(:,6)=num2cell(dgn.DemandVariationCost);
+            data(:,1)=num2cell(dgn.getMalfunction);
+            data(:,2)=num2cell(dgn.getIrreversibilityVariation);
+            data(:,3)=num2cell(dgn.getOutputVariation);
+            data(:,4)=num2cell(dgn.getMalfunctionCost);
+            data(:,5)=num2cell(dgn.getWasteVariationCost);
+            data(:,6)=num2cell(dgn.getDemandVariationCost);
             res=obj.createCellTable(id,data,rowNames,colNames);
         end
          

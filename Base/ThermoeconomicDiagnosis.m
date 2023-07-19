@@ -35,7 +35,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         return
     end
     param=p.Results;
-    if param.DiagnosisMethod==cType.Diagnosis.NONE
+    if param.DiagnosisMethod==cType.DiagnosisMethod.NONE
         res.printError('Diagnosis Method is NOT Activated')
         return
     end
@@ -68,7 +68,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     rex1=data.getExergyData(param.State);
     pdm=cType.getDiagnosisMethod(param.DiagnosisMethod);
     % Read Waste, compute Model FP and make diagnosis
-    if  (data.isWaste)  && (pdm==cType.Diagnosis.WASTE_INTERNAL)
+    if  (data.isWaste)  && (pdm==cType.DiagnosisMethod.WASTE_INTERNAL)
 		wd=data.WasteData;
         fp0=cModelFPR(rex0,wd);
         fp1=cModelFPR(rex1,wd);

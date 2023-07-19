@@ -432,27 +432,27 @@ classdef cDataModel < cStatusLogger
             end
             % Waste Table
             if (obj.NrOfWastes>0) && obj.isWaste
-                wd=obj.WasteData.getWasteDefinition;
+                wd=obj.WasteData;
 				% Waste Definition
 				index=cType.TableDataIndex.WASTEDEF;
                 sheet=cType.TableDataName{index};
-                rowNames=wd.flows;
+                rowNames=wd.Flows;
                 colNames={'key','type','recycle'};
                 values=cell(obj.NrOfWastes,2);
-                values(:,1)=wd.type';
-                values(:,2)=num2cell(wd.recycle)';
+                values(:,1)=wd.Type';
+                values(:,2)=num2cell(wd.RecycleRatio)';
 				tbl=cTableData(values,rowNames,colNames);
 				tbl.setDescription(index);
 				tables.(sheet)=tbl;
 				% Waste Allocation
-                jdx=find(wd.typeId==0);
+                jdx=find(wd.TypeId==0);
                 if ~isempty(jdx)
                     index=cType.TableDataIndex.WASTEALLOC;
 				    sheet=cType.TableDataName{index};
-                    [~,idx]=find(wd.values);idx=unique(idx);
-                    colNames=['key',wd.flows(jdx)];
+                    [~,idx]=find(wd.Values);idx=unique(idx);
+                    colNames=['key',wd.Flows(jdx)];
                     rowNames=pNames(idx);
-                    values=wd.values(jdx,idx);
+                    values=wd.Values(jdx,idx);
 				    tbl=cTableData(num2cell(values),rowNames,colNames);
 				    tbl.setDescription(index);
 				    tables.(sheet)=tbl;

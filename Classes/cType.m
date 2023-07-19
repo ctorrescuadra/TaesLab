@@ -88,8 +88,8 @@ classdef cType
         % Cost Table options
         CostTables=struct('DIRECT',1,'GENERALIZED',2,'ALL',3);
 		DEFAULT_COST_TABLES='DIRECT';
-        % Optionsfor diagnosis calculation
-		Diagnosis=struct('NONE',1,'WASTE_OUTPUT',2,'WASTE_INTERNAL',3);
+        % Options for diagnosis calculation
+		DiagnosisMethod=struct('NONE',1,'WASTE_OUTPUT',2,'WASTE_INTERNAL',3);
 		DEFAULT_DIAGNOSIS='WASTE_OUTPUT';
 		% Input Tables
 		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...
@@ -257,7 +257,7 @@ classdef cType
 
 		function res=getDiagnosisMethod(text)
 		% Get key code of Diagnosis Methods Id
-			res=cType.getTypeId(cType.Diagnosis,text);
+			res=cType.getTypeId(cType.DiagnosisMethod,text);
 		end
 
 		function res=getVarMode(text)
@@ -291,7 +291,7 @@ classdef cType
 
 		function res=checkDiagnosisMethod(text)
 		% Check DiagnosisMethod value
-			res=cType.checkTypeKey(cType.Diagnosis,text);
+			res=cType.checkTypeKey(cType.DiagnosisMethod,text);
 		end
 
 		function res=checkVarMode(text)
@@ -331,7 +331,7 @@ classdef cType
 
 		function res=DiagnosisOptions()
 		% Get a cell array with the Diagnosis Type options
-			res=fieldnames(cType.Diagnosis);
+			res=fieldnames(cType.DiagnosisMethod);
 		end
 		
 		function res=VarModeOptions()

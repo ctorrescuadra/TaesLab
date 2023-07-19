@@ -349,11 +349,9 @@ classdef cModelFPR < cProcessModel
 				opR=obj.WasteOperators.opR;
 				res=diag(opR.mValues(:,opR.mRows))';
 			end
-		end
-	end
-	
-	methods (Access=private)
-		function res=getMinCost(obj,rsc)
+        end
+
+        function res=getMinCost(obj,rsc)
 		% Get minimun cost for a given cost of external resources
 		% rsc [optional] external costs
 			narginchk(1,2);
@@ -363,9 +361,11 @@ classdef cModelFPR < cProcessModel
             else
 				q0=rsc.ce+rsc.zF;
 				res=q0/(eye(N)-obj.pfOperators.mPF(1:N,1:N));
-			end 
-		end
-		
+			end
+        end
+	end
+	
+	methods (Access=private)
 		function cp=computeCostR(obj,aR)
 		% Compute cost production cost including waste allocation, using table FP info
 			N=obj.NrOfProcesses;

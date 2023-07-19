@@ -8,52 +8,34 @@ classdef cDiagnosisR < cDiagnosis
 %       res=obj.WasteMalfunctionCost 
 %  See also cDiagnosis
 %
-    properties(Access=private)
-        dWs     % Final demand variation
-        dCWs    % Cost of final demand variation
-        tCMR    % Malfunction cost of waste table
-        vCMR    % Malfunction cost of waste vector
+    properties(GetAccess=public,SetAccess=private)
+        tMR     % Waste Variation table
+        tDR     % Waste Disfunction table
 	end
     
 	methods
-		function obj=cDiagnosisR(fpr0,fpr1)
+		function obj=cDiagnosisR(fp0,fp1)
         % Constructor
         %  fpr0: cModelFPR object for reference state
         %  fpr1: cModelFPR object for operation state
-            obj=obj@cDiagnosis(fpr0,fpr1);
+            obj=obj@cDiagnosis(fp0,fp1);
             if ~obj.isValid
                 return
             end            
-            if ~fpr0.isWaste || ~fpr1.isWaste
+            if ~fp0.isWaste || ~fp1.isWaste
                 obj.messageLog(cType.ERROR,'Input Paramenter must contains waste information');
                 return
             end
-            obj.dWs=fpr1.FinalDemand-fpr0.FinalDemand;
-            obj.dCWs=obj.dpuk.cP' .* obj.dWs;
+            opR=fp1.WasteOperators.opR;
+            cP=obj.dpuk.cP;
+            cPIN=obj.dpuk.cPE;
+            obj.dCW0= cP .* (fp1.FinalDemand-fp0.FinalDemand)';
             % Compute waste cost variation
-            MR=scaleCol(fpr1.WasteTable.mKR-fpr0.WasteTable.mKR,obj.vP0);
-            DR=fpr1.WasteOperators.opR * obj.tMF(1:end-1,1:end-1);
-            CMR1=scaleRow(MR,obj.dpuk.cP);
-            CMR2=scaleRow(DR,obj.dpuk.cPE);
-            obj.tCMR=CMR1+CMR2;
-			obj.vCMR=sumCols(obj.tCMR);
+            obj.tMR=scaleCol(fp1.WasteTable.mKR-fp0.WasteTable.mKR,obj.vP0);
+            obj.tDR=opR * obj.tMF(1:end-1,1:end-1);
+            obj.tMCR=obj.computeWasteMalfunctionCost(cPIN,cP);
+			obj.vMCR=sumCols(obj.tMCR);
 		end
-        
-        function res=MalfunctionCostTable(obj)
-        % override getMalfunctionCostTable
-            aux=obj.tDF(:,1:end-1)+obj.tCMR;
-            res=[[aux,obj.dCWs];[obj.vMF,0]];
-        end
-        
-        function res=WasteVariationCost(obj)
-        % override getWasteVariationCostTable
-            res=[obj.vCMR,sum(obj.vCMR)];
-        end
-        
-        function res=DemandVariationCost(obj)
-        % override getDemandVariationCost
-            res=[obj.dCWs',sum(obj.dCWs)];
-        end
-	end
+    end   
 end
   

@@ -396,9 +396,9 @@ classdef ThermoeconomicPanel < handle
 				end
 				dnames=cType.DiagnosisOptions;
 				if tm.isWaste
-					set(obj.tdm_popup,'string',dnames,'value',cType.Diagnosis.WASTE_OUTPUT);
+					set(obj.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_OUTPUT);
 				else
-					set(obj.tdm_popup,'string',dnames(1:2),'value',cType.Diagnosis.WASTE_OUTPUT);
+					set(obj.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_OUTPUT);
 				end
 				logtext=' INFO: Valid Data Model';
                 obj.Model=tm;
@@ -440,7 +440,7 @@ classdef ThermoeconomicPanel < handle
 			if obj.Model.isDiagnosis
 				set(obj.tdm_popup,'enable','on');
                 pdm=get(obj.tdm_popup,'value');
-				if pdm ~= cType.Diagnosis.NONE
+				if pdm ~= cType.DiagnosisMethod.NONE
 					set(obj.mn_td,'enable','on');
 					set(obj.tb_td,'enable','on');
 				end
@@ -458,7 +458,7 @@ classdef ThermoeconomicPanel < handle
             if obj.Model.isDiagnosis
 				set(obj.tdm_popup,'enable','on');
                 pdm=get(obj.tdm_popup,'value');
-                if pdm ~= cType.Diagnosis.NONE
+                if pdm ~= cType.DiagnosisMethod.NONE
 					set(obj.mn_td,'enable','on');
 					set(obj.tb_td,'enable','on');
                 end
@@ -480,7 +480,7 @@ classdef ThermoeconomicPanel < handle
             values=get(obj.tdm_popup,'string');
             pos=get(obj.tdm_popup,'value');
 			obj.Model.DiagnosisMethod=values{pos};
-			if pos==cType.Diagnosis.NONE
+			if pos==cType.DiagnosisMethod.NONE
 				set(obj.mn_td,'enable','off');
 				set(obj.tb_td,'enable','off');
 			else
@@ -749,7 +749,7 @@ classdef ThermoeconomicPanel < handle
             set(obj.sr_checkbox,'enable','off');
             set(obj.save_buttom,'enable','off');
 			set(obj.tables_popup,'value',cType.CostTables.DIRECT,'enable','off');
-			set(obj.tdm_popup,'string',{'NONE'},'value',cType.Diagnosis.NONE,'enable','off');
+			set(obj.tdm_popup,'string',{'NONE'},'value',cType.DiagnosisMethod.NONE,'enable','off');
 			set(obj.state_popup,'string',{'Reference'},'value',1,'enable','off');
             set(obj.rstate_popup,'string',{'Reference'},'value',1,'enable','off');
 			set(obj.sample_popup,'string',{'Base'},'value',1,'enable','off');

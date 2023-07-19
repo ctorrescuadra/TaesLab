@@ -433,7 +433,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             %Check if diagnosis method is activated
-            if cType.getDiagnosisMethod(obj.DiagnosisMethod)==cType.Diagnosis.NONE 
+            if cType.getDiagnosisMethod(obj.DiagnosisMethod)==cType.DiagnosisMethod.NONE 
                 return
             end
             %Check is operation and reference state are defined
@@ -854,6 +854,9 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function res=getResourceData(obj,sample)
         % get the resource data cost values of sample
+            if nargin==1
+                sample=obj.ResourceSample;
+            end
             res=obj.DataModel.getResourceData(sample);
         end
     end
@@ -931,7 +934,7 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             % Compute diagnosis analysis
             pdm=cType.getDiagnosisMethod(obj.DiagnosisMethod);
-            if (pdm==cType.Diagnosis.WASTE_INTERNAL) && obj.isWaste
+            if (pdm==cType.DiagnosisMethod.WASTE_INTERNAL) && obj.isWaste
                 sol=cDiagnosisR(obj.fp0,obj.fp1);
             else
                 sol=cDiagnosis(obj.fp0,obj.fp1);
