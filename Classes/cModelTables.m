@@ -40,9 +40,8 @@ classdef cModelTables < cResultId
         function setProperties(obj,model,state)
         % Set model and state values
             obj.ModelName=model;
-            if nargin==3
-                obj.State=state;
-            end
+            cellfun(@(x) setState(x,state),obj.tableIndex);
+            obj.State=state;
         end
 
         function setResultId(obj,id)
@@ -238,7 +237,7 @@ classdef cModelTables < cResultId
             folder=strcat('.',filesep,name,'_csv');
             % Write the info directory
             try
-                fid = fopen (filename, 'wt');
+                fid = fopen(filename, 'wt');
                 fprintf (fid, '%s', folder);
                 fclose (fid);
             catch err

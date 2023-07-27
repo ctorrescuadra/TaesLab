@@ -14,7 +14,6 @@ classdef (Abstract) cTableResult < cTable
 % See also cTable, cTableMatrix, cTableCell
 %
     properties (GetAccess=public, SetAccess=protected)
-        State     % State value
         Format    % Format of the table cells
         Unit      % Units of the table cell
         GraphType % Graph Type associated to table
@@ -31,11 +30,6 @@ classdef (Abstract) cTableResult < cTable
             else    
                 res=obj.Values;
             end
-        end
-
-        function setState(obj,state)
-        % Set state value
-            obj.State=state;
         end
 
         function res=isGraph(obj)

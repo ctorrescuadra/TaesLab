@@ -26,7 +26,7 @@ if model.isResourceCost
 end
 % Select Waste Flows
 if model.NrOfWastes>1
-    [~,param.WasteFlow]=optionChoice('Select Waste Flow:',model.getWasteFlows);
+    [~,param.WasteFlow]=optionChoice('Select Waste Flow:',model.WasteFlows);
 end
 % Get Results
 options.VarMode=cType.VarMode.CELL;

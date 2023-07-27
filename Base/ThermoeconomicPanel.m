@@ -58,7 +58,6 @@ classdef ThermoeconomicPanel < handle
 	properties(GetAccess=public,SetAccess=private)
         Model           	% Thermoeconomic Model
 		Options         	% Global presentation options
-		Results				% Results structure
     end
 
     methods
@@ -277,7 +276,7 @@ classdef ThermoeconomicPanel < handle
 					'units', 'normalized',...
 					'string', cType.CostTablesOptions,...
 					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) obj.getTables(src,evt),...
+					'callback', @(src,evt) obj.getCostTables(src,evt),...
 					'position', [0.35 0.59 0.35 0.05]);
 
 			obj.tdm_popup = uicontrol (hf,'style', 'popupmenu',...
@@ -337,15 +336,6 @@ classdef ThermoeconomicPanel < handle
 			obj.initInputParameters;
 			set(hf,'visible','on');
 		end
-
-		function res=get.Results(obj)
-		% get results info
-			if obj.Model.isValid
-				res=obj.Model.Results;
-			else
-				res=cStatusLogger();
-			end
-        end
 	end
 
 	methods (Access=private)
@@ -386,11 +376,11 @@ classdef ThermoeconomicPanel < handle
                 	set(obj.sr_checkbox,'enable','on');
 				end
 				set(obj.save_buttom,'enable','on');
-				obj.stateNames=tm.getStateNames;
+				obj.stateNames=tm.StateNames;
 				set(obj.state_popup,'enable','on','string',obj.stateNames);
                 set(obj.rstate_popup,'enable','on','string',obj.stateNames);
 				if tm.isResourceCost
-					obj.sampleNames=tm.getResourceSamples;
+					obj.sampleNames=tm.SampleNames;
 					set(obj.sample_popup,'enable','on','string',obj.sampleNames);
                     set(obj.tables_popup,'enable','on');
 				end
@@ -411,7 +401,7 @@ classdef ThermoeconomicPanel < handle
         end
 
         function activateSummary(obj,~,~)
-		% Get activate Summary callback
+		% Activate Summary callback
 			val=get(obj.sr_checkbox,'value');
 			if val
 				obj.Model.Summary=true;
@@ -426,7 +416,7 @@ classdef ThermoeconomicPanel < handle
 			end
         end
 
-        function getTables(obj,~,~)
+        function getCostTables(obj,~,~)
 		% Select Cost Table callback
             values=get(obj.tables_popup,'string');
             pos=get(obj.tables_popup,'value');
@@ -434,7 +424,7 @@ classdef ThermoeconomicPanel < handle
         end
 
 		function getState(obj,~,~)
-		% Get state callback
+		% Get State callback
 			ind=get(obj.state_popup,'value');
 			obj.Model.State=obj.stateNames{ind};
 			if obj.Model.isDiagnosis
@@ -452,7 +442,7 @@ classdef ThermoeconomicPanel < handle
         end
 
         function getReferenceState(obj,~,~)
-		% Get state callback
+		% Get Reference state callback
 			ind=get(obj.state_popup,'value');
 			obj.Model.ReferenceState=obj.stateNames{ind};
             if obj.Model.isDiagnosis
@@ -476,7 +466,7 @@ classdef ThermoeconomicPanel < handle
         end
 
 		function getDiagnosisMethod(obj,~,~)
-		% Get WasteDiagnosis callback
+		% Get Diagnosis Method callback
             values=get(obj.tdm_popup,'string');
             pos=get(obj.tdm_popup,'value');
 			obj.Model.DiagnosisMethod=values{pos};
@@ -505,7 +495,7 @@ classdef ThermoeconomicPanel < handle
 		end
 
 		function getPrinter(obj,~,~)
-		% Get show in console (Printer) callback
+		% Activate show results in console callback
 			val=get(obj.sh_checkbox,'value');
 			if val
 				obj.Options.Printer=true;
@@ -515,7 +505,7 @@ classdef ThermoeconomicPanel < handle
 		end
 
 		function getShowGraph(obj,~,~)
-		% Get Save format callback
+		% Activate Show Results as Graph callback
             val=get(obj.gr_checkbox,'value');
             if val
 				obj.Options.ShowGraph=true;
@@ -525,7 +515,7 @@ classdef ThermoeconomicPanel < handle
 		end
 
 		function saveResult(obj,~,~)
-		% Save file callback
+		% Save Model Results callback
 			default_file=obj.Options.ResultFile;
 			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files'},'Select File',default_file);
             cd(path);
@@ -545,6 +535,7 @@ classdef ThermoeconomicPanel < handle
         end
 
         function saveDataModel(obj,~,~)
+		% Save Data Model callback
 			[file,path,ext]=uiputfile({'*.mat','MAT Files';'*.xlsx','XLSX Files';'*.csv','CSV Files'; ...
                 '*.xml','XML Files';'*.json','JSON Files'},'Select File',cType.DATA_MODEL_FILE);
             cd(path);
@@ -563,6 +554,7 @@ classdef ThermoeconomicPanel < handle
         end
 
         function saveSummary(obj,~,~)
+		% Save Summary Results callback
 			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files'},'Select File',cType.SUMMARY_FILE);
             cd(path);
             if ext % File has been selected
@@ -580,6 +572,7 @@ classdef ThermoeconomicPanel < handle
         end
 
         function saveDiagramFP(obj,~,~)
+		% Save Diagram FP callback
 			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files'},'Select File',cType.DIAGRAM_FILE);
             cd(path);
             if ext % File has been selected
@@ -600,7 +593,7 @@ classdef ThermoeconomicPanel < handle
 		% Methods
 		%%%%%%%%%%%%%%%%%%%%%%%
 		function productiveStructure(obj,~,~)
-		% Show table FP callback
+		% Productive Structure callback
 			set(obj.log,'string','');
 			ps=obj.Model.productiveStructure;
 			if ps.isValid
@@ -609,7 +602,7 @@ classdef ThermoeconomicPanel < handle
 				end
 				res=getResultTables(ps,obj.Options.VarMode,obj.Options.VarFormat);
 				logtext=sprintf(' INFO: Results Available in Variable ProductiveStructure');
-				assignin('base', 'ProductiveStructure', res);
+				assignin('base', 'productiveStructure', res);
 				if obj.Options.ShowGraph
 					if isOctave
 						viewTable(ps.Tables.flows);
@@ -633,7 +626,7 @@ classdef ThermoeconomicPanel < handle
 				end
 				res=getResultTables(ots,obj.Options.VarMode,obj.Options.VarFormat);
 				logtext=sprintf(' INFO: Results Available in Variable StateTables (%s)',ots.State);
-				assignin('base', 'ThermoeconomicState', res);
+				assignin('base', 'thermoeconomicState', res);
 				if obj.Options.ShowGraph
 					if isOctave
                     	viewTable(ots.Tables.eprocesses);
@@ -657,7 +650,7 @@ classdef ThermoeconomicPanel < handle
 				end
 				res=getResultTables(ota,obj.Options.VarMode,obj.Options.VarFormat);
 				logtext=sprintf(' INFO: Results Available in Variable CostTables (%s)',ota.State);
-				assignin('base', 'ThermoeconomicAnalysis', res);
+				assignin('base', 'thermoeconomicAnalysis', res);
 				if obj.Options.ShowGraph
 					if isOctave
 						graphCost(ota)
@@ -681,7 +674,7 @@ classdef ThermoeconomicPanel < handle
 				end
 				res=getResultTables(otd,obj.Options.VarMode,obj.Options.VarFormat);
 				logtext=sprintf(' INFO: Results Available in Variable DiagnosisTables (%s)',otd.State);
-				assignin('base', 'ThermoeconomicDiagnosis', res);
+				assignin('base', 'thermoeconomicDiagnosis', res);
 				if obj.Options.ShowGraph
 					if isOctave
 						graphDiagnosis(otd);
@@ -696,6 +689,7 @@ classdef ThermoeconomicPanel < handle
         end
 
         function summaryResults(obj,~,~)
+		% Summary Results callback
             set(obj.log,'string','');
             srt=obj.Model.summaryResults;
 			if srt.isValid
@@ -704,7 +698,7 @@ classdef ThermoeconomicPanel < handle
 				end
 				res=getResultTables(srt,obj.Options.VarMode,obj.Options.VarFormat);
 				logtext=sprintf(' INFO: Results Available in Variable Summary Results');
-				assignin('base', 'SummaryResults', res);
+				assignin('base', 'summaryResults', res);
 				if obj.Options.ShowGraph
 					if isOctave
 						graphSummary(srt);
@@ -719,6 +713,7 @@ classdef ThermoeconomicPanel < handle
         end
 
         function viewResultsModel(obj,~,~)
+		% Save the model object in the workspace and launch ViewResuls app
             assignin('base', 'model', obj.Model);
 			logtext=sprintf(' INFO: Model Available in Variable model');
 			set(obj.log,'string',logtext);

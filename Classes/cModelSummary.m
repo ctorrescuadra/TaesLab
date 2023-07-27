@@ -73,7 +73,7 @@ classdef cModelSummary < cResultId
             obj.status=true;
             obj.ExergyData=rex;
             obj.UnitConsumption=pku;
-            obj.StateNames=model.getStateNames;
+            obj.StateNames=model.StateNames;
             obj.ps=model.productiveStructure.Info;
         end
 

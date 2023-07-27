@@ -576,7 +576,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             data(:,2)=num2cell(dgn.getIrreversibilityVariation);
             data(:,3)=num2cell(dgn.getOutputVariation);
             data(:,4)=num2cell(dgn.getMalfunctionCost);
-            data(:,5)=num2cell(dgn.getWasteVariationCost);
+            data(:,5)=num2cell(dgn.getWasteMalfunctionCost);
             data(:,6)=num2cell(dgn.getDemandVariationCost);
             res=obj.createCellTable(id,data,rowNames,colNames);
         end

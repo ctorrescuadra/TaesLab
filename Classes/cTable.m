@@ -18,17 +18,24 @@ classdef (Abstract) cTable < cStatusLogger
         Values          % Table values
         Description=''  % Table Descripcion
         Name=''         % Table Name
+        State=''        % State Name
     end
     methods
         function res=get.Values(obj)
         % get the table Values
             res=[obj.ColNames;[obj.RowNames',obj.Data]];
-        end   
+        end 
+         
         function status = checkTableSize(obj)
         % Check the size of the table
             status = (size(obj.Data,1)==obj.NrOfRows) && (size(obj.Data,2)==obj.NrOfCols-1);
         end
 
+        function setState(obj,state)
+        % Set state value
+            obj.State=state;
+        end
+    
         function res = getStructData(obj)
         % Get the table as struct array
             val = [obj.RowNames',obj.Data];

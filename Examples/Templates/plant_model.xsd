@@ -169,6 +169,7 @@
             <xs:enumeration value="GENERALIZED_COST"/>
             <xs:enumeration value="GENERALIZED_UNIT_COST"/>
             <xs:enumeration value="DIAGNOSIS"/>
+            <xs:enumeration value="GENERALIZED_DIAGNOSIS"/>
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

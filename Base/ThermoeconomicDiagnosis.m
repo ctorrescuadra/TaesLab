@@ -66,18 +66,18 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     % Read reference and operation  exergy values
     rex0=data.getExergyData(param.ReferenceState);
     rex1=data.getExergyData(param.State);
-    pdm=cType.getDiagnosisMethod(param.DiagnosisMethod);
-    % Read Waste, compute Model FP and make diagnosis
-    if  (data.isWaste)  && (pdm==cType.DiagnosisMethod.WASTE_INTERNAL)
+    % Read Waste, compute Model FP
+    if  data.isWaste
 		wd=data.WasteData;
         fp0=cModelFPR(rex0,wd);
         fp1=cModelFPR(rex1,wd);
-        dgn=cDiagnosisR(fp0,fp1);
     else
         fp0=cModelFPR(rex0);
         fp1=cModelFPR(rex1);
-        dgn=cDiagnosis(fp0,fp1);
     end
+    % Make the thermoeconomic diagnosis
+    method=cType.getDiagnosisMethod(param.DiagnosisMethod);
+    dgn=cDiagnosis(fp0,fp1,method);
     % Get diagnosis results
     if dgn.isValid
         res=getDiagnosisResults(fmt,dgn);

@@ -1,26 +1,47 @@
 classdef cDiagnosis < cResultId
 % cDiagnosis make Thermoeconomic Diagnosis Analysis
-%   It compares two states of the plant given by two cModelFPR objects
-%   cDiagnosis methods and properties
+%   It compares two states of the plant given by two cModelFPR objects.
+%   Two method could be applied:
+%   WASTE_OUTPUT considers waste as a system output
+%   WASTE_INTERNAL internalize the waste cost according waste table allocation
 %   Methods:
 %	    obj=cDiagnosis(fp0,fp1,method)
-%
-	properties(GetAccess=public, SetAccess=protected)
-        NrOfProcesses % Number of processes
-        NrOfWastes % Number of Wastes
+%       obj.FuelImpact
+%       obj.TotalMalfunctionCost
+%       obj.getUnitConsumptionVariation
+%       obj.getIrreversibilityVariation
+%       obj.getIrreversibilityTable
+%       obj.getOutputVariation
+%       obj.getDemandVariationCost
+%       obj.getUnitProductCostVariation
+%       obj.getMalfunction
+%       obj.getMalfunctionTable
+%       obj.getMalfunctionCost
+%       obj.getWasteMalfunctionCost
+%       obj.getMalfunctionCostTable
+	properties(GetAccess=public, SetAccess=private)
+        NrOfProcesses        % Number of processes
+        NrOfWastes           % Number of Wastes
+        FuelImpact           % Fuel Impact
+        TotalMalfunctionCost % Total Malfunction Cost
+    end
+    properties(Access=private)
+        DKP  % Unit Cost Variation Matrix
+        tMCR % Waste Malfunction Cost Matrix
         DW0  % System output variation
         DWt  % Final demand variation
-        DFT  % Fuel Impact
-        DKP  % Unit Cost Variation Matrix
-		tMF  % Malfunction table
+        DWr  % Waste Variation Matrix
+        DcP  % Unit Cost Variation     
+		tMF  % Malfunction Matrix
+        tDF  % Disfunction Matrix
         vMF  % Process Malfunction
-		tDF  % Disfunction table
-        tMR  % Waste Malfunction Matrix
-        tDR  % Waste Diafunction Matrix
-        tMCR % Waste Malfunction Cost Table
-        vMCR % Waste Malfunction Cost
-        dCW0 % Direct Cost of Output Variation
-        A0   % Technical saving
+        vDI  % Irreversibility Variation
+        DFT  % Fuel Impact
+        dCW0 % Cost of Output Variation
+        dW   % Output Variation
+        A0   % Technical Saving
+        dpuk % direct Unit exergy cost (operation)
+        dpuk0 % direct Unit exergy cost (reference)
     end
 	
 	methods
@@ -32,6 +53,7 @@ classdef cDiagnosis < cResultId
         %   cType.DiagnosisMethod.WASTE_OUTPUT
         %   cType.DiagnosisMethod.WASTE_INTERNAL   
             obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
+            % Check Arguments
             if ~isa(fp0,'cModelFPR') || ~isa(fp1,'cModelFPR')
                 obj.messageLog(cType.ERROR,'Input parameters are not cModelFPR objects');
                 return
@@ -53,71 +75,92 @@ classdef cDiagnosis < cResultId
                 return
             end
             % Check if the states are equal
+            obj.NrOfProcesses=fp0.NrOfProcesses;
+		    obj.NrOfWastes=fp0.NrOfWastes;    
             obj.DKP=zerotol(fp1.pfOperators.mKP-fp0.pfOperators.mKP);
             if all(obj.DKP==0)
                 obj.messageLog(cType.ERROR,'Reference and Operation states are the same');
                 return
             end
-            % Preparing the model
-            opI=fp1.pfOperators.opI;
-            dpuk=fp1.getDirectProcessUnitCost;
-            cP=dpuk.cP;
-            cPIN=dpuk.cPE;     
+            % Product Variation
+            obj.vDI=fp1.Irreversibility - fp0.Irreversibility;
             obj.DW0=fp1.SystemOutput - fp0.SystemOutput;
             obj.DWt=fp1.FinalDemand - fp0.FinalDemand;
-            dcpt=cP * obj.DWt;
-            obj.DFT=sum(fp1.Resources-fp0.Resources);
-            obj.A0=obj.DFT - dcpt;
+            % Cost Information
+            opI=fp1.pfOperators.opI;
+            obj.dpuk=fp1.getDirectProcessUnitCost;
+            obj.dpuk0=fp0.getDirectProcessUnitCost;
+            obj.DcP=obj.dpuk.cP-obj.dpuk0.cP;
+            % Malfunction and Disfunction Matrix
             obj.tMF=[scaleCol(obj.DKP,fp0.ProductExergy),[obj.DW0;0]];
             obj.vMF=sum(obj.tMF(:,1:end-1));
             obj.tDF=zerotol(opI*obj.tMF(1:end-1,:));
-            N=fp0.NrOfProcesses;
+            % Calculate the malfunction cost according to the chosen method
             switch method
                 case cType.DiagnosisMethod.WASTE_OUTPUT
-                    obj.dCW0=cPIN .* obj.DW0';
-                    obj.tMCR=zeros(N,N);
+                    obj.wasteOutputMethod;
                 case cType.DiagnosisMethod.WASTE_INTERNAL
-                    opR=fp1.WasteOperators.opR;
-                    obj.dCW0= cP .* obj.DWt;
-                    obj.tMR=scaleCol(fp1.WasteTable.mKR-fp0.WasteTable.mKR,fp0.ProductExergy);
-                    obj.tDR=opR * obj.tMF(1:end-1,1:end-1);
-                    obj.tMCR=obj.computeWasteMalfunctionCost(cPIN,cP);
+                    obj.wasteInternalMethod(fp0,fp1);
+                otherwise
+                    obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
+                    return
             end
-            obj.NrOfProcesses=fp0.NrOfProcesses;
-		    obj.NrOfWastes=fp0.NrOfWastes;    
+            % Fuel Impact and Malfunction Cost
+            dcpt=obj.dpuk.cP * obj.DWt;
+            obj.DFT=sum(fp1.Resources-fp0.Resources);
+            obj.A0=obj.DFT - dcpt;
+            % Object Status Information
             obj.status=cType.VALID;
         end
-        
-        function res=getIrreversibilityTable(obj)
-        % Build the irreversibility table
-            res=[[obj.tDF',[obj.DW0;0]];[obj.vMF,0]];
-        end
-        
-		function res=getMalfunctionTable(obj)
-        % get Malfunction table
-            res=obj.tMF;
-        end
-		
-		function res=getFuelImpact(obj)
-        % get Fuel Impact value
+
+        function res=get.FuelImpact(obj)
+        % Get Fuel Impact value
             res=obj.DFT;
         end
 
-        function res=getTotalMalfunctionCost(obj)
+        function res=get.TotalMalfunctionCost(obj)
         % Total Malfunction Cost (Internal and External)
             res=obj.A0;
         end
-        
+
+        function res=getUnitConsumptionVariation(obj)
+        % Get the unit consumption variation
+            res=sum(obj.DKP,1);
+        end
+
+        function res=getProcessUnitCostVariation(obj)
+            res=obj.DcP;
+        end
+
         function res=getIrreversibilityVariation(obj)
         % Get the irreversibility vatiation vector
-        	vDI=sum(obj.tDF,2)' +obj.vMF;
-            res=[vDI,sum(vDI)];
+            res=[obj.vDI,sum(obj.vDI)];
         end
-        
+
+        function res=getIrreversibilityTable(obj)
+        % Build the irreversibility table
+            res=[[obj.tDF'+obj.DWr',[obj.dW;0]];[obj.vMF,0]];
+        end
+
+        function res=getOutputVariation(obj)
+        % Get the system output variation
+            res=[obj.DW0', sum(obj.DW0)];
+        end        
+            
+        function res=getDemandVariationCost(obj)
+        % get the output cost variation
+            res=[obj.dCW0,sum(obj.dCW0)];
+        end 
+
         function res=getMalfunction(obj)
         % Get the malfunction vector
             aux=obj.vMF;
             res=[aux,sum(aux)];
+        end
+
+		function res=getMalfunctionTable(obj)
+        % get Malfunction table
+            res=obj.tMF;
         end
         
         function res=getMalfunctionCost(obj)
@@ -126,24 +169,10 @@ classdef cDiagnosis < cResultId
 			res=[aux,sum(aux)];
         end
         
-        function res=getOutputVariation(obj)
-        % Get the system output variation
-            res=[obj.DW0', sum(obj.DW0)];
-        end
-
-        function res=getUnitConsumptionVariation(obj)
-        % Get the unit consumption variation
-            res=sum(obj.DKP,1);
-        end
-        
-        function res=getDemandVariationCost(obj)
-        % get the output cost variation
-            res=[obj.dCW0,sum(obj.dCW0)];
-        end 
-
-        function res=getWasteVariationCost(obj)
+        function res=getWasteMalfunctionCost(obj)
         % Default method for Waste Variation Cost
-	        res=[obj.vMCR,sum(obj.vMCR)];
+            aux=sum(obj.tMCR);
+	        res=[aux,sum(aux)];
         end
 
         function res=getMalfunctionCostTable(obj)
@@ -154,10 +183,35 @@ classdef cDiagnosis < cResultId
     end
 
     methods(Access=protected)
-        function res=computeWasteMalfunctionCost(obj,cPIN,cP)
-            CMR1=scaleRow(obj.tMR,cP);
-            CMR2=scaleRow(obj.tDR,cPIN);
-            res=CMR1+CMR2;
+        function wasteOutputMethod(obj)
+        % Compute internal variables with WASTE_OUTPUT method
+            N=obj.NrOfProcesses;
+            obj.dCW0=obj.dpuk.cPE .* obj.DW0';
+            obj.dW=obj.DW0;
+            obj.tMCR=zeros(N,N);
+            obj.DWr=zeros(N,N+1);
+        end
+        function wasteInternalMethod(obj,fp0,fp1)
+        % Compute internal variables with WASTE_INTERNAL method
+            opR=fp1.WasteOperators.opR;
+            cP=obj.dpuk.cP;
+            cPE=obj.dpuk.cPE;
+            obj.dCW0=cP .* obj.DWt';
+            obj.dW=obj.DWt;
+            tMR=scaleCol(fp1.WasteTable.mKR-fp0.WasteTable.mKR,fp0.ProductExergy);
+            tDR=opR * obj.tMF(1:end-1,1:end-1);
+            obj.tMCR=scaleRow(tMR,cP)+scaleRow(tDR,cPE);
+            res1=tMR+tDR+opR*tMR;
+            res2=opR*obj.DWt;
+            obj.DWr=[full(res1),full(res2)];
+        end
+
+        function res=computeDCPT(obj,c0,c1)
+        % Compute the cost of the final product variation (alternate version)
+        % If the variation is positive takes the reference cost
+        % If the variation is negative takes the actual cost
+            cpt=c0 .* (obj.DWt>0)' + c1 .* (obj.DWt<0)';
+            res= cpt * obj.DWt;
         end
 	end
 end

@@ -566,7 +566,7 @@
 			"key": "wd",
 			"number": true,
 			"description": "Waste Definition Table",
-			"columns": 4,
+			"columns": 3,
 			"fields": [
 				{
 					"name": "key",

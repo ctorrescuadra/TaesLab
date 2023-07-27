@@ -28,9 +28,9 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.summaryResults
 %   Model Info Methods
 %       res=obj.showProperties
-%       res=obj.getStateNames
-%       res=obj.getResourceSamples
-%       res=obj.getWasteFlows
+%       res=obj.StateNames
+%       res=obj.SampleNames
+%       res=obj.WasteFlows
 %       res=obj.isResourceCost
 %       res=obj.isGeneralCost
 %       res=obj.isDiagnosis
@@ -70,19 +70,22 @@ classdef cThermoeconomicModel < cStatusLogger
     properties(GetAccess=public,SetAccess=private)
         DataModel      % Data Model
         ModelName      % Model Name
+        StateNames     % Names of the defined states
+        SampleNames    % Names of the defined resource samples
+        WasteFlows     % Names of the waste flows
     end
 
     properties(Access=public)
         State                  % Active thermoeconomic state
         ReferenceState         % Active Reference state
         ResourceSample         % Active resource cost sample
-        CostTables             % Select Tables to obtain
+        CostTables             % Select tables to cost results
         DiagnosisMethod        % Method to calculate fuel impact of wastes
         Summary=false;         % Calculate Summary Results
     end
 
     properties(Access=private)
-        results        % cResultInfo cell array
+        results            % cResultInfo cell array
         rstate             % cModelFPR object cell array
         fmt                % cResultTableBuilder object
         rsd                % cResourceData object
@@ -175,6 +178,10 @@ classdef cThermoeconomicModel < cStatusLogger
             % Read print formatted configuration
             obj.fmt=data.FormatData;
             % Read ResourcesCost
+            if ~data.checkCostTables(param.CostTables)
+                res.printError('Invalid CostTables parameter %s',param.DiagnosisTables);
+                return
+            end
             if data.isResourceCost
                 if isempty(param.ResourceSample)
                     obj.ResourceSample=data.ResourceSamples{1};
@@ -349,7 +356,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 ra=cRecyclingAnalysis(obj.fp1);
             end
             if nargin==1
-                wkey=obj.getWasteFlows{1};
+                wkey=obj.WasteFlows{1};
             end
             ra.doAnalysis(wkey);
             if isValid(ra)
@@ -390,6 +397,12 @@ classdef cThermoeconomicModel < cStatusLogger
             fprintf('%s\n',res);
         end
 
+        function summaryDiagnosis(obj)
+        % Get the diagnosis results summary
+            res=obj.thermoeconomicDiagnosis;
+            res.summaryDiagnosis;
+        end
+
         %%%
         % Utility methods
         %
@@ -406,12 +419,12 @@ classdef cThermoeconomicModel < cStatusLogger
             disp(s);
         end
 
-        function res=getStateNames(obj)
+        function res=get.StateNames(obj)
         % Show a list of the available state names
             res=obj.DataModel.States;
         end
 
-        function res=getResourceSamples(obj)
+        function res=get.SampleNames(obj)
         % Show a list of the avaliable resource samples
             res=obj.DataModel.ResourceSamples;
         end
@@ -454,14 +467,20 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.DataModel.NrOfStates>1;
         end
 
-        function res=getWasteFlows(obj)
+        function res=get.WasteFlows(obj)
         % get waste flows list (cell aarray)
             res=getWasteFlows(obj.DataModel);
         end
 
         function res=getResultStates(obj)
-        % Get the cModelFPR object of each state
+        % Get the cModelFPR object of each state (cModelSummary)
             res=obj.rstate;
+        end
+
+        function res=getModelInfo(obj)
+        % Get the cResultInfo objects of the current state (internal application use)
+            stateResults=obj.results(1:cType.MAX_RESULT);
+            res=obj.results(~cellfun(@isempty,stateResults));
         end
 
         function setDebug(obj,dbg)
@@ -476,8 +495,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %
         function printResults(obj)
         % Print the result tables on console
-            mt=obj.getModelTables;
-            printResults(mt);
+            cellfun(@(x) printResults(x), obj.getModelInfo)
         end
 
         function printSummary(obj,table)
@@ -869,7 +887,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.getResults(id);
             if isempty(res)
                 tables=struct();
-                tmp=obj.results(~cellfun(@isempty,obj.results));
+                tmp=obj.getModelInfo;
                 for k=1:numel(tmp)
                     dm=tmp{k};
                     list=dm.getListOfTables;
@@ -883,7 +901,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.printDebugInfo('Model Tables saved');
             end
         end
-        
+
         function res=setStateInfo(obj)
         % Trigger exergy analysis
             id=cType.ResultId.THERMOECONOMIC_STATE;
@@ -933,12 +951,8 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             % Compute diagnosis analysis
-            pdm=cType.getDiagnosisMethod(obj.DiagnosisMethod);
-            if (pdm==cType.DiagnosisMethod.WASTE_INTERNAL) && obj.isWaste
-                sol=cDiagnosisR(obj.fp0,obj.fp1);
-            else
-                sol=cDiagnosis(obj.fp0,obj.fp1);
-            end
+            method=cType.getDiagnosisMethod(obj.DiagnosisMethod);
+            sol=cDiagnosis(obj.fp0,obj.fp1,method);
             % get cModelResult object
             if sol.isValid
                 res=getDiagnosisResults(obj.fmt,sol);
@@ -1034,8 +1048,9 @@ classdef cThermoeconomicModel < cStatusLogger
         function triggerResourceSampleChange(obj)
         % trigger ResourceSample parameter change
             if obj.isGeneralCost
-                obj.setThermoeconomicAnalysis
+                obj.setThermoeconomicAnalysis;
             end
+            obj.setSummaryResults;
         end
         
         function res=checkCostTables(obj,value)

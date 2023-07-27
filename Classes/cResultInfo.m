@@ -38,16 +38,6 @@ classdef (Sealed) cResultInfo < cModelTables
             obj.status=info.status;
         end
 
-        function setProperties(obj,model,state)
-        % Set model and state properties
-        %   Input:
-        %       model - Model name
-        %       state - state of the results
-            setProperties@cModelTables(obj,model,state);
-            % Assign the state value to all the tables of the object
-            cellfun(@(x) setState(x,state),obj.tableIndex);
-        end
-
         function res=getFuelImpact(obj)
         % get the Fuel Impact as a string including format and unit
             res='WARNING: Fuel Impact NOT Available';
@@ -56,6 +46,17 @@ classdef (Sealed) cResultInfo < cModelTables
                 unit=obj.Tables.dit.Unit;
                 tfmt=['Fuel Impact:',format,' ',unit];
                 res=sprintf(tfmt,obj.Info.FuelImpact);
+            end
+        end
+
+        function summaryDiagnosis(obj)
+            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                format=obj.Tables.mfc.Format;
+                unit=obj.Tables.mfc.Unit;
+                tfmt=['Fuel Impact:',format,' ',unit,'\n'];
+                fprintf(tfmt,obj.Info.FuelImpact);
+                tfmt=['Malfunction Cost:',format,' ',unit,'\n'];
+                fprintf(tfmt,obj.Info.TotalMalfunctionCost);
             end
         end
 
