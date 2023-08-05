@@ -62,10 +62,13 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.setWasteValues(key,values)
 %       res=obj.setWasteRecycled(key,value)
 %   Resources Methods
-%       obj.getResourcesCost
-%       obj.setFlowResources(value)
-%       obj.setProcessResources(value)
-%       obj.setResourcesFlowValue(key,value)
+%       res=obj.getResourceData(sample)
+%       res=obj.getResourceCost
+%       res=obj.resourceAnalysis(active)
+%       obj.setFlowResource(value)
+%       obj.setProcessResource(value)
+%       obj.setFlowResourceValue(key,value)
+%       obj.setProcessResourceValue(key,value)
 %
     properties(GetAccess=public,SetAccess=private)
         DataModel      % Data Model
@@ -96,6 +99,7 @@ classdef cThermoeconomicModel < cStatusLogger
         directCost=true    % Direct cost are obtained
         generalCost=false  % General cost are obtained
         activeSet=false    % set variables control
+        activeResource=false % set active resource analysis
     end
 
     methods
@@ -104,6 +108,8 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Input:
         %     data - cReadModel object 
         %     varargin - optional paramaters (see ThermoeconomicTool)
+        %   
+            obj=obj@cStatusLogger(cType.VALID);
             if ~isa(data,'cDataModel')
                 obj.messageLog(cType.ERROR,'Invalid data model object');
                 printLogger(obj);
@@ -116,6 +122,10 @@ classdef cThermoeconomicModel < cStatusLogger
                 printLogger(obj);
                 return
             end
+            % Create Results Container
+            obj.results=cModelResults(data);
+            obj.DataModel=data;
+            obj.ModelName=data.ModelName;
             % Check optional input parameters
             p = inputParser;
             p.addParameter('State',data.States{1},@ischar);
@@ -134,8 +144,6 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             param=p.Results; 
             % Update Variables
-            obj.DataModel=data;
-            obj.ModelName=data.ModelName;
             obj.debug=param.Debug;
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
@@ -191,14 +199,8 @@ classdef cThermoeconomicModel < cStatusLogger
                     obj.printError('Invalid ResourceSample %s',param.ResourceSample);
                     return
                 end
-            end   
-            % Create Results container
-            obj.status=cType.VALID;
-            obj.results=cell(1,cType.MAX_RESULT_INFO);
-            ps=getProductiveStructureResults(obj.fmt,data.ProductiveStructure);
-            ps.setProperties(obj.ModelName,'SUMMARY');
-            obj.status=cType.VALID;
-            obj.setResults(cType.ResultId.PRODUCTIVE_STRUCTURE,ps)
+            end
+            % Compute initial state results
             obj.activeSet=true;
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
@@ -332,7 +334,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if isempty(res)
                 res=getDiagramFP(obj.fmt,obj.fp1,option);
                 res.setProperties(obj.ModelName,obj.State);
-                obj.setResults(id,res);
+                obj.setResults(res);
                 obj.printDebugInfo('DiagramFP activated')
             end
         end
@@ -479,8 +481,12 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function res=getModelInfo(obj)
         % Get the cResultInfo objects of the current state (internal application use)
-            stateResults=obj.results(1:cType.MAX_RESULT);
-            res=obj.results(~cellfun(@isempty,stateResults));
+            res=getModelInfo(obj.results);
+        end
+
+        function res=getModelTables(obj)
+        % Get a cModelTables object with all tables of the active model
+            res=getModelTables(obj.results);
         end
 
         function setDebug(obj,dbg)
@@ -767,6 +773,10 @@ classdef cThermoeconomicModel < cStatusLogger
         %   wtype - waste allocation type (see cType)
         %
             log=cStatus(cType.VALID);
+            if nargin~=3
+               log.printError('Usage: obj.setWasteType(key,wtype)');
+               return
+            end  
             wt=obj.fp1.WasteData;
             if ~wt.setType(key,wtype)  
                 log.printError('Invalid waste type %s - %s',key,wtype);
@@ -786,6 +796,10 @@ classdef cThermoeconomicModel < cStatusLogger
         %  id - Waste key
         %  val - vector containing the waste values
             log=cStatus(cType.VALID);
+            if nargin~=3
+               log.printError('Usage: obj.setWasteValues(key,values)');
+               return
+            end  
             wt=obj.fp1.WasteData;
             if ~wt.setValues(key,val)
                 log.prinError('Invalid waste %s allocation values',key);
@@ -798,14 +812,17 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.setThermoeconomicDiagnosis;
             end
         end
-
-        
+   
         function log=setWasteRecycled(obj,key,val)
         % Set the waste table values
         % Input
         %  id - Waste id
         %  val - vector containing the waste values
             log=cStatus(cType.VALID);
+            if nargin~=3
+               log.printError('Usage: obj.setWasteRecycled(key,value)');
+               return
+            end 
             wt=obj.fp1.WasteData;
             if ~wt.setRecycleRatio(key,val)
                 log.printError('Invalid waste %s recycling values',key);
@@ -822,52 +839,123 @@ classdef cThermoeconomicModel < cStatusLogger
         %%%
         % Resource Cost Methods
         %
-        function res=setFlowResources(obj,c0)
-        % Set the resources cost of the flows
-        %   Z - array containing the flows cost
-            res=cStatus();
-            if setFlowResources(obj.rsc,c0)
+        function res=resourceAnalysis(obj,active)
+        % Manage the resource cost analysis
+        %   Input:
+        %       active - Indicate if resource analysis is active
+        %           TRUE: Create a new cResourceData object where changes are made
+        %           FALSE: Use the Model Resources Data as usual
+        %   Output:
+        %       res - cResourceCost object
+            res=cStatus(cType.VALID);
+            if nargin==1
+                active=false;
+            end
+            if ~obj.isGeneralCost
+                res.printError('No Generalized Cost activated');
+                return
+            end
+            obj.activeResource=active;
+            sample=obj.ResourceSample;
+            if active
+                id=obj.DataModel.getSampleId(sample);
+                dm=obj.DataModel;
+                data=dm.ModelData.ResourcesCost.Samples(id);
+                ps=obj.DataModel.ProductiveStructure;
+                obj.rsd=cResourceData(data,ps);
+                obj.rsc=getResourceCost(obj.rsd,obj.fp1);
+            else
+                obj.rsd=obj.getResourceData;
+                obj.rsc=getResourceCost(obj.rsd,obj.fp1);
                 obj.setThermoeconomicAnalysis;
-                obj.setSummaryResults;
+            end
+            res=obj.rsc;
+        end
+
+        function res=setFlowResource(obj,c0)
+        % Set the resources cost of the flows
+        %   Input:
+        %       c0 - array containing the flows cost
+        %   Output:
+        %       res - cResourceCost object 
+            res=cStatus(cType.VALID);
+            if ~obj.isGeneralCost
+                res.printError('No Generalized Cost activated');
+				return
+            end
+            log=setFlowResource(obj.rsd,c0);
+            if isValid(log)
+                obj.setThermoeconomicAnalysis;
                 res=obj.rsc;
             else
-                printLogger(obj.rsc);
+                printLogger(log);
                 res.printError('Invalid Resources Values');
             end
         end
 
-        function res=setResourcesFlowValue(obj,key,value)
+        function res=setFlowResourceValue(obj,key,value)
         % Set resource flow cost value
-        %   key - key of the resource flow
-        %   value - resource cost value
-            res=cStatus();
-            if setResourcesFlowValue(obj.rsc,key,value)
+        %   Input:
+        %       key - key of the resource flow
+        %       value - resource cost value
+        %   Output:
+        %       res - cResourceCost object
+            res=cStatus(cType.VALID);
+            if ~obj.isGeneralCost
+                res.printError('No Generalized Cost activated');
+                return
+            end
+            log=setFlowResourceValue(obj.rsd,key,value);
+            if isValid(log)
                 obj.setThermoeconomicAnalysis;
-                obj.setSummaryResults;
                 res=obj.rsc;
             else
-                printLogger(obj.rsc);
+                printLogger(log);
                 res.printError('Invalid Resources Value %s',key);
             end
         end
 
-        function res=setProcessResources(obj,Z)
-        % Set the recource cost of the processes
-        %   Z - array containing the processes cost
-            res=cStatus();
-            if setProcessResources(obj.rsc,Z)
+        function res=setProcessResource(obj,Z)
+        % Set the resource cost of the processes
+        %   Input:
+        %       Z - array containing the processes cost
+        %   Output:
+        %       res - cResourceCost object
+            res=cStatus(cType.VALID);
+            if ~obj.isGeneralCost || ~obj.rsca
+                res.printError('No Generalized Cost activated');
+                return
+            end          
+            log=setProcessResource(obj.rsd,Z);
+            if isValid(log)
                 obj.setThermoeconomicAnalysis;
-                obj.setSummaryResults;
                 res=obj.rsc;
             else
-                printLogger(obj.rsc);
+                printLogger(log);
                 res.printError('Invalid Resources Values');
             end
         end
 
-        function res=getResourcesCost(obj)
-        % get the actual value of resources
-            res=obj.rsc;
+        function res=setProcessResourceValue(obj,key,value)
+        % Set the recource cost of the processes
+        %   Input:
+        %       key - Process key
+        %       value - cost value of the process
+        %   Output:
+        %       res - cResourceCost object
+            res=cStatus(cType.VALID);
+            if ~obj.isGeneralCost
+                res.printError('No Generalized Cost activated');
+                return
+            end
+            log=setProcessResourceValue(obj.rsd,key,value);
+            if isValid(log)
+                obj.setThermoeconomicAnalysis;
+                res=obj.rsc;
+            else
+                printLogger(log);
+                res.printError('Invalid Resources Values');
+            end
         end
 
         function res=getResourceData(obj,sample)
@@ -877,34 +965,25 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             res=obj.DataModel.getResourceData(sample);
         end
+
+        function res=getResourceCost(obj)
+        % Get the current values of resource cost
+            res=obj.rsc;
+        end
     end
-    methods(Access=private)
     %%%
-    % Internal computations
-        function res=getModelTables(obj)
-        % Get a cModelTables object with all tables of the active model
-            id=cType.ResultId.RESULT_MODEL;
-            res=obj.getResults(id);
-            if isempty(res)
-                tables=struct();
-                tmp=obj.getModelInfo;
-                for k=1:numel(tmp)
-                    dm=tmp{k};
-                    list=dm.getListOfTables;
-                    for i=1:dm.NrOfTables
-                        tables.(list{i})=dm.Tables.(list{i});
-                    end
-                end
-                res=cModelTables(cType.ResultId.RESULT_MODEL,tables);
-                res.setProperties(obj.ModelName,obj.State);
-                obj.setResults(id,res);
-                obj.printDebugInfo('Model Tables saved');
+    % Internal Methods
+    methods(Access=private)
+
+        function printDebugInfo(obj,varargin)
+        % Print info messages if debug mode is activated
+            if obj.debug
+                obj.printInfo(varargin{:});
             end
         end
 
         function res=setStateInfo(obj)
         % Trigger exergy analysis
-            id=cType.ResultId.THERMOECONOMIC_STATE;
             idx=obj.DataModel.getStateId(obj.State);
             obj.fp1=obj.rstate{idx};
             if ~obj.activeSet
@@ -912,13 +991,12 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             res=getExergyResults(obj.fmt,obj.fp1);
             res.setProperties(obj.ModelName,obj.State);
-            obj.setResults(id,res);
+            obj.setResults(res);
             obj.printDebugInfo('Set State: %s',obj.State);
         end
 
         function setThermoeconomicAnalysis(obj)
         % Trigger thermoeconomic analysis
-            id=cType.ResultId.THERMOECONOMIC_ANALYSIS;
             if ~obj.activeSet
                 return
             end
@@ -932,7 +1010,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if obj.fp1.isValid
                 res=getThermoeconomicAnalysisResults(obj.fmt,obj.fp1,options);
 	            res.setProperties(obj.ModelName,obj.State);
-                obj.setResults(id,res);
+                obj.setResults(res);
                 obj.printDebugInfo('Compute Thermoeconomic Analysis for State: %s',obj.State);
             else
                 obj.fp1.printLogger;
@@ -957,7 +1035,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if sol.isValid
                 res=getDiagnosisResults(obj.fmt,sol);
                 res.setProperties(obj.ModelName,obj.State);
-                obj.setResults(id,res);
+                obj.setResults(res);
                 obj.printDebugInfo('Compute Thermoeconomic Diagnosis for State: %s',obj.State);
             else
                 sol.printLogger;
@@ -978,7 +1056,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 if tmp.isValid
                     res=getSummaryResults(obj.fmt,tmp);
                     res.setProperties(obj.ModelName,'SUMMARY');
-                    obj.setResults(id,res);
+                    obj.setResults(res);
                     obj.printDebugInfo('Summary Results have been Calculated');
                 else
                     tmp.printLogger;
@@ -1100,6 +1178,7 @@ classdef cThermoeconomicModel < cStatusLogger
         end
 
         function res=checkSummary(obj,value)
+        % Ckeck Summary parameter
             res=false;
             log=cStatus();
             if ~obj.activeSet
@@ -1116,28 +1195,21 @@ classdef cThermoeconomicModel < cStatusLogger
             res=true;
         end
 
+        %%%
+        % cModelResults methods
         function res=getResults(obj,index)
         % Get the result info
-            res=obj.results{index};
+            res=getResults(obj.results,index);
         end
 
         function clearResults(obj,index)
         % Clear the result info
-            obj.results{index}=[];
+            clearResults(obj.results,index);
         end
 
-        function setResults(obj,index,res)
+        function setResults(obj,res)
         % Set the result info
-            if isa(res,'cModelTables')
-                obj.results{index}=res;
-            end
+            setResults(obj.results,res);
         end
-
-        function printDebugInfo(obj,varargin)
-            % Print info messages if debug mode is activated
-                if obj.debug
-                    obj.printInfo(varargin{:});
-                end
-            end
     end
 end

@@ -45,7 +45,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
                 end
                 obj.isResourceCost=true;
                 obj.generalCost=true;
-                obj.resourceCost=cResourceCost(rsd,fpm);
+                obj.resourceCost=getResourceCost(rsd,fpm);
             end
             obj.ps=fpm.ps;
             % Assign object variables

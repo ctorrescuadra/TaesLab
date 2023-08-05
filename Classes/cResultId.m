@@ -23,6 +23,7 @@ classdef cResultId < cStatusLogger
 				end
 			end
         end
+		
         function res=get.ResultName(obj)
         % get the result name 
             res=cType.Results{obj.ResultId};

@@ -84,7 +84,7 @@ function res=ExergyCostCalculator(data,varargin)
 			param.ResourceSample=data.getResourceSample(1);
         end
 		rsd=data.getResourceData(param.ResourceSample);
-		rsc=rsd.getResourceCost(ect);
+		rsc=getResourceCost(rsd,ect);
         if ~rsc.isValid
 			rsc.printLogger;
 			res.printError('Invalid resources cost values. See error log');

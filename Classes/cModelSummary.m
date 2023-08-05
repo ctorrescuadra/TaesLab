@@ -58,7 +58,7 @@ classdef cModelSummary < cResultId
                 obj.setValues(cType.SummaryId.FLOW_DIRECT_COST,j,fcost.C');
                 obj.setValues(cType.SummaryId.FLOW_DIRECT_UNIT_COST,j,fcost.c');
                 if model.isResourceCost
-                    rsc=cResourceCost(rsd,rstates{j});
+                    rsc=getResourceCost(rsd,rstates{j});
                     cost=rstates{j}.getGeneralProcessCost(rsc);
                     obj.setValues(cType.SummaryId.PROCESS_GENERALIZED_COST,j,cost.CP');
                     ucost=rstates{j}.getGeneralProcessUnitCost(rsc);

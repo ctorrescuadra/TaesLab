@@ -212,7 +212,7 @@ classdef cDataModel < cStatusLogger
         end
 
         function res=getResourceData(obj,sample)
-        % get the resource data for a sample
+        % Get the resource data for a sample
             res=cStatus(cType.ERROR);
             if nargin==1
                 idx=1;

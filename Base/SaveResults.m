@@ -20,6 +20,9 @@ function SaveResults(res,filename)
     if isa(res,'cResultInfo')
         log=saveResults(res,filename);
         printLogger(log);
+    elseif isa(res,'cThermoeconomicModel')
+        log=saveResultsModel(res,filename);
+        printLogger(log);
     else
         log.printError('Invalid input. It must be a cResultInfo object');
     end

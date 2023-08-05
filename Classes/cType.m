@@ -64,7 +64,8 @@ classdef cType
         DIRECT=1                  % Direct Cost Tables Bit
         GENERALIZED=2             % Generalized Cost Tables Bit
 		CAPACITY=8	              % Initial capacity for cQueue and cStack
-		MAX_RESULT=4              % Number of results in cModelResults
+		MAX_RESULT=4              % Number of Results in cModelResults
+		MAX_RESULT_INFO=11        % Maximun cResultInfo groups
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		FUEL='FUEL'       % Fuel type option text
@@ -137,7 +138,6 @@ classdef cType
 		Format=struct('NODE',1,'TEXT',2,'EXERGY',3,'EXERGY_COST',4,'EXERGY_UNIT_COST',5,...
 		'GENERALIZED_COST',6,'GENERALIZED_UNIT_COST',7,'DIAGNOSIS',8,'PERCENTAGE',9);
         % Result Id types
-		MAX_RESULT_INFO=11
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
             'THERMOECONOMIC_DIAGNOSIS',4,'SUMMARY_RESULTS',5,'PRODUCTIVE_DIAGRAM',6,'DIAGRAM_FP',7,'WASTE_ANALYSIS',8,...
 			'RECYCLING_ANALYSIS',9,'EXERGY_COST_CALCULATOR',10,'RESULT_MODEL',11,'DATA_MODEL',12);

@@ -106,7 +106,7 @@ classdef cDiagnosis < cResultId
                     return
             end
             % Fuel Impact and Malfunction Cost
-            dcpt=obj.dpuk.cP * obj.DWt;
+            dcpt=obj.computeDCPT(obj.dpuk0.cP,obj.dpuk.cP);
             obj.DFT=sum(fp1.Resources-fp0.Resources);
             obj.A0=obj.DFT - dcpt;
             % Object Status Information
@@ -191,6 +191,7 @@ classdef cDiagnosis < cResultId
             obj.tMCR=zeros(N,N);
             obj.DWr=zeros(N,N+1);
         end
+        
         function wasteInternalMethod(obj,fp0,fp1)
         % Compute internal variables with WASTE_INTERNAL method
             opR=fp1.WasteOperators.opR;
