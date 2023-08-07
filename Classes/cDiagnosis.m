@@ -19,6 +19,7 @@ classdef cDiagnosis < cResultId
 %       obj.getMalfunctionCost
 %       obj.getWasteMalfunctionCost
 %       obj.getMalfunctionCostTable
+%
 	properties(GetAccess=public, SetAccess=private)
         NrOfProcesses        % Number of processes
         NrOfWastes           % Number of Wastes
@@ -26,22 +27,23 @@ classdef cDiagnosis < cResultId
         TotalMalfunctionCost % Total Malfunction Cost
     end
     properties(Access=private)
-        DKP  % Unit Cost Variation Matrix
-        tMCR % Waste Malfunction Cost Matrix
-        DW0  % System output variation
-        DWt  % Final demand variation
-        DWr  % Waste Variation Matrix
-        DcP  % Unit Cost Variation     
-		tMF  % Malfunction Matrix
-        tDF  % Disfunction Matrix
-        vMF  % Process Malfunction
-        vDI  % Irreversibility Variation
-        DFT  % Fuel Impact
-        dCW0 % Cost of Output Variation
-        dW   % Output Variation
-        A0   % Technical Saving
-        dpuk % direct Unit exergy cost (operation)
-        dpuk0 % direct Unit exergy cost (reference)
+        DKP     % Unit Cost Variation Matrix
+        DW0     % System output variation
+        DWt     % Final demand variation
+        DcP     % Unit Cost Variation     
+		tMF     % Malfunction Matrix
+        tDF     % Disfunction Matrix
+        tMCR    % Waste Malfuction Cost
+        vMF     % Process Malfunction
+        vDI     % Irreversibility Variation
+        DFT     % Fuel Impact
+        DCW     % Cost of Output Variation
+        DW      % Output Variation
+        DIT     % Irreversibilty Table
+        MFC     % Malfunction Cost Table
+        A0      % Technical Saving
+        dpuk    % direct Unit exergy cost (operation)
+        dpuk0   % direct Unit exergy cost (reference)
     end
 	
 	methods
@@ -139,7 +141,7 @@ classdef cDiagnosis < cResultId
 
         function res=getIrreversibilityTable(obj)
         % Build the irreversibility table
-            res=[[obj.tDF'+obj.DWr',[obj.dW;0]];[obj.vMF,0]];
+            res=[[obj.DIT',[obj.DW;0]];[obj.vMF,0]];
         end
 
         function res=getOutputVariation(obj)
@@ -149,7 +151,7 @@ classdef cDiagnosis < cResultId
             
         function res=getDemandVariationCost(obj)
         % get the output cost variation
-            res=[obj.dCW0,sum(obj.dCW0)];
+            res=[obj.DCW,sum(obj.DCW)];
         end 
 
         function res=getMalfunction(obj)
@@ -177,8 +179,7 @@ classdef cDiagnosis < cResultId
 
         function res=getMalfunctionCostTable(obj)
         % Build the malfunction cost table
-            aux=obj.tDF(:,1:end-1)+obj.tMCR;
-            res=[[aux,obj.dCW0'];[obj.vMF,0]];
+            res=[[obj.MFC,obj.DCW'];[obj.vMF,0]];
         end
     end
 
@@ -186,25 +187,32 @@ classdef cDiagnosis < cResultId
         function wasteOutputMethod(obj)
         % Compute internal variables with WASTE_OUTPUT method
             N=obj.NrOfProcesses;
-            obj.dCW0=obj.dpuk.cPE .* obj.DW0';
-            obj.dW=obj.DW0;
+            obj.DCW=obj.dpuk.cPE .* obj.DW0';
+            obj.DW=obj.DW0;
+            obj.MFC=obj.tDF(:,1:N);
+            obj.DIT=obj.tDF';
             obj.tMCR=zeros(N,N);
-            obj.DWr=zeros(N,N+1);
         end
         
         function wasteInternalMethod(obj,fp0,fp1)
         % Compute internal variables with WASTE_INTERNAL method
+            N=obj.NrOfProcesses;
             opR=fp1.WasteOperators.opR;
             cP=obj.dpuk.cP;
             cPE=obj.dpuk.cPE;
-            obj.dCW0=cP .* obj.DWt';
-            obj.dW=obj.DWt;
+            % Compute Waste Malfunction Cost
             tMR=scaleCol(fp1.WasteTable.mKR-fp0.WasteTable.mKR,fp0.ProductExergy);
-            tDR=opR * obj.tMF(1:end-1,1:end-1);
+            tDR=opR * obj.tMF(1:N,1:N);
             obj.tMCR=scaleRow(tMR,cP)+scaleRow(tDR,cPE);
+            % Compute waste variation
             res1=tMR+tDR+opR*tMR;
             res2=opR*obj.DWt;
-            obj.DWr=[full(res1),full(res2)];
+            DWr=[full(res1),full(res2)];
+            % Compute variables for tables
+            obj.MFC=obj.tDF(:,1:N)+obj.tMCR;
+            obj.DIT=obj.tDF+DWr;
+            obj.DCW=cP .* obj.DWt';
+            obj.DW=obj.DWt;
         end
 
         function res=computeDCPT(obj,c0,c1)

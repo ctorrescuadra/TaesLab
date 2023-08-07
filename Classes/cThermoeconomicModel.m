@@ -76,6 +76,8 @@ classdef cThermoeconomicModel < cStatusLogger
         StateNames     % Names of the defined states
         SampleNames    % Names of the defined resource samples
         WasteFlows     % Names of the waste flows
+        ResourceData   % Resource Data object
+        ResourceCost   % Resource Cost object
     end
 
     properties(Access=public)
@@ -868,6 +870,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.rsd=obj.getResourceData;
                 obj.rsc=getResourceCost(obj.rsd,obj.fp1);
                 obj.setThermoeconomicAnalysis;
+                obj.setSummaryResults;
             end
             res=obj.rsc;
         end
@@ -879,13 +882,14 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Output:
         %       res - cResourceCost object 
             res=cStatus(cType.VALID);
-            if ~obj.isGeneralCost
+            if ~obj.isGeneralCost || ~obj.activeResource
                 res.printError('No Generalized Cost activated');
 				return
             end
             log=setFlowResource(obj.rsd,c0);
             if isValid(log)
                 obj.setThermoeconomicAnalysis;
+                obj.setSummaryResults;
                 res=obj.rsc;
             else
                 printLogger(log);
@@ -901,13 +905,14 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Output:
         %       res - cResourceCost object
             res=cStatus(cType.VALID);
-            if ~obj.isGeneralCost
+            if ~obj.isGeneralCost || ~obj.activeResource
                 res.printError('No Generalized Cost activated');
                 return
             end
             log=setFlowResourceValue(obj.rsd,key,value);
             if isValid(log)
                 obj.setThermoeconomicAnalysis;
+                obj.setSummaryResults;
                 res=obj.rsc;
             else
                 printLogger(log);
@@ -922,13 +927,14 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Output:
         %       res - cResourceCost object
             res=cStatus(cType.VALID);
-            if ~obj.isGeneralCost || ~obj.rsca
+            if ~obj.isGeneralCost || ~obj.activeResource
                 res.printError('No Generalized Cost activated');
                 return
             end          
             log=setProcessResource(obj.rsd,Z);
             if isValid(log)
                 obj.setThermoeconomicAnalysis;
+                obj.setSummaryResults;
                 res=obj.rsc;
             else
                 printLogger(log);
@@ -944,13 +950,14 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Output:
         %       res - cResourceCost object
             res=cStatus(cType.VALID);
-            if ~obj.isGeneralCost
+            if ~obj.isGeneralCost || ~obj.activeResource
                 res.printError('No Generalized Cost activated');
                 return
             end
             log=setProcessResourceValue(obj.rsd,key,value);
             if isValid(log)
                 obj.setThermoeconomicAnalysis;
+                obj.setSummaryResults;
                 res=obj.rsc;
             else
                 printLogger(log);
@@ -966,7 +973,12 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.DataModel.getResourceData(sample);
         end
 
-        function res=getResourceCost(obj)
+        function res=get.ResourceData(obj)
+        % Get the current values of resource data
+            res=obj.rsd;
+        end
+ 
+        function res=get.ResourceCost(obj)
         % Get the current values of resource cost
             res=obj.rsc;
         end
@@ -1003,7 +1015,7 @@ classdef cThermoeconomicModel < cStatusLogger
             % Read resources
             options=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);
             if obj.isGeneralCost
-                obj.rsc=cResourceCost(obj.rsd,obj.fp1);
+                obj.rsc=getResourceCost(obj.rsd,obj.fp1);
                 options.ResourcesCost=obj.rsc;
             end
             % Get cModelResults info
