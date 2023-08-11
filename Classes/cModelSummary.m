@@ -5,6 +5,7 @@ classdef cModelSummary < cResultId
         StateNames      % States Names
         ExergyData      % Exergy Data
         UnitConsumption % Process Unit Consumption Values
+        Irreversibility % Process Irreversibility Values
         CostValues      % Cost Values cell array
     end
     properties(Access=private)
@@ -45,6 +46,7 @@ classdef cModelSummary < cResultId
             end
             rstates=model.getResultStates;
             pku=zeros(NrOfProcesses+1,obj.NrOfStates);
+            pI=zeros(NrOfProcesses+1,obj.NrOfStates);
             rex=zeros(NrOfFlows,obj.NrOfStates);
             for j=1:obj.NrOfStates
                 cost=rstates{j}.getDirectProcessCost;
@@ -65,11 +67,13 @@ classdef cModelSummary < cResultId
                     obj.setValues(cType.SummaryId.FLOW_GENERALIZED_UNIT_COST,j,fcost.c');
                 end
                 pku(:,j)=rstates{j}.ProcessesExergy.vK';
+                pI(:,j)=rstates{j}.ProcessesExergy.vI';
                 rex(:,j)=rstates{j}.FlowsExergy';
             end
             obj.status=true;
             obj.ExergyData=rex;
             obj.UnitConsumption=pku;
+            obj.Irreversibility=pI;
             obj.StateNames=model.StateNames;
             obj.ps=model.productiveStructure.Info;
         end

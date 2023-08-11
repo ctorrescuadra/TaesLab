@@ -311,8 +311,13 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             % Unit consumption Table
             id=cType.SummaryId.UNIT_CONSUMPTION;
             data=ms.UnitConsumption;
-            rowNames=obj.processKeys(1:end);
+            rowNames=obj.processKeys;
             tbl.pku=createSummaryTable(obj,id,data,rowNames,colNames);
+            % Irreversibility Table
+            id=cType.SummaryId.IRREVERSIBILITY;
+            data=ms.Irreversibility;
+            rowNames=obj.processKeys;
+            tbl.pI=createSummaryTable(obj,id,data,rowNames,colNames);
             % Cost Tables
             N=length(ms.CostValues);
             for id=1:N

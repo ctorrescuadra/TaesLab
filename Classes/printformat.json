@@ -856,6 +856,14 @@
 			"type": 5,
 			"graph": 5,
 			"options": 1
+		},
+		{
+			"id": 11,
+			"key": "pI",
+			"header": "Process Irreversibility",
+			"type": 3,
+			"graph": 0,
+			"options": 0
 		}
 	],
 	"format": [

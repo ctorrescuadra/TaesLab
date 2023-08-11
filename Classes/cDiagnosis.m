@@ -27,12 +27,14 @@ classdef cDiagnosis < cResultId
         TotalMalfunctionCost % Total Malfunction Cost
     end
     properties(Access=private)
+        opI     % Irreversibility operator
         DKP     % Unit Cost Variation Matrix
         DW0     % System output variation
         DWt     % Final demand variation
         DcP     % Unit Cost Variation     
-		tMF     % Malfunction Matrix
+	    tMF     % Malfunction Matrix
         tDF     % Disfunction Matrix
+        tDF0    % External Disfunction Matrix     
         tMCR    % Waste Malfuction Cost
         vMF     % Process Malfunction
         vDI     % Irreversibility Variation
@@ -89,14 +91,16 @@ classdef cDiagnosis < cResultId
             obj.DW0=fp1.SystemOutput - fp0.SystemOutput;
             obj.DWt=fp1.FinalDemand - fp0.FinalDemand;
             % Cost Information
-            opI=fp1.pfOperators.opI;
+            obj.opI=fp1.pfOperators.opI;
             obj.dpuk=fp1.getDirectProcessUnitCost;
             obj.dpuk0=fp0.getDirectProcessUnitCost;
             obj.DcP=obj.dpuk.cP-obj.dpuk0.cP;
             % Malfunction and Disfunction Matrix
             obj.tMF=[scaleCol(obj.DKP,fp0.ProductExergy),[obj.DW0;0]];
             obj.vMF=sum(obj.tMF(:,1:end-1));
-            obj.tDF=zerotol(opI*obj.tMF(1:end-1,:));
+            obj.tDF=zerotol(obj.opI*obj.tMF(1:end-1,:));
+            iw0=fp1.ps.SystemOutput.processes;
+            obj.tDF0=scaleCol(obj.opI(:,iw0),obj.DW0(iw0));
             % Calculate the malfunction cost according to the chosen method
             switch method
                 case cType.DiagnosisMethod.WASTE_OUTPUT
@@ -181,6 +185,14 @@ classdef cDiagnosis < cResultId
         % Build the malfunction cost table
             res=[[obj.MFC,obj.DCW'];[obj.vMF,0]];
         end
+
+        function res=getExternalDisfunction(obj)
+        % Get the external disfunction table
+            rsum=sum(obj.tDF0,2);
+            csum=sum(obj.tDF0,1);
+            tsum=sum(csum);
+            res=[obj.tDF0,rsum;[csum,tsum]];
+        end
     end
 
     methods(Access=protected)
@@ -190,7 +202,7 @@ classdef cDiagnosis < cResultId
             obj.DCW=obj.dpuk.cPE .* obj.DW0';
             obj.DW=obj.DW0;
             obj.MFC=obj.tDF(:,1:N);
-            obj.DIT=obj.tDF';
+            obj.DIT=obj.tDF;
             obj.tMCR=zeros(N,N);
         end
         
@@ -198,6 +210,7 @@ classdef cDiagnosis < cResultId
         % Compute internal variables with WASTE_INTERNAL method
             N=obj.NrOfProcesses;
             opR=fp1.WasteOperators.opR;
+            iwr=fp1.ps.Waste.processes;
             cP=obj.dpuk.cP;
             cPE=obj.dpuk.cPE;
             % Compute Waste Malfunction Cost
@@ -210,9 +223,14 @@ classdef cDiagnosis < cResultId
             DWr=[full(res1),full(res2)];
             % Compute variables for tables
             obj.MFC=obj.tDF(:,1:N)+obj.tMCR;
-            obj.DIT=obj.tDF+DWr;
             obj.DCW=cP .* obj.DWt';
             obj.DW=obj.DWt;
+            obj.DIT=obj.tDF;
+            % Update DIT matrix
+            obj.DIT(:,end)=obj.opI*obj.DWt;
+            DFr=scaleCol(obj.opI(:,iwr),obj.DW0(iwr));
+            obj.DIT(:,iwr)=obj.DIT(:,iwr)+DFr;
+            obj.DIT=obj.DIT+DWr;
         end
 
         function res=computeDCPT(obj,c0,c1)
