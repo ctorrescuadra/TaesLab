@@ -19,7 +19,9 @@ classdef cDiagnosis < cResultId
 %       obj.getMalfunctionCost
 %       obj.getWasteMalfunctionCost
 %       obj.getMalfunctionCostTable
-%
+%       obj.getInternalDisfunction
+%       obj.getExternalDisfunction
+%       obj.getDemandVariationEffectiveCost
 	properties(GetAccess=public, SetAccess=private)
         NrOfProcesses        % Number of processes
         NrOfWastes           % Number of Wastes
@@ -40,6 +42,8 @@ classdef cDiagnosis < cResultId
         vMF     % Process Malfunction
         vDI     % Irreversibility Variation
         vMCR    % Waste Malfuction Cost
+        DFin    % Internal disfunction matrix
+        DFex    % External disfunction matrix
         DFT     % Fuel Impact
         DCW     % Cost of Output Variation
         DW      % Output Variation
@@ -102,21 +106,20 @@ classdef cDiagnosis < cResultId
             obj.tMF=scaleCol(obj.DKP,fp0.ProductExergy);
             obj.vMF=sum(obj.tMF);
             obj.tDF=zerotol(obj.opI*obj.tMF(1:end-1,:));
-            obj.DWTEC=obj.computeDWTEC(dpuk0.cP,obj.dpuk.cP);
-            obj.DFT=sum(fp1.Resources-fp0.Resources);
             % Calculate the malfunction cost according to the chosen method
             switch method
                 case cType.DiagnosisMethod.WASTE_EXTERNAL
                     obj.wasteOutputMethod;
-                    obj.A0=0;
                 case cType.DiagnosisMethod.WASTE_INTERNAL
                     obj.wasteInternalMethod(fp0,fp1);
-                    obj.A0=obj.DFT - sum(obj.DWTEC);
                 otherwise
                     obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
                     return
             end
             % Fuel Impact and Malfunction Cost
+            obj.DWTEC=obj.computeDWTEC(dpuk0.cP,obj.dpuk.cP);
+            obj.DFT=sum(fp1.Resources-fp0.Resources);
+            obj.A0=obj.DFT - sum(obj.DWTEC);
             % Object Status Information
             obj.status=cType.VALID;
         end
@@ -165,10 +168,6 @@ classdef cDiagnosis < cResultId
             res=[obj.DCW,sum(obj.DCW)];
         end 
 
-        function res=getDWTEC(obj)
-            res=[obj.DWTEC,sum(obj.DWTEC)];
-        end
-
         function res=getMalfunction(obj)
         % Get the malfunction vector
             aux=obj.vMF;
@@ -195,6 +194,22 @@ classdef cDiagnosis < cResultId
         % Build the malfunction cost table
             res=[[obj.MFC,obj.DCW'];[obj.vMF,0]];
         end
+
+        function res=getInternalDisfunction(obj)
+        % Get internal disfunction matrix
+            res=obj.DFin';
+        end
+
+        function res=getExternalDisfunction(obj)
+        % Get waste disfunction matrix
+            res=obj.DFex';
+        end
+
+        function res=getDemandVariationEffectiveCost(obj)
+        % Get Demand Variation effective cost.
+            res=[obj.DWTEC,sum(obj.DWTEC)];
+        end
+
     end
 
     methods(Access=protected)
@@ -206,8 +221,9 @@ classdef cDiagnosis < cResultId
             mf=obj.tMF(1:N,:);
             obj.DW=obj.DWt;
             obj.DCW=obj.dpuk.cPE .* obj.DW0';
-            mdf=obj.opI*[mf,obj.DW0];
-            obj.DIT=mdf+mdwr;
+            obj.DFin=obj.opI*[mf,obj.DW0];
+            obj.DFex=zeros(N,N+1);
+            obj.DIT=obj.DFin+mdwr;
             obj.vMCR=zeros(1,N);
             obj.MFC=obj.tDF;
         end
@@ -232,7 +248,9 @@ classdef cDiagnosis < cResultId
             % Compute waste variation
             mdwr=[mr,zeros(N,1)]+opR*mfr;
             % Compute Irreversibility table
-            obj.DIT=obj.opI*([mf,obj.DWt]+mdwr)+mdwr;
+            obj.DFin=obj.opI*([mf,obj.DWt]);
+            obj.DFex=obj.opI*mdwr;
+            obj.DIT=obj.DFin+obj.DFex+mdwr;
         end
 
         function res=computeDWTEC(obj,c0,c1)
