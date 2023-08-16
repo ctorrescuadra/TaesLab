@@ -386,9 +386,9 @@ classdef ThermoeconomicPanel < handle
 				end
 				dnames=cType.DiagnosisOptions;
 				if tm.isWaste
-					set(obj.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_OUTPUT);
+					set(obj.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
 				else
-					set(obj.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_OUTPUT);
+					set(obj.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
 				end
 				logtext=' INFO: Valid Data Model';
                 obj.Model=tm;

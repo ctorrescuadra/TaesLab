@@ -14,7 +14,7 @@ function model=ThermoeconomicTool(filename,varargin)
 %           ALL - Both direct and generalized
 %       DiagnosisMethod - Diagnosis method to allocate wastes
 %           NONE - Deactivate diagnosis
-%           WASTE_OUTPUT - Consider waste as output
+%           WASTE_EXTERNAL - Consider waste as output
 %           WASTE_INTERNAL - Allocate waste increase to productive processes 
 %       Summary - Activate Summary Results
 %       Debug - Print Debug information during execution

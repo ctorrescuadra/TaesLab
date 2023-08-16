@@ -90,8 +90,8 @@ classdef cType
         CostTables=struct('DIRECT',1,'GENERALIZED',2,'ALL',3);
 		DEFAULT_COST_TABLES='DIRECT';
         % Options for diagnosis calculation
-		DiagnosisMethod=struct('NONE',1,'WASTE_OUTPUT',2,'WASTE_INTERNAL',3);
-		DEFAULT_DIAGNOSIS='WASTE_OUTPUT';
+		DiagnosisMethod=struct('NONE',1,'WASTE_EXTERNAL',2,'WASTE_INTERNAL',3);
+		DEFAULT_DIAGNOSIS='WASTE_EXTERNAL';
 		% Input Tables
 		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...
 		'WASTEDEF',5,'WASTEALLOC',6,'RESOURCES',7);

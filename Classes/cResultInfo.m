@@ -50,6 +50,7 @@ classdef (Sealed) cResultInfo < cModelTables
         end
 
         function summaryDiagnosis(obj)
+        % Show diagnosis summary results
             if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
                 format=obj.Tables.mfc.Format;
                 unit=obj.Tables.mfc.Unit;

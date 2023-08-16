@@ -579,7 +579,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             data=cell(nrows,6);     
             data(:,1)=num2cell(dgn.getMalfunction);
             data(:,2)=num2cell(dgn.getIrreversibilityVariation);
-            data(:,3)=num2cell(dgn.getOutputVariation);
+            data(:,3)=num2cell(dgn.getDemandVariation);
             data(:,4)=num2cell(dgn.getMalfunctionCost);
             data(:,5)=num2cell(dgn.getWasteMalfunctionCost);
             data(:,6)=num2cell(dgn.getDemandVariationCost);
@@ -602,7 +602,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   values - Malfunction cost table values
             id=cType.MatrixTable.MALFUNCTION_COST_TABLE;
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
-            colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPs*');
+            colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPt*');
             res=obj.createMatrixTable(id,values,rowNames,colNames);
         end
             
@@ -612,7 +612,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   values - Irreversibility table values
             id=cType.MatrixTable.IRREVERSIBILITY_TABLE;
             rowNames=[obj.processKeys,'MF'];
-            colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPs');
+            colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPt');
             res=obj.createMatrixTable(id,values,rowNames,colNames);
         end
 

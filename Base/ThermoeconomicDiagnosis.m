@@ -8,7 +8,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %           ReferenceState - Reference State for diagnosis. If not provided first state is used.
 %           State - Operation State for diagnosis. If not provided second state is used
 %           DiagnosisMethod - Select the method to compute diagnosis
-%               WASTE_OUTPUT: Waste are considered output, and method compute cost variation
+%               WASTE_EXTERNAL: Waste are considered output, and method compute cost variation
 %               WASTE_INTERNAL: Waste are allocated to productive units, and method compute Malfunction cost of wastes
 %   OUTPUT:
 %       res - cResultInfo object contains the results of thermoeconomic diagnosis.
