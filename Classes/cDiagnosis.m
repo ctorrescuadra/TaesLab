@@ -221,9 +221,10 @@ classdef cDiagnosis < cResultId
             mf=obj.tMF(1:N,:);
             obj.DW=obj.DWt;
             obj.DCW=obj.dpuk.cPE .* obj.DW0';
-            obj.DFin=obj.opI*[mf,obj.DW0];
+            obj.DFin=obj.opI*[mf,obj.DWt];
             obj.DFex=zeros(N,N+1);
-            obj.DIT=obj.DFin+mdwr;
+            dfr=obj.opI*mdwr;
+            obj.DIT=obj.DFin++dfr+mdwr;
             obj.vMCR=zeros(1,N);
             obj.MFC=obj.tDF;
         end

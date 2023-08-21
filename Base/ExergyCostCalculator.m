@@ -63,6 +63,11 @@ function res=ExergyCostCalculator(data,varargin)
 		param.State=data.getStateName(1);
 	end
 	ex=data.getExergyData(param.State);
+	if ~isValid(ex)
+        ex.printLogger;
+		res.printError('Invalid Exergy Values. See error log');
+        return
+	end
 	% Read Waste definition and compute waste operator
     if(data.NrOfWastes>0)
 		wd=data.WasteData;

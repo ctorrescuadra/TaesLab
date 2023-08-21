@@ -198,7 +198,7 @@ classdef cDataModel < cStatusLogger
         % get the exergy data for a state
         %   Input:
         %       state - state key name
-            res=cStatus(cType.ERROR);
+            res=cStatusLogger(cType.ERROR);
             if nargin==1
                 idx=1;
             else

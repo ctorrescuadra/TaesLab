@@ -41,6 +41,11 @@ function res=DiagramFP(data,varargin)
 		param.State=data.getStateName(1);
 	end
 	ex=data.getExergyData(param.State);
+	if ~isValid(ex)
+        ex.printLogger;
+		res.printError('Invalid Exergy Values. See error log');
+        return
+	end
 	% Set Results
 	pm=cModelFPR(ex);
     res=getDiagramFP(fmt,pm,param.Table);

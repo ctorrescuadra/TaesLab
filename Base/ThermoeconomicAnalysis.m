@@ -67,6 +67,11 @@ function res=ThermoeconomicAnalysis(data,varargin)
 		param.State=data.getStateName(1);
     end
 	ex=data.getExergyData(param.State);
+	if ~isValid(ex)
+        ex.printLogger;
+		res.printError('Invalid Exergy Values. See error log');
+        return
+	end
     % Read Waste and compute Model FP
     if(data.NrOfWastes>0)
 		wt=data.WasteData;
