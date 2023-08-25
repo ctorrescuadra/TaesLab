@@ -224,7 +224,7 @@ classdef cDiagnosis < cResultId
             obj.DFin=obj.opI*[mf,obj.DWt];
             obj.DFex=zeros(N,N+1);
             dfr=obj.opI*mdwr;
-            obj.DIT=obj.DFin++dfr+mdwr;
+            obj.DIT=obj.DFin+dfr+mdwr;
             obj.vMCR=zeros(1,N);
             obj.MFC=obj.tDF;
         end

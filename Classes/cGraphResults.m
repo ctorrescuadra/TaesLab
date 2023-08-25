@@ -358,8 +358,8 @@ classdef cGraphResults < cStatusLogger
 			bs.Color=[0.6,0.6,0.6];
 			set(ax,'XTick',obj.xValues,'XTickLabel',obj.Categories,'FontSize',11);
 			title(ax,obj.Title,'FontSize',14);
-			xlabel(ax,obj.xLabel,'fontsize',12);
-			ylabel(ax,obj.yLabel,'fontsize',12);
+			xlabel(ax,obj.xLabel,'fontsize',11);
+			ylabel(ax,obj.yLabel,'fontsize',11);
 			box(ax,'on');
 			set(ax,'ygrid','on','xgrid','off')
 			hold(ax,'off');
