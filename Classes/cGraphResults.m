@@ -32,7 +32,7 @@ classdef cGraphResults < cStatusLogger
 			case cType.GraphType.COST
 				obj.setGraphCostParameters(tbl);
 			case cType.GraphType.DIAGNOSIS
-				obj.setGraphDiagnosisParameters(tbl);
+				obj.setGraphDiagnosisParameters(tbl,varargin{:});
 			case cType.GraphType.SUMMARY
 				obj.setGraphSummaryParameters(tbl,varargin{:})
 			case cType.GraphType.RECYCLING
@@ -192,13 +192,25 @@ classdef cGraphResults < cStatusLogger
             end
         end
 
-		function setGraphDiagnosisParameters(obj,tbl)
-		% Set the properties of diagnosis graph      
+		function setGraphDiagnosisParameters(obj,tbl,opt)
+		% Set the properties of diagnosis graph
+		% Input:
+		%	tbl - Name of the table
+		%	opt - Remove ENV info in graph
+			if nargin==2
+				opt=false;
+			end
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description,' [',tbl.State,']'];
-			obj.Categories=tbl.ColNames(2:end);
-			obj.xValues=(1:tbl.NrOfCols-1)';
-			obj.yValues=cell2mat(tbl.Data(1:end-1,:))';
+			if opt
+				obj.Categories=tbl.ColNames(2:end-1);
+				obj.xValues=(1:tbl.NrOfCols-2)';
+				obj.yValues=cell2mat(tbl.Data(1:end-1,1:end-1))';
+			else
+				obj.Categories=tbl.ColNames(2:end);
+				obj.xValues=(1:tbl.NrOfCols-1)';
+				obj.yValues=cell2mat(tbl.Data(1:end-1,:))';
+			end
 			obj.xLabel='Processes';
 			obj.yLabel=['Exergy ',tbl.Unit];
 			obj.Legend=tbl.RowNames(1:end-1);

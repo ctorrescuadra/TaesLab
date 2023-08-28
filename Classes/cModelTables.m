@@ -1,10 +1,11 @@
 classdef cModelTables < cResultId
     % cModelTable is a class container of the cTable objects
     %   It stores the tables of the data model and application results
-    %   Methods:  
+    %   Methods:
     %       tbj=obj.getTable(tbl)
     %       obj.printTable(tbl)
     %       obj.viewTable(tbl)
+    %       obj.showGraph
     %       obj.printIndexTable
     %       obj.printResults
     %       obj.saveResults(filename)
@@ -106,6 +107,27 @@ classdef cModelTables < cResultId
                 res.viewTable;
             else
                 log.printError('Table %s do NOT exists',name);
+            end
+        end
+
+        function showGraph(obj,name,varargin)
+        % Show the graph of associated to a table name
+        %   Usage:
+        %       obj.showGraph(name,options)
+        %   Input:
+        %       name - Name of the table
+        %       options - aditional information for tables
+            log=cStatus(cType.VALID);
+            tbl=obj.getTable(name);
+            if ~isValid(tbl)
+                log.printError('Invalid table %s',name);
+                return
+            end
+            g=cGraphResults(tbl,varargin{:});
+            if isValid(g)
+                g.showGraph;
+            else
+                printLogger(g);
             end
         end
 

@@ -56,6 +56,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %       log=obj.graphDiagramFP(graph)
 %       log=obj.graphWasteAllocation(wkey)
 %       res=obj.flowsDiagram
+%        log=showGraph(graph,options)
 %   Waste Methods
 %       res=obj.wasteAllocation
 %       res=obj.setWasteType(key,type)
@@ -488,7 +489,11 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function res=getModelTables(obj)
         % Get a cModelTables object with all tables of the active model
-            res=getModelTables(obj.results);
+            res=getResults(obj,cType.ResultId.RESULT_MODEL);
+            if isempty(res)
+                res=getModelTables(obj.results);
+                obj.setResults(res)
+            end
         end
 
         function setDebug(obj,dbg)
@@ -545,6 +550,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %       name - Name of the table
             mt=obj.getModelTables;
             mt.viewTable(name);
+        end
+
+        function showGraph(obj,name,varargin)
+            mt=obj.getModelTables;
+            mt.showGraph(name,varargin{:})
         end
 
         function viewSummaryTable(obj,name)
@@ -717,7 +727,7 @@ classdef cThermoeconomicModel < cStatusLogger
             graphCost(res,graph);
         end
 
-        function graphDiagnosis(obj,graph)
+        function graphDiagnosis(obj,graph,option)
         % Shows a barplot of diagnosis table values for a given state
         %   Usage:
         %       obj.graphDiagnosis(graph)
@@ -735,8 +745,12 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             if nargin==1
                 graph=cType.Tables.MALFUNCTION_COST;
+                option=false;
             end
-            graphDiagnosis(res,graph);
+            if nargin==2
+                option=false;
+            end
+            graphDiagnosis(res,graph,option);
         end
         
         function graphWasteAllocation(obj,varargin)

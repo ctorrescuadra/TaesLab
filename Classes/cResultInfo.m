@@ -18,6 +18,7 @@ classdef (Sealed) cResultInfo < cModelTables
 %       obj.printTable(table)
 %       obj.printResults;
 %       obj.printIndexTable;
+%       obj.showGraph(table,options)
 %       obj.viewTable(table);
 %       log=obj.saveResults(filename)
 %       res=obj.getResultTables(varmode,fmt)
@@ -289,27 +290,6 @@ classdef (Sealed) cResultInfo < cModelTables
             end
             g=cGraphResults(obj.Tables.fat);
             g.showDigraph;
-        end
-
-        function showGraph(obj,name,varargin)
-        % Show the graph of associated to a table name
-        %   Usage:
-        %       obj.showGraph(name,options)
-        %   Input:
-        %       name - Name of the table
-        %       options - aditional information for tables
-            log=cStatus(cType.VALID);
-            tbl=obj.getTable(name);
-            if ~isValid(tbl)
-                log.printError('Invalid table %s',name);
-                return
-            end
-            g=cGraphResults(tbl,varargin{:});
-            if isValid(g)
-                g.showGraph;
-            else
-                printLogger(g);
-            end
         end
     end
 end
