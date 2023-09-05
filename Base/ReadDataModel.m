@@ -19,7 +19,7 @@ function data=ReadDataModel(filename)
         return
     end
     % Read and Check the data model and print logger
-    data=checkModel(filename);
+    data=checkDataModel(filename);
     if ~isValid(data)
 	    data.printLogger;
     end

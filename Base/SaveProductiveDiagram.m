@@ -7,7 +7,7 @@ function SaveProductiveDiagram(arg,filename)
 %   INPUT:
 %       arg - cThermoeconomicModel or cResultInfo object
 %       filename - name of the output file (with extension)
-% See also cmodelultInfo, cThermoeconomicModel
+% See also cResulttInfo, cThermoeconomicModel
 %
     log=cStatus(cType.VALID);
     % Check Input parameters

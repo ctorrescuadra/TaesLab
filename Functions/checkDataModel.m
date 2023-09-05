@@ -1,10 +1,13 @@
-function data = checkModel(filename)
-% checkModel read and check a data model. Internal Function
+function data = checkDataModel(filename)
+% checkDataModel - Read and check a data model.
+% Internal function. Don't print error messages.
+%   USAGE:
+%       data
 %   INPUT:
 %       filename - name of the data model file
 %   OUTPUT:
 %       data - cDataModel object
-%       
+%   See also ReadDataModel, CheckDataModel  
     rdm=readModel(filename);
     if ~isValid(rdm)
         rdm.messageLog(cType.ERROR,'Data Model File %s is NOT valid',filename);

@@ -51,10 +51,8 @@ classdef cExergyData < cStatusLogger
             end
             NS=ps.NrOfStreams;
             N=ps.NrOfProcesses;
-            NL=NS+N;
 			% Check flows' keys	and get exergy values	
             B=zeros(1,M);
-            G=false(NL+2,NL+2); % Graph matrix
             for i=1:M
 				id=ps.getFlowId(values(i).key);
                 if cType.isEmpty(id)
@@ -67,11 +65,6 @@ classdef cExergyData < cStatusLogger
                     obj.messageLog(cType.ERROR,message);
 				else
 					B(id)=values(i).value;
-                end
-                if B(id)>0 % Add to to the graph matrix
-                    idx=ps.Flows(id).from;
-				    jdx=ps.Flows(id).to;
-				    G(idx,jdx)=true;
                 end
             end
 			if ~obj.isValid

@@ -1,6 +1,8 @@
 function res=bfs(G,s)
-    % bfs Bread First Search algorithm
+    % bfs - Bread First Search algorithm
     %   Perform a BFS of the graph starting in node s
+    %   USAGE:
+    %       res = bfs(G, s)
     %   INPUT:
     %       G - Adjacency matrix of the graph
     %       s - starting point

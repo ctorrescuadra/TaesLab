@@ -261,18 +261,18 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Function not implemented')
                 return
             end
-        switch obj.ResultId
-        case cType.ResultId.DIAGRAM_FP
-            tbl=obj.Tables.tfp;
-        case cType.ResultId.THERMOECONOMIC_STATE
-            tbl=obj.Tables.tfp;
-        case cType.ResultId.THERMOECONOMIC_ANALYSIS
-            tbl=obj.Tables.dcfp;
-        otherwise
-            printWarning('Invalid Result Info %s',obj.ResltName)
-        end
-        g=cGraphResults(tbl);
-        g.showDigraph;
+            switch obj.ResultId
+            case cType.ResultId.DIAGRAM_FP
+                tbl=obj.Tables.tfp;
+            case cType.ResultId.THERMOECONOMIC_STATE
+                tbl=obj.Tables.tfp;
+            case cType.ResultId.THERMOECONOMIC_ANALYSIS
+                tbl=obj.Tables.dcfp;
+            otherwise
+                log.printWarning('Invalid Result Info %s',obj.ResultName)
+            end
+            g=cGraphResults(tbl);
+            g.showDigraph;
         end
 
         function showFlowsDiagram(obj)

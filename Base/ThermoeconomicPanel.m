@@ -358,7 +358,7 @@ classdef ThermoeconomicPanel < handle
 				return
 			end
 			% Read and Check Data Model
-			data=checkModel(file);
+			data=checkDataModel(file);
 			if isValid(data) %Assign parameters
 				tm=cThermoeconomicModel(data,'Debug',false);
 				set(obj.mfile_text,'backgroundcolor',[0.95 1 0.95]);

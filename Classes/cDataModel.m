@@ -211,6 +211,45 @@ classdef cDataModel < cStatusLogger
             end
         end
 
+        function log=setExergyData(obj,state,values)
+        % Set the exergy data of the state with values
+        % If state not exists a new one is creates
+        %   Input:
+        %       state - Name of the state
+        %       values - array with the exergy values of the flows
+            log=cStatusLogger(true);
+            M=size(values,2);
+            % Validate the number of flows
+            if obj.NrOfFlows~=M
+                log.printError('Invalid number of exergy values',length(values));
+                return
+            end
+            % Create the exergy data structure
+            fields={'key','value'};
+            keys=obj.ProductiveStructure.FlowKeys;
+            tmp=[keys;num2cell(values)];
+            est.stateId=state;
+            est.exergy=cell2struct(tmp,fields,1);
+            % Check and create a cExergyData object
+            rex=cExergyData(est,obj.ProductiveStructure);
+            if ~isValid(rex)
+                log.printError('Invalid exergy data',length(values));
+                printLogger(rex);
+                return
+            end
+            % If state exist the exergy data is replaced by values
+            % else a new exergy data state is created
+            if obj.existState(state)
+                idx=obj.getStateId(state);
+                obj.ExergyData{idx}=rex;
+            else
+                ns=obj.NrOfStates+1;
+                obj.States{ns}=state;
+                obj.ExergyData{ns}=rex;
+                obj.NrOfStates=ns;
+            end
+        end
+
         function res=getResourceData(obj,sample)
         % Get the resource data for a sample
             res=cStatus(cType.ERROR);

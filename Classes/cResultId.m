@@ -14,6 +14,8 @@ classdef cResultId < cStatusLogger
 	methods
 		function obj = cResultId(id)
         % Class constructor
+		% 	Input:
+		%		id - Result identifier. See cType.ResultId
 			obj=obj@cStatusLogger();
             obj.objectId=randi(intmax,"int32");
 			if (nargin==1) &&isscalar(id) && isnumeric(id)

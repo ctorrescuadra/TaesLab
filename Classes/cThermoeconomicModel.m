@@ -56,7 +56,6 @@ classdef cThermoeconomicModel < cStatusLogger
 %       log=obj.graphDiagramFP(graph)
 %       log=obj.graphWasteAllocation(wkey)
 %       res=obj.flowsDiagram
-%        log=showGraph(graph,options)
 %   Waste Methods
 %       res=obj.wasteAllocation
 %       res=obj.setWasteType(key,type)
@@ -217,8 +216,6 @@ classdef cThermoeconomicModel < cStatusLogger
             if checkState(obj,state)
                 obj.State=state;
                 obj.triggerStateChange;
-                obj.clearResults(cType.ResultId.RESULT_MODEL);
-                obj.clearResults(cType.ResultId.DIAGRAM_FP);
             end
         end
 
@@ -237,7 +234,6 @@ classdef cThermoeconomicModel < cStatusLogger
             if obj.checkCostTables(value)
                 obj.CostTables=value;
                 obj.triggerCostTablesChange;
-                obj.clearResults(cType.ResultId.RESULT_MODEL);
             end
         end
 
@@ -246,7 +242,6 @@ classdef cThermoeconomicModel < cStatusLogger
             if obj.checkResourceSample(sample)
                 obj.ResourceSample=sample;
                 obj.triggerResourceSampleChange;
-                obj.clearResults(cType.ResultId.RESULT_MODEL);
             end
         end
 
@@ -552,11 +547,6 @@ classdef cThermoeconomicModel < cStatusLogger
             mt.viewTable(name);
         end
 
-        function showGraph(obj,name,varargin)
-            mt=obj.getModelTables;
-            mt.showGraph(name,varargin{:})
-        end
-
         function viewSummaryTable(obj,name)
         % View a summary table in a GUI Table
             log=cStatus();
@@ -736,7 +726,8 @@ classdef cThermoeconomicModel < cStatusLogger
         %           cType.Graph.MALFUNCTION_COST (mfc)
         %           cType.Graph.MALFUNCTION (mf)
         %           cType.Graph.IRREVERSIBILITY (dit)
-        %       If graph is ommited first valid value is used.
+        %           If graph is ommited first valid value is used. 
+        %       option (optional) - Plot environment (true/false)      
             log=cStatus(cType.VALID);
             res=obj.thermoeconomicDiagnosis;
             if isempty(res) || ~isValid(res)
@@ -762,6 +753,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %       If not selected first waste is selected
             res=obj.thermoeconomicAnalysis;
             graphWasteAllocation(res,varargin{:});
+        end
+
+        function showGraph(obj,name,varargin)
+            mt=obj.getModelTables;
+            mt.showGraph(name,varargin{:})
         end
 
         function showFlowsDiagram(obj)
@@ -996,6 +992,54 @@ classdef cThermoeconomicModel < cStatusLogger
         % Get the current values of resource cost
             res=obj.rsc;
         end
+
+        %%%
+        % Exergy Data methods
+        %
+        function res=getExergyData(obj,state)
+        % Get cExergyData object of a state
+        %   Input:
+        %       state - State name. If missing, actual state is used 
+            if nargin==1
+                state=obj.State;
+            end
+            res=getExergyData(obj.DataModel,state);
+        end
+        function log=setExergyData(obj,state,values)
+        % Set exergy data values to a state
+        %   Input:
+        %       state - Name of the State
+        %       values - Array with the exergy values of the flows
+            log=cStatusLogger(cType.VALID);
+            % Check state is no reference 
+            if strcmp(obj.ReferenceState,state)
+                log.printError('Cannot change ReferenceState values');
+                return
+            end
+            % Set exergy data for state
+            data=obj.DataModel;
+            log=data.setExergyData(state,values);
+            if ~isValid(log)
+                printLogger(log);
+                return
+            end
+            idx=data.getStateId(state);
+            rex=data.ExergyData{idx};
+            % Compute cModelFPR
+            if obj.isWaste
+                wd=data.WasteData;
+                obj.rstate{idx}=cModelFPR(rex,wd);
+            else
+                obj.rstate{idx}=cModelFPR(rex);
+            end
+            % Get results
+            if strcmp(obj.State,state)
+                obj.triggerStateChange;
+            else
+                obj.State=state;
+            end
+            obj.setSummaryResults;
+        end
     end
     %%%
     % Internal Methods
@@ -1113,6 +1157,8 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
+            obj.clearResults(cType.ResultId.DIAGRAM_FP);
+            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         function res=checkReferenceState(obj,state)
@@ -1155,6 +1201,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.setThermoeconomicAnalysis;
             end
             obj.setSummaryResults;
+            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
         
         function res=checkCostTables(obj,value)
@@ -1186,6 +1233,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             obj.setThermoeconomicAnalysis;
+            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         function res=checkDiagnosisMethod(obj,value)

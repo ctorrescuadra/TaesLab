@@ -90,16 +90,16 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 			res.processes=[obj.Streams(ind).process];
 		end
 
+		function res=get.NrOfResources(obj)
+		% Get the number of resources
+			res=sum(obj.flowtypes==cType.Flow.RESOURCE);
+		end
+
 		function res=get.ProductiveProcesses(obj)
 		% Get a structure with the productive processes
 			id=find(obj.processtypes==cType.Process.PRODUCTIVE);
 			res.key={obj.Processes(id).key};
             res.id=id;
-		end
-
-		function res=get.NrOfResources(obj)
-		% Get the number of resources
-			res=sum(obj.flowtypes==cType.Flow.RESOURCE);
 		end
 
 		function res=get.FinalProducts(obj)

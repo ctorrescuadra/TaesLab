@@ -414,7 +414,7 @@ classdef cProductiveStructureCheck < cResultId
 					G(i,jdx)=true;
 				end
             end
-            % Compute Transitive Closure
+            % Compute Transitive Closure from source node NL+1
             sc=bfs(sparse(G),NL+1);
 			res=all(sc);
 		end

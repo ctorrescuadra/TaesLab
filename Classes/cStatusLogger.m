@@ -2,7 +2,7 @@ classdef cStatusLogger < cStatus
 % cStatusLogger Base class used by ExIOLab classes.
 %	It include methods object comparison (eq, neq) and messages logger.
 % 	Methods:
-%   	obj=cStatusLogger()
+%   	obj=cStatusLogger(init_state)
 %   	test=obj.isValid()
 %   	test=obj.isError()
 %   	test=obj.isWarning()
@@ -26,6 +26,8 @@ classdef cStatusLogger < cStatus
 		function obj=cStatusLogger(varargin)
 		% Class Constructor. 
         % Initialize class to manage errors, logger and objectId
+		%	Input:
+		%		val - Initial state: cType.VALID or cType.ERROR
 			obj=obj@cStatus(varargin{:});
 			obj.logger=cQueue();
 		end

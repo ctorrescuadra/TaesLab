@@ -19,7 +19,9 @@ classdef cStatus < handle
 	methods
 		function obj=cStatus(val)
 		% Class Constructor. 
-        % Initialize class to manage errors, logger and objectId
+		% Initialize class to manage errors
+		%	Input:
+		%		val - Initial state: cType.VALID or cType.ERROR
             if nargin<1
     	        obj.status=cType.ERROR;
             else

@@ -4,7 +4,7 @@ function res=DiagramFP(data,varargin)
 %		res=DiagramFP(data, options)
 % 	INPUT:
 %		data - cReadModel Object containing the data information
-%   	optiond - a structure contains additional parameters (optional)
+%   	option - a structure contains additional parameters (optional)
 %			State - Indicate a state to get exergy values. If not provided, first state is used
 %			Table - Select table for the Diagram FP
 %				cType.Tables.TABLE_FP (tfp)
