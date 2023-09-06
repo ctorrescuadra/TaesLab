@@ -192,24 +192,21 @@ classdef cGraphResults < cStatusLogger
             end
         end
 
-		function setGraphDiagnosisParameters(obj,tbl,opt)
+		function setGraphDiagnosisParameters(obj,tbl,shout)
 		% Set the properties of diagnosis graph
 		% Input:
 		%	tbl - Name of the table
-		%	opt - Remove ENV info in graph
-			if nargin==2
-				opt=false;
-			end
+		%	shout - Remove ENV info in graph
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description,' [',tbl.State,']'];
-			if opt
-				obj.Categories=tbl.ColNames(2:end-1);
-				obj.xValues=(1:tbl.NrOfCols-2)';
-				obj.yValues=cell2mat(tbl.Data(1:end-1,1:end-1))';
-			else
-				obj.Categories=tbl.ColNames(2:end);
+			if shout
+                obj.Categories=tbl.ColNames(2:end);
 				obj.xValues=(1:tbl.NrOfCols-1)';
 				obj.yValues=cell2mat(tbl.Data(1:end-1,:))';
+            else % does not plot lasl bar
+                obj.Categories=tbl.ColNames(2:end-1);
+				obj.xValues=(1:tbl.NrOfCols-2)';
+				obj.yValues=cell2mat(tbl.Data(1:end-1,1:end-1))';
 			end
 			obj.xLabel='Processes';
 			obj.yLabel=['Exergy ',tbl.Unit];

@@ -7,6 +7,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %   - Analize Recycling effects (recycling analysis)
 %   - Get Summary Results
 %   - Save the data model and results in diferent formats, for further analysis
+%   - Show the results tables in console, as GUI tables or graphs
 % Methods:
 %   Set Methods
 %       obj.setState(value)
@@ -35,13 +36,14 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.isGeneralCost
 %       res=obj.isDiagnosis
 %       res=obj.isWaste
+%       res=obj.isSummaryEnable
 %   Print Methods
 %       obj.printIndexTable
 %       obj.printResults
 %       obj.printSummary(tbl)
 %       obj.printResultTable(tbl)
 %   View Table Methods
-%       obj.viewResultTable(tbl)
+%       obj.viewResultsTable(tbl)
 %       obj.viewSummaryTable(tbl)
 %   Save Methods
 %       log=obj.saveModelResults(filename)
@@ -50,26 +52,30 @@ classdef cThermoeconomicModel < cStatusLogger
 %       log=obj.saveProductiveDiagram(filename)
 %       log=obj.saveSummary(filename)
 %   Graph Methods
-%       log=obj.graphCost(graph)
-%       log=obj.graphDiagnosis(graph)
-%       log=obj.graphSummary(graph)
-%       log=obj.graphDiagramFP(graph)
-%       log=obj.graphWasteAllocation(wkey)
-%       res=obj.flowsDiagram
+%       obj.graphCost(graph)
+%       obj.graphDiagnosis(graph,shout)
+%       obj.graphSummary(graph,list)
+%       obj.graphDiagramFP(graph)
+%       obj.graphWasteAllocation(wkey)
+%       obj.flowsDiagram
+%       obj.showResultsGraph(graph, options)
 %   Waste Methods
 %       res=obj.wasteAllocation
 %       res=obj.setWasteType(key,type)
 %       res=obj.setWasteValues(key,values)
 %       res=obj.setWasteRecycled(key,value)
 %   Resources Methods
+%       res=obj.ResourceData
+%       res=obj.ResourceCost
 %       res=obj.getResourceData(sample)
-%       res=obj.getResourceCost
 %       res=obj.resourceAnalysis(active)
 %       obj.setFlowResource(value)
 %       obj.setProcessResource(value)
 %       obj.setFlowResourceValue(key,value)
 %       obj.setProcessResourceValue(key,value)
-%
+%   Exergy Data Methods
+%       rex=obj.getExergyData(state)
+%       log=obj.setExergyData(state,values)
     properties(GetAccess=public,SetAccess=private)
         DataModel      % Data Model
         ModelName      % Model Name
@@ -149,7 +155,7 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.debug=param.Debug;
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
-            if obj.summaryEnable
+            if obj.isSummaryEnable
                 obj.Summary=param.Summary;
             end
             % Load Exergy values (all states)
@@ -373,11 +379,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Output:
         %       res - cResultInfo (PRODUCTIVE_STRUCTURE) 
             id=cType.ResultId.PRODUCTIVE_DIAGRAM;
-            res=obj.getResults{id};
+            res=obj.getResults(id);
             if isempty(res)
                 res=getProductiveDiagram(obj.fmt,obj.productiveStructure.Info);
                 res.setProperties(obj.ModelName,'SUMMARY');
-                obj.stResults(id,res);
+                obj.setResults(res);
                 obj.printDebugInfo('Productive Diagram has been calculated');
             end
         end
@@ -462,7 +468,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=logical(obj.DataModel.isWaste);
         end
 
-        function res=summaryEnable(obj)
+        function res=isSummaryEnable(obj)
         % Indicates if summary is available
             res=obj.DataModel.NrOfStates>1;
         end
@@ -509,7 +515,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function printSummary(obj,table)
         % Print the summary tables
             log=cStatus();
-            if ~obj.summaryEnable
+            if ~obj.isSummaryEnable
                 log.printWarning('Summary Requires more than one State');
                 return
             end
@@ -550,7 +556,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function viewSummaryTable(obj,name)
         % View a summary table in a GUI Table
             log=cStatus();
-            if ~obj.summaryEnable
+            if ~obj.isSummaryEnable
                 log.printWarning('Summary Requires more than one State');
                 return
             end
@@ -583,14 +589,14 @@ classdef cThermoeconomicModel < cStatusLogger
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
-            if ~obj.summaryEnable
+            if ~obj.isSummaryEnable
                 log.printWarning('Summary Requires more than one State');
                 return
             end
-            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             if ~obj.Summary
                 obj.setSummary(true);
             end
+            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             log=saveResults(msr,filename);
         end
     
@@ -644,30 +650,76 @@ classdef cThermoeconomicModel < cStatusLogger
         %%%
         % Graphical methods
         %
+        function graphCost(obj,varargin)
+        % Shows a barplot with the irreversibilty cost table values for a given state
+        %   Usage:
+        %     obj.graphCost(graph)
+        %   Input:   
+        %   graph - table name to plot. Valid Values: 
+        %     cType.Tables.PROCESS_COST (dict)
+        %     cType.Tables.PROCESS_GENERALIZED_COST (gict)
+        %     cType.Tables.FLOW_COST (dfict)
+        %     cType.Tables.FLOW_GENERALIZED_COST (gfict)
+        %   If graph is ommited first valid value is used.
+        % See also cResultInfo/graphCost
+            log=cStatus(cType.VALID);
+            res=obj.thermoeconomicAnalysis;
+            if isempty(res) || ~isValid(res)
+                log.printWarning('Thermoeconomic Analysis Results not available');
+                return
+            end
+            graphCost(res,varargin{:});
+        end
+
+        function graphDiagnosis(obj,varargin)
+        % Shows a barplot of diagnosis table values for a given state
+        %   Usage:
+        %       obj.graphDiagnosis(graph, shout)
+        %   Input:
+        %       graph - table name to plot. Valid values
+        %           cType.Graph.MALFUNCTION_COST (mfc)
+        %           cType.Graph.MALFUNCTION (mf)
+        %           cType.Graph.IRREVERSIBILITY (dit)
+        %           If graph is ommited first valid value is used. 
+        %       shout - Plot output info (true/false)
+        % See also cResultInfo/graphDiagnosis
+            log=cStatus(cType.VALID);
+            res=obj.thermoeconomicDiagnosis;
+            if isempty(res) || ~isValid(res)
+                log.printWarning('Diagnosis Results not available');
+                return
+            end
+            graphDiagnosis(res,varargin{:});
+        end
+
         function graphSummary(obj,varargin)
         % Show a barplot of the summary cost tables
+        %   Usage:
+        %       obj.graphSummary(graph, list)
         %   Input:
-        %       varargin - See cResultInfo/graphSummary
+        %       graph - summary table name to plot.
+        %       list (optional) - list of variables to plot
+        % See also cResultInfo/graphSummary
             log=cStatus();
-            if ~obj.summaryEnable
+            if ~obj.isSummaryEnable
                 log.printWarning('Summary Requires more than one State');
                 return
             end
-            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             if ~obj.Summary 
                 obj.setSummary(true);
             end
+            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             graphSummary(msr,varargin{:});
         end
 
         function showDiagramFP(obj,graph)
         % Show the diagram FP graph (only Matlab)
+        %   Usage:
+        %       obj.showDiagramFP(graph)
         %   Input:
-        %    graph - Table name to represent
+        %    graph - Table name to show
         %       cType.Tables.TABLE_FP (tfp)
-        %       cType.Tables.COST_TABLE_FP (dcfp)
-        %   Output:
-        %       log - cStatusLogger object containing the status and error messages     
+        %       cType.Tables.COST_TABLE_FP (dcfp)  
             log=cStatus();
             if isOctave
                 log.printError('Function NOT inmplemented in Octave');
@@ -692,58 +744,6 @@ classdef cThermoeconomicModel < cStatusLogger
             showDiagramFP(res);
         end
 
-        function graphCost(obj,graph)
-        % Shows a barplot with the irreversibilty cost table values for a given state
-        %   Usage:
-        %     obj.graphCost(graph)
-        %   Input:   
-        %   graph - table name to plot. Valid Values: 
-        %     cType.Tables.PROCESS_COST (dict)
-        %     cType.Tables.PROCESS_GENERALIZED_COST (gict)
-        %     cType.Tables.FLOW_COST (dfict)
-        %     cType.Tables.FLOW_GENERALIZED_COST (gfict)
-        %   If graph is ommited first valid value is used.
-        % Output:
-        %   log - cStatusLogger info
-            log=cStatus(cType.VALID);
-            res=obj.thermoeconomicAnalysis;
-            if isempty(res) || ~isValid(res)
-                log.printWarning('Thermoeconomic Analysis Results not available');
-                return
-            end
-            if nargin==1
-                graph=cType.Tables.PROCESS_ICT;
-            end
-            graphCost(res,graph);
-        end
-
-        function graphDiagnosis(obj,graph,option)
-        % Shows a barplot of diagnosis table values for a given state
-        %   Usage:
-        %       obj.graphDiagnosis(graph)
-        %   Input:
-        %       graph - table name to plot. Valid values
-        %           cType.Graph.MALFUNCTION_COST (mfc)
-        %           cType.Graph.MALFUNCTION (mf)
-        %           cType.Graph.IRREVERSIBILITY (dit)
-        %           If graph is ommited first valid value is used. 
-        %       option (optional) - Plot environment (true/false)      
-            log=cStatus(cType.VALID);
-            res=obj.thermoeconomicDiagnosis;
-            if isempty(res) || ~isValid(res)
-                log.printWarning('Diagnosis Results not available');
-                return
-            end
-            if nargin==1
-                graph=cType.Tables.MALFUNCTION_COST;
-                option=false;
-            end
-            if nargin==2
-                option=false;
-            end
-            graphDiagnosis(res,graph,option);
-        end
-        
         function graphWasteAllocation(obj,varargin)
         % Show a pie chart with the waste allocation
         %   Usage:
@@ -751,21 +751,30 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Input:
         %       wkey - (optional) waste key.
         %       If not selected first waste is selected
+        % See also cResultInfo/graphWasteAllocation
             res=obj.thermoeconomicAnalysis;
             graphWasteAllocation(res,varargin{:});
-        end
-
-        function showGraph(obj,name,varargin)
-            mt=obj.getModelTables;
-            mt.showGraph(name,varargin{:})
         end
 
         function showFlowsDiagram(obj)
         % Show the flow diagram of a system
         %   Usage:
         %       obj.showFlowsDiagram
+        % See also cResultInfo/showFlowDiagram
             res=obj.productiveDiagram;
             res.showFlowsDiagram;
+        end
+
+        function showResultsGraph(obj,varargin)
+        % Show the graph associated to a result model table
+        %   Usage:
+        %       obj.showResultsGraph(graph, options)
+        %   Input:
+        %       graph - Table name to show
+        %       options - options depending of the table
+        % See also cResultInfo/showFlowDiagram
+            mt=obj.getModelTables;
+            mt.showGraph(varargin{:})
         end
         
         %%%
@@ -1117,7 +1126,7 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=setSummaryResults(obj)
         % Obtain Summary Results
             id=cType.ResultId.SUMMARY_RESULTS;
-            if ~obj.activeSet || ~obj.summaryEnable
+            if ~obj.activeSet || ~obj.isSummaryEnable
                 return
             end
             res=obj.getResults(id);
@@ -1258,7 +1267,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if ~obj.activeSet
                 return
             end
-            if ~obj.summaryEnable
+            if ~obj.isSummaryEnable
                 log.printWarning('Summary requires more than one state',value);
                 return
             end

@@ -1,5 +1,5 @@
 function model=ThermoeconomicTool(filename,varargin)
-% Create a cThermoeconomicModel object from a data model file
+% Create a cThermoeconomicModel object from a data model file for interactive analysis
 %   USAGE:
 %       model = ThermoeconomicTool(filename, options)
 %   INPUT:
@@ -33,7 +33,7 @@ function model=ThermoeconomicTool(filename,varargin)
         return
     end
     % Check Data Model file
-    data=CheckDataModel(filename);
+        data=checkDataModel(filename);
     % Check optional parameters and create cThermoeconomicModel obeject
     if isValid(data)
         p = inputParser;
@@ -51,6 +51,11 @@ function model=ThermoeconomicTool(filename,varargin)
             model.printError('Usage: ThermoeconomicTool(model_file,param)');
             return
         end
+        if p.Results.Debug
+            data.printLogger;
+        end
         model=cThermoeconomicModel(data,p.Results);
+    else
+        data.printLogger;
     end
 end

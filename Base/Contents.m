@@ -39,6 +39,6 @@
 %
 % GUI functions
 %   ThermoeconomicPanel     - Graphic user interface to select the thermoeconomic model parameters.
-%   ViewModelResults        - View themodel results in a graphic interface 
+%   ViewResults             - View the model results in a graphic interface 
 %
 % See also cResultInfo, cThermoeconomicModel.
