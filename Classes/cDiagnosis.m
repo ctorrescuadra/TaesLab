@@ -27,6 +27,7 @@ classdef cDiagnosis < cResultId
         NrOfWastes           % Number of Wastes
         FuelImpact           % Fuel Impact
         TotalMalfunctionCost % Total Malfunction Cost
+        Method               % Diagnosis Method
     end
     properties(Access=private)
         iwr     % Waste index
@@ -121,6 +122,7 @@ classdef cDiagnosis < cResultId
             obj.DFT=sum(fp1.Resources-fp0.Resources);
             obj.A0=obj.DFT - sum(obj.DWTEC);
             % Object Status Information
+            obj.Method=method;
             obj.status=cType.VALID;
         end
 

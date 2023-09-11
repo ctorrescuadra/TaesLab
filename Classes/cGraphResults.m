@@ -197,6 +197,9 @@ classdef cGraphResults < cStatusLogger
 		% Input:
 		%	tbl - Name of the table
 		%	shout - Remove ENV info in graph
+			if nargin==2
+				shout=true;
+			end
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description,' [',tbl.State,']'];
 			if shout

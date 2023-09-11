@@ -210,7 +210,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %           dit: Irreversibiliy Variation table
             tbl.dgn=obj.getDiagnosisSummary(dgn);
             tbl.mf=obj.getMalfunctionTable(dgn.getMalfunctionTable);
-            tbl.mfc=obj.getMalfunctionCostTable(dgn.getMalfunctionCostTable);
+            tbl.mfc=obj.getMalfunctionCostTable(dgn.getMalfunctionCostTable,dgn.Method);
             tbl.dit=obj.getIrreversibilityTable(dgn.getIrreversibilityTable);
             res=cResultInfo(dgn,tbl);
         end
@@ -575,6 +575,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             id=cType.CellTable.DIAGNOSIS;
             rowNames=obj.processKeys;
             colNames=obj.getTableHeader(id);
+            if dgn.Method==cType.DiagnosisMethod.WASTE_INTERNAL
+                colNames{end}='ΔPt*';
+            end
             nrows=length(rowNames);
             data=cell(nrows,6);     
             data(:,1)=num2cell(dgn.getMalfunction);
@@ -596,13 +599,17 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=obj.createMatrixTable(id,values,rowNames,colNames);
         end
             
-        function res=getMalfunctionCostTable(obj,values)
+        function res=getMalfunctionCostTable(obj,values,method)
         % Get a cTableMatrix with the mafunction cost table values
         %  Input:
         %   values - Malfunction cost table values
             id=cType.MatrixTable.MALFUNCTION_COST_TABLE;
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
-            colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPt*');
+            if method==cType.DiagnosisMethod.WASTE_INTERNAL
+                colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPt*');
+            else
+                colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPs*');
+            end
             res=obj.createMatrixTable(id,values,rowNames,colNames);
         end
             
