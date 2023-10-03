@@ -1,4 +1,4 @@
-function ShowDiagramFP(arg)
+function ShowDiagramFP(arg,table)
 % Show the digraph of the Table FP
 %   USAGE:
 %       ShowDiagramFP(res, graph)
@@ -8,7 +8,7 @@ function ShowDiagramFP(arg)
 %
     log=cStatus(cType.VALID);
     if isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')
-        showDiagramFP(arg);
+        showDiagramFP(arg,table);
     else
         log.printError('Invalid argument. It sould be a cThermoeconomicModel or cResultInfo object');
     end   

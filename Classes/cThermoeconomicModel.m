@@ -58,7 +58,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %       obj.graphDiagramFP(graph)
 %       obj.graphWasteAllocation(wkey)
 %       obj.flowsDiagram
-%       obj.showResultsGraph(graph, options)
+%       obj.resultsGraph(graph, options)
 %   Waste Methods
 %       res=obj.wasteAllocation
 %       res=obj.setWasteType(key,type)
@@ -84,6 +84,7 @@ classdef cThermoeconomicModel < cStatusLogger
         WasteFlows     % Names of the waste flows
         ResourceData   % Resource Data object
         ResourceCost   % Resource Cost object
+        FormatData     % cResultTableBuilder object
     end
 
     properties(Access=public)
@@ -320,7 +321,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
         end
 
-        function res=diagramFP(obj,varargin)
+        function res=diagramFP(obj)
         % Get the Diagram FP cResultInfo object
         %   Input:
         %       varargin - Optional FP table name
@@ -330,13 +331,8 @@ classdef cThermoeconomicModel < cStatusLogger
         %       res - cResultInfo (DIAGRAM_FP)
             id=cType.ResultId.DIAGRAM_FP;
             res=obj.getResults(id);
-            if nargin==1
-                option=cType.Tables.TABLE_FP;
-            else
-                option=varargin{1};
-            end
             if isempty(res)
-                res=getDiagramFP(obj.fmt,obj.fp1,option);
+                res=getDiagramFP(obj.fmt,obj.fp1);
                 res.setProperties(obj.ModelName,obj.State);
                 obj.setResults(res);
                 obj.printDebugInfo('DiagramFP activated')
@@ -361,7 +357,7 @@ classdef cThermoeconomicModel < cStatusLogger
             else
                 ra=cRecyclingAnalysis(obj.fp1);
             end
-            if nargin==1
+            if (nargin==1) || isempty(wkey)
                 wkey=obj.WasteFlows{1};
             end
             ra.doAnalysis(wkey);
@@ -476,6 +472,10 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=get.WasteFlows(obj)
         % get waste flows list (cell aarray)
             res=getWasteFlows(obj.DataModel);
+        end
+
+        function res=get.FormatData(obj)
+            res=obj.fmt.PrintConfig;
         end
 
         function res=getResultStates(obj)
@@ -610,18 +610,15 @@ classdef cThermoeconomicModel < cStatusLogger
             log=saveDataModel(obj.DataModel,filename);
         end
 
-        function log=saveDiagramFP(obj,filename,varargin)
+        function log=saveDiagramFP(obj,filename)
         % Save the Adjacency matrix of the Diagram FP in a file
         % The following file types are availables (XLSX,CSV,MAT)
         %  Input:
         %   filename - Name of the file
-        %   varargin - optional parameter indicanting the type of FP table
-        %       cType.Tables.TABLE_FP (default)
-        %       cType.Tables.COST_TABLE_FP
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
-            res=obj.diagramFP(varargin{:});
+            res=obj.diagramFP;
             if ~isValid(res)
                 printLogger(res)
                 log.printError('Result object not available');
@@ -728,20 +725,13 @@ classdef cThermoeconomicModel < cStatusLogger
             if nargin==1
                 graph=cType.Tables.TABLE_FP;
             end
-            switch graph
-            case cType.Tables.TABLE_FP
-                res=obj.thermoeconomicState;
-            case cType.Tables.COST_TABLE_FP
-                res=obj.thermoeconomicAnalysis;
-            otherwise
-                log.printWarning('Invalid DiagramFP graph %s',graph);
-            end
+            res=obj.thermoeconomicAnalysis;
             if ~isValid(res)
                 res.printLogger(res)
                 log.printError('Result object not available');
                 return
             end
-            showDiagramFP(res);
+            showDiagramFP(res,graph);
         end
 
         function graphWasteAllocation(obj,varargin)
@@ -763,18 +753,6 @@ classdef cThermoeconomicModel < cStatusLogger
         % See also cResultInfo/showFlowDiagram
             res=obj.productiveDiagram;
             res.showFlowsDiagram;
-        end
-
-        function showResultsGraph(obj,varargin)
-        % Show the graph associated to a result model table
-        %   Usage:
-        %       obj.showResultsGraph(graph, options)
-        %   Input:
-        %       graph - Table name to show
-        %       options - options depending of the table
-        % See also cResultInfo/showFlowDiagram
-            mt=obj.getModelTables;
-            mt.showGraph(varargin{:})
         end
         
         %%%

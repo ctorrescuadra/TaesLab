@@ -135,7 +135,7 @@
           },
           {
             "key": "B5",
-            "value": 1073
+            "value": 826.2
           },
           {
             "key": "WC",
@@ -147,11 +147,11 @@
           },
           {
             "key": "QV",
-            "value": 7168
+            "value": 7457
           },
           {
             "key": "QG",
-            "value": 1073
+            "value": 826.2
           }
         ]
       },
@@ -176,7 +176,7 @@
           },
           {
             "key": "B5",
-            "value": 917.9
+            "value": 845.9
           },
           {
             "key": "WC",
@@ -188,11 +188,11 @@
           },
           {
             "key": "QV",
-            "value": 7168
+            "value": 7254
           },
           {
             "key": "QG",
-            "value": 917.9
+            "value": 845.9
           }
         ]
       },
@@ -201,27 +201,27 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 36914
+            "value": 36903
           },
           {
             "key": "B2",
-            "value": 9589
+            "value": 9381
           },
           {
             "key": "B3",
-            "value": 33221
+            "value": 33010
           },
           {
             "key": "B4",
-            "value": 11854
+            "value": 11874
           },
           {
             "key": "B5",
-            "value": 913.5
+            "value": 813.8
           },
           {
             "key": "WC",
-            "value": 10307
+            "value": 10090
           },
           {
             "key": "WN",
@@ -229,11 +229,11 @@
           },
           {
             "key": "QV",
-            "value": 7168
+            "value": 7288
           },
           {
             "key": "QG",
-            "value": 913.5
+            "value": 813.8
           }
         ]
       },
@@ -258,7 +258,7 @@
           },
           {
             "key": "B5",
-            "value": 888.2
+            "value": 967.3
           },
           {
             "key": "WC",
@@ -270,11 +270,93 @@
           },
           {
             "key": "QV",
-            "value": 7168
+            "value": 7074
           },
           {
             "key": "QG",
-            "value": 888.2
+            "value": 967.3
+          }
+        ]
+      },
+      {
+        "stateId": "WN95",
+        "exergy": [
+          {
+            "key": "NG",
+            "value": 35598
+          },
+          {
+            "key": "B2",
+            "value": 9310
+          },
+          {
+            "key": "B3",
+            "value": 32072
+          },
+          {
+            "key": "B4",
+            "value": 11463
+          },
+          {
+            "key": "B5",
+            "value": 832.4
+          },
+          {
+            "key": "WC",
+            "value": 10038
+          },
+          {
+            "key": "WN",
+            "value": 9500
+          },
+          {
+            "key": "QV",
+            "value": 7010
+          },
+          {
+            "key": "QG",
+            "value": 832.4
+          }
+        ]
+      },
+      {
+        "stateId": "TP5",
+        "exergy": [
+          {
+            "key": "NG",
+            "value": 36620
+          },
+          {
+            "key": "B2",
+            "value": 9512
+          },
+          {
+            "key": "B3",
+            "value": 32990
+          },
+          {
+            "key": "B4",
+            "value": 11707
+          },
+          {
+            "key": "B5",
+            "value": 929.7
+          },
+          {
+            "key": "WC",
+            "value": 10225
+          },
+          {
+            "key": "WN",
+            "value": 10000
+          },
+          {
+            "key": "QV",
+            "value": 7056
+          },
+          {
+            "key": "QG",
+            "value": 929.7
           }
         ]
       },

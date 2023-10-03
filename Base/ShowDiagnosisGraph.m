@@ -9,6 +9,7 @@ function ShowDiagnosisGraph(arg,varargin)
 %           cType.Tables.MALFUNCTION_COST (mfc)
 %           cType.Tables.IRREVERSIBILITY (dit)
 %       If graph is not selected first option is taken
+%       shout - Display system output information (default true)
 % See also cResultInfo,cThermoeconomicModel
 %
     log=cStatus(cType.VALID);

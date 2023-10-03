@@ -6,9 +6,6 @@ function res=DiagramFP(data,varargin)
 %		data - cReadModel Object containing the data information
 %   	option - a structure contains additional parameters (optional)
 %			State - Indicate a state to get exergy values. If not provided, first state is used
-%			Table - Select table for the Diagram FP
-%				cType.Tables.TABLE_FP (tfp)
-%				cType.Tables.COST_TABLE_FP (dcfp) 
 % 	OUTPUT:
 %		res - cResultInfo object contains the adjacency FP table and additional variables
 % See also cModelFPR, cResultInfo
@@ -19,12 +16,11 @@ function res=DiagramFP(data,varargin)
 	p = inputParser;
 	p.addRequired('data',checkModel);
 	p.addParameter('State','',@ischar);
-	p.addParameter('Table',cType.Tables.TABLE_FP,@ischar);
 	try
 		p.parse(data,varargin{:});
 	catch err
 		res.printError(err.message);
-        res.printError('Usage: ExergyCostCalculator(data,param)');
+        res.printError('Usage: SaveDiagramFP(data,param)');
 		return
 	end
 	param=p.Results;
@@ -48,6 +44,6 @@ function res=DiagramFP(data,varargin)
 	end
 	% Set Results
 	pm=cModelFPR(ex);
-    res=getDiagramFP(fmt,pm,param.Table);
+    res=getDiagramFP(fmt,pm);
     res.setProperties(data.ModelName,param.State);
 end

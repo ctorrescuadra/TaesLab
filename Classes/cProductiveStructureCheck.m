@@ -414,9 +414,10 @@ classdef cProductiveStructureCheck < cResultId
 					G(i,jdx)=true;
 				end
             end
-            % Compute Transitive Closure from source node NL+1
-            sc=bfs(sparse(G),NL+1);
-			res=all(sc);
+            % Compute direct and reverse connectivity
+            sc=bfs(sparse(G),NL+1); 
+            tc=bfs(sparse(G'),NL+2);
+			res=all(sc) && all(tc);
 		end
     end
 end

@@ -11,15 +11,11 @@ function SaveModelResults(model,filename)
 %
     log=cStatus(cType.VALID);
     % Check Input parameters
-    if (nargin~=2) || ~cType.checkFileWrite(filename)
-        log.printError('Usage: SaveResultsModel(results,filename)');
+    if (nargin<2) || ~ischar(filename) ||  ~isa(model,'cThermoeconomicModel')
+        log.printError('Usage: SaveModelResults(results,filename)');
         return
     end
     % Save the results
-    if isa(model,'cThermoeconomicModel')
-        log=saveResultsModel(model,filename);
-        printLogger(log);
-    else
-        log.printError('Invalid model. It sould be a cThermoeconomicModel object');
-    end
+    log=saveResultsModel(model,filename);
+    printLogger(log);
 end

@@ -177,12 +177,13 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Invalid graph type: %s',graph);
                 return
             end
-            if (nargin==2) && ~tbl.isFlowsTable
-                log.printError('Variables are required for this type: %s',graph);
-                return
-            end
-            if nargin==2
-                var=obj.Info.getDefaultFlowVariables;
+            if (nargin==2)             
+                if tbl.isFlowsTable
+                    var=obj.Info.getDefaultFlowVariables;
+                else
+                    log.printError('Variables are required for this type: %s',graph);
+                    return
+                end
             end
             if tbl.isFlowsTable
                 idx=obj.Info.getFlowIndex(var);
@@ -227,8 +228,7 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Table %s is NOT available',graph);
                 return
             end
-            wasteFlow=obj.Info.wasteFlow;
-            g=cGraphResults(tbl,wasteFlow);
+            g=cGraphResults(tbl);
             g.graphRecycling;
         end
 
@@ -266,7 +266,7 @@ classdef (Sealed) cResultInfo < cModelTables
             end
         end
 
-        function showDiagramFP(obj)
+        function showDiagramFP(obj,graph)
         % Show the FP table digraph [only Matlab]
         %   Usage:
         %       obj.showDiagramFP;
@@ -277,16 +277,15 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Function not implemented')
                 return
             end
-            switch obj.ResultId
-            case cType.ResultId.DIAGRAM_FP
-                tbl=obj.Tables.tfp;
-            case cType.ResultId.THERMOECONOMIC_STATE
-                tbl=obj.Tables.tfp;
-            case cType.ResultId.THERMOECONOMIC_ANALYSIS
-                tbl=obj.Tables.dcfp;
-            otherwise
-                log.printWarning('Invalid Result Info %s',obj.ResultName)
+            if nargin==1
+                graph=cType.Tables.DIAGRAM_FP;
             end
+            tbl=obj.getTable(graph);
+            if ~isValid(tbl)
+                log.printError('Table %s is NOT available',graph);
+                return
+            end
+            % Show Graph
             g=cGraphResults(tbl);
             g.showDigraph;
         end
@@ -308,6 +307,47 @@ classdef (Sealed) cResultInfo < cModelTables
             end
             g=cGraphResults(obj.Tables.fat);
             g.showDigraph;
+        end
+
+        function showGraph(obj,param)
+            tbl=getTable(obj,param.graph);
+            if ~isValid(tbl) || ~isGraph(tbl)
+                log.printError('Invalid graph table: %s',param.graph);
+                return
+            end
+            % Get aditional parameters
+            option=[];
+            switch tbl.GraphType
+            case cType.GraphType.DIAGNOSIS
+                option=param.ShowOutput;
+            case cType.GraphType.WASTE_ALLOCATION
+                if isempty(param.WasteFlow)
+                    param.WasteFlow=tbl.ColNames{2};
+                end
+                option=param.WasteFlow;
+            case cType.GraphType.SUMMARY
+                if isempty(param.Variables)
+                    if tbl.isFlowsTable
+                        param.Variables=obj.Info.getDefaultFlowVariables;
+                    else
+                        log.printError('Variables are required for this type: %s',graph);
+                        return
+                    end
+                end
+                if tbl.isFlowsTable
+                    idx=obj.Info.getFlowIndex(param.Variables);
+                else
+                    idx=obj.Info.getProcessIndex(param.Variables);
+                end
+                if cType.isEmpty(idx)
+                    log.printError('Invalid Variable Names');
+                    return
+                end
+                option=idx;
+            end
+            % Show Graph
+            g=cGraphResults(tbl,option);
+            g.showGraph;
         end
     end
 end

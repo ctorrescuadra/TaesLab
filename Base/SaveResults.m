@@ -6,24 +6,17 @@ function SaveResults(res,filename)
 %   USAGE:
 %       SaveResults(res,filename)
 %   INPUT:
-%       results - cResultInfo or cThermoeconomicModel object
+%       res - cResultInfo or cThermoeconomicModel object
 %       filename - name of the output file (with extension)
 % See also cModelResults
 %
     log=cStatus(cType.VALID);
     % Check Input parameters
-    if (nargin~=2) || ~cType.checkFileWrite(filename)
+    if (nargin~=2) || ~ischar(filename) || ~isa(res,'cResultInfo')
         log.printError('Usage: SaveResults(res,filename)');
         return
     end
     % Save the results
-    if isa(res,'cResultInfo')
-        log=saveResults(res,filename);
-        printLogger(log);
-    elseif isa(res,'cThermoeconomicModel')
-        log=saveResultsModel(res,filename);
-        printLogger(log);
-    else
-        log.printError('Invalid input. It must be a cResultInfo object');
-    end
+    log=saveResults(res,filename);
+    printLogger(log);
 end

@@ -160,11 +160,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       res - cResultInfo object (THERMOECONOMIC_ANALYSIS) with the result tables
         %
             tbl=struct();
+            dcfp=mfp.getCostTableFP;
             if options.DirectCost
                 dcost=mfp.getDirectProcessCost;
                 udcost=mfp.getDirectProcessUnitCost;
                 dfcost=mfp.getDirectFlowsCost(udcost);    
-                dcfp=mfp.getCostTableFP;
                 dcfpr=mfp.getCostTableFPR;
                 dict=mfp.getProcessICT;
                 dfict=mfp.getFlowsICT(dict);               
@@ -215,30 +215,18 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=cResultInfo(dgn,tbl);
         end
 
-        function res=getDiagramFP(obj,mfp,option)
+        function res=getDiagramFP(obj,mfp)
         % Get a structure with the FP tables
         %   Input:
         %       mfp - cModelFPR object
-        %       option - table to analyze
         %   Output:
         %       res - cResultInfo object (DIAGRAM_FP) with the Diagram FP tables
-            res=cStatusLogger();
-            if nargin==2 
-                option=cType.Tables.TABLE_FP;
-            end
-            switch option
-                case cType.Tables.TABLE_FP
-                values=mfp.TableFP;
-                tbl.tfp=obj.getTableFP(cType.MatrixTable.TABLE_FP,values);
-                tbl.atfp=obj.getAdjacencyTableFP(cType.CellTable.DIAGRAM_FP,tbl.tfp);
-                case cType.Tables.COST_TABLE_FP
-                values=mfp.getCostTableFP;
-                tbl.tfp=obj.getTableFP(cType.MatrixTable.COST_TABLE_FP,values);
-                tbl.atfp=obj.getAdjacencyTableFP(cType.CellTable.COST_DIAGRAM_FP,tbl.tfp);
-            otherwise
-                res.messageLog(cType.ERROR,'Invalid object %s',option);
-                return
-            end
+            values=mfp.TableFP;
+            tbl.tfp=obj.getTableFP(cType.MatrixTable.TABLE_FP,values);
+            tbl.atfp=obj.getAdjacencyTableFP(cType.CellTable.DIAGRAM_FP,tbl.tfp);
+            values=mfp.getCostTableFP;
+            tbl.dcfp=obj.getTableFP(cType.MatrixTable.COST_TABLE_FP,values);
+            tbl.atcfp=obj.getAdjacencyTableFP(cType.CellTable.COST_DIAGRAM_FP,tbl.dcfp);
             res=cResultInfo(mfp,tbl);
             res.setResultId(cType.ResultId.DIAGRAM_FP);
         end

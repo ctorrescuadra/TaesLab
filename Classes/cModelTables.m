@@ -110,26 +110,6 @@ classdef cModelTables < cResultId
             end
         end
 
-        function showGraph(obj,name,varargin)
-        % Show the graph of associated to a table name
-        %   Usage:
-        %       obj.showGraph(name,options)
-        %   Input:
-        %       name - Name of the table
-        %       options - aditional information for tables
-            log=cStatus(cType.VALID);
-            tbl=obj.getTable(name);
-            if ~isValid(tbl)
-                log.printError('Invalid table %s',name);
-                return
-            end
-            g=cGraphResults(tbl,varargin{:});
-            if isValid(g)
-                g.showGraph;
-            else
-                printLogger(g);
-            end
-        end
 
         function res=getIndexTable(obj)
         % Get a cTableData object with the table names and descripcion

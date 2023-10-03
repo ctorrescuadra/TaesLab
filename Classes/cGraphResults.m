@@ -28,17 +28,18 @@ classdef cGraphResults < cStatusLogger
 			end
 			obj.Type=tbl.GraphType;
             obj.isColorbar=false;
+			option=varargin{:};
             switch obj.Type
 			case cType.GraphType.COST
 				obj.setGraphCostParameters(tbl);
 			case cType.GraphType.DIAGNOSIS
-				obj.setGraphDiagnosisParameters(tbl,varargin{:});
+				obj.setGraphDiagnosisParameters(tbl,option);
 			case cType.GraphType.SUMMARY
-				obj.setGraphSummaryParameters(tbl,varargin{:})
+				obj.setGraphSummaryParameters(tbl,option)
 			case cType.GraphType.RECYCLING
-				obj.setGraphRecyclingParameters(tbl,varargin{:})
+				obj.setGraphRecyclingParameters(tbl)
 			case cType.GraphType.WASTE_ALLOCATION
-				obj.setGraphWasteAllocationParameters(tbl,varargin{:})
+				obj.setGraphWasteAllocationParameters(tbl,option)
             case cType.GraphType.DIGRAPH
                 if isMatlab
 				    obj.setDigraphParameters(tbl);
