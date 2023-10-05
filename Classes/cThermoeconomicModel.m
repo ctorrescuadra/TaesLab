@@ -384,6 +384,36 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
+        function res=getResultInfo(obj,id,options)
+            res=cStatusLogger(cType.ERROR);
+            switch id
+            case cType.ResultId.PRODUCTIVE_STRUCTURE
+                res=obj.productiveStructure;
+            case cType.ResultId.THERMOECONOMIC_STATE
+                res=obj.thermoeconomicState;
+            case cType.ResultId.THERMOECONOMIC_ANALYSIS
+                res=obj.thermoeconomicAnalysis;
+            case cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                res=obj.thermoeconomicDiagnosis;
+            case cType.ResultId.SUMMARY_RESULTS
+                res=obj.setSummaryResults;
+            case cType.ResultId.PRODUCTIVE_DIAGRAM
+                res=obj.productiveDiagram;  
+            case cType.ResultId.DIAGRAM_FP
+                res=obj.diagramFP;
+            case cType.ResultId.WASTE_ANALYSIS
+                res=obj.wasteAllocation;
+            case cType.ResultId.RECYCLING_ANALISIS
+                res=obj.recyclingAnalysis(options);
+            case cType.ResultId.RESULT_MODEL
+                res=obj.getModelTables;
+            case cType.ResultId.DATA_MODEL
+                res=obj.DataModel;
+            otherwise
+                res.printError('Invalid ResultId: %d',id)
+            end
+        end
+
         function res=getFuelImpact(obj)
         % Get the fuel impact (value and unit) of the actual diagnosis state
             res='WARNING: Fuel Impact NOT Available';       
@@ -494,6 +524,18 @@ classdef cThermoeconomicModel < cStatusLogger
             if isempty(res)
                 res=getModelTables(obj.results);
                 obj.setResults(res)
+            end
+        end
+
+        function tbl=getTable(obj,table)
+            tbl=cStatus(cType.ERROR);
+            tInfo=getTableIndex(obj.fmt,table);
+            if isempty(tInfo)
+                tbl.printLogger('Invalid table: %s',table);
+                return
+            else
+               res=obj.getResultInfo(tInfo.resultId);
+               tbl=res.getTable(table);
             end
         end
 

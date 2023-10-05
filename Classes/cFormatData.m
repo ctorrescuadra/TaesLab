@@ -20,13 +20,16 @@ classdef cFormatData < cStatusLogger
 %
 	properties(GetAccess=public,SetAccess=private)
 		PrintConfig
+        		tDict        % Tables dictionnary
+		tableIndex   % Index for tables properties
     end
 
 	properties (Access=private)
-		cfgTables 	% Tables configuration
-		cfgMatrices % Matrices configuration
-		cfgSummary  % Summary configuration
-		cfgTypes    % Format types configuration
+		cfgTables 	 % Tables configuration
+		cfgMatrices  % Matrices configuration
+		cfgSummary   % Summary configuration
+		cfgTypes     % Format types configuration
+
 	end
 	
 	methods
@@ -78,12 +81,39 @@ classdef cFormatData < cStatusLogger
 				obj.cfgSummary=config.summary;
 				obj.cfgTypes=config.format;
 			end
+			obj.buildTablesDictionary;
 		end
 
 		function res=get.PrintConfig(obj)
 		% show print configuration
 			res=struct('Tables',obj.cfgTables,'Matrices',obj.cfgMatrices,'Summary',obj.cfgSummary,'Format',obj.cfgTypes);
         end
+
+		function res=getTableIndex(obj,table)
+			res=[];
+			idx=getIndex(obj.tDict,table);
+			if cType.isEmpty(idx)
+				return
+			end
+			res=obj.tableIndex(idx);
+		end
+
+		function res=getTableProperties(obj,table)
+			res=[];
+			idx=getIndex(obj.tDict,table);
+			if cType.isEmpty(idx)
+				return
+			end
+			tIndex=obj.tableIndex(idx);
+			switch tIndex.type
+			case cType.TableType.TABLE
+				res=obj.cfgTables(tIndex.tableId);
+			case cType.TableType.MATRIX
+				res=obj.cfgMatrices(tIndex.tableId);
+			case cType.TableType.MATRIX
+				res=obj.cfgSummary(tIndex.tableId);
+			end
+		end
     end
 
     methods(Access=protected)			
@@ -257,5 +287,43 @@ classdef cFormatData < cStatusLogger
 			row=obj.cfgMatrices(id).rowTotal;
 			col=obj.cfgMatrices(id).colTotal;
         end
+
+		function buildTablesDictionary(obj)
+			id=0;
+			NT=numel(obj.cfgTables);
+			NM=numel(obj.cfgMatrices);
+			NS=numel(obj.cfgSummary);
+			N=NT+NM+NS;
+			tIndex(N)=struct('id',N,'name','pI','resultId',0,'graph',0,'type',0,'tableId',0);
+			for i=1:NT
+				id=id+1;
+				tIndex(id).id=id;
+				tIndex(id).name=obj.cfgTables(i).key;
+				tIndex(id).resultId=obj.cfgTables(i).resultId;
+				tIndex(id).graph=cType.GraphType.NONE;
+				tIndex(id).type=cType.TableType.TABLE;
+				tIndex(id).tableId=i;
+			end
+			for i=1:NM
+				id=id+1;
+				tIndex(id).id=id;
+				tIndex(id).name=obj.cfgMatrices(i).key;
+				tIndex(id).resultId=obj.cfgMatrices(i).resultId;
+				tIndex(id).graph=obj.cfgMatrices(i).graph;
+				tIndex(id).type=cType.TableType.MATRIX;
+				tIndex(id).tableId=i;
+			end
+			for i=1:NS
+				id=id+1;
+				tIndex(id).id=id;
+				tIndex(id).name=obj.cfgSummary(i).key;
+				tIndex(id).resultId=cType.ResultId.SUMMARY_RESULTS;
+				tIndex(id).graph=obj.cfgSummary(i).graph;
+				tIndex(id).type=cType.TableType.SUMMARY;
+				tIndex(id).tableId=i;
+			end
+			obj.tDict=cDictionary({tIndex.name});
+            obj.tableIndex=tIndex;
+		end
 	end
 end

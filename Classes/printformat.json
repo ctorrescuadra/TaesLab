@@ -6,6 +6,7 @@
 			"key": "dfcost",
 			"number": false,
 			"description": "Flows Exergy Cost",
+			"resultId": 3,
 			"columns": 8,
 			"fields": [
 				{
@@ -55,6 +56,7 @@
 			"key": "gfcost",
 			"number": false,
 			"description": "Flows Generalized Cost",
+			"resultId": 3,
 			"columns": 10,
 			"fields": [
 				{
@@ -114,6 +116,7 @@
 			"key": "dcost",
 			"number": false,
 			"description": "Process Exergy Cost",
+			"resultId": 3,
 			"columns": 6,
 			"fields": [
 				{
@@ -153,6 +156,7 @@
 			"key": "ducost",
 			"number": false,
 			"description": "Process Unit Exergy Cost",
+			"resultId": 3,
 			"columns": 7,
 			"fields": [
 				{
@@ -197,6 +201,7 @@
 			"key": "gcost",
 			"number": false,
 			"description": "Process Generalized Cost",
+			"resultId": 3,
 			"columns": 8,
 			"fields": [
 				{
@@ -246,6 +251,7 @@
 			"key": "gucost",
 			"number": false,
 			"description": "Process Generalized Unit Cost",
+			"resultId": 3,
 			"columns": 7,
 			"fields": [
 				{
@@ -290,6 +296,7 @@
 			"key": "dgn",
 			"number": false,
 			"description": "Diagnosis Summary",
+			"resultId": 4,
 			"columns": 7,
 			"fields": [
 				{
@@ -334,6 +341,7 @@
 			"key": "process",
 			"number": true,
 			"description": "Processes Definition Table",
+			"resultId": 1,
 			"columns": 4,
 			"fields": [
 				{
@@ -363,6 +371,7 @@
 			"key": "stream",
 			"number": true,
 			"description": "Productive Groups Definition Table",
+			"resultId": 1,
 			"columns": 3,
 			"fields": [
 				{
@@ -387,6 +396,7 @@
 			"key": "flow",
 			"number": true,
 			"description": "Flows Definition Table",
+			"resultId": 1,
 			"columns": 4,
 			"fields": [
 				{
@@ -416,6 +426,7 @@
 			"key": "eprocess",
 			"number": false,
 			"description": "Processes Exergy Table",
+			"resultId": 2,
 			"columns": 6,
 			"fields": [
 				{
@@ -455,6 +466,7 @@
 			"key": "estream",
 			"number": false,
 			"description": "Productive Groups Exergy Table",
+			"resultId": 2,
 			"columns": 3,
 			"fields": [
 				{
@@ -479,6 +491,7 @@
 			"key": "eflow",
 			"number": false,
 			"description": "Flows Exergy Table",
+			"resultId": 2,
 			"columns": 4,
 			"fields": [
 				{
@@ -508,6 +521,7 @@
 			"key": "atfp",
 			"number": false,
 			"description": "Diagram FP",
+			"resultId": 7,
 			"columns": 4,
 			"fields": [
 				{
@@ -537,6 +551,7 @@
 			"key": "adcfp",
 			"number": false,
 			"description": "Cost Diagram FP",
+			"resultId": 7,
 			"columns": 4,
 			"fields": [
 				{
@@ -566,6 +581,7 @@
 			"key": "wd",
 			"number": true,
 			"description": "Waste Definition Table",
+			"resultId": 8,
 			"columns": 3,
 			"fields": [
 				{
@@ -590,6 +606,7 @@
 			"key": "fat",
 			"number": false,
 			"description": "Flows Diagram",
+			"resultId": 6,
 			"columns": 3,
 			"fields": [
 				{
@@ -614,6 +631,7 @@
 			"key": "pat",
 			"number": false,
 			"description": "Productive Diagram",
+			"resultId": 6,
 			"columns": 3,
 			"fields": [
 				{
@@ -642,6 +660,7 @@
 			"type": 3,
 			"graph": 3,
 			"options": 0,
+			"resultId": 3,
 			"rowTotal": true,
 			"colTotal": true
 		},
@@ -652,6 +671,7 @@
 			"type": 4,
 			"graph": 3,
 			"options": 0,
+			"resultId": 3,
 			"rowTotal": true,
 			"colTotal": true
 		},
@@ -662,6 +682,7 @@
 			"type": 4,
 			"graph": 0,
 			"options": 0,
+			"resultId": 3,
 			"rowTotal": true,
 			"colTotal": true
 		},
@@ -672,6 +693,7 @@
 			"type": 6,
 			"graph": 0,
 			"options": 0,
+			"resultId": 3,
 			"rowTotal": true,
 			"colTotal": true
 		},
@@ -682,6 +704,7 @@
 			"type": 5,
 			"graph": 1,
 			"options": 1,
+			"resultId": 3,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -692,6 +715,7 @@
 			"type": 7,
 			"graph": 1,
 			"options": 5,
+			"resultId": 3,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -702,6 +726,7 @@
 			"type": 5,
 			"graph": 1,
 			"options": 3,
+			"resultId": 3,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -712,6 +737,7 @@
 			"type": 7,
 			"graph": 1,
 			"options": 7,
+			"resultId": 3,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -722,6 +748,7 @@
 			"type": 8,
 			"graph": 2,
 			"options": 0,
+			"resultId": 4,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -732,6 +759,7 @@
 			"type": 8,
 			"graph": 2,
 			"options": 0,
+			"resultId": 4,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -742,6 +770,7 @@
 			"type": 8,
 			"graph": 2,
 			"options": 0,
+			"resultId": 4,
 			"rowTotal": true,
 			"colTotal": false
 		},
@@ -752,6 +781,7 @@
 			"type": 9,
 			"graph": 6,
 			"options": 0,
+			"resultId": 8,
 			"rowTotal": false,
 			"colTotal": false
 		},
@@ -762,6 +792,7 @@
 			"type": 5,
 			"graph": 4,
 			"options": 3,
+			"resultId": 9,
 			"rowTotal": false,
 			"colTotal": false
 		},
@@ -772,6 +803,7 @@
 			"type": 7,
 			"graph": 4,
 			"options": 7,
+			"resultId": 9,
 			"rowTotal": false,
 			"colTotal": false
 		}

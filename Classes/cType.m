@@ -156,6 +156,7 @@ classdef cType
 			'WASTE_DEFINITION','wd','WASTE_ALLOCATION','wa','WASTE_RECYCLING_DIRECT','rad','WASTE_RECYCLING_GENERAL','rag',...
 			'FLOWS_DIAGRAM','fat','PRODUCTIVE_DIAGRAM','pat');
         GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5,'WASTE_ALLOCATION',6,'DIGRAPH',7);
+		TableType=struct('TABLE',1,'MATRIX',2,'SUMMARY',3');
         % File Extension
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt');
