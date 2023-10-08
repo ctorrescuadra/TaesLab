@@ -338,7 +338,7 @@
 		},
 		{
 			"id": 8,
-			"key": "process",
+			"key": "processes",
 			"number": true,
 			"description": "Processes Definition Table",
 			"resultId": 1,
@@ -368,7 +368,7 @@
 		},
 		{
 			"id": 9,
-			"key": "stream",
+			"key": "streams",
 			"number": true,
 			"description": "Productive Groups Definition Table",
 			"resultId": 1,
@@ -393,7 +393,7 @@
 		},
 		{
 			"id": 10,
-			"key": "flow",
+			"key": "flows",
 			"number": true,
 			"description": "Flows Definition Table",
 			"resultId": 1,
@@ -423,7 +423,7 @@
 		},
 		{
 			"id": 11,
-			"key": "eprocess",
+			"key": "eprocesses",
 			"number": false,
 			"description": "Processes Exergy Table",
 			"resultId": 2,
@@ -463,7 +463,7 @@
 		},
 		{
 			"id": 12,
-			"key": "estream",
+			"key": "estreams",
 			"number": false,
 			"description": "Productive Groups Exergy Table",
 			"resultId": 2,
@@ -488,7 +488,7 @@
 		},
 		{
 			"id": 13,
-			"key": "eflow",
+			"key": "eflows",
 			"number": false,
 			"description": "Flows Exergy Table",
 			"resultId": 2,
@@ -660,7 +660,7 @@
 			"type": 3,
 			"graph": 3,
 			"options": 0,
-			"resultId": 3,
+			"resultId": 2,
 			"rowTotal": true,
 			"colTotal": true
 		},

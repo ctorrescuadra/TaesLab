@@ -520,7 +520,7 @@ classdef ThermoeconomicPanel < handle
 			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files'},'Select File',default_file);
             cd(path);
             if ext % File has been selected
-				slog=saveResultsModel(obj.Model,file);
+				slog=saveModelResults(obj.Model,file);
                 if isValid(slog)
 				    obj.Options.ResultFile=file;
 				    set(obj.ofile_text,'string',file);

@@ -163,43 +163,47 @@ classdef (Abstract) cReadModelTable < cReadModel
                 res.WasteDefinition=pswd;
             end                               
             % Get Resources cost definition
-            idx=cType.TableDataIndex.RESOURCES;
-            tbl=getTable(tm,cType.TableDataName{idx});
-            if isValid(tbl)
-                NrOfSamples=tbl.NrOfCols-2;
-                % Check ResourcesCost Table
-                if NrOfSamples<1
-                    obj.messageLog(cType.WARNING,'Invalid Resources Cost Definition');
-                    return
-                end
-                if ~isNumCellArray(tbl.Data(:,2:end))
-                    obj.messageLog(cType.ERROR,'Invalid Resources Cost Definition');
-                end
-                samples=tbl.ColNames(3:end);
-                fields={'key','value'};
-                idx=cellfun(@(x) cType.getResourcesId(x),tbl.Data(:,1));
-                fidx=find(idx==cType.Resources.FLOW);
-                if isempty(fidx)
-                    obj.messageLog(cType.WARNING,'No Resources flows cost defined');
-                    return
-                end
-                % Buil Resources Cost data
-                tmp=struct();
-                for i=1:NrOfSamples
-                    fvalues=[tbl.RowNames(fidx)',tbl.Data(fidx,i+1)];
-                    fs=cell2struct(fvalues,fields,2);
-                    tmp.Samples(i,1).sampleId=samples{i};
-                    tmp.Samples(i,1).flows=fs;
-                end
-                pidx=find(idx==cType.Resources.PROCESS);
-                if ~isempty(pidx)
-                    for i=1:NrOfSamples
-                        pvalues=[tbl.RowNames(pidx)',tbl.Data(pidx,i+1)];
-                        pr=cell2struct(pvalues,fields,2);
-                        tmp.Samples(i,1).processes=pr;
+            index=cType.TableDataIndex.RESOURCES;
+            trsc=cType.TableDataName{index};
+            isResourceCost=existTable(tm,trsc);
+            if isResourceCost
+                tbl=getTable(tm,trsc);
+                if isValid(tbl)
+                    NrOfSamples=tbl.NrOfCols-2;
+                    % Check ResourcesCost Table
+                    if NrOfSamples<1
+                        obj.messageLog(cType.WARNING,'Invalid Resources Cost Definition');
+                        return
                     end
+                    if ~isNumCellArray(tbl.Data(:,2:end))
+                        obj.messageLog(cType.ERROR,'Invalid Resources Cost Definition');
+                    end
+                    samples=tbl.ColNames(3:end);
+                    fields={'key','value'};
+                    idx=cellfun(@(x) cType.getResourcesId(x),tbl.Data(:,1));
+                    fidx=find(idx==cType.Resources.FLOW);
+                    if isempty(fidx)
+                        obj.messageLog(cType.WARNING,'No Resources flows cost defined');
+                        return
+                    end
+                    % Buil Resources Cost data
+                    tmp=struct();
+                    for i=1:NrOfSamples
+                        fvalues=[tbl.RowNames(fidx)',tbl.Data(fidx,i+1)];
+                        fs=cell2struct(fvalues,fields,2);
+                        tmp.Samples(i,1).sampleId=samples{i};
+                        tmp.Samples(i,1).flows=fs;
+                    end
+                    pidx=find(idx==cType.Resources.PROCESS);
+                    if ~isempty(pidx)
+                        for i=1:NrOfSamples
+                            pvalues=[tbl.RowNames(pidx)',tbl.Data(pidx,i+1)];
+                            pr=cell2struct(pvalues,fields,2);
+                            tmp.Samples(i,1).processes=pr;
+                        end
+                    end
+                    res.ResourcesCost=tmp;
                 end
-                res.ResourcesCost=tmp;
             end
         end
     end

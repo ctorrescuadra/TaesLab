@@ -27,6 +27,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.diagramFP
 %       res=obj.productiveDiagram
 %       res=obj.summaryResults
+%       res=obj.getResultInfo(resId)
 %   Model Info Methods
 %       res=obj.showProperties
 %       res=obj.StateNames
@@ -37,14 +38,15 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.isDiagnosis
 %       res=obj.isWaste
 %       res=obj.isSummaryEnable
+%       res=obj.getTableInfo
+%       res=obj.getModelTables
+%       obj.getTable(name)
 %   Print Methods
 %       obj.printIndexTable
 %       obj.printResults
 %       obj.printSummary(tbl)
-%       obj.printResultTable(tbl)
-%   View Table Methods
-%       obj.viewResultsTable(tbl)
-%       obj.viewSummaryTable(tbl)
+%       obj.printTable(name)
+%       obj.viewTable(name)
 %   Save Methods
 %       log=obj.saveModelResults(filename)
 %       log=obj.saveDataModel(filename)
@@ -58,7 +60,6 @@ classdef cThermoeconomicModel < cStatusLogger
 %       obj.graphDiagramFP(graph)
 %       obj.graphWasteAllocation(wkey)
 %       obj.flowsDiagram
-%       obj.resultsGraph(graph, options)
 %   Waste Methods
 %       res=obj.wasteAllocation
 %       res=obj.setWasteType(key,type)
@@ -93,7 +94,7 @@ classdef cThermoeconomicModel < cStatusLogger
         ResourceSample         % Active resource cost sample
         CostTables             % Select tables to cost results
         DiagnosisMethod        % Method to calculate fuel impact of wastes
-        Summary=false;         % Calculate Summary Results
+        Summary                % Calculate Summary Results
     end
 
     properties(Access=private)
@@ -156,9 +157,6 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.debug=param.Debug;
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
-            if obj.isSummaryEnable
-                obj.Summary=param.Summary;
-            end
             % Load Exergy values (all states)
             obj.rstate=cell(1,data.NrOfStates);
             for i=1:data.NrOfStates
@@ -213,8 +211,8 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.activeSet=true;
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
-            obj.setSummaryResults;
             obj.setThermoeconomicDiagnosis;
+            obj.Summary=param.Summary;            
         end
         %%%
         % Set (assign) Methods
@@ -374,18 +372,21 @@ classdef cThermoeconomicModel < cStatusLogger
         % Get the productive diagrams cResultInfo object
         %   Output:
         %       res - cResultInfo (PRODUCTIVE_STRUCTURE) 
-            id=cType.ResultId.PRODUCTIVE_DIAGRAM;
-            res=obj.getResults(id);
+            res=obj.getResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
             if isempty(res)
                 res=getProductiveDiagram(obj.fmt,obj.productiveStructure.Info);
                 res.setProperties(obj.ModelName,'SUMMARY');
                 obj.setResults(res);
-                obj.printDebugInfo('Productive Diagram has been calculated');
             end
         end
 
         function res=getResultInfo(obj,id,options)
             res=cStatusLogger(cType.ERROR);
+            if (nargin==3) && ischar(options)
+                wkey=options;
+            else
+                wkey='';
+            end    
             switch id
             case cType.ResultId.PRODUCTIVE_STRUCTURE
                 res=obj.productiveStructure;
@@ -396,15 +397,17 @@ classdef cThermoeconomicModel < cStatusLogger
             case cType.ResultId.THERMOECONOMIC_DIAGNOSIS
                 res=obj.thermoeconomicDiagnosis;
             case cType.ResultId.SUMMARY_RESULTS
-                res=obj.setSummaryResults;
+                res=obj.getSummaryResults;          
             case cType.ResultId.PRODUCTIVE_DIAGRAM
                 res=obj.productiveDiagram;  
             case cType.ResultId.DIAGRAM_FP
                 res=obj.diagramFP;
             case cType.ResultId.WASTE_ANALYSIS
                 res=obj.wasteAllocation;
-            case cType.ResultId.RECYCLING_ANALISIS
-                res=obj.recyclingAnalysis(options);
+            case cType.ResultId.RECYCLING_ANALYSIS
+                res=obj.recyclingAnalysis(wkey);
+            case cType.ResultId.EXERGY_COST_CALCULATOR
+                res=obj.thermoeconomicAnalysis;
             case cType.ResultId.RESULT_MODEL
                 res=obj.getModelTables;
             case cType.ResultId.DATA_MODEL
@@ -505,7 +508,13 @@ classdef cThermoeconomicModel < cStatusLogger
         end
 
         function res=get.FormatData(obj)
+        % get format data info
             res=obj.fmt.PrintConfig;
+        end
+
+        function res=getTableInfo(obj,name)
+        % Get the dictionary info of table names
+            res=getTableInfo(obj.fmt,name);
         end
 
         function res=getResultStates(obj)
@@ -527,15 +536,16 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
-        function tbl=getTable(obj,table)
+        function tbl=getTable(obj,name)
+        % Get the table called name
             tbl=cStatus(cType.ERROR);
-            tInfo=getTableIndex(obj.fmt,table);
+            tInfo=getTableInfo(obj.fmt,name);
             if isempty(tInfo)
-                tbl.printLogger('Invalid table: %s',table);
+                tbl.printError('Invalid table: %s',name);
                 return
             else
                res=obj.getResultInfo(tInfo.resultId);
-               tbl=res.getTable(table);
+               tbl=res.getTable(name);
             end
         end
 
@@ -554,23 +564,14 @@ classdef cThermoeconomicModel < cStatusLogger
             cellfun(@(x) printResults(x), obj.getModelInfo)
         end
 
-        function printSummary(obj,table)
+        function printSummary(obj)
         % Print the summary tables
-            log=cStatus();
-            if ~obj.isSummaryEnable
-                log.printWarning('Summary Requires more than one State');
+            msr=obj.getSummaryResults;
+            if isempty(msr)
+                obj.printDebugInfo('Summary is not available')
                 return
             end
-            if ~obj.Summary
-                obj.setSummary(true);
-            end
-            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
-            switch nargin
-            case 1
-                printResults(msr);
-            case 2
-                printTable(msr,table);
-            end
+            printResults(msr)
         end
 
         function printIndexTable(obj)
@@ -583,36 +584,26 @@ classdef cThermoeconomicModel < cStatusLogger
         % Print an individual table
         %   Input:
         %       name - Name of the table
-            mt=obj.getModelTables;
-            mt.printTable(name);
+            tbl=obj.getTable(name);
+            if tbl.isValid
+                printTable(tbl);
+            end
         end
 
-        function viewResultsTable(obj,name)
+        function viewTable(obj,name)
         % View a table in a GUI Table
         %   Input:
         %       name - Name of the table
-            mt=obj.getModelTables;
-            mt.viewTable(name);
-        end
-
-        function viewSummaryTable(obj,name)
-        % View a summary table in a GUI Table
-            log=cStatus();
-            if ~obj.isSummaryEnable
-                log.printWarning('Summary Requires more than one State');
-                return
+            tbl=obj.getTable(name);
+            if tbl.isValid
+                viewTable(tbl);
             end
-            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
-            if ~obj.Summary
-                obj.setSummary(true);
-            end
-            viewTable(msr,name);
         end
 
         %%%
         % Save Results methods
         %
-        function log=saveResultsModel(obj,filename)
+        function log=saveModelResults(obj,filename)
         % Save results in a file 
         % The following types are availables (XLSX, CSV, MAT)
         %  Input:
@@ -630,15 +621,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
-            log=cStatus();
-            if ~obj.isSummaryEnable
-                log.printWarning('Summary Requires more than one State');
+            msr=obj.getSummaryResults;
+            if isempty(msr)
+                obj.printDebugInfo('Summary is not available');
                 return
             end
-            if ~obj.Summary
-                obj.setSummary(true);
-            end
-            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
             log=saveResults(msr,filename);
         end
     
@@ -739,16 +726,13 @@ classdef cThermoeconomicModel < cStatusLogger
         %       graph - summary table name to plot.
         %       list (optional) - list of variables to plot
         % See also cResultInfo/graphSummary
-            log=cStatus();
-            if ~obj.isSummaryEnable
-                log.printWarning('Summary Requires more than one State');
+            log=cStatus(cType.VALID);
+            res=obj.getSummaryResults;
+            if isempty(res) || ~isValid(res)
+                log.printWarning('Summary Results not available');
                 return
             end
-            if ~obj.Summary 
-                obj.setSummary(true);
-            end
-            msr=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
-            graphSummary(msr,varargin{:});
+            graphSummary(res,varargin{:});
         end
 
         function showDiagramFP(obj,graph)
@@ -767,13 +751,30 @@ classdef cThermoeconomicModel < cStatusLogger
             if nargin==1
                 graph=cType.Tables.TABLE_FP;
             end
-            res=obj.thermoeconomicAnalysis;
+            res=obj.diagramFP;
             if ~isValid(res)
                 res.printLogger(res)
                 log.printError('Result object not available');
                 return
             end
             showDiagramFP(res,graph);
+        end
+
+        function graphRecycling(obj, graph, wkey)
+            log=cStatus(cType.VALID);
+            switch nargin
+            case 1
+                graph='rad';
+                wkey=obj.WasteFlows{1};
+            case 2
+                wkey=obj.WasteFlows{1};
+            end
+            res=obj.recyclingAnalysis(wkey);
+            if isempty(res) || ~isValid(res)
+                log.printWarning('Diagnosis Results not available');
+                return
+            end
+            graphRecycling(res,graph);
         end
 
         function graphWasteAllocation(obj,varargin)
@@ -804,7 +805,6 @@ classdef cThermoeconomicModel < cStatusLogger
         % Show waste information
             res=getWasteResults(obj.fmt,obj.fp1.WasteData);
             res.setProperties(obj.ModelName,obj.State);
-            printResults(res);
         end
 
         function log=setWasteType(obj,key,wtype)
@@ -1034,6 +1034,7 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             res=getExergyData(obj.DataModel,state);
         end
+
         function log=setExergyData(obj,state,values)
         % Set exergy data values to a state
         %   Input:
@@ -1145,6 +1146,7 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function res=setSummaryResults(obj)
         % Obtain Summary Results
+            res=[];
             id=cType.ResultId.SUMMARY_RESULTS;
             if ~obj.activeSet || ~obj.isSummaryEnable
                 return
@@ -1164,6 +1166,18 @@ classdef cThermoeconomicModel < cStatusLogger
                 obj.clearResults(id);
                 obj.printDebugInfo('Summary Results have been Desactivated');
             end
+        end
+
+        function res=getSummaryResults(obj)
+        % Force to obtain summary results
+            res=[];
+            if ~obj.isSummaryEnable
+                return
+            end
+            if ~obj.Summary
+                obj.setSummary(true);
+            end
+            res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
         end
         %%%
         % Internal set methods

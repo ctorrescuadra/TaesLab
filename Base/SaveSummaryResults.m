@@ -11,9 +11,16 @@ function SaveSummaryResults(model,filename)
 %
     log=cStatus(cType.VALID);
     % Check Input parameters
-    if (nargin<2) || ~ischar(filename) || ~isa(model,'cThermoeconomicModel') 
+    if (nargin<2) || ~isText(filename)
         log.printError('Usage: SaveSummaryResults(arg,filename)');
         return
+    end
+    if ~isa(model,'cThermoeconomicModel') || ~isValid(model)
+        log.printError('Invalid model object');
+        return
+    end
+    if isstring(filename)
+        filename=convertStringsToChars(filename);
     end
     log=saveSummary(model,filename);
     log.printLogger;

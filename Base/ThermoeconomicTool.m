@@ -24,9 +24,12 @@ function model=ThermoeconomicTool(filename,varargin)
 %
     model=cStatusLogger();
     % Check input parameters
-    if (nargin<1) || ~ischar(filename)
+    if (nargin<1) || ~isText(filename)
         model.printError('Usage: model=ThermoeconomicModel(filename,params)');
         return
+    end
+    if isstring(filename)
+        filename=convertStringsToChars(filename);
     end
     if ~cType.checkFileRead(filename)
         model.printError('File %s does not exist',filename);

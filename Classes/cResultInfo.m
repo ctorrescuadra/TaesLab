@@ -177,7 +177,7 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Invalid graph type: %s',graph);
                 return
             end
-            if (nargin==2)             
+            if (nargin==2) || isempty(var)            
                 if tbl.isFlowsTable
                     var=obj.Info.getDefaultFlowVariables;
                 else
@@ -278,7 +278,7 @@ classdef (Sealed) cResultInfo < cModelTables
                 return
             end
             if nargin==1
-                graph=cType.Tables.DIAGRAM_FP;
+                graph=cType.Tables.TABLE_FP;
             end
             tbl=obj.getTable(graph);
             if ~isValid(tbl)
@@ -307,47 +307,6 @@ classdef (Sealed) cResultInfo < cModelTables
             end
             g=cGraphResults(obj.Tables.fat);
             g.showDigraph;
-        end
-
-        function showGraph(obj,param)
-            tbl=getTable(obj,param.graph);
-            if ~isValid(tbl) || ~isGraph(tbl)
-                log.printError('Invalid graph table: %s',param.graph);
-                return
-            end
-            % Get aditional parameters
-            option=[];
-            switch tbl.GraphType
-            case cType.GraphType.DIAGNOSIS
-                option=param.ShowOutput;
-            case cType.GraphType.WASTE_ALLOCATION
-                if isempty(param.WasteFlow)
-                    param.WasteFlow=tbl.ColNames{2};
-                end
-                option=param.WasteFlow;
-            case cType.GraphType.SUMMARY
-                if isempty(param.Variables)
-                    if tbl.isFlowsTable
-                        param.Variables=obj.Info.getDefaultFlowVariables;
-                    else
-                        log.printError('Variables are required for this type: %s',graph);
-                        return
-                    end
-                end
-                if tbl.isFlowsTable
-                    idx=obj.Info.getFlowIndex(param.Variables);
-                else
-                    idx=obj.Info.getProcessIndex(param.Variables);
-                end
-                if cType.isEmpty(idx)
-                    log.printError('Invalid Variable Names');
-                    return
-                end
-                option=idx;
-            end
-            % Show Graph
-            g=cGraphResults(tbl,option);
-            g.showGraph;
         end
     end
 end

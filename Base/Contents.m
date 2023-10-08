@@ -35,6 +35,7 @@
 %   ShowSummaryGraph        - Show the summary results graph 
 %   ShowProductiveDiagram   - Show the productive diagram (Only Matlab)
 %   ShowRecyclingGraph		- Show the recycling analysis graph
+%	ShowModelGraph          - Show the graph of a model table
 %   WasteAllocationGraph    - Show a pie chart with the waste allocation ratios
 %
 % GUI functions

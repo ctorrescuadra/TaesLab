@@ -10,9 +10,12 @@ function data=ReadDataModel(filename)
 %
     data=cStatusLogger();
     %Check parameters
-    if (nargin~=1) || ~ischar(filename)
+    if (nargin~=1) || ~isText(filename)
         data.printError('Usage: ReadDataModel(filename)');
         return
+    end
+    if isstring(filename)
+        filename=convertStringsToChars(filename);
     end
     if ~cType.checkFileRead(filename)
         data.printError('Invalid file name %s', filename);

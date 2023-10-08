@@ -36,15 +36,5 @@ classdef (Abstract) cTableResult < cTable
         % Check if the table has a graph associated
             res=(obj.GraphType ~= cType.GraphType.NONE);
         end
-
-        function showGraph(obj,varargin)
-        % Show the graph associated to the table
-            g=cGraphResults(obj,varargin{:});
-            if isValid(g)
-                g.showGraph;
-            else
-                printLogger(g);
-            end
-        end
     end
 end

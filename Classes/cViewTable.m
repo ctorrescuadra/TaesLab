@@ -43,12 +43,12 @@ classdef cViewTable < cStatusLogger
 			obj.format=tbl.getColumnFormat;
 			obj.fontname=param.FontName;
 			obj.fontsize=param.FontSize;
-            if isa(obj,'cTableResult')
+            if isa(tbl,'cTableResult')
 			    obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
-                 obj.data=tbl.formatData;
+                obj.data=tbl.formatData;
             else
                 obj.descr=tbl.Description; 
-                 obj.data=tbl.Data;
+                obj.data=tbl.Data;
             end
 			% Set the window size and position
 			ss=get(groot,'ScreenSize');

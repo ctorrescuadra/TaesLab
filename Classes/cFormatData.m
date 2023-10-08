@@ -20,8 +20,6 @@ classdef cFormatData < cStatusLogger
 %
 	properties(GetAccess=public,SetAccess=private)
 		PrintConfig
-        		tDict        % Tables dictionnary
-		tableIndex   % Index for tables properties
     end
 
 	properties (Access=private)
@@ -29,7 +27,8 @@ classdef cFormatData < cStatusLogger
 		cfgMatrices  % Matrices configuration
 		cfgSummary   % Summary configuration
 		cfgTypes     % Format types configuration
-
+		tDict        % Tables dictionnary
+		tableIndex   % Index for tables properties
 	end
 	
 	methods
@@ -89,7 +88,8 @@ classdef cFormatData < cStatusLogger
 			res=struct('Tables',obj.cfgTables,'Matrices',obj.cfgMatrices,'Summary',obj.cfgSummary,'Format',obj.cfgTypes);
         end
 
-		function res=getTableIndex(obj,table)
+		function res=getTableInfo(obj,table)
+		% get the dictionary information of a table
 			res=[];
 			idx=getIndex(obj.tDict,table);
 			if cType.isEmpty(idx)
@@ -99,6 +99,7 @@ classdef cFormatData < cStatusLogger
 		end
 
 		function res=getTableProperties(obj,table)
+		% get the format table properties
 			res=[];
 			idx=getIndex(obj.tDict,table);
 			if cType.isEmpty(idx)
@@ -287,14 +288,18 @@ classdef cFormatData < cStatusLogger
 			row=obj.cfgMatrices(id).rowTotal;
 			col=obj.cfgMatrices(id).colTotal;
         end
+	end
 
+	methods(Access=private)
 		function buildTablesDictionary(obj)
+		% Build the table dictionary
 			id=0;
 			NT=numel(obj.cfgTables);
 			NM=numel(obj.cfgMatrices);
 			NS=numel(obj.cfgSummary);
 			N=NT+NM+NS;
 			tIndex(N)=struct('id',N,'name','pI','resultId',0,'graph',0,'type',0,'tableId',0);
+			% Retrieve information for simple tables
 			for i=1:NT
 				id=id+1;
 				tIndex(id).id=id;
@@ -304,6 +309,7 @@ classdef cFormatData < cStatusLogger
 				tIndex(id).type=cType.TableType.TABLE;
 				tIndex(id).tableId=i;
 			end
+			% Retrive information for matrix tables
 			for i=1:NM
 				id=id+1;
 				tIndex(id).id=id;
@@ -313,6 +319,7 @@ classdef cFormatData < cStatusLogger
 				tIndex(id).type=cType.TableType.MATRIX;
 				tIndex(id).tableId=i;
 			end
+			% Retrieve information for summary tables
 			for i=1:NS
 				id=id+1;
 				tIndex(id).id=id;
@@ -322,6 +329,7 @@ classdef cFormatData < cStatusLogger
 				tIndex(id).type=cType.TableType.SUMMARY;
 				tIndex(id).tableId=i;
 			end
+			% Create the dictionary (name,id)
 			obj.tDict=cDictionary({tIndex.name});
             obj.tableIndex=tIndex;
 		end

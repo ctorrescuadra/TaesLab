@@ -12,9 +12,16 @@ function SaveResults(res,filename)
 %
     log=cStatus(cType.VALID);
     % Check Input parameters
-    if (nargin~=2) || ~ischar(filename) || ~isa(res,'cResultInfo')
+    if (nargin~=2) || ~isText(filename)
         log.printError('Usage: SaveResults(res,filename)');
         return
+    end
+    if ~isa(res,'cResultInfo') || ~isValid(res)
+        log.printError('Invalid result object');
+        return
+    end
+    if isstring(filename)
+        filename=convertStringsToChars(filename);
     end
     % Save the results
     log=saveResults(res,filename);

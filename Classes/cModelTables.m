@@ -77,6 +77,8 @@ classdef cModelTables < cResultId
             res = cStatusLogger;
             if obj.existTable(name)
                 res=obj.Tables.(name);
+            else
+                res.printError('Table name %s do not exists',name);
             end
         end
 
@@ -109,7 +111,6 @@ classdef cModelTables < cResultId
                 log.printError('Table %s do NOT exists',name);
             end
         end
-
 
         function res=getIndexTable(obj)
         % Get a cTableData object with the table names and descripcion

@@ -12,10 +12,18 @@ function SaveDiagramFP(model,filename)
     % Check Input parameters
     log=cStatus(cType.VALID);
     % Check Input parameters
-    if (nargin<2) || ~ischar(filename) || ~isa(model,'cThermoeconomicModel') 
+    if (nargin<2) || ~isText(filename) 
         log.printError('Usage: SaveDiagramFP(model,filename)');
         return
     end
+    if ~isa(model,'cThermoeconomicModel') || ~isValid(model)
+        log.printError('Invalid model object');
+        return
+    end
+    if isstring(filename)
+        filename=convertStringsToChars(filename);
+    end
+    % Save the Results
     log=saveDiagramFP(model,filename);
     log.printLogger;
 end

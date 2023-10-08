@@ -21,7 +21,7 @@ function res = SummaryResults(data)
 %   See also cReadModel, cModelSummary, cResultInfo
 %
     res=cStatusLogger(cType.ERROR);
-    if ~isa(data,'cReadModel') || ~isValid(data)
+    if ~isa(data,'cDataModel') || ~isValid(data)
         res.printError('Invalid data. It should be a cReadModel object');
         return
     end

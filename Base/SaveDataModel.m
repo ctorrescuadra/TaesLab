@@ -11,13 +11,16 @@ function SaveDataModel(arg,filename)
 %
     log=cStatus(cType.VALID);
     % Check Input Parameters
-    if (nargin~=2) || ~ischar(filename)
+    if (nargin~=2) || ~isText(filename)
         log.printError('Usage: SaveDataModel(model,filename)');
         return
     end
-    if ~(isa(arg,'cDataModel') || isa(arg,'cThermoeconomicModel'))
+    if ~(isa(arg,'cDataModel') || isa(arg,'cThermoeconomicModel')) || ~isValid(arg)
         log.printError('Invalid model. It sould be a cReadModel or cThermoeconomicModel object');
         return
+    end
+    if isstring(filename)
+        filename=convertStringsToChars(filename);
     end
     % Save the data model
     log=saveDataModel(arg,filename);
