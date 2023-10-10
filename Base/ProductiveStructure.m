@@ -19,7 +19,7 @@ function res=ProductiveStructure(data)
         return
     end
     if ~isa(data,'cDataModel')
-        res.printError('Invalid data. It should be a cReadModel object');
+        res.printError('Invalid data parameter. It should be a cDataModel object');
         return
     end
 	% Check Productive Structure

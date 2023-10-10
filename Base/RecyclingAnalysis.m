@@ -40,14 +40,14 @@ function res = RecyclingAnalysis(data,varargin)
     % Check Productive Structure
     if ~data.isValid
 	    data.printLogger;
-	    res.printError('Invalid Thermoeconomic Model');
+	    res.printError('Invalid data model. See error log');
 	    return
     end
     % Read format definition
     fmt=data.FormatData;
     % Read waste info
     if data.NrOfWastes<1
-	    res.printError(cType.ERROR,'Model must have waste')
+	    res.printError(cType.ERROR,'Data model must have waste')
         return
     end
     wd=data.WasteData;
@@ -63,14 +63,14 @@ function res = RecyclingAnalysis(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~ex.isValid
         ex.printLogger;
-        res.printError('Invalid Exergy Values. See error log');
+        res.printError('Invalid exergy values. See error log');
         return
 	end
 	% Compute the Model FPR
     mfp=cModelFPR(ex);
     if ~isValid(mfp)
         mfp.printLogger;
-        res.printError('Invalid Model FPR. See error log');
+        res.printError('Invalid model FPR. See error log');
     end
     % Check Waste Key
     mfp.setWasteData(wd);

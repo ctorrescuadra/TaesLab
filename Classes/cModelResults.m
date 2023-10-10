@@ -22,7 +22,7 @@ classdef (Sealed) cModelResults < cResultId
         %   data - cDataModel object
             obj=obj@cResultId(cType.ResultId.RESULT_MODEL);
             if ~isa(data,'cDataModel') || ~data.isValid
-                obj.messageLog(cType.ERROR,'Invalid data model parameter');
+                obj.messageLog(cType.ERROR,'Invalid data model');
                 return
             end
             ps=getProductiveStructureResults(data.FormatData,data.ProductiveStructure);

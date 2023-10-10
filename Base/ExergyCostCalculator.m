@@ -47,14 +47,8 @@ function res=ExergyCostCalculator(data,varargin)
     % Check productive structure
     if ~data.isValid
 		data.printLogger;
-		res.printError('Invalid Productive Structure. See error log');
+		res.printError('Invalid data model. See error log');
 		return
-    end
-    % Check CostTable parameter
-    if ~data.checkCostTables(param.CostTables)
-		data.printLogger;
-        res.printError('Invalid CostTable parameter %s',param.CostTables);
-        return
     end
     % Read print formatted configuration
 	fmt=data.FormatData;	

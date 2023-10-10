@@ -27,7 +27,7 @@ function res=DiagramFP(data,varargin)
 	% Check Productive Structure
 	if ~data.isValid
 		data.printLogger;
-		res.printError('Invalid Productive Structure. See error log');
+		res.printError('Invalid data model. See error log');
 		return
 	end	
 	% Check format definition

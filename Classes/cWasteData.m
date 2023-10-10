@@ -42,8 +42,7 @@ classdef cWasteData < cStatusLogger
             wd=data.wastes;
 			NR=length(wd);
 			if NR ~= ps.NrOfWastes
-				message=sprintf('Invalid number of wastes %d defined.',NR);
-				obj.messageLog(cType.ERROR,message);
+				obj.messageLog(cType.ERROR,'Invalid number of wastes %d defined.',NR);
 				return
 			end
 			if ~all(isfield(data.wastes,{'flow','type'}))
@@ -60,24 +59,21 @@ classdef cWasteData < cStatusLogger
                 if cType.checkWasteKey(wd(i).type)
 					wasteType(i)=cType.getWasteId(wd(i).type);
                 else
-                    message=sprintf('Invalid Waste Allocation method %s',wd(i).type);
-                    obj.messageLog(cType.ERROR,message);
+                    obj.messageLog(cType.ERROR,'Invalid Waste Allocation method %s',wd(i).type);
                 end
                 % Check key
                 id=ps.getFlowId(wd(i).flow);
                 if cType.isEmpty(id)
-                   	message=sprintf('Invalid flow id %s',wd(i).flow);
-				    obj.messageLog(cType.ERROR,message);
+				    obj.messageLog(cType.ERROR,'Invalid waste flow %s',wd(i).flow);
 					continue
                 end 
 				if ~ps.Flows(id).type == cType.Flow.WASTE
-					message=sprintf('flow %s must be waste',wd(i).flow);
-					obj.messageLog(cType.ERROR,message);
+					obj.messageLog(cType.ERROR,'Flow %s must be waste',wd(i).flow);
 				end
 				% Check Recycle Ratio
 				if isfield(wd(i),'recycle')
 					if (wd(i).recycle>1) || (wd(i).recycle<0) 
-						obj.messageLog(cType.ERROR,'Invalid Recycle Ratio');
+						obj.messageLog(cType.ERROR,'Invalid Recycle Ratio %f',wd(i).recycle);
 					end
 				else
 					wd(i).recycle=0.0;
@@ -89,33 +85,28 @@ classdef cWasteData < cStatusLogger
 					if isfield(wd(i),'values')
                         wval=wd(i).values;
                         if ~all(isfield(wval,{'process','value'})) 
-							message=sprintf('Values fields missing for waste %s',wd(i).flow);
-							obj.messageLog(cType.ERROR,message);
+							obj.messageLog(cType.ERROR,'Value fields missing for waste %s',wd(i).flow);
 							return
                         end
                         for j=1:length(wval)
 							jp=ps.getProcessId(wval(j).process);
 							if cType.isEmpty(jp)
-								message=sprintf('Invalid process name %s',wval(j).process);
-								obj.messageLog(cType.ERROR,message);
+								obj.messageLog(cType.ERROR,'Invalid process name %s',wval(j).process);
 								continue
 							end
 							if(ps.Processes(jp).type==cType.Process.DISSIPATIVE)
-								message=sprintf('Waste %s cannot be asssigned to dissipative units',wval(j).process);
-								obj.messageLog(cType.ERROR,message);
+								obj.messageLog(cType.ERROR,'Waste %s cannot be asssigned to dissipative units',wval(j).process);
 								continue
 							end
 							if (wval(j).value <= 0)
-								message=sprintf('Waste distribution value %s %f cannot be NEGATIVE',wval(j).process,wval(j).value);
-								obj.messageLog(cType.ERROR,message);
+								obj.messageLog(cType.ERROR,'Waste distribution value %s: %f cannot be NEGATIVE',wval(j).process,wval(j).value);
 								continue
 							end
 							values(i,jp)=wval(j).value;
                         end
 					    else %if no values provided set type to DEFAULT
 						    wasteType(i)=cType.WasteAllocation.DEFAULT;
-						    message=sprintf('Waste allocation of flow %s is defined as MANUAL and does not have values defined ',wd(i).flow);
-						    obj.messageLog(cType.ERROR,message);
+						    obj.messageLog(cType.ERROR,'Waste allocation of flow %s is defined as MANUAL and does not have values defined ',wd(i).flow);
 					end             
 				end
 			end

@@ -101,6 +101,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 		            values=readcell(xls,'Sheet',wsht);
                 catch err
 			        tbl.messageLog(cType.ERROR,err.message);
+                    return
 		        end
             end
             rowNames=values(2:end,1)';

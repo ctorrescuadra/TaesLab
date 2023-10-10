@@ -7,9 +7,16 @@ function B=scaleCol(A,x)
 %   OUTPUT:
 %	    B - Scaled Matrix 
 %
-	[~,M]=size(A);
+    log=cStatus(cType.VALID);
+    B=[];
+    if nargin<2
+        log.printError('Invalid arguments');
+        return
+    end
+    [~,M]=size(A);
     if(M~=length(x))
-		error('Matrix dimensions must agree %d %d',M,length(x));
+        log.printError('Matrix dimensions must agree: %d %d',M,length(x));
+        return
     end
     if issparse(A)
         B=A*diag(sparse(x));

@@ -22,13 +22,13 @@ function res = SummaryResults(data)
 %
     res=cStatusLogger(cType.ERROR);
     if ~isa(data,'cDataModel') || ~isValid(data)
-        res.printError('Invalid data. It should be a cReadModel object');
+        res.printError('Invalid data parameter. It should be a valid cDataModel object');
         return
     end
     if data.NrOfStates>1
         model=cThermoeconomicModel(data,'Summary',true);
         res=model.summaryResults;
     else
-        res.printWarning('Summary Results requires more than one State');
+        res.printWarning('Summary Results requires more than one state');
     end
 end

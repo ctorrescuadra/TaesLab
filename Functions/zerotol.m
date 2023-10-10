@@ -8,7 +8,7 @@ function A=zerotol(A,eps)
 %  	OUTPUT:
 %		A - modified matrix
 	if nargin==1
-		eps=1.0e-6;
+		eps=cType.EPS;
 	end 
 	A(abs(A)<eps)=0;
 end

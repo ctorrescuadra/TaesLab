@@ -10,6 +10,6 @@ function ShowFlowsDiagram(arg)
 	if isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')
 		showFlowsDiagram(arg)
     else
-        log.printError('Invalid argument. It sould be a cResultInfo object');
+		log.printError('Invalid result parameter');
 	end   	
 end

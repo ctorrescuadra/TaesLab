@@ -2,7 +2,7 @@ function data = checkDataModel(filename)
 % checkDataModel - Read and check a data model.
 % Internal function. Don't print error messages.
 %   USAGE:
-%       data
+%       data = checkDataModel(filename)
 %   INPUT:
 %       filename - name of the data model file
 %   OUTPUT:

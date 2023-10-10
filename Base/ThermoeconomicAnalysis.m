@@ -55,11 +55,6 @@ function res=ThermoeconomicAnalysis(data,varargin)
         res.printError('Invalid Productive Structure. See error log');
         return
     end
-    % Check CostTable parameter
-    if ~data.checkCostTables(param.CostTables)
-        res.printError('Invalid CostTable parameter %s',param.CostTables);
-        return
-    end
     % Read print formatted configuration
     fmt=data.FormatData;
     % Read exergy
@@ -69,7 +64,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~isValid(ex)
         ex.printLogger;
-		res.printError('Invalid Exergy Values. See error log');
+		res.printError('Invalid exergy values. See error log');
         return
 	end
     % Read Waste and compute Model FP
@@ -81,7 +76,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
     end
     if ~fpm.isValid
         fpm.printLogger;
-		res.printError('Invalid thermoeconomic analysis. See error log')
+		res.printError('Invalid Thermoeconomic Analysis. See error log')
         return
     end
     % Read external resources and get results
@@ -96,7 +91,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 		rsc=getResourceCost(rd,fpm);
         if ~rsc.isValid
 			rsc.printLogger;
-			res.printError('Invalid resources cost values. See Error Log');
+			res.printError('Invalid resource cost values. See Error Log');
 			return
         end
         param.ResourcesCost=rsc;

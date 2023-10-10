@@ -47,7 +47,7 @@ classdef cDataModel < cStatusLogger
             % Check Data Structure
             obj=obj@cStatusLogger(cType.VALID);
             if ~isa(rdm,'cReadModel') || ~isValid(rdm)
-                obj.messageLog(cType.ERROR,'Invalid Data Model');
+                obj.messageLog(cType.ERROR,'Invalid data model');
                 return
             end
             data=rdm.ModelData;
@@ -83,12 +83,10 @@ classdef cDataModel < cStatusLogger
                 rex=cExergyData(data.ExergyStates.States(i),ps);
                 status = rex.status & status;
                 if isValid(rex)
-					message=sprintf('Exergy values [%s] are valid',obj.States{i});
-					obj.messageLog(cType.INFO,message);
+					obj.messageLog(cType.INFO,'Exergy values [%s] are valid',obj.States{i});
 				else
 					obj.addLogger(rex)
-					message=sprintf('Exergy values [%s] are NOT valid. See Error Log',obj.States{i});
-					obj.messageLog(cType.ERROR,message);
+					obj.messageLog(cType.ERROR,'Exergy values [%s] are NOT valid. See Error Log',obj.States{i});
                 end
                 obj.ExergyData{i}=rex;
             end
@@ -104,11 +102,9 @@ classdef cDataModel < cStatusLogger
                 status=wd.status & status;
                 if ~isValid(wd)
 	                obj.addLogger(wd);
-					message=sprintf('Waste Definition is NOT valid. See error log');
-					obj.messageLog(cType.ERROR,message);
+					obj.messageLog(cType.ERROR,'Waste Definition is NOT valid. See error log');
                 elseif obj.isWaste
-			        message=sprintf('Waste Definition is valid');
-					obj.messageLog(cType.INFO,message);			
+					obj.messageLog(cType.INFO,'Waste Definition is valid');			
                 end
                 obj.WasteData=wd;
             else
@@ -122,13 +118,11 @@ classdef cDataModel < cStatusLogger
                     rsc=cResourceData(data.ResourcesCost.Samples(i),ps);
                     status=rsc.status & status;
                     if isValid(rsc)
-						message=sprintf('Resources Cost sample [%s] is valid',obj.ResourceSamples{i});
-						obj.messageLog(cType.INFO,message);
+						obj.messageLog(cType.INFO,'Resources Cost sample [%s] is valid',obj.ResourceSamples{i});
                         obj.ResourceData{i}=rsc;
                     else
 						obj.addLogger(rsc);
-						message=sprintf('Resources Cost sample [%s] is NOT valid. See error log',obj.ResourceSamples{i});
-						obj.messageLog(cType.ERROR,message);
+						obj.messageLog(cType.ERROR,'Resources Cost sample [%s] is NOT valid. See error log',obj.ResourceSamples{i});
                     end
                 end
             else

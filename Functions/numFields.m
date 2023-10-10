@@ -1,5 +1,7 @@
 function res=numFields(s)
 % numFields returns the number of fields of a structure (Octave/Matlab compatibility)
+%   USAGE:
+%       res=numFields(s)
 %   INPUT:
 %       s - data structure
 %   OUTPUT:

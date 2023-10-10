@@ -8,7 +8,7 @@
 model=selectDataModel();
 if ~model.isValid
 	model.printLogger;
-	model.printError('Invalid Data Model. See error log');
+	model.printError('Invalid data model. See error log');
 	return
 end
 % Define application paramaters

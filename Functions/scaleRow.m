@@ -6,11 +6,18 @@ function B=scaleRow(A,x)
 %	    x - scale vector
 %   OUTPUT:
 %	    B - Scaled Matrix 
-%   
-	[N,~]=size(A);
-    if(N~=length(x))
-		error('Matrix dimensions must agree %d %d',N,length(x));
+%
+    log=cStatus(cType.VALID);
+    B=[];
+    if nargin<2
+        log.printError('Invalid arguments');
+        return
     end
+    [N,~]=size(A);
+    if(N~=length(x))
+        log.printError('Matrix dimensions must agree: %d %d',M,length(x));
+        return
+    end   
     if issparse(A)
         B=diag(sparse(x))*A;
     else

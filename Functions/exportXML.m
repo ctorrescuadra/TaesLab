@@ -1,5 +1,7 @@
 function log=exportXML(data,filename)
 % exportXML save a octave/matlab object as json file
+%   USAGE:
+%       log=exportXML(data, filename)
 %   INPUT:
 %	    data - struct data
 %	    filename - json filename

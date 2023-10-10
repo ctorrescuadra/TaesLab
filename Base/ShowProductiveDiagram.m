@@ -18,7 +18,7 @@ function res=ShowProductiveDiagram(data)
         return
     end
     if ~isa(data,'cDataModel')
-        res.printError('Invalid model. It should be a cReadModel object');
+		res.printError('Invalid result parameter');
         return
     end
 	% Check Productive Structure

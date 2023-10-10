@@ -10,6 +10,6 @@ function WasteAllocationGraph(arg,varargin)
     if isa(arg,'cResultInfo') || isa(arg,'cThermoeconomicModel')
         graphWasteAllocation(arg, varargin{:});
     else
-        log.printError('Invalid argument. It sould be a vailid object.');
+        log.printError('Invalid data parameter. It sould be a valid object.');
     end
 end

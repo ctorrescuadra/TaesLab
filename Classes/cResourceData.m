@@ -25,7 +25,7 @@ classdef cResourceData < cStatusLogger
 		    % Check arguments and inititiliza class
 			obj=obj@cStatusLogger(cType.VALID);
 			if ~isstruct(data)    
-				obj.messageLog(cType.ERROR,'Invalid resources data provided');
+				obj.messageLog(cType.ERROR,'Invalid resource data.');
 				return
 			end
 			obj.Z=zeros(1,ps.NrOfProcesses);
@@ -38,7 +38,7 @@ classdef cResourceData < cStatusLogger
 			if all(isfield(data.flows,{'key','value'}))
 					se=data.flows;
 			else
-				obj.messageLog(cType.ERROR,'Wrong resources cost file. Flows Fields missing.');
+				obj.messageLog(cType.ERROR,'Wrong resource cost file. Flows fields missing.');
 				return	
 			end
 			% Check Resource Flows data
@@ -47,17 +47,14 @@ classdef cResourceData < cStatusLogger
 				id=ps.getFlowId(se(i).key);
 				if ~cType.isEmpty(id)
 					if ~ismember(id,resources)
-						message=sprintf('Flow key %s is not a resource',se(i).key);
-						obj.messageLog(cType.ERROR,message);
+						obj.messageLog(cType.ERROR,'Flow key %s is not a resource',se(i).key);
 					end
 					if (se(i).value < 0)
-						message=sprintf('Value of resource cost %s is negative %f',se(i).key,se(i).value);
-						obj.messageLog(cType.ERROR,message);
+						obj.messageLog(cType.ERROR,'Value of resource cost %s is negative %f',se(i).key,se(i).value);
 					end
 					obj.c0(id)=se(i).value;
 				else
-					message=sprintf('Resources Flow key %s is missing',se(i).key);
-					obj.messageLog(cType.ERROR,message);
+					obj.messageLog(cType.ERROR,'Resource flow key %s is missing',se(i).key);
 				end
 			end
 		    % Read processes costs	
@@ -65,7 +62,7 @@ classdef cResourceData < cStatusLogger
 				if all(isfield(data.processes,{'key','value'}))
 					sz=data.processes;
 				else
-					obj.messageLog(cType.ERROR,'Wrong resources cost data. Processes Fields missing.');
+					obj.messageLog(cType.ERROR,'Wrong resources cost data. Processes fields missing.');
 					return	
 				end		
 				% Check processes cost data
@@ -75,15 +72,14 @@ classdef cResourceData < cStatusLogger
 						if (sz(i).value >= 0)
 							obj.Z(id)=sz(i).value;
 						else
-							txt=sprintf('Value of process cost %s is negative: %f',sz(i).key,sz(i).value);
-							obj.messageLog(cType.WARNING,txt);
+							obj.messageLog(cType.WARNING,'Value of process cost %s is negative: %f',sz(i).key,sz(i).value);
 						end
                     else
-					    obj.messageLog(cType.ERROR,'process key %s is missing',sz(i).key);
+					    obj.messageLog(cType.ERROR,'Process key %s is missing',sz(i).key);
                     end
                 end
 			else
-				obj.messageLog(cType.INFO,'Processes Costs data missing, default values are assumed.');
+				obj.messageLog(cType.INFO,'Processes costs data missing. Default values are assumed.');
 			end
 			obj.ps=ps;
 		end
@@ -96,11 +92,11 @@ classdef cResourceData < cStatusLogger
             if length(Z) == obj.ps.NrOfProcesses
 				obj.Z=Z;
 			else
-				res.messageLog(cType.WARNING,'Invalid Processes Resources size',length(Z));
+				res.messageLog(cType.WARNING,'Invalid processes resources size',length(Z));
 				return
             end
             if any(Z<0)
-				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
+				res.messageLog(cType.WARNING,'Values of process resources must be non-negatives');
 				return
             end
 		end
@@ -113,7 +109,7 @@ classdef cResourceData < cStatusLogger
             if length(c0) == obj.ps.NrOfFlows
 				obj.c0=c0;
 			else
-				res.messageLog(cType.WARNING,'Invalid Flows Resources size',length(c0));
+				res.messageLog(cType.WARNING,'Invalid flows resources size',length(c0));
 				return
             end
             if any(c0<0)

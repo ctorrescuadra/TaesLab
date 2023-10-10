@@ -59,8 +59,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.NrOfCols=length(colNames); 
             obj.status=obj.checkTableSize;
             if ~obj.isValid
-                message=sprintf('Invalid table size (%d,%d)',size(data,1),size(data,2));
-                obj.messageLog(cType.ERROR,message);
+                obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
             end 
         end
         

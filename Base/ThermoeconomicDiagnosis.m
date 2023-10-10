@@ -31,7 +31,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         p.parse(data,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: ExergyCostCalculator(data,param)');
+        res.printError('Usage: ThermoeconomicDiagnosis(data,param)');
         return
     end
     param=p.Results;
@@ -42,7 +42,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     % Read productive structure
     if ~data.isValid
         data.printLogger;
-        res.printError('Invalid data data. See Error log');
+        res.printError('Invalid data model. See Error log');
         return
     end
      % Check if there are two states is defined
@@ -94,6 +94,6 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         res.setProperties(data.ModelName,param.State);
     else
         dgn.printLogger;
-        res.printError('Invalid diagnosis analysis. See error log');
+        res.printError('Invalid Thermoeconomic Diagnosis. See error log');
     end
 end

@@ -12,7 +12,7 @@ function ShowDiagramFP(arg,varargin)
 %
     log=cStatus(cType.VALID);
     if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
-        log.printError('Invalid model');
+        log.printError('Invalid result parameter');
         return
     end
     p = inputParser;
@@ -21,7 +21,7 @@ function ShowDiagramFP(arg,varargin)
         p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: ShowCostGraph(res,options)');
+        log.printError('Usage: ShowDiagramFP(res,options)');
         return
     end
     % Get the graph

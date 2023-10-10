@@ -26,14 +26,14 @@ function res=ThermoeconomicState(data,varargin)
 		p.parse(data,varargin{:});
 	catch err
 		res.printError(err.message);
-        res.printError('Usage: ExergyCostCalculator(data,param)');
+        res.printError('Usage: ThermoeconomicState(data,param)');
 		return
 	end
 	param=p.Results;
 	% Check Productive Structure
 	if ~data.isValid
 		data.printLogger;
-		res.printError('Invalid Productive Structure. See error log');
+		res.printError('Invalid data model. See error log');
 		return
 	end	
 	fmt=data.FormatData;
@@ -44,7 +44,7 @@ function res=ThermoeconomicState(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~isValid(ex)
 		ex.printLogger;
-		res.printError('Exergy Values are NOT correct. See error log');
+		res.printError('Exergy values are NOT correct. See error log');
 		return
 	end
 	pm=cProcessModel(ex);

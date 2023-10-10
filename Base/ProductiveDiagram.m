@@ -17,20 +17,10 @@ function res=ProductiveDiagram(data)
         res.printError('Usage: ShowProductiveStructure(data)');
         return
     end
-    if ~isa(data,'cDataModel')
-        res.printError('Invalid data. It should be a cDataModel object');
+    if ~isa(data,'cDataModel') || ~isValid(data)
+        res.printError('Invalid data parameter. It should be a valid cDataModel object');
         return
     end
-	% Check Productive Structure
-	if data.isError
-		data.printLogger;
-		res.printError('Invalid Productive Structure. See error log');
-		return
-	end
-	if data.isWarning
-		data.printLogger;
-		res.printWarning('Productive Structure has errors. See error log');
-	end
 	% Read print format configuration
     fmt=data.FormatData;
 	% Get Productive Diagram info

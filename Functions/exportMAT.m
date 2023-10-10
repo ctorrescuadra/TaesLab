@@ -1,5 +1,7 @@
 function log=exportMAT(obj,filename)
 % exportMAT save an object as MAT file
+%   USAGE:
+%       log=exportMAT(obj, filename)
 %   INPUT:
 %       obj - inherited cStatusLogger object to save
 %       filename - MAT file name

@@ -25,7 +25,7 @@ function model=ThermoeconomicTool(filename,varargin)
     model=cStatusLogger();
     % Check input parameters
     if (nargin<1) || ~isText(filename)
-        model.printError('Usage: model=ThermoeconomicModel(filename,params)');
+        model.printError('Usage: model=ThermoeconomicModel(filename, params)');
         return
     end
     if isstring(filename)
@@ -51,7 +51,7 @@ function model=ThermoeconomicTool(filename,varargin)
             p.parse(varargin{:});
         catch err
             model.printError(err.message);
-            model.printError('Usage: ThermoeconomicTool(model_file,param)');
+            model.printError('Usage: ThermoeconomicTool(filename, params)');
             return
         end
         if p.Results.Debug

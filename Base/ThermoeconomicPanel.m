@@ -394,7 +394,7 @@ classdef ThermoeconomicPanel < handle
                 obj.Model=tm;
             else
 				set(obj.mfile_text,'backgroundcolor',[1 0.5 0.5]);
-				logtext=' ERROR: Invalid Data Model';
+				logtext=' ERROR: Invalid data model';
 			end
 			set(obj.log,'string',logtext);
 			data.printLogger;

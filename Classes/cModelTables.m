@@ -78,7 +78,7 @@ classdef cModelTables < cResultId
             if obj.existTable(name)
                 res=obj.Tables.(name);
             else
-                res.printError('Table name %s do not exists',name);
+                res.printError('Table name %s does NOT exists',name);
             end
         end
 
@@ -93,7 +93,7 @@ classdef cModelTables < cResultId
             if isValid(res)
                 res.printTable;
             else
-                log.printError('Table %s do NOT exists',name);
+                log.printError('Table name %s does NOT exists',name);
             end
         end
 
@@ -108,7 +108,7 @@ classdef cModelTables < cResultId
             if isValid(res)
                 res.viewTable;
             else
-                log.printError('Table %s do NOT exists',name);
+                log.printError('Table name %s does NOT exists',name);
             end
         end
 
@@ -162,7 +162,7 @@ classdef cModelTables < cResultId
         %   Output:
         %       log - cStatusLogger object with error messages
             log=cStatusLogger(cType.VALID);
-            if ~isValid(obj)
+            if ~isValid(obj) 
                 log.messageLog(cType.ERROR,'Invalid object to save')
                 return
             end

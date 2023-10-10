@@ -68,6 +68,7 @@ classdef cType
 		MAX_RESULT_INFO=11        % Maximun cResultInfo groups
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
+		EPS=1.0e-8                % Zero value for tolerance
 		FUEL='FUEL'       % Fuel type option text
 		PRODUCT='PRODUCT' % Product type option text
 		FORMAT_ID='%3d'   % Line number format

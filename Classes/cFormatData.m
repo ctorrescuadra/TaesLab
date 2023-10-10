@@ -48,10 +48,12 @@ classdef cFormatData < cStatusLogger
 			catch err
 				obj.messageLog(cType.ERROR,err.message);
 				obj.messageLog(cType.ERROR,'Invalid %s config file',cfgfile);
+				return
 			end
             if isfield(data,'format') % Check format data	
                 if ~all(isfield(data.format,{'key','width','precision','unit'}))
                     obj.messageLog(cType.ERROR,'Invalid format data.');
+					return
                 end
                 % Check and save each format definition
                 for i=1:numel(data.format)

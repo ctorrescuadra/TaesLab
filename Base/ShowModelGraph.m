@@ -14,7 +14,7 @@ function ShowModelGraph(model,graph,varargin)
 %
     log=cStatus(cType.VALID);
 	if ~isa(model,'cThermoeconomicModel') || ~isValid(model)
-		log.printError('Invalid model');
+		log.printError('Invalid model parameter');
 		return
 	end
     % Check input parameters
@@ -27,7 +27,7 @@ function ShowModelGraph(model,graph,varargin)
 		p.parse(graph,varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: GraphResults(res,graph,options)');
+        log.printError('Usage: ShowModelGraph(res,graph,options)');
         return
     end
     % Get the cResultInfo of the table

@@ -23,7 +23,7 @@ classdef cGraphResults < cStatusLogger
 				return
 			end
 			if ~isValid(tbl) || ~isGraph(tbl)
-				obj.messageLog(cType.ERROR,'Invalid Graph Table %s',tbl.Name);
+				obj.messageLog(cType.ERROR,'Invalid graph table %s',tbl.Name);
 				return
 			end
 			obj.Type=tbl.GraphType;
@@ -48,7 +48,7 @@ classdef cGraphResults < cStatusLogger
                     obj.setProcessDiagramParameters(tbl);
                 end
 			otherwise
-				obj.messageLog(cType.ERROR,'Invalid Graph Type %d',obj.Type);
+				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
 				return
             end
         end
@@ -74,7 +74,7 @@ classdef cGraphResults < cStatusLogger
                     obj.showDigraph;
                 end
 			otherwise
-				obj.messageLog(cType.ERROR,'Invalid Graph Type %d',obj.Type);
+				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
 				return
             end   
         end
@@ -220,11 +220,11 @@ classdef cGraphResults < cStatusLogger
 		function setGraphSummaryParameters(obj,tbl,idx)
 		% Set the properties of graph Summary
             if nargin<3
-                obj.messageLog(cType.ERROR,'Parameters Missing');
+                obj.messageLog(cType.ERROR,'Parameters missing');
                 return
             end
             if ~isnumeric(idx)
-                obj.messageLog(cType.ERROR,'Invalid Parameter');
+                obj.messageLog(cType.ERROR,'Invalid parameter');
                 return
             end
 			obj.Name='Cost Summary';

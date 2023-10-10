@@ -18,7 +18,7 @@ function ShowSummaryGraph(arg,varargin)
 %
     log=cStatus(cType.VALID);
 	if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
-		log.printError('Invalid model');
+        log.printError('Invalid result parameter');
 		return
 	end
     % Check input parameters
@@ -29,7 +29,7 @@ function ShowSummaryGraph(arg,varargin)
         p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: GraphResults(res,graph,options)');
+        log.printError('Usage: ShowSummaryGraph(res,graph,options)');
         return
     end
     % Get the graph

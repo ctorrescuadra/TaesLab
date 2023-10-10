@@ -1,5 +1,7 @@
 function log=exportJSON(data,filename)
 % exportJSON save a octave/matlab object as json file
+%   USAGE:
+%       log=exportJSON(data, filename)
 %   INPUT:
 %	    data - json struct data
 %	    filename - json filename

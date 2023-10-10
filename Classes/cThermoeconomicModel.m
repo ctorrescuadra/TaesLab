@@ -121,14 +121,14 @@ classdef cThermoeconomicModel < cStatusLogger
         %   
             obj=obj@cStatusLogger(cType.VALID);
             if ~isa(data,'cDataModel')
-                obj.messageLog(cType.ERROR,'Invalid data model object');
+                obj.messageLog(cType.ERROR,'Invalid data model');
                 printLogger(obj);
                 return
             end
             % Check Data Model and Productive Structure
             obj.addLogger(data);
             if ~data.isValid
-                obj.messageLog(cType.ERROR,'Invalid data model. See Log');
+                obj.messageLog(cType.ERROR,'Invalid data model. See error log');
                 printLogger(obj);
                 return
             end
@@ -179,7 +179,7 @@ classdef cThermoeconomicModel < cStatusLogger
             elseif data.existState(param.State)
                 obj.State=param.State;
             else
-                obj.printError('Invalid state %s',param.State);
+                obj.printError('Invalid state name %s',param.State);
                 return
             end
             if isempty(param.ReferenceState)
@@ -187,7 +187,7 @@ classdef cThermoeconomicModel < cStatusLogger
             elseif data.existState(param.State)
                 obj.ReferenceState=param.ReferenceState;
             else
-                obj.printError('Invalid state %s',param.RefeenceState);
+                obj.printError('Invalid state name %s',param.ReferenceState);
                 return
             end
             % Read print formatted configuration
@@ -347,7 +347,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %           cType.Tables.RECYCLING_ANALISIS_GENERAL
             log=cStatus();
             if ~obj.isWaste
-                log.printError('Model do not has wastes');
+                log.printError('Model has NO wastes');
                 return
             end
             if obj.isGeneralCost
@@ -541,7 +541,7 @@ classdef cThermoeconomicModel < cStatusLogger
             tbl=cStatus(cType.ERROR);
             tInfo=getTableInfo(obj.fmt,name);
             if isempty(tInfo)
-                tbl.printError('Invalid table: %s',name);
+                tbl.printError('Invalid table name: %s',name);
                 return
             else
                res=obj.getResultInfo(tInfo.resultId);
@@ -568,7 +568,7 @@ classdef cThermoeconomicModel < cStatusLogger
         % Print the summary tables
             msr=obj.getSummaryResults;
             if isempty(msr)
-                obj.printDebugInfo('Summary is not available')
+                obj.printDebugInfo('Summary Results not available')
                 return
             end
             printResults(msr)
@@ -622,8 +622,8 @@ classdef cThermoeconomicModel < cStatusLogger
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             msr=obj.getSummaryResults;
-            if isempty(msr)
-                obj.printDebugInfo('Summary is not available');
+            if isempty(msr) || ~isValid(msr)
+                obj.printDebugInfo('Summary Results not available');
                 return
             end
             log=saveResults(msr,filename);
@@ -650,7 +650,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.diagramFP;
             if ~isValid(res)
                 printLogger(res)
-                log.printError('Result object not available');
+                log.printError('DiagramFP object not available');
                 return
             end
             log=saveResults(res,filename);
@@ -667,7 +667,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.productiveDiagram;
             if ~isValid(res)
                 res.printLogger(res)
-                log.printError('Result object not available');
+                log.printError('Productive Diagram object not available');
                 return
             end
             log=saveResults(res,filename);
@@ -754,7 +754,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.diagramFP;
             if ~isValid(res)
                 res.printLogger(res)
-                log.printError('Result object not available');
+                log.printError('DiagramFP object not available');
                 return
             end
             showDiagramFP(res,graph);
@@ -771,7 +771,7 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             res=obj.recyclingAnalysis(wkey);
             if isempty(res) || ~isValid(res)
-                log.printWarning('Diagnosis Results not available');
+                log.printWarning('Recycling Results not available');
                 return
             end
             graphRecycling(res,graph);
@@ -1158,7 +1158,7 @@ classdef cThermoeconomicModel < cStatusLogger
                     res=getSummaryResults(obj.fmt,tmp);
                     res.setProperties(obj.ModelName,'SUMMARY');
                     obj.setResults(res);
-                    obj.printDebugInfo('Summary Results have been Calculated');
+                    obj.printDebugInfo('Summary Results have been Activated');
                 else
                     tmp.printLogger;
                 end
@@ -1186,7 +1186,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=false;
             log=cStatus();    
             if ~obj.DataModel.existState(state)
-                log.printWarning('Invalid state %s',state);
+                log.printWarning('Invalid state name %s',state);
                 return
             end
             if strcmp(obj.State,state)
@@ -1209,7 +1209,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=false;
             log=cStatus();
             if ~obj.DataModel.existState(state)
-                log.printWarning('Invalid state %s',state);
+                log.printWarning('Invalid state name %s',state);
                 return
             end
             if strcmp(obj.ReferenceState,state)
@@ -1284,7 +1284,7 @@ classdef cThermoeconomicModel < cStatusLogger
             res=false;
             log=cStatus();
             if ~cType.checkDiagnosisMethod(value)
-                log.printWarning('Invalid Diagnosis Method parameter value: %s',value);
+                log.printWarning('Invalid Diagnosis method: %s',value);
                 return
             end
             if strcmp(obj.DiagnosisMethod,value)
@@ -1302,7 +1302,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if ~obj.isSummaryEnable
-                log.printWarning('Summary requires more than one state',value);
+                log.printWarning('Summary Results requires more than one state');
                 return
             end
             if obj.Summary==value

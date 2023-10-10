@@ -13,7 +13,7 @@ function ShowRecyclingGraph(arg, varargin)
 % See also cResultInfo, cThermoeconomicTool
 	log=cStatus(cType.VALID);
 	if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
-		log.printError('Invalid model');
+		log.printError('Invalid result parameter');
 		return
 	end
 	p = inputParser;
@@ -23,7 +23,7 @@ function ShowRecyclingGraph(arg, varargin)
 		p.parse(varargin{:});
 	catch err
 		log.printError(err.message);
-		log.printError('Usage: ShowCostGraph(res,options)');
+		log.printError('Usage: ShowRecyclingGraph(res,options)');
 		return
 	end
 % Get the graph

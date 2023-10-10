@@ -16,7 +16,7 @@ function SaveDataModel(arg,filename)
         return
     end
     if ~(isa(arg,'cDataModel') || isa(arg,'cThermoeconomicModel')) || ~isValid(arg)
-        log.printError('Invalid model. It sould be a cReadModel or cThermoeconomicModel object');
+        log.printError('Invalid model. It should be a cDataModel or cThermoeconomicModel object');
         return
     end
     if isstring(filename)

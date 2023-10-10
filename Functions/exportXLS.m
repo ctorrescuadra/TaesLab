@@ -1,5 +1,7 @@
 function log=exportXLS(data,filename)
 % exportXLS saves table cell as XLS file
+%   USAGE:
+%       log=exportXLS(data, filename)
 %   INPUT:
 %       data - cell array which contains the data
 %       filename - name of XLSX file
