@@ -65,8 +65,8 @@ classdef cDataModel < cStatusLogger
             end
             obj.ProductiveStructure=ps;
             % Check and get Format
-            tmp.format=data.Format.definitions;		
-            rfmt=cResultTableBuilder(tmp,obj.ProductiveStructure);
+            format=data.Format.definitions;		
+            rfmt=cResultTableBuilder(format,obj.ProductiveStructure);
             status = rfmt.status & status;
             if isValid(rfmt)
 				obj.messageLog(cType.INFO,'Format Definition is valid');
@@ -338,7 +338,7 @@ classdef cDataModel < cStatusLogger
                 return
 			end
             if ~cType.checkFileWrite(filename)
-				log.messageLog(cType.ERROR,'Invalid file name %s',filename);
+				log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
                 return
             end
 			% Save data model depending of fileType

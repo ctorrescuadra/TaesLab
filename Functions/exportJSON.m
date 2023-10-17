@@ -14,11 +14,11 @@ function log=exportJSON(data,filename)
         return
     end
     if ~cType.checkFileWrite(filename)
-        log.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
+        log.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.JSON)
-        log.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
+        log.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
         return
     end
 	try

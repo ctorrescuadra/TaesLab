@@ -74,7 +74,7 @@ classdef (Abstract) cTable < cStatusLogger
             log=cStatusLogger(cType.VALID);
             data=obj.Values;
             if ~cType.checkFileExt(filename,cType.FileExt.CSV)
-                obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
+                obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
                 return
             end
             try

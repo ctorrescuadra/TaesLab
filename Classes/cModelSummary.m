@@ -79,19 +79,15 @@ classdef cModelSummary < cResultId
         end
 
         function res=getDefaultFlowVariables(obj)
-        % get the output flows index
+        % get the output flows keys
             id=obj.ps.SystemOutput.flows;
             res={obj.ps.Flows(id).key};
         end
 
-        function res=getFlowIndex(obj,keys)
-        % get the flows index 
-            res=obj.ps.getFlowId(keys);
-        end
-
-        function res=getProcessIndex(obj,keys)
-        % get the processes index
-            res=obj.ps.getProcessId(keys);
+        function res=getDefaultProcessVariables(obj)
+        % get the output flows keys
+            id=obj.ps.SystemOutput.processes;
+            res={obj.ps.Processes(id).key};
         end
     end
 

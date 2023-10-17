@@ -217,16 +217,21 @@ classdef cGraphResults < cStatusLogger
 			obj.BaseLine=0.0;
 		end
 
-		function setGraphSummaryParameters(obj,tbl,idx)
+		function setGraphSummaryParameters(obj,tbl,var)
 		% Set the properties of graph Summary
             if nargin<3
                 obj.messageLog(cType.ERROR,'Parameters missing');
                 return
             end
-            if ~isnumeric(idx)
+            if ~iscell(var)
                 obj.messageLog(cType.ERROR,'Invalid parameter');
                 return
             end
+            idx=find(ismember(tbl.RowNames,var));
+			if isempty(idx)
+				obj.messageLog(cType.ERROR,'Invalid variable names');
+				return
+			end
 			obj.Name='Cost Summary';
 			obj.Title=tbl.Description;
 			obj.Categories=tbl.ColNames(2:end);

@@ -623,7 +623,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %   log - cStatusLogger object containing the status and error messages
             msr=obj.getSummaryResults;
             if isempty(msr) || ~isValid(msr)
-                obj.printDebugInfo('Summary Results not available');
+                obj.printDebugInfo('Summary results not available');
                 return
             end
             log=saveResults(msr,filename);
@@ -797,6 +797,25 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.productiveDiagram;
             res.showFlowsDiagram;
         end
+
+        function showGraph(obj,name,varargin)
+        % Show the graph of a result table
+        %   Usage:
+        %       obj.showGraph(name, option)
+        %   Input:
+        %       name - graph table name
+        %       option - graph options
+        % See also cResultInfo/showGraph
+            log=cStatus(cType.VALID);
+            tInfo=getTableInfo(obj.fmt,name);
+            if isempty(tInfo)
+                log.printError('Invalid table name: %s',name);
+                return
+            else
+               res=obj.getResultInfo(tInfo.resultId);
+            end
+            showGraph(res,name,varargin{:})
+        end
         
         %%%
         % Waste Analysis methods
@@ -805,7 +824,11 @@ classdef cThermoeconomicModel < cStatusLogger
         % Show waste information
             res=getWasteResults(obj.fmt,obj.fp1.WasteData);
             res.setProperties(obj.ModelName,obj.State);
+            if nargout<1
+                printResults(res);
+            end
         end
+
 
         function log=setWasteType(obj,key,wtype)
         % Set the waste type allocation method

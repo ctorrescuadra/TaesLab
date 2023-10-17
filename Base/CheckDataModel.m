@@ -18,7 +18,7 @@ function data=CheckDataModel(filename)
         filename=convertStringsToChars(filename);
     end
     if ~cType.checkFileRead(filename)
-        data.printError('Invalid file name %s', filename);
+        data.printError('Invalid file name: %s', filename);
         return
     end
     % Read and Check the data model and print logger

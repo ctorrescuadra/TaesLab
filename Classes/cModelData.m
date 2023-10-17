@@ -112,7 +112,7 @@ classdef cModelData < cStatusLogger
 	            return
             end
             if ~cType.checkFileWrite(filename)
-                log.messageLog(cType.ERROR,'Invalid file name %s',filename);
+                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
                 return
             end
             try
@@ -132,7 +132,7 @@ classdef cModelData < cStatusLogger
         %   log: cStatusLog class containing error messages ans status
             log=cStatusLogger(cType.VALID);
             if ~cType.checkFileWrite(filename)
-                log.messageLog(cType.ERROR,'Invalid file name %s',filename);
+                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
                 return
             end
             try

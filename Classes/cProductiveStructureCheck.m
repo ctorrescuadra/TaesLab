@@ -43,11 +43,11 @@ classdef cProductiveStructureCheck < cResultId
 				return
             end
             if ~all(isfield(data.flows,{'key','type'}))
-                obj.messageLog(cType.ERROR,'Invalid Flows data. Fields Missing');
+                obj.messageLog(cType.ERROR,'Invalid flows data. Fields Missing');
 				return
             end
             if ~all(isfield(data.processes,{'key','fuel','product','type'}))
-				obj.messageLog(cType.ERROR,'Invalid Processes data. Fields Missing');
+				obj.messageLog(cType.ERROR,'Invalid processes data. Fields Missing');
 				return
             end
             % Initialize productive structure info
@@ -91,7 +91,7 @@ classdef cProductiveStructureCheck < cResultId
             obj.buildEnvironment;
 			% Check Graph Connectivity
             if ~obj.checkGraphConnectivity
-				obj.messageLog(cType.ERROR,'The productive structure graph is NOT well defined');
+				obj.messageLog(cType.ERROR,'Invalid productive structure graph');
             end
             % Convert to structure and build typeId arrays
             if isValid(obj)
@@ -139,21 +139,21 @@ classdef cProductiveStructureCheck < cResultId
 			end
 			ptype=cType.getProcessId(data.type); %Check Process Type
 			if cType.isEmpty(ptype)	        
-				obj.messageLog(cType.ERROR,'Invalid Type %s for process %s',data.type,data.key);
+				obj.messageLog(cType.ERROR,'Invalid Type %s in process %s',data.type,data.key);
 			end
 			if ~cParseStream.checkProcess(data.fuel) % Check Fuel stream
-				obj.messageLog(cType.ERROR,'Invalid fuel stream %s for process %s',data.fuel,data.key);
+				obj.messageLog(cType.ERROR,'Invalid fuel stream %s in process %s',data.fuel,data.key);
 			end
 			fl=cParseStream.getFlowsList(data.fuel);
 			if ~obj.fDict.existsKey(fl)
-				obj.messageLog(cType.ERROR,'Fuel flow %s for process %s is wrong defined',data.fuel,data.key);
+				obj.messageLog(cType.ERROR,'Invalid fuel flow %s in process %s',data.fuel,data.key);
 			end  
 			if ~cParseStream.checkProcess(data.product) % Check Product stream
-				obj.messageLog(cType.ERROR,'Invalid product stream %s for process %s',data.product,data.key);
+				obj.messageLog(cType.ERROR,'Invalid product stream %s in process %s',data.product,data.key);
 			end
 			fl=cParseStream.getFlowsList(data.product);
 			if ~obj.fDict.existsKey(fl)
-				obj.messageLog(cType.ERROR,'Product flows %s for process %s is wrong defined',data.product,data.key);
+				obj.messageLog(cType.ERROR,'Invalid froduct flows %s in process %s',data.product,data.key);
 			elseif ptype==cType.Process.DISSIPATIVE % Check disipative processes and waste flows
                 for j=1:numel(fl)
 					jkey=obj.fDict.getIndex(fl{j});
@@ -237,7 +237,7 @@ classdef cProductiveStructureCheck < cResultId
 					if ~obj.cflw{idx}.to
 					    obj.cflw{idx}.to=sid;
 				    else
-						obj.messageLog(cType.WARNING,'Flow %s is not correct (TO) definition',obj.cflw{i}.key);
+						obj.messageLog(cType.WARNING,'Flow %s has not correct (TO) definition',obj.cflw{i}.key);
 					end
 			    else
 					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
@@ -253,7 +253,7 @@ classdef cProductiveStructureCheck < cResultId
 					if ~obj.cflw{idx}.from
 					    obj.cflw{idx}.from=sid;
 				    else
-						obj.messageLog(cType.WARNING,'Flow %s is not correct (FROM) definition',obj.cflw{i}.key);
+						obj.messageLog(cType.WARNING,'Flow %s has not correct (FROM) definition',obj.cflw{i}.key);
 					end
 			    else
 					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
@@ -353,9 +353,9 @@ classdef cProductiveStructureCheck < cResultId
 					obj.messageLog(cType.WARNING,'Flow %s is defined as a LOOP',obj.cflw{id}.key);
 				end
 			elseif (obj.cflw{id}.from==0) && (obj.cflw{id}.to~=0) % Check invalid FROM definition
-				obj.messageLog(cType.WARNING,'Internal Flow %s has no correct (FROM) definition',obj.cflw{id}.key);
+				obj.messageLog(cType.WARNING,'Flow %s has not correct (FROM) definition',obj.cflw{id}.key);
 			elseif (obj.cflw{id}.to==0) && (obj.cflw{id}.from~=0) % Check invalid TO definition
-				obj.messageLog(cType.WARNING,'Internal Flow %s has no correct (TO) definition',obj.cflw{id}.key);
+				obj.messageLog(cType.WARNING,'Flow %s has not correct (TO) definition',obj.cflw{id}.key);
 			else
 				res=true;
 			end

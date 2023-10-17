@@ -31,7 +31,7 @@ C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDiagnosis.m
   117,24:                     obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
 
 C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDiagramFP.m
-  31,20:                 obj.messageLog(cType.ERROR,'Table %s is not valid',tbl.Name);
+  31,20:                 obj.messageLog(cType.ERROR,'Table %s is NOT valid',tbl.Name);
   39,8: 				obj.messageLog(cType.ERROR,'Invalid FP table size');
 
 C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyCost.m

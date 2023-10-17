@@ -18,11 +18,11 @@ function log=exportMAT(obj,filename)
         return
     end
     if ~cType.checkFileWrite(filename)
-        log.messageLog(cType.ERROR,'Invalid file name %s',filename);
+        log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.MAT)
-        obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
+        obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
         return
     end
     try

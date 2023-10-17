@@ -96,8 +96,7 @@ classdef (Sealed) cResultInfo < cModelTables
             % Get Result Table info and build graph
             tbl=obj.getTable(graph);
             if isValid(tbl) && isGraph(tbl)
-                g=cGraphResults(tbl);
-                g.graphCost;
+                showGraph(tbl);
             else
                 log.printError('Invalid graph type: %s',graph);
                 return
@@ -137,8 +136,7 @@ classdef (Sealed) cResultInfo < cModelTables
             % Get Result Table info and build graph
             tbl=obj.getTable(graph);
             if isValid(tbl) && isGraph(tbl)
-                g=cGraphResults(tbl,shout);
-                g.graphDiagnosis;
+                showGraph(tbl,shout);
             else
                 log.printError('Invalid graph type: %s',graph);
                 return
@@ -181,22 +179,11 @@ classdef (Sealed) cResultInfo < cModelTables
                 if tbl.isFlowsTable
                     var=obj.Info.getDefaultFlowVariables;
                 else
-                    log.printError('Variables are required for this type: %s',graph);
-                    return
+                    var=obj.Info.getDefaultProcessVariables;
                 end
             end
-            if tbl.isFlowsTable
-                idx=obj.Info.getFlowIndex(var);
-            else
-                idx=obj.Info.getProcessIndex(var);
-            end
-            if cType.isEmpty(idx)
-                log.printError('Invalid Variable Names');
-                return
-            end
             % Plot the table
-            g=cGraphResults(tbl,idx);
-            g.graphSummary;
+            showGraph(tbl,var);
         end
 
         function graphRecycling(obj,graph)
@@ -224,12 +211,12 @@ classdef (Sealed) cResultInfo < cModelTables
             end
             % get result table and plot the graph
             tbl=obj.getTable(graph);
-            if ~isValid(tbl)
-                log.printError('Table %s is NOT available',graph);
+            if isValid(tbl) && isGraph(tbl)
+                showGraph(tbl);
+            else
+                log.printError('Invalid graph type: %s',graph);
                 return
             end
-            g=cGraphResults(tbl);
-            g.graphRecycling;
         end
 
         function graphWasteAllocation(obj,wkey)
@@ -257,13 +244,7 @@ classdef (Sealed) cResultInfo < cModelTables
             if nargin==1
                 wkey=tbl.ColNames{2};
             end
-            g=cGraphResults(tbl,wkey);
-            if isValid(g)
-                g.graphWasteAllocation;
-            else
-                log.printError('Invalid waste key %s',wkey);
-                return
-            end
+            showGraph(tbl,wkey);
         end
 
         function showDiagramFP(obj,graph)
@@ -281,20 +262,19 @@ classdef (Sealed) cResultInfo < cModelTables
                 graph=cType.Tables.TABLE_FP;
             end
             tbl=obj.getTable(graph);
-            if ~isValid(tbl)
-                log.printError('Table %s is NOT available',graph);
+            if isValid(tbl) && isGraph(tbl)
+                showGraph(tbl);
+            else
+                log.printError('Invalid graph type: %s',graph);
                 return
             end
-            % Show Graph
-            g=cGraphResults(tbl);
-            g.showDigraph;
         end
 
         function showFlowsDiagram(obj)
         % Show the flows diagram of the productive structure [Only Matlab]
         %   Usage:
         %       obj.showFlowsDiagram;
-        % See also cGraphResults
+        % See also cGraphResults, cTableResults
         %
             log=cStatus(cType.VALID);
             if isOctave
@@ -305,8 +285,46 @@ classdef (Sealed) cResultInfo < cModelTables
                 log.printError('Invalid Result Object %s', obj.ResultName);
                 return
             end
-            g=cGraphResults(obj.Tables.fat);
-            g.showDigraph;
+            showGraph(obj.Tables.fat,option);
+        end
+
+        function showGraph(obj,graph,varargin)
+        % Show graph with options
+        %   Usage:
+        %       obj.showGraph(graph, options)
+        %   Input:
+        %       graph - graph table name
+        %       varagin - graph options
+        % See also cGraphResults, cTableResults
+            log=cStatus(cType.VALID);
+            if nargin<2
+      		    log.printError('Invalid input parameters');
+		        return
+            end
+	        tbl=getTable(obj,graph);
+	        if ~isValid(tbl)
+		        log.printError('Invalid graph table: %s',graph);
+		        return
+	        end
+	        % Get optional parameters
+            if isempty(varargin)
+                switch tbl.GraphType
+		            case cType.GraphType.DIAGNOSIS
+			            option=true;
+		            case cType.GraphType.WASTE_ALLOCATION
+				        option=tbl.ColNames{2};
+		            case cType.GraphType.SUMMARY
+				        if tbl.isFlowsTable
+					        option=obj.Info.getDefaultFlowVariables;
+				        else
+					        option=obj.Info.getDefaultProcessVariables;
+				        end
+                end
+            else
+                option=varargin{:};
+            end
+	        % Show Graph
+	        showGraph(tbl,option);
         end
     end
 end

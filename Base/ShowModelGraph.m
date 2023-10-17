@@ -9,7 +9,7 @@ function ShowModelGraph(model,graph,varargin)
 %			ShowOutput: Use for diagnosis tables
 %			WasteFlow: Waste flow key for waste allocation and recycling
 %			Variables: Use for summary results. 
-%				Cell array with the variables to represents
+%				Cell array with the variables to represent
 % See also cThermoeconomicModel
 %
     log=cStatus(cType.VALID);
@@ -63,22 +63,11 @@ function ShowModelGraph(model,graph,varargin)
 				if tbl.isFlowsTable
 					param.Variables=obj.Info.getDefaultFlowVariables;
 				else
-					log.printError('Variables are required for this type: %s',graph);
-					return
+					param.Variables=obj.Info.getDefaultProcessVariables;
 				end
 			end
-			if tbl.isFlowsTable
-				idx=res.Info.getFlowIndex(param.Variables);
-			else
-				idx=res.Info.getProcessIndex(param.Variables);
-			end
-			if cType.isEmpty(idx)
-				log.printError('Invalid Variable Names');
-				return
-			end
-			option=idx;
+			option=param.Variables;
 	end
 	% Show Graph
-	g=cGraphResults(tbl,option);
-	g.showGraph;
+	showGraph(tbl,option);
 end

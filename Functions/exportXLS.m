@@ -14,11 +14,11 @@ function log=exportXLS(data,filename)
         return
     end
     if ~cType.checkFileWrite(filename)
-        obj.messageLog(cType.ERROR,'Invalid file name %s',filename)
+        obj.messageLog(cType.ERROR,'Invalid file name: %s',filename)
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.XLSX)
-        obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
+        obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
         return
     end
     if isOctave
