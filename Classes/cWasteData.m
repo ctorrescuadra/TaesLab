@@ -25,11 +25,11 @@ classdef cWasteData < cStatusLogger
 			% Check input arguments
 			obj=obj@cStatusLogger(cType.VALID);
 			if ~isstruct(data) 
-				obj.messageLog(cType.ERROR,'Invalid waste data provided');
+				obj.messageLog(cType.ERROR,'Invalid waste data');
 				return
 			end
 			if ~isa(ps,'cProductiveStructure') || ~ps.isValid
-				obj.messageLog(cType.ERROR,'No Valid Productive Structure provided');
+				obj.messageLog(cType.ERROR,'Invalid productive structure');
 				return
 			end
             obj.status=cType.VALID;
@@ -42,7 +42,7 @@ classdef cWasteData < cStatusLogger
             wd=data.wastes;
 			NR=length(wd);
 			if NR ~= ps.NrOfWastes
-				obj.messageLog(cType.ERROR,'Invalid number of wastes %d defined.',NR);
+				obj.messageLog(cType.ERROR,'Invalid number of wastes %d',NR);
 				return
 			end
 			if ~all(isfield(data.wastes,{'flow','type'}))
@@ -59,7 +59,7 @@ classdef cWasteData < cStatusLogger
                 if cType.checkWasteKey(wd(i).type)
 					wasteType(i)=cType.getWasteId(wd(i).type);
                 else
-                    obj.messageLog(cType.ERROR,'Invalid Waste Allocation method %s',wd(i).type);
+                    obj.messageLog(cType.ERROR,'Invalid waste allocation method %s',wd(i).type);
                 end
                 % Check key
                 id=ps.getFlowId(wd(i).flow);
@@ -73,7 +73,7 @@ classdef cWasteData < cStatusLogger
 				% Check Recycle Ratio
 				if isfield(wd(i),'recycle')
 					if (wd(i).recycle>1) || (wd(i).recycle<0) 
-						obj.messageLog(cType.ERROR,'Invalid Recycle Ratio %f',wd(i).recycle);
+						obj.messageLog(cType.ERROR,'Invalid recycle ratio %f for waste %s',wd(i).recycle,wd(i).flow);
 					end
 				else
 					wd(i).recycle=0.0;

@@ -71,7 +71,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 return
             end
             if ~obj.isValid
-                obj.messageLog(cType.ERROR,'Invalid Flow Exergy Cost method')
+                obj.messageLog(cType.ERROR,'Invalid Exergy Cost object')
                 return
             end
             if obj.NrOfWastes<1

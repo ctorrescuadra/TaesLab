@@ -1,635 +1,652 @@
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDataModel.m
-  50,20:                 obj.messageLog(cType.ERROR,'Invalid Data Model');
-  60,8: 				obj.messageLog(cType.INFO,'Productive Structure is valid');
-  63,8: 				obj.messageLog(cType.ERROR,'Productive Structure is NOT valid. See error log');
-  72,8: 				obj.messageLog(cType.INFO,'Format Definition is valid');
-  75,8: 				obj.messageLog(cType.ERROR,'Format Definition is NOT valid. See error log');
-  86,9: 					obj.messageLog(cType.INFO,'Exergy values [%s] are valid',obj.States{i});
-  89,9: 					obj.messageLog(cType.ERROR,'Exergy values [%s] are NOT valid. See Error Log',obj.States{i});
-  99,24:                     obj.messageLog(cType.INFO,'Waste Definition is not available. Default is used');
-  105,9: 					obj.messageLog(cType.ERROR,'Waste Definition is NOT valid. See error log');
-  107,9: 					obj.messageLog(cType.INFO,'Waste Definition is valid');			
-  111,8: 				obj.messageLog(cType.INFO,'The plant has NOT waste');
-  121,10: 						obj.messageLog(cType.INFO,'Resources Cost sample [%s] is valid',obj.ResourceSamples{i});
-  125,10: 						obj.messageLog(cType.ERROR,'Resources Cost sample [%s] is NOT valid. See error log',obj.ResourceSamples{i});
-  129,19:                obj.messageLog(cType.INFO,'No Resources Cost Data available')
-  337,8: 				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
-  341,8: 				log.messageLog(cType.ERROR,'Invalid file name %s',filename);
-  358,9: 					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
-  361,8: 				log.messageLog(cType.INFO,'File %s has been saved',filename);
-  370,8: 				log.messageLog(cType.ERROR,'Save MAT files is not implemented in Octave');
-  387,20:                 log.messageLog(cType.ERROR,err.message);
-  388,20:                 log.messageLog(cType.ERROR,'File %s cannot be written',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDiagnosis.m
-  68,20:                 obj.messageLog(cType.ERROR,'Input parameters are not cModelFPR objects');
-  72,20:                 obj.messageLog(cType.ERROR,'Compare not equal productive structures');
-  76,20:                 obj.messageLog(cType.ERROR,'Compare two diferent plant configurations is not possible');
-  80,20:                 obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
-  84,20:                 obj.messageLog(cType.ERROR,'Diagnosis Method requires waste information');
-  92,20:                 obj.messageLog(cType.ERROR,'Reference and Operation states are the same');
-  117,24:                     obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDiagramFP.m
-  31,20:                 obj.messageLog(cType.ERROR,'Table %s is NOT valid',tbl.Name);
-  39,8: 				obj.messageLog(cType.ERROR,'Invalid FP table size');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyCost.m
-  70,20:                 obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
-  74,20:                 obj.messageLog(cType.ERROR,'Invalid Flow Exergy Cost method')
-  78,20:                 obj.messageLog(cType.ERROR,'Model must define waste flows');
-  282,32:                             obj.messageLog(cType.ERROR,'Waste values cannot be zeros');
-  295,28:                         obj.messageLog(cType.ERROR,'Waste type %d allocation NOT Allowed',wt.Type(i));
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyData.m
-  25,8: 				obj.messageLog(cType.ERROR,'Invalid exergy data provided');
-  29,8: 				obj.messageLog(cType.ERROR,'No Productive Structure provided');
-  35,20:                 obj.messageLog(cType.ERROR,'Invalid data. Fields Missing');
-  43,20:                 obj.messageLog(cType.ERROR,'Wrong exergy values data. Fields Missing');
-  48,20:                 obj.messageLog(cType.ERROR,'NrOfFlows %d is not conformant with productive structure %d',ps.NrOfFlows,M);
-  58,9: 					obj.messageLog(cType.ERROR,'Exergy index %s not found',values(i).key);
-  62,24:                     obj.messageLog(cType.ERROR,'Exergy of flow %s is negative %f',values(i).key,values(i).value);
-  86,9: 					obj.messageLog(cType.ERROR,'Exergy of stream %s is negative %f',ps.Streams(i).key,E(i));
-  100,9: 					obj.messageLog(cType.ERROR,'Irreversibility of process %s is negative %f',ps.Processes(i).key,vI(i));
-  109,10: 						obj.messageLog(cType.ERROR,'Product of process %s is zero',ps.Processes(i).key);
-  112,10: 						obj.messageLog(cType.INFO,'Process %s is not Active',ps.Processes(i).key);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyModel.m
-  38,8: 				obj.messageLog(cType.ERROR,'Input parameter is not a valid cExergyData object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cFormatData.m
-  40,8: 				obj.messageLog(cType.ERROR,'Invalid format data provided');
-  49,8: 				obj.messageLog(cType.ERROR,err.message);
-  50,8: 				obj.messageLog(cType.ERROR,'Invalid %s config file',cfgfile);
-  54,24:                     obj.messageLog(cType.ERROR,'Invalid format data.');
-  61,10: 						obj.messageLog(cType.ERROR,'Invalid Format Key %s',fmt.key);
-  71,28:                         obj.messageLog(cType.ERROR,'Bad format defined in %s',fmt.key);
-  75,20:                 obj.messageLog(cType.Error,'Invalid Format');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphResults.m
-  22,8: 				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
-  26,8: 				obj.messageLog(cType.ERROR,'Invalid graph table %s',tbl.Name);
-  51,8: 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
-  77,8: 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
-  223,20:                 obj.messageLog(cType.ERROR,'Parameters missing');
-  227,20:                 obj.messageLog(cType.ERROR,'Invalid parameter');
-  275,9: 					obj.messageLog(cType.ERROR,'Parameters missing');
-  279,8: 				obj.messageLog(cType.ERROR,'Parameters missing');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelData.m
-  32,24:                     obj.messageLog(cType.ERROR,'Invalid model. %s is missing',fld);
-  111,20:                 log.messageLog(cType.ERROR,'Save XML files is not yet implemented');
-  115,20:                 log.messageLog(cType.ERROR,'Invalid file name %s',filename);
-  121,20:                 log.messageLog(cType.ERROR,err.message);
-  122,20:                 log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
-  135,20:                 log.messageLog(cType.ERROR,'Invalid file name %s',filename);
-  144,20:                 log.messageLog(cType.ERROR,err.message);
-  145,20:                 log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelFPR.m
-  102,8: 				obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
-  106,8: 				obj.messageLog(cType.ERROR,'Invalid cModelFPR object');
-  110,8: 				obj.messageLog(cType.ERROR,'Model must define waste flows');
-  424,10: 						obj.messageLog(cType.ERROR,'Waste type allocation not valid %d',wt.Type(i));
-  428,9: 					obj.messageLog(cType.ERROR,'Waste values cannot be zero');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelResults.m
-  25,20:                 obj.messageLog(cType.ERROR,'Invalid data model parameter');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelSummary.m
-  23,20:                 obj.messageLog(cType.ERROR,'Invalid Thermoeconomic Model');
-  27,22:                   obj.messageLog(cType.ERROR,'Summary Requires more than one State');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelTables.m
-  166,20:                 log.messageLog(cType.ERROR,'Invalid object to save')
-  170,20:                 log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
-  182,20:                 log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
-  187,8: 				log.messageLog(cType.INFO,'File %s has been saved',filename);
-  235,20:                 log.messageLog(cType.ERROR,'No tables to save');
-  247,20:                 log.messageLog(cType.ERROR,err.message)
-  248,20:                 log.messageLog('Writting file info %s',filename);
-  260,20:                 log.messageLog(cType.ERROR,'Index file is NOT saved');
-  269,24:                     log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
-  286,20:                 log.messageLog(cType.ERROR,'No tables to save');
-  293,24:                     log.messageLog(cType.ERROR,err.message);
-  294,24:                     log.messageLog(cType.ERROR,'Error open file %s',filename);
-  304,24:                     log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
-  311,24:                     log.messageLog(cType.ERROR,err.message);
-  312,24:                     log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
-  321,28:                         log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
-  327,28:                         log.messageLog(cType.ERROR,err.message);
-  328,28:                         log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
-  335,24:                     log.messageLog(cType.ERROR,'Result file %s is NOT saved',filename);
-  353,20:                 log.messageLog(cType.ERROR,err.message)
-  354,20:                 log.messageLog(cType.ERROR,'Open file %s',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cProductiveStructureCheck.m
-  37,8: 				obj.messageLog(cType.ERROR,'Invalid data model');
-  42,8: 				obj.messageLog(cType.ERROR,'Invalid data. Fields Missing');
-  46,20:                 obj.messageLog(cType.ERROR,'Invalid flows data. Fields Missing');
-  50,8: 				obj.messageLog(cType.ERROR,'Invalid Processes data. Fields Missing');
-  94,8: 				obj.messageLog(cType.ERROR,'The productive structure graph is NOT well defined');
-  112,8: 				obj.messageLog(cType.ERROR,'Invalid Flow KeyId %d',id);
-  116,8: 				obj.messageLog(cType.ERROR,'Invalid Flow Key %s',data.key);
-  122,8: 				obj.messageLog(cType.ERROR,'Invalid type %s for flow %s',data.type,data.key);
-  133,8: 				obj.messageLog(cType.ERROR,'Invalid Process KeyId %d',id);
-  137,8: 				obj.messageLog(cType.ERROR,'Invalid Flow Key %s',data.key);
-  142,8: 				obj.messageLog(cType.ERROR,'Invalid Type %s for process %s',data.type,data.key);
-  145,8: 				obj.messageLog(cType.ERROR,'Invalid fuel stream %s for process %s',data.fuel,data.key);
-  149,8: 				obj.messageLog(cType.ERROR,'Fuel flow %s for process %s is wrong defined',data.fuel,data.key);
-  152,8: 				obj.messageLog(cType.ERROR,'Invalid product stream %s for process %s',data.product,data.key);
-  156,8: 				obj.messageLog(cType.ERROR,'Product flows %s for process %s is wrong defined',data.product,data.key);
-  161,16: 				        obj.messageLog(cType.ERROR,'Product %s of dissipative process %s must be a waste',obj.cflw{jkey}.key,data.key);
-  240,10: 						obj.messageLog(cType.WARNING,'Flow %s is not correct (TO) definition',obj.cflw{i}.key);
-  243,9: 					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
-  256,10: 						obj.messageLog(cType.WARNING,'Flow %s is not correct (FROM) definition',obj.cflw{i}.key);
-  259,9: 					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
-  293,17: 					        obj.messageLog(cType.WARNING,'Output Flow %s has not correct (TO) definition',obj.cflw{i}.key);
-  298,18: 					    	    obj.messageLog(cType.WARNING,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
-  311,17: 					        obj.messageLog(cType.WARNING,'Waste Flow %s has not correct (TO) definition',obj.cflw{i}.key);
-  316,18: 					    	    obj.messageLog(cType.WARNING,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
-  328,17: 					        obj.messageLog(cType.WARNING,'Resource Flow %s has not correct (FROM) definition',obj.cflw{i}.key);
-  351,9: 					obj.messageLog(cType.WARNING,'Flow %s do not exist',obj.cflw{id}.key);
-  353,9: 					obj.messageLog(cType.WARNING,'Flow %s is defined as a LOOP',obj.cflw{id}.key);
-  356,8: 				obj.messageLog(cType.WARNING,'Internal Flow %s has no correct (FROM) definition',obj.cflw{id}.key);
-  358,8: 				obj.messageLog(cType.WARNING,'Internal Flow %s has no correct (TO) definition',obj.cflw{id}.key);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelCSV.m
-  19,20:                 obj.messageLog(cType.ERROR,'CSV folder data: %s not exists',folder);
-  36,13: 					    obj.messageLog(cType.ERROR,'Error Reading CSV file: %s',fname);
-  40,12: 				    obj.messageLog('File %s not found',fname);
-  56,13: 					    obj.messageLog(cType.ERROR,'Error reading CSV file: %s',fname);
-  80,15: 			        tbl.messageLog(cType.ERROR,err.message);
-  87,15: 			        tbl.messageLog(cType.ERROR,err.message);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelJSON.m
-  19,20:                 obj.messageLog(cType.ERROR,err.message);
-  20,20:                 obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelStruct.m
-  13,9: 					obj.messageLog(cType.ERROR,'Invalid model. %s is missing',fld);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelTable.m
-  32,20:                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
-  40,20:                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
-  49,24:                     obj.messageLog(cType.ERROR,'Invalid Format table');
-  53,20:                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
-  60,20:                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
-  65,20:                 obj.messageLog(cType.ERROR,'Invalid number of states')
-  69,20:                 obj.messageLog(cType.ERROR,'Invalid Exergy table');
-  97,28:                         obj.messageLog(cType.ERROR,'Waste Table. Invalid number of columns');
-  104,28:                         obj.messageLog(cType.ERROR,'Waste Table. Type column missing');
-  111,32:                             obj.messageLog(cType.ERROR,'Waste Table. Invalid waste flow %s',keys{i});
-  126,28:                         obj.messageLog(cType.ERROR,'Invalid Waste Allocation table');
-  130,28:                         obj.messageLog(cType.ERROR,'Invalid WasteAllocation table');
-  139,32:                             obj.messageLog(cType.ERROR,'Waste Table. Invalid waste flow %s',keys{i});
-  158,32:                             obj.messageLog(cType.ERROR,'Invalid waste allocation values for %s',keys{i});
-  175,28:                         obj.messageLog(cType.WARNING,'Invalid Resources Cost Definition');
-  179,28:                         obj.messageLog(cType.ERROR,'Invalid Resources Cost Definition');
-  186,28:                         obj.messageLog(cType.WARNING,'No Resources flows cost defined');
-  220,20:                 obj.messageLog(cType.ERROR,'Invalid Flows Table. Type Column NOT defined');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelXLS.m
-  23,24:                     obj.messageLog(cType.ERROR,err.message);
-  24,9: 					obj.messageLog(cType.ERROR,'File %s cannot be opened',cfgfile);
-  43,13: 					    obj.messageLog(cType.ERROR,'Error reading sheet %s',wsht);
-  47,9: 					obj.messageLog(cType.ERROR,'Sheet %s does not exists',wsht);
-  61,13: 					    obj.messageLog(cType.ERROR,'Error reading sheet %s',wsht);
-  84,15: 			        tbl.messageLog(cType.ERROR,'Invalid XLS pointer');
-  91,15: 			        tbl.messageLog(cType.ERROR,err.message);
-  96,24:                     tbl.messageLog(cType.ERROR,'File %s not found',xls);
-  103,15: 			        tbl.messageLog(cType.ERROR,err.message);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelXML.m
-  17,14: 		        obj.messageLog(cType.ERROR,'This function is not yet implemented');
-  26,20:                 obj.messageLog(cType.ERROR,err.message);
-  27,20:                 obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cRecyclingAnalysis.m
-  36,20:                 obj.messageLog(cType.ERROR,'Invalid FPR model');
-  43,24:                     obj.messageLog(cType.ERROR,'Invalid Resources Cost data');
-  62,20:                 obj.messageLog(cType.ERROR,'Invalid waste key %s',wkey);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResourceCost.m
-  20,7: 				rd.messageLog(cType.ERROR,'Invalid Resource data provided');
-  24,8: 				obj.messageLog(cType.ERROR,'No exergy data model');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResourceData.m
-  28,8: 				obj.messageLog(cType.ERROR,'Invalid resources data provided');
-  35,8: 				obj.messageLog(cType.ERROR,'Invalid data model. Fields missing');
-  41,8: 				obj.messageLog(cType.ERROR,'Wrong resources cost file. Flows Fields missing.');
-  50,10: 						obj.messageLog(cType.ERROR,'Flow key %s is not a resource',se(i).key);
-  53,10: 						obj.messageLog(cType.ERROR,'Value of resource cost %s is negative %f',se(i).key,se(i).value);
-  57,9: 					obj.messageLog(cType.ERROR,'Resources Flow key %s is missing',se(i).key);
-  65,9: 					obj.messageLog(cType.ERROR,'Wrong resources cost data. Processes Fields missing.');
-  75,11: 							obj.messageLog(cType.WARNING,'Value of process cost %s is negative: %f',sz(i).key,sz(i).value);
-  78,13: 					    obj.messageLog(cType.ERROR,'process key %s is missing',sz(i).key);
-  82,8: 				obj.messageLog(cType.INFO,'Processes Costs data missing, default values are assumed.');
-  95,8: 				res.messageLog(cType.WARNING,'Invalid Processes Resources size',length(Z));
-  99,8: 				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
-  112,8: 				res.messageLog(cType.WARNING,'Invalid Flows Resources size',length(c0));
-  116,8: 				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
-  128,8: 				res.messageLog(cType.WARNING,'Invalid key: %s',key);
-  134,8: 				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
-  146,8: 				res.messageLog(cType.WARNING,'Invalid key: %s',key);
-  152,8: 				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResultInfo.m
-  36,20:                 obj.messageLog(cType.ERROR,'Invalid Results object')
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResultTableBuilder.m
-  45,8: 				obj.messageLog(cType.ERROR,'No valid Productive Structure provided');
-  499,20:                 res.messageLog(cType.WARNING,'No Waste allocation table defined');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cTable.m
-  77,20:                 obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
-  87,20:                 log.messageLog(cType.ERROR,err.message);
-  88,20:                 log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cTableCell.m
-  42,20:                 obj.messageLog('Invalid table size (%d,%d)',size(data,1),size(data,2));
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cTableData.m
-  22,20:                 obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cTableMatrix.m
-  62,20:                 obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cThermoeconomicModel.m
-  124,20:                 obj.messageLog(cType.ERROR,'Invalid data model object');
-  131,20:                 obj.messageLog(cType.ERROR,'Invalid data model. See Log');
-  166,24:                     obj.messageLog(cType.ERROR,'Invalid Exergy Values. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cWasteData.m
-  28,8: 				obj.messageLog(cType.ERROR,'Invalid waste data provided');
-  32,8: 				obj.messageLog(cType.ERROR,'No Valid Productive Structure provided');
-  38,20:                 obj.messageLog(cType.ERROR,'Invalid waste date. Fields Missing');
-  45,8: 				obj.messageLog(cType.ERROR,'Invalid number of wastes %d defined.',NR);
-  49,8: 				obj.messageLog(cType.ERROR,'Invalid waste date. Fields Missing');
-  62,24:                     obj.messageLog(cType.ERROR,'Invalid Waste Allocation method %s',wd(i).type);
-  67,12: 				    obj.messageLog(cType.ERROR,'Invalid waste flow %s',wd(i).flow);
-  71,9: 					obj.messageLog(cType.ERROR,'Flow %s must be waste',wd(i).flow);
-  76,10: 						obj.messageLog(cType.ERROR,'Invalid Recycle Ratio %f',wd(i).recycle);
-  88,11: 							obj.messageLog(cType.ERROR,'Value fields missing for waste %s',wd(i).flow);
-  94,12: 								obj.messageLog(cType.ERROR,'Invalid process name %s',wval(j).process);
-  98,12: 								obj.messageLog(cType.ERROR,'Waste %s cannot be asssigned to dissipative units',wval(j).process);
-  102,12: 								obj.messageLog(cType.ERROR,'Waste distribution value %s: %f cannot be NEGATIVE',wval(j).process,wval(j).value);
-  109,14: 						    obj.messageLog(cType.ERROR,'Waste allocation of flow %s is defined as MANUAL and does not have values defined ',wd(i).flow);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cWasteTable.m
-  25,20:                 obj.messageLog(cType.ERROR,'Invalid Waste Definition object')
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\checkDataModel.m
-  13,12:         rdm.messageLog(cType.ERROR,'Data Model File %s is NOT valid',filename);
-  19,13:         data.messageLog(cType.INFO,'Data Model %s is valid',data.ModelName);
-  21,13:         data.messageLog(cType.ERROR,'Data Model File %s is NOT valid',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportCSV.m
-  11,12:         log.messageLog(cType.ERROR,'Invalid input arguments');
-  15,12:         obj.messageLog(cType.ERROR,'Invalid file name %s',filename);
-  19,12:         obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
-  28,12:         log.messageLog(cType.INFO,'File %s has been saved',filename);
-  30,12:         log.messageLog(cType.ERROR,err.message);
-  31,12:         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportJSON.m
-  11,12:         log.messageLog(cType.ERROR,'Invalid input arguments');
-  15,12:         log.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
-  19,12:         log.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
-  27,12:         log.messageLog(cType.INFO,'File %s has been saved',filename);
-  29,12:         log.messageLog(cType.ERROR,err.message);
-  30,12:         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportMAT.m
-  11,12:         log.messageLog(cType.ERROR,'Invalid input arguments');
-  15,12:         log.messageLog(cType.ERROR,'Invalid object to save');
-  19,12:         log.messageLog(cType.ERROR,'Invalid file name %s',filename);
-  23,12:         obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
-  28,12:         log.messageLog(cType.INFO,'File %s has been saved',filename);
-  30,12:         log.messageLog(cType.ERROR,err.message);
-  31,12:         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportXLS.m
-  11,12:         log.messageLog(cType.ERROR,'Invalid input arguments');
-  15,12:         obj.messageLog(cType.ERROR,'Invalid file name %s',filename)
-  19,12:         obj.messageLog(cType.ERROR,'Invalid filename extension %s',filename)
-  27,16:             log.messageLog(cType.INFO,'File %s has been saved',filename);
-  29,16:             log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
-  34,16:             log.messageLog(cType.INFO,'File %s has been saved',filename);
-  36,16:             log.messageLog(cType.ERROR,err.message);
-  37,16:             log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportXML.m
-  11,12:         log.messageLog(cType.ERROR,'This function is not yet implemented');
-  15,12:         log.messageLog(cType.ERROR,'Invalid input arguments');
-  19,12:         log.messageLog(cType.ERROR,'Invalid filename %s',filename);
-  23,12:         log.messageLog(cType.ERROR,'Invalid filename extension %s',filename);
-  28,12:         log.messageLog(cType.INFO,'File %s has been saved',filename);
-  30,12:         log.messageLog(cType.ERROR,err.message);
-  31,12:         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\importMAT.m
-  11,12:         obj.messageLog(cType.ERROR,'Read MAT files is not yet implemented for Octave');
-  20,6: 		obj.messageLog(cType.ERROR,err.message)
-  21,6: 		obj.messageLog(cType.ERROR,'Error reading file %s',cfgfile);
-  28,6: 		obj.messageLog(cType.ERROR,'Invalid MAT model file %s',data_file);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\readModel.m
-  23,16:             res.messageLog(cType.ERROR,'File extension %s is not supported',filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\Utilities\selectDataModel.m
-  11,11: 	    model.messageLog(cType.ERROR,'Data Model file %s not found',data_file);
-
-  C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\CheckDataModel.m
-  14,13:         data.printError('Usage: data=CheckDataModel(filename)');
-  21,13:         data.printError('Invalid file name %s', filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\DiagramFP.m
-  22,6: 		res.printError(err.message);
-  23,12:         res.printError('Usage: SaveDiagramFP(data,param)');
-  30,6: 		res.printError('Invalid Productive Structure. See error log');
-  42,6: 		res.printError('Invalid Exergy Values. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ExergyCostCalculator.m
-  42,6: 		res.printError(err.message);
-  43,12:         res.printError('Usage: ExergyCostCalculator(data,param)');
-  50,6: 		res.printError('Invalid Productive Structure. See error log');
-  56,12:         res.printError('Invalid CostTable parameter %s',param.CostTables);
-  68,6: 		res.printError('Invalid Exergy Values. See error log');
-  80,6: 		res.printError('Invalid Exergy Cost Computation. See error log')
-  95,7: 			res.printError('Invalid resources cost values. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ProductiveDiagram.m
-  17,12:         res.printError('Usage: ShowProductiveStructure(data)');
-  21,12:         res.printError('Invalid data. It should be a cDataModel object');
-  27,6: 		res.printError('Invalid Productive Structure. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ProductiveStructure.m
-  18,12:         res.printError('Usage: ShowProductiveStructure(data)');
-  22,12:         res.printError('Invalid data. It should be a cReadModel object');
-  28,6: 		res.printError('Invalid Productive Structure. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ReadDataModel.m
-  14,13:         data.printError('Usage: ReadDataModel(filename)');
-  21,13:         data.printError('Invalid file name %s', filename);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\RecyclingAnalysis.m
-  34,12:         res.printError(err.message);
-  35,12:         res.printError('Usage: cRecyclingAnalysis(data,param)')
-  43,9: 	    res.printError('Invalid Thermoeconomic Model');
-  50,9: 	    res.printError(cType.ERROR,'Model must have waste')
-  56,12:         res.printError('Invalid waste data');
-  66,12:         res.printError('Invalid Exergy Values. See error log');
-  73,12:         res.printError('Invalid Model FPR. See error log');
-  84,16:             res.printError('Invalid waste key %s',param.WasteFlow);
-  99,7: 			res.printError('Invalid Resource Data. See Error Log');
-  113,12:         res.printError('Invalid Recycling Analysis. See Error Log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SaveDataModel.m
-  15,12:         log.printError('Usage: SaveDataModel(model,filename)');
-  19,12:         log.printError('Invalid model. It sould be a cReadModel or cThermoeconomicModel object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SaveDiagramFP.m
-  16,12:         log.printError('Usage: SaveDiagramFP(model,filename)');
-  20,12:         log.printError('Invalid model object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SaveModelResults.m
-  15,12:         log.printError('Usage: SaveModelResults(results,filename)');
-  19,12:         log.printError('Invalid model object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SaveProductiveDiagram.m
-  15,12:         log.printError('Usage: SaveProductiveDiagram(model,filename)');
-  19,12:         log.printError('Invalid model object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SaveResults.m
-  16,12:         log.printError('Usage: SaveResults(res,filename)');
-  20,12:         log.printError('Invalid result object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SaveSummaryResults.m
-  15,12:         log.printError('Usage: SaveSummaryResults(arg,filename)');
-  19,12:         log.printError('Invalid model object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ShowCostGraph.m
-  18,6: 		log.printError('Invalid model');
-  26,12:         log.printError(err.message);
-  27,12:         log.printError('Usage: ShowCostGraph(res,options)');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ShowDiagnosisGraph.m
-  18,12:         log.printError('Invalid model');
-  27,12:         log.printError(err.message);
-  28,12:         log.printError('Usage: ShowCostGraph(res,options)');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ShowDiagramFP.m
-  15,12:         log.printError('Invalid model');
-  23,12:         log.printError(err.message);
-  24,12:         log.printError('Usage: ShowCostGraph(res,options)');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ShowFlowsDiagram.m
-  13,12:         log.printError('Invalid argument. It sould be a cResultInfo object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ShowModelGraph.m
-  17,6: 		log.printError('Invalid model');
-  29,12:         log.printError(err.message);
-  30,12:         log.printError('Usage: GraphResults(res,graph,options)');
-  37,12:         log.printError('Graph %s does not exists',param.graph);
-  40,6: 		log.printError('Table %s have not graph',param.graph);
-  48,6: 		log.printError('Invalid graph table: %s',param.graph);
-  66,9: 					log.printError('Variables are required for this type: %s',graph);
-  76,8: 				log.printError('Invalid Variable Names');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ShowProductiveDiagram.m
-  13,12:         res.printError('Function not implemented in Octave');
-  17,12:         res.printError('Usage: ShowProductiveStructure(model)');
-  21,12:         res.printError('Invalid model. It should be a cReadModel object');
-  27,6: 		res.printError('Invalid Productive Structure. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ShowRecyclingGraph.m
-  16,6: 		log.printError('Invalid model');
-  25,6: 		log.printError(err.message);
-  26,6: 		log.printError('Usage: ShowCostGraph(res,options)');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ShowSummaryGraph.m
-  21,6: 		log.printError('Invalid model');
-  31,12:         log.printError(err.message);
-  32,12:         log.printError('Usage: GraphResults(res,graph,options)');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SummaryResults.m
-  25,12:         res.printError('Invalid data. It should be a cReadModel object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ThermoeconomicAnalysis.m
-  47,12:         res.printError(err.message);
-  48,12:         res.printError('Usage: ThermoeconomicAnalysis(data,param)');
-  55,12:         res.printError('Invalid Productive Structure. See error log');
-  60,12:         res.printError('Invalid CostTable parameter %s',param.CostTables);
-  72,6: 		res.printError('Invalid Exergy Values. See error log');
-  84,6: 		res.printError('Invalid thermoeconomic analysis. See error log')
-  99,7: 			res.printError('Invalid resources cost values. See Error Log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ThermoeconomicDiagnosis.m
-  33,12:         res.printError(err.message);
-  34,12:         res.printError('Usage: ExergyCostCalculator(data,param)');
-  39,12:         res.printError('Diagnosis Method is NOT Activated')
-  45,12:         res.printError('Invalid data data. See Error log');
-  51,12:         res.printError('There is NOT two states defined');
-  61,12:         res.printError('Reference and Operation States are the same')
-  70,12:         res.printError('Invalid Exergy Values. See error log');
-  76,12:         res.printError('Invalid Exergy Values. See error log');
-  97,12:         res.printError('Invalid diagnosis analysis. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ThermoeconomicState.m
-  28,6: 		res.printError(err.message);
-  29,12:         res.printError('Usage: ExergyCostCalculator(data,param)');
-  36,6: 		res.printError('Invalid Productive Structure. See error log');
-  47,6: 		res.printError('Exergy Values are NOT correct. See error log');
-  57,6: 		res.printError('Invalid Process Model. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ThermoeconomicTool.m
-  28,14:         model.printError('Usage: model=ThermoeconomicModel(filename,params)');
-  35,14:         model.printError('File %s does not exist',filename);
-  53,18:             model.printError(err.message);
-  54,18:             model.printError('Usage: ThermoeconomicTool(model_file,param)');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ViewResults.m
-  229,20:                 log.printError('Values to show are required');
-  230,20:                 log.printError('Usage: ViewModelResuls(res)');
-  239,20:                 log.printError('Results must be a cResultInfo object');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\WasteAllocationGraph.m
-  13,12:         log.printError('Invalid argument. It sould be a vailid object.');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDataModel.m
-  202,20:                 res.printError('Invalid State %s',state);
-  218,20:                 log.printError('Invalid number of exergy values',length(values));
-  230,20:                 log.printError('Invalid exergy data',length(values));
-  256,20:                 res.printError('Invalid Resource Sample %s',sample);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelTables.m
-  81,20:                 res.printError('Table name %s does NOT exists',name);
-  96,20:                 log.printError('Table name %s does NOT exists',name);
-  111,20:                 log.printError('Table name %s does NOT exists',name);
-  150,20:                 log.printError('Invalid object to print')
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResultInfo.m
-  85,20:                 log.printError('Invalid Result object',obj.ResultName);
-  90,20:                 log.printError('Invalid Result Id: %s',obj.ResultName);
-  102,20:                 log.printError('Invalid graph type: %s',graph);
-  123,20:                 log.printError('Invalid Result object %s',obj.ResultName);
-  127,20:                 log.printError('Invalid Result Id: %s',obj.ResultName);
-  143,20:                 log.printError('Invalid graph type: %s',graph);
-  164,20:                 log.printError('Invalid Result object %s',obj.ResultName);
-  168,20:                 log.printError('Invalid cResultInfo object %s',obj.ResultName);
-  177,20:                 log.printError('Invalid graph type: %s',graph);
-  184,24:                     log.printError('Variables are required for this type: %s',graph);
-  194,20:                 log.printError('Invalid Variable Names');
-  215,20:                 log.printError('Invalid Result Id: %s',obj.ResultName);
-  219,20:                 log.printError('Invalid Result object %s',obj.ResultName);
-  228,20:                 log.printError('Table %s is NOT available',graph);
-  246,20:                 log.printError('Invalid object %s',obj.ResultName);
-  254,20:                 log.printError('Invalid Result Id: %s',obj.ResultName);
-  264,20:                 log.printError('Invalid waste key %s',wkey);
-  277,20:                 log.printError('Function not implemented')
-  285,20:                 log.printError('Table %s is NOT available',graph);
-  301,20:                 log.printError('Function not implemented')
-  305,20:                 log.printError('Invalid Result Object %s', obj.ResultName);
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cStatus.m
-  10,9: %   	obj.printError(text)
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cStatusLogger.m
-  10,9: %   	obj.printError(text)
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cThermoeconomicModel.m
-  151,20:                 obj.printError(err.message);
-  152,20:                 obj.printError('Usage: cThermoeconomicModel(data,param)');
-  182,20:                 obj.printError('Invalid state %s',param.State);
-  190,20:                 obj.printError('Invalid state %s',param.RefeenceState);
-  197,20:                 res.printError('Invalid CostTables parameter %s',param.DiagnosisTables);
-  206,24:                     obj.printError('Invalid ResourceSample %s',param.ResourceSample);
-  350,20:                 log.printError('Model do not has wastes');
-  416,20:                 res.printError('Invalid ResultId: %d',id)
-  544,20:                 tbl.printError('Invalid table: %s',name);
-  653,20:                 log.printError('Result object not available');
-  670,20:                 log.printError('Result object not available');
-  748,20:                 log.printError('Function NOT inmplemented in Octave');
-  757,20:                 log.printError('Result object not available');
-  818,19:                log.printError('Usage: obj.setWasteType(key,wtype)');
-  823,20:                 log.printError('Invalid waste type %s - %s',key,wtype);
-  841,19:                log.printError('Usage: obj.setWasteValues(key,values)');
-  864,19:                log.printError('Usage: obj.setWasteRecycled(key,value)');
-  869,20:                 log.printError('Invalid waste %s recycling values',key);
-  896,20:                 res.printError('No Generalized Cost activated');
-  925,20:                 res.printError('No Generalized Cost activated');
-  935,20:                 res.printError('Invalid Resources Values');
-  948,20:                 res.printError('No Generalized Cost activated');
-  958,20:                 res.printError('Invalid Resources Value %s',key);
-  970,20:                 res.printError('No Generalized Cost activated');
-  980,20:                 res.printError('Invalid Resources Values');
-  993,20:                 res.printError('No Generalized Cost activated');
-  1003,20:                 res.printError('Invalid Resources Values');
-  1046,20:                 log.printError('Cannot change ReferenceState values');
-  1117,24:                 obj.fp1.printError('Thermoeconomic Analysis cannot be calculated')
-  1142,20:                 sol.printError('Thermoeconomic Diagnosis cannot be calculated');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\exergy_cost_calculator.m
-  11,7: 	model.printError('Invalid data model. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\recycling_analysis.m
-  10,7: 	model.printError('Invalid data model. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\show_productive_structure.m
-  11,6: 	data.printError('Invalid data model. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\show_table_fp.m
-  12,7: 	model.printError('Invalid data model. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\show_thermoeconomic_state.m
-  11,7: 	model.printError('Invalid data model. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\summary_results.m
-  11,6: 	data.printError('Invalid data model. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\thermoeconomic_analysis.m
-  11,7: 	model.printError('Invalid Data Model. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Scripts\thermoeconomic_diagnosis.m
-  11,7: 	model.printError('Invalid data model. See error log');
-  21,7: 	model.printError('An Operation State is required');
-
-  C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ProductiveDiagram.m
-  32,6: 		res.printWarning('Productive Structure has errors. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\ProductiveStructure.m
-  33,6: 		res.printWarning('Productive Structure has errors. See error log');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SummaryResults.m
-  32,12:         res.printWarning('Summary Results requires more than one State');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelTables.m
-  219,20:                 res.printWarning('VarMode undefined');
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cStatus.m
-  11,9: %   	obj.printWarning(text)
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cStatusLogger.m
-  11,9: %   	obj.printWarning(text)
-
-C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cThermoeconomicModel.m
-  694,20:                 log.printWarning('Thermoeconomic Analysis Results not available');
-  715,20:                 log.printWarning('Diagnosis Results not available');
-  732,20:                 log.printWarning('Summary Results not available');
-  774,20:                 log.printWarning('Diagnosis Results not available');
-  1189,20:                 log.printWarning('Invalid state %s',state);
-  1193,20:                 log.printWarning('No state change. The new state is equal to the previous one');
-  1212,20:                 log.printWarning('Invalid state %s',state);
-  1216,20:                 log.printWarning('Reference and Operation State are the same');
-  1229,20:                 log.printWarning('Invalid resource sample %s',sample);
-  1233,20:                 log.printWarning('No sample change. The new sample is equal to the previous one');
-  1256,20:                 log.printWarning('Invalid Cost Tables parameter value: %s',value);
-  1260,20:                 log.printWarning('No parameter change. The new state is equal to the previous one');
-  1264,20:                 log.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
-  1287,20:                 log.printWarning('Invalid Diagnosis Method parameter value: %s',value);
-  1291,20:                 log.printWarning('No parameter change. The new state is equal to the previous one');
-  1305,20:                 log.printWarning('Summary Results requires more than one state',value);
-  1309,20:                 log.printWarning('No parameter change. The new state is equal to the previous one');
-
-  
+D:\Documents\Termoeconomia\TaesLab\Classes\cDataModel.m
+  50,21:                 obj.messageLog(cType.ERROR,'Invalid data model');
+  60,9: 				obj.messageLog(cType.INFO,'Productive Structure is valid');
+  63,9: 				obj.messageLog(cType.ERROR,'Productive Structure is NOT valid. See error log');
+  72,9: 				obj.messageLog(cType.INFO,'Format Definition is valid');
+  75,9: 				obj.messageLog(cType.ERROR,'Format Definition is NOT valid. See error log');
+  86,10: 					obj.messageLog(cType.INFO,'Exergy values [%s] are valid',obj.States{i});
+  89,10: 					obj.messageLog(cType.ERROR,'Exergy values [%s] are NOT valid. See Error Log',obj.States{i});
+  99,25:                     obj.messageLog(cType.INFO,'Waste Definition is not available. Default is used');
+  105,10: 					obj.messageLog(cType.ERROR,'Waste Definition is NOT valid. See error log');
+  107,10: 					obj.messageLog(cType.INFO,'Waste Definition is valid');			
+  111,9: 				obj.messageLog(cType.INFO,'The plant has NOT waste');
+  121,11: 						obj.messageLog(cType.INFO,'Resources Cost sample [%s] is valid',obj.ResourceSamples{i});
+  125,11: 						obj.messageLog(cType.ERROR,'Resources Cost sample [%s] is NOT valid. See error log',obj.ResourceSamples{i});
+  129,20:                obj.messageLog(cType.INFO,'No Resources Cost Data available')
+  337,9: 				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
+  341,9: 				log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+  358,10: 					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
+  361,9: 				log.messageLog(cType.INFO,'File %s has been saved',filename);
+  370,9: 				log.messageLog(cType.ERROR,'Save MAT files is not implemented in Octave');
+  387,21:                 log.messageLog(cType.ERROR,err.message);
+  388,21:                 log.messageLog(cType.ERROR,'File %s cannot be written',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cDiagnosis.m
+  68,21:                 obj.messageLog(cType.ERROR,'Input parameters are not cModelFPR objects');
+  72,21:                 obj.messageLog(cType.ERROR,'Compare not equal productive structures');
+  76,21:                 obj.messageLog(cType.ERROR,'Compare two diferent plant configurations is not possible');
+  80,21:                 obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
+  84,21:                 obj.messageLog(cType.ERROR,'Diagnosis Method requires waste information');
+  92,21:                 obj.messageLog(cType.ERROR,'Reference and Operation states are the same');
+  117,25:                     obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cDiagramFP.m
+  31,21:                 obj.messageLog(cType.ERROR,'Table %s is not valid',tbl.Name);
+  39,9: 				obj.messageLog(cType.ERROR,'Invalid FP table size');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cExergyCost.m
+  70,21:                 obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
+  74,21:                 obj.messageLog(cType.ERROR,'Invalid Flow Exergy Cost method')
+  78,21:                 obj.messageLog(cType.ERROR,'Model must define waste flows');
+  282,33:                             obj.messageLog(cType.ERROR,'Waste values cannot be zeros');
+  295,29:                         obj.messageLog(cType.ERROR,'Waste type %d allocation NOT Allowed',wt.Type(i));
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cExergyData.m
+  25,9: 				obj.messageLog(cType.ERROR,'Invalid exergy data provided');
+  29,9: 				obj.messageLog(cType.ERROR,'No Productive Structure provided');
+  35,21:                 obj.messageLog(cType.ERROR,'Invalid data. Fields Missing');
+  43,21:                 obj.messageLog(cType.ERROR,'Wrong exergy values data. Fields Missing');
+  48,21:                 obj.messageLog(cType.ERROR,'NrOfFlows %d is not conformant with productive structure %d',ps.NrOfFlows,M);
+  58,10: 					obj.messageLog(cType.ERROR,'Flow key %s not found',values(i).key);
+  62,25:                     obj.messageLog(cType.ERROR,'Exergy of flow %s is negative %f',values(i).key,values(i).value);
+  86,10: 					obj.messageLog(cType.ERROR,'Exergy of stream %s is negative %f',ps.Streams(i).key,E(i));
+  100,10: 					obj.messageLog(cType.ERROR,'Irreversibility of process %s is negative %f',ps.Processes(i).key,vI(i));
+  109,11: 						obj.messageLog(cType.ERROR,'Product of process %s is zero',ps.Processes(i).key);
+  112,11: 						obj.messageLog(cType.INFO,'Process %s is not Active',ps.Processes(i).key);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cExergyModel.m
+  38,9: 				obj.messageLog(cType.ERROR,'Input parameter is not a valid cExergyData object');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cFormatData.m
+  40,9: 				obj.messageLog(cType.ERROR,'Invalid format data provided');
+  49,9: 				obj.messageLog(cType.ERROR,err.message);
+  50,9: 				obj.messageLog(cType.ERROR,'Invalid %s config file',cfgfile);
+  54,21:                 obj.messageLog(cType.ERROR,'Invalid data. Fields missing');
+  62,16: 			        obj.messageLog(cType.WARNING,'Invalid Format Key %s',fmt.key);
+  72,25:                     obj.messageLog(cType.WARNING,'Bad format defined in %s',fmt.key);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cGraphResults.m
+  22,9: 				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
+  26,9: 				obj.messageLog(cType.ERROR,'Invalid graph table %s',tbl.Name);
+  51,9: 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
+  77,9: 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
+  223,21:                 obj.messageLog(cType.ERROR,'Parameters missing');
+  227,21:                 obj.messageLog(cType.ERROR,'Invalid parameter');
+  232,9: 				obj.messageLog(cType.ERROR,'Invalid variable names');
+  280,10: 					obj.messageLog(cType.ERROR,'Parameters missing');
+  284,9: 				obj.messageLog(cType.ERROR,'Parameters missing');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cModelData.m
+  32,25:                     obj.messageLog(cType.ERROR,'Invalid model. %s is missing',fld);
+  111,21:                 log.messageLog(cType.ERROR,'Save XML files is not yet implemented');
+  115,21:                 log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+  121,21:                 log.messageLog(cType.ERROR,err.message);
+  122,21:                 log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
+  135,21:                 log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+  144,21:                 log.messageLog(cType.ERROR,err.message);
+  145,21:                 log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cModelFPR.m
+  102,9: 				obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
+  106,9: 				obj.messageLog(cType.ERROR,'Invalid cModelFPR object');
+  110,9: 				obj.messageLog(cType.ERROR,'Model must define waste flows');
+  424,11: 						obj.messageLog(cType.ERROR,'Waste type allocation not valid %d',wt.Type(i));
+  428,10: 					obj.messageLog(cType.ERROR,'Waste values cannot be zero');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cModelResults.m
+  25,21:                 obj.messageLog(cType.ERROR,'Invalid data model');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cModelSummary.m
+  23,21:                 obj.messageLog(cType.ERROR,'Invalid Thermoeconomic Model');
+  27,23:                   obj.messageLog(cType.ERROR,'Summary Requires more than one State');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cModelTables.m
+  166,21:                 log.messageLog(cType.ERROR,'Invalid object to save')
+  170,21:                 log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+  182,21:                 log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
+  187,9: 				log.messageLog(cType.INFO,'File %s has been saved',filename);
+  235,21:                 log.messageLog(cType.ERROR,'No tables to save');
+  247,21:                 log.messageLog(cType.ERROR,err.message)
+  248,21:                 log.messageLog('Writting file info %s',filename);
+  260,21:                 log.messageLog(cType.ERROR,'Index file is NOT saved');
+  269,25:                     log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
+  286,21:                 log.messageLog(cType.ERROR,'No tables to save');
+  293,25:                     log.messageLog(cType.ERROR,err.message);
+  294,25:                     log.messageLog(cType.ERROR,'Error open file %s',filename);
+  304,25:                     log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
+  311,25:                     log.messageLog(cType.ERROR,err.message);
+  312,25:                     log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
+  321,29:                         log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
+  327,29:                         log.messageLog(cType.ERROR,err.message);
+  328,29:                         log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
+  335,25:                     log.messageLog(cType.ERROR,'Result file %s is NOT saved',filename);
+  353,21:                 log.messageLog(cType.ERROR,err.message)
+  354,21:                 log.messageLog(cType.ERROR,'Error open file %s',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cProductiveStructureCheck.m
+  37,9: 				obj.messageLog(cType.ERROR,'Invalid data model');
+  42,9: 				obj.messageLog(cType.ERROR,'Invalid data model. Fields Missing');
+  46,21:                 obj.messageLog(cType.ERROR,'Invalid flows data. Fields Missing');
+  50,9: 				obj.messageLog(cType.ERROR,'Invalid processes data. Fields Missing');
+  94,9: 				obj.messageLog(cType.ERROR,'Invalid productive structure graph');
+  113,9: 				obj.messageLog(cType.ERROR,'Invalid Flow KeyId %d',id);
+  117,9: 				obj.messageLog(cType.ERROR,'Invalid Flow Key %s',data.key);
+  123,9: 				obj.messageLog(cType.ERROR,'Invalid type %s for flow %s',data.type,data.key);
+  134,9: 				obj.messageLog(cType.ERROR,'Invalid Process KeyId %d',id);
+  138,9: 				obj.messageLog(cType.ERROR,'Invalid Flow Key %s',data.key);
+  143,9: 				obj.messageLog(cType.ERROR,'Invalid Type %s in process %s',data.type,data.key);
+  146,9: 				obj.messageLog(cType.ERROR,'Invalid fuel stream %s in process %s',data.fuel,data.key);
+  150,9: 				obj.messageLog(cType.ERROR,'Invalid fuel flow %s in process %s',data.fuel,data.key);
+  153,9: 				obj.messageLog(cType.ERROR,'Invalid product stream %s in process %s',data.product,data.key);
+  157,9: 				obj.messageLog(cType.ERROR,'Invalid froduct flows %s in process %s',data.product,data.key);
+  162,17: 				        obj.messageLog(cType.ERROR,'Product %s of dissipative process %s must be a waste',obj.cflw{jkey}.key,data.key);
+  241,11: 						obj.messageLog(cType.WARNING,'Flow %s has not correct (TO) definition',obj.cflw{i}.key);
+  244,10: 					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
+  257,11: 						obj.messageLog(cType.WARNING,'Flow %s has not correct (FROM) definition',obj.cflw{i}.key);
+  260,10: 					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
+  294,18: 					        obj.messageLog(cType.WARNING,'Output Flow %s has not correct (TO) definition',obj.cflw{i}.key);
+  299,19: 					    	    obj.messageLog(cType.WARNING,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
+  312,18: 					        obj.messageLog(cType.WARNING,'Waste Flow %s has not correct (TO) definition',obj.cflw{i}.key);
+  317,19: 					    	    obj.messageLog(cType.WARNING,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
+  329,18: 					        obj.messageLog(cType.WARNING,'Resource Flow %s has not correct (FROM) definition',obj.cflw{i}.key);
+  352,10: 					obj.messageLog(cType.WARNING,'Flow %s do not exist',obj.cflw{id}.key);
+  354,10: 					obj.messageLog(cType.WARNING,'Flow %s is defined as a LOOP',obj.cflw{id}.key);
+  357,9: 				obj.messageLog(cType.WARNING,'Flow %s has not correct (FROM) definition',obj.cflw{id}.key);
+  359,9: 				obj.messageLog(cType.WARNING,'Flow %s has not correct (TO) definition',obj.cflw{id}.key);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cReadModelCSV.m
+  19,21:                 obj.messageLog(cType.ERROR,'CSV folder data: %s not exists',folder);
+  36,14: 					    obj.messageLog(cType.ERROR,'Error Reading CSV file: %s',fname);
+  40,13: 				    obj.messageLog('File %s not found',fname);
+  56,14: 					    obj.messageLog(cType.ERROR,'Error reading CSV file: %s',fname);
+  80,16: 			        tbl.messageLog(cType.ERROR,err.message);
+  87,16: 			        tbl.messageLog(cType.ERROR,err.message);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cReadModelJSON.m
+  19,21:                 obj.messageLog(cType.ERROR,err.message);
+  20,21:                 obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cReadModelStruct.m
+  13,10: 					obj.messageLog(cType.ERROR,'Invalid model. %s is missing',fld);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cReadModelTable.m
+  32,21:                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+  40,21:                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+  49,25:                     obj.messageLog(cType.ERROR,'Invalid Format table');
+  53,21:                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+  60,21:                 obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+  65,21:                 obj.messageLog(cType.ERROR,'Invalid number of states')
+  69,21:                 obj.messageLog(cType.ERROR,'Invalid Exergy table');
+  97,29:                         obj.messageLog(cType.ERROR,'Waste Table. Invalid number of columns');
+  104,29:                         obj.messageLog(cType.ERROR,'Waste Table. Type column missing');
+  111,33:                             obj.messageLog(cType.ERROR,'Waste Table. Invalid waste flow %s',keys{i});
+  126,29:                         obj.messageLog(cType.ERROR,'Invalid Waste Allocation table');
+  130,29:                         obj.messageLog(cType.ERROR,'Invalid WasteAllocation table');
+  139,33:                             obj.messageLog(cType.ERROR,'Waste Table. Invalid waste flow %s',keys{i});
+  158,33:                             obj.messageLog(cType.ERROR,'Invalid waste allocation values for %s',keys{i});
+  175,29:                         obj.messageLog(cType.WARNING,'Invalid Resources Cost Definition');
+  179,29:                         obj.messageLog(cType.ERROR,'Invalid Resources Cost Definition');
+  186,29:                         obj.messageLog(cType.WARNING,'No Resources flows cost defined');
+  220,21:                 obj.messageLog(cType.ERROR,'Invalid Flows Table. Type Column NOT defined');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cReadModelXLS.m
+  23,25:                     obj.messageLog(cType.ERROR,err.message);
+  24,10: 					obj.messageLog(cType.ERROR,'File %s cannot be opened',cfgfile);
+  43,14: 					    obj.messageLog(cType.ERROR,'Error reading sheet %s',wsht);
+  47,10: 					obj.messageLog(cType.ERROR,'Sheet %s does not exists',wsht);
+  61,14: 					    obj.messageLog(cType.ERROR,'Error reading sheet %s',wsht);
+  84,16: 			        tbl.messageLog(cType.ERROR,'Invalid XLS pointer');
+  91,16: 			        tbl.messageLog(cType.ERROR,err.message);
+  96,25:                     tbl.messageLog(cType.ERROR,'File %s not found',xls);
+  103,16: 			        tbl.messageLog(cType.ERROR,err.message);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cReadModelXML.m
+  17,15: 		        obj.messageLog(cType.ERROR,'This function is not yet implemented');
+  26,21:                 obj.messageLog(cType.ERROR,err.message);
+  27,21:                 obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cRecyclingAnalysis.m
+  36,21:                 obj.messageLog(cType.ERROR,'Invalid FPR model');
+  43,25:                     obj.messageLog(cType.ERROR,'Invalid Resources Cost data');
+  62,21:                 obj.messageLog(cType.ERROR,'Invalid waste key %s',wkey);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cResourceCost.m
+  20,8: 				rd.messageLog(cType.ERROR,'Invalid Resource data provided');
+  24,9: 				obj.messageLog(cType.ERROR,'No exergy data model');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cResourceData.m
+  28,9: 				obj.messageLog(cType.ERROR,'Invalid resource data.');
+  35,9: 				obj.messageLog(cType.ERROR,'Invalid data model. Fields missing');
+  41,9: 				obj.messageLog(cType.ERROR,'Wrong resource cost file. Flows fields missing.');
+  50,11: 						obj.messageLog(cType.ERROR,'Flow key %s is not a resource',se(i).key);
+  53,11: 						obj.messageLog(cType.ERROR,'Value of resource cost %s is negative %f',se(i).key,se(i).value);
+  57,10: 					obj.messageLog(cType.ERROR,'Resource flow key %s is missing',se(i).key);
+  65,10: 					obj.messageLog(cType.ERROR,'Wrong resources cost data. Processes fields missing.');
+  75,12: 							obj.messageLog(cType.WARNING,'Value of process cost %s is negative: %f',sz(i).key,sz(i).value);
+  78,14: 					    obj.messageLog(cType.ERROR,'Process key %s is missing',sz(i).key);
+  82,9: 				obj.messageLog(cType.INFO,'Processes costs data missing. Default values are assumed.');
+  95,9: 				res.messageLog(cType.WARNING,'Invalid processes resources size',length(Z));
+  99,9: 				res.messageLog(cType.WARNING,'Values of process resources must be non-negatives');
+  112,9: 				res.messageLog(cType.WARNING,'Invalid flows resources size',length(c0));
+  116,9: 				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
+  128,9: 				res.messageLog(cType.WARNING,'Invalid key: %s',key);
+  134,9: 				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
+  146,9: 				res.messageLog(cType.WARNING,'Invalid key: %s',key);
+  152,9: 				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cResultInfo.m
+  36,21:                 obj.messageLog(cType.ERROR,'Invalid Results object')
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cResultTableBuilder.m
+  45,9: 				obj.messageLog(cType.ERROR,'No valid Productive Structure provided');
+  499,21:                 res.messageLog(cType.WARNING,'No Waste allocation table defined');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cStatus.m
+  80,13: 			message=cMessageLog(error,class(obj),text);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cStatusLogger.m
+  13,10: %   	obj.MessageLog(error,text)
+  35,12: 		function messageLog(obj,error,varargin)
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cTable.m
+  77,21:                 obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+  87,21:                 log.messageLog(cType.ERROR,err.message);
+  88,21:                 log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cTableCell.m
+  42,21:                 obj.messageLog('Invalid table size (%d,%d)',size(data,1),size(data,2));
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cTableData.m
+  22,21:                 obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cTableMatrix.m
+  62,21:                 obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cThermoeconomicModel.m
+  124,21:                 obj.messageLog(cType.ERROR,'Invalid data model');
+  131,21:                 obj.messageLog(cType.ERROR,'Invalid data model. See error log');
+  166,25:                     obj.messageLog(cType.ERROR,'Invalid Exergy Values. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cWasteData.m
+  28,9: 				obj.messageLog(cType.ERROR,'Invalid waste data provided');
+  32,9: 				obj.messageLog(cType.ERROR,'No Valid Productive Structure provided');
+  38,21:                 obj.messageLog(cType.ERROR,'Invalid waste date. Fields Missing');
+  45,9: 				obj.messageLog(cType.ERROR,'Invalid number of wastes %d defined.',NR);
+  49,9: 				obj.messageLog(cType.ERROR,'Invalid waste date. Fields Missing');
+  62,25:                     obj.messageLog(cType.ERROR,'Invalid Waste Allocation method %s',wd(i).type);
+  67,13: 				    obj.messageLog(cType.ERROR,'Invalid waste flow %s',wd(i).flow);
+  71,10: 					obj.messageLog(cType.ERROR,'Flow %s must be waste',wd(i).flow);
+  76,11: 						obj.messageLog(cType.ERROR,'Invalid Recycle Ratio %f',wd(i).recycle);
+  88,12: 							obj.messageLog(cType.ERROR,'Value fields missing for waste %s',wd(i).flow);
+  94,13: 								obj.messageLog(cType.ERROR,'Invalid process name %s',wval(j).process);
+  98,13: 								obj.messageLog(cType.ERROR,'Waste %s cannot be asssigned to dissipative units',wval(j).process);
+  102,13: 								obj.messageLog(cType.ERROR,'Waste distribution value %s: %f cannot be NEGATIVE',wval(j).process,wval(j).value);
+  109,15: 						    obj.messageLog(cType.ERROR,'Waste allocation of flow %s is defined as MANUAL and does not have values defined ',wd(i).flow);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cWasteTable.m
+  25,21:                 obj.messageLog(cType.ERROR,'Invalid Waste Definition object')
+
+D:\Documents\Termoeconomia\TaesLab\Functions\checkDataModel.m
+  13,13:         rdm.messageLog(cType.ERROR,'Data Model File %s is NOT valid',filename);
+  19,14:         data.messageLog(cType.INFO,'Data Model %s is valid',data.ModelName);
+  21,14:         data.messageLog(cType.ERROR,'Data Model File %s is NOT valid',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Functions\exportCSV.m
+  13,13:         log.messageLog(cType.ERROR,'Invalid input arguments');
+  17,13:         obj.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+  21,13:         obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+  30,13:         log.messageLog(cType.INFO,'File %s has been saved',filename);
+  32,13:         log.messageLog(cType.ERROR,err.message);
+  33,13:         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Functions\exportJSON.m
+  13,13:         log.messageLog(cType.ERROR,'Invalid input arguments');
+  17,13:         log.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+  21,13:         log.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+  29,13:         log.messageLog(cType.INFO,'File %s has been saved',filename);
+  31,13:         log.messageLog(cType.ERROR,err.message);
+  32,13:         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Functions\exportMAT.m
+  13,13:         log.messageLog(cType.ERROR,'Invalid input arguments');
+  17,13:         log.messageLog(cType.ERROR,'Invalid object to save');
+  21,13:         log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+  25,13:         obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+  30,13:         log.messageLog(cType.INFO,'File %s has been saved',filename);
+  32,13:         log.messageLog(cType.ERROR,err.message);
+  33,13:         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Functions\exportXLS.m
+  13,13:         log.messageLog(cType.ERROR,'Invalid input arguments');
+  17,13:         obj.messageLog(cType.ERROR,'Invalid file name: %s',filename)
+  21,13:         obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+  29,17:             log.messageLog(cType.INFO,'File %s has been saved',filename);
+  31,17:             log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+  36,17:             log.messageLog(cType.INFO,'File %s has been saved',filename);
+  38,17:             log.messageLog(cType.ERROR,err.message);
+  39,17:             log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Functions\exportXML.m
+  13,13:         log.messageLog(cType.ERROR,'This function is not yet implemented');
+  17,13:         log.messageLog(cType.ERROR,'Invalid input arguments');
+  21,13:         log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+  25,13:         log.messageLog(cType.ERROR,'Invalid file name extension: %s',filename);
+  30,13:         log.messageLog(cType.INFO,'File %s has been saved',filename);
+  32,13:         log.messageLog(cType.ERROR,err.message);
+  33,13:         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Functions\importMAT.m
+  13,13:         obj.messageLog(cType.ERROR,'Read MAT files is not yet implemented for Octave');
+  22,7: 		obj.messageLog(cType.ERROR,err.message)
+  23,7: 		obj.messageLog(cType.ERROR,'Error reading file %s',cfgfile);
+  30,7: 		obj.messageLog(cType.ERROR,'Invalid MAT model file %s',data_file);
+
+D:\Documents\Termoeconomia\TaesLab\Functions\readModel.m
+  23,17:             res.messageLog(cType.ERROR,'File extension %s is not supported',filename);
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\Utilities\selectDataModel.m
+  11,12: 	    model.messageLog(cType.ERROR,'Data Model file %s not found',data_file);
+
+D:\Documents\Termoeconomia\TaesLab\Base\CheckDataModel.m
+  14,14:         data.printError('Usage: data=CheckDataModel(filename)');
+  21,14:         data.printError('Invalid file name: %s', filename);
+
+D:\Documents\Termoeconomia\TaesLab\Base\DiagramFP.m
+  22,7: 		res.printError(err.message);
+  23,13:         res.printError('Usage: SaveDiagramFP(data,param)');
+  30,7: 		res.printError('Invalid data model. See error log');
+  42,7: 		res.printError('Invalid Exergy Values. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ExergyCostCalculator.m
+  42,7: 		res.printError(err.message);
+  43,13:         res.printError('Usage: ExergyCostCalculator(data,param)');
+  50,7: 		res.printError('Invalid data model. See error log');
+  62,7: 		res.printError('Invalid Exergy Values. See error log');
+  74,7: 		res.printError('Invalid Exergy Cost Computation. See error log')
+  89,8: 			res.printError('Invalid resources cost values. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ProductiveDiagram.m
+  17,13:         res.printError('Usage: ShowProductiveStructure(data)');
+  21,13:         res.printError('Invalid data parameter. It should be a valid cDataModel object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ProductiveStructure.m
+  18,13:         res.printError('Usage: ShowProductiveStructure(data)');
+  22,13:         res.printError('Invalid data parameter. It should be a cDataModel object');
+  28,7: 		res.printError('Invalid Productive Structure. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ReadDataModel.m
+  14,14:         data.printError('Usage: ReadDataModel(filename)');
+  21,14:         data.printError('Invalid file name: %s', filename);
+
+D:\Documents\Termoeconomia\TaesLab\Base\RecyclingAnalysis.m
+  34,13:         res.printError(err.message);
+  35,13:         res.printError('Usage: cRecyclingAnalysis(data,param)')
+  43,10: 	    res.printError('Invalid data model. See error log');
+  50,10: 	    res.printError(cType.ERROR,'Data model must have waste')
+  56,13:         res.printError('Invalid waste data');
+  66,13:         res.printError('Invalid exergy values. See error log');
+  73,13:         res.printError('Invalid model FPR. See error log');
+  84,17:             res.printError('Invalid waste key %s',param.WasteFlow);
+  99,8: 			res.printError('Invalid Resource Data. See Error Log');
+  113,13:         res.printError('Invalid Recycling Analysis. See Error Log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\SaveDataModel.m
+  15,13:         log.printError('Usage: SaveDataModel(model,filename)');
+  19,13:         log.printError('Invalid model. It should be a cDataModel or cThermoeconomicModel object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\SaveDiagramFP.m
+  16,13:         log.printError('Usage: SaveDiagramFP(model,filename)');
+  20,13:         log.printError('Invalid model object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\SaveModelResults.m
+  15,13:         log.printError('Usage: SaveModelResults(results,filename)');
+  19,13:         log.printError('Invalid model object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\SaveProductiveDiagram.m
+  15,13:         log.printError('Usage: SaveProductiveDiagram(model,filename)');
+  19,13:         log.printError('Invalid model object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\SaveResults.m
+  16,13:         log.printError('Usage: SaveResults(res,filename)');
+  20,13:         log.printError('Invalid result object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\SaveSummaryResults.m
+  15,13:         log.printError('Usage: SaveSummaryResults(arg,filename)');
+  19,13:         log.printError('Invalid model object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ShowCostGraph.m
+  18,7: 		log.printError('Invalid result parameter');
+  26,13:         log.printError(err.message);
+  27,13:         log.printError('Usage: ShowCostGraph(res,options)');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ShowDiagnosisGraph.m
+  18,13:         log.printError('Invalid result parameter');
+  27,13:         log.printError(err.message);
+  28,13:         log.printError('Usage: ShowDiagnosisGraph(res,options)');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ShowDiagramFP.m
+  15,13:         log.printError('Invalid result parameter');
+  23,13:         log.printError(err.message);
+  24,13:         log.printError('Usage: ShowDiagramFP(res,options)');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ShowFlowsDiagram.m
+  13,7: 		log.printError('Invalid result parameter');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ShowModelGraph.m
+  17,7: 		log.printError('Invalid model parameter');
+  29,13:         log.printError(err.message);
+  30,13:         log.printError('Usage: ShowModelGraph(res,graph,options)');
+  37,13:         log.printError('Graph %s does not exists',param.graph);
+  40,7: 		log.printError('Table %s have not graph',param.graph);
+  48,7: 		log.printError('Invalid graph table: %s',param.graph);
+
+D:\Documents\Termoeconomia\TaesLab\Base\ShowProductiveDiagram.m
+  13,13:         res.printError('Function not implemented in Octave');
+  17,13:         res.printError('Usage: ShowProductiveStructure(model)');
+  21,7: 		res.printError('Invalid result parameter');
+  27,7: 		res.printError('Invalid Productive Structure. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ShowRecyclingGraph.m
+  16,7: 		log.printError('Invalid result parameter');
+  25,7: 		log.printError(err.message);
+  26,7: 		log.printError('Usage: ShowRecyclingGraph(res,options)');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ShowSummaryGraph.m
+  21,13:         log.printError('Invalid result parameter');
+  31,13:         log.printError(err.message);
+  32,13:         log.printError('Usage: ShowSummaryGraph(res,graph,options)');
+
+D:\Documents\Termoeconomia\TaesLab\Base\SummaryResults.m
+  25,13:         res.printError('Invalid data parameter. It should be a valid cDataModel object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ThermoeconomicAnalysis.m
+  47,13:         res.printError(err.message);
+  48,13:         res.printError('Usage: ThermoeconomicAnalysis(data,param)');
+  55,13:         res.printError('Invalid Productive Structure. See error log');
+  67,7: 		res.printError('Invalid exergy values. See error log');
+  79,7: 		res.printError('Invalid Thermoeconomic Analysis. See error log')
+  94,8: 			res.printError('Invalid resource cost values. See Error Log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ThermoeconomicDiagnosis.m
+  33,13:         res.printError(err.message);
+  34,13:         res.printError('Usage: ThermoeconomicDiagnosis(data,param)');
+  39,13:         res.printError('Diagnosis Method is NOT Activated')
+  45,13:         res.printError('Invalid data model. See Error log');
+  51,13:         res.printError('There is NOT two states defined');
+  61,13:         res.printError('Reference and Operation States are the same')
+  70,13:         res.printError('Invalid Exergy Values. See error log');
+  76,13:         res.printError('Invalid Exergy Values. See error log');
+  97,13:         res.printError('Invalid Thermoeconomic Diagnosis. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ThermoeconomicState.m
+  28,7: 		res.printError(err.message);
+  29,13:         res.printError('Usage: ThermoeconomicState(data,param)');
+  36,7: 		res.printError('Invalid data model. See error log');
+  47,7: 		res.printError('Exergy values are NOT correct. See error log');
+  57,7: 		res.printError('Invalid Process Model. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ThermoeconomicTool.m
+  28,15:         model.printError('Usage: model=ThermoeconomicModel(filename, params)');
+  35,15:         model.printError('File %s does not exist',filename);
+  53,19:             model.printError(err.message);
+  54,19:             model.printError('Usage: ThermoeconomicTool(filename, params)');
+
+D:\Documents\Termoeconomia\TaesLab\Base\ViewResults.m
+  229,21:                 log.printError('Values to show are required');
+  230,21:                 log.printError('Usage: ViewModelResuls(res)');
+  239,21:                 log.printError('Results must be a cResultInfo object');
+
+D:\Documents\Termoeconomia\TaesLab\Base\WasteAllocationGraph.m
+  13,13:         log.printError('Invalid data parameter. It sould be a valid object.');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cDataModel.m
+  202,21:                 res.printError('Invalid State %s',state);
+  218,21:                 log.printError('Invalid number of exergy values',length(values));
+  230,21:                 log.printError('Invalid exergy data',length(values));
+  256,21:                 res.printError('Invalid Resource Sample %s',sample);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cModelTables.m
+  81,21:                 res.printError('Table name %s does NOT exists',name);
+  96,21:                 log.printError('Table name %s does NOT exists',name);
+  111,21:                 log.printError('Table name %s does NOT exists',name);
+  150,21:                 log.printError('Invalid object to print')
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cResultInfo.m
+  85,21:                 log.printError('Invalid Result object',obj.ResultName);
+  90,21:                 log.printError('Invalid Result Id: %s',obj.ResultName);
+  101,21:                 log.printError('Invalid graph type: %s',graph);
+  122,21:                 log.printError('Invalid Result object %s',obj.ResultName);
+  126,21:                 log.printError('Invalid Result Id: %s',obj.ResultName);
+  141,21:                 log.printError('Invalid graph type: %s',graph);
+  162,21:                 log.printError('Invalid Result object %s',obj.ResultName);
+  166,21:                 log.printError('Invalid cResultInfo object %s',obj.ResultName);
+  175,21:                 log.printError('Invalid graph type: %s',graph);
+  202,21:                 log.printError('Invalid Result Id: %s',obj.ResultName);
+  206,21:                 log.printError('Invalid Result object %s',obj.ResultName);
+  217,21:                 log.printError('Invalid graph type: %s',graph);
+  233,21:                 log.printError('Invalid object %s',obj.ResultName);
+  241,21:                 log.printError('Invalid Result Id: %s',obj.ResultName);
+  258,21:                 log.printError('Function not implemented')
+  268,21:                 log.printError('Invalid graph type: %s',graph);
+  281,21:                 log.printError('Function not implemented')
+  285,21:                 log.printError('Invalid Result Object %s', obj.ResultName);
+  301,17:       		    log.printError('Invalid input parameters');
+  306,15: 		        log.printError('Invalid graph table: %s',graph);
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cTableResult.m
+  48,19:                 g.printError('Invalid graph parameters. See error log.');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cThermoeconomicModel.m
+  151,21:                 obj.printError(err.message);
+  152,21:                 obj.printError('Usage: cThermoeconomicModel(data,param)');
+  182,21:                 obj.printError('Invalid state name %s',param.State);
+  190,21:                 obj.printError('Invalid state name %s',param.ReferenceState);
+  197,21:                 res.printError('Invalid CostTables parameter %s',param.DiagnosisTables);
+  206,25:                     obj.printError('Invalid ResourceSample %s',param.ResourceSample);
+  350,21:                 log.printError('Model has NO wastes');
+  416,21:                 res.printError('Invalid ResultId: %d',id)
+  544,21:                 tbl.printError('Invalid table name: %s',name);
+  653,21:                 log.printError('DiagramFP object not available');
+  670,21:                 log.printError('Productive Diagram object not available');
+  748,21:                 log.printError('Function NOT inmplemented in Octave');
+  757,21:                 log.printError('DiagramFP object not available');
+  812,21:                 log.printError('Invalid table name: %s',name);
+  841,20:                log.printError('Usage: obj.setWasteType(key,wtype)');
+  846,21:                 log.printError('Invalid waste type %s - %s',key,wtype);
+  864,20:                log.printError('Usage: obj.setWasteValues(key,values)');
+  887,20:                log.printError('Usage: obj.setWasteRecycled(key,value)');
+  892,21:                 log.printError('Invalid waste %s recycling values',key);
+  919,21:                 res.printError('No Generalized Cost activated');
+  948,21:                 res.printError('No Generalized Cost activated');
+  958,21:                 res.printError('Invalid Resources Values');
+  971,21:                 res.printError('No Generalized Cost activated');
+  981,21:                 res.printError('Invalid Resources Value %s',key);
+  993,21:                 res.printError('No Generalized Cost activated');
+  1003,21:                 res.printError('Invalid Resources Values');
+  1016,21:                 res.printError('No Generalized Cost activated');
+  1026,21:                 res.printError('Invalid Resources Values');
+  1069,21:                 log.printError('Cannot change ReferenceState values');
+  1140,25:                 obj.fp1.printError('Thermoeconomic Analysis cannot be calculated')
+  1165,21:                 sol.printError('Thermoeconomic Diagnosis cannot be calculated');
+
+D:\Documents\Termoeconomia\TaesLab\Functions\bfs.m
+  17,13:         log.printError('The imput matrix must be square');
+  22,13:         log.printError('Invalid search node');
+
+D:\Documents\Termoeconomia\TaesLab\Functions\divideCol.m
+  20,7: 		log.printError('Matrix dimensions must agree: %d %d',M,length(x));
+
+D:\Documents\Termoeconomia\TaesLab\Functions\divideRow.m
+  20,7: 		log.printError('Matrix dimensions must agree: %d %d',M,length(x));
+
+D:\Documents\Termoeconomia\TaesLab\Functions\npinv.m
+  17,12:       	log.printError('The input matrix must be square');
+  25,13:       		log.printError('The matrix is singular');
+
+D:\Documents\Termoeconomia\TaesLab\Functions\scaleCol.m
+  13,13:         log.printError('Invalid arguments');
+  18,13:         log.printError('Matrix dimensions must agree: %d %d',M,length(x));
+
+D:\Documents\Termoeconomia\TaesLab\Functions\scaleRow.m
+  13,13:         log.printError('Invalid arguments');
+  18,13:         log.printError('Matrix dimensions must agree: %d %d',M,length(x));
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\exergy_cost_calculator.m
+  11,8: 	model.printError('Invalid data model. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\recycling_analysis.m
+  10,8: 	model.printError('Invalid data model. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\show_productive_structure.m
+  11,7: 	data.printError('Invalid data model. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\show_table_fp.m
+  12,8: 	model.printError('Invalid data model. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\show_thermoeconomic_state.m
+  11,8: 	model.printError('Invalid data model. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\summary_results.m
+  11,7: 	data.printError('Invalid data model. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\thermoeconomic_analysis.m
+  11,8: 	model.printError('Invalid data model. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Scripts\thermoeconomic_diagnosis.m
+  11,8: 	model.printError('Invalid data model. See error log');
+  21,8: 	model.printError('An Operation State is required');
+
+  D:\Documents\Termoeconomia\TaesLab\Base\ProductiveStructure.m
+  33,7: 		res.printWarning('Productive Structure has errors. See error log');
+
+D:\Documents\Termoeconomia\TaesLab\Base\SummaryResults.m
+  32,13:         res.printWarning('Summary Results requires more than one state');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cModelTables.m
+  219,21:                 res.printWarning('VarMode undefined');
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cStatus.m
+  11,10: %   	obj.printWarning(text)
+  54,12: 		function printWarning(obj,varargin)
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cStatusLogger.m
+  11,10: %   	obj.printWarning(text)
+
+D:\Documents\Termoeconomia\TaesLab\Classes\cThermoeconomicModel.m
+  694,21:                 log.printWarning('Thermoeconomic Analysis Results not available');
+  715,21:                 log.printWarning('Diagnosis Results not available');
+  732,21:                 log.printWarning('Summary Results not available');
+  774,21:                 log.printWarning('Recycling Results not available');
+  1212,21:                 log.printWarning('Invalid state name %s',state);
+  1216,21:                 log.printWarning('No state change. The new state is equal to the previous one');
+  1235,21:                 log.printWarning('Invalid state name %s',state);
+  1239,21:                 log.printWarning('Reference and Operation State are the same');
+  1252,21:                 log.printWarning('Invalid resource sample %s',sample);
+  1256,21:                 log.printWarning('No sample change. The new sample is equal to the previous one');
+  1279,21:                 log.printWarning('Invalid Cost Tables parameter value: %s',value);
+  1283,21:                 log.printWarning('No parameter change. The new state is equal to the previous one');
+  1287,21:                 log.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
+  1310,21:                 log.printWarning('Invalid Diagnosis method: %s',value);
+  1314,21:                 log.printWarning('No parameter change. The new state is equal to the previous one');
+  1328,21:                 log.printWarning('Summary Results requires more than one state');
+  1332,21:                 log.printWarning('No parameter change. The new state is equal to the previous one');

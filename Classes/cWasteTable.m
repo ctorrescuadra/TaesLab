@@ -22,7 +22,7 @@ classdef cWasteTable < cResultId
         %       wd - cWasteData object
             obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
             if ~isa(wd,'cWasteData') || ~wd.isValid
-                obj.messageLog(cType.ERROR,'Invalid Waste Definition object')
+                obj.messageLog(cType.ERROR,'Invalid cWasteData object')
             end
             obj.ps=wd.ps;
             obj.NrOfWastes=obj.ps.NrOfWastes;

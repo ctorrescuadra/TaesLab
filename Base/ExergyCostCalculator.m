@@ -59,7 +59,7 @@ function res=ExergyCostCalculator(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~isValid(ex)
         ex.printLogger;
-		res.printError('Invalid Exergy Values. See error log');
+		res.printError('Invalid exergy values. See error log');
         return
 	end
 	% Read Waste definition and compute waste operator
@@ -71,7 +71,7 @@ function res=ExergyCostCalculator(data,varargin)
     end
     if ~ect.isValid
 		ect.printLogger;
-		res.printError('Invalid Exergy Cost Computation. See error log')
+		res.printError('Invalid Exergy Cost calculation. See error log')
 		return
     end
     % Read external resources and get results
@@ -86,7 +86,7 @@ function res=ExergyCostCalculator(data,varargin)
 		rsc=getResourceCost(rsd,ect);
         if ~rsc.isValid
 			rsc.printLogger;
-			res.printError('Invalid resources cost values. See error log');
+			res.printError('Invalid resource cost values. See error log');
 			return
         end
 		param.ResourcesCost=rsc;

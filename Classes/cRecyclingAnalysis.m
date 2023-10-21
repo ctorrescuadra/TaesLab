@@ -40,7 +40,7 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
                 if  ~isa(rsd,'cResourceData') || ~rsd.isValid
                     rsd.printLogger;
                     obj.addLogger(rsd);
-                    obj.messageLog(cType.ERROR,'Invalid Resources Cost data');
+                    obj.messageLog(cType.ERROR,'Invalid resource cost data');
                     return
                 end
                 obj.isResourceCost=true;

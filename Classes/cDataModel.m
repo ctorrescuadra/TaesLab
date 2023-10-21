@@ -199,7 +199,7 @@ classdef cDataModel < cStatusLogger
                 idx=obj.getStateId(state);
             end
             if isempty(idx)
-                res.printError('Invalid State %s',state);
+                res.printError('Invalid state %s',state);
             else
                 res=obj.ExergyData{idx};
             end
@@ -253,7 +253,7 @@ classdef cDataModel < cStatusLogger
                 idx=obj.getSampleId(sample);
             end
             if isempty(idx)
-                res.printError('Invalid Resource Sample %s',sample);
+                res.printError('Invalid resource sample %s',sample);
             else
                 res=obj.ResourceData{idx};
             end

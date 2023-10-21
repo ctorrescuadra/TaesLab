@@ -46,7 +46,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             tbl=getTable(tm,cType.TableDataName{idx});
             if isValid(tbl)
                 if ~isNumCellArray(tbl.Data(:,1:2))
-                    obj.messageLog(cType.ERROR,'Invalid Format table');
+                    obj.messageLog(cType.ERROR,'Invalid format table');
                 end
                 res.Format.definitions=tbl.getStructData;
             else
@@ -66,7 +66,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 return
             end
             if ~isNumCellArray(tbl.Data)
-                obj.messageLog(cType.ERROR,'Invalid Exergy table');
+                obj.messageLog(cType.ERROR,'Invalid exergy table');
                 return
             end
             tmp=struct();
@@ -94,21 +94,21 @@ classdef (Abstract) cReadModelTable < cReadModel
                 if isWasteDefinition
                     tbl=getTable(tm,twd);
                     if (tbl.NrOfCols<2)
-                        obj.messageLog(cType.ERROR,'Waste Table. Invalid number of columns');
+                        obj.messageLog(cType.ERROR,'Waste table. Invalid number of columns');
                         return
                     end
                     wdef=bitset(wdef,1);
                     keys=tbl.RowNames;
                     tmp=tbl.getStructData;
                     if ~isfield(tmp,'type')
-                        obj.messageLog(cType.ERROR,'Waste Table. Type column missing');
+                        obj.messageLog(cType.ERROR,'Waste table. Type column missing');
                         return
                     end
                     % Build waste definition data 
                     for i=1:numel(keys)
                         idx=find(strcmp(keys{i},wf),1);
                         if isempty(idx)
-                            obj.messageLog(cType.ERROR,'Waste Table. Invalid waste flow %s',keys{i});
+                            obj.messageLog(cType.ERROR,'Waste table. Invalid waste flow %s',keys{i});
                             continue
                         end
                         pswd.wastes(idx).type=tmp(i).type;
@@ -122,12 +122,9 @@ classdef (Abstract) cReadModelTable < cReadModel
                     tbl=getTable(tm,twa);
                     NR=tbl.NrOfCols-1;
                     % Check Waste Allocation Table
-                    if NR<1
-                        obj.messageLog(cType.ERROR,'Invalid Waste Allocation table');
+                    if (NR<1) || ~isNumCellArray(tbl.Data)
+                        obj.messageLog(cType.ERROR,'Invalid waste allocation table');
                         return
-                    end
-                    if ~isNumCellArray(tbl.Data)
-                        obj.messageLog(cType.ERROR,'Invalid WasteAllocation table');
                     end
                     keys=tbl.ColNames(2:end);
                     processes=tbl.RowNames;
@@ -136,7 +133,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     for i=1:numel(keys)
                         idx=find(strcmp(keys{i},wf),1);
                         if isempty(idx)
-                            obj.messageLog(cType.ERROR,'Waste Table. Invalid waste flow %s',keys{i});
+                            obj.messageLog(cType.ERROR,'Waste table. Invalid waste flow %s',keys{i});
                             continue
                         end
                         try
@@ -171,19 +168,17 @@ classdef (Abstract) cReadModelTable < cReadModel
                 if isValid(tbl)
                     NrOfSamples=tbl.NrOfCols-2;
                     % Check ResourcesCost Table
-                    if NrOfSamples<1
-                        obj.messageLog(cType.WARNING,'Invalid Resources Cost Definition');
+                    if (NrOfSamples<1) || ~isNumCellArray(tbl.Data(:,2:end))
+                        obj.messageLog(cType.WARNING,'Invalid resource cost definition');
                         return
                     end
-                    if ~isNumCellArray(tbl.Data(:,2:end))
-                        obj.messageLog(cType.ERROR,'Invalid Resources Cost Definition');
-                    end
+            
                     samples=tbl.ColNames(3:end);
                     fields={'key','value'};
                     idx=cellfun(@(x) cType.getResourcesId(x),tbl.Data(:,1));
                     fidx=find(idx==cType.Resources.FLOW);
                     if isempty(fidx)
-                        obj.messageLog(cType.WARNING,'No Resources flows cost defined');
+                        obj.messageLog(cType.WARNING,'No resource flows defined');
                         return
                     end
                     % Buil Resources Cost data
@@ -217,7 +212,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             fields=[ft.ColNames(2:end)];
             cid=find(strcmp(fields,'type'),1);
             if isempty(cid)
-                obj.messageLog(cType.ERROR,'Invalid Flows Table. Type Column NOT defined');
+                obj.messageLog(cType.ERROR,'Invalid flows table. Type column NOT defined');
                 return
             end
             types=[ft.Data(:,cid)];

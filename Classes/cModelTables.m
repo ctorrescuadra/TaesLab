@@ -25,7 +25,8 @@ classdef cModelTables < cResultId
     methods
         function obj = cModelTables(Id,tables)
         % Construct an instance of this class
-        %   Usage: cModelTables(tableId, tables)
+        %  Usage: 
+        %   cModelTables(tableId, tables)
         %  Input:
         %   Id - ResultId of the table group (see cType)
         %   tables - struct containig the tables
@@ -163,7 +164,7 @@ classdef cModelTables < cResultId
         %       log - cStatusLogger object with error messages
             log=cStatusLogger(cType.VALID);
             if ~isValid(obj) 
-                log.messageLog(cType.ERROR,'Invalid object to save')
+                log.messageLog(cType.ERROR,'Invalid cResultInfo object')
                 return
             end
             if ~cType.checkFileWrite(filename)

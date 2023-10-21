@@ -163,7 +163,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 rex=data.ExergyData{i};
                 if ~rex.isValid
                     obj.addLogger(rex);
-                    obj.messageLog(cType.ERROR,'Invalid Exergy Values. See error log');
+                    obj.messageLog(cType.ERROR,'Invalid exergy values. See error log');
                     return
                 end
                 if obj.isWaste

@@ -33,7 +33,7 @@ classdef cReadModelCSV < cReadModelTable
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,'Error Reading CSV file: %s',fname);
+					    obj.messageLog(cType.ERROR,'Error reading CSV file: %s',fname);
                         return
                     end
                 else

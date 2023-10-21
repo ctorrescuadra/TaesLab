@@ -17,7 +17,7 @@ classdef cResourceCost < cStatusLogger
 		%	Input:
 		%	 exm - cExergyModel object with state information
 			if ~isa(rd,'cResourceData') || ~rd.isValid
-				rd.messageLog(cType.ERROR,'Invalid Resource data provided');
+				rd.messageLog(cType.ERROR,'Invalid resource cost data');
 				return
 			end
 			if ~isa(exm,'cExergyModel') || ~exm.isValid

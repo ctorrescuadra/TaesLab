@@ -92,6 +92,7 @@ classdef cProductiveStructureCheck < cResultId
 			% Check Graph Connectivity
             if ~obj.checkGraphConnectivity
 				obj.messageLog(cType.ERROR,'Invalid productive structure graph');
+				return
             end
             % Convert to structure and build typeId arrays
             if isValid(obj)
@@ -109,11 +110,11 @@ classdef cProductiveStructureCheck < cResultId
         function createFlow(obj,id,data)
 		% Check and create flow data
 			if ~ischar(data.key) % Check flow key
-				obj.messageLog(cType.ERROR,'Invalid Flow KeyId %d',id);
+				obj.messageLog(cType.ERROR,'Invalid flow keyId %d',id);
 				return
 			end
 			if ~cType.checkTextKey(data.key)
-				obj.messageLog(cType.ERROR,'Invalid Flow Key %s',data.key);
+				obj.messageLog(cType.ERROR,'Invalid flow key %s',data.key);
 				return
 			end
             % Check flow Type
@@ -130,16 +131,16 @@ classdef cProductiveStructureCheck < cResultId
         function createProcess(obj,id,data)
 		% Check and create process data
 			if ~ischar(data.key) % Check Process Key
-				obj.messageLog(cType.ERROR,'Invalid Process KeyId %d',id);
+				obj.messageLog(cType.ERROR,'Invalid process keyId %d',id);
 				return
 			end
 			if ~cType.checkTextKey(data.key)
-				obj.messageLog(cType.ERROR,'Invalid Flow Key %s',data.key);
+				obj.messageLog(cType.ERROR,'Invalid process key %s',data.key);
 				return
 			end
 			ptype=cType.getProcessId(data.type); %Check Process Type
 			if cType.isEmpty(ptype)	        
-				obj.messageLog(cType.ERROR,'Invalid Type %s in process %s',data.type,data.key);
+				obj.messageLog(cType.ERROR,'Invalid type %s in process %s',data.type,data.key);
 			end
 			if ~cParseStream.checkProcess(data.fuel) % Check Fuel stream
 				obj.messageLog(cType.ERROR,'Invalid fuel stream %s in process %s',data.fuel,data.key);
@@ -153,7 +154,7 @@ classdef cProductiveStructureCheck < cResultId
 			end
 			fl=cParseStream.getFlowsList(data.product);
 			if ~obj.fDict.existsKey(fl)
-				obj.messageLog(cType.ERROR,'Invalid froduct flows %s in process %s',data.product,data.key);
+				obj.messageLog(cType.ERROR,'Invalid product flow %s in process %s',data.product,data.key);
 			elseif ptype==cType.Process.DISSIPATIVE % Check disipative processes and waste flows
                 for j=1:numel(fl)
 					jkey=obj.fDict.getIndex(fl{j});
@@ -290,7 +291,7 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jt % Check if flow is OUTPUT
 						    obj.cflw{i}.to=ns;
 				        else
-					        obj.messageLog(cType.WARNING,'Output Flow %s has not correct (TO) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.WARNING,'Output flow %s has not correct (TO) definition',obj.cflw{i}.key);
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
@@ -308,7 +309,7 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jt % Check if flow is WASTE
 						    obj.cflw{i}.to=ns;	
 					    else
-					        obj.messageLog(cType.WARNING,'Waste Flow %s has not correct (TO) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.WARNING,'Waste flow %s has not correct (TO) definition',obj.cflw{i}.key);
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
@@ -325,7 +326,7 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jf % Check if flow is a resource
 						    obj.cflw{i}.from=ns;				
 					    else
-					        obj.messageLog(cType.WARNING,'Resource Flow %s has not correct (FROM) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.WARNING,'Resource flow %s has not correct (FROM) definition',obj.cflw{i}.key);
                         end
                 	    pstr(ires)=ns;
 				end
@@ -362,15 +363,16 @@ classdef cProductiveStructureCheck < cResultId
         end
 
         function res=checkGraphConnectivity(obj)
-        % Check connectivity of the productive structure graph
+        % Get the productive structure graph and check its conectivity
 			res=false;
 			N=obj.NrOfProcesses;
-			M=obj.NrOfFlows;
             NS=obj.NrOfStreams;
-            NL=NS+N;
-			G=false(NL+2,NL+2);
+            NL=NS+N+2;
+            sNode=NL-1;
+            tNode=NL;
+			G=false(NL,NL);
             % Flows connections
-			for i=1:M
+			for i=1:obj.NrOfFlows
 				if obj.checkFlowConnectivity(i)
 					idx=obj.cflw{i}.from;
 					jdx=obj.cflw{i}.to;
@@ -391,16 +393,14 @@ classdef cProductiveStructureCheck < cResultId
 					idx=str.process+NS;
 					G(idx,i)=true;
 				case cType.Stream.RESOURCE
-					idx=NL+1;
-					G(idx,i)=true;
-				otherwise
-					jdx=NL+2;
-					G(i,jdx)=true;
+					G(sNode,i)=true;
+    				otherwise
+					G(i,tNode)=true;
 				end
             end
             % Compute direct and reverse connectivity
-            sc=bfs(sparse(G),NL+1); 
-            tc=bfs(sparse(G'),NL+2);
+            sc=bfs(sparse(G),sNode); 
+            tc=bfs(sparse(G'),tNode);
 			res=all(sc) && all(tc);
 		end
     end

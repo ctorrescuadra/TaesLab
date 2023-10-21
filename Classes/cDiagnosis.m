@@ -69,7 +69,7 @@ classdef cDiagnosis < cResultId
                 return
             end
             if (fp0.ps~=fp1.ps)
-                obj.messageLog(cType.ERROR,'Compare not equal productive structures');
+                obj.messageLog(cType.ERROR,'Compare two different productive structures');
                 return
             end
             if ~all(fp0.ActiveProcesses==fp1.ActiveProcesses)

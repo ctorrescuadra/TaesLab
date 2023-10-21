@@ -10,7 +10,7 @@ function data = checkDataModel(filename)
 %   See also ReadDataModel, CheckDataModel  
     rdm=readModel(filename);
     if ~isValid(rdm)
-        rdm.messageLog(cType.ERROR,'Data Model File %s is NOT valid',filename);
+        rdm.messageLog(cType.ERROR,'Data model file %s is NOT valid',filename);
         data=rdm;
         return
     end
@@ -18,6 +18,6 @@ function data = checkDataModel(filename)
     if isValid(data)
         data.messageLog(cType.INFO,'Data Model %s is valid',data.ModelName);
     else
-        data.messageLog(cType.ERROR,'Data Model File %s is NOT valid',filename);
+        data.messageLog(cType.ERROR,'Data Model %s is NOT valid',filename);
     end
 end

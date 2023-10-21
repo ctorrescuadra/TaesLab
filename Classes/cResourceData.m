@@ -62,7 +62,7 @@ classdef cResourceData < cStatusLogger
 				if all(isfield(data.processes,{'key','value'}))
 					sz=data.processes;
 				else
-					obj.messageLog(cType.ERROR,'Wrong resources cost data. Processes fields missing.');
+					obj.messageLog(cType.ERROR,'Wrong resource cost data. Processes fields missing.');
 					return	
 				end		
 				% Check processes cost data
@@ -79,7 +79,7 @@ classdef cResourceData < cStatusLogger
                     end
                 end
 			else
-				obj.messageLog(cType.INFO,'Processes costs data missing. Default values are assumed.');
+				obj.messageLog(cType.INFO,'Processes cost data is missing. Default values are assumed.');
 			end
 			obj.ps=ps;
 		end
@@ -131,7 +131,7 @@ classdef cResourceData < cStatusLogger
             if value>=0
 	            obj.c0(id)=value;
             else
-				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
+				res.messageLog(cType.WARNING,'Flows resource cost values must be non-negatives');
 				return
             end
 		end
@@ -149,7 +149,7 @@ classdef cResourceData < cStatusLogger
             if value>=0
 	            obj.Z(id)=value;
             else
-				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
+				res.messageLog(cType.WARNING,'Processes resource cost values must be non-negatives');
 				return
             end	
 		end

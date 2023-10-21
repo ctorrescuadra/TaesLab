@@ -29,7 +29,7 @@ classdef cModelData < cStatusLogger
                     obj.dm.(fld)=s.(fld);
                     obj.(fld)=s.(fld);
                 else
-                    obj.messageLog(cType.ERROR,'Invalid model. %s is missing',fld);
+                    obj.messageLog(cType.ERROR,'Invalid model. Field %s is missing',fld);
                     return
                 end
             end

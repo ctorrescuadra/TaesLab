@@ -20,11 +20,11 @@ classdef cModelSummary < cResultId
             obj=obj@cResultId(cType.ResultId.SUMMARY_RESULTS);
             if ~isa(model,'cThermoeconomicModel') || ~model.isValid
                 obj.addLogger(model);
-                obj.messageLog(cType.ERROR,'Invalid Thermoeconomic Model');
+                obj.messageLog(cType.ERROR,'Invalid thermoeconomic model');
                 return
             end
             if model.DataModel.NrOfStates<2
-                  obj.messageLog(cType.ERROR,'Summary Requires more than one State');
+                  obj.messageLog(cType.ERROR,'Summary requires more than one State');
                   return
             end
             NrOfFlows=model.DataModel.NrOfFlows;

@@ -39,7 +39,7 @@ function res=DiagramFP(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~isValid(ex)
         ex.printLogger;
-		res.printError('Invalid Exergy Values. See error log');
+		res.printError('Invalid exergy values. See error log');
         return
 	end
 	% Set Results

@@ -82,12 +82,12 @@ classdef (Sealed) cResultInfo < cModelTables
             % Check input
             log=cStatus(cType.VALID);
             if ~isValid(obj)
-                log.printError('Invalid Result object',obj.ResultName);
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return                
             end
             if (obj.ResultId~=cType.ResultId.THERMOECONOMIC_ANALYSIS) && ...
                 (obj.ResultId~=cType.ResultId.EXERGY_COST_CALCULATOR)
-                log.printError('Invalid Result Id: %s',obj.ResultName);
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return
             end  
             if nargin==1
@@ -119,11 +119,11 @@ classdef (Sealed) cResultInfo < cModelTables
             % Check input arguments
             log=cStatus(cType.VALID);
             if ~isValid(obj)
-                log.printError('Invalid Result object %s',obj.ResultName);
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return                
             end
             if obj.ResultId~=cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                log.printError('Invalid Result Id: %s',obj.ResultName);
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return
             end  
             if nargin==1
@@ -131,6 +131,9 @@ classdef (Sealed) cResultInfo < cModelTables
                 shout=true;
             end
             if nargin==2
+                shout=true;
+            end
+            if res.Info.Method==cType.DiagnosisMethod.WASTE_EXTERNAL
                 shout=true;
             end
             % Get Result Table info and build graph
@@ -159,7 +162,7 @@ classdef (Sealed) cResultInfo < cModelTables
             % Check input arguments
             log=cStatus(cType.VALID);
             if ~isValid(obj)
-                log.printError('Invalid Result object %s',obj.ResultName);
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return                
             end
             if obj.ResultId ~= cType.ResultId.SUMMARY_RESULTS
@@ -199,11 +202,11 @@ classdef (Sealed) cResultInfo < cModelTables
             % Check Input
             log=cStatus(cType.VALID);
             if obj.ResultId~=cType.ResultId.RECYCLING_ANALYSIS
-                log.printError('Invalid Result Id: %s',obj.ResultName);
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return
             end
             if ~isValid(obj)
-                log.printError('Invalid Result object %s',obj.ResultName);
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return                
             end
             if nargin==1 || isempty(graph)
@@ -229,18 +232,19 @@ classdef (Sealed) cResultInfo < cModelTables
         % See also cGraphResults
         %
             log=cStatus(cType.VALID);
-            if ~isValid(obj)
-                log.printError('Invalid object %s',obj.ResultName);
-                return
-            end   
+  
             if obj.ResultId==cType.ResultId.WASTE_ANALYSIS || ...
                 obj.ResultId==cType.ResultId.EXERGY_COST_CALCULATOR || ...
                 obj.ResultId==cType.ResultId.THERMOECONOMIC_ANALYSIS
                 tbl=obj.Tables.wa;
             else
-                log.printError('Invalid Result Id: %s',obj.ResultName);
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return
             end
+            if ~isValid(obj)
+                log.printError('Invalid cResultInfo object %s',obj.ResultName);
+                return
+            end   
             if nargin==1
                 wkey=tbl.ColNames{2};
             end
@@ -282,8 +286,10 @@ classdef (Sealed) cResultInfo < cModelTables
                 return
             end
             if obj.ResultId ~= cType.ResultId.PRODUCTIVE_DIAGRAM
-                log.printError('Invalid Result Object %s', obj.ResultName);
-                return
+                if ~isValid(obj)
+                    log.printError('Invalid cResultInfo object %s',obj.ResultName);
+                    return
+                end   
             end
             showGraph(obj.Tables.fat,option);
         end

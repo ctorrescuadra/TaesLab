@@ -96,7 +96,7 @@ function res = RecyclingAnalysis(data,varargin)
 		rsd=data.getResourceData(param.ResourceSample);
         if ~rsd.isValid
 			rsd.printLogger;
-			res.printError('Invalid Resource Data. See Error Log');
+			res.printError('Invalid resource data. See Error Log');
 			return
         end
         ra=cRecyclingAnalysis(mfp,rsd);

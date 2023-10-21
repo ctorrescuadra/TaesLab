@@ -5,6 +5,8 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 %   	res=obj.isModelIO
 %   	res=obj.FlowProcessEdges
 %   	res=obj.IncidenceMatrix
+%       res=obj.StructuralMatrix
+%       res=obj.ProductiveMatrix;
 %   	res=obj.getConfigInfo;
 %		id=obj.getProcessId(key)
 %		id=obj.getFlowId(key)

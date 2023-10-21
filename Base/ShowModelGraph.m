@@ -52,7 +52,11 @@ function ShowModelGraph(model,graph,varargin)
 	option=[];
 	switch tbl.GraphType
 		case cType.GraphType.DIAGNOSIS
-			option=param.ShowOutput;
+			if res.Info.Method==cType.DiagnosisMethod.WASTE_INTERNAL
+				option=param.ShowOutput;
+            else
+				option=true;
+			end	
 		case cType.GraphType.WASTE_ALLOCATION
 			if isempty(param.WasteFlow)
 				param.WasteFlow=tbl.ColNames{2};

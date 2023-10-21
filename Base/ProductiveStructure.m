@@ -25,12 +25,12 @@ function res=ProductiveStructure(data)
 	% Check Productive Structure
 	if data.isError
 		data.printLogger;
-		res.printError('Invalid Productive Structure. See error log');
+		res.printError('Invalid productive structure. See error log');
 		return
 	end
 	if data.isWarning
 		data.printLogger;
-		res.printWarning('Productive Structure has errors. See error log');
+		res.printWarning('Productive structure is not well defined. See error log');
 	end
 	% Read print format configuration
     fmt=data.FormatData;
