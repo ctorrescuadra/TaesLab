@@ -64,7 +64,8 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                 end  
             end
             % Set Model properties
-            tm=cModelTables(cType.ResultId.DATA_MODEL,tables);
+            info=cResultId(cType.ResultId.DATA_MODEL);
+            tm=cResultInfo(info,tables);
             sd=obj.buildDataModel(tm);
             if isValid(obj)
                 obj.ModelData=cModelData(sd);

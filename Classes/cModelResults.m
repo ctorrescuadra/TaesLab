@@ -1,4 +1,4 @@
-classdef (Sealed) cModelResults < cResultId
+classdef (Sealed) cModelResults < cStatusLogger
     %cModelResults is a class container of the model results
     %   This class store the results of cThermoeconomicTool 
     %   according to its ResultId
@@ -8,7 +8,6 @@ classdef (Sealed) cModelResults < cResultId
     %       obj.setResults(res)
     %       obj.clearResults(id)
     %       obj.getModelInfo
-    %       obj.getModelTables
     properties(Access=private)
         results    % cResultInfo cell array
         modelName  % Model Name
@@ -20,7 +19,6 @@ classdef (Sealed) cModelResults < cResultId
         %cModelResults Construct an instance of this class
         %  Initialize the results model from data model
         %   data - cDataModel object
-            obj=obj@cResultId(cType.ResultId.RESULT_MODEL);
             if ~isa(data,'cDataModel') || ~data.isValid
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 return
@@ -77,26 +75,6 @@ classdef (Sealed) cModelResults < cResultId
             stateResults=obj.results(1:cType.MAX_RESULT);
             res=obj.results(~cellfun(@isempty,stateResults));
         end
-
-        function res=getModelTables(obj)
-        % Get a cModelTables object with all tables of the active model
-            id=cType.ResultId.RESULT_MODEL;
-            res=obj.getResults(id);
-            if isempty(res)
-                tables=struct();
-                tmp=obj.getModelInfo;
-                for k=1:numel(tmp)
-                    dm=tmp{k};
-                    list=dm.getListOfTables;
-                    for i=1:dm.NrOfTables
-                        tables.(list{i})=dm.Tables.(list{i});
-                    end
-                end
-                res=cModelTables(cType.ResultId.RESULT_MODEL,tables);
-                res.setProperties(obj.modelName,obj.state);
-                obj.setResults(res);
-            end
-        end
     end
 
     methods(Static,Access=private)
@@ -106,15 +84,15 @@ classdef (Sealed) cModelResults < cResultId
             % Determine the objectId of both objects
             if isempty(obj1)
                 id1=cType.EMPTY;
-            elseif isa(obj1,'cModelTables') && isValid(obj1)
-                id1=obj1.objectId;
+            elseif isa(obj1,'cResultInfo') && isValid(obj1)
+                id1=getObjectId(obj1.Info);
             else
                 return
             end
             if isempty(obj2)
                 id2=cType.EMPTY;
-            elseif isa(obj2,'cModelTables') && isValid(obj2)
-                id2=obj2.objectId;
+            elseif isa(obj2,'cResultInfo') && isValid(obj2)
+                id2=getObjectId(obj2.Info);
             else
                 return
             end

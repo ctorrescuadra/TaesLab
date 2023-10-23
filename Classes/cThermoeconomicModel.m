@@ -529,10 +529,21 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function res=getModelTables(obj)
         % Get a cModelTables object with all tables of the active model
-            res=getResults(obj,cType.ResultId.RESULT_MODEL);
+            id=cType.ResultId.RESULT_MODEL;
+            res=obj.getResults(id);
             if isempty(res)
-                res=getModelTables(obj.results);
-                obj.setResults(res)
+                tables=struct();
+                tmp=obj.getModelInfo;
+                for k=1:numel(tmp)
+                    dm=tmp{k};
+                    list=dm.getListOfTables;
+                    for i=1:dm.NrOfTables
+                        tables.(list{i})=dm.Tables.(list{i});
+                    end
+                end
+                res=cResultInfo(cResultId(id),tables);
+                res.setProperties(obj.modelName,obj.state);
+                obj.setResults(res);
             end
         end
 

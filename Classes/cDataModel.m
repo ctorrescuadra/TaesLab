@@ -491,7 +491,8 @@ classdef cDataModel < cStatusLogger
 				    tables.(sheet)=tbl;
                 end
             end
-		    res=cModelTables(cType.ResultId.DATA_MODEL,tables);
+		    info=cResultId(cType.ResultId.DATA_MODEL);
+            res=cResultInfo(info,tables);
             res.setProperties(obj.ModelName,'DATA_MODEL')
         end
     end
