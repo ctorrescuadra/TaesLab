@@ -1,5 +1,5 @@
-classdef cStatus < handle
-% cStatus Base class used by ExIOLab classes.
+classdef cStatus < cTaesLab
+% cStatus define the object status
 %	It include methods to validate the status of the object,
 % 	Methods:
 %   	obj=cStatus(init_status)

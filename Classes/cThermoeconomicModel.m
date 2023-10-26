@@ -542,7 +542,7 @@ classdef cThermoeconomicModel < cStatusLogger
                     end
                 end
                 res=cResultInfo(cResultId(id),tables);
-                res.setProperties(obj.modelName,obj.state);
+                res.setProperties(obj.ModelName,obj.State);
                 obj.setResults(res);
             end
         end

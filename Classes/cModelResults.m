@@ -1,7 +1,6 @@
 classdef (Sealed) cModelResults < cStatusLogger
     %cModelResults is a class container of the model results
-    %   This class store the results of cThermoeconomicTool 
-    %   according to its ResultId
+    %   This class store the results of cThermoeconomicTool according to its ResultId
     %   cModelResults methods:
     %       obj=cModelResults(data)
     %       res=obj.getResults(id)
@@ -10,8 +9,6 @@ classdef (Sealed) cModelResults < cStatusLogger
     %       obj.getModelInfo
     properties(Access=private)
         results    % cResultInfo cell array
-        modelName  % Model Name
-        state      % State Name 
     end
 
     methods
@@ -27,17 +24,7 @@ classdef (Sealed) cModelResults < cStatusLogger
             ps.setProperties(data.ModelName,'SUMMARY');
             obj.results=cell(1,cType.MAX_RESULT_INFO);
             obj.setResults(ps);
-            obj.modelName=data.ModelName;
             obj.status=cType.VALID;
-        end
-
-        function res=get.state(obj)
-        % get the State name from thermoeconomicState
-            res='';
-            ts=obj.getResults(cType.ResultId.THERMOECONOMIC_STATE);
-            if ~isempty(ts)
-                res=ts.State;
-            end
         end
 
         function res=getResults(obj,id)
@@ -79,25 +66,19 @@ classdef (Sealed) cModelResults < cStatusLogger
 
     methods(Static,Access=private)
         function res = checkAssign(obj1,obj2)
-        % Check if the set function (obj1=obj2) should be made
-            res=false;
-            % Determine the objectId of both objects
+        % Check if the set function (obj1=obj2) should be execute
+            % Check if obj2 is not empty and is valid
+            if isempty(obj2) || ~isa(obj2,'cResultInfo') || ~isValid(obj2)
+                res=false;
+                return
+            end
+            % If obj1 is empty do assign
             if isempty(obj1)
-                id1=cType.EMPTY;
-            elseif isa(obj1,'cResultInfo') && isValid(obj1)
-                id1=getObjectId(obj1.Info);
-            else
+                res=true;
                 return
             end
-            if isempty(obj2)
-                id2=cType.EMPTY;
-            elseif isa(obj2,'cResultInfo') && isValid(obj2)
-                id2=getObjectId(obj2.Info);
-            else
-                return
-            end
-            % Assign is made only if obj1~=obj2
-            res=(id1~=id2);
+            % Compare if objects are different
+            res=(obj1~=obj2);
         end
     end
 end

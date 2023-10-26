@@ -1,4 +1,4 @@
-classdef cQueue < handle
+classdef cQueue < cTaesLab
 % cQueue Creates a FIFO queue data structure. It uses a cell array to store the data
 % 	Methods:
 %   	obj = cQueue(initial_capacity)
@@ -88,11 +88,6 @@ classdef cQueue < handle
 		% return next element on the queue
 			res= obj.buffer{obj.iterator};
 			obj.iterator=obj.iterator+1;
-		end
-
-		function res=size(obj,varargin)
-		% get queue size. Overload size function
-			res=size(obj.buffer,varargin{:});
 		end
 
 		function res=length(obj)

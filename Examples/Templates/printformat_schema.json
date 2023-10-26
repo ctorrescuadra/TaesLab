@@ -1,0 +1,224 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/PrintFormat",
+    "definitions": {
+        "PrintFormat": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "tables": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Table"
+                    }
+                },
+                "matrices": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Matrix"
+                    }
+                },
+                "summary": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Summary"
+                    }
+                },
+                "format": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Format"
+                    }
+                }
+            },
+            "required": [
+                "tables",
+                "matrices",
+                "summary",
+                "format"
+            ],
+            "title": "PrintFormat"
+        },
+        "Table": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "number": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "resultId": {
+                    "$ref": "#/definitions/typeResult"
+                },
+                "columns": {
+                    "type": "integer"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Field"
+                    }
+                }
+            },
+            "required": [
+                "id",
+                "key",
+                "number",
+                "description",
+                "resultId",
+                "columns",                
+                "fields"
+            ],
+            "title": "Table"
+        },
+        "Matrix": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/typeFormat"
+                },
+                "header": {
+                    "type": "string"
+                },
+                "graph": {
+                    "$ref": "#/definitions/typeGraph"
+                },
+                "options": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "resultId": {
+                    "$ref": "#/definitions/typeResult"
+                },
+                "rowTotal": {
+                    "type": "boolean"
+                },
+                "colTotal": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "id",
+                "key",
+                "header",
+                "type",
+                "graph",
+                "options",
+                "resultId",
+                "rowTotal",
+                "colTotal"
+            ],
+            "title": "Matrix"
+        },
+        "Summary": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "header": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/typeFormat"
+                },
+                "graph": {
+                    "$ref": "#/definitions/typeGraph"
+                },
+                "options": {
+                    "type": "integer",
+                    "minimum": 0
+                }  
+            },
+            "required": [
+                "id",
+                "key",
+                "header", 
+                "type",
+                "graph",
+                "options"
+            ],
+            "title": "Summary"
+        },
+        "Format": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                }
+            },
+            "required": [               
+                "id",
+                "key",
+                "format",
+                "unit"
+            ],
+            "title": "Format"
+        },
+        "Field": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "header": {
+                    "type": "string"
+                },
+                "type": {
+                    "$ref": "#/definitions/typeFormat"
+                }
+            },
+            "required": [
+                "header",
+                "name",
+                "type"
+            ],
+            "title": "Field"
+        },
+        "typeFormat": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 9
+        },
+        "typeResult": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+        },
+        "typeGraph": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 7
+        }
+    }
+}

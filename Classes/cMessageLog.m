@@ -1,4 +1,4 @@
-classdef cMessageLog < handle
+classdef cMessageLog < cTaesLab
 % cMessageLog define the logger messages as class
 %   Methods:
 %       obj=cMessageLog(error,class,text)

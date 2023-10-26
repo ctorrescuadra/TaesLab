@@ -1,4 +1,4 @@
-classdef cSparseRow < handle
+classdef cSparseRow < cStatusLogger
 	% cSparseRow Defines objects to store matrix which contains a few non-null rows.
 	%	This class is used to manage  waste allocation matrices, and provide a set of
 	%   algebraic operations. 
@@ -12,7 +12,6 @@ classdef cSparseRow < handle
 	%		res=obj.divideRow(x)
 	%		res=obj.sumRows
 	%		res=obj.sumCols
-	%		res=obj.replace(A)
 	% 	Overloaded operators:
 	%		res=a+b (plus)
 	%		res=a-b (minus)	
@@ -39,7 +38,8 @@ classdef cSparseRow < handle
 			obj.NR=size(vals,1);
 			obj.M=size(vals,2);
 			if (obj.NR ~= length(rows))
-				error('Matrix dimensions must agree %d %d',obj.NR,length(rows));
+				obj.messageLog(cType.ERROR,'Matrix dimensions must agree %d %d',obj.NR,length(rows));
+				return
 			end
 			obj.mRows=rows;
 			obj.mValues=vals;
@@ -69,8 +69,10 @@ classdef cSparseRow < handle
 
 		function nobj=scaleCol(obj,x)
 		% Scale Columns function
+			log=cStatus(cType.VALID);
 			if(obj.M~=length(x))
-				error('Matrix dimensions must agree %d %d',obj.M,length(x));
+				log.printError('Matrix dimensions must agree %d %d',obj.NR,length(rows));
+				return
 			end
 			B=scaleCol(obj.mValues,x);
 			nobj=cSparseRow(obj.mRows,B);
@@ -78,11 +80,13 @@ classdef cSparseRow < handle
 
 		function nobj=divideCol(obj,x)
 		% Divide Columns function
+			nobj=cStatus(cType.VALID);
 			if nargin==1
 				x=obj.sumCols;
 			end
 			if(obj.M~=length(x))
-				error('Matrix dimensions must agree %d %d',obj.M,length(x));
+				nobj.printError('Matrix dimensions must agree %d %d',obj.NR,length(rows));
+				return
 			end
 			B=divideRow(obj.mValues,x);
 			nobj=cSparseRow(obj.mRows,B);
@@ -90,8 +94,10 @@ classdef cSparseRow < handle
 
 		function nobj=scaleRow(obj,x)
 		% Scale Rows function
+			nobj=cStatus(cType.VALID);
 			if(obj.N~=length(x))
-				error('Matrix dimensions must agree %d %d',obj.M,length(x));
+				nobj.printError('Matrix dimensions must agree %d %d',obj.NR,length(rows));
+				return
 			end
 			B=scaleRow(obj.mValues,x(obj.mRows));
 			nobj=cSparseRow(obj.mRows,B);
@@ -99,11 +105,13 @@ classdef cSparseRow < handle
 
 		function nobj=divideRow(obj,x)
 		% Divide Rows
+			nobj=cStatus(cType.VALID);
 			if nargin==1
 				x(obj.mRows)=obj.sumRows;
 			end
 			if(obj.N~=length(x))
-				error('Matrix dimensions must agree %d %d',obj.M,length(x));
+				nobj.printError('Matrix dimensions must agree %d %d',obj.NR,length(rows));
+				return
 			end
 			B=divideRow(obj.mValues,x(obj.mRows));
 			nobj=cSparseRow(obj.mRows,B);
@@ -131,18 +139,6 @@ classdef cSparseRow < handle
                 res=sumRows(obj);
             end
         end
-        
-		function B=replace(obj,A)
-		% Replace the active rows of obj in matrix A
-			if (obj.N ~= size(A,1))
-				error('Number of rows must agree %d=%d',obj.N, size(A,1));
-			end
-			if (obj.M ~= size(A,2))
-				error('Number of cols must agree %d-%d',obj.M, size(A,2));
-			end
-			B=A;
-			B(obj.mRows,:)=obj.mValues;
-		end
 
 		function nobj=plus(obj1,obj2)
 		% overload the plus operator

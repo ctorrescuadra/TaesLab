@@ -1,4 +1,4 @@
-classdef cDictionary < handle
+classdef cDictionary < cTaesLab
 % cDictionary implementa a (key, id) dictionary for ExIOLab
 %	It implements an supersed some method of containers.Map class 
 %	Methods:
@@ -74,17 +74,6 @@ classdef cDictionary < handle
 				else
 					res=tbl;
 				end
-			end
-		end
-
-		function res=size(obj,dim)
-		% overload size function
-			narginchk(1,2);
-			val = [obj.NrOfEntries, 1];
-			if nargin==1
-				res=val;
-			else
-				res=val(dim);
 			end
 		end
 

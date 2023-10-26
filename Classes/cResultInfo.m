@@ -66,7 +66,7 @@ classdef cResultInfo < cStatusLogger
             obj.setResultId(info.ResultId)
             obj.ModelName='';
             obj.State='';
-            obj.status=info.Status;
+            obj.status=info.status;
         end
 
         function setResultId(obj,id)
@@ -477,7 +477,7 @@ classdef cResultInfo < cStatusLogger
             if nargin==2
                 shout=true;
             end
-            if res.Info.Method==cType.DiagnosisMethod.WASTE_EXTERNAL
+            if obj.Info.Method==cType.DiagnosisMethod.WASTE_EXTERNAL
                 shout=true;
             end
             % Get Result Table info and build graph

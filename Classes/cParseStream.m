@@ -1,4 +1,4 @@
-classdef cParseStream < handle
+classdef cParseStream < cTaesLab
 % cParseStream utility class to validate fuel-product stream definition
 %   Methods:
 %       obj=cParseStream(dict)

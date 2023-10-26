@@ -1,4 +1,4 @@
-classdef cStack < handle
+classdef cStack < cTaesLab
 % cStack define a LIFO stack data structure
 %   Methods:
 %       s = cStack(initial_capacity)
@@ -78,15 +78,6 @@ classdef cStack < handle
                 obj.Count = obj.Count - 1;
             end
         end
-
-        function res=size(obj,dim)
-		% size - Get stack size. Overload size function
-			if nargin==1
-				res=size(obj.buffer);
-			else
-				res=size(obj.buffer,dim);
-			end
-		end
 
 		function res=length(obj)
 		% length - get stack length. Overload length function

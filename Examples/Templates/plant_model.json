@@ -97,7 +97,6 @@
 			},
 			"required": [
 				"key",
-				"description",
 				"fuel",
 				"product",
 				"type"

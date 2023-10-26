@@ -7,17 +7,12 @@ classdef cResultId < cStatusLogger
 		ResultId=cType.ResultId.DATA_MODEL % Result Id
 		ResultName % Result Name
     end
-    properties(Access=protected)
-		objectId    % class object identifier
-	end
 
 	methods
 		function obj = cResultId(id)
         % Class constructor
 		% 	Input:
 		%		id - Result identifier. See cType.ResultId
-			obj=obj@cStatusLogger;
-            obj.objectId=randi(intmax,"int32");
 			if (nargin==1) &&isscalar(id) && isnumeric(id)
 				N=length(cType.Results);
 				if any (id==1:N)
@@ -31,19 +26,5 @@ classdef cResultId < cStatusLogger
         % get the result name 
             res=cType.Results{obj.ResultId};
         end
-
-        function res=getObjectId(obj)
-            res=obj.objectId;
-        end
-        
-        function res=eq(obj1,obj2)
-        % Check if two class object are equal. Overload eq operator
-            res=(obj1.objectId==obj2.objectId);
-        end
-        
-        function res=ne(obj1,obj2)
-        % Check if two class objects are different. Overload ne operator
-            res=(obj1.objectId~=obj2.objectId);
-		end
 	end
 end
