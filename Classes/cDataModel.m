@@ -379,7 +379,7 @@ classdef cDataModel < cStatusLogger
             if isempty(path)
 				fname=fullfile(pwd,filesep,filename);
             end
-			obj.setModelFile(fname);
+			obj.ModelFile=fname;
             % Save the object
             try
 				save(filename,'obj');
