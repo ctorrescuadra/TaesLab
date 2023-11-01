@@ -3,7 +3,7 @@ function log=exportMAT(obj,filename)
 %   USAGE:
 %       log=exportMAT(obj, filename)
 %   INPUT:
-%       obj - inherited cStatusLogger object to save
+%       obj - cStatusLogger object to save
 %       filename - MAT file name
 %   OUTPUT:
 %       log - cStatusLogger containing the status of the save and error messages

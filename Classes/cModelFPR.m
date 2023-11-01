@@ -23,9 +23,8 @@ classdef cModelFPR < cProcessModel
 		FinalDemand			  % Final Demand
 		Resources             % Resources Exergy by process
 		RecirculationFactor   % Recirculation Factor
-		WasteData			  % Waste Data Definition
 		WasteTable	          % Waste Table
-		WasteOperators        % Waste Cost Operators
+		WasteOperators        % Waste Operators
 		WasteFactor           % Waste Factor Array
 		SystemUnitConsumption % Global Unit Consumption considering waste recycling
 		isWaste=false		  % Waste is well defined
@@ -37,9 +36,10 @@ classdef cModelFPR < cProcessModel
 	
 	methods
 		function obj=cModelFPR(rex,wd)
-		% Model Costructor
+		% Create a instance of this class
 		%	Inputs:
-		%	 rex - cExergyDataObject
+		%	 rex - cExergyData object
+        %    wd - cWasteData object
 			obj=obj@cProcessModel(rex);
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
 			N=obj.NrOfProcesses;
@@ -61,13 +61,13 @@ classdef cModelFPR < cProcessModel
 			obj.c0(obj.ps.Resources.flows)=1.0;
 			obj.status=true;
 			if nargin==2
-				obj.setWasteData(wd);
+				obj.setWasteTable(wd);
                 obj.setWasteOperators;
 			end
 		end
 
 		function res=get.SystemOutput(obj)
-			% return the system output exergy values vector
+			% Get the system output exergy values vector
 				res=obj.TableFP(1:end-1,end);
 			end
 	
@@ -76,12 +76,12 @@ classdef cModelFPR < cProcessModel
 			res=obj.SystemOutput;
 			if obj.isWaste
 				idx=obj.ps.Waste.processes;
-				res(idx)=scaleRow(obj.TableFP(idx,end),obj.WasteTable.mSR);
+				res(idx)=scaleRow(obj.TableFP(idx,end),obj.WasteOperators.mSR);
 			end
 		end    
 			
 		function res=get.Resources(obj)
-		% return the exergy resources vector
+		% Get the exergy resources vector
 			res=obj.TableFP(end,1:end-1);
 		end
 
@@ -90,11 +90,16 @@ classdef cModelFPR < cProcessModel
 		end
 				
 		function res=get.RecirculationFactor(obj)
-		% return the recirculation factor of the processes
+		% Get the recirculation factor of the processes
 			res=diag(obj.fpOperators.opCP)'-1;
-		end	
+        end
+
+        function res=getResultInfo(obj,fmt,options)
+		% Get cResultInfo object
+            res=fmt.getThermoeconomicAnalysisResults(obj,options);
+        end
 		
-		function setWasteData(obj,wd)
+		function setWasteTable(obj,wd)
         % Compute waste tables (tR,mRP,mkR) and waste operators (opCR,opR) 
         %  Input:
         %   wd - cWasteData object
@@ -110,17 +115,17 @@ classdef cModelFPR < cProcessModel
 				obj.messageLog(cType.ERROR,'Model must define waste flows');
 				return
 			end
-			obj.WasteData=wd.getWasteTable;
+			obj.WasteTable=wd.getWasteTable;
         end
 
         function setWasteOperators(obj)
 			% update the production operators from waste table
-			obj.WasteTable=obj.wasteProcessTable;
+			sWaste=obj.wasteProcessTable;
 			if obj.isValid
-				opCR=cModelFPR.computeWasteOperator(obj.WasteTable.mRP,obj.fpOperators.opCP);
-				opR=cModelFPR.computeWasteOperator(obj.WasteTable.mKR,obj.pfOperators.opP);
-				obj.WasteOperators=struct('opCR',opCR,'opR',opR);
-				obj.WasteFactor=diag(opR.mValues(:,opR.mRows))';
+				sWaste.opCR=cModelFPR.computeWasteOperator(sWaste.mRP,obj.fpOperators.opCP);
+				sWaste.opR=cModelFPR.computeWasteOperator(sWaste.mKR,obj.pfOperators.opP);
+				obj.WasteFactor=diag(sWaste.opR.mValues(:,sWaste.opR.mRows))';
+                obj.WasteOperators=sWaste;
 				obj.isWaste=true;
 			end
 		end
@@ -136,7 +141,7 @@ classdef cModelFPR < cProcessModel
 			if obj.isWaste
 				CPR=CPE * obj.WasteOperators.opCR;
 				CP=CPE+CPR;
-				CR=CP * obj.WasteTable.mRP;
+				CR=CP * obj.WasteOperators.mRP;
 			else
 				CP=CPE;
 				CPR=zero;
@@ -160,7 +165,7 @@ classdef cModelFPR < cProcessModel
 			if obj.isWaste
 				CPR=(CPE+CPZ)*obj.WasteOperators.opCR;
 				CP=CPE+CPZ+CPR;
-				CR=CP*obj.WasteTable.mRP;
+				CR=CP*obj.WasteOperators.mRP;
 			else
 				CPR=zero;
 				CP=CPE+CPZ;
@@ -180,7 +185,7 @@ classdef cModelFPR < cProcessModel
             if obj.isWaste
 				cPR=cPE*obj.WasteOperators.opR;
 				cP=cPE+cPR;
-				cR=cP*obj.WasteTable.mKR;
+				cR=cP*obj.WasteOperators.mKR;
 			else
 				cP=cPE;
 				cPR=zero;
@@ -206,7 +211,7 @@ classdef cModelFPR < cProcessModel
 			if obj.isWaste
 				cPR=(cPE+cPZ)*obj.WasteOperators.opR;
 				cP=cPE+cPZ+cPR;
-				cR=cP*obj.WasteTable.mKR;
+				cR=cP*obj.WasteOperators.mKR;
 			else
 				cPR=zero;
 				cP=cPE+cPZ;
@@ -241,8 +246,8 @@ classdef cModelFPR < cProcessModel
 			end
 			tmp=obj.TableFP(1:N,:);
 			if obj.isWaste
-				tR=obj.WasteTable.tR;
-				recycle=scaleRow(obj.TableFP(tR.mRows,end),obj.WasteTable.mSR);
+				tR=obj.WasteOperators.tR;
+				recycle=scaleRow(obj.TableFP(tR.mRows,end),obj.WasteOperators.mSR);
 				tmp(tR.mRows,:)=[tR.mValues,recycle];
 			end
 			res=[scaleRow(tmp,cost.cP);aux];
@@ -384,7 +389,7 @@ classdef cModelFPR < cProcessModel
 		function res=wasteProcessTable(obj)
 		% Calculate the waste allocation ratios, using ModelFP info.
             res=[];
-			wt=obj.WasteData;
+			wt=obj.WasteTable;
 			NR=wt.NrOfWastes;
 			N=obj.NrOfProcesses;
 			aR=wt.Processes;

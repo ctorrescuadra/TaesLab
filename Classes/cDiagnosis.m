@@ -136,6 +136,10 @@ classdef cDiagnosis < cResultId
             res=obj.A0;
         end
 
+        function res=getResultInfo(obj,fmt)
+        % Get cResultInfo object
+            res=fmt.getDiagnosisResults(obj);
+        end
         function res=getUnitConsumptionVariation(obj)
         % Get the unit consumption variation
             res=sum(obj.DKP,1);
@@ -241,7 +245,7 @@ classdef cDiagnosis < cResultId
             obj.DCW=obj.dpuk.cP .* obj.DWt';
             % Prepare internal variables
             mf=obj.tMF(1:N,:);
-            mr=full(scaleCol(fp1.WasteTable.mKR-fp0.WasteTable.mKR,fp0.ProductExergy));
+            mr=full(scaleCol(fp1.WasteOperators.mKR-fp0.WasteOperators.mKR,fp0.ProductExergy));
             dr=opR*mf;
             mfr=[mf+mr,obj.DWt];
             % Compute Malfunction Cost

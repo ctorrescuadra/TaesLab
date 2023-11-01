@@ -1,10 +1,10 @@
 function WasteAllocationGraph(arg,varargin)
 % Show a pie chart with the waste allocation values
 %   USAGE:
-%       ShowWasteAllocationGraph(arg, wkey)
+%       WasteAllocationGraph(arg, wkey)
 %   INPUT:
 %       arg - cResultInfo or cThermoeconomicModel object
-%		wflow - Waste flow key. If not selected first waste is chosen
+%		wkey - Waste flow key. If variable is missing, first waste is chosen
 % See also cResultInfo, cThermoeconomicModel
     log=cStatus(cType.VALID);
     if isa(arg,'cResultInfo') || isa(arg,'cThermoeconomicModel')

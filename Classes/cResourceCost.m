@@ -38,15 +38,11 @@ classdef cResourceCost < cStatusLogger
 				obj.ce(pid)=obj.c0(fid);
             end
 			% Set Process Properties
+            idx=~exm.ActiveProcesses;
 			obj.Z=rd.Z;
-			idx=~exm.ActiveProcesses;
-			N=exm.NrOfProcesses;
-			vP=exm.ProcessesExergy.vP(1:N);
-			vF=exm.ProcessesExergy.vF(1:N);
-			ztmp=obj.Z;
-            ztmp(idx)=0.0;
-			obj.zP=vDivide(ztmp,vP);
-			obj.zF=vDivide(ztmp,vF);
+	        obj.Z(idx)=0.0;
+			obj.zP=vDivide(obj.Z,exm.ProductExergy);
+			obj.zF=vDivide(obj.Z,exm.FuelExergy);
 			obj.status=cType.VALID;
 		end
 	end	

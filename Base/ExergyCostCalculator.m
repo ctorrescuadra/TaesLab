@@ -50,8 +50,6 @@ function res=ExergyCostCalculator(data,varargin)
 		res.printError('Invalid data model. See error log');
 		return
     end
-    % Read print formatted configuration
-	fmt=data.FormatData;	
     % Read exergy
 	if isempty(param.State)
 		param.State=data.getStateName(1);
@@ -91,6 +89,6 @@ function res=ExergyCostCalculator(data,varargin)
         end
 		param.ResourcesCost=rsc;
 	end
-	res=getExergyCostResults(fmt,ect,param);
+	res=ect.getResultInfo(data.FormatData,param);
 	res.setProperties(data.ModelName,param.State);
 end

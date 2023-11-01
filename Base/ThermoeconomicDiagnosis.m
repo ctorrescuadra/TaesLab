@@ -61,8 +61,6 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         res.printError('Reference and Operation States are the same')
         return
     end
-	% Read print formatted configuration
-    fmt=data.FormatData;
     % Read reference and operation  exergy values
     rex0=data.getExergyData(param.ReferenceState);
     if ~isValid(rex0)
@@ -90,7 +88,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     dgn=cDiagnosis(fp0,fp1,method);
     % Get diagnosis results
     if dgn.isValid
-        res=getDiagnosisResults(fmt,dgn);
+        res=dgn.getResultInfo(data.FormatData);
         res.setProperties(data.ModelName,param.State);
     else
         dgn.printLogger;

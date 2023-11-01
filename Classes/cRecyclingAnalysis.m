@@ -50,13 +50,18 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
             obj.ps=fpm.ps;
             % Assign object variables
             obj.modelFP=fpm;
-            obj.wasteTable=fpm.WasteData;
+            obj.wasteTable=fpm.WasteTable;
             obj.status=cType.VALID;
+        end
+
+        function res=getResultInfo(obj,fmt,param)
+        % Get the cResultInfo object
+            res=fmt.getRecyclingAnalysisResults(obj,param);
         end
 
         function doAnalysis(obj,wkey)
         % Do the recycled analysis for waste wkey
-            wd=obj.modelFP.WasteData;
+            wd=obj.modelFP.WasteTable;
             wId=wd.getWasteIndex(wkey);
             if isempty(wId)
                 obj.messageLog(cType.ERROR,'Invalid waste key %s',wkey);

@@ -118,9 +118,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       gfict: generalized irreversibility cost table of flows
         %       gict:  generalized irreversibility cost table of processes
             tbl=struct();
-            if ect.isWaste
-                tbl.wa=obj.getWasteAllocation(ect.WasteData);
-            end
             if options.DirectCost
                 dfcost=ect.getDirectFlowsCost;
                 [dcost,udcost]=ect.getDirectProcessCost(dfcost);
@@ -131,6 +128,10 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tbl.udcost=obj.getProcessCostTable(cType.CellTable.PROCESS_UNIT_COST,udcost);
                 tbl.dfict=obj.getFlowICTable(cType.MatrixTable.FLOW_ICT,dfict);
                 tbl.dict=obj.getProcessICTable(cType.MatrixTable.PROCESS_ICT,dict);
+                if ect.isWaste
+                    tbl.wd=obj.getWasteDefinition(ect.WasteTable);
+                    tbl.wa=obj.getWasteAllocation(ect.WasteTable);
+                end
             end
             if options.GeneralCost
                 cz=options.ResourcesCost;
@@ -172,12 +173,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tbl.ducost=obj.getProcessCostTable(cType.CellTable.PROCESS_UNIT_COST,udcost);
                 tbl.dfcost=obj.getFlowCostTable(cType.CellTable.FLOW_EXERGY_COST,dfcost);
                 tbl.dcfp=obj.getTableFP(cType.MatrixTable.COST_TABLE_FP,dcfp);
-                tbl.dcfpr=obj.getTableFP(cType.MatrixTable.COST_TABLE_FPR,dcfpr);
                 tbl.dict=obj.getProcessICTable(cType.MatrixTable.PROCESS_ICT,dict);
                 tbl.dfict=obj.getFlowICTable(cType.MatrixTable.FLOW_ICT,dfict);
                 if mfp.isWaste
                     tbl.dcfpr=obj.getTableFP(cType.MatrixTable.COST_TABLE_FPR,dcfpr);
-                    tbl.wa=obj.getWasteAllocation(mfp.WasteData);
+                    tbl.wd=obj.getWasteDefinition(mfp.WasteTable);
+                    tbl.wa=obj.getWasteAllocation(mfp.WasteTable);
                 end
             end
             if options.GeneralCost
@@ -235,6 +236,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         % Get a structure with the tables of cRecyclingAnalisys function
         %   Input:
         %       ra: cRecyclingAnalysis object
+        %       param: struct containing the fields (DirectCost,GeneralCost)
         %   Output:
         %       res - cResultInfo object (RECYCLING_ANALYSIS) with the tables
         %           rad - Recycling Analysis direct cost
@@ -255,22 +257,21 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=cResultInfo(ra,tbl);
         end
 
-        function res=getProductiveDiagram(obj,ps)
+        function res=getProductiveDiagram(obj,pd)
         % Get the productive diagram tables
         %   Input:
-        %       ps - Productive Structure
+        %       pd - Productive Diagram
         %   Output:
         %       res - cResultInfo object (PRODUCTIVE_DIAGRAM)    
             id=cType.CellTable.FLOWS_DIAGRAM;
-            A=ps.StructuralMatrix;
+            A=pd.FlowsMatrix;
             nodes=obj.flowKeys;
             tbl.fat=obj.getProductiveTable(id,A,nodes);
             id=cType.CellTable.PRODUCTIVE_DIAGRAM;
-            A=ps.ProductiveMatrix;
+            A=pd.ProductiveMatrix;
             nodes=[obj.streamKeys,obj.flowKeys,obj.processKeys(1:end-1)];
             tbl.pat=obj.getProductiveTable(id,A,nodes);
-            res=cResultInfo(ps,tbl);
-            res.setResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);    
+            res=cResultInfo(pd,tbl);
         end
 
         function res=getSummaryResults(obj,ms)
@@ -289,7 +290,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %           gpuc - Generalized unit cost of processes
         %           gfc - Generalized cost of flows
         %           gfuc - Generalized unit cost of flows
-
             colNames=horzcat('Key',ms.StateNames);
             % Exergy Tables
             id=cType.SummaryId.EXERGY;

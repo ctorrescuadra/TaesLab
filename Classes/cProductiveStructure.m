@@ -133,6 +133,11 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
         % Get a structure array with the stream edges of the flows
             res=struct('from',[obj.Flows.from],'to',[obj.Flows.to]);
         end
+
+		function res=getResultInfo(obj,fmt)
+		% Get cResultInfo object
+			res=fmt.getProductiveStructureResults(obj);
+		end
 		
 		function res=WasteData(obj)
         % Get default waste data info
@@ -166,9 +171,8 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
             res.to=[obj.Streams(AE).process];
         end
 
-        function res=IncidenceMatrix(obj)
+        function [res1,res2]=IncidenceMatrix(obj)
         % Get a structure with the incidence matrices (AF,AP) of the plant
-			res=[];
 			if ~obj.isValid
 				return
 			end
@@ -178,7 +182,11 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
             aP=obj.AdjacencyMatrix.AP;
 			iAF=aF(1:end-1,:)*(aE-aS);
 			iAP=aP(1:end-1,:)*(aS-aE);
-            res=struct('iAF',iAF,'iAP',iAP);
+			if nargout<2
+				res1=iAF-iAP;
+			else
+				res1=iAF;res2=iAP;
+			end
         end
 
 		function res=StructuralMatrix(obj)

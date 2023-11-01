@@ -635,7 +635,7 @@ classdef cResultInfo < cStatusLogger
                     return
                 end   
             end
-            showGraph(obj.Tables.fat,option);
+            showGraph(obj.Tables.fat);
         end
 
         function showGraph(obj,graph,varargin)
@@ -647,6 +647,7 @@ classdef cResultInfo < cStatusLogger
         %       varagin - graph options
         % See also cGraphResults, cTableResults
             log=cStatus(cType.VALID);
+            option=[];
             if nargin<2
       		    log.printError('Invalid input parameters');
 		        return
@@ -664,11 +665,11 @@ classdef cResultInfo < cStatusLogger
 		            case cType.GraphType.WASTE_ALLOCATION
 				        option=tbl.ColNames{2};
 		            case cType.GraphType.SUMMARY
-				        if tbl.isFlowsTable
+                        if tbl.isFlowsTable
 					        option=obj.Info.getDefaultFlowVariables;
 				        else
 					        option=obj.Info.getDefaultProcessVariables;
-				        end
+                        end
                 end
             else
                 option=varargin{:};

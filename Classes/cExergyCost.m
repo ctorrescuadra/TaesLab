@@ -18,7 +18,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         AdjacencyMatrix     % Structure containing the adjacency submatrices
         IncidenceMatrix     % Structure containing the incidence matrices including waste
 		mG	                % Characteristic matrix
-		WasteData          % Waste Table Info
+		WasteTable          % Waste Table Info
 		mL                  % Production Operator
 		opR                 % Waste Operator
         isWaste=false       % Waste is well defined
@@ -59,9 +59,14 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function res=get.IncidenceMatrix(obj)
         % Get the incidence matrix including waste allocation
-            tmp=obj.ps.IncidenceMatrix;
-            iAR=cSparseRow(obj.WasteData.Flows,obj.WasteData.Values,obj.NrOfFlows);
-            res=struct('iAF',tmp.iAF,'iAP',tmp.iAP,'iAR',sparse(iAR)');
+            [iAF,iAP]=obj.ps.IncidenceMatrix;
+            iAR=cSparseRow(obj.WasteTable.Flows,obj.WasteTable.Values,obj.NrOfFlows);
+            res=struct('iAF',iAF,'iAP',iAP,'iAR',sparse(iAR)');
+        end
+
+        function res=getResultInfo(obj,fmt,options)
+        % Get the cResultInfo object
+            res=fmt.getExergyCostResults(obj,options);
         end
 
         function setWasteOperators(obj,wd)
@@ -80,7 +85,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             wt=wd.getWasteTable;
             NR=obj.NrOfWastes;
-            obj.WasteData=wt;
+            obj.WasteTable=wt;
             obj.dprocess=wt.Processes;
             wft=obj.wasteFlowsTable(wt);
             if obj.isValid		
@@ -237,8 +242,8 @@ classdef (Sealed) cExergyCost < cExergyModel
         %  Output:
         %   res - Processes ICT
             tmp=scaleCol(fICT,obj.FlowsExergy);
-            iAP=transpose(obj.IncidenceMatrix.iAP);
-            res=zerotol(divideCol(tmp*iAP,obj.ProductExergy));
+            [~,iAP]=obj.IncidenceMatrix(obj);
+            res=zerotol(divideCol(tmp*iAP',obj.ProductExergy));
 		end        
         
         function res=getProcessICT(obj,fICT,rsc)

@@ -20,7 +20,7 @@ function res=DiagramFP(data,varargin)
 		p.parse(data,varargin{:});
 	catch err
 		res.printError(err.message);
-        res.printError('Usage: SaveDiagramFP(data,param)');
+        res.printError('Usage: DiagramFP(data,param)');
 		return
 	end
 	param=p.Results;
@@ -29,9 +29,7 @@ function res=DiagramFP(data,varargin)
 		data.printLogger;
 		res.printError('Invalid data model. See error log');
 		return
-	end	
-	% Check format definition
-	fmt=data.FormatData;
+	end
 	% Read and check exergy values
 	if isempty(param.State)
 		param.State=data.getStateName(1);
@@ -42,8 +40,9 @@ function res=DiagramFP(data,varargin)
 		res.printError('Invalid exergy values. See error log');
         return
 	end
-	% Set Results
+	% Get FP Model and set results
 	pm=cModelFPR(ex);
+    fmt=data.FormatData;
     res=getDiagramFP(fmt,pm);
     res.setProperties(data.ModelName,param.State);
 end

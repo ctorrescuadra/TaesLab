@@ -78,6 +78,11 @@ classdef cModelSummary < cResultId
             obj.ps=model.productiveStructure.Info;
         end
 
+        function res=getResultInfo(obj,fmt)
+        % Get cResultInfo object
+            res=fmt.getSummaryResults(obj);
+        end
+
         function res=getDefaultFlowVariables(obj)
         % get the output flows keys
             id=obj.ps.SystemOutput.flows;

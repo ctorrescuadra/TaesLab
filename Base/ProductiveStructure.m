@@ -32,9 +32,7 @@ function res=ProductiveStructure(data)
 		data.printLogger;
 		res.printWarning('Productive structure is not well defined. See error log');
 	end
-	% Read print format configuration
-    fmt=data.FormatData;
 	% Get Productive Structure info
-	res=getProductiveStructureResults(fmt,data.ProductiveStructure);
+	res=getResultInfo(data.ProductiveStructure,data.FormatData);
 	res.setProperties(data.ModelName,'SUMMARY');
 end

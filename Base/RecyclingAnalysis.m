@@ -43,8 +43,7 @@ function res = RecyclingAnalysis(data,varargin)
 	    res.printError('Invalid data model. See error log');
 	    return
     end
-    % Read format definition
-    fmt=data.FormatData;
+    
     % Read waste info
     if data.NrOfWastes<1
 	    res.printError(cType.ERROR,'Data model must have waste')
@@ -73,8 +72,8 @@ function res = RecyclingAnalysis(data,varargin)
         res.printError('Invalid model FPR. See error log');
     end
     % Check Waste Key
-    mfp.setWasteData(wd);
-    wt=mfp.WasteData;
+    mfp.setWasteTable(wd);
+    wt=mfp.WasteTable;
     if isempty(param.WasteFlow)
         wid=wt.Flows(1);
         param.WasteFlow=data.ProductiveStructure.Flows(wid).key;
@@ -106,7 +105,7 @@ function res = RecyclingAnalysis(data,varargin)
     % Execute recycling analysis
     if isValid(ra)
         ra.doAnalysis(param.WasteFlow)
-        res=getRecyclingAnalysisResults(fmt,ra,param);
+        res=ra.getResultInfo(data.FormatData,param);
         res.setProperties(data.ModelName,param.State);
     else
         ra.printLogger;

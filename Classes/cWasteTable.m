@@ -35,6 +35,11 @@ classdef cWasteTable < cResultId
             obj.status=true;
         end
 
+        function res=getResultInfo(obj,fmt)
+        % Get the cResultInfo object
+            res=fmt.getWasteResults(obj);
+        end
+
 		function res=getValues(obj,arg)
         % Get the allocation ratios of a waste
         % Input:

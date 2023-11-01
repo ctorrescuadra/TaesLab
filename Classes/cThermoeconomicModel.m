@@ -361,7 +361,7 @@ classdef cThermoeconomicModel < cStatusLogger
             ra.doAnalysis(wkey);
             if isValid(ra)
                 param=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);
-                res=getRecyclingAnalysisResults(obj.fmt,ra,param);
+                res=ra.getResultInfo(obj.fmt,param);
                 res.setProperties(obj.ModelName,obj.State);
             else
                 ra.printLogger;
@@ -374,7 +374,8 @@ classdef cThermoeconomicModel < cStatusLogger
         %       res - cResultInfo (PRODUCTIVE_STRUCTURE) 
             res=obj.getResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
             if isempty(res)
-                res=getProductiveDiagram(obj.fmt,obj.productiveStructure.Info);
+                pd=cProductiveDiagram(obj.productiveStructure.Info);
+                res=pd.getResultInfo(obj.fmt);
                 res.setProperties(obj.ModelName,'SUMMARY');
                 obj.setResults(res);
             end
@@ -833,13 +834,13 @@ classdef cThermoeconomicModel < cStatusLogger
         %
         function res=wasteAllocation(obj)
         % Show waste information
-            res=getWasteResults(obj.fmt,obj.fp1.WasteData);
+            wt=obj.fp1.WasteTable;
+            res=wt.getResultInfo(obj.fmt);
             res.setProperties(obj.ModelName,obj.State);
             if nargout<1
                 printResults(res);
             end
         end
-
 
         function log=setWasteType(obj,key,wtype)
         % Set the waste type allocation method
@@ -852,7 +853,7 @@ classdef cThermoeconomicModel < cStatusLogger
                log.printError('Usage: obj.setWasteType(key,wtype)');
                return
             end  
-            wt=obj.fp1.WasteData;
+            wt=obj.fp1.WasteTable;
             if ~wt.setType(key,wtype)  
                 log.printError('Invalid waste type %s - %s',key,wtype);
                 return
@@ -875,7 +876,7 @@ classdef cThermoeconomicModel < cStatusLogger
                log.printError('Usage: obj.setWasteValues(key,values)');
                return
             end  
-            wt=obj.fp1.WasteData;
+            wt=obj.fp1.WasteTable;
             if ~wt.setValues(key,val)
                 log.prinError('Invalid waste %s allocation values',key);
                 return
@@ -898,7 +899,7 @@ classdef cThermoeconomicModel < cStatusLogger
                log.printError('Usage: obj.setWasteRecycled(key,value)');
                return
             end 
-            wt=obj.fp1.WasteData;
+            wt=obj.fp1.WasteTable;
             if ~wt.setRecycleRatio(key,val)
                 log.printError('Invalid waste %s recycling values',key);
                 return 
@@ -1142,7 +1143,7 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             % Get cModelResults info
             if obj.fp1.isValid
-                res=getThermoeconomicAnalysisResults(obj.fmt,obj.fp1,options);
+                res=getResultInfo(obj.fp1,obj.fmt,options);
 	            res.setProperties(obj.ModelName,obj.State);
                 obj.setResults(res);
                 obj.printDebugInfo('Compute Thermoeconomic Analysis for State: %s',obj.State);
@@ -1167,7 +1168,7 @@ classdef cThermoeconomicModel < cStatusLogger
             sol=cDiagnosis(obj.fp0,obj.fp1,method);
             % get cModelResult object
             if sol.isValid
-                res=getDiagnosisResults(obj.fmt,sol);
+                res=sol.getResultInfo(obj.fmt);
                 res.setProperties(obj.ModelName,obj.State);
                 obj.setResults(res);
                 obj.printDebugInfo('Compute Thermoeconomic Diagnosis for State: %s',obj.State);
@@ -1181,20 +1182,20 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=setSummaryResults(obj)
         % Obtain Summary Results
             res=[];
-            id=cType.ResultId.SUMMARY_RESULTS;
             if ~obj.activeSet || ~obj.isSummaryEnable
                 return
             end
+            id=cType.ResultId.SUMMARY_RESULTS;
             res=obj.getResults(id);
             if obj.Summary
-                tmp=cModelSummary(obj);
-                if tmp.isValid
-                    res=getSummaryResults(obj.fmt,tmp);
+                sr=cModelSummary(obj);
+                if sr.isValid
+                    res=sr.getResultInfo(obj.fmt);
                     res.setProperties(obj.ModelName,'SUMMARY');
                     obj.setResults(res);
                     obj.printDebugInfo('Summary Results have been Activated');
                 else
-                    tmp.printLogger;
+                    sr.printLogger;
                 end
             elseif ~isempty(res)
                 obj.clearResults(id);

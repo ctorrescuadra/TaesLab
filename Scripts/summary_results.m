@@ -12,7 +12,7 @@ if data.isError
 	return
 end
 % Show results
-options.VarMode=cType.VarMode.CELL;
+options.VarMode=cType.VarMode.NONE;
 options.VarFormat=false;
 res=SummaryResults(data);
 if ~res.isError

@@ -36,7 +36,6 @@ function res=ThermoeconomicState(data,varargin)
 		res.printError('Invalid data model. See error log');
 		return
 	end	
-	fmt=data.FormatData;
 	% Read and check exergy values
 	if isempty(param.State)
 		param.State=data.getStateName(1);
@@ -50,7 +49,7 @@ function res=ThermoeconomicState(data,varargin)
 	pm=cProcessModel(ex);
 	% Set Results
 	if isValid(pm)
-		res=getExergyResults(fmt,pm);
+		res=pm.getResultInfo(data.FormatData);
     	res.setProperties(data.ModelName,param.State);
 	else
 		pm.printLogger;

@@ -20,7 +20,7 @@ classdef cReadModelCSV < cReadModelTable
 				return
             end
             tables=struct();
-            Sheets=cType.getInputTables;
+            Sheets=cType.TableDataName;
             % Read Mandatory Tables
             for i=cType.MandatoryTables
                 sname=Sheets{i};
@@ -29,7 +29,7 @@ classdef cReadModelCSV < cReadModelTable
                 if cType.checkFileRead(filename)
                     tbl=cReadModelCSV.import(filename);
                     if tbl.isValid
-                        tbl.setDescription(sname)
+                        tbl.setDescription(i)
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
@@ -49,7 +49,7 @@ classdef cReadModelCSV < cReadModelTable
                 if cType.checkFileRead(filename)
                     tbl=cReadModelCSV.import(filename);
                     if tbl.isValid
-                        tbl.setDescription(sname)
+                        tbl.setDescription(i)
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
@@ -92,8 +92,7 @@ classdef cReadModelCSV < cReadModelTable
             rowNames=values(2:end,1);
             colNames=values(1,:);
             data=values(2:end,2:end);
-            tbl=cTableData(data,rowNames,colNames);
-            tbl.setDescription(wsht);
+            tbl=cTableData(data,rowNames',colNames);
         end
     end
 end

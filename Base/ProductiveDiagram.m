@@ -21,9 +21,8 @@ function res=ProductiveDiagram(data)
         res.printError('Invalid data parameter. It should be a valid cDataModel object');
         return
     end
-	% Read print format configuration
-    fmt=data.FormatData;
 	% Get Productive Diagram info
-	res=getProductiveDiagram(fmt,data.ProductiveStructure);
+	pd=cProductiveDiagram(data.ProductiveStructure);
+    res=pd.getResultInfo(data.FormatData);  
 	res.setProperties(data.ModelName,'SUMMARY');
 end

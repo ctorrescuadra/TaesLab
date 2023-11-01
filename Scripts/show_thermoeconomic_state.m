@@ -5,21 +5,21 @@
 % Prompt some parameters interactively
 %
 % Select data file model
-model=selectDataModel();
-if ~model.isValid
-    model.printLogger;
-	model.printError('Invalid data model. See error log');
+data=selectDataModel();
+if ~data.isValid
+  data.printLogger;
+  data.printError('Invalid data model. See error log');
 	return
 end
 % Assign function paramater
 param=struct();
-if model.NrOfStates>1
-	[~,param.State]=optionChoice('Select State:',model.States);
+if data.NrOfStates>1
+	[~,param.State]=optionChoice('Select State:',data.States);
 end
 % Show results
 options.VarMode=cType.VarMode.NONE;
 options.VarFormat=false;
-res=ThermoeconomicState(model,param);
+res=ThermoeconomicState(data,param);
 if res.isValid
 	tbl=outputResults(res,options);
 end

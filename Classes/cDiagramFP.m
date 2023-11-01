@@ -59,7 +59,12 @@ classdef (Sealed) cDiagramFP < cResultId
 			obj.NrOfEdges=numel(obj.values);
 			obj.NrOfNodes=numel(obj.Nodes);
             obj.status=true;
-		end
+        end
+        
+        function res=getResultInfo(obj,fmt)
+        % Get cResultInfo object
+            res=fmt.getDiagramFP(obj);
+        end
 
 		function res=get.Edges(obj)
         % get the Edges property as a struct (source,target,value)

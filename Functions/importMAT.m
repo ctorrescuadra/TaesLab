@@ -1,9 +1,9 @@
-function obj = importMAT(matfile)
+function obj = importMAT(filename)
 % importMAT creates a data model object from a previous saved MAT file
 %   USAGE:
 %       obj=importMAT(matfile)
 %	INPUT:
-%		matfile - Existing MAT file containing a cDataModel object
+%		filename - Existing MAT file containing a cDataModel object
 %  	OUTPUT:
 %   	obj - cDataModel object
 %
@@ -15,18 +15,18 @@ function obj = importMAT(matfile)
     end
     % Load and check the model
 	try
-        S=load(matfile);
+        S=load(filename);
 		f=fieldnames(S);
 		var=S.(f{1});
 	catch err
 		obj.messageLog(cType.ERROR,err.message)
-		obj.messageLog(cType.ERROR,'Error reading file %s',cfgfile);
+		obj.messageLog(cType.ERROR,'Error reading file %s',filename);
 		return
 	end
 	if isa(var,'cDataModel') && isValid(var)
         obj=var;
 		obj.clearLogger;
 	else
-		obj.messageLog(cType.ERROR,'Invalid MAT model file %s',data_file);
+		obj.messageLog(cType.ERROR,'Invalid MAT model file %s',filename);
 	end
 end

@@ -100,9 +100,14 @@ classdef cExergyModel < cResultId
 		end
 
 		function res=get.TotalIrreversibility(obj)
-		% get the total irreversibility of the system
+		% Get the total irreversibility of the system
 			res=obj.ProcessesExergy.vI(end);
-		end
+        end
+
+        function res=getResultInfo(obj,fmt)
+        % Get the cResultInfo object
+            res=fmt.getExergyResults(obj);
+        end
 		
 		function res=getStreamProcessTable(obj)
 		% get the Stream-Procces table
