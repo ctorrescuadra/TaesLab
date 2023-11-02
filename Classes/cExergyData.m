@@ -122,7 +122,7 @@ classdef cExergyData < cStatusLogger
 			obj.FlowsExergy=B;
 			obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);
 			obj.StreamsExergy=struct('ET',ET,'E',E);
-			obj.ActiveProcesses= ~bypass;
+			obj.ActiveProcesses= uint8(~bypass);
         end
     end
 end

@@ -36,4 +36,13 @@ classdef cTableData < cTable
             res=repmat(cType.colType(1),1,obj.NrOfCols);
         end
     end
+    methods (Static,Access=public)
+        function tbl=create(values)
+            % Create a cTableData from values
+            rowNames=values(2:end,1);
+            colNames=values(1,:);
+            data=values(2:end,2:end);
+            tbl=cTableData(data,rowNames',colNames);
+        end
+    end
 end

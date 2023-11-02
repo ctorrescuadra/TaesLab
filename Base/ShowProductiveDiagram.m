@@ -10,7 +10,7 @@ function res=ShowProductiveDiagram(data)
 %
 	res=cStatusLogger();
     if isOctave
-        res.printError('Function not implemented in Octave');
+        res.printError('Graph function not implemented in Octave');
     end
     % Check input parameters
     if nargin~=1

@@ -76,7 +76,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
         end 
     end
 
-    methods(Static, Access=private)
+    methods(Static,Access=private)
         function tbl=importSheet(xls,wsht)
         %Import a workbook/sheet 
             tbl=cStatusLogger;
@@ -105,10 +105,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                     return
 		        end
             end
-            rowNames=values(2:end,1);
-            colNames=values(1,:);
-            data=values(2:end,2:end);
-            tbl=cTableData(data,rowNames',colNames);
+            tbl=cTableData.create(values);
         end
     end
 end

@@ -40,13 +40,9 @@ classdef cGraphResults < cStatusLogger
 			case cType.GraphType.WASTE_ALLOCATION
 				obj.setGraphWasteAllocationParameters(tbl,varargin{:})
             case cType.GraphType.DIGRAPH
-                if isMatlab
 				    obj.setDigraphParameters(tbl);
-                end
             case cType.GraphType.DIAGRAM_FP
-                if isMatlab
                     obj.setProcessDiagramParameters(tbl);
-                end
 			otherwise
 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
 				return
@@ -65,14 +61,10 @@ classdef cGraphResults < cStatusLogger
 				obj.graphRecycling;
 			case cType.GraphType.WASTE_ALLOCATION
 				obj.graphWasteAllocation;
-            case cType.GraphType.DIGRAPH
-                if isMatlab
+            case cType.GraphType.DIGRAPH       
 				    obj.showDigraph;
-                end
             case cType.GraphType.DIAGRAM_FP
-                if isMatlab
                     obj.showDigraph;
-                end
 			otherwise
 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
 				return
@@ -299,6 +291,10 @@ classdef cGraphResults < cStatusLogger
 
         function setProcessDiagramParameters(obj,tbl)
         % Set the Diagram FP paramaters
+			if isOctave
+				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
+				return
+			end
             obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
             obj.xValues=getDigraphFP(tbl);
@@ -313,6 +309,10 @@ classdef cGraphResults < cStatusLogger
 
 		function setDigraphParameters(obj,tbl)
 		% Set the parameters of a digraph
+			if isOctave
+				obj.logMessage(cType.ERROR,'Graph function not implemented in Octave');
+				return
+			end
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
 			source=tbl.Data(:,1);

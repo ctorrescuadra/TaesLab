@@ -757,7 +757,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %       cType.Tables.COST_TABLE_FP (dcfp)  
             log=cStatus();
             if isOctave
-                log.printError('Function NOT inmplemented in Octave');
+                log.printError('Function not implemented in Octave');
                 return
             end
             if nargin==1
@@ -806,6 +806,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Usage:
         %       obj.showFlowsDiagram
         % See also cResultInfo/showFlowDiagram
+            log=cStatus();
+            if isOctave
+                log.printError('Function not implemented in Octave');
+                return
+            end
             res=obj.productiveDiagram;
             res.showFlowsDiagram;
         end

@@ -1,7 +1,7 @@
 function ShowModelGraph(model,graph,varargin)
 % Show table values as graph
 %   USAGE:
-%       ShowGraph(res, graph, options)
+%       ShowGraph(res, graph, param)
 %   INPUT:
 %       res - cThermoeconomicModel object
 %       graph - Name of the table to plot

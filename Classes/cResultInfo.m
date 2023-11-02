@@ -603,7 +603,7 @@ classdef cResultInfo < cStatusLogger
         %
             log=cStatus(cType.VALID);
             if isOctave
-                log.printError('Function not implemented')
+                log.printError('Function not implemented in Octave');
                 return
             end
             if nargin==1
@@ -626,7 +626,7 @@ classdef cResultInfo < cStatusLogger
         %
             log=cStatus(cType.VALID);
             if isOctave
-                log.printError('Function not implemented')
+                log.printError('Function not implemented in Octave');
                 return
             end
             if obj.ResultId ~= cType.ResultId.PRODUCTIVE_DIAGRAM

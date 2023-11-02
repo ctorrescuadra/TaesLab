@@ -11,6 +11,10 @@ function ShowDiagramFP(arg,varargin)
 % See also cResultInfo,cThermoeconomicModel
 %
     log=cStatus(cType.VALID);
+    if isOctave
+        log.printError('Graph function not implemented in Octave');
+        return
+    end
     if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
         log.printError('Invalid result parameter');
         return

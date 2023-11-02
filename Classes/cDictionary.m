@@ -56,7 +56,9 @@ classdef cDictionary < cTaesLab
 			if nargin==1
 				format=cType.DEFAULT_VARMODE;
 			end
-			entries=[obj.Keys', num2cell(obj.values)'];
+			rowNames=obj.Keys;
+			data=numcell(obj.values)';
+			entries=[rowNames, data];
 			colNames={'Key','Id'};
 			fid=cType.getVarMode(format);
 			if cType.isEmpty(fid)
@@ -68,7 +70,7 @@ classdef cDictionary < cTaesLab
 			case cType.VarMode.STRUCT
 				res=cell2struct(entries,colNames,2);
 			case cType.VarMode.TABLE
-				tbl=cTableData([colNames;entries]);
+				tbl=cTableData(data,rowNames,colNames);
 				if isMatlab
 					res=tbl.getMatlabTable;
 				else
