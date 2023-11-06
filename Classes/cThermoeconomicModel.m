@@ -229,8 +229,7 @@ classdef cThermoeconomicModel < cStatusLogger
             if checkReferenceState(obj,state)
                 obj.ReferenceState=state;
                 obj.printDebugInfo('Set Reference State: %s',state);
-                obj.setThermoeconomicDiagnosis;
-                obj.clearResults(cType.ResultId.RESULT_MODEL);
+                obj.triggerDiagnosisChange;
             end
         end
 
@@ -254,8 +253,7 @@ classdef cThermoeconomicModel < cStatusLogger
         % Set Diagnosis method
             if obj.checkDiagnosisMethod(value)
                 obj.DiagnosisMethod=value;
-                obj.setThermoeconomicDiagnosis;
-                obj.clearResults(cType.ResultId.RESULT_MODEL);
+                obj.triggerDiagnosisChange;
             end
         end
 
@@ -324,7 +322,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Input:
         %       varargin - Optional FP table name
         %           cType.Tables.TABLE_FP (default)
-        %           cType.Tables.COST_TABLE_FP       %
+        %           cType.Tables.COST_TABLE_FP
         %   Output:
         %       res - cResultInfo (DIAGRAM_FP)
             id=cType.ResultId.DIAGRAM_FP;
@@ -1332,6 +1330,12 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             res=true;
+        end
+
+        function triggerDiagnosisChange(obj)
+        % Trigger diagnosis parameters (ReferenceState, DiagnosisMethod) change
+            obj.setThermoeconomicDiagnosis;
+            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         function res=checkSummary(obj,value)

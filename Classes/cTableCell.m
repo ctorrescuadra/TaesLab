@@ -148,7 +148,7 @@ classdef (Sealed) cTableCell < cTableResult
             fprintf(fId,'%s\n',obj.getDescriptionLabel);
             fprintf(fId,'\n');
             fprintf(fId,'%s\n',header);
-            lines=repmat('-',1,length(header)+1);
+            lines=repmat('—',1,length(header)+1);
             fprintf(fId,'%s\n',lines);
             for i=1:obj.NrOfRows
                 fprintf(fId,sformat,data{i,:});

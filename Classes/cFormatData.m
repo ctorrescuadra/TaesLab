@@ -296,12 +296,13 @@ classdef cFormatData < cStatusLogger
 			NM=numel(obj.cfgMatrices);
 			NS=numel(obj.cfgSummary);
 			N=NT+NM+NS;
-			tIndex(N)=struct('id',N,'name','pI','resultId',0,'graph',0,'type',0,'tableId',0);
-			% Retrieve information for simple tables
+			tIndex(N)=struct('id',N,'name,'pI','description,'Process Irreversibility','resultId',0,'graph',0,'type',0,'tableId',0);
+			% Retrieve information for cell tables
 			for i=1:NT
 				id=id+1;
 				tIndex(id).id=id;
 				tIndex(id).name=obj.cfgTables(i).key;
+				tIndex(id).description=obj.cfgTables(i).description;
 				tIndex(id).resultId=obj.cfgTables(i).resultId;
 				tIndex(id).graph=cType.GraphType.NONE;
 				tIndex(id).type=cType.TableType.TABLE;
@@ -312,6 +313,7 @@ classdef cFormatData < cStatusLogger
 				id=id+1;
 				tIndex(id).id=id;
 				tIndex(id).name=obj.cfgMatrices(i).key;
+				tIndex(id).description=obj.cfgMatrices(i).description;
 				tIndex(id).resultId=obj.cfgMatrices(i).resultId;
 				tIndex(id).graph=obj.cfgMatrices(i).graph;
 				tIndex(id).type=cType.TableType.MATRIX;
@@ -322,6 +324,7 @@ classdef cFormatData < cStatusLogger
 				id=id+1;
 				tIndex(id).id=id;
 				tIndex(id).name=obj.cfgSummary(i).key;
+				tIndex(id).description=obj.cfgSummary(i).description;
 				tIndex(id).resultId=cType.ResultId.SUMMARY_RESULTS;
 				tIndex(id).graph=obj.cfgSummary(i).graph;
 				tIndex(id).type=cType.TableType.SUMMARY;
