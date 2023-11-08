@@ -324,8 +324,18 @@ classdef cDataModel < cStatusLogger
             obj.ModelName=name;
         end
 
+        function res = getTablesDirectory(obj,varmode)
+        % Get the list of available tables
+            res=getTablesDirectory(obj.FormatData,varmode);
+        end
+
+        function printTablesDirectory(obj)
+        % Print the list of available tables
+            printTablesDirectory(obj.FormatData);
+        end
+
         function res=getTable(obj,name)
-        % get a cell array with the values of the tables
+        % get the model table
             res=getTable(obj.ModelTables,name);
         end
       
@@ -485,7 +495,7 @@ classdef cDataModel < cStatusLogger
                     [~,idx]=find(wd.Values);idx=unique(idx);
                     colNames=['key',wd.Flows(jdx)];
                     rowNames=pNames(idx);
-                    values=wd.Values(jdx,idx);
+                    values=wd.Values(jdx,idx)';
 				    tbl=cTableData(num2cell(values),rowNames,colNames);
 				    tbl.setDescription(index);
 				    tables.(sheet)=tbl;

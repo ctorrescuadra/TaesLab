@@ -29,12 +29,12 @@ classdef cViewTable < cStatusLogger
 			obj=obj@cStatusLogger(cType.VALID);
 			% Parameters depending of software platform
 			if isOctave
-				param=struct('ColumnWidth',80,'RowWidth',20,...
-					'xScale',0.8,'yScale',0.8,'xoffset',10,...
+				param=struct('ColumnWidth',100,'RowWidth',20,...
+					'xScale',0.8,'yScale',0.8,'xoffset',35,'yoffset',0,...
 					'FontName','Consolas','FontSize',10);
 			else
 				param=struct('ColumnWidth',80,'RowWidth',23,...
-				'xScale',0.8,'yScale',0.8,'xoffset',10,...
+				'xScale',0.8,'yScale',0.8,'xoffset',15,'yoffset',30,...
 				'FontName','FixedWidth','FontSize',12);
 			end
 			% Set object properties
@@ -43,20 +43,21 @@ classdef cViewTable < cStatusLogger
 			obj.format=tbl.getColumnFormat;
 			obj.fontname=param.FontName;
 			obj.fontsize=param.FontSize;
-            if isa(tbl,'cTableResult')
-			    obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
-                obj.data=tbl.formatData;
-            else
-                obj.descr=tbl.Description; 
-                obj.data=tbl.Data;
-            end
 			% Set the window size and position
 			ss=get(groot,'ScreenSize');
 			obj.xsize=min(param.xScale*ss(3),tbl.NrOfCols*param.ColumnWidth-param.xoffset);
-			obj.ysize=min(param.yScale*ss(4),(tbl.NrOfRows+2)*param.RowWidth);
+			obj.ysize=min(param.yScale*ss(4),(tbl.NrOfRows+1)*param.RowWidth+param.yoffset);	
 			obj.xpos=(ss(3)-obj.xsize)/2;
 			obj.ypos=(ss(4)-obj.ysize)/2;
-			obj.wcols=repmat({param.ColumnWidth},1,tbl.NrOfCols);
+			if isa(tbl,'cTableResult')
+			    obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
+                obj.data=tbl.formatData;
+				obj.wcols=repmat({param.ColumnWidth},1,tbl.NrOfCols);
+            else
+                obj.descr=tbl.Description; 
+                obj.data=tbl.Data;
+				obj.wcols='auto';
+			end
 		end
 
 		function showTable(obj)

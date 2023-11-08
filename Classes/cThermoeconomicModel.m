@@ -85,7 +85,6 @@ classdef cThermoeconomicModel < cStatusLogger
         WasteFlows     % Names of the waste flows
         ResourceData   % Resource Data object
         ResourceCost   % Resource Cost object
-        FormatData     % cResultTableBuilder object
     end
 
     properties(Access=public)
@@ -506,11 +505,6 @@ classdef cThermoeconomicModel < cStatusLogger
             res=getWasteFlows(obj.DataModel);
         end
 
-        function res=get.FormatData(obj)
-        % get format data info
-            res=obj.fmt.PrintConfig;
-        end
-
         function res=getTableInfo(obj,name)
         % Get the dictionary info of table names
             res=getTableInfo(obj.fmt,name);
@@ -526,8 +520,18 @@ classdef cThermoeconomicModel < cStatusLogger
             res=getModelInfo(obj.results);
         end
 
+        function res = getTablesDirectory(obj,varargin)
+        % Get the list of available tables
+            res=getTablesDirectory(obj.fmt,varargin{:});
+        end
+
+        function printTablesDirectory(obj)
+        % Print the list of available tables
+            printTablesDirectory(obj.fmt);
+        end
+
         function res=getModelTables(obj)
-        % Get a cModelTables object with all tables of the active model
+        % Get a cResultInfo object with all tables of the active model
             id=cType.ResultId.RESULT_MODEL;
             res=obj.getResults(id);
             if isempty(res)

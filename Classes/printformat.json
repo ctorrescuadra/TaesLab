@@ -811,7 +811,7 @@
 	"summary": [
 		{
 			"id": 1,
-			"key": "dcp",
+			"key": "dpc",
 			"header": "Processes Direct Exergy Cost",
 			"type": 4,
 			"graph": 0,
