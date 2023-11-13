@@ -137,7 +137,7 @@ classdef cResultInfo < cStatusLogger
             log=cStatus(cType.VALID);
             tbl=obj.getTable(name);
             if isValid(tbl)
-                res.viewTable;
+                viewTable(tbl);
             else
                 log.printError('Table name %s does NOT exists',name);
             end

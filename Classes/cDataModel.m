@@ -324,16 +324,6 @@ classdef cDataModel < cStatusLogger
             obj.ModelName=name;
         end
 
-        function res = getTablesDirectory(obj,varmode)
-        % Get the list of available tables
-            res=getTablesDirectory(obj.FormatData,varmode);
-        end
-
-        function printTablesDirectory(obj)
-        % Print the list of available tables
-            printTablesDirectory(obj.FormatData);
-        end
-
         function res=getTable(obj,name)
         % get the model table
             res=getTable(obj.ModelTables,name);

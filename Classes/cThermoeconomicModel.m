@@ -520,16 +520,6 @@ classdef cThermoeconomicModel < cStatusLogger
             res=getModelInfo(obj.results);
         end
 
-        function res = getTablesDirectory(obj,varargin)
-        % Get the list of available tables
-            res=getTablesDirectory(obj.fmt,varargin{:});
-        end
-
-        function printTablesDirectory(obj)
-        % Print the list of available tables
-            printTablesDirectory(obj.fmt);
-        end
-
         function res=getModelTables(obj)
         % Get a cResultInfo object with all tables of the active model
             id=cType.ResultId.RESULT_MODEL;

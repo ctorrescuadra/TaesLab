@@ -37,9 +37,10 @@ function res=ShowProductiveDiagram(data)
     nodetable=table(nodenames',nodetypes','VariableNames',{'name','type'});
     res=digraph(A,nodetable,'omitselfloops');
     colors=eye(3);
+    name=['Productive Diagram / ',data.ModelName];
     nodecolors=colors(nodetypes(:),:);
     figure('menubar','none','name','Productive Diagram','resize','on','numbertitle','off',...
         'units','normalized','position',[0.1 0.1 0.75 0.75],'color',[1 1 1]);
     plot(res,"Layout","auto","NodeLabel",nodenames,"NodeColor",nodecolors,"Interpreter","none");
-    title('Productive Diagram','fontsize',14);
+    title(name,'fontsize',14,"Interpreter","none");
 end

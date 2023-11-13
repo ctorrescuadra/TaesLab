@@ -117,15 +117,15 @@ classdef (Sealed) cTableCell < cTableResult
             hfmt=cell(1,obj.NrOfCols);
             sfmt=cell(1,obj.NrOfCols);
             for j=1:obj.NrOfCols
-                if ischar(obj.Values{2,j})
+                if isNumCellArray(obj.Values(2:obj.NrOfRows,j))
+                    tmp=regexp(obj.Format{j},'[0-9]+','match');
+                    hfmt{j}=[' %',tmp{1},'s'];
+                    sfmt{j}=[' ',obj.Format{j}];
+                else
                     tmp=obj.Values(:,j);
                     len=max(cellfun(@length,tmp))+1;
                     hfmt{j}=[' %-',num2str(len),'s'];
                     sfmt{j}=hfmt{j};
-                else
-                    tmp=regexp(obj.Format{j},'[0-9]+','match');
-                    hfmt{j}=[' %',tmp{1},'s'];
-                    sfmt{j}=[' ',obj.Format{j}];
                 end
             end
             % Determine output depending of table definition

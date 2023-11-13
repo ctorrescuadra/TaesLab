@@ -1,4 +1,3 @@
-
 {
 	"tables": [
 		{
@@ -813,6 +812,7 @@
 			"id": 1,
 			"key": "dpc",
 			"header": "Processes Direct Exergy Cost",
+			"node": 1,
 			"type": 4,
 			"graph": 0,
 			"options": 0
@@ -821,6 +821,7 @@
 			"id": 2,
 			"key": "dpuc",
 			"header": "Processes Direct Unit Exergy Cost",
+			"node": 1,
 			"type": 5,
 			"graph": 5,
 			"options": 1
@@ -829,6 +830,7 @@
 			"id": 3,
 			"key": "dfc",
 			"header": "Flows Direct Exergy Cost",
+			"node": 2,
 			"type": 4,
 			"graph": 0,
 			"options": 0
@@ -837,6 +839,7 @@
 			"id": 4,
 			"key": "dfuc",
 			"header": "Flows Direct Unit Exergy Cost",
+			"node": 2,
 			"type": 5,
 			"graph": 5,
 			"options": 3
@@ -845,6 +848,7 @@
 			"id": 5,
 			"key": "gpc",
 			"header": "Processes Generalized Cost",
+			"node": 1,
 			"type": 6,
 			"graph": 0,
 			"options": 0
@@ -853,6 +857,7 @@
 			"id": 6,
 			"key": "gpuc",
 			"header": "Processes Generalized Unit Cost",
+			"node": 1,
 			"type": 7,
 			"graph": 5,
 			"options": 5
@@ -861,6 +866,7 @@
 			"id": 7,
 			"key": "gfc",
 			"header": "Flows Generalized Cost",
+			"node": 2,
 			"type": 6,
 			"graph": 0,
 			"options": 0
@@ -869,6 +875,7 @@
 			"id": 8,
 			"key": "gfuc",
 			"header": "Flows Generalized Unit Cost",
+			"node": 2,
 			"type": 7,
 			"graph": 5,
 			"options": 7
@@ -877,6 +884,7 @@
 			"id": 9,
 			"key": "exergy",
 			"header": "Flows Exergy",
+			"node": 2,
 			"type": 3,
 			"graph": 0,
 			"options": 0
@@ -885,6 +893,7 @@
 			"id": 10,
 			"key": "pku",
 			"header": "Process Unit Consumption",
+			"node": 1,
 			"type": 5,
 			"graph": 5,
 			"options": 1
@@ -893,6 +902,7 @@
 			"id": 11,
 			"key": "pI",
 			"header": "Process Irreversibility",
+			"node": 1,
 			"type": 3,
 			"graph": 0,
 			"options": 0

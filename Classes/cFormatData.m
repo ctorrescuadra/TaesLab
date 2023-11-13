@@ -4,19 +4,10 @@ classdef cFormatData < cTablesDefinition
 % 	Methods:
 %		res=obj.getFormat(id)
 %		res=obj.getUnit(id)
-%		res=obj.getTableDescription(id)
-%   	res=obj.getMatrixDescription(id)
 %		res=obj.getTableHeader(id)
-%		res=obj.getNumColumns(id)
-%		res=obj.getFieldNames(id)
 %		res=obj.getTableFormat(id)
-%		res=obj.getMatrixFormat(id)
 %		res=obj.getTableUnits(id)
-%		res=obj.getMatrixUnit(id)
-%		res=obj.getMatrixName(id)
-%		[row,col]=obj.getMatrixTotal(id)
-%   	res=obj.PrintConfig;
-% See also printformat.json, cResultsTableBuilder
+% See also printformat.json, cTablesDefinition
 %	
 	methods
 		function obj=cFormatData(format)
@@ -51,14 +42,14 @@ classdef cFormatData < cTablesDefinition
             end
 		end
 
-		function res=getResultInfo(obj,name)
+		function res=getTableInfo(obj,name)
 		% get the resultId of a table from tables dictionary
 			res=[];
 			idx=getIndex(obj.tDict,name);
 			if cType.isEmpty(idx)
 				return
 			end
-			res=obj.tableIndex(idx).resultId;
+			res=obj.tableIndex(idx);
 		end
     end
 
@@ -80,7 +71,7 @@ classdef cFormatData < cTablesDefinition
 		function res=getTableHeader(obj,props)
 		% get the table header cell array
 		%  Input:
-		%   id - Table id
+		%   props - Table properties
 			units=obj.getTableUnits(props);
 			header={props.fields.header};
 			res=cellfun(@strcat,header,units,'UniformOutput',false);
@@ -89,7 +80,7 @@ classdef cFormatData < cTablesDefinition
 		function format=getTableFormat(obj,props)
 		% get an array cell with the format (C-like) of columns table
 		%  Input:
-		%   id - Table id
+		%   props - Table properties
 			idx=[props.fields.type];
 			format={obj.cfgTypes(idx).format};
         end
@@ -97,7 +88,7 @@ classdef cFormatData < cTablesDefinition
 		function units=getTableUnits(obj,props)
 		% get a cell array with the units for each table column
 		%   Input:
-		%    id - Table id
+		%    id - Table properties
 			idx=[props.fields.type];
 			units={obj.cfgTypes(idx).unit};
 		end

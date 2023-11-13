@@ -33,7 +33,14 @@ classdef cTableData < cTable
 
         function res=getColumnFormat(obj)
         % Get the format of each column (TEXT or NUMERIC)
-            res=repmat(cType.colType(1),1,obj.NrOfCols);
+            res=cell(1:obj.NrOfCols);
+            for i=1:obj.NrOfCols-1
+                if isNumCellArray(obj.Data(:,i))
+                    res{i}=cType.colType{2};
+                else
+                    res{i}=cType.colType{1};
+                end
+            end
         end
     end
     methods (Static,Access=public)

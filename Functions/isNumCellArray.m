@@ -11,9 +11,5 @@ function res=isNumCellArray(c)
     if ~res
         return
     end
-    try
-        cell2mat(c);
-    catch
-        res=false;
-    end
+    res=all(cellfun(@(x) isnumeric(x),c(:)));
 end

@@ -83,16 +83,30 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=cellfun(@(x) sprintf(obj.Format,x),obj.Data,'UniformOutput',false);
         end
 
-        function res=getColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            res=repmat(cType.colType(2),1,obj.NrOfCols);
-        end
-
         function res=getFormattedStruct(obj,fmt)
         % Get table as formatted structure
         %  Input:
         %   fmt - (true/false) use table format 
             res=obj.getFormattedCell(fmt);
+        end
+
+        function res=getMatlabTable(obj)
+        % Return as matlab table if apply
+            res=getMatlabTable@cTable(obj);
+            if isMatlab
+                res=addprop(res,["State","GraphType","GraphOptions","Format","Units"],...
+                    ["table","table","table","table","table"]);
+                res.Properties.CustomProperties.State=obj.State;
+                res.Properties.CustomProperties.GraphType=obj.GraphType;
+                res.Properties.CustomProperties.GraphOptions=obj.GraphOptions;
+                res.Properties.CustomProperties.Format=obj.Format;
+                res.Properties.CustomProperties.Units=obj.Unit;
+            end
+        end
+
+        function res=getColumnFormat(obj)
+        % Get the format of each column (TEXT or NUMERIC)
+            res=repmat(cType.colType(2),1,obj.NrOfCols);
         end
 
         function res=getDescriptionLabel(obj)
@@ -203,18 +217,5 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=digraph(source,target,values,"omitselfloops");
         end
 
-        function res=getMatlabTable(obj)
-        % Return as matlab table if apply
-            res=getMatlabTable@cTable(obj);
-            if isMatlab
-                res=addprop(res,["State","GraphType","GraphOptions","Format","Units"],...
-                    ["table","table","table","table","table"]);
-                res.Properties.CustomProperties.State=obj.State;
-                res.Properties.CustomProperties.GraphType=obj.GraphType;
-                res.Properties.CustomProperties.GraphOptions=obj.GraphOptions;
-                res.Properties.CustomProperties.Format=obj.Format;
-                res.Properties.CustomProperties.Units=obj.Unit;
-            end
-        end
     end
 end

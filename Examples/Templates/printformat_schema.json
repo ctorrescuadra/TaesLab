@@ -138,6 +138,11 @@
                 "header": {
                     "type": "string"
                 },
+                "node": {
+                    "type": "integer",
+                    "minumum" : 1,
+                    "maximum" : 2
+                },
                 "type": {
                     "$ref": "#/definitions/typeFormat"
                 },
@@ -152,7 +157,8 @@
             "required": [
                 "id",
                 "key",
-                "header", 
+                "header",
+                "node", 
                 "type",
                 "graph",
                 "options"
