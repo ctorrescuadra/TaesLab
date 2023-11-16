@@ -578,7 +578,7 @@
 		{
 			"id": 16,
 			"key": "wd",
-			"number": true,
+			"number": false,
 			"description": "Waste Definition Table",
 			"resultId": 8,
 			"columns": 3,

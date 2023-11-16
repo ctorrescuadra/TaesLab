@@ -140,7 +140,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             sformat=[fkey,repmat(obj.Format,1,ncols-1),'\n'];
             % Print formatted table
             header=sprintf(hformat,obj.ColNames{:});
-            lines=repmat('—',1,length(header)+1);   
+            lines=cType.getLine(length(header)+1);
 			fprintf(fId,'\n');
             fprintf(fId,'%s\n',obj.getDescriptionLabel);
             fprintf(fId,'\n');       

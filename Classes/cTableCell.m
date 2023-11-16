@@ -114,18 +114,14 @@ classdef (Sealed) cTableCell < cTableResult
             if nargin==1
                 fId=1;
             end
-            hfmt=cell(1,obj.NrOfCols);
-            sfmt=cell(1,obj.NrOfCols);
+            wcol=obj.getColWidth;
+            hfmt=arrayfun(@(x) ['%-',num2str(x),'s'],wcol,'UniformOutput',false);
+            sfmt=hfmt;
             for j=1:obj.NrOfCols
-                if isNumCellArray(obj.Values(2:obj.NrOfRows,j))
+                if isNumCellArray(obj.Values(2:end,j))
                     tmp=regexp(obj.Format{j},'[0-9]+','match');
                     hfmt{j}=[' %',tmp{1},'s'];
                     sfmt{j}=[' ',obj.Format{j}];
-                else
-                    tmp=obj.Values(:,j);
-                    len=max(cellfun(@length,tmp))+1;
-                    hfmt{j}=[' %-',num2str(len),'s'];
-                    sfmt{j}=hfmt{j};
                 end
             end
             % Determine output depending of table definition
@@ -148,7 +144,7 @@ classdef (Sealed) cTableCell < cTableResult
             fprintf(fId,'%s\n',obj.getDescriptionLabel);
             fprintf(fId,'\n');
             fprintf(fId,'%s\n',header);
-            lines=repmat('—',1,length(header)+1);
+            lines=cType.getLine(length(header)+1);
             fprintf(fId,'%s\n',lines);
             for i=1:obj.NrOfRows
                 fprintf(fId,sformat,data{i,:});

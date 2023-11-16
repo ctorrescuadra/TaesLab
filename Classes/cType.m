@@ -139,6 +139,7 @@ classdef cType
 		% Types of define formats
 		Format=struct('NODE',1,'TEXT',2,'EXERGY',3,'EXERGY_COST',4,'EXERGY_UNIT_COST',5,...
 		'GENERALIZED_COST',6,'GENERALIZED_UNIT_COST',7,'DIAGNOSIS',8,'PERCENTAGE',9);
+		Symbols=jsondecode('{"dash": "\u2014","delta": "\u0394"}');
         % Result Id types
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
             'THERMOECONOMIC_DIAGNOSIS',4,'SUMMARY_RESULTS',5,'PRODUCTIVE_DIAGRAM',6,'DIAGRAM_FP',7,'WASTE_ANALYSIS',8,...
@@ -397,6 +398,10 @@ classdef cType
             [~,~,ext]=fileparts(filename);
             res=strcmp(fext,ext);
         end
+
+		function res=getLine(length)
+			res=repmat(cType.Symbols.dash,1,length);
+		end
 
 		%%%
 		% Other functions

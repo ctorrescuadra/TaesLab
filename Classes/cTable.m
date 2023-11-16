@@ -88,6 +88,14 @@ classdef (Abstract) cTable < cStatusLogger
                 log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
             end
         end
+
+        function res=getColWidth(obj)
+            M=obj.NrOfCols;
+            res=zeros(1,M);
+            for j=1:M
+                res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
+            end
+        end
         
         function res=size(obj,dim)
         % Overload size function

@@ -1,6 +1,7 @@
 classdef cTablesDefinition < cStatusLogger
     properties(GetAccess=public,SetAccess=private)
         TablesDefinition  % Tables properties
+        TablesDirectory   % Tables directory
     end
     properties (Access=protected)
         cfgTables 	 % Cell tables configuration
@@ -10,7 +11,6 @@ classdef cTablesDefinition < cStatusLogger
         tDict        % Tables dictionnary
         tableIndex   % Tables index
     end
-
     methods
         function obj=cTablesDefinition()
             obj=obj@cStatusLogger(cType.VALID);          
@@ -29,6 +29,7 @@ classdef cTablesDefinition < cStatusLogger
             obj.cfgSummary=config.summary;
             obj.cfgTypes=config.format;
             obj.buildTablesDictionary;
+            obj.TablesDirectory=[];
         end
 
         function res=get.TablesDefinition(obj)
@@ -56,77 +57,89 @@ classdef cTablesDefinition < cStatusLogger
         end
 
         function res=getTablesDirectory(obj,varmode)
-        % Get the tables directory in diferent format
-        %   Input:
-        %       varmode - (optional) output table format
             if nargin==1
-                varmode=cType.DEFAULT_VARMODE;
+                varmode=cType.VarMode.NONE;
             end
-            % Get tables directory as cTableData
-            tI=obj.tableIndex;
-            N=numel(tI);
-            colNames={'Key','Description','ResultId','Type','Graph'};
-            rowNames={tI.name};
-            %keys=[fieldnames(cType.Tables);fieldnames(cType.SummaryTables)];
-            data=cell(N,4);
-            data(:,1)=[tI.code];
-            data(:,2)=[cType.Results([tI.resultId])];
-            data(:,3)=[cType.TypeTables([tI.type])];
-            data(:,4)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
-            tbl=cTableData(data,rowNames,colNames);
-            tbl.setDescription(cType.TableDataIndex.DIRECTORY)
-            % Convert to diferent formats
+            if isempty(obj.TablesDirectory)
+                obj.buildTablesDirectory;
+            end
+            tbl=obj.TablesDirectory;
             switch varmode
-                case cType.VarMode.CELL
-                    res=tbl.Values;
-                case cType.VarMode.STRUCT
-                    res=getStructData(tbl);
-                case cType.VarMode.TABLE
-                    if isMatlab
-                        res=tbl.getMatlabTable;
-                    else
-                        res=tbl;
-                    end
-                otherwise
+            case cType.VarMode.NONE
+                res=tbl;
+            case cType.VarMode.CELL
+                res=tbl.Values;
+            case cType.VarMode.STRUCT
+                res=getStructData(tbl);
+            case cType.VarMode.TABLE
+                if isMatlab
+                    res=getMatlabTable(tbl);
+                else
                     res=tbl;
+                end
+            otherwise
+                res=tbl;
             end
         end
 
-        function printTable(obj)
+        function printTable(obj,fid)
         % Print the tables directory
-            res=getTablesDirectory(obj);
-            lfmt='%-12s %-36s %-28s %-8s %-6s\n';
-            header=sprintf(lfmt,res.ColNames{:});
-            lines=repmat('—',1,length(header)+1);
-            fprintf('\n')
-            fprintf('%s',header);
-            fprintf('%s\n',lines);
-            for i=2:size(res,1)
-                fprintf(lfmt,res.Values{i,:});
+            if nargin==1
+                fid=1;
             end
-            fprintf('\n');
+            if isempty(obj.TablesDirectory)
+                obj.buildTablesDirectory;
+            end
+            tbl=obj.TablesDirectory;
+            wcol=getColWidth(tbl);
+            lfmt=arrayfun(@(x) ['%-',num2str(x),'s'],wcol,'UniformOutput',false);
+            lformat=[lfmt{:},'\n'];
+            header=sprintf(lformat,tbl.ColNames{:});
+            lines=cType.getLine(length(header)+1);
+            fprintf(fid,'\n');
+            fprintf(fid,'%s',header);
+            fprintf(fid,'%s\n',lines);
+            for i=1:tbl.NrOfRows
+                fprintf(fid,lformat,tbl.RowNames{i},tbl.Data{i,:});
+            end
+            fprintf(fid,'\n');
         end
 
         function viewTable(obj)
-            tbl=obj.getTablesDirectory;
-            wcols=8*[35,26,9,7];
-            ColumnWidth=num2cell(wcols);
+        % View the Tables Directory as GUI
+            % Get the Tables Directory
+            if isempty(obj.TablesDirectory)
+                obj.buildTablesDirectory;
+            end
+            tbl=obj.TablesDirectory;
+            % Define the uitable parameters
+            if isOctave
+				param=struct('xScale',8,'xOffset',-8,...
+                    'RowWidth',23,'yScale',0.8,'yOffset',-10,...
+					'FontName','Consolas','FontSize',10);
+			else
+				param=struct('xScale',8,'xOffset',-8,...
+                    'RowWidth',23,'yScale',0.8,'yOffset',0,...
+				    'FontName','FixedWidth','FontSize',12);
+            end
+            wcols=param.xScale*getColWidth(tbl);
+            ColumnWidth=num2cell(wcols(2:end));
             ss=get(groot,'ScreenSize');
-            xsize=sum(wcols)+120;
-			ysize=min(0.8*ss(4),(tbl.NrOfRows+1)*23);	
+            xsize=sum(wcols)+param.xOffset;
+			ysize=min(0.8*ss(4),(tbl.NrOfRows+1)*param.RowWidth)+param.yOffset;	
 			xpos=(ss(3)-xsize)/2;
 			ypos=(ss(4)-ysize)/2;
+            % Show the table
             h=uifigure('menubar','none','toolbar','none','name',tbl.Description,...
 				'numbertitle','off',...
 				'position',[xpos,ypos,xsize,ysize]);
    			uitable (h, 'Data', tbl.Data,...
-				'RowName', tbl.RowNames, 'ColumnName', tbl.ColNames,...
+				'RowName', tbl.RowNames, 'ColumnName', tbl.ColNames(2:end),...
 				'ColumnWidth',ColumnWidth,...
-				'ColumnFormat',{'char','char','char','char'},...
-				'FontName','FixedWidth','FontSize',12,...
+				'ColumnFormat',tbl.getColumnFormat,...
+				'FontName',param.FontName,'FontSize',param.FontSize,...
 				'Units', 'normalized','Position',[0,0,1,1]);
         end
-        %
     end
 
     methods(Access=protected)
@@ -218,6 +231,23 @@ classdef cTablesDefinition < cStatusLogger
             % Create the dictionary (name,id)
             obj.tDict=td;
             obj.tableIndex=tIndex;
+        end
+ 
+        function buildTablesDirectory(obj)
+        % Get the tables directory as cTableData
+            tI=obj.tableIndex;
+            N=numel(tI);
+            colNames={'Table','Key','Results','Type','Graph'};
+            rowNames={tI.name};
+            %keys=[fieldnames(cType.Tables);fieldnames(cType.SummaryTables)];
+            data=cell(N,4);
+            data(:,1)=[tI.code];
+            data(:,2)=[cType.Results([tI.resultId])];
+            data(:,3)=[cType.TypeTables([tI.type])];
+            data(:,4)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
+            tbl=cTableData(data,rowNames,colNames);
+            tbl.setDescription(cType.TableDataIndex.DIRECTORY);
+            obj.TablesDirectory=tbl;
         end
 	end
 end

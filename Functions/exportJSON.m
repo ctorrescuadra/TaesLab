@@ -9,12 +9,12 @@ function log=exportJSON(data,filename)
 %       log - cLoggerStatus object containing status and error messages
 %
 	log=cStatusLogger(cType.VALID);
-    if (nargin~=2) || (~ischar(filename)) || ~iscell(data)
+    if (nargin~=2) || (~ischar(filename)) || ~isstruct(data)
         log.messageLog(cType.ERROR,'Invalid input arguments');
         return
     end
     if ~cType.checkFileWrite(filename)
-        log.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+        log.messageLog(cType.ERROR,'Invalid file name: %s',filename)
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.JSON)

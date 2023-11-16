@@ -590,7 +590,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   values - Malfunction table values
             tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION);
             rowNames=obj.processKeys;
-            colNames=horzcat(' ',rowNames(1:end-1),'ΔPs');
+            DPt=[cType.Symbols.delta,'Pt'];
+            colNames=horzcat(' ',rowNames(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
             
@@ -601,10 +602,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION_COST);
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
             if method==cType.DiagnosisMethod.WASTE_INTERNAL
-                colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPt*');
+                DPt=[cType.Symbols.delta,'Pt*'];
             else
-                colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPs*');
+                DPt=[cType.Symbols.delta,'Ps*'];
             end
+            colNames=horzcat(' ',obj.processKeys(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
             
@@ -614,7 +616,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   values - Irreversibility table values
             tp=obj.getMatrixTableProperties(cType.Tables.IRREVERSIBILITY_VARIATION);
             rowNames=[obj.processKeys,'MF'];
-            colNames=horzcat(' ',obj.processKeys(1:end-1),'ΔPt');
+            DPt=[cType.Symbols.delta,'Pt'];
+            colNames=horzcat(' ',obj.processKeys(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
 
