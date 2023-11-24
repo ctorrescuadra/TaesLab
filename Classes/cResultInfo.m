@@ -618,7 +618,7 @@ classdef cResultInfo < cStatusLogger
             end
         end
 
-        function showFlowsDiagram(obj)
+        function showProductiveDiagram(obj,graph)
         % Show the flows diagram of the productive structure [Only Matlab]
         %   Usage:
         %       obj.showFlowsDiagram;
@@ -629,13 +629,16 @@ classdef cResultInfo < cStatusLogger
                 log.printError('Function not implemented in Octave');
                 return
             end
-            if obj.ResultId ~= cType.ResultId.PRODUCTIVE_DIAGRAM
-                if ~isValid(obj)
-                    log.printError('Invalid cResultInfo object %s',obj.ResultName);
-                    return
-                end   
+            if nargin==1
+                graph=cType.Tables.FLOWS_DIAGRAM;
             end
-            showGraph(obj.Tables.fat);
+            tbl=obj.getTable(graph);
+            if isValid(tbl) %&& isGraph(tbl)
+                showGraph(tbl);
+            else
+                log.printError('Invalid graph type: %s',graph);
+                return
+            end
         end
 
         function showGraph(obj,graph,varargin)

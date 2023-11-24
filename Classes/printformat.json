@@ -6,6 +6,7 @@
 			"number": false,
 			"description": "Flows Exergy Cost",
 			"resultId": 3,
+			"graph": 0,
 			"columns": 8,
 			"fields": [
 				{
@@ -56,6 +57,7 @@
 			"number": false,
 			"description": "Flows Generalized Cost",
 			"resultId": 3,
+			"graph": 0,
 			"columns": 10,
 			"fields": [
 				{
@@ -116,6 +118,7 @@
 			"number": false,
 			"description": "Process Exergy Cost",
 			"resultId": 3,
+			"graph": 0,
 			"columns": 6,
 			"fields": [
 				{
@@ -156,6 +159,7 @@
 			"number": false,
 			"description": "Process Unit Exergy Cost",
 			"resultId": 3,
+			"graph": 0,
 			"columns": 7,
 			"fields": [
 				{
@@ -201,6 +205,7 @@
 			"number": false,
 			"description": "Process Generalized Cost",
 			"resultId": 3,
+			"graph": 0,
 			"columns": 8,
 			"fields": [
 				{
@@ -251,6 +256,7 @@
 			"number": false,
 			"description": "Process Generalized Unit Cost",
 			"resultId": 3,
+			"graph": 0,
 			"columns": 7,
 			"fields": [
 				{
@@ -296,6 +302,7 @@
 			"number": false,
 			"description": "Diagnosis Summary",
 			"resultId": 4,
+			"graph": 0,
 			"columns": 7,
 			"fields": [
 				{
@@ -341,6 +348,7 @@
 			"number": true,
 			"description": "Processes Definition Table",
 			"resultId": 1,
+			"graph": 0,
 			"columns": 4,
 			"fields": [
 				{
@@ -371,6 +379,7 @@
 			"number": true,
 			"description": "Productive Groups Definition Table",
 			"resultId": 1,
+			"graph": 0,
 			"columns": 3,
 			"fields": [
 				{
@@ -396,6 +405,7 @@
 			"number": true,
 			"description": "Flows Definition Table",
 			"resultId": 1,
+			"graph": 0,
 			"columns": 4,
 			"fields": [
 				{
@@ -426,6 +436,7 @@
 			"number": false,
 			"description": "Processes Exergy Table",
 			"resultId": 2,
+			"graph": 0,
 			"columns": 6,
 			"fields": [
 				{
@@ -466,6 +477,7 @@
 			"number": false,
 			"description": "Productive Groups Exergy Table",
 			"resultId": 2,
+			"graph": 0,
 			"columns": 3,
 			"fields": [
 				{
@@ -491,6 +503,7 @@
 			"number": false,
 			"description": "Flows Exergy Table",
 			"resultId": 2,
+			"graph": 0,
 			"columns": 4,
 			"fields": [
 				{
@@ -521,6 +534,7 @@
 			"number": false,
 			"description": "Diagram FP",
 			"resultId": 7,
+			"graph": 0,
 			"columns": 4,
 			"fields": [
 				{
@@ -551,6 +565,7 @@
 			"number": false,
 			"description": "Cost Diagram FP",
 			"resultId": 7,
+			"graph": 0,
 			"columns": 4,
 			"fields": [
 				{
@@ -581,6 +596,7 @@
 			"number": false,
 			"description": "Waste Definition Table",
 			"resultId": 8,
+			"graph": 0,
 			"columns": 3,
 			"fields": [
 				{
@@ -606,6 +622,7 @@
 			"number": false,
 			"description": "Flows Diagram",
 			"resultId": 6,
+			"graph": 0,
 			"columns": 3,
 			"fields": [
 				{
@@ -627,10 +644,37 @@
 		},
 		{
 			"id": 18,
+			"key": "fpat",
+			"number": false,
+			"description": "Flow-Process Diagram",
+			"resultId": 6,
+			"graph": 7,
+			"columns": 3,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				}
+			]
+		},
+		{
+			"id": 19,
 			"key": "pat",
 			"number": false,
 			"description": "Productive Diagram",
 			"resultId": 6,
+			"graph": 7,
 			"columns": 3,
 			"fields": [
 				{

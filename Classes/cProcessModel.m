@@ -19,7 +19,7 @@ classdef cProcessModel < cExergyModel
 		% Algorithm constructor for the Table FP
 		%   rex: cExergyData object
 			obj=obj@cExergyModel(rex);
-			tbl=obj.getFlowProcessTable;
+			tbl=obj.FlowProcessTable;
 			obj.mgP=divideCol(tbl.tP,obj.FlowsExergy);
 			obj.mgF=divideCol(tbl.tF(:,1:end-1),obj.FuelExergy);
 			mgV=divideCol(tbl.tV,obj.FlowsExergy);

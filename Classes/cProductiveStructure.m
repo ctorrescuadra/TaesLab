@@ -207,6 +207,14 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 				 x.AP(1:end-1,:), zeros(N,M), zeros(N,N)];
 		end
 
+		function res=FlowProcessMatrix(obj)
+		% Get the Flow-Process Adjacency Matrix
+			x=obj.AdjacencyMatrix;
+			N=obj.NrOfProcesses;
+			res=[x.AE*x.AS,x.AE*x.AF(:,1:end-1);...
+			x.AP(1:end-1,:)*x.AS,zeros(N,N)];
+		end
+
 		function res=getConfigInfo(obj)
 		% Get the Productive Structure Config info
 			res=struct('NrOfFlows',obj.NrOfFlows,'NrOfProcesses',obj.NrOfProcesses,...

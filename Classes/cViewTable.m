@@ -34,7 +34,7 @@ classdef cViewTable < cStatusLogger
 					'FontName','Consolas','FontSize',10);
 			else
 				param=struct('ColumnWidth',80,'RowWidth',23,...
-				'xScale',0.8,'yScale',0.8,'xoffset',10,'yoffset',30,...
+				'xScale',0.8,'yScale',0.8,'xoffset',10,'yoffset',20,...
 				'FontName','FixedWidth','FontSize',12);
 			end
 			% Set object properties
@@ -54,9 +54,11 @@ classdef cViewTable < cStatusLogger
                 obj.data=tbl.formatData;
 				obj.wcols=repmat({param.ColumnWidth},1,tbl.NrOfCols);
             else
+				tmp=8*getColumnWidth(tbl);
                 obj.descr=tbl.Description; 
                 obj.data=tbl.Data;
-				obj.wcols='auto';
+				obj.wcols=num2cell(tmp(2:end));
+				obj.xsize=sum(tmp)+param.xoffset;
 			end
 		end
 

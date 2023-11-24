@@ -64,7 +64,7 @@ classdef cGraphResults < cStatusLogger
             case cType.GraphType.DIGRAPH       
 				    obj.showDigraph;
             case cType.GraphType.DIAGRAM_FP
-                    obj.showDigraph;
+                    obj.showDiagramFP;
 			otherwise
 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
 				return
@@ -146,19 +146,29 @@ classdef cGraphResults < cStatusLogger
 		% Plot Productive and FP digraphs
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
+			ax=axes(f);    
+			% Plot the digraph    
+			plot(ax,obj.xValues,"Layout","auto","interpreter","none");
+			title(ax,obj.Title,'fontsize',14);
+		end
+
+		function showDiagramFP(obj)
+			tbl=obj.xValues;
+            source=tbl(:,1);
+            target=tbl(:,2);
+            values=cell2mat(tbl(:,3));
+            dg=digraph(source,target,values,"omitselfloops");
+			f=figure('name',obj.Name, 'numbertitle','off', ...
+				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
 			ax=axes(f);
-			% Plot the digraph with colobar     
 			if obj.isColorbar
 				r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 				colormap(red2blue);
-				plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
-                c=colorbar(ax);
-			    c.Label.String=obj.xLabel;
+				plot(ax,dg,"Layout","auto","EdgeCData",dg.Edges.Weight,"EdgeColor","flat");
+				c=colorbar(ax);
+				c.Label.String=obj.xLabel;
 				c.Label.FontSize=12;
-			else
-				plot(ax,obj.xValues,"Layout","auto","interpreter","none");
 			end
-			title(ax,obj.Title,'fontsize',14);
 		end
 	end
    
@@ -297,7 +307,8 @@ classdef cGraphResults < cStatusLogger
 			end
             obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
-            obj.xValues=getDigraphFP(tbl);
+            mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
+            obj.xValues=buildAdjacencyTableFP(mFP,tbl.RowNames);
             obj.isColorbar=true;
             obj.Legend={};
 			obj.yValues=[];

@@ -65,15 +65,16 @@ classdef cType
         GENERALIZED=2             % Generalized Cost Tables Bit
 		CAPACITY=8	              % Initial capacity for cQueue and cStack
 		MAX_RESULT=4              % Number of Results in cModelResults
-		MAX_RESULT_INFO=12        % Maximun cResultInfo groups
+		MAX_RESULT_INFO=10        % Maximun cResultInfo groups
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance
+		DEFAULT_NUM_LENGHT=10     % Default number length (use in cTableData)
 		FUEL='FUEL'       % Fuel type option text
 		PRODUCT='PRODUCT' % Product type option text
 		FORMAT_ID='%3d'   % Line number format
 		% Node types
-		NodeType=struct('PROCESS',1,'FLOW',2,'STREAM',3);
+		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3);
 		% Types of processes
 		Process=struct('PRODUCTIVE',0,'ENVIRONMENT',2,'DISSIPATIVE',4);
         % Types of Streams 
@@ -123,7 +124,7 @@ classdef cType
 			'PROCESS_ICT','dict','PROCESS_GENERAL_ICT','gict','FLOW_ICT','dfict','FLOW_GENERAL_ICT','gfict',...
 			'DIAGNOSIS','dgn','MALFUNCTION','mf','MALFUNCTION_COST','mfc','IRREVERSIBILITY_VARIATION','dit',...
 			'WASTE_DEFINITION','wd','WASTE_ALLOCATION','wa','WASTE_RECYCLING_DIRECT','rad','WASTE_RECYCLING_GENERAL','rag',...
-			'DIAGRAM_FP','atfp','COST_DIAGRAM_FP','atcfp','FLOWS_DIAGRAM','fat','PRODUCTIVE_DIAGRAM','pat',...
+			'DIAGRAM_FP','atfp','COST_DIAGRAM_FP','atcfp','FLOWS_DIAGRAM','fat','FLOW_PROCESS_DIAGRAM','fpat','PRODUCTIVE_DIAGRAM','pat',...
 			'SUMMARY_EXERGY','exergy','SUMMARY_UNIT_CONSUMPTION','pku','SUMMARY_IRREVERSIBILITY','pI',...
 			'SUMMARY_PROCESS_COST','dpc','SUMMARY_PROCESS_UNIT_COST','dpuc',...
 			'SUMMARY_FLOW_COST','dfc','SUMMARY_FLOW_UNIT_COST','dfuc',...
@@ -139,6 +140,7 @@ classdef cType
 		% Types of define formats
 		Format=struct('NODE',1,'TEXT',2,'EXERGY',3,'EXERGY_COST',4,'EXERGY_UNIT_COST',5,...
 		'GENERALIZED_COST',6,'GENERALIZED_UNIT_COST',7,'DIAGNOSIS',8,'PERCENTAGE',9);
+		% Special symbols unicode (simple dash - \u002D)
 		Symbols=jsondecode('{"dash": "\u2014","delta": "\u0394"}');
         % Result Id types
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...

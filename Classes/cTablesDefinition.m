@@ -91,7 +91,7 @@ classdef cTablesDefinition < cStatusLogger
                 obj.buildTablesDirectory;
             end
             tbl=obj.TablesDirectory;
-            wcol=getColWidth(tbl);
+            wcol=getColumnWidth(tbl);
             lfmt=arrayfun(@(x) ['%-',num2str(x),'s'],wcol,'UniformOutput',false);
             lformat=[lfmt{:},'\n'];
             header=sprintf(lformat,tbl.ColNames{:});
@@ -122,7 +122,7 @@ classdef cTablesDefinition < cStatusLogger
                     'RowWidth',23,'yScale',0.8,'yOffset',0,...
 				    'FontName','FixedWidth','FontSize',12);
             end
-            wcols=param.xScale*getColWidth(tbl);
+            wcols=param.xScale*getColumnWidth(tbl);
             ColumnWidth=num2cell(wcols(2:end));
             ss=get(groot,'ScreenSize');
             xsize=sum(wcols)+param.xOffset;

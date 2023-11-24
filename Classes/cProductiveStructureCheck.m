@@ -295,7 +295,7 @@ classdef cProductiveStructureCheck < cResultId
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
-                            if (obj.cprc{k}.type == cType.Process.DISSIPATIVE)
+                            if (obj.cprc{k}.typeId == cType.Process.DISSIPATIVE)
 					    	    obj.messageLog(cType.WARNING,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
                             end
                         end		
@@ -313,7 +313,7 @@ classdef cProductiveStructureCheck < cResultId
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
-                            if (obj.cprc{k}.type == cType.Process.PRODUCTIVE)
+                            if (obj.cprc{k}.typeId == cType.Process.PRODUCTIVE)
 					    	    obj.messageLog(cType.WARNING,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
                             end
                         end

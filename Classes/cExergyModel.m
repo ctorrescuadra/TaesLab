@@ -16,6 +16,7 @@ classdef cExergyModel < cResultId
 		ProcessesExergy  	  % Structure containing the fuel, product of a process
 		StreamsExergy    	  % Exergy values of streams
 		AdjacencyTable   	  % Adjacency table of the productive structure with exergy values
+		FlowProcessTable      % Flow Process Table
 		FuelExergy            % Fuel Exergy
 		ProductExergy         % Product Exergy
 		Irreversibility       % Irreversibility
@@ -46,11 +47,22 @@ classdef cExergyModel < cResultId
 			% build Adjacency matrices
 			B=rex.FlowsExergy;
 			E=rex.StreamsExergy.E;
+            ET=rex.StreamsExergy.ET;
 			tbl=rex.ps.AdjacencyMatrix;
 			mAE=scaleRow(tbl.AE,B);
 			mAS=scaleCol(tbl.AS,B);
 			mAF=scaleRow(tbl.AF,E);
             mAP=scaleCol(tbl.AP,E);
+			% Build the Flow-ProcessTable
+			mgS=divideRow(mAS,ET);
+			mgF=divideRow(mAF,ET);
+			tF=mAE*mgF;
+			tP=mAP*mgS;
+			if rex.ps.isModelIO
+				tV=sparse(obj.NrOfFlows,obj.NrOfFlows); % zero matrix
+			else
+				tV=mAE*mgS;
+			end
 			% build the object
             obj.ps=rex.ps;
 			obj.FlowsExergy=B;			
@@ -58,6 +70,7 @@ classdef cExergyModel < cResultId
 			obj.StreamsExergy=rex.StreamsExergy;
             obj.ActiveProcesses=rex.ActiveProcesses;
             obj.AdjacencyTable=struct('mAE',mAE,'mAS',mAS,'mAF',mAF,'mAP',mAP);
+			obj.FlowProcessTable=struct('tF',tF,'tP',tP,'tV',tV);
 		end		       		
     
 		function res=get.FuelExergy(obj)
@@ -114,44 +127,6 @@ classdef cExergyModel < cResultId
 			fs=obj.ps.FlowStreamEdges;
 			tV=sparse(fs.from,fs.to,obj.FlowsExergy,obj.NrOfStreams,obj.NrOfStreams,obj.NrOfFlows);
 			res=struct('tF',obj.AdjacencyTable.mAF,'tP',obj.AdjacencyTable.mAP,'tV',tV);
-		end
-			
-		function res=getFlowProcessTable(obj)
-		% get the Flow-Process table
-			mgS=divideRow(obj.AdjacencyTable.mAS,obj.StreamsExergy.ET);
-			mgF=divideRow(obj.AdjacencyTable.mAF,obj.StreamsExergy.ET);
-			tF=obj.AdjacencyTable.mAE*mgF;
-			tP=obj.AdjacencyTable.mAP*mgS;
-			if obj.ps.isModelIO
-				tV=sparse(obj.NrOfFlows,obj.NrOfFlows); % zero matrix
-			else
-				tV=obj.AdjacencyTable.mAE*mgS;
-			end
-			res=struct('tF',tF,'tP',tP,'tV',tV);
-        end
-
-		function res=getAdjacencyTable(obj)
-		% Get the adjacency table values
-			x=obj.AdjacencyTable;
-			fnodes=obj.ps.FlowKeys;
-			snodes=obj.ps.StreamKeys;
-			pnodes=obj.ps.ProcessKeys;
-			[idx,jdx,eval]=find(x.mAE);
-			esource=fnodes(idx);
-			etarget=snodes(jdx);
-			[idx,jdx,sval]=find(x.mAS);
-			ssource=snodes(idx);
-			starget=fnodes(jdx);
-			[idx,jdx,fval]=find(x.mAF(:,1:end-1));
-			fsource=snodes(idx);
-			ftarget=pnodes(jdx);
-			[idx,jdx,pval]=find(x.mAP(1:end-1,:));
-			psource=pnodes(idx);
-			ptarget=snodes(jdx);
-			source=[esource,ssource,fsource,psource];
-			target=[etarget,starget,ftarget,ptarget];
-			values=[eval;sval;fval;pval];
-			res=[{'Source','Target','Values'};[source',target',num2cell(values)]];
 		end
 	
 		function res=getStreamsCost(obj,fcosts,pcosts,rsc)

@@ -58,6 +58,9 @@
                 "resultId": {
                     "$ref": "#/definitions/typeResult"
                 },
+                "graph": {
+                    "$ref": "#/definitions/typeGraph"
+                },
                 "columns": {
                     "type": "integer"
                 },
@@ -74,6 +77,7 @@
                 "number",
                 "description",
                 "resultId",
+                "graph",
                 "columns",                
                 "fields"
             ],

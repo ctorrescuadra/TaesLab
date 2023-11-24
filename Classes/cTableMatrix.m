@@ -106,7 +106,14 @@ classdef (Sealed) cTableMatrix < cTableResult
 
         function res=getColumnFormat(obj)
         % Get the format of each column (TEXT or NUMERIC)
-            res=repmat(cType.colType(2),1,obj.NrOfCols);
+            res=repmat(cType.colType(2),1,obj.NrOfCols-1);
+        end
+
+        function res=getColumnWidth(obj)
+            lkey=max(cellfun(@length,obj.Values(:,1)))+2;
+            tmp=regexp(obj.Format,'[0-9]+','match','once');
+            lfmt=str2double(tmp);
+            res=[lkey,repmat(lfmt,1,obj.NrOfCols-1)];
         end
 
         function res=getDescriptionLabel(obj)
@@ -182,30 +189,11 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=(obj.GraphType==cType.GraphType.DIAGRAM_FP);
         end
 
-        function res=getAdjacencyTableFP(obj)
-        % Get cell array with the FP Adjacency Table
-            mFP=cell2mat(obj.Data(1:end-1,1:end-1));
-            nodes=obj.RowNames(1:end-2);
-			% Build Internal Edges
-            [idx,jdx,ival]=find(mFP(1:end-1,1:end-1));
-            isource=nodes(idx);
-            itarget=nodes(jdx);
-            % Build Resources Edges
-            [~,jdx,vval]=find(mFP(end,1:end-1));
-            vsource=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
-            vtarget=nodes(jdx);
-            % Build Output edges
-            [idx,~,wval]=find(mFP(1:end-1,end));
-            wtarget=arrayfun(@(x) sprintf('OUT%d',x),1:numel(idx),'UniformOutput',false);
-            wsource=nodes(idx);
-            source=[vsource,isource,wsource];
-            target=[vtarget,itarget,wtarget];
-            values=[vval';ival;wval];
-            res=[source', target', num2cell(values)];
-        end
+
+    
 
         function res=getDigraphFP(obj)
-        % get Matlab digraph from table FP
+        % Get Matlab digraph from table FP
             res=[];
             if ~isMatlab || ~isDigraph(obj)
                 return

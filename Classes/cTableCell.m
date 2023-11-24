@@ -99,11 +99,30 @@ classdef (Sealed) cTableCell < cTableResult
             res=cell2struct(val,obj.FieldNames,2);
         end
 		
-        function res=getColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            res=cellfun(@(x) cType.colType(strContains(x,'f')+1),obj.Format(2:end));
+        function res=isNumericColumn(obj,j)
+            res=strContains(obj.Format{j+1},'f');
         end
 
+        function res=getColumnFormat(obj)
+        % Get the format of each column (TEXT or NUMERIC)
+            tmp=arrayfun(@(x) isNumericColumn(obj,x)+1,1:obj.NrOfCols-1);
+            res=[cType.colType(tmp)];
+        end
+
+        function res=getColumnWidth(obj)
+            M=obj.NrOfCols;
+            res=zeros(1,M);
+            res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
+            for j=2:M
+                if isNumericColumn(obj,j-1)
+                    tmp=regexp(obj.Format{j},'[0-9]+','match','once');
+                    res(j)=str2double(tmp);
+                else
+                    res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
+                end
+            end
+        end      
+        
         function res=getDescriptionLabel(obj)
         % Get the description of each table
             res=obj.Description;
@@ -114,13 +133,12 @@ classdef (Sealed) cTableCell < cTableResult
             if nargin==1
                 fId=1;
             end
-            wcol=obj.getColWidth;
+            wcol=obj.getColumnWidth;
             hfmt=arrayfun(@(x) ['%-',num2str(x),'s'],wcol,'UniformOutput',false);
             sfmt=hfmt;
             for j=1:obj.NrOfCols
                 if isNumCellArray(obj.Values(2:end,j))
-                    tmp=regexp(obj.Format{j},'[0-9]+','match');
-                    hfmt{j}=[' %',tmp{1},'s'];
+                    hfmt{j}=[' %',num2str(wcol(j)),'s'];
                     sfmt{j}=[' ',obj.Format{j}];
                 end
             end

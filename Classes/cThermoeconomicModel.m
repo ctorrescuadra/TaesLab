@@ -793,7 +793,7 @@ classdef cThermoeconomicModel < cStatusLogger
             graphWasteAllocation(res,varargin{:});
         end
 
-        function showFlowsDiagram(obj)
+        function showProductiveDiagram(obj,varargin)
         % Show the flow diagram of a system
         %   Usage:
         %       obj.showFlowsDiagram
@@ -804,7 +804,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             res=obj.productiveDiagram;
-            res.showFlowsDiagram;
+            res.showProductiveDiagram(varargin{:});
         end
 
         function showGraph(obj,name,varargin)

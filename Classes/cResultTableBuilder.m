@@ -222,12 +222,17 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       mfp - cModelFPR object
         %   Output:
         %       res - cResultInfo object (DIAGRAM_FP) with the Diagram FP tables
+        %
+            % Get Table FP
             values=mfp.TableFP;
+            tval=buildAdjacencyTableFP(values,obj.processKeys);
             tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,values);
-            tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,tbl.tfp);
+            tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,tval);
+            % Get Cost Table FP
             values=mfp.getCostTableFP;
+            tval=buildAdjacencyTableFP(values,obj.processKeys);
             tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,values);
-            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,tbl.dcfp);
+            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,tval);
             res=cResultInfo(mfp,tbl);
             res.setResultId(cType.ResultId.DIAGRAM_FP);
         end
@@ -262,11 +267,19 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   Input:
         %       pd - Productive Diagram
         %   Output:
-        %       res - cResultInfo object (PRODUCTIVE_DIAGRAM)    
+        %       res - cResultInfo object (PRODUCTIVE_DIAGRAM)
+        %   
+            % Flows Diagram
             id=cType.Tables.FLOWS_DIAGRAM;      
             A=pd.FlowsMatrix;
             nodes=obj.flowKeys;
             tbl.fat=obj.getProductiveTable(id,A,nodes);
+            % Flow-Process Diagram
+            id=cType.Tables.FLOW_PROCESS_DIAGRAM;
+            A=pd.FlowProcessMatrix;
+            nodes=[obj.flowKeys,obj.processKeys(1:end-1)];
+            tbl.fpat=obj.getProductiveTable(id,A,nodes);
+            % Productive (SPF) Diagram
             id=cType.Tables.PRODUCTIVE_DIAGRAM;
             A=pd.ProductiveMatrix;
             nodes=[obj.streamKeys,obj.flowKeys,obj.processKeys(1:end-1)];
@@ -443,13 +456,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
 
-        function res=getAdjacencyTableFP(obj,id,tFP)
+        function res=getAdjacencyTableFP(obj,id,data)
         % Generate the FP adjacency matrix
         %  Input:
         %   id - Table Id
         %   mFP - Table FP values
             tp=obj.getCellTableProperties(id);
-            data=getAdjacencyTableFP(tFP);
             M=size(data,1);
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
             colNames=obj.getTableHeader(tp);
@@ -630,6 +642,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             p.Format=obj.getTableFormat(props);
             p.FieldNames={props.fields.name};
             p.ShowNumber=props.number;
+            p.GraphType=props.graph;
             res.setProperties(p);
         end
             

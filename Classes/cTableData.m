@@ -31,17 +31,18 @@ classdef cTableData < cTable
             obj.Name=cType.TableDataName{idx};
         end
 
-        function res=getColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            res=cell(1:obj.NrOfCols);
-            for i=1:obj.NrOfCols-1
-                if isNumCellArray(obj.Data(:,i))
-                    res{i}=cType.colType{2};
+        function res=getColumnWidth(obj)
+            M=obj.NrOfCols;
+            res=zeros(1,M);
+            res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
+            for j=2:M
+                if obj.isNumericColumn(j-1)
+                    res(j)=cType.DEFAULT_NUM_LENGHT;
                 else
-                    res{i}=cType.colType{1};
+                    res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
                 end
             end
-        end
+        end      
     end
     methods (Static,Access=public)
         function tbl=create(values)

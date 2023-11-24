@@ -89,12 +89,19 @@ classdef (Abstract) cTable < cStatusLogger
             end
         end
 
-        function res=getColWidth(obj)
-            M=obj.NrOfCols;
-            res=zeros(1,M);
-            for j=1:M
-                res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
-            end
+        function res = isNumericTable(obj)
+            res=all(cellfun(@isnumeric,obj.Data(:)));
+        end
+
+        function res = isNumericColumn(obj,idx)
+            tmp=cellfun(@isnumeric,obj.Data(:,idx));
+            res=all(tmp(:));
+        end
+
+        function res=getColumnFormat(obj)
+        % Get the format of each column (TEXT or NUMERIC)
+            tmp=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
+            res=[cType.colType(tmp)];
         end
         
         function res=size(obj,dim)

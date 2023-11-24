@@ -1,8 +1,9 @@
 classdef cProductiveDiagram < cResultId
 % cProductiveDiagram build the productive diagram info
     properties(GetAccess=public,SetAccess=private)
-        FlowsMatrix      % Flow Matrxi
-        ProductiveMatrix % Productive Matrix
+        FlowsMatrix         % Flow Matrix
+        FlowProcessMatrix   % Flow-Process Matrix
+        ProductiveMatrix    % Productive Matrix
     end
 
     methods
@@ -10,6 +11,7 @@ classdef cProductiveDiagram < cResultId
             % Construct an instance of this class
             obj=obj@cResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
             obj.FlowsMatrix=ps.StructuralMatrix;
+            obj.FlowProcessMatrix=ps.FlowProcessMatrix;
             obj.ProductiveMatrix=ps.ProductiveMatrix;
             obj.status=cType.VALID;
         end

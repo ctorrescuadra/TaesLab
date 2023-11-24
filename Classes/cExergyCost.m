@@ -39,7 +39,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             obj.ResultId=cType.ResultId.EXERGY_COST_CALCULATOR;
             M=obj.NrOfFlows;
 			N=obj.NrOfProcesses;
-			tbl=obj.getFlowProcessTable;
+			tbl=obj.FlowProcessTable;
 			obj.mV=divideCol(tbl.tV,obj.FlowsExergy);
 			obj.mF=divideCol(tbl.tF(:,1:N),obj.ProductExergy);
 			obj.mF0=divideCol(tbl.tF(:,1:N),obj.FuelExergy);
