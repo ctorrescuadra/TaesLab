@@ -8,6 +8,7 @@ function log=exportCSV(data,filename)
 %   OUTPUT
 %       log - cLoggerStatus object containing status and error messages
 %
+    % Validate parameters
 	log=cStatusLogger(cType.VALID);
     if (nargin~=2) || (~ischar(filename)) || ~iscell(data)
         log.messageLog(cType.ERROR,'Invalid input arguments');
@@ -21,6 +22,7 @@ function log=exportCSV(data,filename)
         obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
         return
     end
+    % Save data as CSV
 	try
         if isOctave
 			cell2csv(filename,data);

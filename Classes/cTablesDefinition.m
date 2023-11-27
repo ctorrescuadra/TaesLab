@@ -1,7 +1,19 @@
 classdef cTablesDefinition < cStatusLogger
+% cTablesDefinition reads the tables format configuration file 
+%   This class is use for two purposes:
+%   - This class is defined as base class of cFormatData reading the printformat.json
+%   - Provide information of the result tables of the application (TablesDirectory)
+%   Methods:
+%       obj=cTablesDirectory;
+%       res=obj.getTableProperties(table_name)
+%       res=obj.exportTablesDirectory(varmode)
+%       res=obj.printTablesDirectory
+%       res=obj.viewTablesDirectory
+%       res=obj.saveTablesDirectory(filename)
+%   See also cFormatData
     properties(GetAccess=public,SetAccess=private)
-        TablesDefinition  % Tables properties
-        TablesDirectory   % Tables directory
+        TablesDefinition  % Tables properties struct
+        TablesDirectory   % cTableData containig the tables directory info
     end
     properties (Access=protected)
         cfgTables 	 % Cell tables configuration
@@ -24,6 +36,7 @@ classdef cTablesDefinition < cStatusLogger
 				obj.messageLog(cType.ERROR,'Invalid %s config file',cfgfile);
 				return
 			end
+            % set the object properties
             obj.cfgTables=config.tables;
             obj.cfgMatrices=config.matrices;
             obj.cfgSummary=config.summary;
@@ -56,14 +69,28 @@ classdef cTablesDefinition < cStatusLogger
             end
         end
 
-        function res=getTablesDirectory(obj,varmode)
+        function res=exportTablesDirectory(obj,varmode)
+        % Get the tables directory info in diferent variable types.
+        %   Usage:
+        %       res=exportTablesDirectory(varmode)
+        %   Input:
+        %       varmode - type of variable to output
+        %           NONE: cTable object (default)
+        %           CELL: Array of cells
+        %           STRUCT: Array of structs
+        %           TABLE: Matlab table
+        %   Output:
+        %       res - tables directory in the chosen var mode.
+        %
             if nargin==1
                 varmode=cType.VarMode.NONE;
             end
+            % get tables directory info
             if isempty(obj.TablesDirectory)
                 obj.buildTablesDirectory;
             end
             tbl=obj.TablesDirectory;
+            % export to a different var mode
             switch varmode
             case cType.VarMode.NONE
                 res=tbl;
@@ -82,63 +109,58 @@ classdef cTablesDefinition < cStatusLogger
             end
         end
 
-        function printTable(obj,fid)
-        % Print the tables directory
-            if nargin==1
-                fid=1;
-            end
+        function printTablesDirectory(obj)
+        % Print the tables directory in console
             if isempty(obj.TablesDirectory)
                 obj.buildTablesDirectory;
             end
-            tbl=obj.TablesDirectory;
-            wcol=getColumnWidth(tbl);
-            lfmt=arrayfun(@(x) ['%-',num2str(x),'s'],wcol,'UniformOutput',false);
-            lformat=[lfmt{:},'\n'];
-            header=sprintf(lformat,tbl.ColNames{:});
-            lines=cType.getLine(length(header)+1);
-            fprintf(fid,'\n');
-            fprintf(fid,'%s',header);
-            fprintf(fid,'%s\n',lines);
-            for i=1:tbl.NrOfRows
-                fprintf(fid,lformat,tbl.RowNames{i},tbl.Data{i,:});
-            end
-            fprintf(fid,'\n');
+            printTable(obj.TablesDirectory);
         end
 
-        function viewTable(obj)
+        function viewTablesDirectory(obj)
         % View the Tables Directory as GUI
-            % Get the Tables Directory
+            if isempty(obj.TablesDirectory)
+                obj.buildTablesDirectory;
+            end
+            viewTable(obj.TablesDirectory);
+        end
+
+        function log=saveTablesDirectory(obj,filename)
+        % Save result tables in different file formats depending on file extension
+        %   Valid extension are: *.json, *.xml, *.csx, *.xlsx,*.txt
+        %   Usage:
+        %       log=obj.saveTablesDirectory(filename)
+        %   Input:
+        %       filename - File name. Extension is used to determine the save mode.
+        %   Output:
+        %       log - cStatusLogger object with error messages
+            log=cStatusLogger(cType.VALID);
             if isempty(obj.TablesDirectory)
                 obj.buildTablesDirectory;
             end
             tbl=obj.TablesDirectory;
-            % Define the uitable parameters
-            if isOctave
-				param=struct('xScale',8,'xOffset',-8,...
-                    'RowWidth',23,'yScale',0.8,'yOffset',-10,...
-					'FontName','Consolas','FontSize',10);
-			else
-				param=struct('xScale',8,'xOffset',-8,...
-                    'RowWidth',23,'yScale',0.8,'yOffset',0,...
-				    'FontName','FixedWidth','FontSize',12);
+            fileType=cType.getFileType(filename);
+            switch fileType
+                case cType.FileType.CSV
+                    log=exportCSV(tbl.Values,filename);
+                case cType.FileType.XLSX
+                    log=exportXLS(tbl.Values,filename);
+                case cType.FileType.JSON
+                    log=exportJSON(tbl.getStructData,filename);
+                case cType.FileType.XML
+                    s=struct('properties',tbl.getStructData);
+                    log=exportXML(s,filename);
+                case cType.FileType.TXT
+                    log=exportTXT(tbl,filename);
+                case cType.FileType.MAT
+                    log=exportMAT(tbl,filename);
+                otherwise
+                    log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
+                    return
             end
-            wcols=param.xScale*getColumnWidth(tbl);
-            ColumnWidth=num2cell(wcols(2:end));
-            ss=get(groot,'ScreenSize');
-            xsize=sum(wcols)+param.xOffset;
-			ysize=min(0.8*ss(4),(tbl.NrOfRows+1)*param.RowWidth)+param.yOffset;	
-			xpos=(ss(3)-xsize)/2;
-			ypos=(ss(4)-ysize)/2;
-            % Show the table
-            h=uifigure('menubar','none','toolbar','none','name',tbl.Description,...
-				'numbertitle','off',...
-				'position',[xpos,ypos,xsize,ysize]);
-   			uitable (h, 'Data', tbl.Data,...
-				'RowName', tbl.RowNames, 'ColumnName', tbl.ColNames(2:end),...
-				'ColumnWidth',ColumnWidth,...
-				'ColumnFormat',tbl.getColumnFormat,...
-				'FontName',param.FontName,'FontSize',param.FontSize,...
-				'Units', 'normalized','Position',[0,0,1,1]);
+            if isValid(log)
+                log.messageLog(cType.INFO,'File %s has been saved',filename);
+            end
         end
     end
 
@@ -239,7 +261,6 @@ classdef cTablesDefinition < cStatusLogger
             N=numel(tI);
             colNames={'Table','Key','Results','Type','Graph'};
             rowNames={tI.name};
-            %keys=[fieldnames(cType.Tables);fieldnames(cType.SummaryTables)];
             data=cell(N,4);
             data(:,1)=[tI.code];
             data(:,2)=[cType.Results([tI.resultId])];

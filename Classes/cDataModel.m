@@ -16,7 +16,7 @@ classdef cDataModel < cStatusLogger
 %       res=obj.getTable(name)
 %       obj.setModelName(name)   
 %       log=obj.saveDataModel(filename)
-%   See also cModelTables, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
+%   See also cResultInfo, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
 %
     properties(GetAccess=public, SetAccess=private)
         NrOfFlows               % Number of flows
@@ -35,7 +35,7 @@ classdef cDataModel < cStatusLogger
         isResourceCost          % Indicate is the model has resource cost data
         isDiagnosis             % Indicate is the model has information to made diagnosis
         ModelData               % Model data from cReadModel interface
-        ModelTables             % Model tables from cReadModel interface
+        ModelInfo               % cResultInfo data model tables from cReadModel interface
         ModelFile               % Name of the model filename used by the cReadModel interface
         ModelName               % Name of the model
     end
@@ -138,9 +138,9 @@ classdef cDataModel < cStatusLogger
             obj.ModelFile=rdm.ModelFile;
             obj.ModelName=rdm.ModelName;
             if rdm.isTableModel
-                obj.ModelTables=rdm.getTableModel;
+                obj.ModelInfo=rdm.getTableModel;
             else
-                obj.ModelTables=obj.getTableModel;
+                obj.ModelInfo=obj.getTableModel;
             end
        end
 
@@ -326,7 +326,7 @@ classdef cDataModel < cStatusLogger
 
         function res=getTable(obj,name)
         % get the model table
-            res=getTable(obj.ModelTables,name);
+            res=getTable(obj.ModelInfo,name);
         end
       
 		function log=saveDataModel(obj,filename)
@@ -349,10 +349,12 @@ classdef cDataModel < cStatusLogger
                 case cType.FileType.XML
                     log=saveAsXML(obj.ModelData,filename);
 				case cType.FileType.CSV
-                    log=saveAsCSV(obj.ModelTables,filename);
+                    log=saveAsCSV(obj.ModelInfo,filename);
 				case cType.FileType.XLSX
-                    log=saveAsXLS(obj.ModelTables,filename);
-				case cType.FileType.MAT
+                    log=saveAsXLS(obj.ModelInfo,filename);
+                case cType.FileType.TXT
+                    log=saveAsTXT(obj.ModelInfo,filename);
+                case cType.FileType.MAT
 					log=obj.saveAsMAT(filename);
 				otherwise
 					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
@@ -360,6 +362,31 @@ classdef cDataModel < cStatusLogger
 			if isValid(log)
 				log.messageLog(cType.INFO,'File %s has been saved',filename);
 			end
+        end
+
+        function printDataModel(obj)
+        % Print the data model tables
+            printResults(obj.ModelInfo);
+        end
+
+        function printTable(obj,name)
+        % Print a data model table
+        %   Input:
+        %       name - Name of the table
+            tbl=obj.getTable(name);
+            if tbl.isValid
+                printTable(tbl);
+            end
+        end
+        
+        function viewTable(obj,name)
+        % View a table in a GUI Table
+        %   Input:
+        %       name - Name of the table
+            tbl=obj.getTable(name);
+            if tbl.isValid
+                viewTable(tbl);
+            end
         end
     end
     methods(Access=private)

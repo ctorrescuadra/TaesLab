@@ -10,7 +10,7 @@ classdef (Abstract) cReadModelTable < cReadModel
 	end
     methods
         function res=getTableModel(obj)
-        % get the cModelTables object with the data model tables
+        % get the cResultInfo object with the data model tables
             res=obj.modelTables;
         end
     end
@@ -19,7 +19,7 @@ classdef (Abstract) cReadModelTable < cReadModel
         function res=buildDataModel(obj,tm)
         % Build cDataModel and cProductiveStructure from cModelTable object
         %   Input:
-        %   tm - cModelTables object
+        %   tm - cResultInfo object (DATA_MODEL)
         %   res - DataModel structure
             res=[];
             tmp=struct();

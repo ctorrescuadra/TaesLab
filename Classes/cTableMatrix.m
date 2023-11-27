@@ -83,11 +83,14 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=cellfun(@(x) sprintf(obj.Format,x),obj.Data,'UniformOutput',false);
         end
 
-        function res=getFormattedStruct(obj,fmt)
+        function res=getStructData(obj,fmt)
         % Get table as formatted structure
         %  Input:
-        %   fmt - (true/false) use table format 
-            res=obj.getFormattedCell(fmt);
+        %   fmt - (true/false) use table format
+            if nargin==1
+                fmt=false;
+            end
+            res=obj.getCellData(fmt);
         end
 
         function res=getMatlabTable(obj)
@@ -141,8 +144,8 @@ classdef (Sealed) cTableMatrix < cTableResult
             len=max(cellfun(@length,tmp))+1;
             fkey=[' %-',num2str(len),'s'];
             % rest of columns
-            tmp=regexp(obj.Format,'[0-9]+','match');
-            fval=['%',tmp{1},'s'];
+            tmp=regexp(obj.Format,'[0-9]+','match','once');
+            fval=['%',tmp,'s'];
             hformat=[fkey,repmat(fval,1,ncols-1)];
             sformat=[fkey,repmat(obj.Format,1,ncols-1),'\n'];
             % Print formatted table
@@ -187,22 +190,6 @@ classdef (Sealed) cTableMatrix < cTableResult
         function res=isDigraph(obj)
         % Determine if table has a digraph representation       
             res=(obj.GraphType==cType.GraphType.DIAGRAM_FP);
-        end
-
-
-    
-
-        function res=getDigraphFP(obj)
-        % Get Matlab digraph from table FP
-            res=[];
-            if ~isMatlab || ~isDigraph(obj)
-                return
-            end
-            tbl=getAdjacencyTableFP(obj);
-            source=tbl(:,1);
-            target=tbl(:,2);
-            values=cell2mat(tbl(:,3));
-            res=digraph(source,target,values,"omitselfloops");
         end
 
     end

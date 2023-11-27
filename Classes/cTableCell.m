@@ -11,7 +11,6 @@ classdef (Sealed) cTableCell < cTableResult
 %       obj.printTable
 %   Methods Inhereted from cTableResult
 %       obj=cTableResult(data,rowNames,colNames)
-%       res=obj.getFormattedCell(fmt)
 %       obj.ViewTable(state)
 %       obj.setDescription
 %       status=obj.checkTableSize;
@@ -87,10 +86,13 @@ classdef (Sealed) cTableCell < cTableResult
             end
         end
 
-        function res=getFormattedStruct(obj,fmt)
-        % Return table as formatted structure
+        function res=getStructData(obj,fmt)
+        % Return table as structure
         %  Input:
-        %   fmt - (true/false) use table format 
+        %   fmt - (true/false) use table format
+            if nargin==1
+                fmt=false;
+            end
             if fmt
                 val=[obj.RowNames',obj.formatData];
             else
@@ -136,8 +138,8 @@ classdef (Sealed) cTableCell < cTableResult
             wcol=obj.getColumnWidth;
             hfmt=arrayfun(@(x) ['%-',num2str(x),'s'],wcol,'UniformOutput',false);
             sfmt=hfmt;
-            for j=1:obj.NrOfCols
-                if isNumCellArray(obj.Values(2:end,j))
+            for j=2:obj.NrOfCols
+                if isNumericColumn(obj,j-1)
                     hfmt{j}=[' %',num2str(wcol(j)),'s'];
                     sfmt{j}=[' ',obj.Format{j}];
                 end

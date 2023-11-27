@@ -35,22 +35,22 @@ classdef (Abstract) cTable < cStatusLogger
         % Set state value
             obj.State=state;
         end
-    
-        function res = getStructData(obj)
-        % Get the table as struct array
-            val = [obj.RowNames',obj.Data];
-            res = cell2struct(val,obj.ColNames,2);
-        end
 
-        function res=getMatlabTable(obj)
-        % Get the table as Matlab table
-            if isOctave
-                res=obj;
-            else
-                res=cell2table(obj.Data,'VariableNames',obj.ColNames(2:end),'RowNames',obj.RowNames');
-                res=addprop(res,"Name","table");
-                res.Properties.Description=obj.Description;
-                res.Properties.CustomProperties.Name=obj.Name;
+        function res=exportTable(obj,varmode,~)
+        % get cTable info in diferent types of variables
+            switch varmode
+                case cType.VarMode.CELL
+                    res=obj.Values;
+                case cType.VarMode.STRUCT
+                    res=obj.getStructData;
+                case cType.VarMode.TABLE
+                    if isMatlab
+                        res=obj.getMatlabTable;
+                    else
+                        res=obj;
+                    end
+                otherwise
+                    res=obj;
             end
         end
 
@@ -64,29 +64,38 @@ classdef (Abstract) cTable < cStatusLogger
             end
         end
 
-        function log=exportCSV(obj,filename)
-        % Export the table as CSV file
-        %   This method is used internally for SaveResults
+        function log=exportTXT(obj,filename)
+        % exportTXT saves table as TXT file 
+        %   Usage:
+        %       log=exportTXT(data, filename)
         %   Input:
-        %       filename - Name of the file to save the table
-        %   Output:
-        %       log - cStatusLogger with the status and messages
+        %       filename - name of TXT file
+        %   OUTPUT
+        %       log - cLoggerStatus object containing status and error messages
+        %
             log=cStatusLogger(cType.VALID);
-            data=obj.Values;
-            if ~cType.checkFileExt(filename,cType.FileExt.CSV)
+            if (nargin~=2) || (~ischar(filename))
+                log.messageLog(cType.ERROR,'Invalid input arguments');
+                return
+            end
+            if ~cType.checkFileWrite(filename)
+                obj.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+                return
+            end
+            if ~cType.checkFileExt(filename,cType.FileExt.TXT)
                 obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
                 return
             end
             try
-                if isOctave
-                    cell2csv(filename,data);
-                else
-                    writecell(data,filename);
-                end
+                fId = fopen (filename, 'wt');
             catch err
-                log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                log.messageLog(cType.ERROR,err.message)
+                log.messageLog(cType.ERROR,'Open file %s',filename);
+                return
             end
+            % Print tables into file
+            printTable(obj,fId)
+            fclose(fId);
         end
 
         function res = isNumericTable(obj)

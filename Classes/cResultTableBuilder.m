@@ -225,12 +225,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %
             % Get Table FP
             values=mfp.TableFP;
-            tval=buildAdjacencyTableFP(values,obj.processKeys);
+            tval=buildDiagramFP(values,obj.processKeys);
             tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,values);
             tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,tval);
             % Get Cost Table FP
             values=mfp.getCostTableFP;
-            tval=buildAdjacencyTableFP(values,obj.processKeys);
+            tval=buildDiagramFP(values,obj.processKeys);
             tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,values);
             tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,tval);
             res=cResultInfo(mfp,tbl);

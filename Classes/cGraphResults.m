@@ -40,9 +40,9 @@ classdef cGraphResults < cStatusLogger
 			case cType.GraphType.WASTE_ALLOCATION
 				obj.setGraphWasteAllocationParameters(tbl,varargin{:})
             case cType.GraphType.DIGRAPH
-				    obj.setDigraphParameters(tbl);
+				    obj.setProductiveDiagramParameters(tbl);
             case cType.GraphType.DIAGRAM_FP
-                    obj.setProcessDiagramParameters(tbl);
+                    obj.setDiagramFpParameters(tbl);
 			otherwise
 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
 				return
@@ -143,7 +143,7 @@ classdef cGraphResults < cStatusLogger
 		end
 
 		function showDigraph(obj)
-		% Plot Productive and FP digraphs
+		% Plot Productive Diagrams (digraph)
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
 			ax=axes(f);    
@@ -153,18 +153,14 @@ classdef cGraphResults < cStatusLogger
 		end
 
 		function showDiagramFP(obj)
-			tbl=obj.xValues;
-            source=tbl(:,1);
-            target=tbl(:,2);
-            values=cell2mat(tbl(:,3));
-            dg=digraph(source,target,values,"omitselfloops");
+		% Show the Diagram FP
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
 			ax=axes(f);
 			if obj.isColorbar
 				r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 				colormap(red2blue);
-				plot(ax,dg,"Layout","auto","EdgeCData",dg.Edges.Weight,"EdgeColor","flat");
+				plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
 				c=colorbar(ax);
 				c.Label.String=obj.xLabel;
 				c.Label.FontSize=12;
@@ -299,16 +295,16 @@ classdef cGraphResults < cStatusLogger
             obj.Categories={};
         end
 
-        function setProcessDiagramParameters(obj,tbl)
+        function setDiagramFpParameters(obj,tbl)
         % Set the Diagram FP paramaters
-			if isOctave
+            if isOctave
 				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
 				return
-			end
+            end
+            mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
             obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
-            mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
-            obj.xValues=buildAdjacencyTableFP(mFP,tbl.RowNames);
+            obj.xValues=buildDiagramFP(mFP,tbl.RowNames,true);
             obj.isColorbar=true;
             obj.Legend={};
 			obj.yValues=[];
@@ -318,7 +314,7 @@ classdef cGraphResults < cStatusLogger
             obj.Categories={};
         end
 
-		function setDigraphParameters(obj,tbl)
+		function setProductiveDiagramParameters(obj,tbl)
 		% Set the parameters of a digraph
 			if isOctave
 				obj.logMessage(cType.ERROR,'Graph function not implemented in Octave');

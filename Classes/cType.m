@@ -65,7 +65,7 @@ classdef cType
         GENERALIZED=2             % Generalized Cost Tables Bit
 		CAPACITY=8	              % Initial capacity for cQueue and cStack
 		MAX_RESULT=4              % Number of Results in cModelResults
-		MAX_RESULT_INFO=10        % Maximun cResultInfo groups
+		MAX_RESULT_INFO=11        % Maximun cResultInfo groups
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance

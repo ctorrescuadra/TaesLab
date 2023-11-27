@@ -170,7 +170,7 @@ classdef cResultInfo < cStatusLogger
         function printResults(obj)
         % Print the formated tables on console
             log=cStatus();
-            if ~isValid(obj) || ~obj.isResultTable
+            if ~isValid(obj)
                 log.printError('Invalid object to print')
                 return
             end
@@ -351,7 +351,7 @@ classdef cResultInfo < cStatusLogger
             fclose(fId);
         end
 
-        function res=getResultTables(obj,mode,fmt)
+        function res=getResultTables(obj,varmode,fmt)
         % Get the result tables in different format mode
         %   Usage: 
         %       res = obj.getResultTables(mode, fmt)
@@ -365,22 +365,12 @@ classdef cResultInfo < cStatusLogger
         %   Output
         %       res - Result tables in the selected format
             narginchk(2,3);
-            res=cStatusLogger;
             if (nargin==2) || ~isa(fmt,'logical') || ~obj.isResultTable
                 fmt=false;
             end
-            switch mode
-            case cType.VarMode.NONE
-                res=obj;
-            case cType.VarMode.CELL
-                res=obj.getResultAsCell(fmt);
-            case cType.VarMode.STRUCT
-                res=obj.getResultAsStruct(fmt);
-            case cType.VarMode.TABLE
-                res=obj.getResultAsTable;
-            otherwise
-                res.printWarning('VarMode undefined');
-            end
+            names=obj.getListOfTables;
+            tables=cellfun(@(x) exportTable(obj,x,varmode,fmt),names,'UniformOutput',false);
+            res=cell2struct(tables,names,1);            
         end
 
         function res=getFuelImpact(obj)
@@ -683,40 +673,15 @@ classdef cResultInfo < cStatusLogger
     end
 
     methods(Access=private)
-        function res=getResultAsCell(obj,fmt)
-        % Converts Result Tables into cell arrays to display on the variable editor
-            res=struct();
-            if (nargin==1) || ~isa(fmt,'logical') || ~obj.isResultTable
+        function res=exportTable(obj,name,varmode,fmt)
+        % Export a table using diferent formats. Internal use.
+            res=[];
+            if nargin==3
                 fmt=false;
             end
-            list=obj.getListOfTables;
-            for i=1:length(list)
-                res.(list{i})=getFormattedCell(obj.tableIndex{i},fmt);
-            end
-        end
-
-        function res=getResultAsStruct(obj,fmt)
-        % Converts tables result values into arrays of structs, to display on the variable editor
-            res=struct();
-            if (nargin==1) || ~isa(fmt,'logical') || ~obj.isResultTable
-                fmt=false;
-            end
-            list=obj.getListOfTables;
-            for i=1:length(list)
-                res.(list{i})=getFormattedStruct(obj.tableIndex{i},fmt);
-            end
-        end
-
-        function res=getResultAsTable(obj)
-        % Get the tables. In case of matlab it is converted to Matlab tables.
-            if isMatlab
-                res=struct();
-                list=obj.getListOfTables;
-                for i=1:length(list)
-                    res.(list{i})=getMatlabTable(obj.tableIndex{i});
-                end
-            else
-                res=obj.Tables;
+            tbl=obj.getTable(name);
+            if isValid(tbl)
+                res=tbl.exportTable(varmode,fmt);
             end
         end
     end

@@ -106,22 +106,7 @@ classdef cModelData < cStatusLogger
         %   filename - name of the output file
         %  Output:
         %   log: cStatusLog class containing error messages ans status
-            log=cStatusLogger(cType.VALID);
-            if isOctave
-                log.messageLog(cType.ERROR,'Save XML files is not yet implemented');
-	            return
-            end
-            if ~cType.checkFileWrite(filename)
-                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
-                return
-            end
-            try
-			    writestruct(obj.dm,filename,'StructNodeName','root','AttributeSuffix','Id');
-            catch err
-                log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
-                return
-            end
+            log=exportJSON(obj.dm,filename);
 		end
 
         function log=saveAsJSON(obj,filename)
@@ -129,22 +114,8 @@ classdef cModelData < cStatusLogger
         %  Input:
         %   filename - name of the output file
         %  Output:
-        %   log: cStatusLog class containing error messages ans status
-            log=cStatusLogger(cType.VALID);
-            if ~cType.checkFileWrite(filename)
-                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
-                return
-            end
-            try
-		        text=jsonencode(obj.dm,'PrettyPrint',true);
-		        fid=fopen(filename,'wt');
-		        fwrite(fid,text);
-		        fclose(fid);    
-            catch err
-                log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s is NOT saved',filename);
-                return
-            end
+        %   log: cStatusLog class containing error messages ans statu
+            log=exportJSON(obj.dm,filename);
         end
     end
 end
