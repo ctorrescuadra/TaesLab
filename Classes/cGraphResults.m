@@ -304,7 +304,7 @@ classdef cGraphResults < cStatusLogger
             mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
             obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
-            obj.xValues=buildDiagramFP(mFP,tbl.RowNames,true);
+            [~,obj.xValues]=cProcessModel.diagramFP(mFP,tbl.RowNames);
             obj.isColorbar=true;
             obj.Legend={};
 			obj.yValues=[];

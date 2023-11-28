@@ -1,16 +1,14 @@
-function res=buildDiagramFP(mFP,nodes,dgoption)
+function [res,dg]=buildDiagramFP(mFP,nodes)
 % Get cell array with the FP Adjacency Table or the digraph
 % Internal use for cResultInfo and cGraphResults
 %   INPUT:
 %       mFP - FP matrix values
 %       nodes - Cell Array with the processes node
-%       dgoption - (true/false) build the digraph
 %   OUTPUT:
 %       res - Cell Array containing the adjacency matrix
+%       dg - digraph object (only Matlab)
 %
-    if (nargin==2) || isOctave
-        dgoption=false;
-    end
+    dg=[];
     % Build Internal Edges
     [idx,jdx,ival]=find(mFP(1:end-1,1:end-1));
     isource=nodes(idx);
@@ -27,9 +25,8 @@ function res=buildDiagramFP(mFP,nodes,dgoption)
     source=[vsource,isource,wsource];
     target=[vtarget,itarget,wtarget];
     values=[vval';ival;wval];
-    if dgoption
-	    res=digraph(source,target,values,'omitselfloops');
-    else
-        res=[source', target', num2cell(values)];
+    res=[source', target', num2cell(values)];
+    if (nargout==2) && isMatlab
+	    dg=digraph(source,target,values,'omitselfloops');
     end
 end
