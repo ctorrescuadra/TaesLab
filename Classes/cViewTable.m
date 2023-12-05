@@ -40,10 +40,10 @@ classdef cViewTable < cStatusLogger
 			% Set object properties
 			obj.rowNames=tbl.RowNames;
 			obj.colNames=tbl.ColNames(2:end);
-			obj.format=tbl.getColumnFormat;
+			obj.format=[cType.colType(tbl.getColumnFormat)];
 			obj.fontname=param.FontName;
 			obj.fontsize=param.FontSize;
-			wcol=param.ColumnScale*tbl.getColumnWidth;
+			wcol=cType.colScale*tbl.getColumnWidth;
 			% Set the window size and position
 			ss=get(groot,'ScreenSize');
 			xs=min(param.xScale*ss(3),sum(wcol)+param.xoffset);
@@ -52,13 +52,8 @@ classdef cViewTable < cStatusLogger
 			obj.xpos=(ss(3)-obj.xsize)/2;
 			obj.ypos=(ss(4)-obj.ysize)/2;
 			obj.colWidth=num2cell(wcol(2:end));
-			if isa(tbl,'cTableResult')
-			    obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
-                obj.data=tbl.formatData;
-            else
-                obj.descr=tbl.Description; 
-                obj.data=tbl.Data;
-			end
+			obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
+            obj.data=tbl.formatData;
 		end
 
 		function showTable(obj)

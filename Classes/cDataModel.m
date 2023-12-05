@@ -420,17 +420,17 @@ classdef cDataModel < cStatusLogger
         % Get the cModelTable with the data model tables
             ps=obj.ProductiveStructure;
 			% Flows Table
-            idx=cType.TableDataIndex.FLOWS;
-            sheet=cType.TableDataName{idx};
+            index=cType.TableDataIndex.FLOWS;
+            sheet=cType.TableDataName{index};
             fNames={ps.Flows(:).key};
             colNames={'key','type'};
             values={ps.Flows(:).type}';
             tbl=cTableData(values,fNames,colNames);
-			tbl.setDescription(idx);
+			tbl.setProperties(index);
 			tables.(sheet)=tbl;
 			% Process Table
-            idx=cType.TableDataIndex.PROCESSES;
-            sheet=cType.TableDataName{idx};
+            index=cType.TableDataIndex.PROCESSES;
+            sheet=cType.TableDataName{index};
             pNames={ps.Processes(1:end-1).key};
             colNames={'key','fuel','product','type'};
             values=cell(obj.NrOfProcesses,3);
@@ -438,11 +438,11 @@ classdef cDataModel < cStatusLogger
             values(:,2)={ps.Processes(1:end-1).product}';
             values(:,3)={ps.Processes(1:end-1).type}';
             tbl=cTableData(values,pNames,colNames);
-			tbl.setDescription(idx);
+			tbl.setProperties(index);
 			tables.(sheet)=tbl;
             % Exergy Table
-            idx=cType.TableDataIndex.EXERGY;
-            sheet=cType.TableDataName{idx};
+            index=cType.TableDataIndex.EXERGY;
+            sheet=cType.TableDataName{index};
 			colNames=['key',obj.States];			
 			values=zeros(obj.NrOfFlows,obj.NrOfStates);
             for i=1:obj.NrOfStates
@@ -450,20 +450,20 @@ classdef cDataModel < cStatusLogger
 				values(:,i)=rex.FlowsExergy';
             end
             tbl=cTableData(num2cell(values),fNames,colNames);
-			tbl.setDescription(idx);
+			tbl.setProperties(index);
 			tables.(sheet)=tbl;
             % Format Table
-            idx=cType.TableDataIndex.FORMAT;
-            sheet=cType.TableDataName{idx};
+            index=cType.TableDataIndex.FORMAT;
+            sheet=cType.TableDataName{index};
 			fmt=obj.ModelData.Format.definitions;
             rowNames={fmt(:).key};
             val=struct2cell(fmt)';
 			tbl=cTableData(val(:,2:end),rowNames,fieldnames(fmt)');
-			tbl.setDescription(idx);
+			tbl.setProperties(index);
 			tables.(sheet)=tbl;
             % Resources Cost tables
-            idx=cType.TableDataIndex.RESOURCES;
-            sheet=cType.TableDataName{idx};
+            index=cType.TableDataIndex.RESOURCES;
+            sheet=cType.TableDataName{index};
             if obj.isResourceCost
 				colNames=[{'Key','Type'},obj.ResourceSamples];
 				%Flows
@@ -487,7 +487,7 @@ classdef cDataModel < cStatusLogger
                 rowNames=[rNames,pNames];
                 values=[cflow;cprocess];
 				tbl=cTableData(values,rowNames,colNames);
-				tbl.setDescription(idx);
+				tbl.setProperties(index);
 				tables.(sheet)=tbl;
             end
             % Waste Table
@@ -502,7 +502,7 @@ classdef cDataModel < cStatusLogger
                 values(:,1)=wd.Type';
                 values(:,2)=num2cell(wd.RecycleRatio)';
 				tbl=cTableData(values,rowNames,colNames);
-				tbl.setDescription(index);
+				tbl.setProperties(index);
 				tables.(sheet)=tbl;
 				% Waste Allocation
                 jdx=find(wd.TypeId==0);
@@ -514,7 +514,7 @@ classdef cDataModel < cStatusLogger
                     rowNames=pNames(idx);
                     values=wd.Values(jdx,idx)';
 				    tbl=cTableData(num2cell(values),rowNames,colNames);
-				    tbl.setDescription(index);
+				    tbl.setProperties(index);
 				    tables.(sheet)=tbl;
                 end
             end

@@ -481,7 +481,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
             colNames=obj.getTableHeader(tp);
 			res=obj.createCellTable(tp,data,rowNames,colNames);
-            res.setGraphType(cType.GraphType.DIGRAPH);
         end
 
         function res=getWasteDefinition(obj,wt)

@@ -175,12 +175,13 @@ classdef ViewResults < matlab.apps.AppBase
         
         % Show table in table panel
         function ViewTable(app,tbl)
+            wcol=cType.colScale*tbl.getColumnWidth;
             app.Label.Text=tbl.getDescriptionLabel;
             app.UITable.ColumnName = tbl.ColNames(2:end);
             app.UITable.RowName = tbl.RowNames;
-            app.UITable.ColumnWidth=repmat({cType.colWidth},1,tbl.NrOfCols); 
+            app.UITable.ColumnWidth=num2cell(wcol(2:end)); 
             app.UITable.Data=tbl.formatData;
-            app.UITable.ColumnFormat=tbl.getColumnFormat;
+            app.UITable.ColumnFormat=[cType.colType(tbl.getColumnFormat)];
             app.Label.Visible=true;
             app.UITable.Visible=true;      
         end

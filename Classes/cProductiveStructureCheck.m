@@ -238,7 +238,7 @@ classdef cProductiveStructureCheck < cResultId
 					if ~obj.cflw{idx}.to
 					    obj.cflw{idx}.to=sid;
 				    else
-						obj.messageLog(cType.WARNING,'Flow %s has not correct (TO) definition',obj.cflw{i}.key);
+						obj.messageLog(cType.WARNING,'Flow %s has not correct (TO) definition',obj.cflw{idx}.key);
 					end
 			    else
 					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
@@ -248,16 +248,16 @@ classdef cProductiveStructureCheck < cResultId
             % set output flows of the stream
             fout=zeros(1,fs.Count);
             for i=1:fs.Count
-			    in=fs.Content{i};
-				idx=obj.fDict.getIndex(in);
+			    out=fs.Content{i};
+				idx=obj.fDict.getIndex(out);
                 if ~cType.isEmpty(idx)
 					if ~obj.cflw{idx}.from
 					    obj.cflw{idx}.from=sid;
 				    else
-						obj.messageLog(cType.WARNING,'Flow %s has not correct (FROM) definition',obj.cflw{i}.key);
+						obj.messageLog(cType.WARNING,'Dlow %s has not correct (FROM) definition',obj.cflw{idx}.key);
 					end
 			    else
-					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
+					obj.messageLog(cType.WARNING,'Flow %s is not defined',out);
                 end
                 fout(i)=idx;
             end

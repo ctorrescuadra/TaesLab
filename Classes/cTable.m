@@ -2,12 +2,13 @@ classdef (Abstract) cTable < cStatusLogger
 % cTable Abstract class implementation for tabular data
 %   The table definition include row and column names and description
 %   Methods:
-%       obj.setDescription
+%       status=tbl.checkDataSize;
+%       obj.setState
 %       status=obj.checkTableSize;
-%       res=obj.getStructData
-%       res=obj.getMatlabTable [only Matlab]
-%       log=obj.exportCSV(filename)
-%       log=obj.exportXLS(filename)
+%       viewTable(obj)
+%       log=obj.saveTable(filename)
+%       res=obj.isNumericTable
+%       res=obj.getColumnFormat
 % See also cTableData, cTableResult
     properties(GetAccess=public, SetAccess=protected)
         NrOfCols  	    % Number of Columns
@@ -36,24 +37,6 @@ classdef (Abstract) cTable < cStatusLogger
             obj.State=state;
         end
 
-        function res=exportTable(obj,varmode,~)
-        % get cTable info in diferent types of variables
-            switch varmode
-                case cType.VarMode.CELL
-                    res=obj.Values;
-                case cType.VarMode.STRUCT
-                    res=obj.getStructData;
-                case cType.VarMode.TABLE
-                    if isMatlab
-                        res=obj.getMatlabTable;
-                    else
-                        res=obj;
-                    end
-                otherwise
-                    res=obj;
-            end
-        end
-
         function viewTable(obj)
         % View the values of the table (tbl) in a uitable graphic object
             vt=cViewTable(obj);
@@ -64,53 +47,40 @@ classdef (Abstract) cTable < cStatusLogger
             end
         end
 
-        function log=exportTXT(obj,filename)
-        % exportTXT saves table as TXT file 
+        function log = saveTable(obj,filename)
+        % saveTable save a cTable in a file
+        %   The file types depends on the extension
+        %   Valid extensions are: CSV,XLSX,JSON,XML,TXT and MAT
         %   Usage:
-        %       log=exportTXT(data, filename)
+        %       log = obj.saveTable(filename)
         %   Input:
-        %       filename - name of TXT file
-        %   OUTPUT
-        %       log - cLoggerStatus object containing status and error messages
+        %       filename - Nane of the file
+        %   Output:
+        %       log - cStatusLogger object with the methods actions
         %
             log=cStatusLogger(cType.VALID);
-            if (nargin~=2) || (~ischar(filename))
-                log.messageLog(cType.ERROR,'Invalid input arguments');
-                return
+            [fileType,ext]=cType.getFileType(filename);
+            switch fileType
+                case cType.FileType.CSV
+                    log=exportCSV(obj.Values,filename);
+                case cType.FileType.XLSX
+                    log=exportXLS(obj.Values,filename);
+                case cType.FileType.JSON
+                    log=exportJSON(obj.getStructTable,filename);
+                case cType.FileType.XML
+                    log=exportXML(obj.getStructTable,filename);
+                case cType.FileType.TXT
+                    log=exportTXT(obj,filename);
+                case cType.FileType.MAT
+                    log=exportMAT(obj,filename);
+                otherwise
+                    log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
             end
-            if ~cType.checkFileWrite(filename)
-                obj.messageLog(cType.ERROR,'Invalid file name: %s',filename);
-                return
-            end
-            if ~cType.checkFileExt(filename,cType.FileExt.TXT)
-                obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
-                return
-            end
-            try
-                fId = fopen (filename, 'wt');
-            catch err
-                log.messageLog(cType.ERROR,err.message)
-                log.messageLog(cType.ERROR,'Open file %s',filename);
-                return
-            end
-            % Print tables into file
-            printTable(obj,fId)
-            fclose(fId);
         end
 
         function res = isNumericTable(obj)
+        % Check is the data of the table is numeric
             res=all(cellfun(@isnumeric,obj.Data(:)));
-        end
-
-        function res = isNumericColumn(obj,idx)
-            tmp=cellfun(@isnumeric,obj.Data(:,idx));
-            res=all(tmp(:));
-        end
-
-        function res=getColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            tmp=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
-            res=[cType.colType(tmp)];
         end
         
         function res=size(obj,dim)

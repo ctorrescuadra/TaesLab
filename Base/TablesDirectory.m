@@ -20,7 +20,7 @@ function res = TablesDirectory(varargin)
 %
     % Load the tables directory
     obj=cTablesDefinition;
-    res=obj.TablesDirectory;
+    res=obj.getTablesDirectory;
     % Get parameters
     p = inputParser;
 	p.addParameter('PrintTable',true,@islogical);

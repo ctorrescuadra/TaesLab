@@ -2,19 +2,24 @@ classdef (Sealed) cTableCell < cTableResult
 % cTableCell Implements cTable interface to store the tabular results of ExIOLab as array cells.
 %   Methods:
 %       obj=cTableCell(data,rowNames,colNames)
-%       obj.setProperties
-%       res=obj.formatData
-%       res=obj.getMatlabTable
-%       res=obj.getFormatedStruct(fmt)
-%       res=obj.getColumnFormat
-%       res=obj.getDescriptionLabel
-%       obj.printTable
-%   Methods Inhereted from cTableResult
-%       obj=cTableResult(data,rowNames,colNames)
-%       obj.ViewTable(state)
-%       obj.setDescription
 %       status=obj.checkTableSize;
-%       res=obj.getStructData
+%       obj.setState
+%       obj.setProperties(p)
+%       status=obj.isNumericTable
+%       status=obj.isNumericColumn(i)
+%       res=obj.getColumnFormat
+%       res=obj.getColumnWidth
+%       res=obj.getStructData(fmt)
+%       res=obj.getStructTable(fmt)
+%       res=obj.getMatlabTable
+%       res=obj.formatData
+%       res=obj.exportTable(varmode,fmt)
+%       obj.printTable
+%       obj.viewTable
+%       log=obj.saveTable(filename)
+%       status=obj.isGraph
+%       obj.showGraph(options)
+%       res=obj.getDescriptionLabel
 % See also cTableResult, cTable
 %
     properties (GetAccess=public,SetAccess=private)
@@ -33,7 +38,6 @@ classdef (Sealed) cTableCell < cTableResult
             obj.Data=data;
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
-            obj.GraphType=cType.GraphType.NONE;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames);
             obj.status=obj.checkTableSize;
@@ -50,10 +54,7 @@ classdef (Sealed) cTableCell < cTableResult
             obj.Format=p.Format;
             obj.FieldNames=p.FieldNames;
             obj.ShowNumber=p.ShowNumber;
-        end
-
-        function setGraphType(obj,value)
-            obj.GraphType=value;
+            obj.GraphType=p.GraphType;
         end
 
         function res=formatData(obj)
@@ -100,15 +101,23 @@ classdef (Sealed) cTableCell < cTableResult
             end
             res=cell2struct(val,obj.FieldNames,2);
         end
+
+        function res=getStructTable(obj)
+            N=obj.NrOfCols-1;
+            fields(N)=struct('Name','','Format','','Unit','','Data',[]);
+            for i=1:N
+                data=cell2struct([obj.RowNames',obj.Data(:,i)],{'key','value'},2);
+                fields(i)=struct('Name',obj.FieldNames{i+1},...
+                     'Format',obj.Format{i+1},...
+                     'Unit',obj.Unit{i+1},...
+                     'Data',data);
+            end
+            res=struct('Name',obj.Name,'Description',obj.Description,...
+            'State',obj.State,'Fields',fields);
+        end
 		
         function res=isNumericColumn(obj,j)
             res=strContains(obj.Format{j+1},'f');
-        end
-
-        function res=getColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            tmp=arrayfun(@(x) isNumericColumn(obj,x)+1,1:obj.NrOfCols-1);
-            res=[cType.colType(tmp)];
         end
 
         function res=getColumnWidth(obj)
@@ -123,7 +132,12 @@ classdef (Sealed) cTableCell < cTableResult
                     res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
                 end
             end
-        end      
+        end
+
+        function res=getColumnFormat(obj)
+        % Get the format of each column (TEXT or NUMERIC)
+            res=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
+        end
         
         function res=getDescriptionLabel(obj)
         % Get the description of each table
@@ -136,10 +150,11 @@ classdef (Sealed) cTableCell < cTableResult
                 fId=1;
             end
             wcol=obj.getColumnWidth;
+            fcol=obj.getColumnFormat;
             hfmt=arrayfun(@(x) ['%-',num2str(x),'s'],wcol,'UniformOutput',false);
             sfmt=hfmt;
             for j=2:obj.NrOfCols
-                if isNumericColumn(obj,j-1)
+                if fcol(j-1)==cType.ColumnFormat.NUMERIC
                     hfmt{j}=[' %',num2str(wcol(j)),'s'];
                     sfmt{j}=[' ',obj.Format{j}];
                 end

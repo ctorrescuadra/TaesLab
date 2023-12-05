@@ -13,14 +13,14 @@ classdef cTablesDefinition < cStatusLogger
 %   See also cFormatData
     properties(GetAccess=public,SetAccess=private)
         TablesDefinition  % Tables properties struct
-        TablesDirectory   % cTableData containig the tables directory info
     end
     properties (Access=protected)
         cfgTables 	 % Cell tables configuration
         cfgMatrices  % Matrix tables configuration
         cfgSummary   % Summary tables configuration
         cfgTypes     % Format types configuration
-        tDict        % Tables dictionnary
+        tDictionary  % Tables dictionnary
+        tDirectory   % cTableData containig the tables directory info
         tableIndex   % Tables index
     end
     methods
@@ -42,7 +42,7 @@ classdef cTablesDefinition < cStatusLogger
             obj.cfgSummary=config.summary;
             obj.cfgTypes=config.format;
             obj.buildTablesDictionary;
-            obj.TablesDirectory=[];
+            obj.tDirectory=[];
         end
 
         function res=get.TablesDefinition(obj)
@@ -54,7 +54,7 @@ classdef cTablesDefinition < cStatusLogger
         function res=getTableProperties(obj,name)
         % Get the properties of a table
             res=[];
-            idx=getIndex(obj.tDict,name);
+            idx=getIndex(obj.tDictionary,name);
             if cType.isEmpty(idx)
                 return
             end
@@ -67,6 +67,13 @@ classdef cTablesDefinition < cStatusLogger
                 case cType.TableType.SUMMARY
                     res=obj.cfgSummary(tIndex.tableId);
             end
+        end
+
+        function res=getTablesDirectory(obj)
+            if isempty(obj.tDirectory)
+                obj.buildTablesDirectory;
+            end
+            res=obj.tDirectory;
         end
 
         function res=exportTablesDirectory(obj,varmode)
@@ -86,43 +93,20 @@ classdef cTablesDefinition < cStatusLogger
                 varmode=cType.VarMode.NONE;
             end
             % get tables directory info
-            if isempty(obj.TablesDirectory)
-                obj.buildTablesDirectory;
-            end
-            tbl=obj.TablesDirectory;
-            % export to a different var mode
-            switch varmode
-            case cType.VarMode.NONE
-                res=tbl;
-            case cType.VarMode.CELL
-                res=tbl.Values;
-            case cType.VarMode.STRUCT
-                res=getStructData(tbl);
-            case cType.VarMode.TABLE
-                if isMatlab
-                    res=getMatlabTable(tbl);
-                else
-                    res=tbl;
-                end
-            otherwise
-                res=tbl;
-            end
+            tbl=obj.getTablesDirectory;
+            res=exportTable(tbl,varmode);
         end
 
         function printTablesDirectory(obj)
         % Print the tables directory in console
-            if isempty(obj.TablesDirectory)
-                obj.buildTablesDirectory;
-            end
-            printTable(obj.TablesDirectory);
+            tbl=obj.getTablesDirectory;
+            printTable(tbl);
         end
 
         function viewTablesDirectory(obj)
         % View the Tables Directory as GUI
-            if isempty(obj.TablesDirectory)
-                obj.buildTablesDirectory;
-            end
-            viewTable(obj.TablesDirectory);
+            tbl=obj.getTablesDirectory;
+            viewTable(tbl);
         end
 
         function log=saveTablesDirectory(obj,filename)
@@ -134,33 +118,8 @@ classdef cTablesDefinition < cStatusLogger
         %       filename - File name. Extension is used to determine the save mode.
         %   Output:
         %       log - cStatusLogger object with error messages
-            log=cStatusLogger(cType.VALID);
-            if isempty(obj.TablesDirectory)
-                obj.buildTablesDirectory;
-            end
-            tbl=obj.TablesDirectory;
-            fileType=cType.getFileType(filename);
-            switch fileType
-                case cType.FileType.CSV
-                    log=exportCSV(tbl.Values,filename);
-                case cType.FileType.XLSX
-                    log=exportXLS(tbl.Values,filename);
-                case cType.FileType.JSON
-                    log=exportJSON(tbl.getStructData,filename);
-                case cType.FileType.XML
-                    s=struct('properties',tbl.getStructData);
-                    log=exportXML(s,filename);
-                case cType.FileType.TXT
-                    log=exportTXT(tbl,filename);
-                case cType.FileType.MAT
-                    log=exportMAT(tbl,filename);
-                otherwise
-                    log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
-                    return
-            end
-            if isValid(log)
-                log.messageLog(cType.INFO,'File %s has been saved',filename);
-            end
+            tbl=obj.getTablesDirectory;
+            log=tbl.saveTable(filename);
         end
     end
 
@@ -170,7 +129,7 @@ classdef cTablesDefinition < cStatusLogger
         %   Input:
         %     name - table key name 
             res=[];
-            idx=getIndex(obj.tDict,name);
+            idx=getIndex(obj.tDictionary,name);
             if cType.isEmpty(idx)
                 return
             end
@@ -183,7 +142,7 @@ classdef cTablesDefinition < cStatusLogger
         %   Input:
         %     name - table key name 
             res=[];
-            idx=getIndex(obj.tDict,name);
+            idx=getIndex(obj.tDictionary,name);
             if cType.isEmpty(idx)
                 return
             end
@@ -196,7 +155,7 @@ classdef cTablesDefinition < cStatusLogger
         %   Input:
         %     name - table key name 
             res=[];
-            idx=getIndex(obj.tDict,name);
+            idx=getIndex(obj.tDictionary,name);
             if cType.isEmpty(idx)
                 return
             end
@@ -251,7 +210,7 @@ classdef cTablesDefinition < cStatusLogger
                 tIndex(idx).tableId=i;
             end
             % Create the dictionary (name,id)
-            obj.tDict=td;
+            obj.tDictionary=td;
             obj.tableIndex=tIndex;
         end
  
@@ -267,8 +226,8 @@ classdef cTablesDefinition < cStatusLogger
             data(:,3)=[cType.TypeTables([tI.type])];
             data(:,4)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
             tbl=cTableData(data,rowNames,colNames);
-            tbl.setDescription(cType.TableDataIndex.DIRECTORY);
-            obj.TablesDirectory=tbl;
+            tbl.setProperties(cType.TableDataIndex.DIRECTORY);
+            obj.tDirectory=tbl;
         end
 	end
 end

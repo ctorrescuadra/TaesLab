@@ -1340,7 +1340,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if ~obj.isSummaryEnable
-                log.printWarning('Summary Results requires more than one state');
+                obj.printDebugInfo('Summary Results requires more than one state');
                 return
             end
             if obj.Summary==value

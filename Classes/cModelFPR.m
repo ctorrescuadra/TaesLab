@@ -429,10 +429,11 @@ classdef cModelFPR < cProcessModel
 						obj.messageLog(cType.ERROR,'Waste type allocation not valid %d',wt.Type(i));
 						return
 				end
-                if isempty(find(tmp,1))					
-					obj.messageLog(cType.ERROR,'Waste values cannot be zero');
+				if isempty(find(tmp,1))	
+					text=obj.ps.FlowKeys{wt.Flows(i)};				
+					obj.messageLog(cType.ERROR,'Invalid Waste Allocation for %s', text);
 					return
-                end
+				end
 				sol(i,:)=tmp/sum(tmp);
 			end
 			sol=scaleRow(sol,1-wt.RecycleRatio);

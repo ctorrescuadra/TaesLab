@@ -44,8 +44,8 @@ classdef (Abstract) cReadModelTable < cReadModel
             % Get Format definition
             idx=cType.TableDataIndex.FORMAT;
             tbl=getTable(tm,cType.TableDataName{idx});
-            if isValid(tbl)
-                if ~isNumCellArray(tbl.Data(:,1:2))
+            if isValid(tbl)  
+                if ~tbl.isNumericColumn(1:2)
                     obj.messageLog(cType.ERROR,'Invalid format table');
                 end
                 res.Format.definitions=tbl.getStructData;
@@ -65,7 +65,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.messageLog(cType.ERROR,'Invalid number of states')
                 return
             end
-            if ~isNumCellArray(tbl.Data)
+            if ~tbl.isNumericTable
                 obj.messageLog(cType.ERROR,'Invalid exergy table');
                 return
             end
@@ -122,7 +122,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     tbl=getTable(tm,twa);
                     NR=tbl.NrOfCols-1;
                     % Check Waste Allocation Table
-                    if (NR<1) || ~isNumCellArray(tbl.Data)
+                    if (NR<1) || ~tbl.isNumericTable
                         obj.messageLog(cType.ERROR,'Invalid waste allocation table');
                         return
                     end
@@ -168,7 +168,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 if isValid(tbl)
                     NrOfSamples=tbl.NrOfCols-2;
                     % Check ResourcesCost Table
-                    if (NrOfSamples<1) || ~isNumCellArray(tbl.Data(:,2:end))
+                    if (NrOfSamples<1) || ~tbl.isNumericColumn(2:tbl.NrOfCols-1)
                         obj.messageLog(cType.WARNING,'Invalid resource cost definition');
                         return
                     end

@@ -2,24 +2,26 @@ classdef (Sealed) cTableMatrix < cTableResult
 % cTableMatrix Implements cTable interface to store the matrix results of ExIOLab.
 %   It store the row/col summary of the matrix
 %   Methods:
-%       obj=cTableCell(data,rowNames,colNames,RowSum,ColSum)
-%       obj.setProperties
-%       obj.getMatrix
-%       res=obj.formatData
-%       res=obj.getMatlabTable
-%       res=obj.getFormatedStruct(fmt)
-%       res=obj.getColumnFormat
-%       res=obj.getDescriptionLabel
-%       obj.printTable
-%       obj.isGraph
-%       obj.isDigraph
-%   Methods Inhereted from cTableResult
-%       res=obj.getFormattedCell(fmt)
-%       obj.ViewTable(state)
-%       obj.setDescription
+%       obj=cTableMatrix(data,rowNames,colNames,RowSum,ColSum)
 %       status=obj.checkTableSize;
-%       res=obj.getStructData
-%   See also cTableResult, cTable
+%       obj.setState
+%       obj.setProperties(p)
+%       status=obj.isNumericTable
+%       status=obj.isNumericColumn(i)
+%       res=obj.getColumnFormat
+%       res=obj.getColumnWidth
+%       res=obj.getStructData(fmt)
+%       res=obj.getStructTable(fmt)
+%       res=obj.getMatlabTable
+%       res=obj.formatData
+%       res=obj.exportTable(varmode,fmt)
+%       obj.printTable
+%       obj.viewTable
+%       log=obj.saveTable(filename)
+%       status=obj.isGraph
+%       obj.showGraph(options)
+%       res=obj.getDescriptionLabel
+% See also cTableResult, cTable
 %
     properties (Access=private)
         RowSum			% Row summary true/false
@@ -90,7 +92,19 @@ classdef (Sealed) cTableMatrix < cTableResult
             if nargin==1
                 fmt=false;
             end
-            res=obj.getCellData(fmt);
+            [idx,jdx,val]=find(obj.getMatrix);
+            M=numel(val);
+            res(M)=struct('row','','col','','value',[]);
+            for i=1:M
+                row=obj.RowNames{idx(i)};
+                col=obj.ColNames{jdx(i)+1};
+                if fmt
+                    value=sprintf(obj.Format,val(idx(i)));
+                else
+                    value=val(idx(i));
+                end
+                res(i)=struct('row',row,'col',col,'value',value);
+            end
         end
 
         function res=getMatlabTable(obj)
@@ -107,9 +121,19 @@ classdef (Sealed) cTableMatrix < cTableResult
             end
         end
 
+        function res=getStructTable(obj)
+            data=getStructData(obj);
+            res=struct('Name',obj.Name,'Description',obj.Description,...
+                    'State',obj.State,'Unit',obj.Unit,'Format',obj.Format,'Data',data);
+        end
+
+        function res = isNumericColumn(obj,idx)
+            res=(idx>0) && (idx<obj.NrOfCols);
+        end
+
         function res=getColumnFormat(obj)
         % Get the format of each column (TEXT or NUMERIC)
-            res=repmat(cType.colType(2),1,obj.NrOfCols-1);
+            res=repmat(cType.ColumnFormat.NUMERIC,1,obj.NrOfCols-1);
         end
 
         function res=getColumnWidth(obj)

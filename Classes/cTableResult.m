@@ -1,15 +1,19 @@
 classdef (Abstract) cTableResult < cTable
 % cTableResult Abstrat class to store ExIOLab results into a cTable
 %   Methods:
-%       obj=cTableResult(data,rowNames,colNames)
-%       res=obj.getFormattedCell(fmt)
-%       obj.ViewTable(state)
-%       
-%   Methods inhereted from cTable:
-%       obj.setDescription(text)
+%       status=tbl.checkDataSize;
+%       obj.setState
 %       status=obj.checkTableSize;
-%       res=obj.getStructData 
-%       res=obj.getMatlabTable [only Matlab]
+%       viewTable(obj)
+%       log=obj.saveTable(filename)
+%       res=obj.isNumericTable
+%       res=obj.getColumnFormat
+%       res=obj.exportTable(varmode,fmt)
+%       obj.printTable
+%       obj.viewTable
+%       log=obj.saveTable(filename)
+%       status=obj.isGraph
+%       obj.showGraph(options)
 % See also cTable, cTableMatrix, cTableCell
 %
     properties (GetAccess=public, SetAccess=protected)
@@ -17,8 +21,7 @@ classdef (Abstract) cTableResult < cTable
         Unit      % Units of the table cell
         GraphType % Graph Type associated to table
     end
-    methods
-        
+    methods      
         function res=exportTable(obj,varmode,fmt)
         % get cTable info in diferent types of variables
             if nargin==1

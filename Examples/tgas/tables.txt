@@ -1,0 +1,48 @@
+
+ Table        Key                                 Results                    Type      Graph  
+————————————————————————————————————————————————————————————————————————————————————————————————
+ flows        FLOW_TABLE                          Productive Structure       TABLE     false  
+ processes    PROCESS_TABLE                       Productive Structure       TABLE     false  
+ streams      STREAM_TABLE                        Productive Structure       TABLE     false  
+ eflows       FLOW_EXERGY                         Thermoeconomic State       TABLE     false  
+ eprocesses   PROCESS_EXERGY                      Thermoeconomic State       TABLE     false  
+ estreams     STREAM_EXERGY                       Thermoeconomic State       TABLE     false  
+ tfp          TABLE_FP                            Thermoeconomic State       MATRIX    true   
+ dfcost       FLOW_EXERGY_COST                    Thermoeconomic Analysis    TABLE     false  
+ gfcost       FLOW_GENERAL_COST                   Thermoeconomic Analysis    TABLE     false  
+ dcost        PROCESS_COST                        Thermoeconomic Analysis    TABLE     false  
+ ducost       PROCESS_UNIT_COST                   Thermoeconomic Analysis    TABLE     false  
+ gcost        PROCESS_GENERAL_COST                Thermoeconomic Analysis    TABLE     false  
+ gucost       PROCESS_GENERAL_UNIT_COST           Thermoeconomic Analysis    TABLE     false  
+ dcfp         COST_TABLE_FP                       Thermoeconomic Analysis    MATRIX    true   
+ dcfpr        COST_TABLE_FPR                      Thermoeconomic Analysis    MATRIX    false  
+ gcfp         GENERAL_COST_TABLE                  Thermoeconomic Analysis    MATRIX    false  
+ dict         PROCESS_ICT                         Thermoeconomic Analysis    MATRIX    true   
+ gict         PROCESS_GENERAL_ICT                 Thermoeconomic Analysis    MATRIX    true   
+ dfict        FLOW_ICT                            Thermoeconomic Analysis    MATRIX    true   
+ gfict        FLOW_GENERAL_ICT                    Thermoeconomic Analysis    MATRIX    true   
+ dgn          DIAGNOSIS                           Thermoeconomic Diagnosis   TABLE     false  
+ mf           MALFUNCTION                         Thermoeconomic Diagnosis   MATRIX    true   
+ mfc          MALFUNCTION_COST                    Thermoeconomic Diagnosis   MATRIX    true   
+ dit          IRREVERSIBILITY_VARIATION           Thermoeconomic Diagnosis   MATRIX    true   
+ wd           WASTE_DEFINITION                    Waste Analysis             TABLE     false  
+ wa           WASTE_ALLOCATION                    Waste Analysis             MATRIX    true   
+ rad          WASTE_RECYCLING_DIRECT              Recycling Analysis         MATRIX    true   
+ rag          WASTE_RECYCLING_GENERAL             Recycling Analysis         MATRIX    true   
+ atfp         DIAGRAM_FP                          Diagram FP                 TABLE     false  
+ atcfp        COST_DIAGRAM_FP                     Diagram FP                 TABLE     false  
+ fat          FLOWS_DIAGRAM                       Productive Diagram         TABLE     false  
+ fpat         FLOW_PROCESS_DIAGRAM                Productive Diagram         TABLE     false  
+ pat          PRODUCTIVE_DIAGRAM                  Productive Diagram         TABLE     false  
+ exergy       SUMMARY_EXERGY                      Summary Results            SUMMARY   false  
+ pku          SUMMARY_UNIT_CONSUMPTION            Summary Results            SUMMARY   true   
+ pI           SUMMARY_IRREVERSIBILITY             Summary Results            SUMMARY   false  
+ dpc          SUMMARY_PROCESS_COST                Summary Results            SUMMARY   false  
+ dpuc         SUMMARY_PROCESS_UNIT_COST           Summary Results            SUMMARY   true   
+ dfc          SUMMARY_FLOW_COST                   Summary Results            SUMMARY   false  
+ dfuc         SUMMARY_FLOW_UNIT_COST              Summary Results            SUMMARY   true   
+ gpc          SUMMARY_PROCESS_GENERAL_COST        Summary Results            SUMMARY   false  
+ gpuc         SUMMARY_PROCESS_GENERAL_UNIT_COST   Summary Results            SUMMARY   true   
+ gfc          SUMMARY_FLOW_GENERAL_COST           Summary Results            SUMMARY   false  
+ gfuc         SUMMARY_FLOW_GENERAL_UNIT_COST      Summary Results            SUMMARY   true   
+

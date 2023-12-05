@@ -151,8 +151,9 @@ classdef cType
 			'Thermoeconomic Diagnosis','Summary Results','Productive Diagram','Diagram FP','Waste Analysis',...
 			'Recycling Analysis','Exergy Cost Calculator','Model Results','Data Model'};
 		% Type of columns for uitables
+		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
-		colWidth=80;  
+        colScale=8;
         % File Extension
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt');
@@ -358,7 +359,7 @@ classdef cType
 		%%%%
 		% File Functions
 		%%%%%
-		function res=getFileType(filename)
+		function [res,ext]=getFileType(filename)
 		% Get file type acording its extension (ext)
 			[~,~,ext]=fileparts(filename);
 			res=cType.ERROR;
