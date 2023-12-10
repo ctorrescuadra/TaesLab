@@ -426,7 +426,7 @@ classdef cDataModel < cStatusLogger
             colNames={'key','type'};
             values={ps.Flows(:).type}';
             tbl=cTableData(values,fNames,colNames);
-			tbl.setProperties(index);
+            tbl.setProperties(sheet,cType.TableDataDescription{index})
 			tables.(sheet)=tbl;
 			% Process Table
             index=cType.TableDataIndex.PROCESSES;
@@ -438,7 +438,7 @@ classdef cDataModel < cStatusLogger
             values(:,2)={ps.Processes(1:end-1).product}';
             values(:,3)={ps.Processes(1:end-1).type}';
             tbl=cTableData(values,pNames,colNames);
-			tbl.setProperties(index);
+            tbl.setProperties(sheet,cType.TableDataDescription{index})
 			tables.(sheet)=tbl;
             % Exergy Table
             index=cType.TableDataIndex.EXERGY;
@@ -450,7 +450,7 @@ classdef cDataModel < cStatusLogger
 				values(:,i)=rex.FlowsExergy';
             end
             tbl=cTableData(num2cell(values),fNames,colNames);
-			tbl.setProperties(index);
+            tbl.setProperties(sheet,cType.TableDataDescription{index})
 			tables.(sheet)=tbl;
             % Format Table
             index=cType.TableDataIndex.FORMAT;
@@ -459,7 +459,7 @@ classdef cDataModel < cStatusLogger
             rowNames={fmt(:).key};
             val=struct2cell(fmt)';
 			tbl=cTableData(val(:,2:end),rowNames,fieldnames(fmt)');
-			tbl.setProperties(index);
+            tbl.setProperties(sheet,cType.TableDataDescription{index})
 			tables.(sheet)=tbl;
             % Resources Cost tables
             index=cType.TableDataIndex.RESOURCES;
@@ -487,7 +487,7 @@ classdef cDataModel < cStatusLogger
                 rowNames=[rNames,pNames];
                 values=[cflow;cprocess];
 				tbl=cTableData(values,rowNames,colNames);
-				tbl.setProperties(index);
+                tbl.setProperties(sheet,cType.TableDataDescription{index})
 				tables.(sheet)=tbl;
             end
             % Waste Table
@@ -502,7 +502,7 @@ classdef cDataModel < cStatusLogger
                 values(:,1)=wd.Type';
                 values(:,2)=num2cell(wd.RecycleRatio)';
 				tbl=cTableData(values,rowNames,colNames);
-				tbl.setProperties(index);
+                tbl.setProperties(sheet,cType.TableDataDescription{index})
 				tables.(sheet)=tbl;
 				% Waste Allocation
                 jdx=find(wd.TypeId==0);
@@ -514,7 +514,7 @@ classdef cDataModel < cStatusLogger
                     rowNames=pNames(idx);
                     values=wd.Values(jdx,idx)';
 				    tbl=cTableData(num2cell(values),rowNames,colNames);
-				    tbl.setProperties(index);
+                    tbl.setProperties(sheet,cType.TableDataDescription{index})
 				    tables.(sheet)=tbl;
                 end
             end

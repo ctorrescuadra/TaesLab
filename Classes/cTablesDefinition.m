@@ -226,7 +226,7 @@ classdef cTablesDefinition < cStatusLogger
             data(:,3)=[cType.TypeTables([tI.type])];
             data(:,4)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
             tbl=cTableData(data,rowNames,colNames);
-            tbl.setProperties(cType.TableDataIndex.DIRECTORY);
+            tbl.setProperties('tdir','Tables Directory');
             obj.tDirectory=tbl;
         end
 	end

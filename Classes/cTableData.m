@@ -18,7 +18,7 @@ classdef cTableData < cTable
 %       obj.viewTable
 %       log=obj.saveTable(filename)
 % See also cTable
-    properties(Access=public)
+    properties(Access=private)
         fdata   % Format Data
         fcol    % Columns Format
         wcol    % Columns Width
@@ -38,12 +38,12 @@ classdef cTableData < cTable
             end
         end
 
-        function setProperties(obj,idx)
+        function setProperties(obj,name,descr)
         % Set Table Description and Name from cType
         %   Input:
         %       idx - Table index
-            obj.Description=cType.TableDataDescription{idx};
-            obj.Name=cType.TableDataName{idx};
+            obj.Name=name;
+            obj.Description=descr;
         end
 
         function res = isNumericColumn(obj,idx)
@@ -97,7 +97,7 @@ classdef cTableData < cTable
 
         function buildFormatData(obj)
             M=obj.NrOfCols-1;
-            obj.fdata=cell(obj.NrOfRows,M);
+            obj.fdata=obj.Data;
             obj.fcol=zeros(1,M);
             obj.wcol=zeros(1,obj.NrOfCols);
             obj.wcol(1)=max(cellfun(@length,obj.Values(:,1)))+2;
@@ -112,8 +112,6 @@ classdef cTableData < cTable
                     obj.fcol(j)=cType.ColumnFormat.NUMERIC;
                 else
                     cw=max(cellfun(@length,obj.Values(:,j+1)));
-                    fmt=['%-',num2str(cw),'s'];
-                    obj.fdata(:,j)=cellfun(@(x) sprintf(fmt,x),obj.Data(:,j),'UniformOutput',false);
                     obj.wcol(j+1)=cw+2;
                     obj.fcol(j)=cType.ColumnFormat.CHAR;
                 end

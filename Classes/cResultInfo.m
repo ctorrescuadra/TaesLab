@@ -149,22 +149,14 @@ classdef cResultInfo < cStatusLogger
             tnames=obj.getListOfTables;
             data=cellfun(@(x) obj.Tables.(x).Description,tnames,'UniformOutput',false);
             res=cTableData(data,tnames',colNames);
+            res.setProperties(cType.ResultIndex{obj.ResultId},obj.ResultName);
+            res.setState(obj.State)
         end
         
         function printIndexTable(obj)
         % Print the index table in console
             tbl=obj.getIndexTable;
-            len1=max(cellfun(@length,tbl.RowNames))+1;
-            len2=max(cellfun(@length,tbl.Data(:,1)))+1;
-            hfmt=['%-',num2str(len1),'s %-',num2str(len2),'s\n'];
-            lines=repmat('-',1,len1+len2+2);
-            fprintf('\n')
-            fprintf(hfmt,tbl.ColNames{:});
-            fprintf('%s\n',lines);
-            for i=1:tbl.NrOfRows
-                fprintf(hfmt,tbl.RowNames{i},tbl.Data{i,1});
-            end
-            fprintf('\n');
+            tbl.printTable;
         end
     
         function printResults(obj)

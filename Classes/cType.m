@@ -150,13 +150,17 @@ classdef cType
 		Results={'Productive Structure','Thermoeconomic State','Thermoeconomic Analysis',...
 			'Thermoeconomic Diagnosis','Summary Results','Productive Diagram','Diagram FP','Waste Analysis',...
 			'Recycling Analysis','Exergy Cost Calculator','Model Results','Data Model'};
+        ResultIndex={'psindex','tsindex','taindex','tdindex','srindex','pdindex','fpindex','waindex',...
+            'raindex','ecindex','rmindex','dmindex'};
 		% Type of columns for uitables
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
         colScale=8;
-        % File Extension
-		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6);
-		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt');
+        % File Extensionsprintf
+		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7);
+		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html');
+        % HTML/CCS style file
+		CSSFILE='styles.css';
 		% Icon Files
 		IconFile=struct('ProductiveStructure','ps.png','ThermoeconomicState','ts.png','ThermoeconomicAnalysis','ta.png',...
             'ThermoeconomicDiagnosis','td.png','SummaryResults','gs.png');
@@ -171,7 +175,7 @@ classdef cType
 		PATH_PC='\'           % Path Character for Windows
 		PATH_UNIX='/'         % Path Character for Unix
 		% File Pattern
-		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+.(xlsx|csv|mat|txt|json|xml)$'
+		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+.(xlsx|csv|mat|txt|json|xml|html)$'
 		% Key Text Patter
 		KEY_PATTERN='^[A-Z][A-Za-z0-9]+$'
 		KEY_LENGTH=2:8
@@ -300,7 +304,7 @@ classdef cType
 		function res=checkFormat(text)
 		% Check DiagnosisMethod value
 			res=cType.checkTypeKey(cType.Format,text);
-		end
+        end
 
 		function res=FlowTypeOptions()
 		% Get a cell array with the Flow Type options

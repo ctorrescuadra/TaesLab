@@ -426,12 +426,12 @@ classdef cModelFPR < cProcessModel
 						tmp=tmp/sum(tmp);  
 						tmp(aP)=tmp(aP)+opI(aP,j)';
 					otherwise
-						obj.messageLog(cType.ERROR,'Waste type allocation not valid %d',wt.Type(i));
+						obj.messageLog(cType.ERROR,'Invalid Waste type allocation %s',wt.Type{i});
 						return
 				end
 				if isempty(find(tmp,1))	
 					text=obj.ps.FlowKeys{wt.Flows(i)};				
-					obj.messageLog(cType.ERROR,'Invalid Waste Allocation for %s', text);
+					obj.messageLog(cType.ERROR,'Invalid Allocation for waste flow %s', text);
 					return
 				end
 				sol(i,:)=tmp/sum(tmp);

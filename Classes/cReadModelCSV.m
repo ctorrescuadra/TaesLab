@@ -29,7 +29,7 @@ classdef cReadModelCSV < cReadModelTable
                 if cType.checkFileRead(filename)
                     tbl=cReadModelCSV.import(filename);
                     if tbl.isValid
-                        tbl.setProperties(i)
+                        tbl.setProperties(sname,cType.TableDataDescription{i})
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
@@ -49,7 +49,7 @@ classdef cReadModelCSV < cReadModelTable
                 if cType.checkFileRead(filename)
                     tbl=cReadModelCSV.import(filename);
                     if tbl.isValid
-                        tbl.setProperties(i)
+                        tbl.setProperties(sname,cType.TableDataDescription{i})
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);

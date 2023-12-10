@@ -224,11 +224,13 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       res - cResultInfo object (DIAGRAM_FP) with the Diagram FP tables
         %
             % Get Table FP
-            tval=cProcessModel.diagramFP(mfp.TableFP,obj.processKeys);
+            values=mfp.TableFP;
+            tval=cProcessModel.diagramFP(values,obj.processKeys);
             tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,values);
             tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,tval);
             % Get Cost Table FP
-            tval=cProcessModel.diagramFP(mfp.getCostTableFP,obj.processKeys);
+            values=mfp.getCostTableFP;
+            tval=cProcessModel.diagramFP(values,obj.processKeys);
             tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,values);
             tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,tval);
             res=cResultInfo(mfp,tbl);

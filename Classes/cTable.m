@@ -47,6 +47,15 @@ classdef (Abstract) cTable < cStatusLogger
             end
         end
 
+        function viewHTML(obj)
+            vh=cBuildHTML(obj);
+            if isValid(vh)
+                vh.showTable
+            else
+                printLogger(vh);
+            end
+        end
+        
         function log = saveTable(obj,filename)
         % saveTable save a cTable in a file
         %   The file types depends on the extension
@@ -71,6 +80,8 @@ classdef (Abstract) cTable < cStatusLogger
                     log=exportXML(obj.getStructTable,filename);
                 case cType.FileType.TXT
                     log=exportTXT(obj,filename);
+                case cType.FileType.HTML
+                    log=exportHTML(obj,filename);
                 case cType.FileType.MAT
                     log=exportMAT(obj,filename);
                 otherwise
