@@ -117,40 +117,40 @@ classdef cBuildHTML < cStatusLogger
             res=[res,sprintf('</html>\n')];
         end
 
-        function res=buildIndexHTML(tbl,folder)
+        function res=buildIndexBody(tbl,folder)
         % Build the body of the HTML file of a index table
             cols=cell(1,tbl.NrOfCols);
             rows=cell(1,tbl.NrOfRows);
             % Body and table head
-            res=sprintf(fId,'\t<body>\n');
-            res=[res,sprintf(fId,'\t\t<h3>\n')];
-            res=[res,sprintf(fId,'\t\t\t%s\n',tbl.Description)];
-            res=[res,sprintf(fId,'\t\t</h3>\n')];
-            res=[res,sprintf(fId,'\t\t<table>\n')];
-            res=[res,sprintf(fId,'\t\t\t<thead>\n')];
+            res=sprintf('\t<body>\n');
+            res=[res,sprintf('\t\t<h3>\n')];
+            res=[res,sprintf('\t\t\t%s\n',tbl.Description)];
+            res=[res,sprintf('\t\t</h3>\n')];
+            res=[res,sprintf('\t\t<table>\n')];
+            res=[res,sprintf('\t\t\t<thead>\n')];
             data=tbl.formatData;
             % Table header
             for j=1:tbl.NrOfCols
-                cols{j}=sprintf(fId,'\t\t\t\t<th>%s</th>\n',tbl.ColNames{j});
+                cols{j}=sprintf('\t\t\t\t<th>%s</th>\n',tbl.ColNames{j});
             end
             res=[res,[cols{:}]];
-            res=[res,sprintf(fId,'\t\t\t</thead>\n')];
+            res=[res,sprintf('\t\t\t</thead>\n')];
             % Rows entries
             for i=1:tbl.NrOfRows
                 url=[folder,filesep,tbl.RowNames{i},'.html'];
                 tIndex=['<a href="',url,'" target="_blank">',tbl.RowNames{i},'</a>'];
-                rows{i}=sprintf(fId,'\t\t\t<tr>\n');
+                rows{i}=sprintf('\t\t\t<tr>\n');
                 rows{i}=[rows{i},sprintf('\t\t\t\t<td>\n')];
                 rows{i}=[rows{i},sprintf('\t\t\t\t\t%s\n',tIndex)];
                 rows{i}=[rows{i},sprintf('\t\t\t\t</td>\n')];
                 rows{i}=[rows{i},sprintf('\t\t\t\t<td>%s</td>\n',data{i,1})];
                 rows{i}=[rows{i},sprintf('\t\t\t</tr>\n')];     
             end
-            res=[res,[rows{i}]];
+            res=[res,[rows{:}]];
             % Close the HTML labels
-            res=[res,sprintf(fId,'\t\t</table>\n')];
-            res=[res,sprintf(fId,'\t</body>\n')];
-            res=[res,sprintf(fId,'</html>\n')];
+            res=[res,sprintf('\t\t</table>\n')];
+            res=[res,sprintf('\t</body>\n')];
+            res=[res,sprintf('</html>\n')];
         end
     end    
 end

@@ -48,6 +48,7 @@ classdef (Abstract) cTable < cStatusLogger
         end
 
         function viewHTML(obj)
+        % View a table in the web browser
             vh=cBuildHTML(obj);
             if isValid(vh)
                 vh.showTable
@@ -94,6 +95,56 @@ classdef (Abstract) cTable < cStatusLogger
             res=all(cellfun(@isnumeric,obj.Data(:)));
         end
         
+        function res = isNumericColumn(obj,idx)
+        % Check if a column is numeric (base mathod)
+            tmp=cellfun(@isnumeric,obj.Data(:,idx));
+            res=all(tmp(:));
+        end
+
+        function res = getStructData(obj)
+        % Get Table data as struct array
+            val = [obj.RowNames',obj.Data];
+            res = cell2struct(val,obj.ColNames,2);
+        end
+    
+        function res=getMatlabTable(obj)
+        % Get Table as Matlab table
+            if isOctave
+                res=obj;
+            else
+                res=cell2table(obj.Data,'VariableNames',obj.ColNames(2:end),'RowNames',obj.RowNames');
+                res=addprop(res,["Name","State"],["table","table"]);
+                res.Properties.Description=obj.Description;
+                res.Properties.CustomProperties.Name=obj.Name;
+                res.Properties.CustomProperties.State=obj.State;
+            end
+        end
+
+        function res=getStructTable(obj)
+        % Get a structure with the table info
+            data=cell2struct([obj.RowNames',obj.Data],obj.ColNames,2);
+            res=struct('Name',obj.Name,'Description',obj.Description,...
+            'State',obj.State,'Data',data);
+        end
+
+        function res=exportTable(obj,varmode)
+        % Get table values in diferent formats
+            switch varmode
+                case cType.VarMode.CELL
+                    res=obj.Values;
+                case cType.VarMode.STRUCT
+                    res=obj.getStructData;
+                case cType.VarMode.TABLE
+                    if isMatlab
+                        res=obj.getMatlabTable;
+                    else
+                        res=obj;
+                    end
+                otherwise
+                    res=obj;
+            end
+        end
+
         function res=size(obj,dim)
         % Overload size function
             if nargin==1

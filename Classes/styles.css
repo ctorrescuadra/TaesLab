@@ -1,10 +1,23 @@
+
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
 h3{
     font-family:Arial, sans-serif; font-size:14px; font-weight:bold
 }
+
 table{
     border-collapse:collapse; border: solid thin;
     font-family:Arial, sans-serif; font-size:12px;
 }
+
 td {
     overflow:hidden; word-break:normal; 
     padding:5px 5px; padding-left:5px; padding-right:20px;
@@ -18,17 +31,21 @@ th {
     background-color: #f2f2f2;
     border: solid thin; border-color: #b2b2b2;
 }
+
 td.num {
     text-align: right;
     padding-left:20px; padding-right:5px;
 }
+
 th.num {
     text-align: right;
     padding-left:20px; padding-right:5px;
 }
+
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
+
 td:first-child {
     font-weight: bold;
     background-color: #f2f2f2;  
