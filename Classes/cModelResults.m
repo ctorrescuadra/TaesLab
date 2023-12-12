@@ -6,7 +6,7 @@ classdef (Sealed) cModelResults < cStatusLogger
     %       res=obj.getResults(id)
     %       obj.setResults(res)
     %       obj.clearResults(id)
-    %       obj.getModelInfo
+    %       obj.getModelResults
     properties(Access=private)
         results    % cResultInfo cell array
     end
@@ -58,7 +58,7 @@ classdef (Sealed) cModelResults < cStatusLogger
             end
         end
 
-        function res=getModelInfo(obj)
+        function res=getModelResults(obj)
         % Get the cResultInfo objects of the current state
             stateResults=obj.results(1:cType.MAX_RESULT);
             res=obj.results(~cellfun(@isempty,stateResults));

@@ -39,7 +39,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.isWaste
 %       res=obj.isSummaryEnable
 %       res=obj.getTableInfo
-%       res=obj.getModelTables
+%       res=obj.getModelInfo
 %       obj.getTable(name)
 %   Print Methods
 %       obj.printIndexTable
@@ -407,7 +407,7 @@ classdef cThermoeconomicModel < cStatusLogger
             case cType.ResultId.EXERGY_COST_CALCULATOR
                 res=obj.thermoeconomicAnalysis;
             case cType.ResultId.RESULT_MODEL
-                res=obj.getModelTables;
+                res=obj.getModelInfo;
             case cType.ResultId.DATA_MODEL
                 res=obj.DataModel;
             otherwise
@@ -515,18 +515,18 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.rstate;
         end
 
-        function res=getModelInfo(obj)
+        function res=getModelResults(obj)
         % Get the cResultInfo objects of the current state (internal application use)
-            res=getModelInfo(obj.results);
+            res=getModelResults(obj.results);
         end
 
-        function res=getModelTables(obj)
+        function res=getModelInfo(obj)
         % Get a cResultInfo object with all tables of the active model
             id=cType.ResultId.RESULT_MODEL;
             res=obj.getResults(id);
             if isempty(res)
                 tables=struct();
-                tmp=obj.getModelInfo;
+                tmp=obj.getModelResults;
                 for k=1:numel(tmp)
                     dm=tmp{k};
                     list=dm.getListOfTables;
@@ -565,7 +565,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %
         function printResults(obj)
         % Print the result tables on console
-            cellfun(@(x) printResults(x), obj.getModelInfo)
+            cellfun(@(x) printResults(x), obj.getModelResults)
         end
 
         function printSummary(obj)
@@ -580,7 +580,7 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function printIndexTable(obj)
         % Print tables index of the result model
-            mt=obj.getModelTables;
+            mt=obj.getModelInfo;
             mt.printIndexTable;
         end
 
@@ -614,7 +614,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
-            mt=obj.getModelTables;
+            mt=obj.getModelInfo;
             log=saveResults(mt,filename);
         end
 

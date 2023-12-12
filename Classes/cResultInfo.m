@@ -142,8 +142,12 @@ classdef cResultInfo < cStatusLogger
                 log.printError('Table name %s does NOT exists',name);
             end
         end
+
+        function res=getTableIndex(obj)
+            res=obj.tableIndex;
+        end
         
-        function printIndexTable(obj)
+        function printTableIndex(obj)
         % Print the index table in console
             tbl=obj.tableIndex;
             tbl.printTable;

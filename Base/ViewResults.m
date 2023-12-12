@@ -189,7 +189,7 @@ classdef ViewResults < matlab.apps.AppBase
         % Show the index table in table panel    
         function ViewIndexTable(app,res)
             app.Label.Text=res.ResultName;
-            tbl=res.getIndexTable;
+            tbl=res.getTableIndex;
             app.UITable.ColumnName = tbl.ColNames(2:end);
             app.UITable.RowName = tbl.RowNames;
             app.UITable.ColumnWidth={'auto','auto'};
@@ -235,7 +235,7 @@ classdef ViewResults < matlab.apps.AppBase
             if isa(res,'cResultInfo')
                 val={res};
             elseif isa(res,'cThermoeconomicModel')
-                val=res.getModelInfo;
+                val=res.getModelResults;
             else
                 log.printError('Results must be a cResultInfo object');
                 delete(app);
