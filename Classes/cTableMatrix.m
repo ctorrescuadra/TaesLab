@@ -6,14 +6,6 @@ classdef (Sealed) cTableMatrix < cTableResult
 %       status=obj.checkTableSize;
 %       obj.setState
 %       obj.setProperties(p)
-%       status=obj.isNumericTable
-%       status=obj.isNumericColumn(i)
-%       res=obj.getColumnFormat
-%       res=obj.getColumnWidth
-%       res=obj.getStructData(fmt)
-%       res=obj.getStructTable(fmt)
-%       res=obj.getMatlabTable
-%       res=obj.formatData
 %       res=obj.exportTable(varmode,fmt)
 %       obj.printTable
 %       obj.viewTable
@@ -92,19 +84,12 @@ classdef (Sealed) cTableMatrix < cTableResult
             if nargin==1
                 fmt=false;
             end
-            [idx,jdx,val]=find(obj.getMatrix);
-            M=numel(val);
-            res(M)=struct('row','','col','','value',[]);
-            for i=1:M
-                row=obj.RowNames{idx(i)};
-                col=obj.ColNames{jdx(i)+1};
-                if fmt
-                    value=sprintf(obj.Format,val(idx(i)));
-                else
-                    value=val(idx(i));
-                end
-                res(i)=struct('row',row,'col',col,'value',value);
+            if fmt
+                val=[obj.RowNames',obj.formatData];
+            else
+                val=[obj.RowNames',obj.Data];
             end
+            res=cell2struct(val,obj.ColNames,2);
         end
 
         function res=getMatlabTable(obj)

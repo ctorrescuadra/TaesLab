@@ -379,13 +379,13 @@ classdef cDataModel < cStatusLogger
             end
         end
         
-        function viewTable(obj,name)
+        function viewTable(obj,name,varargin)
         % View a table in a GUI Table
         %   Input:
         %       name - Name of the table
             tbl=obj.getTable(name);
             if tbl.isValid
-                viewTable(tbl);
+                viewTable(tbl.varargin{:});
             end
         end
     end

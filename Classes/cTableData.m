@@ -5,14 +5,7 @@ classdef cTableData < cTable
 %       cTableData.create(values)
 %       status=obj.checkTableSize;
 %       obj.setState
-%       obj.setProperties(idx)
-%       status=obj.isNumericTable
-%       status=obj.isNumericColumn(i)
-%       res=obj.getColumnFormat
-%       res=obj.getColumnWidth
-%       res=obj.getStructData
-%       res=obj.getStructTable
-%       res=obj.getMatlabTable
+%       obj.setProperties(name,descr)
 %       res=obj.exportTable(varmode)
 %       obj.printTable
 %       obj.viewTable

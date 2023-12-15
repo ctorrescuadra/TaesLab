@@ -5,15 +5,6 @@ classdef (Sealed) cTableCell < cTableResult
 %       status=obj.checkTableSize;
 %       obj.setState
 %       obj.setProperties(p)
-%       status=obj.isNumericTable
-%       status=obj.isNumericColumn(i)
-%       res=obj.getColumnFormat
-%       res=obj.getColumnWidth
-%       res=obj.getStructData(fmt)
-%       res=obj.getStructTable(fmt)
-%       res=obj.getMatlabTable
-%       res=obj.formatData
-%       res=obj.exportTable(varmode,fmt)
 %       obj.printTable
 %       obj.viewTable
 %       log=obj.saveTable(filename)
@@ -104,16 +95,15 @@ classdef (Sealed) cTableCell < cTableResult
 
         function res=getStructTable(obj)
             N=obj.NrOfCols-1;
-            fields(N)=struct('Name','','Format','','Unit','','Data',[]);
+            data=obj.getStructData;
+            fields(N)=struct('Name','','Format','','Unit','');
             for i=1:N
-                data=cell2struct([obj.RowNames',obj.Data(:,i)],{'key','value'},2);
                 fields(i)=struct('Name',obj.FieldNames{i+1},...
                      'Format',obj.Format{i+1},...
-                     'Unit',obj.Unit{i+1},...
-                     'Data',data);
+                     'Unit',obj.Unit{i+1});
             end
             res=struct('Name',obj.Name,'Description',obj.Description,...
-            'State',obj.State,'Fields',fields);
+            'State',obj.State,'Fields',fields,'Data',data);
         end
 		
         function res=isNumericColumn(obj,j)

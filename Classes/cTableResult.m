@@ -1,19 +1,14 @@
 classdef (Abstract) cTableResult < cTable
 % cTableResult Abstrat class to store ExIOLab results into a cTable
 %   Methods:
-%       status=tbl.checkDataSize;
-%       obj.setState
+%   Methods:
 %       status=obj.checkTableSize;
+%       obj.setState
 %       viewTable(obj)
 %       log=obj.saveTable(filename)
-%       res=obj.isNumericTable
-%       res=obj.getColumnFormat
-%       res=obj.exportTable(varmode,fmt)
-%       obj.printTable
-%       obj.viewTable
-%       log=obj.saveTable(filename)
-%       status=obj.isGraph
-%       obj.showGraph(options)
+%       res=exportTable(obj)
+%       res=obj.isGraph
+%       obj.showGraph(name)
 % See also cTable, cTableMatrix, cTableCell
 %
     properties (GetAccess=public, SetAccess=protected)

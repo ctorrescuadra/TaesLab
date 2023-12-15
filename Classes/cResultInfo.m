@@ -5,14 +5,15 @@ classdef cResultInfo < cStatusLogger
 %   - Show the results in console
 %   - Show the results in workspace
 %   - Show the results in graphic user interfaces
-%   - Save the results in files: XLSX, CSV and MAT
+%   - Save the results in files: XLSX, CSV, TXT and HTML
 %   The diferent types (ResultId) of cResultInfo object are defined in cType.ResultId 
 %   Methods:
 %       obj.getTable(table)
 %       obj.printTable(table)
 %       obj.viewTable(table);
 %       obj.printResults;
-%       obj.printIndexTable;
+%       res=getTableIndex
+%       obj.printTableIndex;
 %       log=obj.saveResults(filename)
 %       res=obj.getResultTables(varmode,fmt)
 %       obj.summaryDiagnosis
@@ -128,16 +129,20 @@ classdef cResultInfo < cStatusLogger
             end
         end
     
-        function viewTable(obj,name)
+        function viewTable(obj,name,varargin)
         % View an individual table as a GUI Table
         %   Usage:
-        %       obj.viewTable(table)
+        %       obj.viewTable(table,option)
         %   Input:
         %       name - Name of the table
+        %       option - Way to display the table
+        %           cType.TableView.GUI (default)
+        %           cType.TableView.HTML
+        %
             log=cStatus(cType.VALID);
             tbl=obj.getTable(name);
             if isValid(tbl)
-                viewTable(tbl);
+                viewTable(tbl,varargin{:});
             else
                 log.printError('Table name %s does NOT exists',name);
             end
@@ -180,18 +185,18 @@ classdef cResultInfo < cStatusLogger
                 log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
                 return
             end
-            fileType=cType.getFileType(filename);
+            [fileType,ext]=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.CSV
                     slog=obj.saveAsCSV(filename);
                 case cType.FileType.XLSX
                     slog=obj.saveAsXLS(filename);
-                case cType.FileTtype.HTML
+                case cType.FileType.HTML
                     slog=obj.saveAsHTML(filename);
                 case cType.FileType.TXT
                     slog=obj.saveAsTXT(filename);
             otherwise
-                log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
+                log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
                 return
             end
             log.addLogger(slog);

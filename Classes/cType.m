@@ -153,17 +153,18 @@ classdef cType
         ResultIndex={'psindex','tsindex','taindex','tdindex','srindex','pdindex','fpindex','waindex',...
             'raindex','ecindex','rmindex','dmindex'};
 		% Type of columns for uitables
+		TableView=struct('GUI',1,'HTML',2);
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
         colScale=8;
-        % File Extensionsprintf
+        % File Extensions
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html');
         % HTML/CCS style file
 		CSSFILE='styles.css';
 		% Icon Files
 		IconFile=struct('ProductiveStructure','ps.png','ThermoeconomicState','ts.png','ThermoeconomicAnalysis','ta.png',...
-            'ThermoeconomicDiagnosis','td.png','SummaryResults','gs.png');
+            'ThermoeconomicDiagnosis','td.png','RecyclingAnalysis','ra.png','SummaryResults','gs.png','ModelResults','mr.png');
         % Taess app welcome image
 		TaesImage='TaesLab.png';
         % Taess app Resources folder

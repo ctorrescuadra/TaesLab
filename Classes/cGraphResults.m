@@ -136,7 +136,11 @@ classdef cGraphResults < cStatusLogger
 			f=figure('name',obj.Name,'numbertitle','off',...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
-			pie(obj.xValues,'%5.1f%%');
+			if isMatlab
+				pie(obj.xValues,'%5.1f%%');
+			else
+				pie(obj.xValues);
+			end
 			title(ax,obj.Title,'fontsize',14);
 			hl=legend(obj.Legend);
 			set(hl,'Orientation','horizontal','Location','southoutside');

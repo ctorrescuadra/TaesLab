@@ -13,16 +13,10 @@ classdef ThermoeconomicPanel < handle
 %   - View Result in tables and graphs
 %
 %	USAGE: app=ThermoeconomicPanel;
-%	OUTPUT:
-%		app - Contains information about the application
-%			Model: cThermoeconomicModel object
-%			Options: Current Parameters of the app
-%			Results: Structure containing the current result values
 % See also cThermoeconomicModel
 %
     properties(Access=private)
-		stateNames      % State Names
-        sampleNames     % Resource Sample names
+        % Widgets definition
 		log             % Log widget
 		mfile_text      % Model file widget
 		open_button     % Open Data Model widget
@@ -31,17 +25,18 @@ classdef ThermoeconomicPanel < handle
         state_popup     % Select State widget
         rstate_popup    % Select Reference State widget
         sample_popup    % Select Resources widget
-        varmode_popup   % Select VarMode widget
+        wf_popup        % Select Waste Flows widget
         tables_popup    % Select CostTables widget
 		tdm_popup       % Diagnosis method widget
-        vf_checkbox     % Select VarFormat widget
+        ra_checkbox     % Recycling Analysis widget
 		sh_checkbox     % Show in console widget
-		gr_checkbox     % Select file button widget
+		gr_checkbox     % Select graphic widget
         sr_checkbox     % Summary Results widget
 		mn_ps           % Table Productive Structure menu widget
 		mn_ts           % Thermoeconomic State menu widget
 		mn_ta           % Thermoeconomic Analysis menu widget
         mn_td           % Thermoeconomic Diagnosis menu widget
+        mn_ra           % Recycling Analysis menu widget
         mn_gs           % Summary Results menu widget
         mn_vr           % View Model Results menu widget
 		mn_sr  			% Save Result menu widget
@@ -51,559 +46,315 @@ classdef ThermoeconomicPanel < handle
 		tb_ps			% Productive Structure tool bar widget
 		tb_ts           % Thermoeconomic State tool bar widget
         tb_ta			% Thermoeconomic Analysis tool bar widget
-        tb_td			% Thermoeconomic Diagnosis tool bar widgt
+        tb_td			% Thermoeconomic Diagnosis tool bar widget
+        tb_ra           % Recycling Analysis tool bar widget
+        tb_mr           % Model Results tool bar widget
         tb_gs           % General Summary Results tool bar widget
     end
 
-	properties(GetAccess=public,SetAccess=private)
-        Model           	% Thermoeconomic Model
-		Options         	% Global presentation options
+	properties(Access=private)
+    % Appplication variables
+        model           % cThermoeconomicModel object
+        stateNames      % State Names
+        sampleNames     % Resource Sample names
+        wasteFlows      % Waste Flows
+        activeWaste     % Active Waste Flow for Recycling
+	    console         % Show results in console
+        showGraph       % Show results in GUI
+        resultFile      % Full results file name
+        outputFileName  % Sort output file name
     end
 
     methods
-        function obj=ThermoeconomicPanel()
+        function app=ThermoeconomicPanel()
 		% ThermoeconomicPanel constructor
-			% Initilize non-graphics object variables
-			outputFileName=strcat(cType.RESULT_FILE,'.xlsx');
-			obj.Options=struct('Printer',false,...
-				'VarMode',cType.VarMode.NONE, ...
-				'ResultFile',[pwd,filesep,outputFileName],...
-				'VarFormat',false,...
-				'ShowGraph',false);
-			obj.Model=cStatusLogger();
-			% Create figure
-            ss=get(groot,'ScreenSize');
-            xsize=ss(3)/3.5;
-            ysize=ss(4)/2;
-            xpos=(ss(3)-xsize)/2;
-            ypos=(ss(4)-ysize)/2;
-            hf=figure('visible','off','menubar','none',...
-			          'name','Thermoeconomic Analysis Panel',...
-                      'numbertitle','off','color',[0.94 0.94 0.94],...
-                      'resize','on','Position',[xpos,ypos,xsize,ysize]);
-            % Tool Bar
-			tb = uitoolbar(hf);
-			obj.tb_ps = uipushtool (tb, 'cdata', cType.getIcon('ProductiveStructure'),...
-				'tooltipstring','Show Productive Structure',...
-				'clickedcallback', @(src,evt) obj.productiveStructure(src,evt));
-			obj.tb_ts = uipushtool (tb, 'cdata', cType.getIcon('ThermoeconomicState'),...
-			    'tooltipstring','Show Thermoeconomic State',...
-			    'clickedcallback', @(src,evt) obj.thermoeconomicState(src,evt));
-            obj.tb_ta = uipushtool (tb, 'cdata', cType.getIcon('ThermoeconomicAnalysis'),...
-			    'tooltipstring','Thermoeconomic Analysis',...
-			    'clickedcallback', @(src,evt) obj.thermoeconomicAnalysis(src,evt));
-            obj.tb_td = uipushtool (tb, 'cdata', cType.getIcon('ThermoeconomicDiagnosis'),...
-			    'tooltipstring','Thermoeconomic Diagnosis',...
-			    'clickedcallback', @(src,evt) obj.thermoeconomicDiagnosis(src,evt));
-            obj.tb_gs = uipushtool (tb, 'cdata', cType.getIcon('SummaryResults'),...
-			    'tooltipstring','General Summary',...
-			    'clickedcallback', @(src,evt) obj.summaryResults(src,evt));
-			% Menus
-            f=uimenu (hf,'label', '&File', 'accelerator', 'f');
-            e=uimenu (hf,'label', '&Tools', 'accelerator', 't');
-            uimenu (hf,'label', '&Help', 'accelerator', 'h');
-			uimenu (f, 'label', 'Open', 'accelerator', 'o', ...
-				'callback', @(src,evt) obj.getFile(src,evt));
-            uimenu (f, 'label', 'Close', 'accelerator', 'q', ...
-				'callback', 'close (gcf)');
-            s=uimenu (f,'label','Save','accelerator','s');
-			obj.mn_sr=uimenu (s, 'label', 'Model Results',...
-				'callback', @(src,evt) obj.saveResult(src,evt));
-            obj.mn_sd=uimenu (s, 'label', 'Data Model',...
-				'callback', @(src,evt) obj.saveDataModel(src,evt));
-            obj.mn_ss=uimenu (s, 'label', 'Summary',...
-				'callback', @(src,evt) obj.saveSummary(src,evt));
-            obj.mn_fp=uimenu (s, 'label', 'Diagram FP',...
-				'callback', @(src,evt) obj.saveDiagramFP(src,evt));
-			obj.mn_ps=uimenu (e, 'label', 'Productive Structure',...
-				'callback', @(src,evt) obj.productiveStructure(src,evt));
-			obj.mn_ts=uimenu (e, 'label', 'Thermoeconomic State',...
-				'callback', @(src,evt) obj.thermoeconomicState(src,evt));
-			obj.mn_ta=uimenu (e, 'label', 'Thermoeconomic Analysis',...
-				'callback', @(src,evt) obj.thermoeconomicAnalysis(src,evt));
-			obj.mn_td=uimenu (e, 'label', 'Thermoeconomic Diagnosis',...
-				'callback', @(src,evt) obj.thermoeconomicDiagnosis(src,evt));
-            obj.mn_gs=uimenu (e, 'label', 'Summary Results',...
-				'callback', @(src,evt) obj.summaryResults(src,evt));
-            obj.mn_vr=uimenu (e, 'label', 'View Results Model',...
-				'callback', @(src,evt) obj.viewResultsModel(src,evt));
-				
-			% Decoration panel
-            uipanel (hf,'title', 'Input Parameters', ...
-                 'units','normalized',...
-                 'fontname','Verdana','fontsize',8,...
-                 'position', [0.01, 0.43, 0.98, 0.54]);
-
-			uipanel (hf,'title', 'Output Parameters', ...
-                 'units','normalized',...
-                 'fontname','Verdana','fontsize',8,...
-                 'position', [0.01, 0.01, 0.98, 0.38]);
-
-			% Labels Input Parameters
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'fontname','Verdana','fontsize',9,...
-                   'string', 'Data Model File:',...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Select data model file',...
-                   'position', [0.08 0.87 0.35 0.05]);
-
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Reference State:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Select Reference State for Analysis',...
-                   'position', [0.08 0.80 0.35 0.05]);
-
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Operation State:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Select Operation State for Analysis',...
-                   'position', [0.08 0.73 0.35 0.05]);
-
-			uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Resources Cost:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Select Resource Sample for Analysis',...
-                   'position', [0.08 0.66 0.35 0.05]);
-
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Cost Tables:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Select Cost Tables',...
-                   'position', [0.08 0.59 0.35 0.05]);
-
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Diagnosis Method:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Diagnosis Method',...
-                   'position', [0.08 0.52 0.35 0.05]);
-
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Summary Results:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Summary Results',...
-                   'position', [0.08 0.45 0.35 0.05]);
-
-
-			% Labels output parameters
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Output File:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Select Result File',...
-                   'position', [0.08 0.29 0.35 0.05]);
-
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Result Mode:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Select mode to show results',...
-                   'position', [0.08 0.22 0.35 0.05]);
-
-            uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Show in Console:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Show results in console',...
-                   'position', [0.08 0.15 0.35 0.05]);
-
-			uicontrol (hf,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Show Graphs:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Show results in console',...
-                   'position', [0.08 0.08 0.35 0.05]);
-
-			% object widget
-            obj.log = uicontrol (hf,'style', 'text',...
-                    'units', 'normalized',...
-                    'fontname','Verdana','fontsize',9,...
-                    'string', '',...
-                    'backgroundcolor',[0.85 0.85 0.85],...
-                    'horizontalalignment', 'left',...
-                    'position', [0.012 0.014 0.975 0.05]);
-
-			obj.mfile_text = uicontrol (hf,'style', 'text',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',10,...
-					'string', ' Not Model Available',...
-					'horizontalalignment', 'left',...
-					'position', [0.35 0.87 0.35 0.05]);
-
-			obj.open_button = uicontrol (hf,'style', 'pushbutton',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'string','Open',....
-					'callback', @(src,evt) obj.getFile(src,evt),...
-					'position', [0.75 0.87 0.1 0.05]);
-
-           obj.rstate_popup = uicontrol (hf,'style', 'popupmenu',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'backgroundcolor',[0.9 0.9 0.94],...
-					'callback', @(src,evt) obj.getReferenceState(src,evt),...
-					'position', [0.35 0.80 0.35 0.05]);
-            
-            obj.state_popup = uicontrol (hf,'style', 'popupmenu',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) obj.getState(src,evt),...
-					'position', [0.35 0.73 0.35 0.05]);
-
- 			obj.sample_popup = uicontrol (hf,'style', 'popupmenu',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) obj.getSample(src,evt),...
-					'position', [0.35 0.66 0.35 0.05]);
-
-			 obj.tables_popup = uicontrol (hf,'style', 'popupmenu',...
-					'units', 'normalized',...
-					'string', cType.CostTablesOptions,...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) obj.getCostTables(src,evt),...
-					'position', [0.35 0.59 0.35 0.05]);
-
-			obj.tdm_popup = uicontrol (hf,'style', 'popupmenu',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) obj.getDiagnosisMethod(src,evt),...
-					'position', [0.35 0.52 0.35 0.05]);
-
-            obj.sr_checkbox = uicontrol (hf,'style', 'checkbox',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) obj.activateSummary(src,evt),...
-					'position', [0.35 0.45 0.35 0.05]);
-
-			obj.ofile_text = uicontrol (hf,'style', 'text',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',10,...
-					'string',outputFileName,...
-					'backgroundcolor',[0.95 1 0.95],...
-					'horizontalalignment', 'left',...
-					'position', [0.35 0.29 0.35 0.05]);
-
-			obj.save_buttom = uicontrol (hf,'style', 'pushbutton',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'string','Save',...
-					'callback', @(src,evt) obj.saveResult(src,evt),...
-					'position', [0.75 0.29 0.1 0.05]);
-
-			obj.varmode_popup = uicontrol (hf,'style', 'popupmenu',...
-					'units', 'normalized',...
-					'string', cType.VarModeOptions,...
-					'fontname','Verdana','fontsize',9,...
-					'value',cType.VarMode.NONE,...
-					'callback', @(src,evt) obj.getVarMode(src,evt),...
-					'position', [0.35 0.22 0.35 0.05]);
-
-   			obj.vf_checkbox = uicontrol (hf,'style', 'checkbox',...
-					'units', 'normalized',...
-					'value', 0,...
-					'fontname','Verdana','fontsize',9,...
-					'string','Format',...
-					'callback', @(src,evt) obj.getVarFormat(src,evt),...
-					'position', [0.75 0.22 0.15 0.05]);
-
-			obj.sh_checkbox = uicontrol (hf,'style', 'checkbox',...
-					'units', 'normalized',...
-					'value', 0,...
-					'callback', @(src,evt) obj.getPrinter(src,evt),...
-					'position', [0.35 0.15 0.05 0.05]);
-
-			obj.gr_checkbox = uicontrol (hf,'style', 'checkbox',...
-					'units', 'normalized',...
-					'value', 0,...
-					'callback', @(src,evt) obj.getShowGraph(src,evt),...
-					'position', [0.35 0.08 0.05 0.05]);
-			obj.initInputParameters;
-			set(hf,'visible','on');
-		end
+            % Initialize application variabbles
+            app.console=false;
+            app.showGraph=false;
+            app.outputFileName=[cType.RESULT_FILE,'.xlsx'];
+		    app.resultFile=[pwd,filesep,app.outputFileName];
+			app.model=cStatusLogger();
+            % Create GUI components
+            createComponents(app);
+            initInputParameters(app);
+        end
 	end
 
 	methods (Access=private)
 		%%%%%%%%%%%%%%%%%%%%%%%%%%
 		% Callback Functions
 		%%%%%%%%%%%%%%%%%%%%%%%%%%
-		function getFile(obj,~,~)
+		function getFile(app,~,~)
 		% Get data model file callback
 		% Select file and path
-			obj.initInputParameters;
+			app.initInputParameters;
             [file,path]=uigetfile({'*.json;*.csv;*.xlsx;*.xml;*.mat','Suported Data Models'});
 			if file
 				cd(path);
-				set(obj.log,'string','');
-				set(obj.mfile_text,'string',file);
+				set(app.log,'string','');
+				set(app.mfile_text,'string',file);
 			else
 				logtext=' ERROR: No file selected';
-			    set(obj.log,'string',logtext);
-				set(obj.mfile_text,'string','Not Model Available');
+			    set(app.log,'string',logtext);
+				set(app.mfile_text,'string','Not Model Available');
 				return
 			end
 			% Read and Check Data Model
 			data=checkDataModel(file);
 			if isValid(data) %Assign parameters
 				tm=cThermoeconomicModel(data,'Debug',false);
-				set(obj.mfile_text,'backgroundcolor',[0.95 1 0.95]);
-				set(obj.mn_ts,'enable','on');
-				set(obj.mn_ta,'enable','on');
-				set(obj.mn_ps,'enable','on');
-                set(obj.mn_vr,'enable','on');
-				set(obj.mn_sr,'enable','on');
-                set(obj.mn_sd,'enable','on');
-                set(obj.mn_fp,'enable','on');
-				set(obj.tb_ts,'enable','on');
-                set(obj.tb_ta,'enable','on');
-                set(obj.tb_ps,'enable','on');
-				if data.NrOfStates>1
-                	set(obj.sr_checkbox,'enable','on');
-				end
-				set(obj.save_buttom,'enable','on');
-				obj.stateNames=tm.StateNames;
-				set(obj.state_popup,'enable','on','string',obj.stateNames);
-                set(obj.rstate_popup,'enable','on','string',obj.stateNames);
+				set(app.mfile_text,'backgroundcolor',[0.95 1 0.95]);
+				set(app.mn_ts,'enable','on');
+				set(app.mn_ta,'enable','on');
+				set(app.mn_ps,'enable','on');
+                set(app.mn_vr,'enable','on');
+				set(app.mn_sr,'enable','on');
+                set(app.mn_sd,'enable','on');
+                set(app.mn_fp,'enable','on');
+				set(app.tb_ts,'enable','on');
+                set(app.tb_ta,'enable','on');
+                set(app.tb_ps,'enable','on');
+                set(app.tb_mr,'enable','on');
+                if data.NrOfStates>1
+                	set(app.sr_checkbox,'enable','on');
+                end
+				set(app.save_buttom,'enable','on');
+				app.stateNames=tm.StateNames;
+				set(app.state_popup,'enable','on','string',app.stateNames);
+                set(app.rstate_popup,'enable','on','string',app.stateNames);
 				if tm.isResourceCost
-					obj.sampleNames=tm.SampleNames;
-					set(obj.sample_popup,'enable','on','string',obj.sampleNames);
-                    set(obj.tables_popup,'enable','on');
+					app.sampleNames=tm.SampleNames;
+					set(app.sample_popup,'enable','on','string',app.sampleNames);
+                    set(app.tables_popup,'enable','on');
 				end
 				dnames=cType.DiagnosisOptions;
 				if tm.isWaste
-					set(obj.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
+                    app.wasteFlows=tm.WasteFlows;
+                    app.activeWaste=app.wasteFlows{1};
+                    set(app.wf_popup,'enable','on','string',app.wasteFlows);
+                    set(app.ra_checkbox,'enable','on');
+					set(app.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
 				else
-					set(obj.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
+					set(app.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
 				end
 				logtext=' INFO: Valid Data Model';
-                obj.Model=tm;
+                app.model=tm;
             else
-				set(obj.mfile_text,'backgroundcolor',[1 0.5 0.5]);
-				logtext=' ERROR: Invalid data model';
+				set(app.mfile_text,'backgroundcolor',[1 0.5 0.5]);
+				logtext=' ERROR: Invalid Data Model';
 			end
-			set(obj.log,'string',logtext);
+			set(app.log,'string',logtext);
 			data.printLogger;
         end
 
-        function activateSummary(obj,~,~)
-		% Activate Summary callback
-			val=get(obj.sr_checkbox,'value');
+        function activateSummary(app,~,~)
+		% Get activate Summary callback
+			val=get(app.sr_checkbox,'value');
 			if val
-				obj.Model.Summary=true;
-                set(obj.tb_gs,'enable','on');
-                set(obj.mn_gs,'enable','on');
-				set(obj.mn_ss,'enable','on');
+				app.model.Summary=true;
+                set(app.tb_gs,'enable','on');
+                set(app.mn_gs,'enable','on');
+				set(app.mn_ss,'enable','on');
 			else
-				obj.Model.Summary=false;
-                set(obj.tb_gs,'enable','off');
-                set(obj.mn_gs,'enable','off');
-				set(obj.mn_ss,'enable','off');
+				app.model.Summary=false;
+                set(app.tb_gs,'enable','off');
+                set(app.mn_gs,'enable','off');
+				set(app.mn_ss,'enable','off');
 			end
         end
 
-        function getCostTables(obj,~,~)
-		% Select Cost Table callback
-            values=get(obj.tables_popup,'string');
-            pos=get(obj.tables_popup,'value');
-            obj.Model.CostTables=values{pos};
+        function activateRecycling(app,~,~)
+		% Get activate Summary callback
+			val=get(app.ra_checkbox,'value');
+            if val
+               set(app.tb_ra,'enable','on');
+               set(app.mn_ra,'enable','on');
+            else
+               set(app.tb_ra,'enable','off');
+               set(app.mn_ra,'enable','off'); 
+            end
         end
 
-		function getState(obj,~,~)
-		% Get State callback
-			ind=get(obj.state_popup,'value');
-			obj.Model.State=obj.stateNames{ind};
-			if obj.Model.isDiagnosis
-				set(obj.tdm_popup,'enable','on');
-                pdm=get(obj.tdm_popup,'value');
+        function getTables(app,~,~)
+		% Select Cost Table callback
+            values=get(app.tables_popup,'string');
+            pos=get(app.tables_popup,'value');
+            app.model.CostTables=values{pos};
+        end
+
+		function getState(app,~,~)
+		% Get state callback
+			ind=get(app.state_popup,'value');
+			app.model.State=app.stateNames{ind};
+			if app.model.isDiagnosis
+				set(app.tdm_popup,'enable','on');
+                pdm=get(app.tdm_popup,'value');
 				if pdm ~= cType.DiagnosisMethod.NONE
-					set(obj.mn_td,'enable','on');
-					set(obj.tb_td,'enable','on');
+					set(app.mn_td,'enable','on');
+					set(app.tb_td,'enable','on');
 				end
 			else
-				set(obj.mn_td,'enable','off');
-				set(obj.tb_td,'enable','off');
-				set(obj.tdm_popup,'enable','off');
+				set(app.mn_td,'enable','off');
+				set(app.tb_td,'enable','off');
+				set(app.tdm_popup,'enable','off');
 			end
         end
 
-        function getReferenceState(obj,~,~)
-		% Get Reference state callback
-			ind=get(obj.state_popup,'value');
-			obj.Model.ReferenceState=obj.stateNames{ind};
-            if obj.Model.isDiagnosis
-				set(obj.tdm_popup,'enable','on');
-                pdm=get(obj.tdm_popup,'value');
+        function getReferenceState(app,~,~)
+		% Get state callback
+			ind=get(app.state_popup,'value');
+			app.model.ReferenceState=app.stateNames{ind};
+            if app.model.isDiagnosis
+				set(app.tdm_popup,'enable','on');
+                pdm=get(app.tdm_popup,'value');
                 if pdm ~= cType.DiagnosisMethod.NONE
-					set(obj.mn_td,'enable','on');
-					set(obj.tb_td,'enable','on');
+					set(app.mn_td,'enable','on');
+					set(app.tb_td,'enable','on');
                 end
             else
-				set(obj.mn_td,'enable','off');
-				set(obj.tb_td,'enable','off');
-				set(obj.tdm_popup,'enable','off');
+				set(app.mn_td,'enable','off');
+				set(app.tb_td,'enable','off');
+				set(app.tdm_popup,'enable','off');
             end
 		end
 
-		function getSample(obj,~,~)
+		function getSample(app,~,~)
 		% Get Resources Sample callback
-			ind=get(obj.sample_popup,'value');
-			obj.Model.ResourceSample=obj.sampleNames{ind};
+			ind=get(app.sample_popup,'value');
+			app.model.ResourceSample=app.sampleNames{ind};
         end
 
-		function getDiagnosisMethod(obj,~,~)
-		% Get Diagnosis Method callback
-            values=get(obj.tdm_popup,'string');
-            pos=get(obj.tdm_popup,'value');
-			obj.Model.DiagnosisMethod=values{pos};
+		function getDiagnosisMethod(app,~,~)
+		% Get WasteDiagnosis callback
+            values=get(app.tdm_popup,'string');
+            pos=get(app.tdm_popup,'value');
+			app.model.DiagnosisMethod=values{pos};
 			if pos==cType.DiagnosisMethod.NONE
-				set(obj.mn_td,'enable','off');
-				set(obj.tb_td,'enable','off');
+				set(app.mn_td,'enable','off');
+				set(app.tb_td,'enable','off');
 			else
-				set(obj.mn_td,'enable','on');
-				set(obj.tb_td,'enable','on');
+				set(app.mn_td,'enable','on');
+				set(app.tb_td,'enable','on');
 			end
-		end
+        end
 
-		function getVarMode(obj,~,~)
-		% Get VarMode callback
-           obj.Options.VarMode=get(obj.varmode_popup,'value');
-		end
+        function getActiveWaste(app,~,~)
+        % Get WasteDiagnosis callback
+            values=get(app.tdm_popup,'string');
+            pos=get(app.tdm_popup,'value');
+			app.activeWaste=values{pos};
+        end
 
-		function getVarFormat(obj,~,~)
-		% Get VarFormat callback
-			val=get(obj.vf_checkbox,'value');
+		function getPrinter(app,~,~)
+		% Get show in console (Printer) callback
+			val=get(app.sh_checkbox,'value');
 			if val
-				obj.Options.VarFormat=true;
+				app.console=true;
 			else
-				obj.Options.VarFormat=false;
+				app.console=false;
 			end
 		end
 
-		function getPrinter(obj,~,~)
-		% Activate show results in console callback
-			val=get(obj.sh_checkbox,'value');
-			if val
-				obj.Options.Printer=true;
-			else
-				obj.Options.Printer=false;
-			end
-		end
-
-		function getShowGraph(obj,~,~)
-		% Activate Show Results as Graph callback
-            val=get(obj.gr_checkbox,'value');
+		function getShowGraph(app,~,~)
+		% Get Save format callback
+            val=get(app.gr_checkbox,'value');
             if val
-				obj.Options.ShowGraph=true;
+				app.showGraph=true;
 			else
-				obj.Options.ShowGraph=false;
+				app.showGraph=false;
             end
 		end
 
-		function saveResult(obj,~,~)
-		% Save Model Results callback
-			default_file=obj.Options.ResultFile;
-			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files'},'Select File',default_file);
+		function saveResult(app,~,~)
+		% Save file callback
+			default_file=app.resultFile;
+			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files';'*.html', 'HTML files'},...
+                                        'Select File',default_file);
             cd(path);
             if ext % File has been selected
-				slog=saveModelResults(obj.Model,file);
+				slog=saveResultsModel(app.model,file);
                 if isValid(slog)
-				    obj.Options.ResultFile=file;
-				    set(obj.ofile_text,'string',file);
+				    app.resultFile=file;
+				    set(app.ofile_text,'string',file);
 				    logtext=sprintf(' INFO: Results Available in file %s',file);			    
                 else
                     logtext=sprintf(' ERROR: Result file %s could NOT be saved', file);
                     printLogger(slog);
-                    obj.Model.addLogger(slog);
+                    app.model.addLogger(slog);
                 end
             end
-            set(obj.log,'string',logtext);
+            set(app.log,'string',logtext);
         end
 
-        function saveDataModel(obj,~,~)
-		% Save Data Model callback
+        function saveDataModel(app,~,~)
 			[file,path,ext]=uiputfile({'*.mat','MAT Files';'*.xlsx','XLSX Files';'*.csv','CSV Files'; ...
                 '*.xml','XML Files';'*.json','JSON Files'},'Select File',cType.DATA_MODEL_FILE);
             cd(path);
             if ext % File has been selected
-				slog=saveDataModel(obj.Model,file);
+				slog=saveDataModel(app.model,file);
                 if isValid(slog)
-				    set(obj.ofile_text,'string',file);
+				    set(app.ofile_text,'string',file);
 				    logtext=sprintf(' INFO: Results Available in file %s',file);			    
                 else
                     logtext=sprintf(' ERROR: Result file %s could NOT be saved', file);
                     printLogger(slog);
-                    obj.Model.addLogger(slog);
+                    app.model.addLogger(slog);
                 end
             end
-            set(obj.log,'string',logtext);
+            set(app.log,'string',logtext);
         end
 
-        function saveSummary(obj,~,~)
-		% Save Summary Results callback
-			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files'},'Select File',cType.SUMMARY_FILE);
+        function saveSummary(app,~,~)
+			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files';'*.html', 'HTML files'},...
+                'Select File',cType.SUMMARY_FILE);
             cd(path);
             if ext % File has been selected
-				slog=saveSummary(obj.Model,file);
+				slog=saveSummary(app.model,file);
                 if isValid(slog)
-				    set(obj.ofile_text,'string',file);
+				    set(app.ofile_text,'string',file);
 				    logtext=sprintf(' INFO: Summary Results Available in file %s',file);			    
                 else
                     logtext=sprintf(' ERROR: Summary Result file %s could NOT be saved', file);
                     printLogger(slog);
-                    obj.Model.addLogger(slog);
+                    app.model.addLogger(slog);
                 end
             end
-            set(obj.log,'string',logtext);
+            set(app.log,'string',logtext);
         end
 
-        function saveDiagramFP(obj,~,~)
-		% Save Diagram FP callback
-			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files'},'Select File',cType.DIAGRAM_FILE);
+        function saveDiagramFP(app,~,~)
+			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files';'*.html', 'HTML files'},...
+                                        'Select File',cType.DIAGRAM_FILE);
             cd(path);
             if ext % File has been selected
-				slog=saveDiagramFP(obj.Model,file);
+				slog=saveDiagramFP(app.model,file);
                 if isValid(slog)
-				    set(obj.ofile_text,'string',file);
+				    set(app.ofile_text,'string',file);
 				    logtext=sprintf(' INFO: Diagram FP Available in file %s',file);			    
                 else
                     logtext=sprintf(' ERROR: Diagram FP file %s could NOT be saved', file);
                     printLogger(slog);
-                    obj.Model.addLogger(slog);
+                    app.model.addLogger(slog);
                 end
             end
-            set(obj.log,'string',logtext);
+            set(app.log,'string',logtext);
         end
 
 		%%%%%%%%%%%%%%%%%%%%%%%
 		% Methods
 		%%%%%%%%%%%%%%%%%%%%%%%
-		function productiveStructure(obj,~,~)
-		% Productive Structure callback
-			set(obj.log,'string','');
-			ps=obj.Model.productiveStructure;
+		function productiveStructure(app,~,~)
+		% Show table FP callback
+			set(app.log,'string','');
+			ps=app.model.productiveStructure;
 			if ps.isValid
-				if obj.Options.Printer
+                if app.console
 					printResults(ps);
-				end
-				res=getResultTables(ps,obj.Options.VarMode,obj.Options.VarFormat);
-				logtext=sprintf(' INFO: Results Available in Variable ProductiveStructure');
-				assignin('base', 'productiveStructure', res);
-				if obj.Options.ShowGraph
+                end
+                assignin('base', 'productiveStructure', ps);
+				logtext=sprintf(' INFO: Results in variable ProductiveStructure');
+
+				if app.showGraph
 					if isOctave
 						viewTable(ps.Tables.flows);
 					else
@@ -611,23 +362,22 @@ classdef ThermoeconomicPanel < handle
 					end
 				end
 			else
-				logtext=' ERROR: Productive Structure Values are not available';
+				logtext=' ERROR: Productive Structure is not available';
 			end
-			set(obj.log,'string',logtext);
+			set(app.log,'string',logtext);
 		end
 
-        function thermoeconomicState(obj,~,~)
+        function thermoeconomicState(app,~,~)
         % ThermoeconomicState callback
-			set(obj.log,'string','');
-			ots=obj.Model.thermoeconomicState;
+			set(app.log,'string','');
+			ots=app.model.thermoeconomicState;
 			if ots.isValid
-				if obj.Options.Printer
+                if app.console
 					printResults(ots);
-				end
-				res=getResultTables(ots,obj.Options.VarMode,obj.Options.VarFormat);
-				logtext=sprintf(' INFO: Results Available in Variable StateTables (%s)',ots.State);
-				assignin('base', 'thermoeconomicState', res);
-				if obj.Options.ShowGraph
+                end
+                assignin('base', 'thermoeconomicState', ots);
+				logtext=sprintf(' INFO: Results in variable thermoeconomicState');
+				if app.showGraph
 					if isOctave
                     	viewTable(ots.Tables.eprocesses);
 					else
@@ -635,23 +385,22 @@ classdef ThermoeconomicPanel < handle
 					end
 				end
 			else
-				logtext=' ERROR: Thermoeconomic State Values are not available';
+				logtext=' ERROR: Thermoeconomic State is not available';
 			end
-			set(obj.log,'string',logtext);
+			set(app.log,'string',logtext);
         end
 
-		function thermoeconomicAnalysis(obj,~,~)
+		function thermoeconomicAnalysis(app,~,~)
 		% ThermoeconomicAnalisis callback
-			set(obj.log,'string','');
-			ota=obj.Model.thermoeconomicAnalysis;
+			set(app.log,'string','');
+			ota=app.model.thermoeconomicAnalysis;
 			if ota.isValid
-				if obj.Options.Printer
+                if app.console
 					printResults(ota);
-				end
-				res=getResultTables(ota,obj.Options.VarMode,obj.Options.VarFormat);
-				logtext=sprintf(' INFO: Results Available in Variable CostTables (%s)',ota.State);
-				assignin('base', 'thermoeconomicAnalysis', res);
-				if obj.Options.ShowGraph
+                end
+				logtext=sprintf(' INFO: Results in variable thermoeconomicAnalysis');
+				assignin('base', 'thermoeconomicAnalysis', ota);
+				if app.showGraph
 					if isOctave
 						graphCost(ota)
 					else
@@ -659,47 +408,68 @@ classdef ThermoeconomicPanel < handle
 					end
 				end
 			else
-				logtext=' ERROR: Thermoeconomic Analysis Values are not available';
+				logtext=' ERROR: Thermoeconomic Analysis is not available';
 			end
-			set(obj.log,'string',logtext);
+			set(app.log,'string',logtext);
 		end
 
-		function thermoeconomicDiagnosis(obj,~,~)
+		function thermoeconomicDiagnosis(app,~,~)
 			% ThermoeconomicDiagnosis callback
-			set(obj.log,'string','');
-			otd=obj.Model.thermoeconomicDiagnosis;
+			set(app.log,'string','');
+			otd=app.model.thermoeconomicDiagnosis;
 			if otd.isValid
-				if obj.Options.Printer
+                if app.console
 					printResults(otd);
-				end
-				res=getResultTables(otd,obj.Options.VarMode,obj.Options.VarFormat);
-				logtext=sprintf(' INFO: Results Available in Variable DiagnosisTables (%s)',otd.State);
-				assignin('base', 'thermoeconomicDiagnosis', res);
-				if obj.Options.ShowGraph
-					if isOctave
+                end
+                assignin('base', 'thermoeconomicDiagnosis', otd);
+				logtext=sprintf(' INFO: Results in variable thermoeconomicDiagnosis');
+                if app.showGraph
+                    if isOctave
 						graphDiagnosis(otd);
 					else
 						ViewResults(otd);
-					end
-				end
+                    end
+                end
 			else
 				logtext=' ERROR: Thermoeconomic Diagnosis Values are not available';
 			end
-			set(obj.log,'string',logtext);
+			set(app.log,'string',logtext);
         end
 
-        function summaryResults(obj,~,~)
-		% Summary Results callback
-            set(obj.log,'string','');
-            srt=obj.Model.summaryResults;
+        function recyclingAnalysis(app,~,~)
+            set(app.log,'string','');
+			ra=app.model.recyclingAnalysis(app.activeWaste);
+			if ra.isValid
+                if app.console
+					printResults(ra);
+                end
+                assignin('base', 'recyclingAnalysis', ra);
+				logtext=sprintf(' INFO: Results in variable recyclingAnalysis');
+                if app.showGraph
+                    if isOctave
+						graphRecycling(ra);
+					else
+						ViewResults(ra);
+                    end
+                end
+			else
+				logtext=' ERROR: Recycling Analysis Values are not available';
+			end
+			set(app.log,'string',logtext);
+
+        end
+
+        function summaryResults(app,~,~)
+            % Summary Results callback
+            set(app.log,'string','');
+            srt=app.model.summaryResults;
 			if srt.isValid
-				if obj.Options.Printer
+                if app.console
 					printResults(srt);
-				end
-				res=getResultTables(srt,obj.Options.VarMode,obj.Options.VarFormat);
-				logtext=sprintf(' INFO: Results Available in Variable Summary Results');
-				assignin('base', 'summaryResults', res);
-				if obj.Options.ShowGraph
+                end
+				logtext=sprintf(' INFO: Results in variable Summary Results');
+				assignin('base', 'summaryResults', srt);
+				if app.showGraph
 					if isOctave
 						graphSummary(srt);
 					else
@@ -709,46 +479,339 @@ classdef ThermoeconomicPanel < handle
 			else
 				logtext=' ERROR: Summary Results Values are not available';
 			end
-			set(obj.log,'string',logtext);
+			set(app.log,'string',logtext);
         end
 
-        function viewResultsModel(obj,~,~)
-		% Save the model object in the workspace and launch ViewResuls app
-            assignin('base', 'model', obj.Model);
-			logtext=sprintf(' INFO: Model Available in Variable model');
-			set(obj.log,'string',logtext);
+        function modelResults(app,~,~)
+        % Model Results callback
+            res=app.model.getModelInfo;
+            assignin('base', 'modelResults', res);
+			logtext=sprintf(' INFO: Results in Variable modelResults');
+			set(app.log,'string',logtext);
             if isMatlab  
-                ViewResults(obj.Model);
+                ViewResults(app.model);
             end
         end
 
-		function initInputParameters(obj)
-		% Initialize widgets
-			set(obj.mfile_text,'backgroundcolor',[1 0.5 0.5]);
-			set(obj.mn_ts,'enable','off');
-			set(obj.mn_ta,'enable','off');
-			set(obj.mn_ps,'enable','off');
-			set(obj.mn_td,'enable','off');
-			set(obj.mn_gs,'enable','off');
-            set(obj.mn_vr,'enable','off');
-			set(obj.mn_sr,'enable','off');
-            set(obj.mn_sd,'enable','off');
-            set(obj.mn_ss,'enable','off');
-            set(obj.mn_fp,'enable','off');
-			set(obj.tb_ts,'enable','off');
-			set(obj.tb_ta,'enable','off');
-			set(obj.tb_ps,'enable','off');
-			set(obj.tb_td,'enable','off');
-            set(obj.tb_gs,'enable','off');
-			set(obj.save_buttom,'enable','off');
-            set(obj.sr_checkbox,'enable','off');
-            set(obj.save_buttom,'enable','off');
-			set(obj.tables_popup,'value',cType.CostTables.DIRECT,'enable','off');
-			set(obj.tdm_popup,'string',{'NONE'},'value',cType.DiagnosisMethod.NONE,'enable','off');
-			set(obj.state_popup,'string',{'Reference'},'value',1,'enable','off');
-            set(obj.rstate_popup,'string',{'Reference'},'value',1,'enable','off');
-			set(obj.sample_popup,'string',{'Base'},'value',1,'enable','off');
-            set(obj.open_button,'enable','on');
+        function createComponents(app)
+        % Create Figure Components
+			% Determine the scale depending on screen size
+            ss=get(groot,'ScreenSize');
+            xsize=ss(3)/4;
+            ysize=ss(4)/1.75;
+            xpos=(ss(3)-xsize)/2;
+            ypos=(ss(4)-ysize)/2;
+
+            % Create figure
+            hf=figure('visible','off','menubar','none',...
+			          'name','Thermoeconomic Analysis Panel',...
+                      'numbertitle','off','color',[0.94 0.94 0.94],...
+                      'resize','on','Position',[xpos,ypos,xsize,ysize]);
+
+            % Tool Bar
+			tb = uitoolbar(hf);
+			app.tb_ps = uipushtool (tb, 'cdata', cType.getIcon('ProductiveStructure'),...
+				'tooltipstring','Show Productive Structure',...
+				'clickedcallback', @(src,evt) app.productiveStructure(src,evt));
+			app.tb_ts = uipushtool (tb, 'cdata', cType.getIcon('ThermoeconomicState'),...
+			    'tooltipstring','Show Thermoeconomic State',...
+			    'clickedcallback', @(src,evt) app.thermoeconomicState(src,evt));
+            app.tb_ta = uipushtool (tb, 'cdata', cType.getIcon('ThermoeconomicAnalysis'),...
+			    'tooltipstring','Thermoeconomic Analysis',...
+			    'clickedcallback', @(src,evt) app.thermoeconomicAnalysis(src,evt));
+            app.tb_td = uipushtool (tb, 'cdata', cType.getIcon('ThermoeconomicDiagnosis'),...
+			    'tooltipstring','Thermoeconomic Diagnosis',...
+			    'clickedcallback', @(src,evt) app.thermoeconomicDiagnosis(src,evt));
+            app.tb_ra = uipushtool (tb, 'cdata', cType.getIcon('RecyclingAnalysis'),...
+			    'tooltipstring','Thermoeconomic Diagnosis',...
+			    'clickedcallback', @(src,evt) app.recyclingAnalysis(src,evt));
+            app.tb_gs = uipushtool (tb, 'cdata', cType.getIcon('SummaryResults'),...
+			    'tooltipstring','General Summary',...
+			    'clickedcallback', @(src,evt) app.summaryResults(src,evt));
+            app.tb_mr = uipushtool (tb, 'cdata', cType.getIcon('ModelResults'),...
+			    'tooltipstring','Model Results',...
+			    'clickedcallback', @(src,evt) app.modelResults(src,evt));
+
+			% Menus
+            f=uimenu (hf,'label', '&File', 'accelerator', 'f');
+            e=uimenu (hf,'label', '&Tools', 'accelerator', 't');
+            uimenu (hf,'label', '&Help', 'accelerator', 'h');
+			uimenu (f, 'label', 'Open', 'accelerator', 'o', ...
+				'callback', @(src,evt) app.getFile(src,evt));
+            uimenu (f, 'label', 'Close', 'accelerator', 'q', ...
+				'callback', 'close (gcf)');
+            s=uimenu (f,'label','Save','accelerator','s');
+			app.mn_sr=uimenu (s, 'label', 'Model Results',...
+				'callback', @(src,evt) app.saveResult(src,evt));
+            app.mn_sd=uimenu (s, 'label', 'Data Model',...
+				'callback', @(src,evt) app.saveDataModel(src,evt));
+            app.mn_ss=uimenu (s, 'label', 'Summary',...
+				'callback', @(src,evt) app.saveSummary(src,evt));
+            app.mn_fp=uimenu (s, 'label', 'Diagram FP',...
+				'callback', @(src,evt) app.saveDiagramFP(src,evt));
+			app.mn_ps=uimenu (e, 'label', 'Productive Structure',...
+				'callback', @(src,evt) app.productiveStructure(src,evt));
+			app.mn_ts=uimenu (e, 'label', 'Thermoeconomic State',...
+				'callback', @(src,evt) app.thermoeconomicState(src,evt));
+			app.mn_ta=uimenu (e, 'label', 'Thermoeconomic Analysis',...
+				'callback', @(src,evt) app.thermoeconomicAnalysis(src,evt));
+			app.mn_td=uimenu (e, 'label', 'Thermoeconomic Diagnosis',...
+				'callback', @(src,evt) app.thermoeconomicDiagnosis(src,evt));
+            app.mn_ra=uimenu (e, 'label', 'Recycling Analysis',...
+				'callback', @(src,evt) app.recyclingAnalysis(src,evt));
+            app.mn_gs=uimenu (e, 'label', 'Summary Results',...
+				'callback', @(src,evt) app.summaryResults(src,evt));
+            app.mn_vr=uimenu (e, 'label', 'Model Results',...
+				'callback', @(src,evt) app.modelResults(src,evt));
+				
+			% Decoration panel
+            uipanel (hf,'title', 'Input Parameters', ...
+                 'units','normalized',...
+                 'fontname','Verdana','fontsize',8,...
+                 'position', [0.01, 0.36, 0.98, 0.61]);
+
+			uipanel (hf,'title', 'Output Parameters', ...
+                 'units','normalized',...
+                 'fontname','Verdana','fontsize',8,...
+                 'position', [0.01, 0.01, 0.98, 0.30]);
+
+			% Labels Input Parameters
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'fontname','Verdana','fontsize',9,...
+                   'string', 'Data Model File:',...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Select data model file',...
+                   'position', [0.06 0.86 0.36 0.04]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Reference State:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Select Reference State for Analysis',...
+                   'position', [0.06 0.80 0.36 0.04]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Operation State:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Select Operation State for Analysis',...
+                   'position', [0.06 0.74 0.36 0.04]);
+
+			uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Resources Cost:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Select Resource Sample for Analysis',...
+                   'position', [0.06 0.68 0.36 0.04]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Cost Tables:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Select Cost Tables',...
+                   'position', [0.06 0.62 0.36 0.04]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Diagnosis Method:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Diagnosis Method',...
+                   'position', [0.06 0.56 0.36 0.04]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Recycled Flow:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Waste for Recycling Analysis',...
+                   'position', [0.06 0.50 0.36 0.04]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Recycling Analysis:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Activate Recycling',...
+                   'position', [0.06 0.44 0.36 0.04]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Summary Results:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Summary Results',...
+                   'position', [0.06 0.38 0.36 0.04]);
+
+
+			% Labels output parameters
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Output File:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Select Result File',...
+                   'position', [0.06 0.20 0.36 0.04]);
+
+            uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Show in Console:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Show results in console',...
+                   'position', [0.06 0.14 0.36 0.04]);
+
+			uicontrol (hf,'style', 'text',...
+                   'units', 'normalized',...
+                   'string', 'Show Graphs:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Show Results in GUI',...
+                   'position', [0.06 0.08 0.36 0.04]);
+
+			% object widget
+            app.log = uicontrol (hf,'style', 'text',...
+                    'units', 'normalized',...
+                    'fontname','Verdana','fontsize',9,...
+                    'string', '',...
+                    'backgroundcolor',[0.85 0.85 0.85],...
+                    'horizontalalignment', 'left',...
+                    'position', [0.014 0.014 0.973 0.04]);
+
+			app.mfile_text = uicontrol (hf,'style', 'text',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',10,...
+					'string', ' Not Model Available',...
+					'horizontalalignment', 'left',...
+					'position', [0.38 0.87 0.40 0.04]);
+
+			app.open_button = uicontrol (hf,'style', 'pushbutton',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'string','Open',....
+					'callback', @(src,evt) app.getFile(src,evt),...
+					'position', [0.80 0.867 0.15 0.045]);
+
+           app.rstate_popup = uicontrol (hf,'style', 'popupmenu',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'backgroundcolor',[0.9 0.9 0.94],...
+					'callback', @(src,evt) app.getReferenceState(src,evt),...
+					'position', [0.38 0.80 0.4 0.04]);
+            
+            app.state_popup = uicontrol (hf,'style', 'popupmenu',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'callback', @(src,evt) app.getState(src,evt),...
+					'position', [0.38 0.74 0.4 0.04]);
+
+ 			app.sample_popup = uicontrol (hf,'style', 'popupmenu',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'callback', @(src,evt) app.getSample(src,evt),...
+					'position', [0.38 0.68 0.4 0.04]);
+
+			 app.tables_popup = uicontrol (hf,'style', 'popupmenu',...
+					'units', 'normalized',...
+					'string', cType.CostTablesOptions,...
+					'fontname','Verdana','fontsize',9,...
+					'callback', @(src,evt) app.getTables(src,evt),...
+					'position', [0.38 0.62 0.4 0.04]);
+
+			app.tdm_popup = uicontrol (hf,'style', 'popupmenu',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'callback', @(src,evt) app.getDiagnosisMethod(src,evt),...
+					'position', [0.38 0.56 0.4 0.04]);
+
+           app.wf_popup = uicontrol (hf,'style', 'popupmenu',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'callback', @(src,evt) app.getActiveWaste(src,evt),...
+					'position', [0.38 0.50 0.4 0.04]);
+
+            app.ra_checkbox = uicontrol (hf,'style', 'checkbox',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'callback', @(src,evt) app.activateRecycling(src,evt),...
+					'position', [0.38 0.45 0.04 0.04]);
+
+            app.sr_checkbox = uicontrol (hf,'style', 'checkbox',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'callback', @(src,evt) app.activateSummary(src,evt),...
+					'position', [0.38 0.39 0.04 0.04]);
+
+            % Output Control Widgets
+			app.ofile_text = uicontrol (hf,'style', 'text',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',10,...
+					'string',app.outputFileName,...
+					'backgroundcolor',[0.95 1 0.95],...
+					'horizontalalignment', 'left',...
+					'position', [0.38 0.20 0.4 0.04]);
+
+			app.save_buttom = uicontrol (hf,'style', 'pushbutton',...
+					'units', 'normalized',...
+					'fontname','Verdana','fontsize',9,...
+					'string','Save',...
+					'callback', @(src,evt) app.saveResult(src,evt),...
+					'position', [0.80 0.197 0.15 0.045]);
+
+			app.sh_checkbox = uicontrol (hf,'style', 'checkbox',...
+					'units', 'normalized',...
+					'value', 0,...
+					'callback', @(src,evt) app.getPrinter(src,evt),...
+					'position', [0.38 0.15 0.04 0.04]);
+
+			app.gr_checkbox = uicontrol (hf,'style', 'checkbox',...
+					'units', 'normalized',...
+					'value', 0,...
+					'callback', @(src,evt) app.getShowGraph(src,evt),...
+					'position', [0.38 0.09 0.04 0.04]);
+            % Make the figure visible
+			set(hf,'visible','on');
+        end
+
+		function initInputParameters(app)
+		    % Initialize widgets
+			set(app.mfile_text,'backgroundcolor',[1 0.5 0.5]);
+			set(app.mn_ts,'enable','off');
+			set(app.mn_ta,'enable','off');
+			set(app.mn_ps,'enable','off');
+			set(app.mn_td,'enable','off');
+            set(app.mn_ra,'enable','off');
+			set(app.mn_gs,'enable','off');
+            set(app.mn_vr,'enable','off');
+			set(app.mn_sr,'enable','off');
+            set(app.mn_sd,'enable','off');
+            set(app.mn_ss,'enable','off');
+            set(app.mn_fp,'enable','off');
+			set(app.tb_ts,'enable','off');
+			set(app.tb_ta,'enable','off');
+			set(app.tb_ps,'enable','off');
+			set(app.tb_td,'enable','off');
+            set(app.tb_ra,'enable','off');
+            set(app.tb_mr,'enable','off');
+            set(app.tb_gs,'enable','off');
+			set(app.save_buttom,'enable','off');
+            set(app.sr_checkbox,'enable','off');
+            set(app.ra_checkbox,'enable','off');
+            set(app.sr_checkbox,'value',0);
+            set(app.ra_checkbox,'value',0);
+            set(app.save_buttom,'enable','off');
+			set(app.tables_popup,'value',cType.CostTables.DIRECT,'enable','off');
+			set(app.tdm_popup,'string',{'NONE'},'value',cType.DiagnosisMethod.NONE,'enable','off');
+            set(app.wf_popup,'string',{'NONE'},'value',1,'enable','off');
+			set(app.state_popup,'string',{'Reference'},'value',1,'enable','off');
+            set(app.rstate_popup,'string',{'Reference'},'value',1,'enable','off');
+			set(app.sample_popup,'string',{'Base'},'value',1,'enable','off');
+            set(app.open_button,'enable','on');
 		end
 	end
 end

@@ -1,9 +1,22 @@
 classdef cTableIndex < cTable
+% cTableIndex create a cTable which contains the tables of a cResultInfo object
+%   Methods:
+%       obj=cTableIndex(res)
+%       status=obj.checkTableSize;
+%       obj.setState
+%       bj.printTable
+%       obj.viewTable(obj)
+%       log=obj.saveTable(filename)
+%       res=exportTable(obj)
+% See also cTable
     properties (GetAccess=public,SetAccess=private)
         Content % Cell array with the cResultInfo tables
     end
     methods
         function obj=cTableIndex(res)
+        % cTableIndex cTable object constructor
+        %   Input:
+        %       res - cResultInfo object
             if ~isa(res,'cResultInfo')
                 obj.messageLog(cType.ERROR,'Invalid input argument')
                 return

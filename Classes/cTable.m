@@ -2,13 +2,11 @@ classdef (Abstract) cTable < cStatusLogger
 % cTable Abstract class implementation for tabular data
 %   The table definition include row and column names and description
 %   Methods:
-%       status=tbl.checkDataSize;
-%       obj.setState
 %       status=obj.checkTableSize;
+%       obj.setState
 %       viewTable(obj)
 %       log=obj.saveTable(filename)
-%       res=obj.isNumericTable
-%       res=obj.getColumnFormat
+%       res=exportTable(obj)
 % See also cTableData, cTableResult
     properties(GetAccess=public, SetAccess=protected)
         NrOfCols  	    % Number of Columns
@@ -37,26 +35,23 @@ classdef (Abstract) cTable < cStatusLogger
             obj.State=state;
         end
 
-        function viewTable(obj)
-        % View the values of the table (tbl) in a uitable graphic object
-            vt=cViewTable(obj);
-            if isValid(vt)
-                vt.showTable
-            else
-                printLogger(vt);
+        function viewTable(obj,option)
+        % View Table in GUI or HTML
+        %   Usage:
+        %       option - select form to view a table
+        %           cType.TableView.GUI (default)
+        %           cType.TableView.HTML
+        %
+            if nargin==1
+                option=cType.TableView.GUI;
+            end
+            switch option
+            case cType.TableView.GUI
+                viewTableGUI(obj)
+            case cType.TableView.HTML
+                viewTableHTML(obj)
             end
         end
-
-        function viewHTML(obj)
-        % View a table in the web browser
-            vh=cBuildHTML(obj);
-            if isValid(vh)
-                vh.showTable
-            else
-                printLogger(vh);
-            end
-        end
-        
         function log = saveTable(obj,filename)
         % saveTable save a cTable in a file
         %   The file types depends on the extension
@@ -153,5 +148,26 @@ classdef (Abstract) cTable < cStatusLogger
                 res=size(obj.Values,dim);
             end
         end
+    end
+    methods(Access=protected)
+        function viewTableGUI(obj)
+            % View the values of the table (tbl) in a uitable graphic object
+                vt=cViewTable(obj);
+                if isValid(vt)
+                    vt.showTable
+                else
+                    printLogger(vt);
+                end
+            end
+    
+            function viewTableHTML(obj)
+            % View a table in the web browser
+                vh=cBuildHTML(obj);
+                if isValid(vh)
+                    vh.showTable
+                else
+                    printLogger(vh);
+                end
+            end
     end
 end
