@@ -1,0 +1,393 @@
+{
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "QBLR",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "WP",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WN",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QEVP",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QCND",
+        "type": "WASTE"
+      },
+      {
+        "key": "QVEX",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "BLR",
+        "fuel": "QBLR",
+        "product": "B1-B5",
+        "type": "PRODUCTIVE",
+        "description": "Steam Generator"
+      },
+      {
+        "key": "TRB",
+        "fuel": "B1-B2",
+        "product": "WN+WP",
+        "type": "PRODUCTIVE",
+        "description": "Turbine"
+      },
+      {
+        "key": "EJCT",
+        "fuel": "B2+B8",
+        "product": "B3",
+        "type": "PRODUCTIVE",
+        "description": "Ejector"
+      },
+      {
+        "key": "PMP",
+        "fuel": "WP",
+        "product": "B5-B4",
+        "type": "PRODUCTIVE",
+        "description": "Pump"
+      },
+      {
+        "key": "EVP",
+        "fuel": "B7-B8",
+        "product": "QEVP",
+        "type": "PRODUCTIVE",
+        "description": "Evaporator"
+      },
+      {
+        "key": "CND",
+        "fuel": "B3-B4-B6",
+        "product": "QCND",
+        "type": "DISSIPATIVE",
+        "description": "Condense"
+      },
+      {
+        "key": "VEX",
+        "fuel": "B6-B7",
+        "product": "QVEX",
+        "type": "DISSIPATIVE",
+        "description": "Expansion Valve"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Reference",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 69.07
+          },
+          {
+            "key": "B2",
+            "value": 36.44
+          },
+          {
+            "key": "B3",
+            "value": 36.55
+          },
+          {
+            "key": "B4",
+            "value": 19.89
+          },
+          {
+            "key": "B5",
+            "value": 22.12
+          },
+          {
+            "key": "B6",
+            "value": 7.954
+          },
+          {
+            "key": "B7",
+            "value": 6.827
+          },
+          {
+            "key": "B8",
+            "value": 0.9629
+          },
+          {
+            "key": "QBLR",
+            "value": 70.61
+          },
+          {
+            "key": "WP",
+            "value": 2.607
+          },
+          {
+            "key": "WN",
+            "value": 25
+          },
+          {
+            "key": "QEVP",
+            "value": 4.658
+          },
+          {
+            "key": "QCND",
+            "value": 8.705999999999996
+          },
+          {
+            "key": "QVEX",
+            "value": 1.1269999999999998
+          }
+        ]
+      },
+      {
+        "stateId": "T120",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 70.24
+          },
+          {
+            "key": "B2",
+            "value": 37.8
+          },
+          {
+            "key": "B3",
+            "value": 37.89
+          },
+          {
+            "key": "B4",
+            "value": 20.61
+          },
+          {
+            "key": "B5",
+            "value": 22.7
+          },
+          {
+            "key": "B6",
+            "value": 8.242
+          },
+          {
+            "key": "B7",
+            "value": 7.074
+          },
+          {
+            "key": "B8",
+            "value": 0.9978
+          },
+          {
+            "key": "QBLR",
+            "value": 72.91
+          },
+          {
+            "key": "WP",
+            "value": 2.454
+          },
+          {
+            "key": "WN",
+            "value": 25
+          },
+          {
+            "key": "QEVP",
+            "value": 4.827
+          },
+          {
+            "key": "QCND",
+            "value": 9.038
+          },
+          {
+            "key": "QVEX",
+            "value": 1.168000000000001
+          }
+        ]
+      },
+      {
+        "stateId": "TRB82",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 71.87
+          },
+          {
+            "key": "B2",
+            "value": 38.04
+          },
+          {
+            "key": "B3",
+            "value": 38.1
+          },
+          {
+            "key": "B4",
+            "value": 20.69
+          },
+          {
+            "key": "B5",
+            "value": 23.01
+          },
+          {
+            "key": "B6",
+            "value": 8.277
+          },
+          {
+            "key": "B7",
+            "value": 7.104
+          },
+          {
+            "key": "B8",
+            "value": 1.002
+          },
+          {
+            "key": "QBLR",
+            "value": 73.47
+          },
+          {
+            "key": "WP",
+            "value": 2.712
+          },
+          {
+            "key": "WN",
+            "value": 25
+          },
+          {
+            "key": "QEVP",
+            "value": 4.847
+          },
+          {
+            "key": "QCND",
+            "value": 9.1330000000000009
+          },
+          {
+            "key": "QVEX",
+            "value": 1.1729999999999992
+          }
+        ]
+      }
+    ]
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "QCND",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "QVEX",
+        "type": "IRREVERSIBILITY",
+        "recycle": 0
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": {
+      "sampleId": "Base",
+      "flows": {
+        "key": "QBLR",
+        "value": 0.1
+      },
+      "processes": [
+        {
+          "key": "BLR",
+          "value": 4.7428513932035044
+        },
+        {
+          "key": "TRB",
+          "value": 82.549721363796536
+        },
+        {
+          "key": "EJCT",
+          "value": 8.4970279188654931
+        },
+        {
+          "key": "PMP",
+          "value": 2.3156954467858033
+        },
+        {
+          "key": "EVP",
+          "value": 10.140156245779444
+        },
+        {
+          "key": "CND",
+          "value": 7.3248875599420931
+        },
+        {
+          "key": "VEX",
+          "value": 0.55609772618831332
+        }
+      ]
+    }
+  }
+}

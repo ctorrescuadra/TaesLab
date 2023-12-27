@@ -11,7 +11,7 @@ classdef cDataModel < cStatusLogger
 %       res=obj.getResourceSample(i)
 %       res=obj.getSampleId(sample)
 %       res=obj.existSample(sample)
-%       res=obj.getWasteFlows
+%       res=obj.WasteFlows
 %       res=obj.checkCostTables
 %       res=obj.getTable(name)
 %       obj.setModelName(name)   
@@ -358,9 +358,6 @@ classdef cDataModel < cStatusLogger
 					log=obj.saveAsMAT(filename);
 				otherwise
 					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
-			end
-			if isValid(log)
-				log.messageLog(cType.INFO,'File %s has been saved',filename);
 			end
         end
 

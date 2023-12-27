@@ -1,4 +1,4 @@
-classdef cWasteTable < cResultId
+classdef cWasteTable < cStatusLogger
 %cWasteTable  Manage waste allocation table information
 %
 	properties (GetAccess=public,SetAccess=private)
@@ -17,10 +17,9 @@ classdef cWasteTable < cResultId
 
     methods
         function obj = cWasteTable(wd)
-        %cWasteTable Construct an instance of this class
+        % cWasteTable Construct an instance of this class
         %   Input:
         %       wd - cWasteData object
-            obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
             if ~isa(wd,'cWasteData') || ~wd.isValid
                 obj.messageLog(cType.ERROR,'Invalid cWasteData object')
             end
@@ -33,11 +32,6 @@ classdef cWasteTable < cResultId
             obj.Values=wd.Values;
             obj.RecycleRatio=wd.RecycleRatio;
             obj.status=true;
-        end
-
-        function res=getResultInfo(obj,fmt)
-        % Get the cResultInfo object
-            res=fmt.getWasteResults(obj);
         end
 
 		function res=getValues(obj,arg)

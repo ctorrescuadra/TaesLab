@@ -8,7 +8,7 @@ function res = TablesDirectory(varargin)
 %       param - Select the options to use
 %           ViewTable - (true/false) view the tables info in a uitable
 %           SaveAs - Save the tables info in a file
-%                    Valid options: *.txt, *.csv, *.xlsx, *.json, *.xml, *.mat
+%                    Valid options: *.txt, *.csv, *.xlsx, *.json, *.xml, *.html, *.mat
 %           VarMode - Select the kind of output for tables info
 %               cType.VarMode.NONE - get a cTableData object
 %               cType.VarMode.CELL - get a cell array

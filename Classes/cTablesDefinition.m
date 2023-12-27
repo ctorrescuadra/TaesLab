@@ -13,13 +13,13 @@ classdef cTablesDefinition < cStatusLogger
 %   See also cFormatData
     properties(GetAccess=public,SetAccess=private)
         TablesDefinition  % Tables properties struct
+        tDictionary  % Tables dictionnary
     end
     properties (Access=protected)
         cfgTables 	 % Cell tables configuration
         cfgMatrices  % Matrix tables configuration
         cfgSummary   % Summary tables configuration
         cfgTypes     % Format types configuration
-        tDictionary  % Tables dictionnary
         tDirectory   % cTableData containig the tables directory info
         tableIndex   % Tables index
     end
@@ -183,7 +183,7 @@ classdef cTablesDefinition < cStatusLogger
                 tIndex(idx).name=key;
                 tIndex(idx).code=tCodes(idx);
                 tIndex(idx).resultId=obj.cfgTables(i).resultId;
-                tIndex(idx).graph=cType.GraphType.NONE;
+                tIndex(idx).graph=obj.cfgTables(i).graph;
                 tIndex(idx).type=cType.TableType.TABLE;
                 tIndex(idx).tableId=i;
             end

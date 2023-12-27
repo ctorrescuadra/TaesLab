@@ -533,7 +533,7 @@
 			"key": "atfp",
 			"number": false,
 			"description": "Diagram FP",
-			"resultId": 7,
+			"resultId": 8,
 			"graph": 0,
 			"columns": 4,
 			"fields": [
@@ -564,7 +564,7 @@
 			"key": "atcfp",
 			"number": false,
 			"description": "Cost Diagram FP",
-			"resultId": 7,
+			"resultId": 8,
 			"graph": 0,
 			"columns": 4,
 			"fields": [
@@ -595,7 +595,7 @@
 			"key": "wd",
 			"number": false,
 			"description": "Waste Definition Table",
-			"resultId": 8,
+			"resultId": 5,
 			"graph": 0,
 			"columns": 3,
 			"fields": [
@@ -621,8 +621,8 @@
 			"key": "fat",
 			"number": false,
 			"description": "Flows Diagram",
-			"resultId": 6,
-			"graph": 0,
+			"resultId": 7,
+			"graph": 7,
 			"columns": 3,
 			"fields": [
 				{
@@ -647,7 +647,7 @@
 			"key": "fpat",
 			"number": false,
 			"description": "Flow-Process Diagram",
-			"resultId": 6,
+			"resultId": 7,
 			"graph": 7,
 			"columns": 3,
 			"fields": [
@@ -673,7 +673,7 @@
 			"key": "pat",
 			"number": false,
 			"description": "Productive Diagram",
-			"resultId": 6,
+			"resultId": 7,
 			"graph": 7,
 			"columns": 3,
 			"fields": [
@@ -824,7 +824,7 @@
 			"type": 9,
 			"graph": 6,
 			"options": 0,
-			"resultId": 8,
+			"resultId": 5,
 			"rowTotal": false,
 			"colTotal": false
 		},
@@ -835,7 +835,7 @@
 			"type": 5,
 			"graph": 4,
 			"options": 3,
-			"resultId": 9,
+			"resultId": 5,
 			"rowTotal": false,
 			"colTotal": false
 		},
@@ -846,7 +846,7 @@
 			"type": 7,
 			"graph": 4,
 			"options": 7,
-			"resultId": 9,
+			"resultId": 5,
 			"rowTotal": false,
 			"colTotal": false
 		}

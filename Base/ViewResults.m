@@ -33,6 +33,9 @@ classdef ViewResults < matlab.apps.AppBase
             obj=cGraphResults(tbl);
             M=numel(obj.Legend);
             app.UIAxes.Visible='off';
+            if ~isempty(app.Colorbar)
+                app.Colobar.Visible='off';
+            end
             app.UIAxes.Colormap=turbo(M);
             % Plot the bar graph
             b=bar(obj.yValues,...
@@ -62,6 +65,9 @@ classdef ViewResults < matlab.apps.AppBase
             obj=cGraphResults(tbl);
             M=numel(obj.Legend);
             app.UIAxes.Visible='off';
+            if ~isempty(app.Colorbar)
+                app.Colobar.Visible='off';
+            end
             app.UIAxes.Colormap=turbo(M);
             % Plot the bar graph
             b=bar(obj.yValues,...
@@ -81,7 +87,6 @@ classdef ViewResults < matlab.apps.AppBase
             xlabel(app.UIAxes,obj.xLabel,'FontSize',10);
             ylabel(app.UIAxes,obj.yLabel,'FontSize',10);
             legend(app.UIAxes,obj.Legend,'FontSize',8);
-            colorbar(app.UIAxes,'off');
             app.UIAxes.XTick=obj.xValues; 
             app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.Legend.Location='northeastoutside';
@@ -103,6 +108,9 @@ classdef ViewResults < matlab.apps.AppBase
             % plot the graph
             M=numel(obj.Legend);
             app.UIAxes.Visible='off';
+            if ~isempty(app.Colorbar)
+                app.Colobar.Visible='off';
+            end
             app.UIAxes.Colormap=turbo(M);
             % Plot the bar graph
             b=bar(obj.xValues, obj.yValues,...
@@ -117,8 +125,7 @@ classdef ViewResults < matlab.apps.AppBase
             xlabel(app.UIAxes,obj.xLabel,'FontSize',10);
             ylabel(app.UIAxes,obj.yLabel,'FontSize',10);
             legend(app.UIAxes,obj.Legend,'FontSize',8);
-            colorbar(app.UIAxes,'off');
-            %app.UIAxes.XTick=obj.xValues;
+            app.UIAxes.XTick=obj.xValues;
             app.UIAxes.TickLabelInterpreter='none';
             app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.Legend.Location='northeastoutside';
@@ -134,17 +141,20 @@ classdef ViewResults < matlab.apps.AppBase
             obj=cGraphResults(tbl,wkey);
             % plot the graph
             app.UIAxes.Visible='off';
+            if ~isempty(app.Colorbar)
+                app.Colobar.Visible='off';
+            end
 		    plot(obj.xValues,obj.yValues,...
                 'Marker','diamond',...
                 'Parent',app.UIAxes);
+            app.UIAxes.XLimMode="auto";
+            app.UIAxes.YLimMode="auto";
 		    title(app.UIAxes,obj.Title,'Fontsize',12);
-		    yl=app.UIAxes.YLim;yl(1)=obj.BaseLine;
-            app.UIAxes.YLim=yl;
 		    xlabel(app.UIAxes,obj.xLabel,'fontsize',10);
 		    ylabel(app.UIAxes,obj.yLabel,'fontsize',10);
 		    set(app.UIAxes,'xgrid','off','ygrid','on');
-		    box(app.UIAxes,'on');
             legend(app.UIAxes,obj.Legend,'FontSize',8);
+            app.UIAxes.XTick=obj.xValues;
             app.UIAxes.Legend.Location='northeastoutside';
             app.UIAxes.Legend.Orientation='vertical';
             app.UIAxes.Visible='on';
@@ -205,17 +215,17 @@ classdef ViewResults < matlab.apps.AppBase
             if tbl.isGraph
                 switch tbl.GraphType
                     case cType.GraphType.COST
-                            app.GraphCost(tbl);
+                        app.GraphCost(tbl);
                     case cType.GraphType.DIAGNOSIS
-                            app.GraphDiagnosis(tbl);
+                        app.GraphDiagnosis(tbl);
                     case cType.GraphType.SUMMARY
-                            app.GraphSummary(tbl)
+                        app.GraphSummary(tbl)
                     case cType.GraphType.DIAGRAM_FP
-                            app.ShowDigraph(tbl);
+                        app.ShowDigraph(tbl);
                     case cType.GraphType.DIGRAPH
-                            app.ShowDigraph(tbl);
+                        app.ShowDigraph(tbl);
                     case cType.GraphType.RECYCLING
-                            app.GraphRecycling(tbl);
+                        app.GraphRecycling(tbl);
                 end
             end            
         end

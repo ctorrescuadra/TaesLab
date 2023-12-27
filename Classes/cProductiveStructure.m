@@ -155,6 +155,12 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
             end			
         end
 
+		function res=getWasteFlows(obj)
+		% Get a cell array with the waste flow keys
+			id=obj.ps.Waste.flows;
+			res=obj.FlowKeys(id);
+		end
+
         function res=isModelIO(obj)
         % Check if the model is Input-Output
             res=isempty(intersect(obj.FlowStreamEdges.from,obj.FlowStreamEdges.to));

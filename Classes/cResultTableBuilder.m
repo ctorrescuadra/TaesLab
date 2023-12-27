@@ -5,7 +5,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 %       obj=cResultTableBuilder(cfglocal,ps)
 %       res=obj.getProductiveStructureResults(ps)
 %       res=obj.getExergyResults(pm)
-%       res=obj.getWasteResults(wt)
 %       res=obj.getExergyCostResults(pm,options)
 %       res=obj.getThermoeconomicAnalysisResults(mfp,options)
 %       res=obj.getThermoeconomicDiagnosisResults(dgn)
@@ -64,13 +63,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.streams=obj.getStreamsTable(ps);
             tbl.processes=obj.getProcessesTable(ps);
             res=cResultInfo(ps,tbl);
-        end
-
-        function res=getWasteResults(obj,wt)
-            tbl=struct();
-            tbl.wd=obj.getWasteDefinition(wt);
-            tbl.wa=obj.getWasteAllocation(wt);
-            res=cResultInfo(wt,tbl);
         end
         
         function res=getExergyResults(obj,pm)
@@ -177,8 +169,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tbl.dfict=obj.getFlowICTable(cType.Tables.FLOW_ICT,dfict);
                 if mfp.isWaste
                     tbl.dcfpr=obj.getTableFP(cType.Tables.COST_TABLE_FPR,dcfpr);
-                    tbl.wd=obj.getWasteDefinition(mfp.WasteTable);
-                    tbl.wa=obj.getWasteAllocation(mfp.WasteTable);
                 end
             end
             if options.GeneralCost
@@ -216,6 +206,41 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=cResultInfo(dgn,tbl);
         end
 
+        function res=getWasteAnalysisResults(obj,ra,param)
+        % Get a structure with the tables of cRecyclingAnalisys function
+        %   Input:
+        %       ra: cRecyclingAnalysis object
+        %       param: struct containing the fields (DirectCost,GeneralCost)
+        %   Output:
+        %       res - cResultInfo object (WASTE_ANALYSIS) with the tables
+        %            wd - Waste Definition
+        %            wa - Waste Allocation
+        %           rad - Recycling Analysis direct cost
+        %           rag - Recycling Analysis generalized cost
+            tbl=struct();
+            % Get Waste Definition and Allocation tables
+            tbl.wd=obj.getWasteDefinition(ra.wasteTable);
+            tbl.wa=obj.getWasteAllocation(ra.wasteTable);
+            % Get Recycling analysis tables
+            if ra.Recycling
+                colNames=horzcat('Recycle (%)',ra.OutputFlows);
+                tmp=int8(100*ra.dValues(:,1));
+                rowNames=arrayfun(@(x) sprintf('%6d',x),tmp,'UniformOutput',false);
+                if param.DirectCost
+                    tp=obj.getMatrixTableProperties(cType.Tables.WASTE_RECYCLING_DIRECT);
+                    data=ra.dValues(:,2:end);
+                    tbl.rad=obj.createMatrixTable(tp,data,rowNames',colNames);
+                end
+                if param.GeneralCost
+                    tp=obj.getMatrixTableProperties(cType.Tables.WASTE_RECYCLING_GENERAL);
+                    data=ra.gValues(:,2:end);
+                    tbl.rag=obj.createMatrixTable(tp,data,rowNames',colNames);
+                end
+            end
+            % Build the cResultInfo Object
+            res=cResultInfo(ra,tbl);
+        end
+
         function res=getDiagramFP(obj,mfp)
         % Get a structure with the FP tables
         %   Input:
@@ -226,40 +251,13 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             % Get Table FP
             values=mfp.TableFP;
             tval=cProcessModel.diagramFP(values,obj.processKeys);
-            tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,values);
             tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,tval);
             % Get Cost Table FP
             values=mfp.getCostTableFP;
             tval=cProcessModel.diagramFP(values,obj.processKeys);
-            tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,values);
             tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,tval);
             res=cResultInfo(mfp,tbl);
             res.setResultId(cType.ResultId.DIAGRAM_FP);
-        end
-
-        function res=getRecyclingAnalysisResults(obj,ra,param)
-        % Get a structure with the tables of cRecyclingAnalisys function
-        %   Input:
-        %       ra: cRecyclingAnalysis object
-        %       param: struct containing the fields (DirectCost,GeneralCost)
-        %   Output:
-        %       res - cResultInfo object (RECYCLING_ANALYSIS) with the tables
-        %           rad - Recycling Analysis direct cost
-        %           rag - Recycling Analysis generalized cost
-            colNames=horzcat('Recycle (%)',ra.OutputFlows);
-            tmp=int8(100*ra.dValues(:,1));
-            rowNames=arrayfun(@(x) sprintf('%6d',x),tmp,'UniformOutput',false);
-            if param.DirectCost
-                tp=obj.getMatrixTableProperties(cType.Tables.WASTE_RECYCLING_DIRECT);
-                data=ra.dValues(:,2:end);
-                tbl.rad=obj.createMatrixTable(tp,data,rowNames',colNames);
-            end
-            if param.GeneralCost
-                tp=obj.getMatrixTableProperties(cType.Tables.WASTE_RECYCLING_GENERAL);
-                data=ra.gValues(:,2:end);
-                tbl.rag=obj.createMatrixTable(tp,data,rowNames',colNames);
-            end
-            res=cResultInfo(ra,tbl);
         end
 
         function res=getProductiveDiagram(obj,pd)
@@ -271,18 +269,18 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   
             % Flows Diagram
             id=cType.Tables.FLOWS_DIAGRAM;      
-            A=pd.FlowsMatrix;
-            nodes=obj.flowKeys;
+            A=pd.FlowMatrix;
+            nodes=pd.FlowNodes.Name;
             tbl.fat=obj.getProductiveTable(id,A,nodes);
             % Flow-Process Diagram
             id=cType.Tables.FLOW_PROCESS_DIAGRAM;
             A=pd.FlowProcessMatrix;
-            nodes=[obj.flowKeys,obj.processKeys(1:end-1)];
+            nodes=pd.FlowProcessNodes.Name;
             tbl.fpat=obj.getProductiveTable(id,A,nodes);
             % Productive (SPF) Diagram
             id=cType.Tables.PRODUCTIVE_DIAGRAM;
             A=pd.ProductiveMatrix;
-            nodes=[obj.streamKeys,obj.flowKeys,obj.processKeys(1:end-1)];
+            nodes=pd.ProductiveNodes.Name;
             tbl.pat=obj.getProductiveTable(id,A,nodes);
             res=cResultInfo(pd,tbl);
         end
@@ -478,7 +476,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             [idx,jdx,~]=find(A);
             source=nodes(idx);
             target=nodes(jdx);
-            data=[source', target'];
+            data=[source, target];
             M=numel(source);
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
             colNames=obj.getTableHeader(tp);

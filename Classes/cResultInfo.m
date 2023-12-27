@@ -562,7 +562,7 @@ classdef cResultInfo < cStatusLogger
         %
             % Check Input
             log=cStatus(cType.VALID);
-            if obj.ResultId~=cType.ResultId.RECYCLING_ANALYSIS
+            if obj.ResultId~=cType.ResultId.WASTE_ANALYSIS
                 log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return
             end
@@ -594,9 +594,8 @@ classdef cResultInfo < cStatusLogger
         %
             log=cStatus(cType.VALID);
   
-            if obj.ResultId==cType.ResultId.WASTE_ANALYSIS || ...
-                obj.ResultId==cType.ResultId.EXERGY_COST_CALCULATOR || ...
-                obj.ResultId==cType.ResultId.THERMOECONOMIC_ANALYSIS
+            if obj.ResultId==cType.ResultId.RECYCLING_ANALYSIS || ...
+                obj.ResultId==cType.ResultId.EXERGY_COST_CALCULATOR
                 tbl=obj.Tables.wa;
             else
                 log.printError('Invalid cResultInfo object %s',obj.ResultName);
@@ -607,7 +606,7 @@ classdef cResultInfo < cStatusLogger
                 return
             end   
             if nargin==1
-                wkey=tbl.ColNames{2};
+                wkey=obj.Info.wasteFlow;
             end
             showGraph(tbl,wkey);
         end
@@ -650,7 +649,7 @@ classdef cResultInfo < cStatusLogger
                 graph=cType.Tables.FLOWS_DIAGRAM;
             end
             tbl=obj.getTable(graph);
-            if isValid(tbl) %&& isGraph(tbl)
+            if isValid(tbl) && isGraph(tbl)
                 showGraph(tbl);
             else
                 log.printError('Invalid graph type: %s',graph);
@@ -677,13 +676,15 @@ classdef cResultInfo < cStatusLogger
 		        log.printError('Invalid graph table: %s',graph);
 		        return
 	        end
-	        % Get optional parameters
+	        % Get default optional parameters
             if isempty(varargin)
                 switch tbl.GraphType
 		            case cType.GraphType.DIAGNOSIS
 			            option=true;
 		            case cType.GraphType.WASTE_ALLOCATION
-				        option=tbl.ColNames{2};
+				        option=obj.Info.wasteFlow;
+                    case cType.GraphType.DIGRAPH
+                        option=obj.Info.getNodeTable(graph);
 		            case cType.GraphType.SUMMARY
                         if tbl.isFlowsTable
 					        option=obj.Info.getDefaultFlowVariables;

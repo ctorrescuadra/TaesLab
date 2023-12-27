@@ -40,7 +40,7 @@ classdef cGraphResults < cStatusLogger
 			case cType.GraphType.WASTE_ALLOCATION
 				obj.setGraphWasteAllocationParameters(tbl,varargin{:})
             case cType.GraphType.DIGRAPH
-				    obj.setProductiveDiagramParameters(tbl);
+				    obj.setProductiveDiagramParameters(tbl,varargin{:});
             case cType.GraphType.DIAGRAM_FP
                     obj.setDiagramFpParameters(tbl);
 			otherwise
@@ -148,12 +148,17 @@ classdef cGraphResults < cStatusLogger
 
 		function showDigraph(obj)
 		% Plot Productive Diagrams (digraph)
+            
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
 			ax=axes(f);    
-			% Plot the digraph    
-			plot(ax,obj.xValues,"Layout","auto","interpreter","none");
-			title(ax,obj.Title,'fontsize',14);
+			% Plot the digraph
+            colors=eye(3);
+            nodetable=obj.xValues.Nodes;
+            nodecolors=colors(nodetable.Type,:);
+            nodenames=nodetable.Name;
+            plot(ax,obj.xValues,"Layout","auto","NodeLabel",nodenames,"NodeColor",nodecolors,"Interpreter","none");
+            title(obj.Title,'fontsize',14,"Interpreter","none");
 		end
 
 		function showDiagramFP(obj)
@@ -286,7 +291,7 @@ classdef cGraphResults < cStatusLogger
 				obj.messageLog(cType.ERROR,'Parameters missing');
 				return
 			end
-			obj.Name='Waste Allocation Analysis';
+			obj.Name='Waste Allocation';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',wf,']'];
 			x=cell2mat(tbl.Data(:,idx));
 			jdx=find(x>1.0);
@@ -318,17 +323,16 @@ classdef cGraphResults < cStatusLogger
             obj.Categories={};
         end
 
-		function setProductiveDiagramParameters(obj,tbl)
+		function setProductiveDiagramParameters(obj,tbl,nodes)
 		% Set the parameters of a digraph
 			if isOctave
 				obj.logMessage(cType.ERROR,'Graph function not implemented in Octave');
 				return
 			end
 			obj.Name=tbl.Description;
-			obj.Title=[tbl.Description ' [',tbl.State,']'];
-			source=tbl.Data(:,1);
-			target=tbl.Data(:,2);
-			obj.xValues=digraph(source,target,"omitselfloops");
+			obj.Title=tbl.Description;
+			edges=table(tbl.Data,'VariableNames',{'EndNodes'});
+			obj.xValues=digraph(edges,nodes,"omitselfloops");
             obj.Legend={};
 			obj.yValues=[];
 			obj.xLabel=['Exergy ' tbl.Unit{end}];

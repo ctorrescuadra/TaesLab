@@ -56,7 +56,9 @@ function ShowModelGraph(model,graph,varargin)
 				option=param.ShowOutput;
             else
 				option=true;
-			end	
+			end
+		case cType.GraphType.DIGRAPH
+			option=res.Info.getNodeTable(graph);
 		case cType.GraphType.WASTE_ALLOCATION
 			if isempty(param.WasteFlow)
 				param.WasteFlow=tbl.ColNames{2};

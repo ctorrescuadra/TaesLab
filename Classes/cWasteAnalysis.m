@@ -1,77 +1,108 @@
-classdef (Sealed) cRecyclingAnalysis < cResultId
+classdef (Sealed) cWasteAnalysis < cResultId
 % cRecyclingAnalysis analyze the potential cost saving of waste recycling
 %   This class calculates the direct unit cost of output flows of the plant as function
 %   of the recycling ratio of a waste.
 %   Methods:
 %       obj=cRecyclingAnalysis()
-%       obj.doAnalysis
-%       obj.plotValues
+%       res=obj.getResultInfo(fmt,param)
+%   See also cResultId
     properties(GetAccess=public,SetAccess=private)
+        Recycling    
         OutputFlows  % Output flows
         wasteFlow    % Actual waste flow key
+        wasteTable   % cWasteTable object
         dValues      % Recycling Analysis Direct Cost values
         gValues      % Recycling Analysis Generalized Cost values
     end
     properties(Access=private)
-        ps           % Productive structure
-        modelFP      % cModelFPR object
-        wasteTable   % cWasteData object
-        resourceCost % cReadResource object
-        directCost=true        % Direct cost are calculated
-        generalCost=false      % General cost are calculated
-        isResourceCost=false;  % Resource Cost available
+        modelFP                 % cModelFPR object
+        resourceCost            % cResourceCost object
+        directCost=true         % Direct cost are calculated
+        generalCost=false       % General cost are calculated
+        isResourceCost=false;   % Resource Cost available
     end
 
     methods
-        function obj = cRecyclingAnalysis(fpm,rsd)
+        function obj = cWasteAnalysis(fpm,wkey,recycling,rsd)
         % Create an instance of cRecyclingAnalysis
         %   Input:
         %       fpm - cModelFPR object
-        %       rsc - (optional) cResourceData object     
-        %
-            obj=obj@cResultId(cType.ResultId.RECYCLING_ANALYSIS);
-            % Check input parameters
+        %       recycling - (true/false)
+        %       wkey - Active waste flow key 
+        %       rsd - Resources data
+            obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
+            if nargin<2
+                obj.messageLog(cType.ERROR,'Invalid number of parameters');
+                return
+            end
+            % Check mandatory parameters
             if ~isa(fpm,'cModelFPR') || ~fpm.isValid
                 obj.addLogger(fpm);
                 obj.messageLog(cType.ERROR,'Invalid FPR model');
                 return
             end
-            if nargin==2
-                if  ~isa(rsd,'cResourceData') || ~rsd.isValid
+            if ~ischar(wkey)
+                obj.messageLog(cType.ERROR,'Invalid wkey parameters');
+                return
+            end
+            wid=fpm.WasteTable.getWasteIndex(wkey);
+            if isempty(wid)
+                res.printError('Invalid waste flow key %s',wkey);
+                return
+            end
+            switch nargin
+            case 2
+                recycling=false;
+            case 3
+                if ~islogical(recycling)
+                    res.printError('Invalid recycling parameter');
+                    return
+                end
+            case 4
+                if isa(rsd,'cResourceData') && rsd.isValid
+                    obj.isResourceCost=true;
+                    obj.generalCost=true;
+                    obj.resourceCost=getResourceCost(rsd,fpm);
+                else
                     rsd.printLogger;
                     obj.addLogger(rsd);
                     obj.messageLog(cType.ERROR,'Invalid resource cost data');
                     return
                 end
-                obj.isResourceCost=true;
-                obj.generalCost=true;
-                obj.resourceCost=getResourceCost(rsd,fpm);
+            otherwise
+                obj.messageLog(cType.ERROR,'Invalid number of parameters');
+                return
             end
-            obj.ps=fpm.ps;
             % Assign object variables
             obj.modelFP=fpm;
+            obj.wasteFlow=wkey;
             obj.wasteTable=fpm.WasteTable;
-            obj.status=cType.VALID;
+            obj.Recycling=recycling;
+            if recycling
+                obj.recyclingAnalysis;
+            end
         end
 
         function res=getResultInfo(obj,fmt,param)
         % Get the cResultInfo object
-            res=fmt.getRecyclingAnalysisResults(obj,param);
+            res=fmt.getWasteAnalysisResults(obj,param);
         end
-
-        function doAnalysis(obj,wkey)
-        % Do the recycled analysis for waste wkey
-            wd=obj.modelFP.WasteTable;
-            wId=wd.getWasteIndex(wkey);
+    end
+    methods(Access=private)
+        function recyclingAnalysis(obj)
+        % Do the recycling analysis for a waste flow
+            wd=obj.wasteTable;
+            ps=obj.modelFP.ps;
+            wId=wd.getWasteIndex(obj.wasteFlow);
             if isempty(wId)
                 obj.messageLog(cType.ERROR,'Invalid waste key %s',wkey);
                 return
             end
             idx=wd.Flows(wId);
             % Get Output Flows Id
-            tmp=obj.ps.SystemOutput.flows;
-            outputId=[setdiff(tmp,idx),idx];
-            obj.OutputFlows={obj.ps.Flows(outputId).key};
+            tmp=ps.FinalProducts.flows;
+            outputId=[tmp,idx];
+            obj.OutputFlows={ps.Flows(outputId).key};
             % Save original values
             rwv=wd.Values;
             wrc=obj.wasteTable.RecycleRatio(wId); % Save original value
@@ -95,7 +126,6 @@ classdef (Sealed) cRecyclingAnalysis < cResultId
                 end
             end
             % Set object variables
-            obj.wasteFlow=wkey;
             obj.dValues=[x,yd];
             obj.gValues=[x,yg];
             % Restore original values

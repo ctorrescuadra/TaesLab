@@ -6,7 +6,7 @@ classdef (Abstract) cTable < cStatusLogger
 %       obj.setState
 %       viewTable(obj)
 %       log=obj.saveTable(filename)
-%       res=exportTable(obj)
+%       res=obj.exportTable(varmode)
 % See also cTableData, cTableResult
     properties(GetAccess=public, SetAccess=protected)
         NrOfCols  	    % Number of Columns
@@ -42,16 +42,26 @@ classdef (Abstract) cTable < cStatusLogger
         %           cType.TableView.GUI (default)
         %           cType.TableView.HTML
         %
+            log=cStatus(cType.VALID);
+            options=[cType.TableView.GUI,cType.TableView.HTML];
             if nargin==1
-                option=cType.TableView.GUI;
+                if isOctave
+                    option=options(1);
+                else
+                    option=options(2);
+                end
             end
             switch option
             case cType.TableView.GUI
                 viewTableGUI(obj)
             case cType.TableView.HTML
                 viewTableHTML(obj)
+            otherwise
+                log.printError('Invalid viewTable option');
             end
+
         end
+        
         function log = saveTable(obj,filename)
         % saveTable save a cTable in a file
         %   The file types depends on the extension
@@ -82,6 +92,24 @@ classdef (Abstract) cTable < cStatusLogger
                     log=exportMAT(obj,filename);
                 otherwise
                     log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
+            end
+        end
+
+        function res=exportTable(obj,varmode)
+        % Get table values in diferent formats
+            switch varmode
+                case cType.VarMode.CELL
+                    res=obj.Values;
+                case cType.VarMode.STRUCT
+                    res=obj.getStructData;
+                case cType.VarMode.TABLE
+                    if isMatlab
+                        res=obj.getMatlabTable;
+                    else
+                        res=obj;
+                    end
+                otherwise
+                    res=obj;
             end
         end
 
@@ -120,24 +148,6 @@ classdef (Abstract) cTable < cStatusLogger
             data=cell2struct([obj.RowNames',obj.Data],obj.ColNames,2);
             res=struct('Name',obj.Name,'Description',obj.Description,...
             'State',obj.State,'Data',data);
-        end
-
-        function res=exportTable(obj,varmode)
-        % Get table values in diferent formats
-            switch varmode
-                case cType.VarMode.CELL
-                    res=obj.Values;
-                case cType.VarMode.STRUCT
-                    res=obj.getStructData;
-                case cType.VarMode.TABLE
-                    if isMatlab
-                        res=obj.getMatlabTable;
-                    else
-                        res=obj;
-                    end
-                otherwise
-                    res=obj;
-            end
         end
 
         function res=size(obj,dim)

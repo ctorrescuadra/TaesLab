@@ -6,9 +6,9 @@ classdef ThermoeconomicPanel < handle
 %   - thermoeconomicState
 %   - thermoeconomicAnalysis
 %   - thermoeconomicDiagnosis
+%	- wasteAnalysis
 % and perform the following operations:
-%   - Save the results as excel or csv files
-%   - Show result on console
+%   - Save the results in several formats (xlsx, csc, html, txt
 %   - Save variables in the base workspace
 %   - View Result in tables and graphs
 %
@@ -130,7 +130,6 @@ classdef ThermoeconomicPanel < handle
 				dnames=cType.DiagnosisOptions;
 				if tm.isWaste
                     app.wasteFlows=tm.WasteFlows;
-                    app.activeWaste=app.wasteFlows{1};
                     set(app.wf_popup,'enable','on','string',app.wasteFlows);
                     set(app.ra_checkbox,'enable','on');
 					set(app.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
@@ -173,6 +172,7 @@ classdef ThermoeconomicPanel < handle
                set(app.tb_ra,'enable','off');
                set(app.mn_ra,'enable','off'); 
             end
+            app.model.Recycling=val;
         end
 
         function getTables(app,~,~)
@@ -240,9 +240,9 @@ classdef ThermoeconomicPanel < handle
 
         function getActiveWaste(app,~,~)
         % Get WasteDiagnosis callback
-            values=get(app.tdm_popup,'string');
-            pos=get(app.tdm_popup,'value');
-			app.activeWaste=values{pos};
+            values=get(app.wf_popup,'string');
+            pos=get(app.wf_popup,'value');
+            app.model.ActiveWaste=values{pos};
         end
 
 		function getPrinter(app,~,~)
@@ -436,15 +436,15 @@ classdef ThermoeconomicPanel < handle
 			set(app.log,'string',logtext);
         end
 
-        function recyclingAnalysis(app,~,~)
+        function wasteAnalysis(app,~,~)
             set(app.log,'string','');
-			ra=app.model.recyclingAnalysis(app.activeWaste);
+			ra=app.model.wasteAnalysis;
 			if ra.isValid
                 if app.console
 					printResults(ra);
                 end
-                assignin('base', 'recyclingAnalysis', ra);
-				logtext=sprintf(' INFO: Results in variable recyclingAnalysis');
+                assignin('base', 'wasteAnalysis', ra);
+				logtext=sprintf(' INFO: Results in variable wasteAnalysis');
                 if app.showGraph
                     if isOctave
 						graphRecycling(ra);
@@ -524,7 +524,7 @@ classdef ThermoeconomicPanel < handle
 			    'clickedcallback', @(src,evt) app.thermoeconomicDiagnosis(src,evt));
             app.tb_ra = uipushtool (tb, 'cdata', cType.getIcon('RecyclingAnalysis'),...
 			    'tooltipstring','Thermoeconomic Diagnosis',...
-			    'clickedcallback', @(src,evt) app.recyclingAnalysis(src,evt));
+			    'clickedcallback', @(src,evt) app.wasteAnalysis(src,evt));
             app.tb_gs = uipushtool (tb, 'cdata', cType.getIcon('SummaryResults'),...
 			    'tooltipstring','General Summary',...
 			    'clickedcallback', @(src,evt) app.summaryResults(src,evt));
@@ -558,7 +558,7 @@ classdef ThermoeconomicPanel < handle
 			app.mn_td=uimenu (e, 'label', 'Thermoeconomic Diagnosis',...
 				'callback', @(src,evt) app.thermoeconomicDiagnosis(src,evt));
             app.mn_ra=uimenu (e, 'label', 'Recycling Analysis',...
-				'callback', @(src,evt) app.recyclingAnalysis(src,evt));
+				'callback', @(src,evt) app.wasteAnalysis(src,evt));
             app.mn_gs=uimenu (e, 'label', 'Summary Results',...
 				'callback', @(src,evt) app.summaryResults(src,evt));
             app.mn_vr=uimenu (e, 'label', 'Model Results',...

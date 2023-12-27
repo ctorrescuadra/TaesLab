@@ -64,8 +64,8 @@ classdef cType
         DIRECT=1                  % Direct Cost Tables Bit
         GENERALIZED=2             % Generalized Cost Tables Bit
 		CAPACITY=8	              % Initial capacity for cQueue and cStack
-		MAX_RESULT=4              % Number of Results in cModelResults
-		MAX_RESULT_INFO=11        % Maximun cResultInfo groups
+		MAX_RESULT=5              % Number of Results in cModelResults
+		MAX_RESULT_INFO=10        % Maximun cResultInfo groups
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance
@@ -144,14 +144,14 @@ classdef cType
 		Symbols=jsondecode('{"dash": "\u2014","delta": "\u0394"}');
         % Result Id types
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
-            'THERMOECONOMIC_DIAGNOSIS',4,'SUMMARY_RESULTS',5,'PRODUCTIVE_DIAGRAM',6,'DIAGRAM_FP',7,'WASTE_ANALYSIS',8,...
-			'RECYCLING_ANALYSIS',9,'EXERGY_COST_CALCULATOR',10,'RESULT_MODEL',11,'DATA_MODEL',12);
+            'THERMOECONOMIC_DIAGNOSIS',4,'WASTE_ANALYSIS',5,'SUMMARY_RESULTS',6,'PRODUCTIVE_DIAGRAM',7,'DIAGRAM_FP',8,...
+			'EXERGY_COST_CALCULATOR',9,'RESULT_MODEL',10,'DATA_MODEL',11);
 		% Names for cModelResults	
 		Results={'Productive Structure','Thermoeconomic State','Thermoeconomic Analysis',...
-			'Thermoeconomic Diagnosis','Summary Results','Productive Diagram','Diagram FP','Waste Analysis',...
-			'Recycling Analysis','Exergy Cost Calculator','Model Results','Data Model'};
-        ResultIndex={'psindex','tsindex','taindex','tdindex','srindex','pdindex','fpindex','waindex',...
-            'raindex','ecindex','rmindex','dmindex'};
+			'Thermoeconomic Diagnosis','Waste Analysis','Summary Results','Productive Diagram','Diagram FP',...
+			'Exergy Cost Calculator','Model Results','Data Model'};
+        ResultIndex={'psindex','tsindex','taindex','tdindex','raindex','srindex','pdindex','fpindex',...
+            'ecindex','rmindex','dmindex'};
 		% Type of columns for uitables
 		TableView=struct('GUI',1,'HTML',2);
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
@@ -164,7 +164,7 @@ classdef cType
 		CSSFILE='styles.css';
 		% Icon Files
 		IconFile=struct('ProductiveStructure','ps.png','ThermoeconomicState','ts.png','ThermoeconomicAnalysis','ta.png',...
-            'ThermoeconomicDiagnosis','td.png','RecyclingAnalysis','ra.png','SummaryResults','gs.png','ModelResults','mr.png');
+            'ThermoeconomicDiagnosis','td.png','WasteAnalysis','wa.png','SummaryResults','gs.png','ModelResults','mr.png');
         % Taess app welcome image
 		TaesImage='TaesLab.png';
         % Taess app Resources folder
