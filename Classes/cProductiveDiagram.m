@@ -1,12 +1,12 @@
-classdef cProductiveDiagram < cResultId
+classdef (Sealed) cProductiveDiagram < cResultId
 % cProductiveDiagram build the productive diagram info
     properties(GetAccess=public,SetAccess=private)
-        FlowMatrix          % Flow adjacency matrix
-        FlowProcessMatrix   % Flow-Process adjacency matrix
-        ProductiveMatrix    % Productive adjacency matrix
-        FlowNodes           % Flow nodes properties
-        FlowProcessNodes    % Flow-Process nodes properties
-        ProductiveNodes     % Productive nodes properties
+        EdgesFAT          % Flow adjacency matrix
+        EdgesFPAT         % Flow-Process adjacency matrix
+        EdgesPAT          % Productive adjacency matrix
+        NodesFAT          % Flow nodes properties
+        NodesFPAT         % Flow-Process nodes properties
+        NodesPAT          % Productive nodes properties
     end
 
     methods
@@ -15,26 +15,29 @@ classdef cProductiveDiagram < cResultId
         %  Input:
         %   ps - cProductiveStructure
         %
-            % Get Adjacency Matrix
             obj=obj@cResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
-            obj.FlowMatrix=ps.StructuralMatrix;
-            obj.FlowProcessMatrix=ps.FlowProcessMatrix;
-            obj.ProductiveMatrix=ps.ProductiveMatrix;
-            % Get Flows node names   
+            % Get Flows (FAT) info  
             nodenames=[ps.FlowKeys];
-            nodetypes=repmat(cType.NodeType.FLOW,1,ps.NrOfFlows);
-            obj.FlowNodes=table(nodenames',nodetypes','VariableNames',{'Name','Type'}); 
+            flowMatrix=ps.StructuralMatrix;
+            nodetypes=repmat({cType.NodeType.FLOW},1,ps.NrOfFlows);
+            obj.NodesFAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
+            obj.EdgesFAT=cProductiveDiagram.adjacencyTable(flowMatrix,nodenames);
             % Get Flow-Process node names
             nodenames=[ps.FlowKeys,ps.ProcessKeys(1:end-1)];
-            nodetypes=[repmat(cType.NodeType.FLOW,1,ps.NrOfFlows),...
-                   repmat(cType.NodeType.PROCESS,1,ps.NrOfProcesses)];
-            obj.FlowProcessNodes=table(nodenames',nodetypes','VariableNames',{'Name','Type'}); 
+            flowProcessMatrix=ps.FlowProcessMatrix;
+            nodetypes=[repmat({cType.NodeType.FLOW},1,ps.NrOfFlows),...
+                   repmat({cType.NodeType.PROCESS},1,ps.NrOfProcesses)];
+            obj.NodesFPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
+            obj.EdgesFPAT=cProductiveDiagram.adjacencyTable(flowProcessMatrix,nodenames);
             % Get Productive (PST) node names
             nodenames=[ps.StreamKeys,ps.FlowKeys,ps.ProcessKeys(1:end-1)];
-            nodetypes=[repmat(cType.NodeType.STREAM,1,ps.NrOfStreams),...
-                   repmat(cType.NodeType.FLOW,1,ps.NrOfFlows),...
-                   repmat(cType.NodeType.PROCESS,1,ps.NrOfProcesses)];
-            obj.ProductiveNodes=table(nodenames',nodetypes','VariableNames',{'Name','Type'});
+            productiveMatrix=ps.ProductiveMatrix;
+            nodetypes=[repmat({cType.NodeType.STREAM},1,ps.NrOfStreams),...
+                   repmat({cType.NodeType.FLOW},1,ps.NrOfFlows),...
+                   repmat({cType.NodeType.PROCESS},1,ps.NrOfProcesses)];
+            obj.NodesPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
+            obj.EdgesPAT=cProductiveDiagram.adjacencyTable(productiveMatrix,nodenames);
+            obj.DefaultGraph=cType.Tables.FLOWS_DIAGRAM;
             obj.status=cType.VALID;
         end
 
@@ -42,11 +45,11 @@ classdef cProductiveDiagram < cResultId
         % Get the nodes info of a table
             switch tbl
                 case cType.Tables.FLOWS_DIAGRAM
-                    res=obj.FlowNodes;
+                    res=obj.NodesFAT;
                 case cType.Tables.FLOW_PROCESS_DIAGRAM
-                    res=obj.FlowProcessNodes;
+                    res=obj.NodesFPAT;
                 case cType.Tables.PRODUCTIVE_DIAGRAM
-                    res=obj.ProductiveNodes;
+                    res=obj.NodesPAT;
             end 
         end
 
@@ -54,7 +57,19 @@ classdef cProductiveDiagram < cResultId
         % Get cResultInfo object
             res=fmt.getProductiveDiagram(obj);
         end
+    end
 
+    methods(Static,Access=private)
+        function res=adjacencyTable(A,nodes)
+            [idx,jdx,~]=find(A);
+            source=nodes(idx);
+            target=nodes(jdx);
+            res=[source', target'];
+        end
 
+        function res=nodesTable(nodenames,nodetypes)
+            fields={'Name','Type'};
+            res=cell2struct([nodenames;nodetypes],fields,1);
+        end
     end
 end

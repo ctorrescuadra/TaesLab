@@ -81,6 +81,8 @@ classdef (Sealed) cWasteAnalysis < cResultId
             if recycling
                 obj.recyclingAnalysis;
             end
+            obj.DefaultGraph=cType.Tables.WASTE_ALLOCATION;
+            obj.status=cType.VALID;
         end
 
         function res=getResultInfo(obj,fmt,param)

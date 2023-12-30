@@ -51,6 +51,8 @@ classdef (Sealed) cExergyCost < cExergyModel
             if (nargin==2) && isa(wd,'cWasteData')
                 obj.setWasteOperators(wd)
             end
+            obj.DefaultGraph=cType.Tables.PROCESS_ICT;
+            obj.status=cType.VALID;
 		end
 
         function res=get.AdjacencyMatrix(obj)

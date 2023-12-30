@@ -106,7 +106,7 @@ classdef cModelData < cStatusLogger
         %   filename - name of the output file
         %  Output:
         %   log: cStatusLog class containing error messages ans status
-            log=exportJSON(obj.dm,filename);
+            log=exportXML(obj.dm,filename);
 		end
 
         function log=saveAsJSON(obj,filename)

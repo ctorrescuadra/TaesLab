@@ -195,11 +195,5 @@ classdef (Sealed) cTableMatrix < cTableResult
         function res=isGeneralCostTable(obj)
             res=bitget(obj.GraphOptions,3);
         end
-
-        function res=isDigraph(obj)
-        % Determine if table has a digraph representation       
-            res=(obj.GraphType==cType.GraphType.DIAGRAM_FP);
-        end
-
     end
 end

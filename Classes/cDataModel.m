@@ -407,6 +407,7 @@ classdef cDataModel < cStatusLogger
             % Save the object
             try
 				save(filename,'obj');
+                log.messageLog(cType.INFO,'File %s has been saved',filename)
 			catch err
                 log.messageLog(cType.ERROR,err.message);
                 log.messageLog(cType.ERROR,'File %s cannot be written',filename);

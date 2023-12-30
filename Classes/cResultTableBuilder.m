@@ -241,23 +241,18 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=cResultInfo(ra,tbl);
         end
 
-        function res=getDiagramFP(obj,mfp)
+        function res=getDiagramFP(obj,dfp)
         % Get a structure with the FP tables
         %   Input:
-        %       mfp - cModelFPR object
+        %       dfp - cDiagramFP object
         %   Output:
         %       res - cResultInfo object (DIAGRAM_FP) with the Diagram FP tables
         %
-            % Get Table FP
-            values=mfp.TableFP;
-            tval=cProcessModel.diagramFP(values,obj.processKeys);
-            tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,tval);
-            % Get Cost Table FP
-            values=mfp.getCostTableFP;
-            tval=cProcessModel.diagramFP(values,obj.processKeys);
-            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,tval);
-            res=cResultInfo(mfp,tbl);
-            res.setResultId(cType.ResultId.DIAGRAM_FP);
+            % Get FP adjacency tables
+            tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,dfp.EdgesFP);
+            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,dfp.EdgesCFP);
+            % Build the cResultInfo
+            res=cResultInfo(dfp,tbl);
         end
 
         function res=getProductiveDiagram(obj,pd)
@@ -268,20 +263,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       res - cResultInfo object (PRODUCTIVE_DIAGRAM)
         %   
             % Flows Diagram
-            id=cType.Tables.FLOWS_DIAGRAM;      
-            A=pd.FlowMatrix;
-            nodes=pd.FlowNodes.Name;
-            tbl.fat=obj.getProductiveTable(id,A,nodes);
+            id=cType.Tables.FLOWS_DIAGRAM;                 
+            tbl.fat=obj.getProductiveTable(id,pd.EdgesFAT);
             % Flow-Process Diagram
             id=cType.Tables.FLOW_PROCESS_DIAGRAM;
-            A=pd.FlowProcessMatrix;
-            nodes=pd.FlowProcessNodes.Name;
-            tbl.fpat=obj.getProductiveTable(id,A,nodes);
+            tbl.fpat=obj.getProductiveTable(id,pd.EdgesFPAT);
             % Productive (SPF) Diagram
             id=cType.Tables.PRODUCTIVE_DIAGRAM;
-            A=pd.ProductiveMatrix;
-            nodes=pd.ProductiveNodes.Name;
-            tbl.pat=obj.getProductiveTable(id,A,nodes);
+            tbl.pat=obj.getProductiveTable(id,pd.EdgesPAT);
             res=cResultInfo(pd,tbl);
         end
 
@@ -466,18 +455,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 			res=obj.createCellTable(tp,data,rowNames,colNames);
 		end
 
-        function res=getProductiveTable(obj,id,A,nodes)
+        function res=getProductiveTable(obj,id,data)
         % Get the productive tables
         %   Input:
         %     id - table id (printconfig.json)
         %     A - adjacency matrix
         %     nodes - node names
             tp=obj.getCellTableProperties(id);
-            [idx,jdx,~]=find(A);
-            source=nodes(idx);
-            target=nodes(jdx);
-            data=[source, target];
-            M=numel(source);
+            M=size(data,1);
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
             colNames=obj.getTableHeader(tp);
 			res=obj.createCellTable(tp,data,rowNames,colNames);

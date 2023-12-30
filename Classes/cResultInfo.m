@@ -583,7 +583,7 @@ classdef cResultInfo < cStatusLogger
             end
         end
 
-        function graphWasteAllocation(obj,wkey)
+        function graphWasteAllocation(obj,varargin)
         % Shows a pie chart of the waste allocation table
         %   Usage:
         %       obj.graphWasteAllocation(wkey)
@@ -594,7 +594,7 @@ classdef cResultInfo < cStatusLogger
         %
             log=cStatus(cType.VALID);
   
-            if obj.ResultId==cType.ResultId.RECYCLING_ANALYSIS || ...
+            if obj.ResultId==cType.ResultId.WASTE_ANALYSIS || ...
                 obj.ResultId==cType.ResultId.EXERGY_COST_CALCULATOR
                 tbl=obj.Tables.wa;
             else
@@ -605,10 +605,7 @@ classdef cResultInfo < cStatusLogger
                 log.printError('Invalid cResultInfo object %s',obj.ResultName);
                 return
             end   
-            if nargin==1
-                wkey=obj.Info.wasteFlow;
-            end
-            showGraph(tbl,wkey);
+            showGraph(tbl,varargin{:});
         end
 
         function showDiagramFP(obj,graph)
@@ -623,7 +620,17 @@ classdef cResultInfo < cStatusLogger
                 return
             end
             if nargin==1
-                graph=cType.Tables.TABLE_FP;
+                switch obj.ResultId
+                case cType.ResultId.DIAGRAM_FP
+                    graph=cType.Tables.DIAGRAM_FP;
+                case cType.ResultId.THERMOECONOMIC_STATE
+                    graph=cType.Tables.TABLE_FP;
+                case cType.ResultId.THERMOECONOMIC_ANALYSIS
+                    graph=cType.Tables.COST_TABLE_FP;
+                otherwise
+                    log.printError('Invalid cResultInfo object %s',obj.ResultName);
+                    return
+                end
             end
             tbl=obj.getTable(graph);
             if isValid(tbl) && isGraph(tbl)
@@ -650,7 +657,8 @@ classdef cResultInfo < cStatusLogger
             end
             tbl=obj.getTable(graph);
             if isValid(tbl) && isGraph(tbl)
-                showGraph(tbl);
+                option=obj.Info.getNodeTable(graph);
+                showGraph(tbl,option);
             else
                 log.printError('Invalid graph type: %s',graph);
                 return
@@ -667,9 +675,8 @@ classdef cResultInfo < cStatusLogger
         % See also cGraphResults, cTableResults
             log=cStatus(cType.VALID);
             option=[];
-            if nargin<2
-      		    log.printError('Invalid input parameters');
-		        return
+            if nargin==1
+                graph=obj.Info.DefaultGraph;
             end
 	        tbl=getTable(obj,graph);
 	        if ~isValid(tbl)

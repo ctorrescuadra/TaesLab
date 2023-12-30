@@ -47,15 +47,17 @@ classdef ViewResults < matlab.apps.AppBase
             for i=1:M
                 b(i).CData=app.UIAxes.Colormap(i,:);
             end
-            title(app.UIAxes,obj.Title,'FontSize',12);
-            xlabel(app.UIAxes,obj.xLabel,'FontSize',10);
-            ylabel(app.UIAxes,obj.yLabel,'FontSize',10);
+             title(app.UIAxes,obj.Title,'FontSize',14);
+            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
+            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
             legend(app.UIAxes,obj.Legend,'FontSize',8);
-            colorbar(app.UIAxes,'off');
             app.UIAxes.XTick=obj.xValues; 
             app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.Legend.Location='northeastoutside';
             app.UIAxes.Legend.Orientation='vertical';
+            app.UIAxes.XGrid = 'off';
+            app.UIAxes.YGrid = 'on';
+            app.UIAxes.GridLineWidth = 0.25;         
             app.UIAxes.Visible='on';
         end
         
@@ -83,14 +85,16 @@ classdef ViewResults < matlab.apps.AppBase
             bs.BaseValue=0.0;
             bs.LineStyle='-';
             bs.Color=[0.6,0.6,0.6];
-            title(app.UIAxes,obj.Title,'FontSize',12);
-            xlabel(app.UIAxes,obj.xLabel,'FontSize',10);
-            ylabel(app.UIAxes,obj.yLabel,'FontSize',10);
+            title(app.UIAxes,obj.Title,'FontSize',14);
+            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
+            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
             legend(app.UIAxes,obj.Legend,'FontSize',8);
             app.UIAxes.XTick=obj.xValues; 
             app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.Legend.Location='northeastoutside';
             app.UIAxes.Legend.Orientation='vertical';
+            app.UIAxes.XGrid = 'off';
+            app.UIAxes.YGrid = 'on';
             app.UIAxes.Visible='on';
         end
 
@@ -100,8 +104,7 @@ classdef ViewResults < matlab.apps.AppBase
             if tbl.isFlowsTable
                 res=app.Tree.SelectedNodes.Parent.NodeData;
                 var=res.Info.getDefaultFlowVariables;
-                idx=res.Info.getFlowIndex(var);
-                obj=cGraphResults(tbl,idx);
+                obj=cGraphResults(tbl,var);
             else
                 return
             end
@@ -121,15 +124,17 @@ classdef ViewResults < matlab.apps.AppBase
             for i=1:M
                 b(i).CData=app.UIAxes.Colormap(i,:);
             end
-            title(app.UIAxes,obj.Title,'FontSize',12);
-            xlabel(app.UIAxes,obj.xLabel,'FontSize',10);
-            ylabel(app.UIAxes,obj.yLabel,'FontSize',10);
+            title(app.UIAxes,obj.Title,'FontSize',14);
+            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
+            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
             legend(app.UIAxes,obj.Legend,'FontSize',8);
             app.UIAxes.XTick=obj.xValues;
             app.UIAxes.TickLabelInterpreter='none';
             app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.Legend.Location='northeastoutside';
             app.UIAxes.Legend.Orientation='vertical';
+            app.UIAxes.XGrid = 'off';
+            app.UIAxes.YGrid = 'on';
             app.UIAxes.Visible='on';
         end
 
@@ -149,21 +154,52 @@ classdef ViewResults < matlab.apps.AppBase
                 'Parent',app.UIAxes);
             app.UIAxes.XLimMode="auto";
             app.UIAxes.YLimMode="auto";
-		    title(app.UIAxes,obj.Title,'Fontsize',12);
-		    xlabel(app.UIAxes,obj.xLabel,'fontsize',10);
-		    ylabel(app.UIAxes,obj.yLabel,'fontsize',10);
-		    set(app.UIAxes,'xgrid','off','ygrid','on');
+		    title(app.UIAxes,obj.Title,'Fontsize',14);
+		    xlabel(app.UIAxes,obj.xLabel,'fontsize',12);
+		    ylabel(app.UIAxes,obj.yLabel,'fontsize',12);
             legend(app.UIAxes,obj.Legend,'FontSize',8);
             app.UIAxes.XTick=obj.xValues;
             app.UIAxes.Legend.Location='northeastoutside';
             app.UIAxes.Legend.Orientation='vertical';
+            app.UIAxes.XGrid = 'off';
+            app.UIAxes.YGrid = 'on';
             app.UIAxes.Visible='on';
         end
+
+        % Show Waste Allocation graph
+        function GraphWasteAllocation(app,tbl)
+            % Get graph Properties
+            obj=cGraphResults(tbl);
+            % Plot the bar graph
+            app.UIAxes.Visible='off';
+            if ~isempty(app.Colorbar)
+                app.Colobar.Visible='off';
+            end
+            bar(obj.xValues,obj.yValues',...
+                'EdgeColor','none',...
+                'BarLayout','stacked',...
+                'Horizontal','on',...
+                'Parent',app.UIAxes);
+            title(app.UIAxes,obj.Title,'FontSize',14);
+            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
+            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
+            legend(app.UIAxes,obj.Categories,'FontSize',8);
+            app.UIAxes.Legend.Location='bestoutside';
+            app.UIAxes.Legend.Orientation='horizontal';
+            app.UIAxes.XTick = (0:10:100);
+            app.UIAxes.XGrid = 'on';
+            app.UIAxes.YGrid = 'off';
+            % Show the figure after all components are created
+            app.UIAxes.Visible = 'on';
+        end
+
 
         % Show digraphs (productiveDiagram, diagramFP object)
         function ShowDigraph(app,tbl)
             % get the graph properties
-            obj=cGraphResults(tbl);
+            res=app.Tree.SelectedNodes.Parent.NodeData;
+            nodes=res.Info.getNodeTable(tbl.Name);
+            obj=cGraphResults(tbl,nodes);
             % plot the graph
             if obj.isColorbar
                 r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
@@ -172,13 +208,19 @@ classdef ViewResults < matlab.apps.AppBase
                 c=colorbar(app.UIAxes);
                 c.Label.String=['Exergy ', tbl.Unit];
             else
-                plot(app.UIAxes,obj.xValues,"Layout","auto");
+                colors=eye(3);
+                nodetable=obj.xValues.Nodes;
+                nodecolors=colors(nodetable.Type,:);
+                nodenames=nodetable.Name;
+                plot(app.UIAxes,obj.xValues,"Layout","auto","NodeLabel",nodenames,"NodeColor",nodecolors,"Interpreter","none");
             end
             app.UIAxes.Title.String=[tbl.Description, ' [',app.State,']'];
             app.UIAxes.XLabel.String='';
             app.UIAxes.YLabel.String='';
             app.UIAxes.XTick=[];
             app.UIAxes.YTick=[];
+            app.UIAxes.XGrid = 'off';
+            app.UIAxes.YGrid = 'off';
             legend(app.UIAxes,'off');
             app.UIAxes.Visible='on';
         end
@@ -222,10 +264,14 @@ classdef ViewResults < matlab.apps.AppBase
                         app.GraphSummary(tbl)
                     case cType.GraphType.DIAGRAM_FP
                         app.ShowDigraph(tbl);
+                    case cType.GraphType.DIGRAPH_FP
+                        app.ShowDigraph(tbl);
                     case cType.GraphType.DIGRAPH
                         app.ShowDigraph(tbl);
                     case cType.GraphType.RECYCLING
                         app.GraphRecycling(tbl);
+                    case cType.GraphType.WASTE_ALLOCATION
+                        app.GraphWasteAllocation(tbl);
                 end
             end            
         end
@@ -355,7 +401,7 @@ classdef ViewResults < matlab.apps.AppBase
 
             % Create UITable
             app.UITable = uitable(app.TablesTab);
-            app.UITable.ColumnName = {'Column 1'; 'Column 2'; 'Column 3'; 'Column 4'};
+            app.UITable.ColumnName = {};
             app.UITable.RowName = {};
             app.UITable.Visible = 'off';
             app.UITable.Position = [12 1 669 418];
@@ -373,13 +419,11 @@ classdef ViewResults < matlab.apps.AppBase
 
             % Create UIAxes
             app.UIAxes = uiaxes(app.GraphsTab);
-            title(app.UIAxes, 'Title')
-            xlabel(app.UIAxes, 'X')
-            ylabel(app.UIAxes, 'Y')
-            zlabel(app.UIAxes, 'Z')
+            app.UIAxes.Visible = 'off';
+            app.UIAxes.TickDir = 'none';
             app.UIAxes.XColor = [0 0 0];
             app.UIAxes.Box = 'on';
-            app.UIAxes.Visible = 'off';
+            app.UIAxes.GridLineWidth = 0.2;
             app.UIAxes.Position = [2 1 679 446];
 
             % Create LogField

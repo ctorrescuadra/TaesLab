@@ -12,12 +12,13 @@ classdef cGraphResults < cStatusLogger
         BaseLine    % Base Line
         Legend      % Legend Categories
 		isColorbar  % Colorbar activated
+		isPieChart  % Use Pie Chart
     end
 
     methods
         function obj = cGraphResults(tbl, varargin)
 		% Constructor. Create the object with the graph properties  
-            obj.status=cType.VALID;
+             obj=obj@cStatusLogger(cType.VALID);
 			if ~isa(tbl,'cTableResult')
 				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
 				return
@@ -28,6 +29,7 @@ classdef cGraphResults < cStatusLogger
 			end
 			obj.Type=tbl.GraphType;
             obj.isColorbar=false;
+			obj.isPieChart=false;
             switch obj.Type
 			case cType.GraphType.COST
 				obj.setGraphCostParameters(tbl);
@@ -41,6 +43,8 @@ classdef cGraphResults < cStatusLogger
 				obj.setGraphWasteAllocationParameters(tbl,varargin{:})
             case cType.GraphType.DIGRAPH
 				    obj.setProductiveDiagramParameters(tbl,varargin{:});
+			case cType.GraphType.DIGRAPH_FP
+					obj.setDigraphFpParameters(tbl);
             case cType.GraphType.DIAGRAM_FP
                     obj.setDiagramFpParameters(tbl);
 			otherwise
@@ -60,11 +64,17 @@ classdef cGraphResults < cStatusLogger
 			case cType.GraphType.RECYCLING
 				obj.graphRecycling;
 			case cType.GraphType.WASTE_ALLOCATION
-				obj.graphWasteAllocation;
+				if obj.isPieChart
+					obj.pieChartWasteAllocation;
+				else
+					obj.graphWasteAllocation;
+				end
             case cType.GraphType.DIGRAPH       
 				    obj.showDigraph;
-            case cType.GraphType.DIAGRAM_FP
+            case cType.GraphType.DIAGRAM_FP 
                     obj.showDiagramFP;
+			case cType.GraphType.DIGRAPH_FP
+					obj.showDiagramFP;
 			otherwise
 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
 				return
@@ -131,7 +141,7 @@ classdef cGraphResults < cStatusLogger
 			set(hl,'Orientation','horizontal','Location','southoutside');
 		end
 
-		function graphWasteAllocation(obj)
+		function pieChartWasteAllocation(obj)
 		% Plot the waste allocation pie chart
 			f=figure('name',obj.Name,'numbertitle','off',...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
@@ -144,6 +154,22 @@ classdef cGraphResults < cStatusLogger
 			title(ax,obj.Title,'fontsize',14);
 			hl=legend(obj.Legend);
 			set(hl,'Orientation','horizontal','Location','southoutside');
+		end
+
+		function graphWasteAllocation(obj)
+			f=figure('name',obj.Name, 'numbertitle','off', ...
+				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
+			ax=axes(f);
+			barh(obj.xValues,obj.yValues,'stacked','edgecolor','none','parent',ax); 
+			title(ax,obj.Title,'fontsize',14);
+			set(ax,'xtick',(0:10:100),'Fontsize',12);
+			xlabel(ax,obj.xLabel,'fontsize',12);
+			ylabel(ax,obj.yLabel,'fontsize',12);
+			set(ax,'ygrid','on','fontsize',12);
+			set(ax,'xgrid','off','fontsize',12)
+			box(ax,'on');
+			hl=legend(obj.Legend);
+			set(hl,'location','southoutside','orientation','horizontal','fontsize',10);
 		end
 
 		function showDigraph(obj)
@@ -170,6 +196,7 @@ classdef cGraphResults < cStatusLogger
 				r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 				colormap(red2blue);
 				plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
+				title(ax,obj.Title,'fontsize',14);
 				c=colorbar(ax);
 				c.Label.String=obj.xLabel;
 				c.Label.FontSize=12;
@@ -276,33 +303,37 @@ classdef cGraphResults < cStatusLogger
 
         function setGraphWasteAllocationParameters(obj,tbl,wf)
 		% Set the parameters of Waste Allocation pie chart
-			switch nargin
-			case 2
-				idx=1;
-                wf=tbl.ColNames{idx+1};
-			case 3
+			obj.Name='Waste Allocation';
+			if (nargin==3) && (~isempty(wf))  % Use pie chart for the waste flow
 				cols=tbl.ColNames(2:end);
 				idx=find(strcmp(cols,wf),1);
 				if isempty(idx)
 					obj.messageLog(cType.ERROR,'Parameters missing');
 					return
 				end
-			otherwise
-				obj.messageLog(cType.ERROR,'Parameters missing');
-				return
+				x=cell2mat(tbl.Data(:,idx));
+				jdx=find(x>1.0);
+				obj.isPieChart=true;
+				obj.Title=[tbl.Description ' [',tbl.State,'/',wf,']'];
+				obj.xValues=x(jdx);
+				obj.Legend=tbl.RowNames(jdx);
+				obj.yValues=[];
+				obj.xLabel='';
+				obj.yLabel='';
+				obj.BaseLine=0.0;
+				obj.Categories={};
+			else % Use bar to show all waste flows
+				obj.isPieChart=false;
+				obj.Title=[tbl.Description ' [',tbl.State,']'];
+				obj.xValues=tbl.ColNames(2:end);
+				obj.yValues=cell2mat(tbl.Data);
+                obj.Legend=tbl.RowNames;
+				obj.xLabel=tbl.Unit;
+				obj.yLabel='Waste Flows';
+				obj.BaseLine=0.0;
+				obj.Categories={};
 			end
-			obj.Name='Waste Allocation';
-			obj.Title=[tbl.Description ' [',tbl.State,'/',wf,']'];
-			x=cell2mat(tbl.Data(:,idx));
-			jdx=find(x>1.0);
-			obj.xValues=x(jdx);
-            obj.Legend=tbl.RowNames(jdx);
-			obj.yValues=[];
-			obj.xLabel='';
-			obj.yLabel='';
-			obj.BaseLine=0.0;
-            obj.Categories={};
-        end
+		end
 
         function setDiagramFpParameters(obj,tbl)
         % Set the Diagram FP paramaters
@@ -313,7 +344,10 @@ classdef cGraphResults < cStatusLogger
             mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
             obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
-            [~,obj.xValues]=cProcessModel.diagramFP(mFP,tbl.RowNames);
+            data=cDiagramFP.adjacencyTable(mFP,tbl.RowNames);
+			source=data(:,1); target=data(:,2);
+			values=cell2mat(data(:,3));
+			obj.xValues=digraph(source,target,values,'omitselfloops');
             obj.isColorbar=true;
             obj.Legend={};
 			obj.yValues=[];
@@ -323,19 +357,44 @@ classdef cGraphResults < cStatusLogger
             obj.Categories={};
         end
 
+		function setDigraphFpParameters(obj,tbl)
+		% Set the Diagram FP paramaters
+			if isOctave
+				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
+				return
+			end
+			obj.Name=tbl.Description;
+			obj.Title=[tbl.Description ' [',tbl.State,']'];
+			source=tbl.Data(:,1); target=tbl.Data(:,2);
+			values=cell2mat(tbl.Data(:,3));
+			obj.xValues=digraph(source,target,values,'omitselfloops');
+			obj.isColorbar=true;
+			obj.Legend={};
+			obj.yValues=[];
+			obj.xLabel=['Exergy ' tbl.Unit];
+			obj.yLabel='';
+			obj.BaseLine=0.0;
+			obj.Categories={};
+		end
+
 		function setProductiveDiagramParameters(obj,tbl,nodes)
 		% Set the parameters of a digraph
 			if isOctave
-				obj.logMessage(cType.ERROR,'Graph function not implemented in Octave');
+				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
+				return
+			end
+			if (nargin<3) || ~isstruct(nodes)
+				obj.messageLog(cType.ERROR,'Node information is missing');
 				return
 			end
 			obj.Name=tbl.Description;
 			obj.Title=tbl.Description;
+			tnodes=struct2table(nodes);
 			edges=table(tbl.Data,'VariableNames',{'EndNodes'});
-			obj.xValues=digraph(edges,nodes,"omitselfloops");
+			obj.xValues=digraph(edges,tnodes,"omitselfloops");
             obj.Legend={};
 			obj.yValues=[];
-			obj.xLabel=['Exergy ' tbl.Unit{end}];
+			obj.xLabel='';
 			obj.yLabel='';
 			obj.BaseLine=0.0;
             obj.Categories={};

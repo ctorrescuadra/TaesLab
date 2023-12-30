@@ -123,6 +123,7 @@ classdef cDiagnosis < cResultId
             obj.A0=obj.DFT - sum(obj.DWTEC);
             % Object Status Information
             obj.Method=method;
+            obj.DefaultGraph=cType.Tables.MALFUNCTION_COST;
             obj.status=cType.VALID;
         end
 

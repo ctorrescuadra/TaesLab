@@ -145,7 +145,7 @@
                 "node": {
                     "type": "integer",
                     "minumum" : 1,
-                    "maximum" : 2
+                    "maximum" : 3
                 },
                 "type": {
                     "$ref": "#/definitions/typeFormat"
@@ -228,7 +228,7 @@
         "typeGraph": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 7
+            "maximum": 8
         }
     }
 }

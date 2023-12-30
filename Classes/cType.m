@@ -136,7 +136,8 @@ classdef cType
 		% Tables Types 
 		TableType=struct('TABLE',1,'MATRIX',2,'SUMMARY',3');
 		TypeTables={'TABLE','MATRIX','SUMMARY'};
-		GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5,'WASTE_ALLOCATION',6,'DIGRAPH',7);
+		GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5,...
+				'WASTE_ALLOCATION',6,'DIGRAPH',7,'DIGRAPH_FP',8);
 		% Types of define formats
 		Format=struct('NODE',1,'TEXT',2,'EXERGY',3,'EXERGY_COST',4,'EXERGY_UNIT_COST',5,...
 		'GENERALIZED_COST',6,'GENERALIZED_UNIT_COST',7,'DIAGNOSIS',8,'PERCENTAGE',9);

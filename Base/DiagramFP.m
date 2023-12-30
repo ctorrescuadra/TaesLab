@@ -39,10 +39,10 @@ function res=DiagramFP(data,varargin)
         ex.printLogger;
 		res.printError('Invalid exergy values. See error log');
         return
-	end
-	% Get FP Model and set results
+	end	
+	% Get FP Diagram model and set results
 	pm=cModelFPR(ex);
-    fmt=data.FormatData;
-    res=getDiagramFP(fmt,pm);
+    dfp=cDiagramFP(pm);
+	res=dfp.getResultInfo(data.FormatData);
     res.setProperties(data.ModelName,param.State);
 end

@@ -6,6 +6,7 @@ classdef cResultId < cStatusLogger
 	properties(GetAccess=public,SetAccess=protected)
 		ResultId=cType.ResultId.DATA_MODEL % Result Id
 		ResultName % Result Name
+		DefaultGraph % Default Graph
     end
 
 	methods

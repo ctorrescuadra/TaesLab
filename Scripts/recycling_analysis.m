@@ -31,7 +31,7 @@ end
 % Get Results
 options.VarMode=cType.VarMode.NONE;
 options.VarFormat=false;
-res=RecyclingAnalysis(data,param);
+res=WasteRecycling(data,param);
 if ~res.isError
 	tbl=outputResults(res,options);
 end

@@ -59,11 +59,13 @@ classdef cModelFPR < cProcessModel
 			obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             obj.c0=zeros(1,obj.NrOfFlows);
 			obj.c0(obj.ps.Resources.flows)=1.0;
-			obj.status=true;
+
 			if nargin==2
 				obj.setWasteTable(wd);
                 obj.setWasteOperators;
 			end
+			obj.DefaultGraph=cType.Tables.PROCESS_ICT;
+			obj.status=cType.VALID;
 		end
 
 		function res=get.SystemOutput(obj)

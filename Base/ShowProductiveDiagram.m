@@ -1,4 +1,4 @@
-function res=ShowProductiveDiagram(data,varargin)
+function ShowProductiveDiagram(data,varargin)
 % Shows the productive graphs (Only Matlab)
 %   USAGE:
 %       res=ShowProductiveDiagram(data,option)
@@ -9,13 +9,11 @@ function res=ShowProductiveDiagram(data,varargin)
 %               cType.Tables.FLOWS_DIAGRAM (fat)
 %               cType.Tables.FLOW_PROCESS_DIAGRAM (fpat)
 %               cType.Tables.PRODUCTIVE_DIAGRAM (pat)
-% 	OUTPUT:
-%		res - digraph object
 % See also cProductiveStructure
 %
-	res=cStatusLogger();
+	log=cStatusLogger();
     if isOctave
-        res.printError('Graph function not implemented in Octave');
+        log.printError('Graph function not implemented in Octave');
     end
 	checkModel=@(x) isa(x,'cDataModel');
 	% Check input parameters
@@ -25,15 +23,15 @@ function res=ShowProductiveDiagram(data,varargin)
 	try
 		p.parse(data,varargin{:});
 	catch err
-		res.printError(err.message);
-        res.printError('Usage: ThermoeconomicState(data,param)');
+		log.printError(err.message);
+        log.printError('Usage: ThermoeconomicState(data,param)');
 		return
 	end
 	param=p.Results;
 	% Check Productive Structure
 	if ~data.isValid
 		data.printLogger;
-		res.printError('Invalid Productive Structure. See error log');
+		log.printError('Invalid Productive Structure. See error log');
 		return
 	end
 	% Build the digraph

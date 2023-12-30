@@ -6,6 +6,8 @@ function ShowDiagramFP(arg,varargin)
 %       arg - cResultInfo or cThermoeconomicModel object
 %       param - Aditional parameters
 %           Graph - Graph table name
+%               cType.Tables.DIAGRAM_FP (atfp)
+%               cType.Tables.COST_DIAGRAM_FP (atcfp)
 %               cType.Tables.TABLE_FP (tfp)
 %               cType.Tables.COST_TABLE_FP (dcfp)
 % See also cResultInfo,cThermoeconomicModel
@@ -20,7 +22,7 @@ function ShowDiagramFP(arg,varargin)
         return
     end
     p = inputParser;
-    p.addParameter('Graph','tfp',@ischar)
+    p.addParameter('Graph','atfp',@ischar)
     try
         p.parse(varargin{:});
     catch err
