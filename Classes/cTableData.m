@@ -11,11 +11,6 @@ classdef cTableData < cTable
 %       obj.viewTable
 %       log=obj.saveTable(filename)
 % See also cTable
-    properties(Access=private)
-        fdata   % Format Data
-        fcol    % Columns Format
-        wcol    % Columns Width
-    end
     methods
         function obj = cTableData(data,rowNames,colNames)
         %cTableData Construct an instance of this class
@@ -41,26 +36,32 @@ classdef cTableData < cTable
 
         function res=getColumnWidth(obj)
         % Get column width info
-            if isempty(obj.fdata)
-                obj.buildFormatData;
+            res=zeros(1,obj.NrOfCols);
+            res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
+            for j=1:obj.NrOfCols-1
+                if isNumericColumn(obj,j)
+                    data=cellfun(@num2str,obj.Data(:,j),'UniformOutput',false);
+                    dl=max(cellfun(@length,data));
+                    cw=max([dl,length(obj.ColNames{j}),cType.DEFAULT_NUM_LENGHT]);
+                    res(j+1)=cw+1;
+                else
+                    res(j+1)=max(cellfun(@length,obj.Values(:,j+1)))+2;
+                end
             end
-            res=obj.wcol;
-        end
-
-        function res=getColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            if isempty(obj.fdata)
-                obj.buildFormatData;
-            end
-            res=obj.fcol;
         end
 
         function res=formatData(obj)
         % Get the format of each column (TEXT or NUMERIC)
-            if isempty(obj.fdata)
-                obj.buildFormatData;
+            res=obj.Data;
+            for j=1:obj.NrOfCols-1
+                if isNumericColumn(obj,j)
+                    data=cellfun(@num2str,obj.Data(:,j),'UniformOutput',false);
+                    dl=max(cellfun(@length,data));
+                    cw=max([dl,length(obj.ColNames{j}),cType.DEFAULT_NUM_LENGHT]);
+                    fmt=['%',num2str(cw),'s'];
+                    res(:,j)=cellfun(@(x) sprintf(fmt,x),data,'UniformOutput',false);
+                end
             end
-            res=obj.fdata;
         end
 
         function printTable(obj,fid)
@@ -68,13 +69,12 @@ classdef cTableData < cTable
             if nargin==1
                 fid=1;
             end
-            if isempty(obj.fdata)
-                obj.buildFormatData;
-            end
+            fdata=obj.formatData;
             wc=obj.getColumnWidth;
+            fcol=obj.getColumnFormat;
             lfmt=arrayfun(@(x) [' %-',num2str(x),'s'],wc,'UniformOutput',false);
             for j=1:obj.NrOfCols-1
-                if obj.fcol(j)==cType.ColumnFormat.NUMERIC
+                if fcol(j)==cType.ColumnFormat.NUMERIC
                     lfmt{j+1}=['%',num2str(wc(j+1)),'s '];
                 end
             end
@@ -85,39 +85,11 @@ classdef cTableData < cTable
             fprintf(fid,'%s',header);
             fprintf(fid,'%s\n',lines);
             for i=1:obj.NrOfRows
-                fprintf(fid,lformat,obj.RowNames{i},obj.fdata{i,:});
+                fprintf(fid,lformat,obj.RowNames{i},fdata{i,:});
             end
             fprintf(fid,'\n');
         end
     end
-
-    methods(Access=private)
-        function buildFormatData(obj)
-        % Build format data column type and width
-            M=obj.NrOfCols-1;
-            obj.fdata=obj.Data;
-            obj.fcol=zeros(1,M);
-            obj.wcol=zeros(1,obj.NrOfCols);
-            obj.wcol(1)=max(cellfun(@length,obj.Values(:,1)))+2;
-            for j=1:obj.NrOfCols-1
-                if isNumericColumn(obj,j)
-                    data=cellfun(@num2str,obj.Data(:,j),'UniformOutput',false);
-                    dl=max(cellfun(@length,data));
-                    cw=max([dl,length(obj.ColNames{j}),cType.DEFAULT_NUM_LENGHT]);
-                    fmt=['%',num2str(cw),'s'];
-                    obj.fdata(:,j)=cellfun(@(x) sprintf(fmt,x),data,'UniformOutput',false);
-                    obj.wcol(j+1)=cw+1;
-                    obj.fcol(j)=cType.ColumnFormat.NUMERIC;
-                else
-                    cw=max(cellfun(@length,obj.Values(:,j+1)));
-                    obj.wcol(j+1)=cw+2;
-                    obj.fcol(j)=cType.ColumnFormat.CHAR;
-                end
-            end
-        end
-    end
-
-
     methods (Static,Access=public)
         function tbl=create(values)
             % Create a cTableData from values

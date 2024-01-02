@@ -5,6 +5,7 @@ function ViewTable(table,varargin)
 %   INPUT:
 %       table - cTable object
 %       option - select the way to present the table
+%           cType.TableView.CONSOLE (show in console)
 %           cType.TableView.GUI (use uitable)
 %           cType.TableView.HTML (use web browser)
 % See also cTable

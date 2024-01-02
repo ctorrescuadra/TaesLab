@@ -52,12 +52,10 @@ function ShowGraph(arg,varargin)
 			log.printError('Graph %s does not exists',param.Graph);
 			return
 		end
-		isModel=true;
 	else
 		if	isempty(param.Graph)
 			param.Graph=arg.Info.DefaultGraph;
 		end
-		isModel=false;
 		res=arg;
 	end		
 

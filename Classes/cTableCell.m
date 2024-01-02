@@ -124,10 +124,7 @@ classdef (Sealed) cTableCell < cTableResult
             end
         end
 
-        function res=getColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            res=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
-        end
+
         
         function res=getDescriptionLabel(obj)
         % Get the description of each table

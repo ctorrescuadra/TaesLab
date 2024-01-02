@@ -29,21 +29,9 @@
 %   SaveSummaryResults      - Saves the summary cost tables into a file
 %   ExportDataModel         - Copy a model data file in another format
 %
-% Show Graphs
-%   ShowCostGraph           - Show a bar plot of the Irreversibility-Cost tables 
-%   ShowDiagnosisGraph      - Show a bar plot of the Diagnosis tables
-%   ShowSummaryGraph        - Show the summary results graph
-%   ShowDiagramFP           - Show the diagram FP (Only Matlab)
-%   ShowProductiveDiagram   - Show the productive diagram (Only Matlab)
-%   ShowRecyclingGraph		- Show the recycling analysis graph
-%	ShowModelGraph          - Show the graph of a model table
-%   WasteAllocationGraph    - Show a pie chart with the waste allocation ratios
-%
-% Tables Utilities
-%
-%   TablesDirectory         - Get the list of available tables
-%   SaveTable               - Save a result table into a file
-%   ViewTable               - View a table in a GUI
+% Results Presentation
+%   ViewTable               - View a model result table
+%	ShowGraph               - Show the graph of a model result table
 %
 % GUI functions
 %   ThermoeconomicPanel     - GUI to select the thermoeconomic model parameters.

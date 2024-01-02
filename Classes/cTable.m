@@ -43,21 +43,22 @@ classdef (Abstract) cTable < cStatusLogger
         %           cType.TableView.HTML
         %
             log=cStatus(cType.VALID);
-            options=[cType.TableView.GUI,cType.TableView.HTML];
             if nargin==1
                 if isOctave
-                    option=options(1);
+                    option=cType.TableView.GUI;
                 else
-                    option=options(2);
+                    option=cType.TableView.HTML;
                 end
             end
             switch option
+            case cType.TableView.CONSOLE
+                printTable(obj);
             case cType.TableView.GUI
                 viewTableGUI(obj)
             case cType.TableView.HTML
                 viewTableHTML(obj)
             otherwise
-                log.printError('Invalid viewTable option');
+                log.printError('Invalid Table View option');
             end
 
         end
@@ -124,6 +125,11 @@ classdef (Abstract) cTable < cStatusLogger
             res=all(tmp(:));
         end
 
+        function res=getColumnFormat(obj)
+        % Get the format of each column (TEXT or NUMERIC)
+            res=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
+        end
+
         function res = getStructData(obj)
         % Get Table data as struct array
             val = [obj.RowNames',obj.Data];
@@ -148,6 +154,26 @@ classdef (Abstract) cTable < cStatusLogger
             data=cell2struct([obj.RowNames',obj.Data],obj.ColNames,2);
             res=struct('Name',obj.Name,'Description',obj.Description,...
             'State',obj.State,'Data',data);
+        end
+
+        function log=setColumnValues(obj,idx,value)
+        % Set the values of a column table
+            log=cStatus(cType.VALID);
+            if iscell(value) && size(value,1)==obj.NrOfRows
+                obj.Data(:,idx)=value;
+            else
+                log.printError('Invalid table %s values',obj.Name);
+            end
+        end
+
+        function log=setRowValues(obj,idx,value)
+        % Set the values of a row table
+            log=cStatus(cType.VALID);
+            if iscell(value) && (size(value,2)==obj.NrOfCols-1)
+                obj.Data(idx,:)=value;
+            else
+                log.printError('Invalid table %s values',obj.Name);
+            end
         end
 
         function res=size(obj,dim)

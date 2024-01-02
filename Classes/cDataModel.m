@@ -385,6 +385,18 @@ classdef cDataModel < cStatusLogger
                 viewTable(tbl.varargin{:});
             end
         end
+
+        function res=TablesDirectory(obj,varargin)
+            res=getDirectory(obj.FormatData,varargin{:});
+        end
+
+        function ViewTablesDirectory(obj,varargin)
+            ViewTablesDirectory(obj.FormatData,varargin{:});
+        end
+
+        function SaveTablesDirectory(obj,filename)
+            SaveTablesDirectory(obj.FormatData,filename);
+        end
     end
     methods(Access=private)
         function log=saveAsMAT(obj,filename)

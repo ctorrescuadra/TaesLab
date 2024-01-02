@@ -14,6 +14,7 @@ classdef cTablesDefinition < cStatusLogger
     properties(GetAccess=public,SetAccess=private)
         TablesDefinition  % Tables properties struct
         tDictionary  % Tables dictionnary
+        tableIndex   % Tables index
     end
     properties (Access=protected)
         cfgTables 	 % Cell tables configuration
@@ -21,7 +22,6 @@ classdef cTablesDefinition < cStatusLogger
         cfgSummary   % Summary tables configuration
         cfgTypes     % Format types configuration
         tDirectory   % cTableData containig the tables directory info
-        tableIndex   % Tables index
     end
     methods
         function obj=cTablesDefinition()
@@ -42,7 +42,7 @@ classdef cTablesDefinition < cStatusLogger
             obj.cfgSummary=config.summary;
             obj.cfgTypes=config.format;
             obj.buildTablesDictionary;
-            obj.tDirectory=[];
+            obj.buildTablesDirectory;
         end
 
         function res=get.TablesDefinition(obj)
@@ -69,14 +69,7 @@ classdef cTablesDefinition < cStatusLogger
             end
         end
 
-        function res=getTablesDirectory(obj)
-            if isempty(obj.tDirectory)
-                obj.buildTablesDirectory;
-            end
-            res=obj.tDirectory;
-        end
-
-        function res=exportTablesDirectory(obj,varmode)
+        function res=getDirectory(obj,varmode)
         % Get the tables directory info in diferent variable types.
         %   Usage:
         %       res=exportTablesDirectory(varmode)
@@ -92,24 +85,16 @@ classdef cTablesDefinition < cStatusLogger
             if nargin==1
                 varmode=cType.VarMode.NONE;
             end
-            % get tables directory info
-            tbl=obj.getTablesDirectory;
-            res=exportTable(tbl,varmode);
+            % Get tables directory info in diferent formats
+            res=exportTable(obj.tDirectory,varmode);
         end
 
-        function printTablesDirectory(obj)
-        % Print the tables directory in console
-            tbl=obj.getTablesDirectory;
-            printTable(tbl);
-        end
-
-        function viewTablesDirectory(obj)
+        function ViewTablesDirectory(obj,varargin)
         % View the Tables Directory as GUI
-            tbl=obj.getTablesDirectory;
-            viewTable(tbl);
+            viewTable(obj.tDirectory,varargin{:});
         end
 
-        function log=saveTablesDirectory(obj,filename)
+        function SaveTablesDirectory(obj,filename)
         % Save result tables in different file formats depending on file extension
         %   Valid extension are: *.json, *.xml, *.csx, *.xlsx,*.txt
         %   Usage:
@@ -118,8 +103,8 @@ classdef cTablesDefinition < cStatusLogger
         %       filename - File name. Extension is used to determine the save mode.
         %   Output:
         %       log - cStatusLogger object with error messages
-            tbl=obj.getTablesDirectory;
-            log=tbl.saveTable(filename);
+            log=saveTable(obj.tDirectory,filename);
+            log.printLogger;
         end
     end
 
@@ -175,12 +160,14 @@ classdef cTablesDefinition < cStatusLogger
             NM=numel(obj.cfgMatrices);
             NS=numel(obj.cfgSummary);
             N=NT+NM+NS;
-            tIndex(N)=struct('name','','code','','resultId',0,'graph',0,'type',0,'tableId',0);
+            tIndex(N)=struct('name','','description','','code','',...
+                'resultId',0,'graph',0,'type',0,'tableId',0);
             % Retrieve information for cell tables
             for i=1:NT
                 key=obj.cfgTables(i).key;
                 idx=td.getIndex(key);
                 tIndex(idx).name=key;
+                tIndex(idx).description=obj.cfgTables(i).description;
                 tIndex(idx).code=tCodes(idx);
                 tIndex(idx).resultId=obj.cfgTables(i).resultId;
                 tIndex(idx).graph=obj.cfgTables(i).graph;
@@ -192,6 +179,7 @@ classdef cTablesDefinition < cStatusLogger
                 key=obj.cfgMatrices(i).key;
                 idx=td.getIndex(key);
                 tIndex(idx).name=key;
+                tIndex(idx).description=obj.cfgMatrices(i).header;
                 tIndex(idx).code=tCodes(idx);
                 tIndex(idx).resultId=obj.cfgMatrices(i).resultId;
                 tIndex(idx).graph=obj.cfgMatrices(i).graph;
@@ -203,6 +191,7 @@ classdef cTablesDefinition < cStatusLogger
                 key=obj.cfgSummary(i).key;
                 idx=td.getIndex(key);
                 tIndex(idx).name=key;
+                tIndex(idx).description=obj.cfgSummary(i).header;
                 tIndex(idx).code=tCodes(idx);
                 tIndex(idx).resultId=cType.ResultId.SUMMARY_RESULTS;
                 tIndex(idx).graph=obj.cfgSummary(i).graph;
@@ -218,13 +207,13 @@ classdef cTablesDefinition < cStatusLogger
         % Get the tables directory as cTableData
             tI=obj.tableIndex;
             N=numel(tI);
-            colNames={'Table','Key','Results','Type','Graph'};
+            colNames={'Table','Description','Results','Graph','Type'};
             rowNames={tI.name};
             data=cell(N,4);
-            data(:,1)=[tI.code];
+            data(:,1)={tI.description};
             data(:,2)=[cType.Results([tI.resultId])];
-            data(:,3)=[cType.TypeTables([tI.type])];
-            data(:,4)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
+            data(:,3)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
+            data(:,4)=[cType.TypeTables([tI.type])];
             tbl=cTableData(data,rowNames,colNames);
             tbl.setProperties('tdir','Tables Directory');
             obj.tDirectory=tbl;

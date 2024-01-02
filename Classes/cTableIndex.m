@@ -2,15 +2,14 @@ classdef cTableIndex < cTable
 % cTableIndex create a cTable which contains the tables of a cResultInfo object
 %   Methods:
 %       obj=cTableIndex(res)
-%       status=obj.checkTableSize;
-%       obj.setState
-%       bj.printTable
-%       obj.viewTable(obj)
+%       obj.printTable(fId)
+%       obj.viewTable(obj,options)
 %       log=obj.saveTable(filename)
 %       res=exportTable(obj)
 % See also cTable
     properties (GetAccess=public,SetAccess=private)
         Content % Cell array with the cResultInfo tables
+        Info    % Info handle
     end
     methods
         function obj=cTableIndex(res)
@@ -31,6 +30,7 @@ classdef cTableIndex < cTable
             obj.Description=res.ResultName;
             obj.State=res.State;
             obj.Content=struct2cell(res.Tables);
+            obj.Info=res.Info;
             obj.status=cType.VALID;
         end
 

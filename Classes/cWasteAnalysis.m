@@ -7,7 +7,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
 %       res=obj.getResultInfo(fmt,param)
 %   See also cResultId
     properties(GetAccess=public,SetAccess=private)
-        Recycling    
+        Recycling    % Indicate if recycling is available
         OutputFlows  % Output flows
         wasteFlow    % Actual waste flow key
         wasteTable   % cWasteTable object

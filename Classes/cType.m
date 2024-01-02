@@ -145,8 +145,8 @@ classdef cType
 		Symbols=jsondecode('{"dash": "\u2014","delta": "\u0394"}');
         % Result Id types
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
-            'THERMOECONOMIC_DIAGNOSIS',4,'WASTE_ANALYSIS',5,'SUMMARY_RESULTS',6,'PRODUCTIVE_DIAGRAM',7,'DIAGRAM_FP',8,...
-			'EXERGY_COST_CALCULATOR',9,'RESULT_MODEL',10,'DATA_MODEL',11);
+            'THERMOECONOMIC_DIAGNOSIS',4,'WASTE_ANALYSIS',5,'PRODUCTIVE_DIAGRAM',6,'DIAGRAM_FP',7,...
+			'SUMMARY_RESULTS',8,'EXERGY_COST_CALCULATOR',9,'RESULT_MODEL',10,'DATA_MODEL',11);
 		% Names for cModelResults	
 		Results={'Productive Structure','Thermoeconomic State','Thermoeconomic Analysis',...
 			'Thermoeconomic Diagnosis','Waste Analysis','Summary Results','Productive Diagram','Diagram FP',...
@@ -154,10 +154,11 @@ classdef cType
         ResultIndex={'psindex','tsindex','taindex','tdindex','raindex','srindex','pdindex','fpindex',...
             'ecindex','rmindex','dmindex'};
 		% Type of columns for uitables
-		TableView=struct('GUI',1,'HTML',2);
+		TableView=struct('CONSOLE',0,'GUI',1,'HTML',2);
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
         colScale=8;
+		ACTIVE_TABLE_COL=4;
         % File Extensions
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html');
