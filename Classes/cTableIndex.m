@@ -16,16 +16,21 @@ classdef cTableIndex < cTable
         % cTableIndex cTable object constructor
         %   Input:
         %       res - cResultInfo object
+        %
+            % Check input parameters
             if ~isa(res,'cResultInfo')
                 obj.messageLog(cType.ERROR,'Invalid input argument')
                 return
             end
+            % Get tables oof the results and build table
             tnames=res.getListOfTables;
-            obj.ColNames={'Key','Description'};
+            obj.ColNames={'Key','Description','Graph'};
             obj.RowNames=tnames';
             obj.NrOfCols=numel(obj.ColNames);
             obj.NrOfRows=numel(obj.RowNames);
-            obj.Data=cellfun(@(x) res.Tables.(x).Description,tnames,'UniformOutput',false);
+            obj.Data=cell(obj.NrOfRows,2);
+            obj.Data(:,1)=cellfun(@(x) res.Tables.(x).Description,tnames,'UniformOutput',false);
+            obj.Data(:,2)=cellfun(@(x) log2str(res.Tables.(x).GraphType),tnames,'UniformOutput',false);
             obj.Name=cType.ResultIndex{res.ResultId};
             obj.Description=res.ResultName;
             obj.State=res.State;
@@ -35,10 +40,12 @@ classdef cTableIndex < cTable
         end
 
         function res=getColumnFormat(obj)
-            res=obj.isNumericColumn(1)+1;
+        % Get column format for cTableIndex
+            res=repmat(cType.ColumnFormat.CHAR,1,obj.NrOfCols);
         end
 
         function res=getColumnWidth(obj)
+        % Get column width for cTableIndex
             res=zeros(1,obj.NrOfCols);
             for i=1:obj.NrOfCols
                 res(i)=max(cellfun(@length,obj.Values(:,i)))+2;
@@ -50,7 +57,7 @@ classdef cTableIndex < cTable
         end
 
         function printTable(obj,fid)
-        % Get table as text
+        % Get table as text or show in console
             if nargin==1
                 fid=1;
             end

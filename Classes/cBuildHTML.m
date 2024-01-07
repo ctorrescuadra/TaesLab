@@ -34,12 +34,17 @@ classdef cBuildHTML < cStatusLogger
             obj.status=true;
         end
 
+        function res=getMarkupHTML(obj)
+        % Get the HTML text of the table
+            res=[obj.head,obj.body];
+        end
+
         function showTable(obj)
         % Show a normal table in the web browser
             if obj.isIndexTable
                 return
             end
-            html=['text://',obj.head,obj.body];
+            html=['text://',obj.getMarkupHTML];
             web(html)
         end
 
@@ -62,12 +67,15 @@ classdef cBuildHTML < cStatusLogger
         function res=buildHead(tbl)
         % Build the head of the HTML file
             path=fileparts(mfilename('fullpath'));
-            cssfile=fullfile('file:///',path,cType.CSSFILE);
+            cssfile=fullfile(path,cType.CSSFILE);
+            csstext=fileread(cssfile);
             res = '<!DOCTYPE html>';
             res=[res,sprintf('\n<html>\n')];
             res=[res,sprintf('\t<head>\n')];
             res=[res,sprintf('\t\t<title>%s</title>\n',tbl.Name)];
-            res=[res,sprintf('\t\t<link rel="stylesheet" type="text/css" href="%s"/>\n',cssfile)]; 
+            res=[res,sprintf('\t\t<style>\n')];
+            res=[res,sprintf('%s',csstext)];
+            res=[res,sprintf('\t\t</style>\n')];
             res=[res,sprintf('\t</head>\n')];
         end
 

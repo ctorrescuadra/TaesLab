@@ -14,7 +14,6 @@ classdef (Abstract) cTableResult < cTable
     properties (GetAccess=public, SetAccess=protected)
         Format    % Format of the table cells
         Unit      % Units of the table cell
-        GraphType % Graph Type associated to table
     end
     methods      
         function res=exportTable(obj,varmode,fmt)

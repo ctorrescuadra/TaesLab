@@ -35,6 +35,7 @@
 %
 % GUI functions
 %   ThermoeconomicPanel     - GUI to select the thermoeconomic model parameters.
-%   ViewResults             - View the model results in a GUI 
+%   ViewResults             - View the model results in a GUI
+%   ShowTables              - Show Tables and Graphs from the matlab workarea
 %
 % See also cResultInfo, cThermoeconomicModel.

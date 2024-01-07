@@ -152,10 +152,10 @@ classdef cResultInfo < cStatusLogger
             res=obj.tableIndex;
         end
         
-        function printTableIndex(obj)
+        function viewTableIndex(obj,varargin)
         % Print the index table in console
             tbl=obj.tableIndex;
-            tbl.printTable;
+            tbl.viewTable(varargin{:});
         end
     
         function printResults(obj)

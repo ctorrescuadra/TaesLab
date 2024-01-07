@@ -524,6 +524,7 @@ classdef cThermoeconomicModel < cStatusLogger
         end
 
         function ViewTablesDirectory(obj,varargin)
+        % View tables directoy on GUI
             viewTable(obj.TablesDirectory,varargin{:});
         end
 
@@ -569,10 +570,10 @@ classdef cThermoeconomicModel < cStatusLogger
             printResults(msr)
         end
 
-        function printIndexTable(obj)
+        function ViewIndexTable(obj,varargin)
         % Print tables index of the result model
             mt=obj.getModelInfo;
-            mt.printIndexTable;
+            viewIndexTable(mt,varargin{:});
         end
 
         function printTable(obj,name)
@@ -589,10 +590,38 @@ classdef cThermoeconomicModel < cStatusLogger
         % View a table in a GUI Table
         %   Input:
         %       name - Name of the table
+        %       option - TableView options
             tbl=obj.getTable(name);
             if tbl.isValid
                 viewTable(tbl,varargin{:});
             end
+        end
+
+        function showGraph(obj,name,varargin)
+        % Show the graph of a result table
+        %   Usage:
+        %       obj.showGraph(name, option)
+        %   Input:
+        %       name - graph table name
+        %       option - graph options
+        % See also cResultInfo/showGraph
+            log=cStatus(cType.VALID);
+            if nargin<2
+                log.printError('Graph parameter missing: %s',name);
+                return
+            end
+            tInfo=getTableInfo(obj.fmt,name);
+            if isempty(tInfo)
+                log.printError('Invalid table name: %s',name);
+                return
+            else
+                res=obj.getResultInfo(tInfo.resultId);
+            end
+            if isempty(res)
+                log.printError('There is not results for %s available',name);
+                return
+            end
+            showGraph(res,name,varargin{:})
         end
 
         %%%
@@ -642,6 +671,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
+            % Save tables atfp, atcfp
             res=obj.diagramFP;
             if ~isValid(res)
                 printLogger(res)
@@ -659,6 +689,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
+            % Save fat,pat and fpat tables
             res=obj.productiveDiagram;
             if ~isValid(res)
                 res.printLogger(res)
@@ -668,32 +699,7 @@ classdef cThermoeconomicModel < cStatusLogger
             log=saveResults(res,filename);
         end
 
-        function showGraph(obj,name,varargin)
-        % Show the graph of a result table
-        %   Usage:
-        %       obj.showGraph(name, option)
-        %   Input:
-        %       name - graph table name
-        %       option - graph options
-        % See also cResultInfo/showGraph
-            log=cStatus(cType.VALID);
-            if nargin<2
-                log.printError('Graph parameter missing: %s',name);
-                return
-            end
-            tInfo=getTableInfo(obj.fmt,name);
-            if isempty(tInfo)
-                log.printError('Invalid table name: %s',name);
-                return
-            else
-               res=obj.getResultInfo(tInfo.resultId);
-            end
-            if isempty(res)
-                log.printError('There is not results for %s available',name);
-                return
-            end
-            showGraph(res,name,varargin{:})
-        end
+
         
         %%%
         % Waste Analysis methods
@@ -1141,7 +1147,7 @@ classdef cThermoeconomicModel < cStatusLogger
             tDict=obj.fmt.tDictionary;
             tResultId=[obj.fmt.tableIndex.resultId];
             % Retrieve the actual values and init the values to update.
-            atm=tbl.Data(:,cType.ACTIVE_TABLE_COL);
+            atm=tbl.Data(:,cType.ACTIVE_TABLE_COLUMN);
             atm(tResultId==id)={'false'};
             % Update the values of the required ResultId
             rid=obj.getResults(id);
@@ -1151,7 +1157,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 atm(idx)={'true'};
             end
             % Update the table values
-            tbl.setColumnValues(cType.ACTIVE_TABLE_COL,atm);
+            tbl.setColumnValues(cType.ACTIVE_TABLE_COLUMN,atm);
             obj.printDebugInfo('Tables Directory have been updated');
         end
 
@@ -1250,6 +1256,9 @@ classdef cThermoeconomicModel < cStatusLogger
         % trigger ResourceSample parameter change
             if obj.isGeneralCost
                 obj.setThermoeconomicAnalysis;
+                if obj.Recycling
+                    obj.setRecyclingResults;
+                end
             end
             obj.setSummaryResults;
             obj.clearResults(cType.ResultId.RESULT_MODEL);

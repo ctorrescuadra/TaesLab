@@ -6,17 +6,15 @@ classdef ShowTables < handle
 %   INPUT:
 %       res - A cResultInfo or a cThermoeconomicModel object
 %       param - Optional parameters
-%           ViewTable - TableView option
-%           ShowGraph - (true/false) indicates if the graph is shown
+%           ViewTable - TableView options: CONSOLE, GUI and HTML
 %   See also cResultInfo, cThermoeconomicTool
 %
     properties(Access=private)
-        table_control
-        tableIndex
-        activeTable
-        fig
-        ViewTable
-        ShowGraph
+        fig             % Base Figure
+        table_control   % uitable component
+        tableIndex      % cTableIndex of the results
+        activeTable     % Current table to show
+        ViewTable       % View Table option
     end
     methods
         function app=ShowTables(arg,varargin)
@@ -28,7 +26,6 @@ classdef ShowTables < handle
             p = inputParser;
             p.addRequired('arg',checkModel);
             p.addParameter('ViewTable',cType.TableView.HTML',@isnumber);
-            p.addParameter('ShowGraph',false,@islogical);
             try
                 p.parse(arg,varargin{:});
             catch err
@@ -46,7 +43,7 @@ classdef ShowTables < handle
             tbl=res.getTableIndex;
             % Create figure
             ss=get(groot,'ScreenSize');
-            xsize=ss(3)/4;
+            xsize=ss(3)/4.2;
             ysize=ss(4)/2;
             xpos=(ss(3)-xsize)/2;
             ypos=(ss(4)-ysize)/2;
@@ -60,26 +57,29 @@ classdef ShowTables < handle
 				'callback', 'close(gcf)');
             % Show table
             data=[tbl.RowNames', tbl.Data];
-            cw=num2cell([xsize*0.24 xsize*0.74]);
+            cw=num2cell([xsize*0.18 xsize*0.68 xsize*0.12]);
+            format=[cType.colType(tbl.getColumnFormat)];
             app.table_control = uitable (app.fig,'Data',data,...
                 'ColumnName',tbl.ColNames,'RowName',[],...
-                'ColumnWidth',cw,'ColumnFormat',{'char','char'},...
+                'ColumnWidth',cw,'ColumnFormat',format,...
                 'FontName','Verdana','FontSize',8,...
                 'CellSelectionCallback',@(src,evt) app.setActiveTable(src,evt),...
                 'units', 'normalized','position',[0.01 0.01 0.98 0.98]);
             set(app.fig,'visible','on');
             app.tableIndex=tbl;
             app.ViewTable=param.ViewTable;
-            app.ShowGraph=param.ShowGraph;
         end
 
-        function setActiveTable(app,~,evt)
-        % Cell selection callback
-            idx=evt.Indices(1);
+        function setActiveTable(app,~,event)
+        % Cell selection callback.
+        % Select the table to show
+            indices=event.Indices;
+            idx=indices(1);
             app.activeTable=app.tableIndex.Content{idx};
             viewTable(app.activeTable,app.ViewTable);
-            if app.ShowGraph && app.activeTable.isGraph
-                showGraph(app)
+            sg=(indices(2)==cType.GRAPH_COLUMN);
+            if app.activeTable.isGraph && sg 
+                app.showGraph;
             end
         end
 

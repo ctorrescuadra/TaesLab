@@ -149,16 +149,17 @@ classdef cType
 			'SUMMARY_RESULTS',8,'EXERGY_COST_CALCULATOR',9,'RESULT_MODEL',10,'DATA_MODEL',11);
 		% Names for cModelResults	
 		Results={'Productive Structure','Thermoeconomic State','Thermoeconomic Analysis',...
-			'Thermoeconomic Diagnosis','Waste Analysis','Summary Results','Productive Diagram','Diagram FP',...
-			'Exergy Cost Calculator','Model Results','Data Model'};
-        ResultIndex={'psindex','tsindex','taindex','tdindex','raindex','srindex','pdindex','fpindex',...
+			'Thermoeconomic Diagnosis','Waste Analysis','Productive Diagram','Diagram FP',...
+			'Summary Results','Exergy Cost Calculator','Model Results','Data Model'};
+        ResultIndex={'psindex','tsindex','taindex','tdindex','raindex','pdindex','fpindex','srindex',...
             'ecindex','rmindex','dmindex'};
 		% Type of columns for uitables
 		TableView=struct('CONSOLE',0,'GUI',1,'HTML',2);
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
         colScale=8;
-		ACTIVE_TABLE_COL=4;
+		ACTIVE_TABLE_COLUMN=4;
+		GRAPH_COLUMN=3;
         % File Extensions
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html');

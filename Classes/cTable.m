@@ -18,6 +18,7 @@ classdef (Abstract) cTable < cStatusLogger
         Description=''  % Table Descripcion
         Name=''         % Table Name
         State=''        % State Name
+        GraphType=0     % Graph Type associated to table
     end
     methods
         function res=get.Values(obj)

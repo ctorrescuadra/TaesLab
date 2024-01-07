@@ -336,7 +336,7 @@ classdef cGraphResults < cStatusLogger
 		end
 
         function setDiagramFpParameters(obj,tbl)
-        % Set the Diagram FP paramaters
+        % Set the Diagram FP paramaters (tfp, dcfp)
             if isOctave
 				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
 				return
@@ -358,7 +358,7 @@ classdef cGraphResults < cStatusLogger
         end
 
 		function setDigraphFpParameters(obj,tbl)
-		% Set the Diagram FP paramaters
+		% Set the Diagram FP parameters (atfp, atcfp)
 			if isOctave
 				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
 				return
