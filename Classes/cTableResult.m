@@ -53,11 +53,6 @@ classdef (Abstract) cTableResult < cTable
             end
         end
 
-        function res=isGraph(obj)
-        % Check if the table has a graph associated
-            res=(obj.GraphType ~= cType.GraphType.NONE);
-        end
-
         function showGraph(obj, varargin)
         % Show table values as graph
         %  Input:

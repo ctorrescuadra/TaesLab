@@ -365,21 +365,16 @@ classdef cDataModel < cStatusLogger
         % Print the data model tables
             printResults(obj.ModelInfo);
         end
-
-        function printTable(obj,name)
-        % Print a data model table
-        %   Input:
-        %       name - Name of the table
-            tbl=obj.getTable(name);
-            if tbl.isValid
-                printTable(tbl);
-            end
-        end
         
         function viewTable(obj,name,varargin)
         % View a table in a GUI Table
         %   Input:
         %       name - Name of the table
+        %       options - TableView option
+        %           cType.TableView.CONSOLE
+        %           cType.TableView.GUI
+        %           cType.TableView.HTML (default)
+        %
             tbl=obj.getTable(name);
             if tbl.isValid
                 viewTable(tbl.varargin{:});
@@ -387,14 +382,31 @@ classdef cDataModel < cStatusLogger
         end
 
         function res=TablesDirectory(obj,varargin)
+        % Get the Tables directory object
+        %   Input:
+        %       options - VarMode options.
+        %           cType.VarMode.NONE (default) as cTable
+        %           cType.VarMode.CELL as cell array
+        %           cType.VarMode.STRUCT as struct array
+        %           cType.VarMode.TABLE as Matlab table
+        %
             res=getDirectory(obj.FormatData,varargin{:});
         end
 
         function ViewTablesDirectory(obj,varargin)
+        % View the Tables directory
+        %   Input:
+        %       options - TableView option
+        %
             ViewTablesDirectory(obj.FormatData,varargin{:});
         end
 
         function SaveTablesDirectory(obj,filename)
+        % Save Tables directory in a file depending the extension
+        %   Valid extension are: txt, csv, html, xlsx, json, xml, mat
+        %   Input:
+        %       filename - name of the file including extension.
+        %    
             SaveTablesDirectory(obj.FormatData,filename);
         end
     end

@@ -86,7 +86,6 @@ classdef cThermoeconomicModel < cStatusLogger
         WasteFlows          % Names of the waste flows
         ResourceData        % Resource Data object
         ResourceCost        % Resource Cost object
-        TablesDirectory     % Tables Directory
     end
 
     properties(Access=public)
@@ -226,7 +225,6 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
-            obj.initTablesDirectory;
             obj.Summary=param.Summary;
         end
         %%%
@@ -523,13 +521,48 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
+        function res=getTablesDirectory(obj,varargin)
+        % Create the tables directory of the active model
+        %   Input:
+        %       options - VarMode options
+        %
+            tbl=obj.fmt.getDirectory;
+            tDict=obj.fmt.tDictionary;
+            atm=repmat({'false'},tbl.NrOfRows,1);
+            % Get the initial state of the table
+            for i=1:cType.ResultId.DIAGRAM_FP
+                rid=obj.getResults(i);
+                if ~isempty(rid)
+                    list=rid.getListOfTables;
+                    idx=cellfun(@(x) getIndex(tDict,x),list);
+                    atm(idx)={'true'};
+                end
+            end
+            % Create the table
+            data=[tbl.Data(:,1:end-1),atm];
+            rowNames=tbl.RowNames;
+            colNames=[tbl.ColNames(1:end-1),{'Active'}];
+            tmp=cTableData(data,rowNames,colNames);
+            if nargin==1
+                res=tmp;
+                res.setProperties('tdir','Tables Directory');
+            else
+                res=exportTable(tmp,varargin{:});
+            end
+        end
+
         function ViewTablesDirectory(obj,varargin)
-        % View tables directoy on GUI
-            viewTable(obj.TablesDirectory,varargin{:});
+        % View Tables directory
+        %   Input:
+        %       options - TableView options
+            tbl=getTablesDirectory(obj);
+            viewTable(tbl,varargin{:});
         end
 
         function tbl=getTable(obj,name)
         % Get the table called name
+        %   Input:
+        %       name - Name of the table
             tbl=cStatus(cType.ERROR);
             tInfo=getTableInfo(obj.fmt,name);
             if isempty(tInfo)
@@ -1076,14 +1109,12 @@ classdef cThermoeconomicModel < cStatusLogger
                     res.setProperties(obj.ModelName,'SUMMARY');
                     obj.setResults(res);
                     obj.printDebugInfo('Summary Results is active');
-                    obj.updateTablesDirectory(id);
                 else
                     sr.printLogger;
                 end
             elseif ~isempty(res)
                 obj.clearResults(id);
                 obj.printDebugInfo('Summary Results is not active');
-                obj.updateTablesDirectory(id);
             end
         end
 
@@ -1111,54 +1142,6 @@ classdef cThermoeconomicModel < cStatusLogger
             else
                 ra.printLogger;
             end
-        end
-
-        function initTablesDirectory(obj)
-        % Create the tables directory of the active model
-            tbl=obj.fmt.getDirectory;
-            tDict=obj.fmt.tDictionary;
-            atm=repmat({'false'},tbl.NrOfRows,1);
-            % Get the initial state of the table
-            for i=1:cType.ResultId.DIAGRAM_FP
-                rid=obj.getResults(i);
-                if ~isempty(rid)
-                    list=rid.getListOfTables;
-                    idx=cellfun(@(x) getIndex(tDict,x),list);
-                    atm(idx)={'true'};
-                end
-            end
-            % Create the table
-            data=[tbl.Data(:,1:end-1),atm];
-            rowNames=tbl.RowNames;
-            colNames=[tbl.ColNames(1:end-1),{'Active'}];
-            obj.TablesDirectory=cTableData(data,rowNames,colNames);
-            obj.TablesDirectory.setProperties('tdir','Tables Directory');
-            obj.printDebugInfo('Tables Directory have been created');
-        end
-       
-        function updateTablesDirectory(obj,id)
-        % Update the tables directory
-        %  Input:
-        %   id - ResultId of tables to update
-            if ~obj.activeSet
-                return
-            end
-            tbl=obj.TablesDirectory;
-            tDict=obj.fmt.tDictionary;
-            tResultId=[obj.fmt.tableIndex.resultId];
-            % Retrieve the actual values and init the values to update.
-            atm=tbl.Data(:,cType.ACTIVE_TABLE_COLUMN);
-            atm(tResultId==id)={'false'};
-            % Update the values of the required ResultId
-            rid=obj.getResults(id);
-            if ~isempty(rid)
-                list=rid.getListOfTables;
-                idx=cellfun(@(x) getIndex(tDict,x),list);
-                atm(idx)={'true'};
-            end
-            % Update the table values
-            tbl.setColumnValues(cType.ACTIVE_TABLE_COLUMN,atm);
-            obj.printDebugInfo('Tables Directory have been updated');
         end
 
         function setDiagramFP(obj)
@@ -1214,7 +1197,6 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
-            obj.updateTablesDirectory(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
             obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
@@ -1293,10 +1275,6 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             obj.setThermoeconomicAnalysis;
-            obj.updateTablesDirectory(cType.ResultId.THERMOECONOMIC_ANALYSIS);
-            if obj.Recycling
-                obj.updateTablesDirectory(cType.ResultId.WASTE_ANALYSIS);
-            end
             obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
@@ -1332,15 +1310,11 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function triggerActiveWaste(obj)
             obj.setRecyclingResults;
-            if obj.Recycling
-                obj.updateTablesDirectory(cType.ResultId.WASTE_ANALYSIS);
-            end
         end
 
         function triggerDiagnosisChange(obj)
         % Trigger diagnosis parameters (ReferenceState, DiagnosisMethod) change
             obj.setThermoeconomicDiagnosis;
-            obj.updateTablesDirectory(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
             obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
@@ -1382,7 +1356,6 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function triggerRecyclingChange(obj)
             obj.setRecyclingResults;
-            obj.updateTablesDirectory(cType.ResultId.WASTE_ANALYSIS);
         end
 
         %%%

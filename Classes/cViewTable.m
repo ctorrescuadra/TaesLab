@@ -44,7 +44,7 @@ classdef cViewTable < cStatusLogger
 			obj.format=[cType.colType(tbl.getColumnFormat)];
 			obj.fontname=param.FontName;
 			obj.fontsize=param.FontSize;
-			wcol=cType.colScale*tbl.getColumnWidth;
+			wcol=cType.COLUMN_SCALE*tbl.getColumnWidth;
 			% Set the window size and position
 			ss=get(groot,'ScreenSize');
 			xs=min(param.xScale*ss(3),sum(wcol)+param.xoffset);

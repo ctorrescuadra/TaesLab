@@ -176,6 +176,11 @@ classdef (Abstract) cTable < cStatusLogger
                 log.printError('Invalid table %s values',obj.Name);
             end
         end
+        
+        function res=isGraph(obj)
+        % Check if the table has a graph associated
+            res=(obj.GraphType ~= cType.GraphType.NONE);
+        end
 
         function res=size(obj,dim)
         % Overload size function

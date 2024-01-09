@@ -240,7 +240,7 @@ classdef cGraphResults < cStatusLogger
                 obj.Categories=tbl.ColNames(2:end);
 				obj.xValues=(1:tbl.NrOfCols-1)';
 				obj.yValues=cell2mat(tbl.Data(1:end-1,:))';
-            else % does not plot lasl bar
+            else % does not plot last bar
                 obj.Categories=tbl.ColNames(2:end-1);
 				obj.xValues=(1:tbl.NrOfCols-2)';
 				obj.yValues=cell2mat(tbl.Data(1:end-1,1:end-1))';
@@ -331,7 +331,7 @@ classdef cGraphResults < cStatusLogger
 				obj.xLabel=tbl.Unit;
 				obj.yLabel='Waste Flows';
 				obj.BaseLine=0.0;
-				obj.Categories={};
+				obj.Categories=tbl.RowNames;
 			end
 		end
 

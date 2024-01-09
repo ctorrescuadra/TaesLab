@@ -22,7 +22,7 @@ classdef cTableIndex < cTable
                 obj.messageLog(cType.ERROR,'Invalid input argument')
                 return
             end
-            % Get tables oof the results and build table
+            % Get tables of the results and build table
             tnames=res.getListOfTables;
             obj.ColNames={'Key','Description','Graph'};
             obj.RowNames=tnames';
