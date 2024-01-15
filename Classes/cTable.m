@@ -4,9 +4,18 @@ classdef (Abstract) cTable < cStatusLogger
 %   Methods:
 %       status=obj.checkTableSize;
 %       obj.setState
-%       viewTable(obj)
+%       obj.printTable(fId)
+%       obj.viewTable(options)
 %       log=obj.saveTable(filename)
 %       res=obj.exportTable(varmode)
+%       res=obj.isNumericTable
+%       res=obj.isNumericColumn(idx)
+%       res=obj.getColumnFormat
+%       res=obj.getColumnWidth
+%       res=obj.formatData
+%       res=obj.isGraph
+%       obj.setColumnValues(idx,values)
+%       obj.setRowValues(idx,values)
 % See also cTableData, cTableResult
     properties(GetAccess=public, SetAccess=protected)
         NrOfCols  	    % Number of Columns
@@ -40,7 +49,8 @@ classdef (Abstract) cTable < cStatusLogger
         % View Table in GUI or HTML
         %   Usage:
         %       option - select form to view a table
-        %           cType.TableView.GUI (default)
+        %           cType.TableView.CONSOLE
+        %           cType.TableView.GUI
         %           cType.TableView.HTML
         %
             log=cStatus(cType.VALID);
@@ -65,15 +75,15 @@ classdef (Abstract) cTable < cStatusLogger
         end
         
         function log = saveTable(obj,filename)
-        % saveTable save a cTable in a file
+        % saveTable generate a file with the table values
         %   The file types depends on the extension
-        %   Valid extensions are: CSV,XLSX,JSON,XML,TXT and MAT
+        %   Valid extensions are: CSV,XLSX,JSON,XML,TXT,HTML,LaTeX and MAT
         %   Usage:
         %       log = obj.saveTable(filename)
         %   Input:
         %       filename - Nane of the file
         %   Output:
-        %       log - cStatusLogger object with the methods actions
+        %       log - cStatusLogger object with error messages
         %
             log=cStatusLogger(cType.VALID);
             [fileType,ext]=cType.getFileType(filename);
@@ -90,6 +100,8 @@ classdef (Abstract) cTable < cStatusLogger
                     log=exportTXT(obj,filename);
                 case cType.FileType.HTML
                     log=exportHTML(obj,filename);
+                case cType.FileType.LaTeX
+                    log=exportLaTeX(obj,filename);
                 case cType.FileType.MAT
                     log=exportMAT(obj,filename);
                 otherwise

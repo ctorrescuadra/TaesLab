@@ -152,6 +152,7 @@ classdef cBuildHTML < cStatusLogger
                 rows{i}=[rows{i},sprintf('\t\t\t\t\t%s\n',tIndex)];
                 rows{i}=[rows{i},sprintf('\t\t\t\t</td>\n')];
                 rows{i}=[rows{i},sprintf('\t\t\t\t<td>%s</td>\n',data{i,1})];
+                rows{i}=[rows{i},sprintf('\t\t\t\t<td>%s</td>\n',data{i,2})];
                 rows{i}=[rows{i},sprintf('\t\t\t</tr>\n')];     
             end
             res=[res,[rows{:}]];

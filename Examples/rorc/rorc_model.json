@@ -123,7 +123,7 @@
           },
           {
             "key": "QCND",
-            "value": 9.5170000000000012
+            "value": 9.517
           }
         ]
       },
@@ -168,7 +168,7 @@
           },
           {
             "key": "QCND",
-            "value": 13.799000000000001
+            "value": 13.799
           }
         ]
       },
@@ -449,10 +449,10 @@
   "ResourcesCost": {
     "Samples": [
       {
-        "sampleId": "Internal",
+        "sampleId": "External",
         "flows": {
           "key": "QBLR",
-          "value": 0
+          "value": 0.5
         },
         "processes": [
           {
@@ -478,10 +478,10 @@
         ]
       },
       {
-        "sampleId": "External",
+        "sampleId": "Internal",
         "flows": {
           "key": "QBLR",
-          "value": 0.5
+          "value": 0
         },
         "processes": [
           {

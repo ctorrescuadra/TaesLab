@@ -1,5 +1,5 @@
 function log=exportCSV(data,filename)
-% exportCSV saves table cell as XLS file
+% exportCSV saves table values as CSV file
 %   USAGE:
 %       log=exportCSV(data, filename)
 %   INPUT:

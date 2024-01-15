@@ -23,7 +23,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
     end
 
     methods
-        function obj = cWasteAnalysis(fpm,wkey,recycling,rsd)
+        function obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
         % Create an instance of cRecyclingAnalysis
         %   Input:
         %       fpm - cModelFPR object
@@ -31,31 +31,36 @@ classdef (Sealed) cWasteAnalysis < cResultId
         %       wkey - Active waste flow key 
         %       rsd - Resources data
             obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
-            if nargin<2
-                obj.messageLog(cType.ERROR,'Invalid number of parameters');
-                return
-            end
             % Check mandatory parameters
             if ~isa(fpm,'cModelFPR') || ~fpm.isValid
                 obj.addLogger(fpm);
                 obj.messageLog(cType.ERROR,'Invalid FPR model');
                 return
             end
-            if ~ischar(wkey)
-                obj.messageLog(cType.ERROR,'Invalid wkey parameters');
+            if ~fpm.isWaste
+                obj.addLogger(fpm);
+                obj.messageLog(cType.ERROR,'Model has NOT waste');
                 return
             end
-            wid=fpm.WasteTable.getWasteIndex(wkey);
-            if isempty(wid)
-                res.printError('Invalid waste flow key %s',wkey);
-                return
-            end
+            wt=fpm.WasteTable;
             switch nargin
-            case 2
+            case 1
                 recycling=false;
-            case 3
+                wkey=wt.WasteKeys{1};
+            case 2
                 if ~islogical(recycling)
                     res.printError('Invalid recycling parameter');
+                    return
+                end
+                wkey=wt.WasteKeys{1};
+            case 3
+                if ~ischar(wkey)
+                    obj.messageLog(cType.ERROR,'Invalid wkey parameters');
+                    return
+                end
+                wid=fpm.WasteTable.getWasteIndex(wkey);
+                if isempty(wid)
+                    res.printError('Invalid waste flow key %s',wkey);
                     return
                 end
             case 4
@@ -76,7 +81,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             % Assign object variables
             obj.modelFP=fpm;
             obj.wasteFlow=wkey;
-            obj.wasteTable=fpm.WasteTable;
+            obj.wasteTable=wt;
             obj.Recycling=recycling;
             if recycling
                 obj.recyclingAnalysis;

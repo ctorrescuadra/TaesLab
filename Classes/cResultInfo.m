@@ -8,24 +8,18 @@ classdef cResultInfo < cStatusLogger
 %   - Save the results in files: XLSX, CSV, TXT and HTML
 %   The diferent types (ResultId) of cResultInfo object are defined in cType.ResultId 
 %   Methods:
-%       obj.getTable(table)
-%       obj.printTable(table)
-%       obj.viewTable(table);
-%       obj.printResults;
+%       res=obj.getListOfTables;
+%       res=obj.getTable(name)
+%       obj.printTable(name)
+%       obj.viewTable(name);
 %       res=getTableIndex
-%       obj.printTableIndex;
+%       obj.viewTableIndex;
+%       obj.printResults;
 %       log=obj.saveResults(filename)
 %       res=obj.getResultTables(varmode,fmt)
 %       obj.summaryDiagnosis
-%       obj.graphCost(table)
-%       obj.graphDiagnosis(table, option)
-%       obj.graphSummary(table, option)
-%       obj.graphRecycling(table)
-%       obj.graphWasteAllocation(waste);
-%       obj.showDiagramFP;
-%       obj.showFlowsDiagram;
-%       obj.showGraph(table,options) 
-% See: cResultTableBuilder, cTableResult
+%       obj.showGraph(name,options) 
+% See: cResultTableBuilder, cTable
 %
     properties (GetAccess=public, SetAccess=private)
         ResultId     % Result Id 
@@ -38,7 +32,7 @@ classdef cResultInfo < cStatusLogger
     end
 
     properties (Access=private)
-        tableIndex   % cell array of tables
+        tableIndex   % cTableIndex object with tables information
     end
 
     methods
@@ -122,7 +116,7 @@ classdef cResultInfo < cStatusLogger
         %       name - Name of the table
             log=cStatus(cType.VALID);
             tbl=obj.getTable(name);
-            if isValid(tbl) && isResultTable(obj)
+            if isValid(tbl)
                 tbl.printTable;
             else
                 log.printError('Table name %s does NOT exists',name);
@@ -149,6 +143,7 @@ classdef cResultInfo < cStatusLogger
         end
 
         function res=getTableIndex(obj)
+        % Get the Table Index
             res=obj.tableIndex;
         end
         
@@ -427,8 +422,7 @@ classdef cResultInfo < cStatusLogger
         % Print the fuel impact of the actual diagnosis state
             fprintf('%s\n',obj.getFuelImpact);
         end
-
-        
+   
         function showGraph(obj,graph,varargin)
         % Show graph with options
         %   Usage:

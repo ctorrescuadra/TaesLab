@@ -390,7 +390,7 @@ classdef cDataModel < cStatusLogger
         %           cType.VarMode.STRUCT as struct array
         %           cType.VarMode.TABLE as Matlab table
         %
-            res=getDirectory(obj.FormatData,varargin{:});
+            res=getTablesDirectory(obj.FormatData,varargin{:});
         end
 
         function ViewTablesDirectory(obj,varargin)

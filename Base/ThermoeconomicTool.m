@@ -16,8 +16,10 @@ function model=ThermoeconomicTool(filename,varargin)
 %           NONE - Deactivate diagnosis
 %           WASTE_EXTERNAL - Consider waste as output
 %           WASTE_INTERNAL - Allocate waste increase to productive processes 
-%       Summary - Activate Summary Results
-%       Debug - Print Debug information during execution
+%      ActiveWaste: Name of the active waste flow for analysis
+%      Recycling: Activate Recycling Analysis
+%      Summary: Activate Summary Results
+%      Debug:  Print Debug information during execution
 %  OUTPUT:
 %   model - cThermoeconomicModel object
 %  See also cThermoeconomicModel
@@ -45,7 +47,9 @@ function model=ThermoeconomicTool(filename,varargin)
         p.addParameter('ResourceSample','',@ischar);
         p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
         p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
-        p.addParameter('Summary',false,@islogical)
+        p.addParameter('Recycling',false,@islogical);
+        p.addParameter('ActiveWaste','',@ischar);
+        p.addParameter('Summary',false,@islogical);
         p.addParameter('Debug',true,@islogical);
         try
             p.parse(varargin{:});

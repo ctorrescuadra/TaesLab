@@ -153,16 +153,20 @@ classdef cType
 			'Summary Results','Exergy Cost Calculator','Model Results','Data Model'};
         ResultIndex={'psindex','tsindex','taindex','waindex','tdindex','pdindex','fpindex','srindex',...
             'ecindex','rmindex','dmindex'};
+		% Tables Directory configuration
+		DirCols=struct('DESCRIPTION',1,'RESULT_NAME',2,'GRAPH',3,'TYPE',4,'CODE',5,'RESULT_CODE',6);
+		DirColNames={'Description','Results','Graph','Type','Code','Results Code'};
+		DirColsDefault={'DESCRIPTION','RESULT_NAME','GRAPH','TYPE'};
+        ACTIVE_TABLE_COLUMN=4;
+		GRAPH_COLUMN=3;
 		% Type of columns for uitables
 		TableView=struct('CONSOLE',0,'GUI',1,'HTML',2);
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
-        COLUMN_SCALE=8;
-		ACTIVE_TABLE_COLUMN=4;
-		GRAPH_COLUMN=3;
+        COLUMN_SCALE=7;
         % File Extensions
-		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7);
-		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html');
+		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7,'LaTeX',8);
+		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html','LaTeX','.tex');
         % HTML/CCS style file
 		CSSFILE='styles.css';
 		% Icon Files
@@ -179,7 +183,7 @@ classdef cType
 		PATH_PC='\'           % Path Character for Windows
 		PATH_UNIX='/'         % Path Character for Unix
 		% File Pattern
-		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+.(xlsx|csv|mat|txt|json|xml|html)$'
+		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+.(xlsx|csv|mat|txt|json|xml|html|tex)$'
 		% Key Text Patterm
 		KEY_PATTERN='^[A-Z][A-Za-z0-9]+$'
 		KEY_LENGTH=2:8
@@ -202,7 +206,7 @@ classdef cType
         %   res - true/false
 			res=false;
 			if ischar(key)
-            	res= isfield(s,upper(key));
+            	res=isfield(s,upper(key));
 			end
         end
 		
@@ -364,20 +368,33 @@ classdef cType
 			res=true;
 		end
 
+		function res=tableCode(name)
+		% Get the key code of a table
+			res=[];
+			if ~ischar(name)
+				return
+			end
+			codes=fieldnames(cType.Tables);
+			tables=struct2cell(cType.Tables);
+			idx=find(strcmpi(name,tables),1);
+			if isempty(idx)
+				return
+			end
+			res=['cType.Tables.',codes{idx}];
+		end
+
 		%%%%
 		% File Functions
 		%%%%%
 		function [res,ext]=getFileType(filename)
 		% Get file type acording its extension (ext)
+            res=cType.EMPTY;
 			[~,~,ext]=fileparts(filename);
-			res=cType.ERROR;
-			names=fieldnames(cType.FileExt);
 			values=struct2cell(cType.FileExt);
-			idx=strcmp(values(:),ext);			
-			if any(idx)
-				field=names{idx};
-				res=cType.getTypeId(cType.FileType,field);
-			end
+			idx=find(strcmp(values(:),ext));
+            if ~isempty(idx)
+                res=idx;
+            end
 		end
 
 		function res=checkFileWrite(filename)
@@ -386,7 +403,8 @@ classdef cType
 			if ~ischar(filename)
 				return
 			end
-			if regexp(filename,cType.FILE_PATTERN,'once')
+			[~,file,ext]=fileparts(filename);
+			if regexp(strcat(file,ext),cType.FILE_PATTERN,'once')
 				res=true;
 			end
 		end

@@ -6,10 +6,17 @@ classdef cTableData < cTable
 %       status=obj.checkTableSize;
 %       obj.setState
 %       obj.setProperties(name,descr)
-%       res=obj.exportTable(varmode)
-%       obj.printTable
-%       obj.viewTable
+%       obj.printTable(fId)
+%       obj.viewTable(options)
 %       log=obj.saveTable(filename)
+%       res=obj.exportTable(varmode)
+%       res=obj.isNumericTable
+%       res=obj.isNumericColumn(idx)
+%       res=obj.getColumnFormat
+%       res=obj.getColumnWidth
+%       res=obj.formatData
+%       obj.setColumnValues(idx,values)
+%       obj.setRowValues(idx,values)
 % See also cTable
     methods
         function obj = cTableData(data,rowNames,colNames)

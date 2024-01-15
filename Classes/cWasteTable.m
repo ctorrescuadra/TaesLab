@@ -3,10 +3,11 @@ classdef cWasteTable < cStatusLogger
 %
 	properties (GetAccess=public,SetAccess=private)
 		NrOfWastes     % Number of Wastes
-        Flows          % Waste flows
+        WasteKeys       % Waste Flows keys
+        Flows          % Waste flows id
 		Type           % Type processing of wastes (text)
         typeId         % Type Id for processing wastes
-        Processes      % Dissipative processes
+        Processes      % Dissipative processes id
 		Values         % Cost allocation ratios
 		RecycleRatio   % Ratio of recycling
 	end
@@ -28,6 +29,7 @@ classdef cWasteTable < cStatusLogger
             obj.Type=wd.Type;
             obj.typeId=wd.TypeId;
             obj.Processes=obj.ps.Waste.processes;
+            obj.WasteKeys=wd.Flows;
             obj.Flows=obj.ps.Waste.flows;
             obj.Values=wd.Values;
             obj.RecycleRatio=wd.RecycleRatio;

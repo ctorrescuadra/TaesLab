@@ -1,5 +1,5 @@
 % Thermoeconomic Analysis Toolbox
-% Version 1.4 (R2023b) 29-Dec-2023 
+% Version 1.4 (R2023b) 13-Ene-2024
 %
 % Apps
 %   TaesApp                 - TaesLab App.
@@ -27,7 +27,12 @@
 %   SaveResults             - Saves a cResultInfo object into a file.
 %   SaveModelResults        - Saves the model results of a plant state into a file.
 %   SaveSummaryResults      - Saves the summary cost tables into a file
+%   SaveTable               - Save a result table into a file
 %   ExportDataModel         - Copy a model data file in another format
+%
+% Tables Directory
+%   ListResultTables        - List the result tables properties
+%   ListCodeTable           - List the internal code of the result tables
 %
 % Results Presentation
 %   ViewTable               - View a model result table

@@ -5,10 +5,9 @@ classdef cTablesDefinition < cStatusLogger
 %   - Provide information of the result tables of the application (TablesDirectory)
 %   Methods:
 %       obj=cTablesDirectory;
-%       res=obj.getTableProperties(table_name)
-%       res=obj.exportTablesDirectory(varmode)
-%       res=obj.printTablesDirectory
-%       res=obj.viewTablesDirectory
+%       res=obj.getTableProperties(name)
+%       res=obj.getTablesDirectory(varmode)
+%       res=obj.viewTablesDirectory(options)
 %       res=obj.saveTablesDirectory(filename)
 %   See also cFormatData
     properties(GetAccess=public,SetAccess=private)
@@ -17,11 +16,11 @@ classdef cTablesDefinition < cStatusLogger
         tableIndex   % Tables index
     end
     properties (Access=protected)
-        cfgTables 	 % Cell tables configuration
-        cfgMatrices  % Matrix tables configuration
-        cfgSummary   % Summary tables configuration
-        cfgTypes     % Format types configuration
-        tDirectory   % cTableData containig the tables directory info
+        cfgTables 	    % Cell tables configuration
+        cfgMatrices     % Matrix tables configuration
+        cfgSummary      % Summary tables configuration
+        cfgTypes        % Format types configuration
+        tDirectory=[]   % cTableData containig the tables directory info
     end
     methods
         function obj=cTablesDefinition()
@@ -69,25 +68,21 @@ classdef cTablesDefinition < cStatusLogger
             end
         end
 
-        function res=getDirectory(obj,varmode)
-        % Get the tables directory info in diferent variable types.
+        function res=getTablesDirectory(obj,varargin)
+        % Get the tables directory in diferent formats
         %   Usage:
-        %       res=exportTablesDirectory(varmode)
+        %       res=getTablesDirectory(cols)
         %   Input:
-        %       varmode - type of variable to output
-        %           NONE: cTable object (default)
-        %           CELL: Array of cells
-        %           STRUCT: Array of structs
-        %           TABLE: Matlab table
+        %       cols - cell array with the columns to show
         %   Output:
-        %       res - tables directory in the chosen var mode.
-        %
+        %       res - cTableData containing the tables directory
             if nargin==1
-                varmode=cType.VarMode.NONE;
+                res=obj.tDirectory;
+            else
+                res=obj.buildTablesDirectory(varargin{:});
             end
-            % Get tables directory info in diferent formats
-            res=exportTable(obj.tDirectory,varmode);
         end
+        
 
         function ViewTablesDirectory(obj,varargin)
         % View the Tables Directory as GUI
@@ -96,7 +91,7 @@ classdef cTablesDefinition < cStatusLogger
 
         function SaveTablesDirectory(obj,filename)
         % Save result tables in different file formats depending on file extension
-        %   Valid extension are: *.json, *.xml, *.csx, *.xlsx,*.txt
+        %   Valid extension are: *.json, *.xml, *.csx, *.xlsx, *.txt, *.html, *.tex
         %   Usage:
         %       log=obj.saveTablesDirectory(filename)
         %   Input:
@@ -168,7 +163,7 @@ classdef cTablesDefinition < cStatusLogger
                 idx=td.getIndex(key);
                 tIndex(idx).name=key;
                 tIndex(idx).description=obj.cfgTables(i).description;
-                tIndex(idx).code=tCodes(idx);
+                tIndex(idx).code=tCodes{idx};
                 tIndex(idx).resultId=obj.cfgTables(i).resultId;
                 tIndex(idx).graph=obj.cfgTables(i).graph;
                 tIndex(idx).type=cType.TableType.TABLE;
@@ -180,7 +175,7 @@ classdef cTablesDefinition < cStatusLogger
                 idx=td.getIndex(key);
                 tIndex(idx).name=key;
                 tIndex(idx).description=obj.cfgMatrices(i).header;
-                tIndex(idx).code=tCodes(idx);
+                tIndex(idx).code=tCodes{idx};
                 tIndex(idx).resultId=obj.cfgMatrices(i).resultId;
                 tIndex(idx).graph=obj.cfgMatrices(i).graph;
                 tIndex(idx).type=cType.TableType.MATRIX;
@@ -192,7 +187,7 @@ classdef cTablesDefinition < cStatusLogger
                 idx=td.getIndex(key);
                 tIndex(idx).name=key;
                 tIndex(idx).description=obj.cfgSummary(i).header;
-                tIndex(idx).code=tCodes(idx);
+                tIndex(idx).code=tCodes{idx};
                 tIndex(idx).resultId=cType.ResultId.SUMMARY_RESULTS;
                 tIndex(idx).graph=obj.cfgSummary(i).graph;
                 tIndex(idx).type=cType.TableType.SUMMARY;
@@ -203,20 +198,49 @@ classdef cTablesDefinition < cStatusLogger
             obj.tableIndex=tIndex;
         end
  
-        function buildTablesDirectory(obj)
+        function res=buildTablesDirectory(obj,cols)
         % Get the tables directory as cTableData
+            res=cStatus;
+            if nargin==1
+                cols=cType.DirColsDefault;
+            end
             tI=obj.tableIndex;
             N=numel(tI);
-            colNames={'Table','Description','Results','Graph','Type'};
+            M=numel(cols);
             rowNames={tI.name};
-            data=cell(N,4);
-            data(:,1)={tI.description};
-            data(:,2)=[cType.Results([tI.resultId])];
-            data(:,3)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
-            data(:,4)=[cType.TypeTables([tI.type])];
-            tbl=cTableData(data,rowNames,colNames);
-            tbl.setProperties('tdir','Tables Directory');
-            obj.tDirectory=tbl;
+            colNames=cell(1,M+1);
+            colNames{1}='Table';
+            data=cell(N,M);
+            for i=1:M
+                col=upper(cols{i});
+                if isfield(cType.DirCols,col)
+                    colId=cType.DirCols.(col);
+                    colNames{i+1}=cType.DirColNames{colId};
+                else
+                    res.printError('Invalid column name %s',col);
+                    return
+                end
+                resultCode=fieldnames(cType.ResultId);
+                switch colId
+                    case cType.DirCols.DESCRIPTION
+                        data(:,i)={tI.description};
+                    case cType.DirCols.RESULT_NAME
+                        data(:,i)=[cType.Results([tI.resultId])];
+                    case  cType.DirCols.GRAPH
+                        data(:,i)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
+                    case  cType.DirCols.TYPE
+                        data(:,i)=[cType.TypeTables([tI.type])];
+                    case cType.DirCols.CODE
+                        data(:,i)={tI.code};
+                    case cType.DirCols.RESULT_CODE
+                        data(:,i)=[resultCode([tI.resultId])];
+                end
+            end
+            res=cTableData(data,rowNames,colNames);
+            res.setProperties('tdir','Tables Directory');
+            if isempty(obj.tDirectory)
+                obj.tDirectory=res;
+            end
         end
 	end
 end

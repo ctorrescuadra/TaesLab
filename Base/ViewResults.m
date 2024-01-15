@@ -1,4 +1,5 @@
 classdef ViewResults < matlab.apps.AppBase
+
     % Properties that correspond to app components
     properties (Access = private)
         UIFigure          matlab.ui.Figure
@@ -16,12 +17,12 @@ classdef ViewResults < matlab.apps.AppBase
         ContextMenu       matlab.ui.container.ContextMenu
         OpenAsFigureMenu  matlab.ui.container.Menu
     end
-  
+   
     properties (Access = private)
-        State           % Results State
-        Colorbar        % Colorbar
-        CurrentNode=[]  % Current Node
-        TableIndex      % Table Index
+        State            % Results State
+        Colorbar         % Colorbar
+        ExpandedNode=[]  % Current Node
+        TableIndex       % Table Index
     end
     
     methods (Access = private)
@@ -98,14 +99,14 @@ classdef ViewResults < matlab.apps.AppBase
 
         % View the graph of summary table
         function GraphSummary(app,tbl)
-            res=app.Tree.SelectedNodes.Parent.NodeData;
             % get the graph parameters
             if tbl.isFlowsTable
-                option=res.Info.getDefaultFlowVariables;
+                res=app.Tree.SelectedNodes.Parent.NodeData;
+                var=res.Info.getDefaultFlowVariables;
+                obj=cGraphResults(tbl,var);
             else
-                option=res.Info.getDefaultProcessVariables;
+                return
             end
-            obj=cGraphResults(tbl,option);
             % plot the graph
             M=numel(obj.Legend);
             app.UIAxes.Visible='off';
@@ -139,8 +140,7 @@ classdef ViewResults < matlab.apps.AppBase
         % View the graph recycling
         function GraphRecycling(app,tbl)
             % Get the graph properties
-            res=app.Tree.SelectedNodes.Parent.NodeData;
-            wkey=res.Info.wasteFlow;
+            wkey=tbl.ColNames{end};
             obj=cGraphResults(tbl,wkey);
             % plot the graph
             app.UIAxes.Visible='off';
@@ -184,7 +184,9 @@ classdef ViewResults < matlab.apps.AppBase
             legend(app.UIAxes,obj.Categories,'FontSize',8);
             app.UIAxes.Legend.Location='bestoutside';
             app.UIAxes.Legend.Orientation='horizontal';
-            app.UIAxes.XTick = (0:10:100);
+            xtick=(0:10:100);
+            app.UIAxes.XTick = xtick;
+            app.UIAxes.XTickLabel=arrayfun(@(x) sprintf('%3d',x),xtick,'UniformOutput',false);
             app.UIAxes.XGrid = 'on';
             app.UIAxes.YGrid = 'off';
             % Show the figure after all components are created
@@ -192,15 +194,13 @@ classdef ViewResults < matlab.apps.AppBase
         end
 
         function ShowDiagramFP(app,tbl)
-            % get the graph properties
             obj=cGraphResults(tbl);
-            % plot the digraph
             r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
             app.UIAxes.Colormap=red2blue;
             plot(app.UIAxes,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
             app.Colorbar=colorbar(app.UIAxes);
             app.Colorbar.Label.String=['Exergy ', tbl.Unit];
-            app.UIAxes.Title.String=[tbl.Description, ' [',app.State,']'];
+            app.UIAxes.Title.String=obj.Title;
             app.UIAxes.XLabel.String='';
             app.UIAxes.YLabel.String='';
             app.UIAxes.XTick=[];
@@ -212,12 +212,10 @@ classdef ViewResults < matlab.apps.AppBase
         end
 
         % Show digraphs (productiveDiagram, diagramFP object)
-        function ShowDigraph(app,tbl)
+        function ShowDigraph(app,tbl,res)
             % get the graph properties
-            res=app.Tree.SelectedNodes.Parent.NodeData;
-            nodes=res.Info.getNodeTable(tbl.Name);
+            nodes=res.getNodeTable(tbl.Name);
             obj=cGraphResults(tbl,nodes);
-            % plot the diagraph
             colors=eye(3);
             nodetable=obj.xValues.Nodes;
             nodecolors=colors(nodetable.Type,:);
@@ -234,7 +232,7 @@ classdef ViewResults < matlab.apps.AppBase
             app.UIAxes.Visible='on';
         end
         
-        % Show the index table in index panel
+        % Show the index table in table panel
         function ViewIndexTable(app,res)
             app.Label.Text=res.ResultName;
             tbl=res.getTableIndex;
@@ -245,7 +243,7 @@ classdef ViewResults < matlab.apps.AppBase
             app.TableIndex=tbl;
         end
 
-        % Show table in HTML table panel
+        % Show table in table panel
         function ViewTable(app,tbl)
             vh=cBuildHTML(tbl);
             if isValid(vh)
@@ -257,7 +255,7 @@ classdef ViewResults < matlab.apps.AppBase
         end
         
         % Show table in graph panel
-        function ViewGraph(app,tbl)
+        function ViewGraph(app,tbl,res)
             if tbl.isGraph
                 switch tbl.GraphType
                     case cType.GraphType.COST
@@ -271,7 +269,7 @@ classdef ViewResults < matlab.apps.AppBase
                     case cType.GraphType.DIGRAPH_FP
                         app.ShowDiagramFP(tbl);
                     case cType.GraphType.DIGRAPH
-                        app.ShowDigraph(tbl);
+                        app.ShowDigraph(tbl,res);
                     case cType.GraphType.RECYCLING
                         app.GraphRecycling(tbl);
                     case cType.GraphType.WASTE_ALLOCATION
@@ -279,6 +277,21 @@ classdef ViewResults < matlab.apps.AppBase
                 end
             end            
         end
+
+        % Clear Tab contents befere new results calculation
+        function ClearTabContent(app)
+            app.Table.Visible=false;
+            app.UIAxes.Visible=false;
+            if ~isempty(app.Colorbar)
+                app.Colorbar.Visible=false;
+            end
+            if ~isempty(app.UIAxes.Legend)
+                app.UIAxes.Legend.Visible=false;
+            end
+            delete(app.UIAxes.Children)
+            app.LogField.Text='';
+        end
+
     end
 
     % Callbacks that handle component events
@@ -295,8 +308,10 @@ classdef ViewResults < matlab.apps.AppBase
             end
             if isa(res,'cResultInfo')
                 val={res};
+                mt=res;
             elseif isa(res,'cThermoeconomicModel')
                 val=res.getModelResults;
+                mt=res.getModelInfo;
             else
                 log.printError('Results must be a cResultInfo object');
                 delete(app);
@@ -317,51 +332,59 @@ classdef ViewResults < matlab.apps.AppBase
                 end
             end
             app.State=res.State;
+            app.ViewIndexTable(mt);
+            app.TabGroup.SelectedTab=app.IndexTab;
         end
 
         % Selection changed function: Tree
-        function TreeSelectionChanged(app,~)
+        function TreeSelectionChanged(app, ~)
             selectedNodes = app.Tree.SelectedNodes;
             tbl=selectedNodes.NodeData;
             if isempty(tbl)
                 return
             end
-            if isa(tbl,'cTableResult')
+            if isa(tbl,'cTable')
                 resultNode=selectedNodes.Parent;
                 logtext=sprintf(' INFO: %s for State %s. %s ',...
                 resultNode.Text,tbl.State,resultNode.UserData);
                 app.LogField.Text=logtext;
                 app.ViewTable(tbl);
-                app.ViewGraph(tbl);
-                app.CurrentNode=resultNode;
                 app.TabGroup.SelectedTab=app.TablesTab;
+                app.ViewGraph(tbl,resultNode.NodeData.Info);
+                app.ExpandedNode=resultNode;
             elseif isa(tbl,'cResultInfo')
                 app.ViewIndexTable(tbl);
                 app.TabGroup.SelectedTab=app.IndexTab;
                 app.LogField.Text=sprintf(' INFO: %s selected',tbl.ResultName);            
-            end          
+            end
         end
 
         % Node expanded function: Tree
         function TreeNodeExpanded(app, event)
             node = event.Node;
-            if ~isempty(app.CurrentNode)
-                app.CurrentNode.collapse;
+            if ~isempty(app.ExpandedNode)
+                app.ExpandedNode.collapse;
             end
-            app.CurrentNode=node;
+            app.ExpandedNode=node;
             app.ViewIndexTable(node.NodeData);
             app.TabGroup.SelectedTab=app.IndexTab;
         end
 
+        % Node collapsed function: Tree
+        function TreeNodeCollapsed(app, ~)
+            app.ClearTabContent;
+            app.TabGroup.SelectedTab=app.IndexTab; 
+            app.ExpandedNode=[];
+        end
+
         % Cell selection callback: UITable
-        % Select table to show from table index
         function UITableCellSelection(app, event)
             indices = event.Indices;
             idx=indices(1);
             tbl=app.TableIndex.Content{idx};
             app.ViewTable(tbl);
             if tbl.isGraph
-                app.ViewGraph(tbl);
+                app.ViewGraph(tbl,app.TableIndex.Info);
             end
             if indices(2)==cType.GRAPH_COLUMN
                 app.TabGroup.SelectedTab=app.GraphsTab;
@@ -371,11 +394,11 @@ classdef ViewResults < matlab.apps.AppBase
         end
 
         % Callback function: ContextMenu, OpenAsFigureMenu
-        function OpenAsFigureMenuSelected(app,~)
+        function OpenAsFigureMenuSelected(app, ~)
             newfigure = figure;
             copyobj(app.UIAxes, newfigure);
-        end    
-        
+        end
+
         % Close request function: UIFigure
         function CloseApp(app, ~)
             selection = uiconfirm(app.UIFigure,{'Close the Application?'},'Confirmation');   
@@ -385,6 +408,7 @@ classdef ViewResults < matlab.apps.AppBase
                 case 'Cancel'
                     return
             end
+            delete(app);            
         end
     end
 
@@ -396,6 +420,7 @@ classdef ViewResults < matlab.apps.AppBase
 
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Color = [1 1 1];
             app.UIFigure.Position = [100 100 931 530];
             app.UIFigure.Name = 'View Results';
             app.UIFigure.CloseRequestFcn = createCallbackFcn(app, @CloseApp, true);
@@ -404,11 +429,13 @@ classdef ViewResults < matlab.apps.AppBase
             app.GridLayout = uigridlayout(app.UIFigure);
             app.GridLayout.ColumnWidth = {200, '4x'};
             app.GridLayout.RowHeight = {'1x', 24};
+            app.GridLayout.BackgroundColor = [0.9804 0.9804 0.9804];
 
             % Create Tree
             app.Tree = uitree(app.GridLayout);
             app.Tree.SelectionChangedFcn = createCallbackFcn(app, @TreeSelectionChanged, true);
             app.Tree.NodeExpandedFcn = createCallbackFcn(app, @TreeNodeExpanded, true);
+            app.Tree.NodeCollapsedFcn = createCallbackFcn(app, @TreeNodeCollapsed, true);
             app.Tree.Layout.Row = 1;
             app.Tree.Layout.Column = 1;
 
@@ -427,6 +454,8 @@ classdef ViewResults < matlab.apps.AppBase
             app.UITable.ColumnName = {'Tables'; 'Description'; 'Graph'};
             app.UITable.RowName = {};
             app.UITable.CellSelectionCallback = createCallbackFcn(app, @UITableCellSelection, true);
+            app.UITable.Multiselect = 'off';
+            app.UITable.Tooltip = {'Select a cell to display the results as table or graph'};
             app.UITable.Visible = 'off';
             app.UITable.Position = [12 12 676 400];
 

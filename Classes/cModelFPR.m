@@ -432,7 +432,7 @@ classdef cModelFPR < cProcessModel
 						return
 				end
 				if isempty(find(tmp,1))	
-					text=obj.ps.FlowKeys{wt.Flows(i)};				
+					text=wt.WasteKeys{i};				
 					obj.messageLog(cType.ERROR,'Invalid Allocation for waste flow %s', text);
 					return
 				end

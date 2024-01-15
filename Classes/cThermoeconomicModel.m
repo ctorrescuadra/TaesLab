@@ -15,6 +15,8 @@ classdef cThermoeconomicModel < cStatusLogger
 %       obj.setResourceSample(value)
 %       obj.setCostTables(value)
 %       obj.setDiagnosisMethod(value)
+%       obj.setActiveWaste(value)
+%       obj.setRecycling(value)
 %       obj.setDebug(value)
 %       obj.setSumary(value)
 %   Results Info Methods
@@ -22,7 +24,7 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.termoeconomicState(state)
 %       res=obj.thermoeconomicAnalysis
 %       res=obj.thermoeconomicDiagnosis
-%       res=obj.fuelImpact
+%       res=obj.summaryDiagnosis
 %       res=obj.wasteAnalysis
 %       res=obj.diagramFP
 %       res=obj.productiveDiagram
@@ -38,28 +40,24 @@ classdef cThermoeconomicModel < cStatusLogger
 %       res=obj.isDiagnosis
 %       res=obj.isWaste
 %       res=obj.isSummaryEnable
-%       res=obj.getTableInfo
+%       res=getTablesDirectiory
 %       res=obj.getModelInfo
+%       res=obj.getTableInfo(name)
 %       obj.getTable(name)
 %   Print Methods
-%       obj.printIndexTable
 %       obj.printResults
 %       obj.printSummary(tbl)
 %       obj.printTable(name)
+%       obj.viewIndexTable
 %       obj.viewTable(name)
+%       obj.viewTableDirectory
+%       obj.showGraph(name,options)
 %   Save Methods
 %       log=obj.saveModelResults(filename)
 %       log=obj.saveDataModel(filename)
 %       log=obj.saveDiagramFP(filename)
 %       log=obj.saveProductiveDiagram(filename)
 %       log=obj.saveSummary(filename)
-%   Graph Methods
-%       obj.graphCost(graph)
-%       obj.graphDiagnosis(graph,shout)
-%       obj.graphSummary(graph,list)
-%       obj.graphDiagramFP(graph)
-%       obj.graphWasteAllocation(wkey)
-%       obj.flowsDiagram
 %   Waste Methods
 %       res=obj.wasteAllocation
 %       res=obj.setWasteType(key,type)
@@ -167,7 +165,6 @@ classdef cThermoeconomicModel < cStatusLogger
                 else
                     obj.ActiveWaste=obj.WasteFlows{1};
                 end
-                obj.Recycling=param.Recycling;   
             end
             % Load Exergy values (all states)
             obj.rstate=cell(1,data.NrOfStates);
@@ -225,6 +222,7 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
+            obj.Recycling=param.Recycling;   
             obj.Summary=param.Summary;
         end
         %%%
@@ -310,8 +308,21 @@ classdef cThermoeconomicModel < cStatusLogger
         function setDiagnosisMethod(obj,method)
             obj.DiagnosisMethod=method;
         end
+        function setActiveWaste(obj,key)
+            obj.ActiveWaste=key;
+        end
         function setSummary(obj,value)
             obj.Summary=value;
+        end
+        function setRecycling(obj,value)
+            obj.Recycling=value;
+        end
+
+        function setDebug(obj,dbg)
+        % Set debug control variable
+            if islogical(dbg) && (obj.debug~=dbg)
+                obj.debug=dbg;
+            end
         end
 
         %%%
@@ -441,6 +452,11 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.DataModel.ResourceSamples;
         end
 
+        function res=get.WasteFlows(obj)
+        % Get waste flows list (cell array)
+            res=getWasteFlows(obj.DataModel);
+        end
+
         function res=isResourceCost(obj)
         % Indicates if resources cost are defined
             res=obj.DataModel.isResourceCost;
@@ -479,23 +495,14 @@ classdef cThermoeconomicModel < cStatusLogger
             res=obj.DataModel.NrOfStates>1;
         end
 
-        function res=get.WasteFlows(obj)
-        % Get waste flows list (cell array)
-            res=getWasteFlows(obj.DataModel);
-        end
-
-        function res=getTableInfo(obj,name)
-        % Get the dictionary info of table names
-            res=getTableInfo(obj.fmt,name);
-        end
-
         function res=getResultStates(obj)
-        % Get the cModelFPR object of each state (cModelSummary)
+        % Get the cModelFPR object of each state 
+        %   Internal application use: cModelSummary
             res=obj.rstate;
         end
 
         function res=getModelResults(obj)
-        % Get the cResultInfo objects of the current state (internal application use)
+        % Get a cell array of cResultInfo objects of the current state (internal application use)
             res=getModelResults(obj.results);
         end
 
@@ -526,7 +533,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %   Input:
         %       options - VarMode options
         %
-            tbl=obj.fmt.getDirectory;
+            tbl=obj.fmt.getTablesDirectory;
             tDict=obj.fmt.tDictionary;
             atm=repmat({'false'},tbl.NrOfRows,1);
             % Get the initial state of the table
@@ -559,6 +566,12 @@ classdef cThermoeconomicModel < cStatusLogger
             viewTable(tbl,varargin{:});
         end
 
+        function res=getTableInfo(obj,name)
+        % Get table properties
+        % 
+            res=getTableInfo(obj.fmt,name);
+        end
+
         function tbl=getTable(obj,name)
         % Get the table called name
         %   Input:
@@ -575,13 +588,6 @@ classdef cThermoeconomicModel < cStatusLogger
                     return
                end
                tbl=res.getTable(name);
-            end
-        end
-
-        function setDebug(obj,dbg)
-        % Set debug control variable
-            if islogical(dbg) && (obj.debug~=dbg)
-                obj.debug=dbg;
             end
         end
 
@@ -731,9 +737,7 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             log=saveResults(res,filename);
         end
-
-
-        
+       
         %%%
         % Waste Analysis methods
         %
@@ -1125,13 +1129,13 @@ classdef cThermoeconomicModel < cStatusLogger
             end
             if obj.Recycling
                 if obj.isGeneralCost 
-                    ra=cWasteAnalysis(obj.fp1,obj.ActiveWaste,true,obj.rsd);
+                    ra=cWasteAnalysis(obj.fp1,true,obj.ActiveWaste,obj.rsd);
                 else
-                    ra=cWasteAnalysis(obj.fp1,obj.ActiveWaste,true);
+                    ra=cWasteAnalysis(obj.fp1,true,obj.ActiveWaste);
                 end
                 obj.printDebugInfo('Recycling Analysis is active');
             else
-                ra=cWasteAnalysis(obj.fp1,obj.ActiveWaste,false);
+                ra=cWasteAnalysis(obj.fp1);
                 obj.printDebugInfo('Recycling Analysis is not active');
             end
             if isValid(ra)
@@ -1310,6 +1314,7 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function triggerActiveWaste(obj)
             obj.setRecyclingResults;
+            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         function triggerDiagnosisChange(obj)
@@ -1356,6 +1361,7 @@ classdef cThermoeconomicModel < cStatusLogger
 
         function triggerRecyclingChange(obj)
             obj.setRecyclingResults;
+            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         %%%

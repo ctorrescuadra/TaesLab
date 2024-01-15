@@ -1,4 +1,4 @@
-function res = WasteRecycling(data,varargin)
+function res = WasteAnalysis(data,varargin)
 % Provide a recycling analysis of the plant
 % Given a waste flow calculates the cost of output flows (final products and wastes)
 % when it is recycled from 0 to %100.
@@ -16,10 +16,12 @@ function res = WasteRecycling(data,varargin)
 %               ALL - Both Direct and Generalized are selected
 %           ResourceSample: Resource sample name
 %   OUTPUT:
-%       res - cResultInfo object with the recicling tables:
+%       res - cResultInfo object with the waste analysis tables:
+%               cType.Tables.WASTE_DEFINITION (wd)
+%               cType.Tables.WASTE_ALLOCATION (wa)
 %               cType.Tables.WASTE_RECYCLING_DIRECT (rad)
 %               cType.Tables.WASTE_RECYCLING_GENERAL (rag)
-% See also cReadModel, cRecyclingAnalysis, cResultInfo
+% See also cDataModel, cRecyclingAnalysis, cResultInfo
 %
     res=cStatusLogger();
     checkModel=@(x) isa(x,'cDataModel');
@@ -78,8 +80,7 @@ function res = WasteRecycling(data,varargin)
     % Check Waste Key
     wt=mfp.WasteTable;
     if isempty(param.WasteFlow)
-        wid=wt.Flows(1);
-        param.WasteFlow=data.ProductiveStructure.Flows(wid).key;
+        param.WasteFlow=wt.WasteKeys{1};
     else
         wid=wt.getWasteIndex(param.WasteFlow);
         if isempty(wid)
@@ -102,12 +103,12 @@ function res = WasteRecycling(data,varargin)
 			    res.printError('Invalid resource data. See Error Log');
 			    return
             end
-            ra=cWasteAnalysis(mfp,param.WasteFlow,true,rsd);
+            ra=cWasteAnalysis(mfp,true,param.WasteFlow,rsd);
         else
-            ra=cWasteAnalysis(mfp,param.WasteFlow,true); 
+            ra=cWasteAnalysis(mfp,true,param.WasteFlow); 
         end
     else
-        ra=cWasteAnalysis(mfp,param.WasteFlow,false); 
+        ra=cWasteAnalysis(mfp); 
     end
     % Execute recycling analysis
     if isValid(ra)

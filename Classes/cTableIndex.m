@@ -3,9 +3,9 @@ classdef cTableIndex < cTable
 %   Methods:
 %       obj=cTableIndex(res)
 %       obj.printTable(fId)
-%       obj.viewTable(obj,options)
+%       obj.viewTable(options)
 %       log=obj.saveTable(filename)
-%       res=exportTable(obj)
+%       res=obj.exportTable(varmode)
 % See also cTable
     properties (GetAccess=public,SetAccess=private)
         Content % Cell array with the cResultInfo tables
