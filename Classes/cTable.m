@@ -45,6 +45,11 @@ classdef (Abstract) cTable < cStatusLogger
             obj.State=state;
         end
 
+        function res=getDescriptionLabel(obj)
+        % Get the description of each table
+            res=obj.Description;
+        end
+
         function viewTable(obj,option)
         % View Table in GUI or HTML
         %   Usage:

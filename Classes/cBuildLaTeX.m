@@ -1,0 +1,86 @@
+classdef (Sealed) cBuildLaTeX < cStatusLogger
+% cBuildHTML convert cTable object into HTML files
+%   If a cTableIndexobject is provided create a index table
+%   which indicate where are saved the HTML files of the cResultInfo tables. 
+%   Methods:
+%       obj=cBuildLaTeX(tbl)
+%       obj.printTable(fId)
+%       log=obj.saveTable(filename)
+%
+    properties(Access=private)
+        tabular  % tablular code - column aligment  
+        header   % header code - Colnames
+        body     % body code -data 
+        caption  % caption code -table description 
+        label    % label code - table name
+    end
+
+    methods
+        function obj=cBuildLaTeX(tbl)
+        % Create an instance of the class
+        %   Input:
+        %       tbl - cTable object
+            N=tbl.NrOfRows;
+            M=tbl.NrOfCols;
+            wc=tbl.getColumnWidth;
+            fc=[cType.ColumnFormat.CHAR,tbl.getColumnFormat];
+            fdata=[tbl.RowNames',tbl.formatData];
+            fcols=cell(1,M);
+            % Get formatted data and column Aligment
+            colAlign=[repmat('l',1,M)];
+            for j=1:M
+                fmt=['%-',num2str(wc(j)),'s'];
+                fcols{j}=sprintf(fmt,tbl.ColNames{j});
+                if fc(j)==cType.ColumnFormat.NUMERIC
+                    colAlign(j)='r';
+                else
+                    tmp=fdata(:,j);
+                    fdata(:,j)=cellfun(@(x) sprintf(fmt,x),tmp,'UniformOutput',false);
+                end
+            end
+            % Get dinamic text from table
+            obj.tabular=['\begin{tabular}{',colAlign,'}'];
+            obj.header=[strjoin(fcols,' & '),'\\'];
+            obj.caption=['\caption{',tbl.getDescriptionLabel,'}'];
+            obj.label=['\label{tab:',tbl.Name,'}'];
+            val=cell(N,1);
+            for i=1:tbl.NrOfRows
+                val{i}=sprintf('\t\t%s\n',[strjoin(fdata(i,:),' & '),'\\']);
+            end
+            obj.body=val;
+        end
+
+        function res=getLaTeXcode(obj)
+        % Get the latex code as string
+            res=sprintf('%s\n','\begin{table}[H]');
+            res=[res,sprintf('%s\n',obj.caption)];
+            res=[res,sprintf('%s\n',obj.label)];
+            res=[res,sprintf('\t%s\n',obj.tabular)];
+            res=[res,sprintf('\t\t%s\n','\toprule')];
+            res=[res,sprintf('\t\t%s\n',obj.header)];
+            res=[res,sprintf('\t\t%s\n','\midrule')];
+            res=[res,[obj.body{:}]];
+            res=[res,sprintf('\t\t%s\n','\bottomrule')];
+            res=[res,sprintf('\t%s\n','\end{tabular}')];
+            res=[res,sprintf('%s\n\n','\end{table}')];
+        end
+
+        function log=expotTable(obj,filename)
+        % Save the table as LaTeX code into filename
+        %   Usage:
+        %       obj.saveTable(filename);
+        %   Input:
+        %       filename - Name of the file
+            log=cStatusLogger;
+            try
+                fId = fopen (filename, 'wt');
+                fprintf(fId,'%s',obj.getLaTeXcode);
+                fclose(fId);
+                log.messageLog(cType.INFO,'File %s has been saved',filename);
+            catch err
+                log.message(err.message);
+                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+            end
+        end
+    end
+end

@@ -190,6 +190,8 @@ classdef cResultInfo < cStatusLogger
                     slog=obj.saveAsHTML(filename);
                 case cType.FileType.TXT
                     slog=obj.saveAsTXT(filename);
+                case cType.FileType.LaTeX
+                    slog=obj.saveAsLaTeX(filename);
             otherwise
                 log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
                 return
@@ -370,6 +372,24 @@ classdef cResultInfo < cStatusLogger
             end
             % Print tables into file
             cellfun(@(x) printTable(x,fId),obj.tableIndex.Content);
+            fclose(fId);
+        end
+
+        function log=saveAsLaTeX(obj,filename)
+            log=cStatusLogger(cType.VALID);
+            % Open text file
+            try
+                fId = fopen (filename, 'wt');
+            catch err
+                log.messageLog(cType.ERROR,err.message)
+                log.messageLog(cType.ERROR,'Open file %s',filename);
+                return
+            end
+            for i=1:obj.NrOfTables
+                tbl=obj.tableIndex.Content{i};
+                ltx=cBuildLaTeX(tbl);
+                fprintf(fId,'%s',ltx.getLaTeXcode);
+            end
             fclose(fId);
         end
 

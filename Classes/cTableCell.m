@@ -132,13 +132,6 @@ classdef (Sealed) cTableCell < cTableResult
             end
         end
 
-
-        
-        function res=getDescriptionLabel(obj)
-        % Get the description of each table
-            res=obj.Description;
-        end
-
         function printTable(obj,fId)
         % Print table on console in a pretty formatted way
             if nargin==1

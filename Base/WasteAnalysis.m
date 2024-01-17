@@ -31,7 +31,7 @@ function res = WasteAnalysis(data,varargin)
     p.addParameter('State','',@ischar);
     p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
-    p.addParameter('WasteFlow','',@ischar);
+    p.addParameter('ActiveWaste','',@ischar);
     p.addParameter('Recycling',true,@islogical);
 
     try
@@ -79,12 +79,12 @@ function res = WasteAnalysis(data,varargin)
     end
     % Check Waste Key
     wt=mfp.WasteTable;
-    if isempty(param.WasteFlow)
-        param.WasteFlow=wt.WasteKeys{1};
+    if isempty(param.ActiveWaste)
+        param.ActiveWaste=wt.WasteKeys{1};
     else
-        wid=wt.getWasteIndex(param.WasteFlow);
+        wid=wt.getWasteIndex(param.ActiveWaste);
         if isempty(wid)
-            res.printError('Invalid waste key %s',param.WasteFlow);
+            res.printError('Invalid waste key %s',param.ActiveWaste);
             return
         end
     end
@@ -103,9 +103,9 @@ function res = WasteAnalysis(data,varargin)
 			    res.printError('Invalid resource data. See Error Log');
 			    return
             end
-            ra=cWasteAnalysis(mfp,true,param.WasteFlow,rsd);
+            ra=cWasteAnalysis(mfp,true,param.ActiveWaste,rsd);
         else
-            ra=cWasteAnalysis(mfp,true,param.WasteFlow); 
+            ra=cWasteAnalysis(mfp,true,param.ActiveWaste); 
         end
     else
         ra=cWasteAnalysis(mfp); 

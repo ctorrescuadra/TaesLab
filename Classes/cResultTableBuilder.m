@@ -250,7 +250,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %
             % Get FP adjacency tables
             tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,dfp.EdgesFP);
-            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,dfp.EdgesCFP);
+            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,dfp.EdgesCFP);
             % Build the cResultInfo
             res=cResultInfo(dfp,tbl);
         end

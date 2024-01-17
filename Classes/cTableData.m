@@ -97,6 +97,7 @@ classdef cTableData < cTable
             fprintf(fid,'\n');
         end
     end
+    
     methods (Static,Access=public)
         function tbl=create(values)
             % Create a cTableData from values
