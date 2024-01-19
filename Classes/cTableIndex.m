@@ -36,23 +36,27 @@ classdef cTableIndex < cTable
             obj.State=res.State;
             obj.Content=struct2cell(res.Tables);
             obj.Info=res.Info;
+            obj.setColumnFormat;
+            obj.setColumnWidth;
             obj.status=cType.VALID;
         end
 
-        function res=getColumnFormat(obj)
+        function setColumnFormat(obj)
         % Get column format for cTableIndex
-            res=repmat(cType.ColumnFormat.CHAR,1,obj.NrOfCols);
+            obj.fcol=repmat(cType.ColumnFormat.CHAR,1,obj.NrOfCols);
         end
 
-        function res=getColumnWidth(obj)
+        function res=setColumnWidth(obj)
         % Get column width for cTableIndex
             res=zeros(1,obj.NrOfCols);
             for i=1:obj.NrOfCols
                 res(i)=max(cellfun(@length,obj.Values(:,i)))+2;
             end
+            obj.wcol=res;
         end
 
         function res=formatData(obj)
+        % Format data. Only numeric fields
             res=obj.Data;
         end
 

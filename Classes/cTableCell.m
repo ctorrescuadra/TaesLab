@@ -42,7 +42,7 @@ classdef (Sealed) cTableCell < cTableResult
             obj.status=obj.checkTableSize;
             if ~obj.isValid
                 obj.messageLog('Invalid table size (%d,%d)',size(data,1),size(data,2));
-            end 
+            end
         end
 		
         function setProperties(obj,p)
@@ -54,6 +54,8 @@ classdef (Sealed) cTableCell < cTableResult
             obj.FieldNames=p.FieldNames;
             obj.ShowNumber=p.ShowNumber;
             obj.GraphType=p.GraphType;
+            obj.setColumnFormat;
+            obj.setColumnWidth;
         end
 
         function res=formatData(obj)
@@ -102,6 +104,7 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getStructTable(obj)
+        % Get table as a struct
             N=obj.NrOfCols-1;
             data=obj.getStructData;
             fields(N)=struct('Name','','Format','','Unit','');
@@ -115,10 +118,12 @@ classdef (Sealed) cTableCell < cTableResult
         end
 		
         function res=isNumericColumn(obj,j)
+        % determine if the column is numeric
             res=strContains(obj.Format{j+1},'f');
         end
 
-        function res=getColumnWidth(obj)
+        function setColumnWidth(obj)
+        % define the width of the columns
             M=obj.NrOfCols;
             res=zeros(1,M);
             res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
@@ -130,6 +135,7 @@ classdef (Sealed) cTableCell < cTableResult
                     res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
                 end
             end
+            obj.wcol=res;
         end
 
         function printTable(obj,fId)
@@ -142,7 +148,7 @@ classdef (Sealed) cTableCell < cTableResult
             hfmt=arrayfun(@(x) ['%-',num2str(x),'s'],wcol,'UniformOutput',false);
             sfmt=hfmt;
             for j=2:obj.NrOfCols
-                if fcol(j-1)==cType.ColumnFormat.NUMERIC
+                if fcol(j)==cType.ColumnFormat.NUMERIC
                     hfmt{j}=[' %',num2str(wcol(j)),'s'];
                     sfmt{j}=[' ',obj.Format{j}];
                 end

@@ -41,7 +41,8 @@ classdef cViewTable < cStatusLogger
 			% Set object properties
 			obj.rowNames=tbl.RowNames;
 			obj.colNames=tbl.ColNames(2:end);
-			obj.format=[cType.colType(tbl.getColumnFormat)];
+			tmp=[cType.colType(tbl.getColumnFormat)];
+			obj.format=tmp(2:end);
 			obj.fontname=param.FontName;
 			obj.fontsize=param.FontSize;
 			wcol=cType.COLUMN_SCALE*tbl.getColumnWidth;

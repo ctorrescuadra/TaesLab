@@ -91,7 +91,7 @@ classdef cBuildHTML < cStatusLogger
             res=[res,sprintf('\t\t<table>\n')];
             res=[res,sprintf('\t\t\t<thead>\n')];
             % Table Header
-            fcol=[1,tbl.getColumnFormat];
+            fcol=tbl.getColumnFormat;
             data=tbl.formatData;
             for j=1:tbl.NrOfCols
                 if fcol(j)==cType.ColumnFormat.CHAR

@@ -31,6 +31,8 @@ classdef cTableData < cTable
             if ~obj.isValid
                 obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
             end
+            obj.setColumnFormat;
+            obj.setColumnWidth;
         end
 
         function setProperties(obj,name,descr)
@@ -41,8 +43,8 @@ classdef cTableData < cTable
             obj.Description=descr;
         end
 
-        function res=getColumnWidth(obj)
-        % Get column width info
+        function setColumnWidth(obj)
+        % Define the width of the columns
             res=zeros(1,obj.NrOfCols);
             res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
             for j=1:obj.NrOfCols-1
@@ -55,17 +57,17 @@ classdef cTableData < cTable
                     res(j+1)=max(cellfun(@length,obj.Values(:,j+1)))+2;
                 end
             end
+            obj.wcol=res;
         end
 
         function res=formatData(obj)
         % Get the format of each column (TEXT or NUMERIC)
             res=obj.Data;
+            cw=obj.getColumnWidth;
             for j=1:obj.NrOfCols-1
                 if isNumericColumn(obj,j)
                     data=cellfun(@num2str,obj.Data(:,j),'UniformOutput',false);
-                    dl=max(cellfun(@length,data));
-                    cw=max([dl,length(obj.ColNames{j}),cType.DEFAULT_NUM_LENGHT]);
-                    fmt=['%',num2str(cw),'s'];
+                    fmt=['%',num2str(cw(j+1)),'s'];
                     res(:,j)=cellfun(@(x) sprintf(fmt,x),data,'UniformOutput',false);
                 end
             end
@@ -80,9 +82,9 @@ classdef cTableData < cTable
             wc=obj.getColumnWidth;
             fcol=obj.getColumnFormat;
             lfmt=arrayfun(@(x) [' %-',num2str(x),'s'],wc,'UniformOutput',false);
-            for j=1:obj.NrOfCols-1
+            for j=2:obj.NrOfCols
                 if fcol(j)==cType.ColumnFormat.NUMERIC
-                    lfmt{j+1}=['%',num2str(wc(j+1)),'s '];
+                    lfmt{j}=['%',num2str(wc(j)),'s '];
                 end
             end
             lformat=[lfmt{:},'\n'];

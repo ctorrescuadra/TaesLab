@@ -368,9 +368,8 @@ classdef cType
 			res=true;
 		end
 
-		function res=tableCode(name)
+		function tableCode(name)
 		% Get the key code of a table
-			res=[];
 			if ~ischar(name)
 				return
 			end
@@ -380,7 +379,7 @@ classdef cType
 			if isempty(idx)
 				return
 			end
-			res=['cType.Tables.',codes{idx}];
+			disp(['cType.Tables.',codes{idx}]);
 		end
 
 		%%%%

@@ -63,7 +63,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.status=obj.checkTableSize;
             if ~obj.isValid
                 obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
-            end 
+            end
         end
         
         function setProperties(obj,p)
@@ -74,6 +74,8 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.Format=p.Format;
             obj.GraphType=p.GraphType;
             obj.GraphOptions=p.GraphOptions;
+            obj.setColumnFormat;
+            obj.setColumnWidth;
         end
 
         function res=getMatrix(obj)
@@ -82,7 +84,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res=formatData(obj)
-        % Format the data value as characters
+        % Format the data values as characters
             res=cellfun(@(x) sprintf(obj.Format,x),obj.Data,'UniformOutput',false);
         end
 
@@ -116,25 +118,29 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res=getStructTable(obj)
+        % Get table info as structure
             data=getStructData(obj);
             res=struct('Name',obj.Name,'Description',obj.Description,...
                     'State',obj.State,'Unit',obj.Unit,'Format',obj.Format,'Data',data);
         end
 
         function res = isNumericColumn(obj,idx)
+        % Check if the column is numeric
             res=(idx>0) && (idx<obj.NrOfCols);
         end
 
-        function res=getColumnFormat(obj)
+        function setColumnFormat(obj)
         % Get the format of each column (TEXT or NUMERIC)
-            res=repmat(cType.ColumnFormat.NUMERIC,1,obj.NrOfCols-1);
+            tmp=repmat(cType.ColumnFormat.NUMERIC,1,obj.NrOfCols-1);
+            obj.fcol=[cType.ColumnFormat.CHAR,tmp];
         end
 
-        function res=getColumnWidth(obj)
+        function setColumnWidth(obj)
+        % Define the width of columns
             lkey=max(cellfun(@length,obj.Values(:,1)))+2;
             tmp=regexp(obj.Format,'[0-9]+','match','once');
             lfmt=str2double(tmp);
-            res=[lkey,repmat(lfmt,1,obj.NrOfCols-1)];
+            obj.wcol=[lkey,repmat(lfmt,1,obj.NrOfCols-1)];
         end
 
         function res=getDescriptionLabel(obj)
@@ -157,11 +163,11 @@ classdef (Sealed) cTableMatrix < cTableResult
             end
             nrows=obj.NrOfRows;
 			ncols=obj.NrOfCols;
+            wc=obj.getColumnWidth;
             % first column header size
-            tmp=[obj.ColNames{1},obj.RowNames(1:end)];
-            len=max(cellfun(@length,tmp))+1;
+            len=wc(1)+1;
             fkey=[' %-',num2str(len),'s'];
-            % rest of columns
+            % Rest of columns
             tmp=regexp(obj.Format,'[0-9]+','match','once');
             fval=['%',tmp,'s'];
             hformat=[fkey,repmat(fval,1,ncols-1)];

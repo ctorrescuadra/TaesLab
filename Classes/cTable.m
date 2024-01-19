@@ -29,6 +29,10 @@ classdef (Abstract) cTable < cStatusLogger
         State=''        % State Name
         GraphType=0     % Graph Type associated to table
     end
+    properties(Access=protected)
+        fcol            % Array with columns format
+        wcol            % Array with columns width
+    end
     methods
         function res=get.Values(obj)
         % get the table Values
@@ -143,11 +147,22 @@ classdef (Abstract) cTable < cStatusLogger
             res=all(tmp(:));
         end
 
-        function res=getColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            res=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
+        function setColumnFormat(obj)
+        % Define the format of each column (TEXT or NUMERIC)
+            tmp=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
+            obj.fcol=[cType.ColumnFormat.CHAR,tmp];
         end
 
+        function res=getColumnFormat(obj)
+        % Get the columns format
+            res=obj.fcol;
+        end
+
+        function res=getColumnWidth(obj)
+        % Get the columns width
+            res=obj.wcol;
+        end
+        
         function res = getStructData(obj)
         % Get Table data as struct array
             val = [obj.RowNames',obj.Data];

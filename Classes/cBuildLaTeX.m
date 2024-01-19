@@ -23,17 +23,19 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
             N=tbl.NrOfRows;
             M=tbl.NrOfCols;
             wc=tbl.getColumnWidth;
-            fc=[cType.ColumnFormat.CHAR,tbl.getColumnFormat];
+            fc=tbl.getColumnFormat;
             fdata=[tbl.RowNames',tbl.formatData];
             fcols=cell(1,M);
             % Get formatted data and column Aligment
             colAlign=[repmat('l',1,M)];
             for j=1:M
-                fmt=['%-',num2str(wc(j)),'s'];
-                fcols{j}=sprintf(fmt,tbl.ColNames{j});
                 if fc(j)==cType.ColumnFormat.NUMERIC
                     colAlign(j)='r';
+                    fmt=['%',num2str(wc(j)),'s'];
+                    fcols{j}=sprintf(fmt,tbl.ColNames{j});
                 else
+                    fmt=['%-',num2str(wc(j)),'s'];
+                    fcols{j}=sprintf(fmt,tbl.ColNames{j});
                     tmp=fdata(:,j);
                     fdata(:,j)=cellfun(@(x) sprintf(fmt,x),tmp,'UniformOutput',false);
                 end
@@ -65,7 +67,7 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
             res=[res,sprintf('%s\n\n','\end{table}')];
         end
 
-        function log=expotTable(obj,filename)
+        function log=exportTable(obj,filename)
         % Save the table as LaTeX code into filename
         %   Usage:
         %       obj.saveTable(filename);
