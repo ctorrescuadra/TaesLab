@@ -80,9 +80,7 @@ classdef (Sealed) cTableCell < cTableResult
                 res.Properties.VariableNames=obj.FieldNames(2:end);
                 res.Properties.VariableUnits=obj.Unit(2:end);
                 res.Properties.VariableDescriptions=obj.ColNames(2:end);
-                res=addprop(res,["State","GraphType","ShowNumber","Format"],["table","table","table","variable"]);
-                res.Properties.CustomProperties.State=obj.State;
-                res.Properties.CustomProperties.GraphType=obj.GraphType;
+                res=addprop(res,["ShowNumber","Format"],["table","variable"]);
                 res.Properties.CustomProperties.Format=obj.Format(2:end);
                 res.Properties.CustomProperties.ShowNumber=obj.ShowNumber;
             end

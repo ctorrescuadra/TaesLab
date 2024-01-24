@@ -6,7 +6,7 @@ function SaveResults(res,filename)
 %   USAGE:
 %       SaveResults(res,filename)
 %   INPUT:
-%       res - cResultInfo or cThermoeconomicModel object
+%       res - cResultInfo object
 %       filename - name of the output file (with extension)
 % See also cModelResults
 %
@@ -16,7 +16,7 @@ function SaveResults(res,filename)
         log.printError('Usage: SaveResults(res,filename)');
         return
     end
-    if ~isa(res,'cResultInfo') || ~isValid(res)
+    if ~(isa(res,'cResultInfo') || isa(res,'cThermoeconomicModel')) ||  ~isValid(res)
         log.printError('Invalid result object');
         return
     end

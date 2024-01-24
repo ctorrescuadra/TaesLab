@@ -27,7 +27,7 @@ classdef (Abstract) cTableResult < cTable
     methods      
         function res=exportTable(obj,varmode,fmt)
         % get cTable info in diferent types of variables
-            if nargin==1
+            if nargin==2
                 fmt=false;
             end
             switch varmode

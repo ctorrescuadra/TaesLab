@@ -666,7 +666,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %%%
         % Save Results methods
         %
-        function log=saveModelResults(obj,filename)
+        function log=saveResults(obj,filename)
         % Save results in a file 
         % The following types are availables (XLSX, CSV, MAT)
         %  Input:

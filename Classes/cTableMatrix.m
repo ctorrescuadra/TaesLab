@@ -107,10 +107,8 @@ classdef (Sealed) cTableMatrix < cTableResult
         % Return as matlab table if apply
             res=getMatlabTable@cTable(obj);
             if isMatlab
-                res=addprop(res,["State","GraphType","GraphOptions","Format","Units"],...
-                    ["table","table","table","table","table"]);
-                res.Properties.CustomProperties.State=obj.State;
-                res.Properties.CustomProperties.GraphType=obj.GraphType;
+                res=addprop(res,["GraphOptions","Format","Units"],...
+                    ["table","table","table"]);
                 res.Properties.CustomProperties.GraphOptions=obj.GraphOptions;
                 res.Properties.CustomProperties.Format=obj.Format;
                 res.Properties.CustomProperties.Units=obj.Unit;

@@ -200,7 +200,7 @@ classdef cTablesDefinition < cStatusLogger
  
         function res=buildTablesDirectory(obj,cols)
         % Get the tables directory as cTableData
-            res=cStatus;
+            res=cStatusLogger;
             if nargin==1
                 cols=cType.DirColsDefault;
             end
@@ -211,16 +211,14 @@ classdef cTablesDefinition < cStatusLogger
             colNames=cell(1,M+1);
             colNames{1}='Table';
             data=cell(N,M);
+            resultCode=fieldnames(cType.ResultId);
             for i=1:M
-                col=upper(cols{i});
-                if isfield(cType.DirCols,col)
-                    colId=cType.DirCols.(col);
-                    colNames{i+1}=cType.DirColNames{colId};
-                else
-                    res.printError('Invalid column name %s',col);
+                colId=cType.getDirColumns(cols{i});
+                if cType.isEmpty(colId)
+                    res.messageLog(cType.ERROR,'Invalid column name %s',col);
                     return
                 end
-                resultCode=fieldnames(cType.ResultId);
+                colNames{i+1}=cType.DirColNames{colId};
                 switch colId
                     case cType.DirCols.DESCRIPTION
                         data(:,i)={tI.description};

@@ -62,7 +62,6 @@ classdef (Abstract) cTable < cStatusLogger
         %           cType.TableView.GUI
         %           cType.TableView.HTML
         %
-            log=cStatus(cType.VALID);
             if nargin==1
                 if isOctave
                     option=cType.TableView.GUI;
@@ -77,8 +76,6 @@ classdef (Abstract) cTable < cStatusLogger
                 viewTableGUI(obj)
             case cType.TableView.HTML
                 viewTableHTML(obj)
-            otherwise
-                log.printError('Invalid Table View option');
             end
 
         end
@@ -175,10 +172,11 @@ classdef (Abstract) cTable < cStatusLogger
                 res=obj;
             else
                 res=cell2table(obj.Data,'VariableNames',obj.ColNames(2:end),'RowNames',obj.RowNames');
-                res=addprop(res,["Name","State"],["table","table"]);
+                res=addprop(res,["Name","State","GraphType"],["table","table","table"]);
                 res.Properties.Description=obj.Description;
                 res.Properties.CustomProperties.Name=obj.Name;
                 res.Properties.CustomProperties.State=obj.State;
+                res.Properties.CustomProperties.GraphType=obj.GraphType;
             end
         end
 

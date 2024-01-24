@@ -1,9 +1,12 @@
-function res=ListResultTables(varargin)
-% ListResultTables shows the list of the result tables of TaesLab
+function res=ShowResults(arg,varargin)
+% ShowResults shows the tables results, export and svet it in diferent format
 %   USAGE:
-%       res=ListResultTables(options)
+%       res=ShowResults(arg,options)
 %   INPUT:
+%       arg - cResultInfo or cThermoeconomicModel
 %       options - an structure contains additional parameters
+%           Table: Name of the table to show. 
+%               If empty print on console all the results tables
 %           View: Select the way to show the table
 %               CONSOLE - show in console (default)
 %               GUI - use uitable
@@ -15,26 +18,23 @@ function res=ListResultTables(varargin)
 %               TABLE - return a matlab table
 %           SaveAs: Save the table in an external file. 
 %               If it is empty the table is not save
-%           Columns: Cell Array with column names to show.
-%               If it is empty the default list of columns
-%               cType.DirColsDefault is shown
-%               DESCRIPTION - Table description
-%               RESULT_NAME - cResultInfo name of the table
-%               GRAPH - Indicate if have graph representation
-%               TYPE - Type of cTable
-%               CODE - Code text for cType.Tables
-%               RESULT_CODE - Code Text for cType.ResultId
 %   OUTPUT:
 %       res - table object in the format specified in ExportAs
-%               and the selected columns
+%  
+% See also cResultInfo, cThermoeconomicModel
 %
     res=cStatusLogger(cType.ERROR);
+    % Check Input parameters
+	if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
+		res.printError('Invalid result parameter');
+		return
+	end
     % Check input parameters
     p = inputParser;
+    p.addParameter('Table','',@ischar);
     p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@ischar);
-    p.addParameter('Columns',cType.DirColsDefault,@iscell)
     try
 		p.parse(varargin{:});
     catch err
@@ -43,20 +43,23 @@ function res=ListResultTables(varargin)
         return
     end
     param=p.Results;
-    obj=cTablesDefinition;
-    tbl=obj.getTablesDirectory(param.Columns);
+    % If table is empty printResults
+    if isempty(param.Table)
+        printResults(arg);
+        return
+    end
+    % Get table
+    tbl=getTable(arg,param.Table);
     if ~isValid(tbl)
-        printLogger(tbl);
+        tbl.printLogger;
         return
     end
     % Export the table
     option=cType.getVarMode(param.ExportAs);
     res=exportTable(tbl,option);
     % View the table
-    if nargin>0
-        option=cType.getTableView(param.View);
-        viewTable(tbl,option);
-    end
+    option=cType.getTableView(param.View);
+    viewTable(tbl,option);
     % Save table 
     if ~isempty(param.SaveAs)
         log=saveTable(tbl,param.SaveAs);

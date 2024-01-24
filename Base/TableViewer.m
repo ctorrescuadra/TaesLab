@@ -1,33 +1,38 @@
-classdef ShowTables < handle
-% ShowTables is a GUI funtion thatshows the table index of a collection of results.
+classdef TableViewer < handle
+% ShowTables is a GUI funtion that shows the table index of a collection of results.
 %   When select a table, it is shown in the web browser and show the graph if it exists.
 %   USAGE:
 %       ShowTables(res,params)
 %   INPUT:
 %       res - A cResultInfo or a cThermoeconomicModel object
 %       param - Optional parameters
-%           ViewTable - TableView options: CONSOLE, GUI and HTML
-%   See also cResultInfo, cThermoeconomicTool
+%           View: Select the way to show the table
+%               CONSOLE - show in console (default)
+%               GUI - use uitable
+%               HTML- use web browser
+%   See also cResultInfo, cThermoeconomicModel
 %
     properties(Access=private)
         fig             % Base Figure
         table_control   % uitable component
         tableIndex      % cTableIndex of the results
         activeTable     % Current table to show
-        ViewTable       % View Table option
+        TableView       % View Table option
     end
     methods
-        function app=ShowTables(arg,varargin)
+        function app=TableViewer(arg,varargin)
         % Built an instance of the object
             log=cStatusLogger();
-            % Check input parameters
-            checkModel=@(x) isa(x,'cResultInfo') || isa(x,'cThermoeconomicModel') && isValid(x) ;
+            % Check Input parameters
+            if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
+                log.printError('Invalid result parameter');
+                return
+            end
             % Check input parameters
             p = inputParser;
-            p.addRequired('arg',checkModel);
-            p.addParameter('ViewTable',cType.TableView.HTML',@isnumber);
+            p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
             try
-                p.parse(arg,varargin{:});
+                p.parse(varargin{:});
             catch err
                 log.printError(err.message);
                 log.printError('Usage: ShowTables(arg,param)');
@@ -67,7 +72,7 @@ classdef ShowTables < handle
                 'units', 'normalized','position',[0.01 0.01 0.98 0.98]);
             set(app.fig,'visible','on');
             app.tableIndex=tbl;
-            app.ViewTable=param.ViewTable;
+            app.TableView=cType.getTableView(param.View);
         end
 
         function setActiveTable(app,~,event)
@@ -76,7 +81,7 @@ classdef ShowTables < handle
             indices=event.Indices;
             idx=indices(1);
             app.activeTable=app.tableIndex.Content{idx};
-            viewTable(app.activeTable,app.ViewTable);
+            viewTable(app.activeTable,app.TableView);
             sg=(indices(2)==cType.GRAPH_COLUMN);
             if app.activeTable.isGraph && sg 
                 app.showGraph;

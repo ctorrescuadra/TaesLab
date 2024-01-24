@@ -94,6 +94,9 @@ classdef cType
         % Options for diagnosis calculation
 		DiagnosisMethod=struct('NONE',1,'WASTE_EXTERNAL',2,'WASTE_INTERNAL',3);
 		DEFAULT_DIAGNOSIS='WASTE_EXTERNAL';
+		% Options for Table View
+		TableView=struct('NONE',0,'CONSOLE',1,'GUI',2,'HTML',3);
+		DEFAULT_TABLEVIEW='CONSOLE';
 		% Input Tables
 		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...
 			'WASTEDEF',5,'WASTEALLOC',6,'RESOURCES',7,'DIRECTORY',8);
@@ -156,11 +159,10 @@ classdef cType
 		% Tables Directory configuration
 		DirCols=struct('DESCRIPTION',1,'RESULT_NAME',2,'GRAPH',3,'TYPE',4,'CODE',5,'RESULT_CODE',6);
 		DirColNames={'Description','Results','Graph','Type','Code','Results Code'};
-		DirColsDefault={'DESCRIPTION','RESULT_NAME','GRAPH','TYPE'};
+		DirColsDefault={'DESCRIPTION','RESULT_NAME','GRAPH'};
         ACTIVE_TABLE_COLUMN=4;
 		GRAPH_COLUMN=3;
 		% Type of columns for uitables
-		TableView=struct('CONSOLE',0,'GUI',1,'HTML',2);
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
         COLUMN_SCALE=7;
@@ -256,22 +258,31 @@ classdef cType
             res=cType.getTypeId(cType.Resources,text);
         end
 
-		function res=getFormatId(text)
-		% Get internal code of a resources cost type text
-			res=cType.getTypeId(cType.Format,text);
-		end
+		
 
 		function res=getCostTables(text)
+		% Get id for CostTables option
 			res=cType.getTypeId(cType.CostTables,text);
 		end
 
 		function res=getDiagnosisMethod(text)
-		% Get key code of Diagnosis Methods Id
+		% Get id for Diagnosis Method option
 			res=cType.getTypeId(cType.DiagnosisMethod,text);
 		end
 
 		function res=getVarMode(text)
+		% Get id for VarMode option
 			res=cType.getTypeId(cType.VarMode,text);
+		end
+
+		function res=getTableView(text)
+		% Get id for TableView option
+			res=cType.getTypeId(cType.TableView,text);
+		end
+
+		function res=getDirColumns(text)
+		% Get id for Directory Table Columns option
+			res=cType.getTypeId(cType.DirCols,text);
 		end
 
 		function res=checkProcessKey(text)
@@ -309,10 +320,15 @@ classdef cType
 			res=cType.checkTypeKey(cType.VarMode,text);
 		end
 
-		function res=checkFormat(text)
-		% Check DiagnosisMethod value
-			res=cType.checkTypeKey(cType.Format,text);
-        end
+		function res=checkTableView(text)
+		% Check TableView value
+			res=cType.checkTypeKey(cType.TableView,text);
+		end
+
+		function res=checkDirColumns(text)
+		% Check Directory Table Columns option
+			res=cType.checkTypeKey(cType.DirCols,text);
+		end
 
 		function res=FlowTypeOptions()
 		% Get a cell array with the Flow Type options

@@ -16,7 +16,7 @@
 %   ThermoeconomicAnalysis  - Provide a termoeconomic analysis of a plant state
 %   ThermoeconomicDiagnosis - Compares a plant state with its reference state
 %   SummaryResults          - Get the summary results of a data model
-%   WasteRecycling          - Provide waste recycling analysis of the plant
+%   WasteAnalysis           - Provide waste recycling analysis of a plant state
 %   DiagramFP               - Get the Diagram FP info of a plant state
 %   ExergyCostCalculator    - Calculate the exergy cost values of a plant state
 %
@@ -25,22 +25,18 @@
 %   SaveDiagramFP           - Saves the Diagram FP adjacency tables into a file
 %   SaveProductiveDiagram   - Saves the productive structure adjacency tables into a file.
 %   SaveResults             - Saves a cResultInfo object into a file.
-%   SaveModelResults        - Saves the model results of a plant state into a file.
 %   SaveSummaryResults      - Saves the summary cost tables into a file
 %   SaveTable               - Save a result table into a file
 %   ExportDataModel         - Copy a model data file in another format
 %
-% Tables Directory
-%   ListResultTables        - List the result tables properties
-%   ListCodeTable           - List the internal code of the result tables
-%
 % Results Presentation
-%   ViewTable               - View a model result table
+%   ListResultTables        - List the result tables properties
+%   ShowResults             - Show model results tables
 %	ShowGraph               - Show the graph of a model result table
 %
 % GUI functions
 %   ThermoeconomicPanel     - GUI to select the thermoeconomic model parameters.
-%   ViewResults             - View the model results in a GUI
-%   ShowTables              - Show Tables and Graphs from the matlab workarea
+%   ViewResults             - View the model results in a GUI App
+%   TableViewer             - Show Tables and Graphs from the Matlab workarea
 %
 % See also cResultInfo, cThermoeconomicModel.
