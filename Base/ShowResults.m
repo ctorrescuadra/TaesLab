@@ -1,5 +1,5 @@
 function res=ShowResults(arg,varargin)
-% ShowResults shows the tables results, export and svet it in diferent format
+% ShowResults shows the tables results, export and save them in diferent format
 %   USAGE:
 %       res=ShowResults(arg,options)
 %   INPUT:
@@ -23,10 +23,14 @@ function res=ShowResults(arg,varargin)
 %  
 % See also cResultInfo, cThermoeconomicModel
 %
-    res=cStatusLogger(cType.ERROR);
+    log=cStatusLogger(cType.ERROR);
+    if nargin<1
+        log.printError('Usage: ShowResults(res)');
+		return
+    end
     % Check Input parameters
 	if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
-		res.printError('Invalid result parameter');
+		log.printError('Invalid result parameter');
 		return
 	end
     % Check input parameters
@@ -38,8 +42,8 @@ function res=ShowResults(arg,varargin)
     try
 		p.parse(varargin{:});
     catch err
-        res.printError(err.message);
-        res.printError('Usage: ViewTable(arg,options)');
+        log.printError(err.message);
+        log.printError('Usage: ViewTable(arg,options)');
         return
     end
     param=p.Results;
@@ -55,8 +59,10 @@ function res=ShowResults(arg,varargin)
         return
     end
     % Export the table
-    option=cType.getVarMode(param.ExportAs);
-    res=exportTable(tbl,option);
+    if nargout>0
+        option=cType.getVarMode(param.ExportAs);
+        res=exportTable(tbl,option);
+    end
     % View the table
     option=cType.getTableView(param.View);
     viewTable(tbl,option);

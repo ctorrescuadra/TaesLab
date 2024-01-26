@@ -546,9 +546,9 @@ classdef cThermoeconomicModel < cStatusLogger
                 end
             end
             % Create the table
-            data=[tbl.Data(:,1:end-1),atm];
+            data=[tbl.Data,atm];
             rowNames=tbl.RowNames;
-            colNames=[tbl.ColNames(1:end-1),{'Active'}];
+            colNames=[tbl.ColNames,{'Active'}];
             tmp=cTableData(data,rowNames,colNames);
             if nargin==1
                 res=tmp;

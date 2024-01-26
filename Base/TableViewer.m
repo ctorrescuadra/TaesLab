@@ -17,29 +17,28 @@ classdef TableViewer < handle
         table_control   % uitable component
         tableIndex      % cTableIndex of the results
         activeTable     % Current table to show
-        TableView       % View Table option
+        resultInfo      % Result Info object
+        tableView       % View Table option
     end
     methods
-        function app=TableViewer(arg,varargin)
+        function app=TableViewer(arg)
         % Built an instance of the object
             log=cStatusLogger();
+            if nargin<1
+                log.printError('Usage: TableViewer(res)');
+                return
+            end
             % Check Input parameters
             if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
                 log.printError('Invalid result parameter');
                 return
             end
             % Check input parameters
-            p = inputParser;
-            p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
-            try
-                p.parse(varargin{:});
-            catch err
-                log.printError(err.message);
-                log.printError('Usage: ShowTables(arg,param)');
-                delete(app);
-                return
+            if isOctave
+                app.tableView=cType.TableView.GUI;
+            else
+                app.tableView=cType.TableView.HTML;
             end
-            param=p.Results;
             if isa(arg,'cThermoeconomicModel')
                 res=arg.getModelInfo;
             else
@@ -72,7 +71,7 @@ classdef TableViewer < handle
                 'units', 'normalized','position',[0.01 0.01 0.98 0.98]);
             set(app.fig,'visible','on');
             app.tableIndex=tbl;
-            app.TableView=cType.getTableView(param.View);
+            app.resultInfo=arg;
         end
 
         function setActiveTable(app,~,event)
@@ -81,38 +80,12 @@ classdef TableViewer < handle
             indices=event.Indices;
             idx=indices(1);
             app.activeTable=app.tableIndex.Content{idx};
-            viewTable(app.activeTable,app.TableView);
+            viewTable(app.activeTable,app.tableView);
             sg=(indices(2)==cType.GRAPH_COLUMN);
-            if app.activeTable.isGraph && sg 
-                app.showGraph;
+            if app.activeTable.isGraph && sg
+               graph=app.tableIndex.RowNames{idx};
+               showGraph(app.resultInfo,graph);
             end
-        end
-
-        function showGraph(app)
-        % Show graph from tableIndex
-            log=cStatus(cType.VALID);
-            option=[];
-            tbl=app.activeTable;
-            info=app.tableIndex.Info;
-            if ~isValid(tbl) || ~isValid(info)
-                log.printError('Invalid graph table: %s',tbl.Name);
-                return
-            end
-            % Get default optional parameters
-            switch tbl.GraphType
-                case cType.GraphType.DIAGNOSIS
-                    option=true;
-                case cType.GraphType.DIGRAPH
-                    option=info.getNodeTable(graph);
-                case cType.GraphType.SUMMARY
-                    if tbl.isFlowsTable
-                        option=info.getDefaultFlowVariables;
-                    else
-                        option=info.getDefaultProcessVariables;
-                    end
-            end
-            % Show Graph
-            showGraph(tbl,option);
         end
 
         function closeApp(app,~,~)

@@ -165,7 +165,6 @@ classdef cType
 		% Type of columns for uitables
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
-        COLUMN_SCALE=7;
         % File Extensions
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7,'LaTeX',8);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html','LaTeX','.tex');
@@ -258,7 +257,10 @@ classdef cType
             res=cType.getTypeId(cType.Resources,text);
         end
 
-		
+		function res=getFormatId(text)
+		% Get internal code of a resources cost type text
+			res=cType.getTypeId(cType.Format,text);
+		end
 
 		function res=getCostTables(text)
 		% Get id for CostTables option

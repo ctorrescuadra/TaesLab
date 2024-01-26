@@ -28,7 +28,7 @@ function res=ListResultTables(varargin)
 %       res - table object in the format specified in ExportAs
 %               and the selected columns
 %
-    res=cStatusLogger(cType.ERROR);
+    log=cStatusLogger(cType.ERROR);
     % Check input parameters
     p = inputParser;
     p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
@@ -38,8 +38,8 @@ function res=ListResultTables(varargin)
     try
 		p.parse(varargin{:});
     catch err
-        res.printError(err.message);
-        res.printError('Usage: ViewTable(arg,options)');
+        log.printError(err.message);
+        log.printError('Usage: ViewTable(arg,options)');
         return
     end
     param=p.Results;
@@ -51,12 +51,12 @@ function res=ListResultTables(varargin)
     end
     % Export the table
     option=cType.getVarMode(param.ExportAs);
-    res=exportTable(tbl,option);
-    % View the table
-    if nargin>0
-        option=cType.getTableView(param.View);
-        viewTable(tbl,option);
+    if nargout>0
+        res=exportTable(tbl,option);
     end
+    % View the table
+    option=cType.getTableView(param.View);
+    viewTable(tbl,option);
     % Save table 
     if ~isempty(param.SaveAs)
         log=saveTable(tbl,param.SaveAs);

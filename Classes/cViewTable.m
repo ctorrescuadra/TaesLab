@@ -34,7 +34,7 @@ classdef cViewTable < cStatusLogger
 					'xScale',0.8,'yScale',0.8,'xoffset',10,'yoffset',10,...
 					'FontName','Consolas','FontSize',10);
 			else
-				param=struct('ColumnScale',8,'RowWidth',23,'xMin',240,...
+				param=struct('ColumnScale',7,'RowWidth',23,'xMin',240,...
 				'xScale',0.8,'yScale',0.8,'xoffset',12,'yoffset',23,...
 				'FontName','FixedWidth','FontSize',12);
 			end
@@ -45,7 +45,7 @@ classdef cViewTable < cStatusLogger
 			obj.format=tmp(2:end);
 			obj.fontname=param.FontName;
 			obj.fontsize=param.FontSize;
-			wcol=cType.COLUMN_SCALE*tbl.getColumnWidth;
+			wcol=param.ColumnScale*tbl.getColumnWidth;
 			% Set the window size and position
 			ss=get(groot,'ScreenSize');
 			xs=min(param.xScale*ss(3),sum(wcol)+param.xoffset);
