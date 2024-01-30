@@ -18,9 +18,7 @@ if data.NrOfStates>1
 	[~,param.State]=optionChoice('Select State:',data.States);
 end
 % Get TableFP
-options.VarMode=cType.VarMode.NONE;
-options.VarFormat=false;
 res=DiagramFP(data,param);
 if ~res.isError
-	tbl=outputResults(res,options);
+	tbl=outputResults(res);
 end

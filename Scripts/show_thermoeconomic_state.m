@@ -17,9 +17,7 @@ if data.NrOfStates>1
 	[~,param.State]=optionChoice('Select State:',data.States);
 end
 % Show results
-options.VarMode=cType.VarMode.NONE;
-options.VarFormat=false;
 res=ThermoeconomicState(data,param);
 if res.isValid
-	tbl=outputResults(res,options);
+	tbl=outputResults(res);
 end

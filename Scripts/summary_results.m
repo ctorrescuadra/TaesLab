@@ -12,9 +12,7 @@ if data.isError
 	return
 end
 % Show results
-options.VarMode=cType.VarMode.NONE;
-options.VarFormat=false;
 res=SummaryResults(data);
 if ~res.isError
-	tbl=outputResults(res,options);
+	tbl=outputResults(res);
 end

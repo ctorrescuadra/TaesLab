@@ -26,9 +26,7 @@ if data.isResourceCost
     end
 end
 % Solve and show results
-options.VarMode=cType.VarMode.NONE;
-options.VarFormat=false;
 res=ThermoeconomicAnalysis(data,param);
 if res.isValid
-	tbl=outputResults(res,options);
+	tbl=outputResults(res);
 end

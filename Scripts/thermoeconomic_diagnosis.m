@@ -25,9 +25,7 @@ if askQuestion('Compute Waste Diagnosis','Y')
 	param.DiagnosisMethod='WASTE_INTERNAL';
 end
 % Solve and show results
-options.VarMode=cType.VarMode.NONE;
-options.VarFormat=false;
 res=ThermoeconomicDiagnosis(data,param);
 if res.isValid
-	tbl=outputResults(res,options);
+	tbl=outputResults(res);
 end

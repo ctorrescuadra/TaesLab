@@ -8,6 +8,8 @@ function tbl=outputResults(res,options)
 %
     tbl=[];
     log=cStatusLogger();
+	options.VarFormat=false;
+	[nopt,options.VarMode]=optionChoice('Select Variable Output:',cType.VarModeOptions);
 	ShowConsole=askQuestion('Show in Console','Y');
 	if ShowConsole
 		res.printResults;
@@ -20,8 +22,8 @@ function tbl=outputResults(res,options)
 		log=res.saveResults(resFileName);
 		printLogger(log);
     end
-    if options.VarMode ~= cType.VarMode.NONE
+	if nopt ~= cType.VarMode.NONE
 	    tbl=res.getResultTables(options.VarMode,options.VarFormat);
 	    log.printInfo('Tables (tbl) available in Variables Editor');
-    end
+	end
 end

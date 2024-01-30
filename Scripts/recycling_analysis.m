@@ -29,9 +29,7 @@ if data.NrOfWastes>1
     [~,param.WasteFlow]=optionChoice('Select Waste Flow:',data.WasteData.Flows);
 end
 % Get Results
-options.VarMode=cType.VarMode.NONE;
-options.VarFormat=false;
-res=WasteRecycling(data,param);
+res=WasteAnalysis(data,param);
 if ~res.isError
-	tbl=outputResults(res,options);
+	tbl=outputResults(res);
 end
