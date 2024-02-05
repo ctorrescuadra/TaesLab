@@ -1306,7 +1306,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if strcmp(obj.ActiveWaste,value)
-                log.printDebugInfo('No parameter change. The new state is equal to the previous one');
+                obj.printDebugInfo('No parameter change. The new state is equal to the previous one');
                 return
             end
             res=true;

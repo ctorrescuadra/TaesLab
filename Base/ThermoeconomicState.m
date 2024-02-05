@@ -7,6 +7,8 @@ function res=ThermoeconomicState(data,varargin)
 %   	options - A structure contains additional parameters:
 %			State - Indicate a state to get exergy values.
 %               If not provided, first state is used
+%           Show -  Show results on console (true/false)
+%           SaveAs - Save results in an external file
 % 	OUTPUT:
 %		res - cResultsInfo object contains the results of the exergy analysis for the required state
 %   	The following tables are obtained:
@@ -22,6 +24,8 @@ function res=ThermoeconomicState(data,varargin)
 	p = inputParser;
 	p.addRequired('data',checkModel);
 	p.addParameter('State','',@ischar);
+    p.addParameter('Show',false,@islogical);
+    p.addParameter('SaveAs','',@ischar);
 	try
 		p.parse(data,varargin{:});
 	catch err
@@ -54,5 +58,12 @@ function res=ThermoeconomicState(data,varargin)
 	else
 		pm.printLogger;
 		res.printError('Invalid Process Model. See error log');
-	end
+    end
+    % Show and Save results if required
+    if param.Show
+        printResults(res);
+    end
+    if ~isempty(param.SaveAs)
+        SaveResults(res,param.SaveAs);
+    end
 end

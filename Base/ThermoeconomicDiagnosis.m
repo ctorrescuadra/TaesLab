@@ -10,6 +10,8 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %           DiagnosisMethod - Select the method to compute diagnosis
 %               WASTE_EXTERNAL: Waste are considered output, and method compute cost variation
 %               WASTE_INTERNAL: Waste are allocated to productive units, and method compute Malfunction cost of wastes
+%           Show -  Show results on console (true/false)
+%           SaveAs - Save results in an external file
 %   OUTPUT:
 %       res - cResultInfo object contains the results of thermoeconomic diagnosis.
 %           It contains the following tables
@@ -27,6 +29,8 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     p.addParameter('ReferenceState','',@ischar)
 	p.addParameter('State','',@ischar);
     p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
+    p.addParameter('Show',false,@islogical);
+    p.addParameter('SaveAs','',@ischar);
     try
         p.parse(data,varargin{:});
     catch err
@@ -93,5 +97,13 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     else
         dgn.printLogger;
         res.printError('Invalid Thermoeconomic Diagnosis. See error log');
+    end
+    % Show and Save results if required
+    if param.Show
+        summaryDiagnosis(res);
+        printResults(res);
+    end
+    if ~isempty(param.SaveAs)
+        SaveResults(res,param.SaveAs);
     end
 end

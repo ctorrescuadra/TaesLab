@@ -37,12 +37,15 @@ classdef ThermoeconomicPanel < handle
 		mn_ta           % Thermoeconomic Analysis menu widget
         mn_td           % Thermoeconomic Diagnosis menu widget
         mn_ra           % Recycling Analysis menu widget
+        mn_fp           % Diagram FP menu widget
+        mn_pd           % Productive Daigram menu widget
         mn_gs           % Summary Results menu widget
         mn_vr           % View Model Results menu widget
 		mn_sr  			% Save Result menu widget
         mn_sd           % Save Data Model menu widget
         mn_ss           % Save General Summary menu widget
-        mn_fp           % Save Diagram FP menu widget
+        mn_sfp          % Save Diagram FP menu widget
+        mn_spd          % Save Productive Diagram menu widget
 		tb_ps			% Productive Structure tool bar widget
 		tb_ts           % Thermoeconomic State tool bar widget
         tb_ta			% Thermoeconomic Analysis tool bar widget
@@ -110,11 +113,14 @@ classdef ThermoeconomicPanel < handle
                 set(app.mn_vr,'enable','on');
 				set(app.mn_sr,'enable','on');
                 set(app.mn_sd,'enable','on');
-                set(app.mn_fp,'enable','on');
+                set(app.mn_sfp,'enable','on');
+                set(app.mn_spd,'enable','on');
 				set(app.tb_ts,'enable','on');
                 set(app.tb_ta,'enable','on');
                 set(app.tb_ps,'enable','on');
                 set(app.tb_mr,'enable','on');
+                set(app.mn_fp,'enable','on');
+                set(app.mn_pd,'enable','on');
                 if data.NrOfStates>1
                 	set(app.sr_checkbox,'enable','on');
                 end
@@ -456,7 +462,46 @@ classdef ThermoeconomicPanel < handle
 				logtext=' ERROR: Recycling Analysis Values are not available';
 			end
 			set(app.log,'string',logtext);
+        end
 
+        function productiveDiagram(app,~,~)
+            set(app.log,'string','');
+			pd=app.model.productiveDiagram;
+			if pd.isValid
+                if app.console
+					printResults(pd);
+                end
+                assignin('base', 'productiveDiagram', pd);
+				logtext=sprintf(' INFO: Results in variable wasteAnalysis');
+                if app.showGraph
+                    if isMatlab
+						ViewResults(pd);
+                    end
+                end
+			else
+				logtext=' ERROR: Productive Diagrams are not available';
+			end
+			set(app.log,'string',logtext);
+        end
+
+        function diagramFP(app,~,~)
+            set(app.log,'string','');
+			fp=app.model.diagramFP;
+			if fp.isValid
+                if app.console
+					printResults(fp);
+                end
+                assignin('base', 'diagramFP', fp);
+				logtext=sprintf(' INFO: Results in variable wasteAnalysis');
+                if app.showGraph
+                    if isMatlab
+						ViewResults(fp);
+                    end
+                end
+			else
+				logtext=' ERROR: Productive Diagrams are not available';
+			end
+			set(app.log,'string',logtext);
         end
 
         function summaryResults(app,~,~)
@@ -485,12 +530,21 @@ classdef ThermoeconomicPanel < handle
         function modelResults(app,~,~)
         % Model Results callback
             res=app.model.getModelInfo;
-            assignin('base', 'modelResults', res);
-			logtext=sprintf(' INFO: Results in Variable modelResults');
+ 			if res.isValid
+                if app.console
+					printResults(res);
+                end
+				logtext=sprintf(' INFO: Results in variable Summary Results');
+				assignin('base', "modelResults", res);
+				if app.showGraph
+					if isMatlab
+						ViewResults(res);
+					end
+				end
+			else
+				logtext=' ERROR: Summary Results Values are not available';
+			end
 			set(app.log,'string',logtext);
-            if isMatlab  
-                ViewResults(app.model);
-            end
         end
 
         function createComponents(app)
@@ -522,8 +576,8 @@ classdef ThermoeconomicPanel < handle
             app.tb_td = uipushtool (tb, 'cdata', cType.getIcon('ThermoeconomicDiagnosis'),...
 			    'tooltipstring','Thermoeconomic Diagnosis',...
 			    'clickedcallback', @(src,evt) app.thermoeconomicDiagnosis(src,evt));
-            app.tb_ra = uipushtool (tb, 'cdata', cType.getIcon('RecyclingAnalysis'),...
-			    'tooltipstring','Thermoeconomic Diagnosis',...
+            app.tb_ra = uipushtool (tb, 'cdata', cType.getIcon('WasteAnalysis'),...
+			    'tooltipstring','Waste Analysis',...
 			    'clickedcallback', @(src,evt) app.wasteAnalysis(src,evt));
             app.tb_gs = uipushtool (tb, 'cdata', cType.getIcon('SummaryResults'),...
 			    'tooltipstring','General Summary',...
@@ -547,7 +601,9 @@ classdef ThermoeconomicPanel < handle
 				'callback', @(src,evt) app.saveDataModel(src,evt));
             app.mn_ss=uimenu (s, 'label', 'Summary',...
 				'callback', @(src,evt) app.saveSummary(src,evt));
-            app.mn_fp=uimenu (s, 'label', 'Diagram FP',...
+            app.mn_sfp=uimenu (s, 'label', 'Diagram FP',...
+				'callback', @(src,evt) app.saveDiagramFP(src,evt));
+            app.mn_spd=uimenu (s, 'label', 'Diagram FP',...
 				'callback', @(src,evt) app.saveDiagramFP(src,evt));
 			app.mn_ps=uimenu (e, 'label', 'Productive Structure',...
 				'callback', @(src,evt) app.productiveStructure(src,evt));
@@ -559,6 +615,10 @@ classdef ThermoeconomicPanel < handle
 				'callback', @(src,evt) app.thermoeconomicDiagnosis(src,evt));
             app.mn_ra=uimenu (e, 'label', 'Recycling Analysis',...
 				'callback', @(src,evt) app.wasteAnalysis(src,evt));
+            app.mn_pd=uimenu (e, 'label', 'Productive Diagram',...
+				'callback', @(src,evt) app.productiveDiagram(src,evt));
+            app.mn_fp=uimenu (e, 'label', 'Diagram FP',...
+				'callback', @(src,evt) app.diagramFP(src,evt));
             app.mn_gs=uimenu (e, 'label', 'Summary Results',...
 				'callback', @(src,evt) app.summaryResults(src,evt));
             app.mn_vr=uimenu (e, 'label', 'Model Results',...
@@ -791,7 +851,10 @@ classdef ThermoeconomicPanel < handle
 			set(app.mn_sr,'enable','off');
             set(app.mn_sd,'enable','off');
             set(app.mn_ss,'enable','off');
+            set(app.mn_sfp,'enable','off');
+            set(app.mn_spd,'enable','off');
             set(app.mn_fp,'enable','off');
+            set(app.mn_pd,'enable','off');
 			set(app.tb_ts,'enable','off');
 			set(app.tb_ta,'enable','off');
 			set(app.tb_ps,'enable','off');

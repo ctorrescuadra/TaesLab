@@ -6,6 +6,8 @@ function res=DiagramFP(data,varargin)
 %		data - cReadModel Object containing the data information
 %   	option - a structure contains additional parameters (optional)
 %			State - Indicate a state to get exergy values. If not provided, first state is used
+%           Show -  Show results on console (true/false)
+%           SaveAs - Save results in an external file 
 % 	OUTPUT:
 %		res - cResultInfo object contains the adjacency FP table and additional variables
 % See also cModelFPR, cResultInfo
@@ -16,6 +18,8 @@ function res=DiagramFP(data,varargin)
 	p = inputParser;
 	p.addRequired('data',checkModel);
 	p.addParameter('State','',@ischar);
+    p.addParameter('Show',false,@islogical);
+    p.addParameter('SaveAs','',@ischar);
 	try
 		p.parse(data,varargin{:});
 	catch err
@@ -43,6 +47,17 @@ function res=DiagramFP(data,varargin)
 	% Get FP Diagram model and set results
 	pm=cModelFPR(ex);
     dfp=cDiagramFP(pm);
+    if ~isValid(dfp)
+        dfp.printLogger;
+        res.printError('Invalid Diagram FP. See error log');
+    end
 	res=dfp.getResultInfo(data.FormatData);
     res.setProperties(data.ModelName,param.State);
+    % Show and Save results if required
+    if param.Show
+        printResults(res);
+    end
+    if ~isempty(param.SaveAs)
+        SaveResults(res,param.SaveAs);
+    end
 end

@@ -15,6 +15,9 @@ function res = WasteAnalysis(data,varargin)
 %               GENERALIZED - Only Generalized costs are selected
 %               ALL - Both Direct and Generalized are selected
 %           ResourceSample: Resource sample name
+%           Show -  Show results on console (true/false)
+%           SaveAs - Save results in an external file
+%
 %   OUTPUT:
 %       res - cResultInfo object with the waste analysis tables:
 %               cType.Tables.WASTE_DEFINITION (wd)
@@ -33,7 +36,8 @@ function res = WasteAnalysis(data,varargin)
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('ActiveWaste','',@ischar);
     p.addParameter('Recycling',true,@islogical);
-
+    p.addParameter('Show',false,@islogical);
+    p.addParameter('SaveAs','',@ischar);
     try
         p.parse(data,varargin{:});
     catch err
@@ -117,5 +121,12 @@ function res = WasteAnalysis(data,varargin)
     else
         ra.printLogger;
         res.printError('Invalid Recycling Analysis. See Error Log');
+    end
+    % Show and Save results if required
+    if param.Show
+        printResults(res);
+    end
+    if ~isempty(param.SaveAs)
+        SaveResults(res,param.SaveAs);
     end
 end

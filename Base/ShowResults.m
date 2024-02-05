@@ -7,7 +7,7 @@ function res=ShowResults(arg,varargin)
 %       options - an structure contains additional parameters
 %           Table: Name of the table to show. 
 %               If empty print on console all the results tables
-%           View: Select the way to show the table
+%           Show: Select the way to show the table
 %               CONSOLE - show in console (default)
 %               GUI - use uitable
 %               HTML- use web browser
@@ -36,7 +36,7 @@ function res=ShowResults(arg,varargin)
     % Check input parameters
     p = inputParser;
     p.addParameter('Table','',@ischar);
-    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('Show',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@ischar);
     try
@@ -64,7 +64,7 @@ function res=ShowResults(arg,varargin)
         res=exportTable(tbl,option);
     end
     % View the table
-    option=cType.getTableView(param.View);
+    option=cType.getTableView(param.Show);
     viewTable(tbl,option);
     % Save table 
     if ~isempty(param.SaveAs)

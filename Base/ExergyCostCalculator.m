@@ -12,6 +12,8 @@ function res=ExergyCostCalculator(data,varargin)
 %           	GENERALIZED: calculates generalized exergy cost tables
 %           	ALL: calculate both kind of tables
 %       	ResourceSample - Select a sample in ResourcesCost table.  If missing first sample is taken
+%           Show -  Show results on console (true/false)
+%           SaveAs - Save results in an external file
 % 	OUTPUT:
 %   	res - A cResultInfo object contains the results of Exergy Cost
 %	   		The following tables are obtained if DirectCost is selected
@@ -36,6 +38,8 @@ function res=ExergyCostCalculator(data,varargin)
 	p.addParameter('State','',@ischar);
 	p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
+    p.addParameter('Show',false,@islogical);
+    p.addParameter('SaveAs','',@ischar);
     try
 		p.parse(data,varargin{:});
     catch err
@@ -91,4 +95,11 @@ function res=ExergyCostCalculator(data,varargin)
 	end
 	res=ect.getResultInfo(data.FormatData,param);
 	res.setProperties(data.ModelName,param.State);
+    % Show and Save results if required
+    if param.Show
+        printResults(res);
+    end
+    if ~isempty(param.SaveAs)
+        SaveResults(res,param.SaveAs);
+    end
 end

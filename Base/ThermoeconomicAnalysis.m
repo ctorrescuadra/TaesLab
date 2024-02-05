@@ -13,6 +13,8 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %               ALL: calculate both kind of tables
 %           ResourceSample - Select a sample in ResourcesCost table.  
 %            If missing first sample is taken
+%           Show -  Show results on console (true/false)
+%           SaveAs - Save results in an external file
 % OUTPUT:
 %   res - cModelResults object contains the results of thermoeconomic Analysis
 %      If DirectCost is selected (default) the follwing tables are obtained:
@@ -41,6 +43,8 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	p.addParameter('State','',@ischar);
 	p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
+    p.addParameter('Show',false,@islogical);
+    p.addParameter('SaveAs','',@ischar);
     try
 		p.parse(data,varargin{:});
     catch err
@@ -96,4 +100,11 @@ function res=ThermoeconomicAnalysis(data,varargin)
     end
     res=fpm.getResultInfo(data.FormatData,param);
     res.setProperties(data.ModelName,param.State);
+    % Show and Save results if required
+    if param.Show
+        printResults(res);
+    end
+    if ~isempty(param.SaveAs)
+        SaveResults(res,param.SaveAs);
+    end
 end
