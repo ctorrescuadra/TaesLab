@@ -155,12 +155,13 @@ classdef (Sealed) cExergyCost < cExergyModel
             narginchk(1,2);
             if nargin==1
                 cm=obj.getMinCost;
-                cn=cm*(obj.mF-obj.mF0);
+                cn=cm*obj.mF0;
             else
                 cm=obj.getMinCost(rsc);
-                cn=cm*(obj.mF-obj.mF0) + rsc.zP - rsc.zF;
+                cn=cm*obj.mF0+rsc.zF;
             end
-            fict=[scaleRow(obj.mP*obj.mL,cn);cm];
+            ce=cn .* (obj.UnitConsumption-1);
+            fict=[scaleRow(obj.mP*obj.mL,ce);cm];
             if obj.isWaste
                 cmR=scaleRow(obj.opR,sum(fict));
                 rict=cSparseRow(obj.dprocess,cmR.mValues,obj.NrOfProcesses+1);
@@ -235,18 +236,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
 			res1=struct('CP',CP,'CPE',CPE,'CPR',CPR,'CPZ',CPZ,'CF',CF,'CR',CR,'Z',rsc.Z);
 			res2=struct('cP',cP,'cPE',cPE,'cPR',cPR,'cPZ',cPZ,'cF',cF,'cR',cR);
-		end
-		
-        function res=getProcessICT0(obj,fICT)
-		% get the processes ICT given the flows ICT
-        %  Input:
-		%   fICT - flows ICT
-        %  Output:
-        %   res - Processes ICT
-            tmp=scaleCol(fICT,obj.FlowsExergy);
-            [~,iAP]=obj.IncidenceMatrix(obj);
-            res=zerotol(divideCol(tmp*iAP',obj.ProductExergy));
-		end        
+        end  
         
         function res=getProcessICT(obj,fICT,rsc)
         % Compute the Process ICT from Flow ICT (Alternative)
@@ -258,8 +248,8 @@ classdef (Sealed) cExergyCost < cExergyModel
             else
                 cn=ones(1,obj.NrOfProcesses);
             end
-            ku=cn .* (obj.UnitConsumption-1);
-            opIn=fICT(1:end-1,:)*obj.mF+diag(ku);
+            ce=cn .* (obj.UnitConsumption-1);
+            opIn=fICT(1:end-1,:)*obj.mF+diag(ce);
             if obj.NrOfWastes>0
                 tmp=scaleRow(obj.mR,sum(fICT));
                 opEx=cSparseRow(obj.dprocess,tmp.mValues);

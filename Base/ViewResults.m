@@ -46,17 +46,9 @@ classdef ViewResults < matlab.apps.AppBase
             for i=1:M
                 b(i).CData=app.UIAxes.Colormap(i,:);
             end
-             title(app.UIAxes,obj.Title,'FontSize',14);
-            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
-            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
-            legend(app.UIAxes,obj.Legend,'FontSize',8);
+            app.SetGraphParameters(obj);
             app.UIAxes.XTick=obj.xValues; 
             app.UIAxes.XTickLabel=obj.Categories;
-            app.UIAxes.Legend.Location='northeastoutside';
-            app.UIAxes.Legend.Orientation='vertical';
-            app.UIAxes.XGrid = 'off';
-            app.UIAxes.YGrid = 'on';
-            app.UIAxes.GridLineWidth = 0.25;         
             app.UIAxes.Visible='on';
         end
         
@@ -84,25 +76,17 @@ classdef ViewResults < matlab.apps.AppBase
             bs.BaseValue=0.0;
             bs.LineStyle='-';
             bs.Color=[0.6,0.6,0.6];
-            title(app.UIAxes,obj.Title,'FontSize',14);
-            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
-            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
-            legend(app.UIAxes,obj.Legend,'FontSize',8);
+            app.SetGraphParameters(obj);
             app.UIAxes.XTick=obj.xValues; 
             app.UIAxes.XTickLabel=obj.Categories;
-            app.UIAxes.Legend.Location='northeastoutside';
-            app.UIAxes.Legend.Orientation='vertical';
-            app.UIAxes.XGrid = 'off';
-            app.UIAxes.YGrid = 'on';
             app.UIAxes.Visible='on';
         end
 
         % View the graph of summary table
-        function GraphSummary(app,tbl)
+        function GraphSummary(app,tbl,res)
             % get the graph parameters
             if tbl.isFlowsTable
-                res=app.Tree.SelectedNodes.Parent.NodeData;
-                var=res.Info.getDefaultFlowVariables;
+                var=res.getDefaultFlowVariables;
                 obj=cGraphResults(tbl,var);
             else
                 return
@@ -123,17 +107,9 @@ classdef ViewResults < matlab.apps.AppBase
             for i=1:M
                 b(i).CData=app.UIAxes.Colormap(i,:);
             end
-            title(app.UIAxes,obj.Title,'FontSize',14);
-            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
-            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
-            legend(app.UIAxes,obj.Legend,'FontSize',8);
+            app.SetGraphParameters(obj);
             app.UIAxes.XTick=obj.xValues;
-            app.UIAxes.TickLabelInterpreter='none';
             app.UIAxes.XTickLabel=obj.Categories;
-            app.UIAxes.Legend.Location='northeastoutside';
-            app.UIAxes.Legend.Orientation='vertical';
-            app.UIAxes.XGrid = 'off';
-            app.UIAxes.YGrid = 'on';
             app.UIAxes.Visible='on';
         end
 
@@ -150,17 +126,8 @@ classdef ViewResults < matlab.apps.AppBase
 		    plot(obj.xValues,obj.yValues,...
                 'Marker','diamond',...
                 'Parent',app.UIAxes);
-            app.UIAxes.XLimMode="auto";
-            app.UIAxes.YLimMode="auto";
-		    title(app.UIAxes,obj.Title,'Fontsize',14);
-		    xlabel(app.UIAxes,obj.xLabel,'fontsize',12);
-		    ylabel(app.UIAxes,obj.yLabel,'fontsize',12);
-            legend(app.UIAxes,obj.Legend,'FontSize',8);
+            app.SetGraphParameters(obj);
             app.UIAxes.XTick=obj.xValues;
-            app.UIAxes.Legend.Location='northeastoutside';
-            app.UIAxes.Legend.Orientation='vertical';
-            app.UIAxes.XGrid = 'off';
-            app.UIAxes.YGrid = 'on';
             app.UIAxes.Visible='on';
         end
 
@@ -187,6 +154,7 @@ classdef ViewResults < matlab.apps.AppBase
             xtick=(0:10:100);
             app.UIAxes.XTick = xtick;
             app.UIAxes.XTickLabel=arrayfun(@(x) sprintf('%3d',x),xtick,'UniformOutput',false);
+            app.UIAxes.XLimMode="auto";
             app.UIAxes.XGrid = 'on';
             app.UIAxes.YGrid = 'off';
             % Show the figure after all components are created
@@ -231,6 +199,20 @@ classdef ViewResults < matlab.apps.AppBase
             legend(app.UIAxes,'off');
             app.UIAxes.Visible='on';
         end
+        % Set some common graph parameters
+        function SetGraphParameters(app,obj)
+            title(app.UIAxes,obj.Title,'FontSize',14);
+            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
+            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
+            legend(app.UIAxes,obj.Legend,'FontSize',8);
+            yticks(app.UIAxes,'auto');
+            app.UIAxes.XGrid = 'off';
+            app.UIAxes.YGrid = 'on';
+            app.UIAxes.GridLineWidth = 0.1;
+            app.UIAxes.TickLabelInterpreter='none';
+            app.UIAxes.Legend.Location='northeastoutside';
+            app.UIAxes.Legend.Orientation='vertical';     
+        end
         
         % Show the index table in table panel
         function ViewIndexTable(app,res)
@@ -263,7 +245,7 @@ classdef ViewResults < matlab.apps.AppBase
                     case cType.GraphType.DIAGNOSIS
                         app.GraphDiagnosis(tbl);
                     case cType.GraphType.SUMMARY
-                        app.GraphSummary(tbl)
+                        app.GraphSummary(tbl,res)
                     case cType.GraphType.DIAGRAM_FP
                         app.ShowDiagramFP(tbl);
                     case cType.GraphType.DIGRAPH_FP
@@ -421,7 +403,7 @@ classdef ViewResults < matlab.apps.AppBase
             % Create UIFigure and hide until all components are created
             app.UIFigure = uifigure('Visible', 'off');
             app.UIFigure.Color = [1 1 1];
-            app.UIFigure.Position = [100 100 931 530];
+            app.UIFigure.Position = [100 100 976 530];
             app.UIFigure.Name = 'View Results';
             app.UIFigure.CloseRequestFcn = createCallbackFcn(app, @CloseApp, true);
 
@@ -457,7 +439,7 @@ classdef ViewResults < matlab.apps.AppBase
             app.UITable.Multiselect = 'off';
             app.UITable.Tooltip = {'Select a cell to display the results as table or graph'};
             app.UITable.Visible = 'off';
-            app.UITable.Position = [12 12 676 400];
+            app.UITable.Position = [12 12 720 400];
 
             % Create Label
             app.Label = uilabel(app.IndexTab);
@@ -474,7 +456,7 @@ classdef ViewResults < matlab.apps.AppBase
             % Create Table
             app.Table = uihtml(app.TablesTab);
             app.Table.Visible = 'off';
-            app.Table.Position = [10 10 680 432];
+            app.Table.Position = [10 10 720 432];
 
             % Create GraphsTab
             app.GraphsTab = uitab(app.TabGroup);
@@ -490,7 +472,7 @@ classdef ViewResults < matlab.apps.AppBase
             app.UIAxes.XColor = [0 0 0];
             app.UIAxes.Box = 'on';
             app.UIAxes.Visible = 'off';
-            app.UIAxes.Position = [2 1 679 446];
+            app.UIAxes.Position = [2 1 700 446];
 
             % Create LogField
             app.LogField = uilabel(app.GridLayout);

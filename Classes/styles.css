@@ -32,12 +32,12 @@ th {
 
 td.num {
     text-align: right;
-    padding-left:20px; padding-right:5px;
+    padding-left:15px; padding-right:5px;
 }
 
 th.num {
     text-align: right;
-    padding-left:20px; padding-right:5px;
+    padding-left:15px; padding-right:5px;
 }
 
 tr:nth-child(even) {

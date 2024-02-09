@@ -288,11 +288,11 @@ classdef cGraphResults < cStatusLogger
             end
 			obj.Name='Recycling Cost Analysis';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',label,']'];
-			obj.Categories={};
 			obj.xValues=(0:10:100);
 			obj.yValues=cell2mat(tbl.Data);
 			obj.xLabel='Recycling (%)';
 			obj.yLabel=['Unit Cost ',tbl.Unit];
+			obj.Categories=tbl.RowNames;
 			obj.Legend=tbl.ColNames(2:end);
 			if tbl.isGeneralCostTable
 				obj.BaseLine=0.0;

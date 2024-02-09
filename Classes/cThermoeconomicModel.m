@@ -535,20 +535,21 @@ classdef cThermoeconomicModel < cStatusLogger
         %
             tbl=obj.fmt.getTablesDirectory;
             tDict=obj.fmt.tDictionary;
-            atm=repmat({'false'},tbl.NrOfRows,1);
+            atm=zeros(tbl.NrOfRows,1);
             % Get the initial state of the table
-            for i=1:cType.ResultId.DIAGRAM_FP
+            for i=1:cType.ResultId.SUMMARY_RESULTS
                 rid=obj.getResults(i);
                 if ~isempty(rid)
                     list=rid.getListOfTables;
                     idx=cellfun(@(x) getIndex(tDict,x),list);
-                    atm(idx)={'true'};
+                    atm(idx)=true;
                 end
             end
             % Create the table
-            data=[tbl.Data,atm];
-            rowNames=tbl.RowNames;
-            colNames=[tbl.ColNames,{'Active'}];
+            rows=find(atm);
+            data=tbl.Data(rows,:);
+            rowNames=tbl.RowNames(rows);
+            colNames=tbl.ColNames;
             tmp=cTableData(data,rowNames,colNames);
             if nargin==1
                 res=tmp;

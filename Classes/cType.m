@@ -115,7 +115,7 @@ classdef cType
 		DATA_MODEL_FILE='DataModel';
         RESULT_FILE='ModelResults';
 		SUMMARY_FILE='SummaryResults';
-		DIAGRAM_FILE='DiagramFP';
+		DIAGRAM_FILE='Diagram';
 		% Format config file
 		CFGFILE='printformat.json';
 		% Table Names and keys

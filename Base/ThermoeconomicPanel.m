@@ -346,6 +346,24 @@ classdef ThermoeconomicPanel < handle
             set(app.log,'string',logtext);
         end
 
+		function saveProductiveDiagram(app,~,~)
+			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files';'*.html', 'HTML files'},...
+                                        'Select File',cType.DIAGRAM_FILE);
+            cd(path);
+            if ext % File has been selected
+				slog=saveProductiveDiagram(app.model,file);
+                if isValid(slog)
+				    set(app.ofile_text,'string',file);
+				    logtext=sprintf(' INFO: Productive Diagram Available in file %s',file);			    
+                else
+                    logtext=sprintf(' ERROR: Productive Diagram file %s could NOT be saved', file);
+                    printLogger(slog);
+                    app.model.addLogger(slog);
+                end
+            end
+            set(app.log,'string',logtext);
+        end
+
 		%%%%%%%%%%%%%%%%%%%%%%%
 		% Methods
 		%%%%%%%%%%%%%%%%%%%%%%%
@@ -362,7 +380,7 @@ classdef ThermoeconomicPanel < handle
 
 				if app.showGraph
 					if isOctave
-						viewTable(ps.Tables.flows);
+						TableViewer(ps);
 					else
 						ViewResults(ps);
 					end
@@ -385,7 +403,7 @@ classdef ThermoeconomicPanel < handle
 				logtext=sprintf(' INFO: Results in variable thermoeconomicState');
 				if app.showGraph
 					if isOctave
-                    	viewTable(ots.Tables.eprocesses);
+                    	TableViewer(ots);
 					else
 						ViewResults(ots);
 					end
@@ -408,7 +426,7 @@ classdef ThermoeconomicPanel < handle
 				assignin('base', 'thermoeconomicAnalysis', ota);
 				if app.showGraph
 					if isOctave
-						graphCost(ota)
+						TableViewer(ota)
 					else
 						ViewResults(ota);
 					end
@@ -431,7 +449,7 @@ classdef ThermoeconomicPanel < handle
 				logtext=sprintf(' INFO: Results in variable thermoeconomicDiagnosis');
                 if app.showGraph
                     if isOctave
-						graphDiagnosis(otd);
+						TableViewer(otd);
 					else
 						ViewResults(otd);
                     end
@@ -453,7 +471,7 @@ classdef ThermoeconomicPanel < handle
 				logtext=sprintf(' INFO: Results in variable wasteAnalysis');
                 if app.showGraph
                     if isOctave
-						graphRecycling(ra);
+						TableViewer(ra);
 					else
 						ViewResults(ra);
                     end
@@ -474,7 +492,9 @@ classdef ThermoeconomicPanel < handle
                 assignin('base', 'productiveDiagram', pd);
 				logtext=sprintf(' INFO: Results in variable wasteAnalysis');
                 if app.showGraph
-                    if isMatlab
+                    if isOctave
+						TableViewer(pd);
+					else
 						ViewResults(pd);
                     end
                 end
@@ -494,9 +514,11 @@ classdef ThermoeconomicPanel < handle
                 assignin('base', 'diagramFP', fp);
 				logtext=sprintf(' INFO: Results in variable wasteAnalysis');
                 if app.showGraph
-                    if isMatlab
+					if isOctave
+						TableViewer(fp);
+					else
 						ViewResults(fp);
-                    end
+					end
                 end
 			else
 				logtext=' ERROR: Productive Diagrams are not available';
@@ -516,7 +538,7 @@ classdef ThermoeconomicPanel < handle
 				assignin('base', 'summaryResults', srt);
 				if app.showGraph
 					if isOctave
-						graphSummary(srt);
+						TableViewer(srt);
 					else
 						ViewResults(srt);
 					end
@@ -537,7 +559,9 @@ classdef ThermoeconomicPanel < handle
 				logtext=sprintf(' INFO: Results in variable Summary Results');
 				assignin('base', "modelResults", res);
 				if app.showGraph
-					if isMatlab
+					if isOctave
+						TableViewer(res);
+					else
 						ViewResults(res);
 					end
 				end
@@ -603,8 +627,8 @@ classdef ThermoeconomicPanel < handle
 				'callback', @(src,evt) app.saveSummary(src,evt));
             app.mn_sfp=uimenu (s, 'label', 'Diagram FP',...
 				'callback', @(src,evt) app.saveDiagramFP(src,evt));
-            app.mn_spd=uimenu (s, 'label', 'Diagram FP',...
-				'callback', @(src,evt) app.saveDiagramFP(src,evt));
+            app.mn_spd=uimenu (s, 'label', 'Productive Diagram',...
+				'callback', @(src,evt) app.saveProductiveDiagram(src,evt));
 			app.mn_ps=uimenu (e, 'label', 'Productive Structure',...
 				'callback', @(src,evt) app.productiveStructure(src,evt));
 			app.mn_ts=uimenu (e, 'label', 'Thermoeconomic State',...
@@ -799,13 +823,13 @@ classdef ThermoeconomicPanel < handle
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) app.activateRecycling(src,evt),...
-					'position', [0.38 0.45 0.04 0.04]);
+					'position', [0.38 0.44 0.04 0.04]);
 
             app.sr_checkbox = uicontrol (hf,'style', 'checkbox',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) app.activateSummary(src,evt),...
-					'position', [0.38 0.39 0.04 0.04]);
+					'position', [0.38 0.38 0.04 0.04]);
 
             % Output Control Widgets
 			app.ofile_text = uicontrol (hf,'style', 'text',...
@@ -827,13 +851,13 @@ classdef ThermoeconomicPanel < handle
 					'units', 'normalized',...
 					'value', 0,...
 					'callback', @(src,evt) app.getPrinter(src,evt),...
-					'position', [0.38 0.15 0.04 0.04]);
+					'position', [0.38 0.14 0.04 0.04]);
 
 			app.gr_checkbox = uicontrol (hf,'style', 'checkbox',...
 					'units', 'normalized',...
 					'value', 0,...
 					'callback', @(src,evt) app.getShowGraph(src,evt),...
-					'position', [0.38 0.09 0.04 0.04]);
+					'position', [0.38 0.08 0.04 0.04]);
             % Make the figure visible
 			set(hf,'visible','on');
         end

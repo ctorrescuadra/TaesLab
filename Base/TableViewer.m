@@ -80,11 +80,12 @@ classdef TableViewer < handle
             indices=event.Indices;
             idx=indices(1);
             app.activeTable=app.tableIndex.Content{idx};
-            viewTable(app.activeTable,app.tableView);
             sg=(indices(2)==cType.GRAPH_COLUMN);
             if app.activeTable.isGraph && sg
                graph=app.tableIndex.RowNames{idx};
                showGraph(app.resultInfo,graph);
+            else
+                viewTable(app.activeTable,app.tableView);
             end
         end
 
