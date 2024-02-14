@@ -49,7 +49,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 			obj.mG=obj.mF*obj.mP+obj.mV;
 			obj.mL=zerotol(inv(full(eye(M)-obj.mG)));
             if (nargin==2) && isa(wd,'cWasteData')
-                obj.setWasteOperators(wd)
+                obj.setWasteOperators(wd);
             end
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
             obj.status=cType.VALID;

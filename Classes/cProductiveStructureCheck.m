@@ -69,6 +69,11 @@ classdef cProductiveStructureCheck < cResultId
                 return
             end
             obj.fDict=cDictionary({fdata.key});
+			if ~isValid(obj.fDict)
+				obj.addLogger(obj.fDict);
+				obj.messageLog(cType.ERROR,'Name of flows are duplicated');
+				return
+			end
             % Create products structure
             pdata=data.processes;
             for i=1:obj.NrOfProcesses
@@ -78,6 +83,11 @@ classdef cProductiveStructureCheck < cResultId
                 return
             end
 			obj.pDict=cDictionary({pdata.key});
+			if ~isValid(obj.pDict)
+				obj.addLogger(obj.fDict);
+				obj.messageLog(cType.ERROR,'Name of processes are duplicated');
+				return
+			end
             % Create productive groups (streams)
             obj.parser=cParseStream();
             for i=1:obj.NrOfProcesses

@@ -47,8 +47,6 @@ classdef ViewResults < matlab.apps.AppBase
                 b(i).CData=app.UIAxes.Colormap(i,:);
             end
             app.SetGraphParameters(obj);
-            app.UIAxes.XTick=obj.xValues; 
-            app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.Visible='on';
         end
         
@@ -77,8 +75,6 @@ classdef ViewResults < matlab.apps.AppBase
             bs.LineStyle='-';
             bs.Color=[0.6,0.6,0.6];
             app.SetGraphParameters(obj);
-            app.UIAxes.XTick=obj.xValues; 
-            app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.Visible='on';
         end
 
@@ -87,10 +83,10 @@ classdef ViewResults < matlab.apps.AppBase
             % get the graph parameters
             if tbl.isFlowsTable
                 var=res.getDefaultFlowVariables;
-                obj=cGraphResults(tbl,var);
             else
-                return
+                var=res.getDefaultProcessVariables; 				       
             end
+            obj=cGraphResults(tbl,var);
             % plot the graph
             M=numel(obj.Legend);
             app.UIAxes.Visible='off';
@@ -108,8 +104,6 @@ classdef ViewResults < matlab.apps.AppBase
                 b(i).CData=app.UIAxes.Colormap(i,:);
             end
             app.SetGraphParameters(obj);
-            app.UIAxes.XTick=obj.xValues;
-            app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.Visible='on';
         end
 
@@ -127,7 +121,6 @@ classdef ViewResults < matlab.apps.AppBase
                 'Marker','diamond',...
                 'Parent',app.UIAxes);
             app.SetGraphParameters(obj);
-            app.UIAxes.XTick=obj.xValues;
             app.UIAxes.Visible='on';
         end
 
@@ -206,8 +199,13 @@ classdef ViewResults < matlab.apps.AppBase
             ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
             legend(app.UIAxes,obj.Legend,'FontSize',8);
             yticks(app.UIAxes,'auto');
+            app.UIAxes.XTick=obj.xValues;
+            app.UIAxes.XTickLabel=obj.Categories;
             app.UIAxes.XGrid = 'off';
             app.UIAxes.YGrid = 'on';
+            app.UIAxes.YLimMode="auto";
+            tmp=ylim(app.UIAxes);
+            app.UIAxes.YLim=[obj.BaseLine, tmp(2)];
             app.UIAxes.GridLineWidth = 0.1;
             app.UIAxes.TickLabelInterpreter='none';
             app.UIAxes.Legend.Location='northeastoutside';
@@ -472,7 +470,7 @@ classdef ViewResults < matlab.apps.AppBase
             app.UIAxes.XColor = [0 0 0];
             app.UIAxes.Box = 'on';
             app.UIAxes.Visible = 'off';
-            app.UIAxes.Position = [2 1 700 446];
+            app.UIAxes.Position = [1 1 675 445];
 
             % Create LogField
             app.LogField = uilabel(app.GridLayout);

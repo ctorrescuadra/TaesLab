@@ -151,6 +151,10 @@ classdef cTablesDefinition < cStatusLogger
             tCodes=fieldnames(cType.Tables);
             tNames=struct2cell(cType.Tables);
             td=cDictionary(tNames);
+            if ~isValid(td)
+                obj.printError('Invalid tables dictionary');
+                return
+            end
             NT=numel(obj.cfgTables);
             NM=numel(obj.cfgMatrices);
             NS=numel(obj.cfgSummary);

@@ -1191,7 +1191,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if strcmp(obj.State,state)
-                log.printDebugInfo('No state change. The new state is equal to the previous one');
+                obj.printDebugInfo('No state change. The new state is equal to the previous one');
                 return
             end
             res=true;
@@ -1214,7 +1214,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if strcmp(obj.ReferenceState,state)
-                log.printDebugInfo('Reference and Operation State are the same');
+                obj.printDebugInfo('Reference and Operation State are the same');
                 return
             end
             idx=obj.DataModel.getStateId(state);
@@ -1231,7 +1231,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return       
             end
             if isempty(sample) || strcmp(obj.ResourceSample,sample)
-                log.printDebugInfo('No sample change. The new sample is equal to the previous one');
+                obj.printDebugInfo('No sample change. The new sample is equal to the previous one');
                 return
             end
             % Read resources and check if are valid
@@ -1261,7 +1261,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if strcmp(obj.CostTables,value)
-                log.printDebugInfo('No parameter change. The new state is equal to the previous one');
+                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end
             if bitget(pct,cType.GENERALIZED) && ~obj.isResourceCost
@@ -1292,7 +1292,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if strcmp(obj.DiagnosisMethod,value)
-                log.printDebugInfo('No parameter change. The new state is equal to the previous one');
+                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end
             res=true;
@@ -1307,7 +1307,7 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if strcmp(obj.ActiveWaste,value)
-                obj.printDebugInfo('No parameter change. The new state is equal to the previous one');
+                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end
             res=true;
@@ -1332,11 +1332,11 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if ~obj.isSummaryEnable
-                obj.printWarning('Summary Results requires more than one state');
+                log.printWarning('Summary Results requires more than one state');
                 return
             end
             if obj.Summary==value
-                log.printDebugInfo('No parameter change. The new state is equal to the previous one');
+                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end
             res=true;
@@ -1350,11 +1350,11 @@ classdef cThermoeconomicModel < cStatusLogger
                 return
             end
             if ~obj.isWaste
-                obj.printDebugInfo('Recycling Analysis requires waste');
+                log.printWarning('Recycling Analysis requires waste');
                 return
             end
             if obj.Recycling==value
-                log.printDebugInfo('No parameter change. The new state is equal to the previous one');
+                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end
             res=true;

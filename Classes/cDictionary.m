@@ -1,5 +1,5 @@
-classdef cDictionary < cTaesLab
-% cDictionary implementa a (key, id) dictionary for ExIOLab
+classdef cDictionary < cStatusLogger
+% cDictionary implementa a (key, id) dictionary for TaesLab
 %	It implements an supersed some method of containers.Map class 
 %	Methods:
 %   	res=obj.getKey(index)
@@ -8,24 +8,31 @@ classdef cDictionary < cTaesLab
 %		res=obj.getEntries(format)
 % See also cMapList, cMapKey
 %
-	properties (GetAccess=public,SetAccess=protected)
-		NrOfEntries % Size of the dictionary
-		Keys        % Array Cell with the keys
-	end
   
     properties(Access=private)
         map
         values
+		keys
     end
 
 	methods
 
         function obj = cDictionary(data)
 		% Construct an instance of this class
-			obj.Keys=data;
-			obj.NrOfEntries=numel(data);
-			obj.values=uint16(1:obj.NrOfEntries);
-			obj.map=containers.Map(obj.Keys,obj.values);
+			obj=obj@cStatusLogger(cType.VALID);
+			obj.map=containers.Map('KeyType','char','ValueType','uint8');
+			for i=1:numel(data)
+				if obj.map.isKey(data{i})
+					obj.messageLog(cType.ERROR,'Key %s is duplicated',data{i});
+				else
+					obj.map(data{i})=i;
+				end
+				if ~isValid(obj)
+					return
+				end
+			end
+			obj.keys=obj.map.keys;
+			obj.values=obj.map.values;
 		end
 
 		function res = existsKey(obj,key)
@@ -44,8 +51,8 @@ classdef cDictionary < cTaesLab
         function res = getKey(obj,idx)
 		% getKey return the corresponding key of a index
 			res='';
-			if idx>0 && idx<=obj.NrOfEntries
-				res=obj.Keys{idx};
+			if idx>0 && idx<=length(obj)
+				res=obj.keys{idx};
 			end
 		end
 
@@ -56,33 +63,39 @@ classdef cDictionary < cTaesLab
 			if nargin==1
 				format=cType.DEFAULT_VARMODE;
 			end
-			rowNames=obj.Keys;
-			data=numcell(obj.values)';
-			entries=[rowNames, data];
+			rowNames=obj.keys;
+			data=obj.values;
+			entries=[rowNames; data]';
 			colNames={'Key','Id'};
 			fid=cType.getVarMode(format);
 			if cType.isEmpty(fid)
 				fid=cType.VarMode.CELL;
 			end
 			switch fid
-			case cType.VarMode.CELL
-				res=[colNames;entries];
-			case cType.VarMode.STRUCT
-				res=cell2struct(entries,colNames,2);
-			case cType.VarMode.TABLE
-				tbl=cTableData(data,rowNames,colNames);
-				if isMatlab
-					res=tbl.getMatlabTable;
-				else
-					res=tbl;
-				end
+                case cType.VarMode.NONE
+                    res=[colNames;entries];
+			    case cType.VarMode.CELL
+				    res=[colNames;entries];
+			    case cType.VarMode.STRUCT
+				    res=cell2struct(entries,colNames,2);
+			    case cType.VarMode.TABLE
+				    tbl=cTableData(data,rowNames,colNames);
+				    if isMatlab
+					    res=tbl.getMatlabTable;
+				    else
+					    res=tbl;
+				    end
 			end
 		end
 
-		function res=length(obj)
+        function res=size(obj)
+        % Overload size function
+           res=size(obj.map);
+        end
+        
+        function res=length(obj)
 		% Overload length function
-			res=obj.NrOfEntries;
+			res=obj.map.Count;
 		end
-
 	end
 end
