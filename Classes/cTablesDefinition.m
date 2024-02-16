@@ -240,6 +240,7 @@ classdef cTablesDefinition < cStatusLogger
             end
             res=cTableData(data,rowNames,colNames);
             res.setProperties('tdir','Tables Directory');
+            res.setState('SUMMARY');
             if isempty(obj.tDirectory)
                 obj.tDirectory=res;
             end

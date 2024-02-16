@@ -86,7 +86,7 @@ classdef cBuildHTML < cStatusLogger
             % Body and Table head
             res=sprintf('\t<body>\n');
             res=[res,sprintf('\t\t<h3>\n')];
-            res=[res,sprintf('\t\t\t%s\n',tbl.Description)];
+            res=[res,sprintf('\t\t\t%s [%s]\n',tbl.Description,tbl.State)];
             res=[res,sprintf('\t\t</h3>\n')];
             res=[res,sprintf('\t\t<table>\n')];
             res=[res,sprintf('\t\t\t<thead>\n')];

@@ -11,8 +11,6 @@ classdef cDictionary < cStatusLogger
   
     properties(Access=private)
         map
-        values
-		keys
     end
 
 	methods
@@ -20,19 +18,18 @@ classdef cDictionary < cStatusLogger
         function obj = cDictionary(data)
 		% Construct an instance of this class
 			obj=obj@cStatusLogger(cType.VALID);
-			obj.map=containers.Map('KeyType','char','ValueType','uint8');
+			m=containers.Map('KeyType','char','ValueType','uint8');
 			for i=1:numel(data)
-				if obj.map.isKey(data{i})
+				if m.isKey(data{i})
 					obj.messageLog(cType.ERROR,'Key %s is duplicated',data{i});
 				else
-					obj.map(data{i})=i;
+					m(data{i})=i;
 				end
 				if ~isValid(obj)
 					return
 				end
 			end
-			obj.keys=obj.map.keys;
-			obj.values=obj.map.values;
+			obj.map=m;
 		end
 
 		function res = existsKey(obj,key)
@@ -43,7 +40,7 @@ classdef cDictionary < cStatusLogger
         function res = getIndex(obj,key)
 		% getIndex return the corresponding index of a key
 			res=cType.EMPTY;
-			if obj.existsKey(key)
+			if obj.map.isKey(key)
 				res=obj.map(key);
 			end
 		end
@@ -52,7 +49,7 @@ classdef cDictionary < cStatusLogger
 		% getKey return the corresponding key of a index
 			res='';
 			if idx>0 && idx<=length(obj)
-				res=obj.keys{idx};
+				res=obj.map.keys{idx};
 			end
 		end
 
@@ -63,29 +60,11 @@ classdef cDictionary < cStatusLogger
 			if nargin==1
 				format=cType.DEFAULT_VARMODE;
 			end
-			rowNames=obj.keys;
-			data=obj.values;
-			entries=[rowNames; data]';
+			rowNames=obj.map.keys;
+			data=obj.map.values';
 			colNames={'Key','Id'};
-			fid=cType.getVarMode(format);
-			if cType.isEmpty(fid)
-				fid=cType.VarMode.CELL;
-			end
-			switch fid
-                case cType.VarMode.NONE
-                    res=[colNames;entries];
-			    case cType.VarMode.CELL
-				    res=[colNames;entries];
-			    case cType.VarMode.STRUCT
-				    res=cell2struct(entries,colNames,2);
-			    case cType.VarMode.TABLE
-				    tbl=cTableData(data,rowNames,colNames);
-				    if isMatlab
-					    res=tbl.getMatlabTable;
-				    else
-					    res=tbl;
-				    end
-			end
+			tbl=cTableData(data,rowNames,colNames);
+			res=exportTable(tbl,format);
 		end
 
         function res=size(obj)
