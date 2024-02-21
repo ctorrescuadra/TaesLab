@@ -57,6 +57,9 @@ classdef cResourceData < cStatusLogger
 					obj.messageLog(cType.ERROR,'Resource flow key %s is missing',se(i).key);
 				end
 			end
+            if ~obj.isValid
+                return
+            end
 		    % Read processes costs	
 			if isfield(data,'processes')
 				if all(isfield(data.processes,{'key','value'}))

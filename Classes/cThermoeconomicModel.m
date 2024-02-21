@@ -687,7 +687,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %   log - cStatusLogger object containing the status and error messages
             msr=obj.getSummaryResults;
             if isempty(msr) || ~isValid(msr)
-                obj.printDebugInfo('Summary results not available');
+                obj.printDebugInfo('Summary Results not available');
                 return
             end
             log=saveResults(msr,filename);
@@ -1327,12 +1327,11 @@ classdef cThermoeconomicModel < cStatusLogger
         function res=checkSummary(obj,value)
         % Ckeck Summary parameter
             res=false;
-            log=cStatus();
             if ~obj.activeSet
                 return
             end
             if ~obj.isSummaryEnable
-                log.printWarning('Summary Results requires more than one state');
+                obj.printDebugInfo('Summary Results requires more than one state');
                 return
             end
             if obj.Summary==value
