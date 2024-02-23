@@ -206,7 +206,6 @@ classdef ViewResults < matlab.apps.AppBase
             app.UIAxes.YLimMode="auto";
             tmp=ylim(app.UIAxes);
             app.UIAxes.YLim=[obj.BaseLine, tmp(2)];
-            app.UIAxes.GridLineWidth = 0.1;
             app.UIAxes.TickLabelInterpreter='none';
             app.UIAxes.Legend.Location='northeastoutside';
             app.UIAxes.Legend.Orientation='vertical';     
@@ -271,7 +270,6 @@ classdef ViewResults < matlab.apps.AppBase
             delete(app.UIAxes.Children)
             app.LogField.Text='';
         end
-
     end
 
     % Callbacks that handle component events

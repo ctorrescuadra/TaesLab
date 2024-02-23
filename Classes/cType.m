@@ -172,7 +172,7 @@ classdef cType
 		CSSFILE='styles.css';
 		% Icon Files
 		IconFile=struct('ProductiveStructure','ps.png','ThermoeconomicState','ts.png','ThermoeconomicAnalysis','ta.png',...
-            'ThermoeconomicDiagnosis','td.png','WasteAnalysis','wa.png','SummaryResults','gs.png','ModelResults','mr.png');
+            'ThermoeconomicDiagnosis','td.png','WasteAnalysis','wa.png','SummaryResults','sr.png','ModelResults','mr.png');
         % Taess app welcome image
 		TaesImage='TaesLab.png';
         % Taess app Resources folder
