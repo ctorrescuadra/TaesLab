@@ -113,11 +113,12 @@ classdef (Sealed) cWasteAnalysis < cResultId
             % Save original values
             rwv=wd.Values;
             wrc=obj.wasteTable.RecycleRatio(wId); % Save original value
+            sol=obj.modelFP;
+            opW=sol.WasteOperators;
             % Generate the table
             x=(0:0.1:1)';
             yd=zeros(size(x,1),size(outputId,2));
-            yg=zeros(size(x,1),size(outputId,2));
-            sol=obj.modelFP;
+            yg=zeros(size(x,1),size(outputId,2));     
             for i=1:size(x,1)
                 obj.wasteTable.setRecycleRatio(wId,x(i));
                 sol.setWasteOperators;
@@ -138,6 +139,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             % Restore original values
             wd.setRecycleRatio(wId,wrc);
             wd.updateValues(rwv);
+            sol.setWasteOperators(opW);
         end
     end
 end

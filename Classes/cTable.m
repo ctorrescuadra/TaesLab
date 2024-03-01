@@ -64,7 +64,7 @@ classdef (Abstract) cTable < cStatusLogger
         %
             if nargin==1
                 if isOctave
-                    option=cType.TableView.GUI;
+                    option=cType.TableView.CONSOLE;
                 else
                     option=cType.TableView.HTML;
                 end

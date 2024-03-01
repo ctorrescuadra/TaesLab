@@ -65,7 +65,7 @@ classdef cType
         GENERALIZED=2             % Generalized Cost Tables Bit
 		CAPACITY=8	              % Initial capacity for cQueue and cStack
 		MAX_RESULT=5              % Number of Results in cModelResults
-		MAX_RESULT_INFO=10        % Maximun cResultInfo groups
+		MAX_RESULT_INFO=11        % Maximun cResultInfo groups
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance
@@ -149,13 +149,13 @@ classdef cType
         % Result Id types
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
             'WASTE_ANALYSIS',4,'THERMOECONOMIC_DIAGNOSIS',5,'PRODUCTIVE_DIAGRAM',6,'DIAGRAM_FP',7,...
-			'SUMMARY_RESULTS',8,'EXERGY_COST_CALCULATOR',9,'RESULT_MODEL',10,'DATA_MODEL',11);
+			'SUMMARY_RESULTS',8,'EXERGY_COST_CALCULATOR',9,'DATA_MODEL',10,'RESULT_MODEL',11);
 		% Names for cModelResults	
 		Results={'Productive Structure','Thermoeconomic State','Thermoeconomic Analysis',...
 			'Waste Analysis','Thermoeconomic Diagnosis','Productive Diagram','Diagram FP',...
-			'Summary Results','Exergy Cost Calculator','Model Results','Data Model'};
+			'Summary Results','Exergy Cost Calculator','Data Model','Model Results'};
         ResultIndex={'psindex','tsindex','taindex','waindex','tdindex','pdindex','fpindex','srindex',...
-            'ecindex','rmindex','dmindex'};
+            'ecindex','dmindex','rmindex'};
 		% Tables Directory configuration
 		DirCols=struct('DESCRIPTION',1,'RESULT_NAME',2,'GRAPH',3,'TYPE',4,'CODE',5,'RESULT_CODE',6);
 		DirColNames={'Description','Results','Graph','Type','Code','Results Code'};

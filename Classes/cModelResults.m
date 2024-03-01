@@ -20,11 +20,9 @@ classdef (Sealed) cModelResults < cStatusLogger
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 return
             end
-            ps=data.ProductiveStructure;
-            res=ps.getResultInfo(data.FormatData);
-            res.setProperties(data.ModelName,'SUMMARY');
             obj.results=cell(1,cType.MAX_RESULT_INFO);
-            obj.setResults(res);
+            dm=data.getResultInfo;
+            obj.setResults(dm);
             obj.status=cType.VALID;
         end
 

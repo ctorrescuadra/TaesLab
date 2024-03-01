@@ -6,23 +6,22 @@ classdef cResultInfo < cStatusLogger
 %   - Show the results in workspace
 %   - Show the results in graphic user interfaces
 %   - Save the results in files: XLSX, CSV, TXT and HTML
-%   The diferent types (ResultId) of cResultInfo object are defined in cType.ResultId 
+%   The diferent types (ResultId) of cResultInfo object are defined in cType.ResultId
 %   Methods:
-%       res=obj.getListOfTables;
 %       res=obj.getTable(name)
 %       obj.printTable(name)
-%       obj.viewTable(name);
-%       res=getTableIndex
-%       obj.viewTableIndex;
+%       obj.viewTable(name,option);
+%       res=obj.getTableIndex
+%       obj.viewTableIndex(option);
 %       obj.printResults;
 %       log=obj.saveResults(filename)
 %       res=obj.getResultTables(varmode,fmt)
 %       obj.summaryDiagnosis
-%       obj.showGraph(name,options) 
+%       obj.showGraph(name,options)
 % See: cResultTableBuilder, cTable
 %
     properties (GetAccess=public, SetAccess=private)
-        ResultId     % Result Id 
+        ResultId     % Result Id
         ResultName   % Result name
         Tables       % Struct containing the tables
         NrOfTables   % Number of tables
@@ -38,7 +37,7 @@ classdef cResultInfo < cStatusLogger
     methods
         function obj=cResultInfo(info,tables)
         % Construct an instance of this class
-        %  Usage: 
+        %  Usage:
         %   cResultInfo(info,tables)
         %  Input:
         %   info - cResultId containing the results
@@ -64,42 +63,14 @@ classdef cResultInfo < cStatusLogger
             obj.status=info.status;
         end
 
-        function setResultId(obj,id)
-        % Set ResultId
-            obj.ResultId=id;
-            obj.ResultName=cType.Results{id};
-        end
-        
-        function setProperties(obj,model,state)
-        % Set model and state properties
-            obj.ModelName=model;
-            cellfun(@(x) setState(x,state),obj.tableIndex.Content);
-            obj.State=state;
-        end
-
-        function status=isResultTable(obj)
-        % Determine if the tables are results
-            status=(obj.ResultId~=cType.ResultId.DATA_MODEL);
-        end
-            
-        function status=existTable(obj,name)
-        % Check if there is a table called name
-            status=isfield(obj.Tables,name);
-        end
-    
-        function res=getListOfTables(obj)
-        % Get the list of tables as cell array
-            res=fieldnames(obj.Tables);
-        end
-    
         function res = getTable(obj,name)
         % Get the table called name
-        %   Usage: 
+        %   Usage:
         %       res=obj.getTable(name)
         %   Input:
         %       name - Name of the table
         %   Output:
-        %       res - cTable object 
+        %       res - cTable object
             res = cStatusLogger;
             if obj.existTable(name)
                 res=obj.Tables.(name);
@@ -122,16 +93,17 @@ classdef cResultInfo < cStatusLogger
                 log.printError('Table name %s does NOT exists',name);
             end
         end
-    
+
         function viewTable(obj,name,varargin)
-        % View an individual table as a GUI Table
+        % View an individual table
         %   Usage:
         %       obj.viewTable(table,option)
         %   Input:
         %       name - Name of the table
         %       option - Way to display the table
-        %           cType.TableView.GUI (default)
-        %           cType.TableView.HTML
+        %           cType.TableView.CONSOLE 
+        %           cType.TableView.GUI
+        %           cType.TableView.HTML (default)
         %
             log=cStatus(cType.VALID);
             tbl=obj.getTable(name);
@@ -146,15 +118,24 @@ classdef cResultInfo < cStatusLogger
         % Get the Table Index
             res=obj.tableIndex;
         end
-        
+
         function viewTableIndex(obj,varargin)
-        % Print the index table in console
+        % View the index tables
+        %   Usage:
+        %       obj.viewTableIndex(table,option)
+        %   Input:
+        %       name - Name of the table
+        %       option - Way to display the table
+        %           cType.TableView.CONSOLE (default)
+        %           cType.TableView.GUI
+        %           cType.TableView.HTML
+        %       
             tbl=obj.tableIndex;
             tbl.viewTable(varargin{:});
         end
-    
+
         function printResults(obj)
-        % Print the formated tables on console
+        % Print the tables on console
             log=cStatus();
             if ~isValid(obj)
                 log.printError('Invalid object to print')
@@ -165,6 +146,7 @@ classdef cResultInfo < cStatusLogger
 
         function log=saveResults(obj,filename)
         % Save result tables in different file formats depending on file extension
+        %   Accepted extensions: xlsx, csv, html, txt, tex
         %   Usage:
         %       log=obj.saveResults(filename)
         %   Input:
@@ -172,7 +154,7 @@ classdef cResultInfo < cStatusLogger
         %   Output:
         %       log - cStatusLogger object with error messages
             log=cStatusLogger(cType.VALID);
-            if ~isValid(obj) 
+            if ~isValid(obj)
                 log.messageLog(cType.ERROR,'Invalid cResultInfo object')
                 return
             end
@@ -202,200 +184,9 @@ classdef cResultInfo < cStatusLogger
 			end
         end
 
-        function log=saveAsCSV(obj,filename)
-        % Save result tables as CSV files, each table in a file
-        %   Usage:
-        %       log=obj.saveAsCSV(filename)
-        %   Input:
-        %       filename - Name of the file where the csv file information is stored
-        %   Output:
-        %       log - cStatusLog object with error messages
-            log=cStatusLogger(cType.VALID);
-            % Check Input
-            if obj.tableIndex.NrOfRows<1
-                log.messageLog(cType.ERROR,'No tables to save');
-                return
-            end
-            % Check Folder and print info file
-            [~,name,ext]=fileparts(filename);
-            folder=strcat('.',filesep,name,'_csv');
-            % Write the info directory
-            try
-                fid = fopen(filename, 'wt');
-                fprintf (fid, '%s', folder);
-                fclose (fid);
-            catch err
-                log.messageLog(cType.ERROR,err.message)
-                log.messageLog('Writting file info %s',filename);
-                return
-            end
-            if ~exist(folder,'dir')
-                mkdir(folder);
-            end
-            % Save Index file
-            tidx=obj.tableIndex;
-            fname=strcat(folder,filesep,'index',ext);
-            slog=tidx.exportCSV(fname);
-            if ~slog.isValid
-                log.addLogger(slog);
-                log.messageLog(cType.ERROR,'Index file is NOT saved');
-            end
-            % Save each table in a file
-            for i=1:obj.NrOfTables
-                tbl=obj.tableIndex.Content{i};
-                fname=strcat(folder,filesep,tbl.Name,ext);
-                slog=tbl.exportCSV(fname);
-                if ~slog.isValid
-                    log.addLogger(slog);
-                    log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
-                end
-            end
-        end
-            
-        function log=saveAsXLS(obj,filename)
-        % Save the result tables in a Excel file, each table in a worksheet.
-        %   Usage:
-        %       log=obj.saveASXLS(filename)
-        %  Input:
-        %       filename - name of the worksheet file
-        %  Output:
-        %       log - cStatusLog object with error messages
-            log=cStatusLogger(cType.VALID);
-            % Check Input     
-            if obj.tableIndex.NrOfRows<1
-                log.messageLog(cType.ERROR,'No tables to save');
-                return
-            end
-            if isOctave
-                try
-                    fId=xlsopen(filename,1);
-                catch err
-                    log.messageLog(cType.ERROR,err.message);
-                    log.messageLog(cType.ERROR,'Error open file %s',filename);
-                    return
-                end
-            else
-                fId=filename;
-            end
-            tidx=obj.tableIndex;
-            if isOctave
-                [fId,status]=oct2xls(tidx.Values,fId,'Index');
-                if ~status || isempty(fId)
-                    log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
-                    return
-                end
-            else
-                try
-                    writecell(tidx.Values,fId,'Sheet','Index');
-                catch err
-                    log.messageLog(cType.ERROR,err.message);
-                    log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
-                    return
-                end
-            end
-            for i=1:obj.NrOfTables
-                tbl=obj.tableIndex.Content{i};              
-                if isOctave
-                    [fId,status]=oct2xls(tbl.Values,fId,tbl.Name);
-                    if ~status || isempty(fId)
-                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
-                    end
-                else
-                    try
-                        writecell(tbl.Values,fId,'Sheet',tbl.Name);
-                    catch err
-                        log.messageLog(cType.ERROR,err.message);
-                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
-                    end
-                end
-            end
-            if isOctave
-                fId=xlsclose(fId);
-                if ~isempty(fId)
-                    log.messageLog(cType.ERROR,'Result file %s is NOT saved',filename);
-                end
-            end
-        end
-
-        function log=saveAsHTML(obj,filename)
-        % Save result tables as CSV files, each table in a file
-        %   Usage:
-        %       log=obj.saveAsCSV(filename)
-        %   Input:
-        %       filename - Name of the file where the csv file information is stored
-        %   Output:
-        %       log - cStatusLog object with error messages
-            log=cStatusLogger(cType.VALID);
-            % Check Input
-            if obj.tableIndex.NrOfRows<1
-                log.messageLog(cType.ERROR,'No tables to save');
-                return
-            end
-            % Get folder name and create it.
-            [~,name,ext]=fileparts(filename);
-            folder=strcat('.',filesep,name,'_html');
-            if ~exist(folder,'dir')
-                mkdir(folder);
-            end
-            % Create html index page
-            html=cBuildHTML(obj.tableIndex,folder);
-            log=html.saveTable(filename);
-            % Save each table in a file
-            for i=1:obj.NrOfTables
-                tbl=obj.tableIndex.Content{i};
-                fname=strcat(folder,filesep,tbl.Name,ext);
-                html=cBuildHTML(tbl);
-                slog=html.saveTable(fname);
-                if ~slog.isValid
-                    log.addLogger(slog);
-                    log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
-                end
-            end
-        end
-
-        function log=saveAsTXT(obj,filename)
-        % Save the result tables if a formatted text file
-        %   Usage:
-        %       log=saveAsTXT(filename)
-        %   Input:
-        %       filename - name of the worksheet file
-        %   Output:
-        %       log - cStatusLog object with save status and error messages
-            log=cStatusLogger(cType.VALID);
-            % Open text file
-            try
-                fId = fopen (filename, 'wt');
-            catch err
-                log.messageLog(cType.ERROR,err.message)
-                log.messageLog(cType.ERROR,'Open file %s',filename);
-                return
-            end
-            % Print tables into file
-            cellfun(@(x) printTable(x,fId),obj.tableIndex.Content);
-            fclose(fId);
-        end
-
-        function log=saveAsLaTeX(obj,filename)
-            log=cStatusLogger(cType.VALID);
-            % Open text file
-            try
-                fId = fopen (filename, 'wt');
-            catch err
-                log.messageLog(cType.ERROR,err.message)
-                log.messageLog(cType.ERROR,'Open file %s',filename);
-                return
-            end
-            for i=1:obj.NrOfTables
-                tbl=obj.tableIndex.Content{i};
-                ltx=cBuildLaTeX(tbl);
-                fprintf(fId,'%s',ltx.getLaTeXcode);
-            end
-            fclose(fId);
-        end
-
         function res=getResultTables(obj,varmode,fmt)
         % Get the result tables in different format mode
-        %   Usage: 
+        %   Usage:
         %       res = obj.getResultTables(mode, fmt)
         %   Input:
         %       mode - Select the output object. The valid values are:
@@ -412,7 +203,7 @@ classdef cResultInfo < cStatusLogger
             end
             names=obj.getListOfTables;
             tables=cellfun(@(x) exportTable(obj,x,varmode,fmt),names,'UniformOutput',false);
-            res=cell2struct(tables,names,1);            
+            res=cell2struct(tables,names,1);
         end
 
         function res=getFuelImpact(obj)
@@ -442,13 +233,13 @@ classdef cResultInfo < cStatusLogger
         % Print the fuel impact of the actual diagnosis state
             fprintf('%s\n',obj.getFuelImpact);
         end
-   
+
         function showGraph(obj,graph,varargin)
         % Show graph with options
         %   Usage:
         %       obj.showGraph(graph, options)
         %   Input:
-        %       graph - graph table name
+        %       graph - [optional] graph table name
         %       varagin - graph options
         % See also cGraphResults, cTableResults
             log=cStatus(cType.VALID);
@@ -483,6 +274,240 @@ classdef cResultInfo < cStatusLogger
 	        % Show Graph
 	        showGraph(tbl,option);
         end
+
+		%%%
+        % Internal functions
+		%%%
+        function setResultId(obj,id)
+        % Set ResultId
+            obj.ResultId=id;
+            obj.ResultName=cType.Results{id};
+        end
+
+        function setProperties(obj,model,state)
+         % Set model and state properties
+            obj.ModelName=model;
+            cellfun(@(x) setState(x,state),obj.tableIndex.Content);
+            obj.State=state;
+        end
+
+        function status=isResultTable(obj)
+        % Determine if the tables are results
+            status=(obj.ResultId~=cType.ResultId.DATA_MODEL);
+        end
+
+        function status=existTable(obj,name)
+        % Check if there is a table called name
+            status=isfield(obj.Tables,name);
+        end
+
+        function res=getListOfTables(obj)
+        % Get the list of tables as cell array
+            res=fieldnames(obj.Tables);
+        end
+
+        function log=saveAsCSV(obj,filename)
+		% Save result tables as CSV files, each table in a file
+		%   Usage:
+		%       log=obj.saveAsCSV(filename)
+		%   Input:
+		%       filename - Name of the file where the csv file information is stored
+		%   Output:
+		%       log - cStatusLog object with error messages
+			log=cStatusLogger(cType.VALID);
+			% Check Input
+			if obj.tableIndex.NrOfRows<1
+				log.messageLog(cType.ERROR,'No tables to save');
+				return
+			end
+			% Check Folder and print info file
+			[~,name,ext]=fileparts(filename);
+			folder=strcat('.',filesep,name,'_csv');
+			% Write the info directory
+			try
+				fid = fopen(filename, 'wt');
+				fprintf (fid, '%s', folder);
+				fclose (fid);
+			catch err
+				log.messageLog(cType.ERROR,err.message)
+				log.messageLog('Writting file info %s',filename);
+				return
+			end
+			if ~exist(folder,'dir')
+				mkdir(folder);
+			end
+			% Save Index file
+			tidx=obj.tableIndex;
+			fname=strcat(folder,filesep,'index',ext);
+			slog=tidx.exportCSV(fname);
+			if ~slog.isValid
+				log.addLogger(slog);
+				log.messageLog(cType.ERROR,'Index file is NOT saved');
+			end
+			% Save each table in a file
+			for i=1:obj.NrOfTables
+				tbl=obj.tableIndex.Content{i};
+				fname=strcat(folder,filesep,tbl.Name,ext);
+				slog=tbl.exportCSV(fname);
+				if ~slog.isValid
+					log.addLogger(slog);
+					log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
+				end
+			end
+		end
+
+        function log=saveAsXLS(obj,filename)
+        % Save the result tables in a Excel file, each table in a worksheet.
+		%   Usage:
+		%       log=obj.saveASXLS(filename)
+		%  Input:
+		%       filename - name of the worksheet file
+		%  Output:
+		%       log - cStatusLog object with error messages
+			log=cStatusLogger(cType.VALID);
+			% Check Input
+			if obj.tableIndex.NrOfRows<1
+				log.messageLog(cType.ERROR,'No tables to save');
+				return
+			end
+			% Open file
+			if isOctave
+				try
+					fId=xlsopen(filename,1);
+				catch err
+					log.messageLog(cType.ERROR,err.message);
+					log.messageLog(cType.ERROR,'Error open file %s',filename);
+					return
+				end
+			else
+				fId=filename;
+			end
+			% Save table index sheet
+			tidx=obj.tableIndex;
+			if isOctave
+				[fId,status]=oct2xls(tidx.Values,fId,'Index');
+				if ~status || isempty(fId)
+					log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
+					return
+				end
+			else
+				try
+					writecell(tidx.Values,fId,'Sheet','Index');
+				catch err
+					log.messageLog(cType.ERROR,err.message);
+					log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
+					return
+				end
+			end
+			% Save tables
+			for i=1:obj.NrOfTables
+				tbl=obj.tableIndex.Content{i};
+				if isOctave
+					[fId,status]=oct2xls(tbl.Values,fId,tbl.Name);
+					if ~status || isempty(fId)
+						log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
+					end
+				else
+					try
+						writecell(tbl.Values,fId,'Sheet',tbl.Name);
+					catch err
+						log.messageLog(cType.ERROR,err.message);
+						log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
+					end
+				end
+			end
+			if isOctave
+				fId=xlsclose(fId);
+				if ~isempty(fId)
+					log.messageLog(cType.ERROR,'Result file %s is NOT saved',filename);
+				end
+			end
+		end
+		
+		function log=saveAsHTML(obj,filename)
+		% Save result tables as HTML files.
+		%	Create a index file and a folder containing all the table files%
+		%   Usage:
+		%       log=obj.saveAsHTML(filename)
+		%   Input:
+		%       filename - Name of the index file
+		%   Output:
+		%       log - cStatusLog object with error messages
+			log=cStatusLogger(cType.VALID);
+			% Check Input
+			if obj.tableIndex.NrOfRows<1
+				log.messageLog(cType.ERROR,'No tables to save');
+				return
+			end
+			% Get folder name and create it.
+			[~,name,ext]=fileparts(filename);
+			folder=strcat('.',filesep,name,'_html');
+			if ~exist(folder,'dir')
+				mkdir(folder);
+			end
+			% Create html index page
+			html=cBuildHTML(obj.tableIndex,folder);
+			log=html.saveTable(filename);
+			% Save each table in a file
+			for i=1:obj.NrOfTables
+				tbl=obj.tableIndex.Content{i};
+				fname=strcat(folder,filesep,tbl.Name,ext);
+				html=cBuildHTML(tbl);
+				slog=html.saveTable(fname);
+				if ~slog.isValid
+					log.addLogger(slog);
+					log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
+				end
+			end
+		end
+
+		function log=saveAsTXT(obj,filename)
+		% Save the result tables if a formatted text file
+		%   Usage:
+		%       log=saveAsTXT(filename)
+		%   Input:
+		%       filename - name of the worksheet file
+		%   Output:
+		%       log - cStatusLog object with save status and error messages
+			log=cStatusLogger(cType.VALID);
+			% Open text file
+			try
+				fId = fopen (filename, 'wt');
+			catch err
+				log.messageLog(cType.ERROR,err.message)
+				log.messageLog(cType.ERROR,'Open file %s',filename);
+				return
+			end
+			% Print tables into file
+			cellfun(@(x) printTable(x,fId),obj.tableIndex.Content);
+			fclose(fId);
+		end
+
+		function log=saveAsLaTeX(obj,filename)
+		% Save the tables into a file in LaTeX format
+		%   Usage:
+		%       log=saveAsLaTeX(filename)
+		%   Input:
+		%       filename - name of the file
+		%   Output:
+		%       log - cStatusLog object with save status and error messages
+			log=cStatusLogger(cType.VALID);
+			% Open text file
+			try
+				fId = fopen (filename, 'wt');
+			catch err
+				log.messageLog(cType.ERROR,err.message)
+				log.messageLog(cType.ERROR,'Open file %s',filename);
+				return
+			end
+			% Save the tables in the file
+			for i=1:obj.NrOfTables
+				tbl=obj.tableIndex.Content{i};
+				ltx=cBuildLaTeX(tbl);
+				fprintf(fId,'%s',ltx.getLaTeXcode);
+			end
+			fclose(fId);
+		end
     end
 
     methods(Access=private)

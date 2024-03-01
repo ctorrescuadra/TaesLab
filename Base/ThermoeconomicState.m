@@ -58,7 +58,7 @@ function res=ThermoeconomicState(data,varargin)
 	else
 		pm.printLogger;
 		res.printError('Invalid Process Model. See error log');
-    end
+	end
     % Show and Save results if required
     if param.Show
         printResults(res);

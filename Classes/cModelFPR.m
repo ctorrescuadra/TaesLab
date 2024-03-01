@@ -15,6 +15,7 @@ classdef cModelFPR < cProcessModel
 %		res=obj.getDirectFlowsCost(ucost)
 %		res=obj.getGeneralFlowsCost(ucost,rsc)
 %		res=obj.getFlowsICT(ict,rsc)
+%		res=get.WasteWeight
 %		
 	properties (GetAccess=public, SetAccess=private)
 		fpOperators           % FP representation operators (mFP,opCP)
@@ -25,7 +26,6 @@ classdef cModelFPR < cProcessModel
 		RecirculationFactor   % Recirculation Factor
 		WasteTable	          % Waste Table
 		WasteOperators        % Waste Operators
-		WasteFactor           % Waste Factor Array
 		SystemUnitConsumption % Global Unit Consumption considering waste recycling
 		isWaste=false		  % Waste is well defined
     end
@@ -59,13 +59,12 @@ classdef cModelFPR < cProcessModel
 			obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             obj.c0=zeros(1,obj.NrOfFlows);
 			obj.c0(obj.ps.Resources.flows)=1.0;
-
-			if nargin==2
+			obj.isWaste=(obj.NrOfWastes>0);
+			obj.DefaultGraph=cType.Tables.PROCESS_ICT;
+			if (nargin==2)
 				obj.setWasteTable(wd);
                 obj.setWasteOperators;
 			end
-			obj.DefaultGraph=cType.Tables.PROCESS_ICT;
-			obj.status=cType.VALID;
 		end
 
 		function res=get.SystemOutput(obj)
@@ -100,36 +99,18 @@ classdef cModelFPR < cProcessModel
 		% Get cResultInfo object
             res=fmt.getThermoeconomicAnalysisResults(obj,options);
         end
-		
-		function setWasteTable(obj,wd)
-        % Compute waste tables (tR,mRP,mkR) and waste operators (opCR,opR) 
-        %  Input:
-        %   wd - cWasteData object
-			if ~isa(wd,'cWasteData') || ~wd.isValid
-				obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
-				return
-			end
-			if ~obj.isValid
-				obj.messageLog(cType.ERROR,'Invalid cModelFPR object');
-				return	
-			end
-			if obj.isWaste
-				obj.messageLog(cType.ERROR,'Model must define waste flows');
-				return
-			end
-			obj.WasteTable=wd.getWasteTable;
-        end
 
-        function setWasteOperators(obj)
-			% update the production operators from waste table
-			sWaste=obj.wasteProcessTable;
-			if obj.isValid
+        function setWasteOperators(obj,sWaste)
+		% Set the Waste Operators values
+		% Input:
+		%	sWaste [optional] - Stucture containing  WasteOperators (tR, mRP, mKR, opR, opCR)
+		%  		If it is not provided, they are calculated.
+			if nargin==1
+				sWaste=obj.wasteProcessTable;
 				sWaste.opCR=cModelFPR.computeWasteOperator(sWaste.mRP,obj.fpOperators.opCP);
-				sWaste.opR=cModelFPR.computeWasteOperator(sWaste.mKR,obj.pfOperators.opP);
-				obj.WasteFactor=diag(sWaste.opR.mValues(:,sWaste.opR.mRows))';
-                obj.WasteOperators=sWaste;
-				obj.isWaste=true;
+				sWaste.opR=cModelFPR.computeWasteOperator(sWaste.mKR,obj.pfOperators.opP);			else
 			end
+            obj.WasteOperators=sWaste;
 		end
 		
 		function res=getDirectProcessCost(obj)
@@ -350,7 +331,7 @@ classdef cModelFPR < cProcessModel
         end    
 
 		function res=getWasteWeight(obj)
-		% Get the wastes weight.  The diagonal of the S matrix.
+		% Get the waste weight.  The diagonal of the S matrix.
 			res=[];
 			if obj.isWaste
 				opR=obj.WasteOperators.opR;
@@ -358,21 +339,24 @@ classdef cModelFPR < cProcessModel
 			end
         end
 
-        function res=getMinCost(obj,rsc)
+
+	end
+	
+	methods (Access=private)
+		function res=getMinCost(obj,rsc)
 		% Get minimun cost for a given cost of external resources
-		% rsc [optional] external costs
+		%  Input:
+        %   rsc - [optional] cost of external resources
 			narginchk(1,2);
 			N=obj.NrOfProcesses;
 			if nargin==1
 				res=ones(1,N);
-            else
+			else
 				q0=rsc.ce+rsc.zF;
 				res=q0/(eye(N)-obj.pfOperators.mPF(1:N,1:N));
 			end
-        end
-	end
-	
-	methods (Access=private)
+		end
+
 		function cp=computeCostR(obj,aR)
 		% Compute cost production cost including waste allocation, using table FP info
 			N=obj.NrOfProcesses;
@@ -387,6 +371,21 @@ classdef cModelFPR < cProcessModel
 			end
 			cp=ke/(eye(N)-tmp);
         end
+
+		function setWasteTable(obj,wd)
+		% Set the Waste Table for the cModelFPR 
+		%  Input:
+		%   wd - cWasteData object
+			if ~obj.isWaste
+				obj.messageLog(cType.ERROR,'Model must define waste flows');
+				return
+			end
+			if ~isa(wd,'cWasteData') || ~wd.isValid
+				obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
+				return
+			end
+			obj.WasteTable=wd.getWasteTable;
+		end
 		
 		function res=wasteProcessTable(obj)
 		% Calculate the waste allocation ratios, using ModelFP info.
@@ -408,7 +407,7 @@ classdef cModelFPR < cProcessModel
 			if (any(wt.typeId==cType.WasteAllocation.COST))
 				cp=obj.computeCostR(aR);
 			end
-		% Compute Waste table depending on waste definition type
+			% Compute Waste table depending on waste definition type
 			for i=1:NR
 				j=aR(i);       
 				switch wt.typeId(i)
@@ -438,6 +437,7 @@ classdef cModelFPR < cProcessModel
 				end
 				sol(i,:)=tmp/sum(tmp);
 			end
+			% Create Waste Tables
 			sol=scaleRow(sol,1-wt.RecycleRatio);
             wt.updateValues(sol);
 			mRP=cSparseRow(aR,sol);
@@ -455,6 +455,7 @@ classdef cModelFPR < cProcessModel
 			tmp=mR*oP;
 			res=cSparseRow(aR,(eye(NR)-tmp.mValues(:,aR))\tmp.mValues);
         end
+		
 		function res=updateOperator(op,opR)
 		% Update an operator with the corresponding waste operator
 			res=op+op*opR;

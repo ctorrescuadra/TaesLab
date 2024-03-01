@@ -81,9 +81,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.eprocesses=obj.getProcessExergy(pm.ProcessesExergy);
             tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,pm.TableFP);
             res=cResultInfo(pm,tbl);
-            if res.ResultId~=cType.ResultId.THERMOECONOMIC_STATE
-                res.setResultId(cType.ResultId.THERMOECONOMIC_STATE);
-            end
+            res.setResultId(cType.ResultId.THERMOECONOMIC_STATE);
         end
         
         function res=getExergyCostResults(obj,ect,options)
@@ -291,6 +289,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %           gpuc - Generalized unit cost of processes
         %           gfc - Generalized cost of flows
         %           gfuc - Generalized unit cost of flows
+        %
             colNames=horzcat('Key',ms.StateNames);
             % Exergy Tables
             data=ms.ExergyData;

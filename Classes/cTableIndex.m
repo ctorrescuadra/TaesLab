@@ -33,7 +33,7 @@ classdef cTableIndex < cTable
             obj.Data(:,2)=cellfun(@(x) log2str(res.Tables.(x).GraphType),tnames,'UniformOutput',false);
             obj.Name=cType.ResultIndex{res.ResultId};
             obj.Description=res.ResultName;
-            obj.State=res.State;
+            obj.State='INDEX';
             obj.Content=struct2cell(res.Tables);
             obj.Info=res.Info;
             obj.setColumnFormat;

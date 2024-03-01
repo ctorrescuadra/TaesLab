@@ -4,6 +4,7 @@ classdef cDataModel < cStatusLogger
 % and organizes the information to be used by the calculation algorithms
 %   Methods:
 %       res=obj.getExergyData(state)
+%       log=obj.setExergyData(state,values)
 %       res=obj.getResourceData(sample)
 %       res=obj.getStateName(i)
 %       res=obj.getStateId(state)
@@ -11,11 +12,16 @@ classdef cDataModel < cStatusLogger
 %       res=obj.getResourceSample(i)
 %       res=obj.getSampleId(sample)
 %       res=obj.existSample(sample)
-%       res=obj.WasteFlows
+%       res=obj.getWasteFlows
 %       res=obj.checkCostTables
 %       res=obj.getTable(name)
 %       obj.setModelName(name)   
 %       log=obj.saveDataModel(filename)
+%       obj.viewDataModel(name,option)
+%       res=obj.getTablesDirectory;
+%       obj.viewTablesDirectory(option)
+%       log=obj.saveTablesDirectory(filename)
+%       
 %   See also cResultInfo, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
 %
     properties(GetAccess=public, SetAccess=private)
@@ -354,6 +360,10 @@ classdef cDataModel < cStatusLogger
                     log=saveAsXLS(obj.ModelInfo,filename);
                 case cType.FileType.TXT
                     log=saveAsTXT(obj.ModelInfo,filename);
+                case cType.FileType.HTML
+                    log=saveAsHTML(obj.ModelInfo,filename);
+                case cType.FileType.LaTeX
+                    log=saveAsLaTeX(obj.ModelInfo,filename);
                 case cType.FileType.MAT
 					log=obj.saveAsMAT(filename);
 				otherwise
@@ -369,19 +379,24 @@ classdef cDataModel < cStatusLogger
         function viewTable(obj,name,varargin)
         % View a table in a GUI Table
         %   Input:
-        %       name - Name of the table
+        %       name - [optional] Name of the table
+        %           If is missing all tables are shown in the console
         %       options - TableView option
         %           cType.TableView.CONSOLE
         %           cType.TableView.GUI
         %           cType.TableView.HTML (default)
         %
+            if nargin==1
+                printResults(obj.ModelInfo);
+                return
+            end
             tbl=obj.getTable(name);
             if tbl.isValid
                 viewTable(tbl.varargin{:});
             end
         end
 
-        function res=TablesDirectory(obj,varargin)
+        function res=getTablesDirectory(obj,varargin)
         % Get the Tables directory object
         %   Input:
         %       options - VarMode options.
@@ -393,7 +408,7 @@ classdef cDataModel < cStatusLogger
             res=getTablesDirectory(obj.FormatData,varargin{:});
         end
 
-        function ViewTablesDirectory(obj,varargin)
+        function viewTablesDirectory(obj,varargin)
         % View the Tables directory
         %   Input:
         %       options - TableView option
@@ -401,7 +416,7 @@ classdef cDataModel < cStatusLogger
             ViewTablesDirectory(obj.FormatData,varargin{:});
         end
 
-        function SaveTablesDirectory(obj,filename)
+        function saveTablesDirectory(obj,filename)
         % Save Tables directory in a file depending the extension
         %   Valid extension are: txt, csv, html, xlsx, json, xml, mat
         %   Input:
