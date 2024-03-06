@@ -48,7 +48,7 @@ function res=ExergyCostCalculator(data,varargin)
         return
     end
     param=p.Results;
-    % Check productive structure
+    % Check Data Model
     if ~data.isValid
 		data.printLogger;
 		res.printError('Invalid data model. See error log');
@@ -94,7 +94,6 @@ function res=ExergyCostCalculator(data,varargin)
 		param.ResourcesCost=rsc;
 	end
 	res=ect.getResultInfo(data.FormatData,param);
-	res.setProperties(data.ModelName,param.State);
     % Show and Save results if required
     if param.Show
         printResults(res);

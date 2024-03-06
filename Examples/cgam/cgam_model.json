@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "cgam_model",
     "flows": [
       {
         "key": "NG",

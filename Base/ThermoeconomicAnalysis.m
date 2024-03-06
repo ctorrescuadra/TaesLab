@@ -37,7 +37,6 @@ function res=ThermoeconomicAnalysis(data,varargin)
     res=cStatusLogger();
     % Check input parameters
 	checkModel=@(x) isa(x,'cDataModel');
-    % Check input parameters
     p = inputParser;
     p.addRequired('data',checkModel);
 	p.addParameter('State','',@ischar);
@@ -53,7 +52,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
         return
     end
     param=p.Results;
-    % Read productive structure
+    % Check data model
     if ~data.isValid
 		data.printLogger;
         res.printError('Invalid Productive Structure. See error log');
@@ -71,8 +70,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	end
     % Read Waste and compute Model FP
     if(data.NrOfWastes>0)
-		wt=data.WasteData;
-        fpm=cModelFPR(ex,wt); 
+        fpm=cModelFPR(ex,data.WasteData); 
     else
         fpm=cModelFPR(ex);
     end
@@ -99,7 +97,6 @@ function res=ThermoeconomicAnalysis(data,varargin)
         param.ResourcesCost=rsc;
     end
     res=fpm.getResultInfo(data.FormatData,param);
-    res.setProperties(data.ModelName,param.State);
     % Show and Save results if required
     if param.Show
         printResults(res);

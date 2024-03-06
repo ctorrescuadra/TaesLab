@@ -34,7 +34,7 @@ function res=ThermoeconomicState(data,varargin)
 		return
 	end
 	param=p.Results;
-	% Check Productive Structure
+	% Check data model
 	if ~data.isValid
 		data.printLogger;
 		res.printError('Invalid data model. See error log');
@@ -54,7 +54,6 @@ function res=ThermoeconomicState(data,varargin)
 	% Set Results
 	if isValid(pm)
 		res=pm.getResultInfo(data.FormatData);
-    	res.setProperties(data.ModelName,param.State);
 	else
 		pm.printLogger;
 		res.printError('Invalid Process Model. See error log');

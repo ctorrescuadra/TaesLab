@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "cicloComb_model",
     "flows": [
       {
         "key": "B2",

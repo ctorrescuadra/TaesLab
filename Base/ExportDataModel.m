@@ -10,7 +10,5 @@ function ExportDataModel(inputFile, outputFile)
     data=ReadDataModel(inputFile);
     if isValid(data)
         SaveDataModel(data,outputFile);
-    else
-        data.printLogger;
     end
 end

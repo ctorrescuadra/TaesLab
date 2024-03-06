@@ -31,6 +31,9 @@
 			"type": "object",
 			"additionalProperties": false,
 			"properties": {
+				"name": {
+					"type": "string"
+				},
 				"flows": {
 					"type": "array",
 					"items": {

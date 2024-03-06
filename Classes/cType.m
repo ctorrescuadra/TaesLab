@@ -156,6 +156,8 @@ classdef cType
 			'Summary Results','Exergy Cost Calculator','Data Model','Model Results'};
         ResultIndex={'psindex','tsindex','taindex','waindex','tdindex','pdindex','fpindex','srindex',...
             'ecindex','dmindex','rmindex'};
+        % ClassId types
+        ClassId=struct('RESULT_INFO',1,'DATA_MODEL',2,'RESULT_MODEL',3)
 		% Tables Directory configuration
 		DirCols=struct('DESCRIPTION',1,'RESULT_NAME',2,'GRAPH',3,'TYPE',4,'CODE',5,'RESULT_CODE',6);
 		DirColNames={'Description','Results','Graph','Type','Code','Results Code'};

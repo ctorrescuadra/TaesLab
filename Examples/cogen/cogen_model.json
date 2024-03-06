@@ -1,404 +1,401 @@
 {
-	"ProductiveStructure": {
-		"flows": [
-			{
-				"key": "B1",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B2",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B3",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B4",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B5",
-				"type": "RESOURCE"
-			},
-			{
-				"key": "B6",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B7",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B8",
-				"type": "OUTPUT"
-			},
-			{
-				"key": "B9",
-				"type": "OUTPUT"
-			}
-		],
-		"processes": [
-			{
-				"key": "BOIL",
-				"description": "Boiler",
-				"fuel": "B5",
-				"product": "B1-B4",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "TURB",
-				"description": "Turbine",
-				"fuel": "B1-B2",
-				"product": "B6",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "HEAT",
-				"description": "Heat Exchanger",
-				"fuel": "B2-B3",
-				"product": "B9",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "PUMP",
-				"description": "Pump",
-				"fuel": "B7",
-				"product": "B4-B3",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "ALTR",
-				"description": "Alternator",
-				"fuel": "B6",
-				"product": "B7+B8",
-				"type": "PRODUCTIVE"
-			}
-		]
-	},
-	"ExergyStates": {
-		"States": [
-			{
-				"stateId": "Reference",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 30299
-					},
-					{
-						"key": "B2",
-						"value": 19111
-					},
-					{
-						"key": "B3",
-						"value": 2935
-					},
-					{
-						"key": "B4",
-						"value": 3184
-					},
-					{
-						"key": "B5",
-						"value": 64119
-					},
-					{
-						"key": "B6",
-						"value": 10485
-					},
-					{
-						"key": "B7",
-						"value": 275.3
-					},
-					{
-						"key": "B8",
-						"value": 10000
-					},
-					{
-						"key": "B9",
-						"value": 15021
-					}
-				]
-			},
-			{
-				"stateId": "TP15",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 30304
-					},
-					{
-						"key": "B2",
-						"value": 19114
-					},
-					{
-						"key": "B3",
-						"value": 3101
-					},
-					{
-						"key": "B4",
-						"value": 3352
-					},
-					{
-						"key": "B5",
-						"value": 63583
-					},
-					{
-						"key": "B6",
-						"value": 10487
-					},
-					{
-						"key": "B7",
-						"value": 277.1
-					},
-					{
-						"key": "B8",
-						"value": 10000
-					},
-					{
-						"key": "B9",
-						"value": 14867
-					}
-				]
-			},
-			{
-				"stateId": "ALT97",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 30620
-					},
-					{
-						"key": "B2",
-						"value": 19314
-					},
-					{
-						"key": "B3",
-						"value": 2966
-					},
-					{
-						"key": "B4",
-						"value": 3217
-					},
-					{
-						"key": "B5",
-						"value": 64799
-					},
-					{
-						"key": "B6",
-						"value": 10596
-					},
-					{
-						"key": "B7",
-						"value": 278.2
-					},
-					{
-						"key": "B8",
-						"value": 10000
-					},
-					{
-						"key": "B9",
-						"value": 15181
-					}
-				]
-			},
-			{
-				"stateId": "T89",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 30649
-					},
-					{
-						"key": "B2",
-						"value": 19380
-					},
-					{
-						"key": "B3",
-						"value": 2969
-					},
-					{
-						"key": "B4",
-						"value": 3221
-					},
-					{
-						"key": "B5",
-						"value": 64860
-					},
-					{
-						"key": "B6",
-						"value": 10488
-					},
-					{
-						"key": "B7",
-						"value": 278.5
-					},
-					{
-						"key": "B8",
-						"value": 10000
-					},
-					{
-						"key": "B9",
-						"value": 15235
-					}
-				]
-			},
-			{
-				"stateId": "t490",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 30529
-					},
-					{
-						"key": "B2",
-						"value": 19325
-					},
-					{
-						"key": "B3",
-						"value": 2991
-					},
-					{
-						"key": "B4",
-						"value": 3244
-					},
-					{
-						"key": "B5",
-						"value": 64679
-					},
-					{
-						"key": "B6",
-						"value": 10490
-					},
-					{
-						"key": "B7",
-						"value": 280.5
-					},
-					{
-						"key": "B8",
-						"value": 10000
-					},
-					{
-						"key": "B9",
-						"value": 15183
-					}
-				]
-			},
-			{
-				"stateId": "p15",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 30354
-					},
-					{
-						"key": "B2",
-						"value": 19146
-					},
-					{
-						"key": "B3",
-						"value": 2940
-					},
-					{
-						"key": "B4",
-						"value": 3206
-					},
-					{
-						"key": "B5",
-						"value": 64214
-					},
-					{
-						"key": "B6",
-						"value": 10504
-					},
-					{
-						"key": "B7",
-						"value": 294
-					},
-					{
-						"key": "B8",
-						"value": 10000
-					},
-					{
-						"key": "B9",
-						"value": 15049
-					}
-				]
-			}
-		]
-	},
-	"ResourcesCost": {
-		"Samples": [
-			{
-				"sampleId": "Base",
-				"flows": [
-					{
-						"key": "B5",
-						"value": 1.32
-					}
-				],
-				"processes": [
-					{
-						"key": "BOIL",
-						"value": 18000
-					},
-					{
-						"key": "TURB",
-						"value": 3000
-					},
-					{
-						"key": "HEAT",
-						"value": 500
-					},
-					{
-						"key": "PUMP",
-						"value": 0.1
-					},
-					{
-						"key": "ALTR",
-						"value": 1000
-					}
-				]
-			}
-		]
-	},
-	"Format": {
-		"definitions": [
-			{
-				"key": "EXERGY",
-				"width": 10,
-				"precision": 1,
-				"unit": "(kW)"
-			},
-			{
-				"key": "EXERGY_COST",
-				"width": 10,
-				"precision": 1,
-				"unit": "(kW)"
-			},
-			{
-				"key": "EXERGY_UNIT_COST",
-				"width": 10,
-				"precision": 4,
-				"unit": "(J/J)"
-			},
-			{
-				"key": "GENERALIZED_COST",
-				"width": 10,
-				"precision": 1,
-				"unit": "(c/h)"
-			},
-			{
-				"key": "GENERALIZED_UNIT_COST",
-				"width": 10,
-				"precision": 4,
-				"unit": "(c/kWh)"
-			},
-			{
-				"key": "DIAGNOSIS",
-				"width": 10,
-				"precision": 2,
-				"unit": "(kW)"
-			}
-		]
-	}
+  "ProductiveStructure": {
+    "name": "cogen_model",
+    "flows": [
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "B9",
+        "type": "OUTPUT"
+      }
+    ],
+    "processes": [
+      {
+        "key": "BOIL",
+        "description": "Boiler",
+        "fuel": "B5",
+        "product": "B1-B4",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TURB",
+        "description": "Turbine",
+        "fuel": "B1-B2",
+        "product": "B6",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HEAT",
+        "description": "Heat Exchanger",
+        "fuel": "B2-B3",
+        "product": "B9",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PUMP",
+        "description": "Pump",
+        "fuel": "B7",
+        "product": "B4-B3",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "ALTR",
+        "description": "Alternator",
+        "fuel": "B6",
+        "product": "B7+B8",
+        "type": "PRODUCTIVE"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Reference",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 30299
+          },
+          {
+            "key": "B2",
+            "value": 19111
+          },
+          {
+            "key": "B3",
+            "value": 2935
+          },
+          {
+            "key": "B4",
+            "value": 3184
+          },
+          {
+            "key": "B5",
+            "value": 64119
+          },
+          {
+            "key": "B6",
+            "value": 10485
+          },
+          {
+            "key": "B7",
+            "value": 275.3
+          },
+          {
+            "key": "B8",
+            "value": 10000
+          },
+          {
+            "key": "B9",
+            "value": 15021
+          }
+        ]
+      },
+      {
+        "stateId": "TP15",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 30304
+          },
+          {
+            "key": "B2",
+            "value": 19114
+          },
+          {
+            "key": "B3",
+            "value": 3101
+          },
+          {
+            "key": "B4",
+            "value": 3352
+          },
+          {
+            "key": "B5",
+            "value": 63583
+          },
+          {
+            "key": "B6",
+            "value": 10487
+          },
+          {
+            "key": "B7",
+            "value": 277.1
+          },
+          {
+            "key": "B8",
+            "value": 10000
+          },
+          {
+            "key": "B9",
+            "value": 14867
+          }
+        ]
+      },
+      {
+        "stateId": "ALT97",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 30620
+          },
+          {
+            "key": "B2",
+            "value": 19314
+          },
+          {
+            "key": "B3",
+            "value": 2966
+          },
+          {
+            "key": "B4",
+            "value": 3217
+          },
+          {
+            "key": "B5",
+            "value": 64799
+          },
+          {
+            "key": "B6",
+            "value": 10596
+          },
+          {
+            "key": "B7",
+            "value": 278.2
+          },
+          {
+            "key": "B8",
+            "value": 10000
+          },
+          {
+            "key": "B9",
+            "value": 15181
+          }
+        ]
+      },
+      {
+        "stateId": "T89",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 30649
+          },
+          {
+            "key": "B2",
+            "value": 19380
+          },
+          {
+            "key": "B3",
+            "value": 2969
+          },
+          {
+            "key": "B4",
+            "value": 3221
+          },
+          {
+            "key": "B5",
+            "value": 64860
+          },
+          {
+            "key": "B6",
+            "value": 10488
+          },
+          {
+            "key": "B7",
+            "value": 278.5
+          },
+          {
+            "key": "B8",
+            "value": 10000
+          },
+          {
+            "key": "B9",
+            "value": 15235
+          }
+        ]
+      },
+      {
+        "stateId": "t490",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 30529
+          },
+          {
+            "key": "B2",
+            "value": 19325
+          },
+          {
+            "key": "B3",
+            "value": 2991
+          },
+          {
+            "key": "B4",
+            "value": 3244
+          },
+          {
+            "key": "B5",
+            "value": 64679
+          },
+          {
+            "key": "B6",
+            "value": 10490
+          },
+          {
+            "key": "B7",
+            "value": 280.5
+          },
+          {
+            "key": "B8",
+            "value": 10000
+          },
+          {
+            "key": "B9",
+            "value": 15183
+          }
+        ]
+      },
+      {
+        "stateId": "p15",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 30354
+          },
+          {
+            "key": "B2",
+            "value": 19146
+          },
+          {
+            "key": "B3",
+            "value": 2940
+          },
+          {
+            "key": "B4",
+            "value": 3206
+          },
+          {
+            "key": "B5",
+            "value": 64214
+          },
+          {
+            "key": "B6",
+            "value": 10504
+          },
+          {
+            "key": "B7",
+            "value": 294
+          },
+          {
+            "key": "B8",
+            "value": 10000
+          },
+          {
+            "key": "B9",
+            "value": 15049
+          }
+        ]
+      }
+    ]
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": {
+      "sampleId": "Base",
+      "flows": {
+        "key": "B5",
+        "value": 1.32
+      },
+      "processes": [
+        {
+          "key": "BOIL",
+          "value": 18000
+        },
+        {
+          "key": "TURB",
+          "value": 3000
+        },
+        {
+          "key": "HEAT",
+          "value": 500
+        },
+        {
+          "key": "PUMP",
+          "value": 0.1
+        },
+        {
+          "key": "ALTR",
+          "value": 1000
+        }
+      ]
+    }
+  }
 }

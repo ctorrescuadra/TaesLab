@@ -32,7 +32,6 @@ function res=ProductiveDiagram(data,varargin)
 	% Get Productive Diagram info
 	pd=cProductiveDiagram(data.ProductiveStructure);
     res=pd.getResultInfo(data.FormatData);  
-	res.setProperties(data.ModelName,'SUMMARY');
     % Show and Save results if required
     if param.Show
         printResults(res);

@@ -72,6 +72,8 @@ classdef cExergyModel < cResultId
             obj.AdjacencyTable=struct('mAE',mAE,'mAS',mAS,'mAF',mAF,'mAP',mAP);
 			obj.FlowProcessTable=struct('tF',tF,'tP',tP,'tV',tV);
 			obj.DefaultGraph=cType.Tables.TABLE_FP;
+            obj.ModelName=obj.ps.ModelName;
+            obj.State=rex.State;
 		end		       		
     
 		function res=get.FuelExergy(obj)

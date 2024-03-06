@@ -117,7 +117,7 @@ classdef (Sealed) cTableCell < cTableResult
 		
         function res=isNumericColumn(obj,j)
         % determine if the column is numeric
-            res=strContains(obj.Format{j+1},'f');
+            res=ismember('f',obj.Format{j+1});
         end
 
         function setColumnWidth(obj)

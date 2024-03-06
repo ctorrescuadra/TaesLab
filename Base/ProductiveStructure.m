@@ -30,7 +30,7 @@ function res=ProductiveStructure(data,varargin)
         return
     end
     param=p.Results;
-	% Check Productive Structure
+	% Check data model
 	if data.isError
 		data.printLogger;
 		res.printError('Invalid productive structure. See error log');
@@ -42,7 +42,6 @@ function res=ProductiveStructure(data,varargin)
 	end
 	% Get Productive Structure info
 	res=getResultInfo(data.ProductiveStructure,data.FormatData);
-	res.setProperties(data.ModelName,'SUMMARY');
     % Show and Save results if required
     if param.Show
         printResults(res);

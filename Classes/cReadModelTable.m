@@ -22,7 +22,7 @@ classdef (Abstract) cReadModelTable < cReadModel
         %   tm - cResultInfo object (DATA_MODEL)
         %   res - DataModel structure
             res=[];
-            tmp=struct();
+            tmp.name=obj.ModelName;
             % Productive Structure Tables
             idx=cType.TableDataIndex.FLOWS;
             ftbl=getTable(tm,cType.TableDataName{idx});

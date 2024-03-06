@@ -551,7 +551,7 @@ classdef ThermoeconomicPanel < handle
 
         function modelResults(app,~,~)
         % Model Results callback
-            res=app.model.getModelInfo;
+            res=app.model.resultModelInfo;
  			if res.isValid
                 if app.console
 					printResults(res);

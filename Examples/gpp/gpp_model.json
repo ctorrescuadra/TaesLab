@@ -1,524 +1,519 @@
 {
-	"ProductiveStructure": {
-		"flows": [
-			{
-				"key": "GTS",
-				"type": "RESOURCE"
-			},
-			{
-				"key": "B1",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B2",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B3",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B5",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B6",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B7",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B8",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V10",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V11",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V12",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V13",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V14",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V15",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V16",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V17",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V18",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V19",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "V20",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "W23",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "W24",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "W25",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "W26",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "W27",
-				"type": "OUTPUT"
-			},
-			{
-				"key": "Q28",
-				"type": "WASTE"
-			},
-			{
-				"key": "Q29",
-				"type": "WASTE"
-			}
-		],
-		"processes": [
-			{
-				"key": "GTS",
-				"description": "Geotermal Source",
-				"fuel": "GTS",
-				"product": "B1-B6-B8",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "VAP1",
-				"description": "Vaporizer 1",
-				"fuel": "B1-B2",
-				"product": "V10-V15",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "PHT1",
-				"description": "Preheater 1",
-				"fuel": "B5-B6",
-				"product": "V14-V13",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "TPHT",
-				"description": "Top Preheater",
-				"fuel": "B2-B3",
-				"product": "V15-V14",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "VAP2",
-				"description": "Vaporizer 2",
-				"fuel": "B3-B5-B7",
-				"product": "V16-V20",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "PHT2",
-				"description": "Preheater 2",
-				"fuel": "B7-B8",
-				"product": "V20-V19",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "TRB1",
-				"description": "Organic Turbine 1",
-				"fuel": "V10-V11",
-				"product": "W23",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "PMP1",
-				"description": "Cycle Pump 1",
-				"fuel": "W25",
-				"product": "V13-V12",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "TRB2",
-				"description": "Organic Turbine 2",
-				"fuel": "V16-V17",
-				"product": "W24",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "PMP2",
-				"description": "Cycle Pump 2",
-				"fuel": "W26",
-				"product": "V19-V18",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "GEN",
-				"description": "Generator",
-				"fuel": "W23+W24",
-				"product": "W25+W26+W27",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "CND1",
-				"description": "AirCooler Conderser 1",
-				"fuel": "V11-V12",
-				"product": "Q28",
-				"type": "DISSIPATIVE"
-			},
-			{
-				"key": "CND2",
-				"description": "AirCooler Condenser 2",
-				"fuel": "V17-V18",
-				"product": "Q29",
-				"type": "DISSIPATIVE"
-			}
-		]
-	},
-	"ExergyStates": {
-		"States": [
-			{
-				"stateId": "Reference",
-				"exergy": [
-					{
-						"key": "GTS",
-						"value": 47.13663024
-					},
-					{
-						"key": "B1",
-						"value": 60.37948494
-					},
-					{
-						"key": "B2",
-						"value": 39.00582594
-					},
-					{
-						"key": "B3",
-						"value": 33.3164664
-					},
-					{
-						"key": "B5",
-						"value": 13.43235312
-					},
-					{
-						"key": "B6",
-						"value": 6.36141789
-					},
-					{
-						"key": "B7",
-						"value": 13.43235312
-					},
-					{
-						"key": "B8",
-						"value": 6.88143681
-					},
-					{
-						"key": "V10",
-						"value": 28.5002048
-					},
-					{
-						"key": "V11",
-						"value": 6.64214304
-					},
-					{
-						"key": "V12",
-						"value": 0.20911648
-					},
-					{
-						"key": "V13",
-						"value": 0.68771296
-					},
-					{
-						"key": "V14",
-						"value": 4.90669184
-					},
-					{
-						"key": "V15",
-						"value": 9.40377408
-					},
-					{
-						"key": "V16",
-						"value": 9.19369068
-					},
-					{
-						"key": "V17",
-						"value": 2.37007
-					},
-					{
-						"key": "V18",
-						"value": 0.07847163
-					},
-					{
-						"key": "V19",
-						"value": 0.13760967
-					},
-					{
-						"key": "V20",
-						"value": 4.55362908
-					},
-					{
-						"key": "W23",
-						"value": 13.5729
-					},
-					{
-						"key": "W24",
-						"value": 4.18365
-					},
-					{
-						"key": "W25",
-						"value": 0.71277
-					},
-					{
-						"key": "W26",
-						"value": 0.08766
-					},
-					{
-						"key": "W27",
-						"value": 15.535596
-					},
-					{
-						"key": "Q28",
-						"value": 6.43302656
-					},
-					{
-						"key": "Q29",
-						"value": 2.29159905
-					}
-				]
-			}
-		]
-	},
-	"WasteDefinition": {
-		"wastes": [
-			{
-				"flow": "Q28",
-				"type": "MANUAL",
-				"recycle": 0,
-				"values": [
-					{
-						"process": "VAP1",
-						"value": 4.342
-					},
-					{
-						"process": "PHT1",
-						"value": 0.959
-					},
-					{
-						"process": "TPHT",
-						"value": 1.023
-					}
-				]
-			},
-			{
-				"flow": "Q29",
-				"type": "MANUAL",
-				"recycle": 0,
-				"values": [
-					{
-						"process": "VAP2",
-						"value": 1.167
-					},
-					{
-						"process": "PHT2",
-						"value": 1.11
-					}
-				]
-			}
-		]
-	},
-	"ResourcesCost": {
-		"Samples": [
-			{
-				"sampleId": "Base",
-				"flows": [
-					{
-						"key": "GTS",
-						"value": 0
-					}
-				],
-				"processes": [
-					{
-						"key": "GTS",
-						"value": 2.016
-					},
-					{
-						"key": "VAP1",
-						"value": 22.285569084618874
-					},
-					{
-						"key": "PHT1",
-						"value": 40.277710276471652
-					},
-					{
-						"key": "TPHT",
-						"value": 11.652665142962849
-					},
-					{
-						"key": "VAP2",
-						"value": 25.339241921632429
-					},
-					{
-						"key": "PHT2",
-						"value": 11.36591179427392
-					},
-					{
-						"key": "TRB1",
-						"value": 12.413933996893435
-					},
-					{
-						"key": "PMP1",
-						"value": 1.6558322656713613
-					},
-					{
-						"key": "TRB2",
-						"value": 9.340597579858402
-					},
-					{
-						"key": "PMP2",
-						"value": 0.31553226694687342
-					},
-					{
-						"key": "GEN",
-						"value": 73.3754516213971
-					},
-					{
-						"key": "CND1",
-						"value": 103.59773535017091
-					},
-					{
-						"key": "CND2",
-						"value": 59.115402673146008
-					}
-				]
-			},
-			{
-				"sampleId": "Operation",
-				"flows": [
-					{
-						"key": "GTS",
-						"value": 0.04
-					}
-				],
-				"processes": [
-					{
-						"key": "GTS",
-						"value": 2.016
-					},
-					{
-						"key": "VAP1",
-						"value": 20.057012176156988
-					},
-					{
-						"key": "PHT1",
-						"value": 36.249939248824489
-					},
-					{
-						"key": "TPHT",
-						"value": 10.487398628666565
-					},
-					{
-						"key": "VAP2",
-						"value": 22.805317729469188
-					},
-					{
-						"key": "PHT2",
-						"value": 10.229320614846529
-					},
-					{
-						"key": "TRB1",
-						"value": 11.172540597204092
-					},
-					{
-						"key": "PMP1",
-						"value": 1.4902490391042251
-					},
-					{
-						"key": "TRB2",
-						"value": 8.4065378218725613
-					},
-					{
-						"key": "PMP2",
-						"value": 0.28397904025218607
-					},
-					{
-						"key": "GEN",
-						"value": 66.0379064592574
-					},
-					{
-						"key": "CND1",
-						"value": 93.237961815153824
-					},
-					{
-						"key": "CND2",
-						"value": 53.203862405831408
-					}
-				]
-			}
-		]
-	},
-	"Format": {
-		"definitions": [
-			{
-				"key": "EXERGY",
-				"width": 10,
-				"precision": 3,
-				"unit": "(MW)"
-			},
-			{
-				"key": "EXERGY_COST",
-				"width": 10,
-				"precision": 3,
-				"unit": "(MW)"
-			},
-			{
-				"key": "EXERGY_UNIT_COST",
-				"width": 10,
-				"precision": 4,
-				"unit": "(J/J)"
-			},
-			{
-				"key": "GENERALIZED_COST",
-				"width": 10,
-				"precision": 3,
-				"unit": "($/h)"
-			},
-			{
-				"key": "GENERALIZED_UNIT_COST",
-				"width": 10,
-				"precision": 3,
-				"unit": "($/MWh)"
-			},
-			{
-				"key": "DIAGNOSIS",
-				"width": 10,
-				"precision": 4,
-				"unit": "(MW)"
-			}
-		]
-	}
+  "ProductiveStructure": {
+    "name": "gpp_model",
+    "flows": [
+      {
+        "key": "GTS",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V14",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V15",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V16",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V17",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V18",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V19",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V20",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W23",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W24",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W25",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W26",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W27",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "Q28",
+        "type": "WASTE"
+      },
+      {
+        "key": "Q29",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "GTS",
+        "description": "Geotermal Source",
+        "fuel": "GTS",
+        "product": "B1-B6-B8",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "VAP1",
+        "description": "Vaporizer 1",
+        "fuel": "B1-B2",
+        "product": "V10-V15",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PHT1",
+        "description": "Preheater 1",
+        "fuel": "B5-B6",
+        "product": "V14-V13",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TPHT",
+        "description": "Top Preheater",
+        "fuel": "B2-B3",
+        "product": "V15-V14",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "VAP2",
+        "description": "Vaporizer 2",
+        "fuel": "B3-B5-B7",
+        "product": "V16-V20",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PHT2",
+        "description": "Preheater 2",
+        "fuel": "B7-B8",
+        "product": "V20-V19",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TRB1",
+        "description": "Organic Turbine 1",
+        "fuel": "V10-V11",
+        "product": "W23",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PMP1",
+        "description": "Cycle Pump 1",
+        "fuel": "W25",
+        "product": "V13-V12",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "TRB2",
+        "description": "Organic Turbine 2",
+        "fuel": "V16-V17",
+        "product": "W24",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PMP2",
+        "description": "Cycle Pump 2",
+        "fuel": "W26",
+        "product": "V19-V18",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "GEN",
+        "description": "Generator",
+        "fuel": "W23+W24",
+        "product": "W25+W26+W27",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "CND1",
+        "description": "AirCooler Conderser 1",
+        "fuel": "V11-V12",
+        "product": "Q28",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "CND2",
+        "description": "AirCooler Condenser 2",
+        "fuel": "V17-V18",
+        "product": "Q29",
+        "type": "DISSIPATIVE"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Reference",
+      "exergy": [
+        {
+          "key": "GTS",
+          "value": 47.136630239999995
+        },
+        {
+          "key": "B1",
+          "value": 60.37948494
+        },
+        {
+          "key": "B2",
+          "value": 39.00582594
+        },
+        {
+          "key": "B3",
+          "value": 33.316466399999996
+        },
+        {
+          "key": "B5",
+          "value": 13.432353120000002
+        },
+        {
+          "key": "B6",
+          "value": 6.36141789
+        },
+        {
+          "key": "B7",
+          "value": 13.432353120000002
+        },
+        {
+          "key": "B8",
+          "value": 6.88143681
+        },
+        {
+          "key": "V10",
+          "value": 28.5002048
+        },
+        {
+          "key": "V11",
+          "value": 6.64214304
+        },
+        {
+          "key": "V12",
+          "value": 0.20911648
+        },
+        {
+          "key": "V13",
+          "value": 0.68771295999999993
+        },
+        {
+          "key": "V14",
+          "value": 4.9066918400000006
+        },
+        {
+          "key": "V15",
+          "value": 9.40377408
+        },
+        {
+          "key": "V16",
+          "value": 9.1936906800000013
+        },
+        {
+          "key": "V17",
+          "value": 2.3700706800000004
+        },
+        {
+          "key": "V18",
+          "value": 0.078471629999999987
+        },
+        {
+          "key": "V19",
+          "value": 0.13760967
+        },
+        {
+          "key": "V20",
+          "value": 4.5536290799999994
+        },
+        {
+          "key": "W23",
+          "value": 13.572899999999999
+        },
+        {
+          "key": "W24",
+          "value": 4.1836499999999992
+        },
+        {
+          "key": "W25",
+          "value": 0.71277
+        },
+        {
+          "key": "W26",
+          "value": 0.08766
+        },
+        {
+          "key": "W27",
+          "value": 15.535596
+        },
+        {
+          "key": "Q28",
+          "value": 6.43302656
+        },
+        {
+          "key": "Q29",
+          "value": 2.2915990500000003
+        }
+      ]
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "($/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "($/MWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 4,
+        "unit": "(MW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "Q28",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": [
+          {
+            "process": "VAP1",
+            "value": 4.342
+          },
+          {
+            "process": "PHT1",
+            "value": 0.959
+          },
+          {
+            "process": "TPHT",
+            "value": 1.023
+          }
+        ]
+      },
+      {
+        "flow": "Q29",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": [
+          {
+            "process": "VAP2",
+            "value": 1.167
+          },
+          {
+            "process": "PHT2",
+            "value": 1.11
+          }
+        ]
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": [
+      {
+        "sampleId": "Base",
+        "flows": {
+          "key": "GTS",
+          "value": 0
+        },
+        "processes": [
+          {
+            "key": "GTS",
+            "value": 2.016
+          },
+          {
+            "key": "VAP1",
+            "value": 22.285569084618874
+          },
+          {
+            "key": "PHT1",
+            "value": 40.277710276471652
+          },
+          {
+            "key": "TPHT",
+            "value": 11.652665142962849
+          },
+          {
+            "key": "VAP2",
+            "value": 25.339241921632429
+          },
+          {
+            "key": "PHT2",
+            "value": 11.36591179427392
+          },
+          {
+            "key": "TRB1",
+            "value": 12.413933996893435
+          },
+          {
+            "key": "PMP1",
+            "value": 1.6558322656713613
+          },
+          {
+            "key": "TRB2",
+            "value": 9.340597579858402
+          },
+          {
+            "key": "PMP2",
+            "value": 0.31553226694687342
+          },
+          {
+            "key": "GEN",
+            "value": 73.3754516213971
+          },
+          {
+            "key": "CND1",
+            "value": 103.59773535017091
+          },
+          {
+            "key": "CND2",
+            "value": 59.115402673146008
+          }
+        ]
+      },
+      {
+        "sampleId": "Operation",
+        "flows": {
+          "key": "GTS",
+          "value": 0.04
+        },
+        "processes": [
+          {
+            "key": "GTS",
+            "value": 2.016
+          },
+          {
+            "key": "VAP1",
+            "value": 20.057012176156988
+          },
+          {
+            "key": "PHT1",
+            "value": 36.249939248824489
+          },
+          {
+            "key": "TPHT",
+            "value": 10.487398628666565
+          },
+          {
+            "key": "VAP2",
+            "value": 22.805317729469188
+          },
+          {
+            "key": "PHT2",
+            "value": 10.229320614846529
+          },
+          {
+            "key": "TRB1",
+            "value": 11.172540597204092
+          },
+          {
+            "key": "PMP1",
+            "value": 1.4902490391042251
+          },
+          {
+            "key": "TRB2",
+            "value": 8.4065378218725613
+          },
+          {
+            "key": "PMP2",
+            "value": 0.28397904025218607
+          },
+          {
+            "key": "GEN",
+            "value": 66.0379064592574
+          },
+          {
+            "key": "CND1",
+            "value": 93.237961815153824
+          },
+          {
+            "key": "CND2",
+            "value": 53.203862405831408
+          }
+        ]
+      }
+    ]
+  }
 }

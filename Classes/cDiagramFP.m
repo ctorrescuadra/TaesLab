@@ -18,6 +18,8 @@ classdef (Sealed) cDiagramFP < cResultId
             values=mfp.getCostTableFP;
             obj.EdgesCFP=cDiagramFP.adjacencyTable(values,nodes);
             obj.DefaultGraph=cType.Tables.DIAGRAM_FP;
+            obj.ModelName=mfp.ModelName;
+            obj.State=mfp.State;
             obj.status=cType.VALID;
         end
 

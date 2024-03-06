@@ -63,11 +63,7 @@ classdef (Abstract) cTable < cStatusLogger
         %           cType.TableView.HTML
         %
             if nargin==1
-                if isOctave
-                    option=cType.TableView.CONSOLE;
-                else
-                    option=cType.TableView.HTML;
-                end
+                option=cType.TableView.CONSOLE;
             end
             switch option
             case cType.TableView.CONSOLE
@@ -117,6 +113,9 @@ classdef (Abstract) cTable < cStatusLogger
 
         function res=exportTable(obj,varmode)
         % Get table values in diferent formats
+            if nargin==1
+                varmode=cType.VarMode.NONE;
+            end        
             switch varmode
                 case cType.VarMode.CELL
                     res=obj.Values;

@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "orcerc_model",
     "flows": [
       {
         "key": "B1",
@@ -341,12 +342,12 @@
     "wastes": [
       {
         "flow": "QCND",
-        "type": "RESOURCES",
+        "type": "IRREVERSIBILITY",
         "recycle": 0
       },
       {
         "flow": "QVEX",
-        "type": "IRREVERSIBILITY",
+        "type": "HYBRID",
         "recycle": 0
       }
     ]

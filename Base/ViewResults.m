@@ -289,7 +289,7 @@ classdef ViewResults < matlab.apps.AppBase
                 mt=res;
             elseif isa(res,'cThermoeconomicModel')
                 val=res.getModelResults;
-                mt=res.getModelInfo;
+                mt=res.resultModelInfo;
             else
                 log.printError('Results must be a cResultInfo object');
                 delete(app);

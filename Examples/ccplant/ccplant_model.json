@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "ccplant_model",
     "flows": [
       {
         "key": "A1",

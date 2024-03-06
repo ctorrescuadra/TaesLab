@@ -112,6 +112,8 @@ classdef cProductiveStructureCheck < cResultId
                 obj.flowtypes=[obj.Flows.typeId];
 			    obj.streamtypes=[obj.Streams.typeId];
 			    obj.processtypes=[obj.Processes.typeId];
+				obj.ModelName=data.name;
+				obj.State='SUMMARY';
             end
         end
     end
@@ -409,9 +411,40 @@ classdef cProductiveStructureCheck < cResultId
 				end
             end
             % Compute direct and reverse connectivity
-            sc=bfs(sparse(G),sNode); 
-            tc=bfs(sparse(G'),tNode);
+            sc=cProductiveStructureCheck.bfs(sparse(G),sNode); 
+            tc=cProductiveStructureCheck.bfs(sparse(G'),tNode);
 			res=all(sc) && all(tc);
 		end
     end
+	methods(Static,Access=private)
+		function res=bfs(G,s)
+		% bfs - Bread First Search algorithm
+		%   Perform a BFS of the graph G starting in node s
+		%   Usage:
+		%       res = bfs(G, s)
+		%   Input:
+		%       G - Adjacency matrix of the graph
+		%       s - starting point
+		%   Output:
+		%       res - logical vector indicating the visiting nodes starting in s
+		%
+			sz=size(G);
+			N=sz(1);
+			res=false(1,N);
+			stack=cStack(N);
+			% make bfs starting on the s nodes
+			res(s)=true;
+			stack.push(s);
+			while ~stack.isempty
+				v=stack.pop;
+				[~,idx]=find(G(v,:));
+				for w=idx
+					if ~res(w) 
+						stack.push(w);
+						res(w)=true;
+					end
+				end
+			end
+		end
+	end
 end

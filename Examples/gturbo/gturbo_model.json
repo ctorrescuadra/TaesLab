@@ -1,6 +1,6 @@
 {
-  "ModelName": "gturbo",
   "ProductiveStructure": {
+    "name": "gturbo_model",
     "flows": [
       {
         "key": "B1",

@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "powerplant_model",
     "flows": [
       {
         "key": "B1",

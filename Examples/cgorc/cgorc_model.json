@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "cgorc_model",
     "flows": [
       {
         "key": "B11",

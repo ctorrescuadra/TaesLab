@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "rankine_model",
     "flows": [
       {
         "key": "CMB",

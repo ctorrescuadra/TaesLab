@@ -5,7 +5,9 @@ classdef cResultId < cStatusLogger
 %
 	properties(GetAccess=public,SetAccess=protected)
 		ResultId=cType.ResultId.DATA_MODEL % Result Id
-		ResultName % Result Name
+		ResultName   % Result Name
+        ModelName    % Model Name
+        State        % State Name
 		DefaultGraph % Default Graph
     end
 
@@ -14,13 +16,16 @@ classdef cResultId < cStatusLogger
         % Class constructor
 		% 	Input:
 		%		id - Result identifier. See cType.ResultId
-			if (nargin==1) &&isscalar(id) && isnumeric(id)
+            if (nargin==1) &&isscalar(id) && isnumeric(id)
 				N=length(cType.Results);
 				if any (id==1:N)
 					obj.ResultId=id;
                     obj.status=cType.VALID;
+                    obj.ModelName='';
+                    obj.State='';
+                    obj.DefaultGraph='';
 				end
-			end
+            end
         end
 		
         function res=get.ResultName(obj)

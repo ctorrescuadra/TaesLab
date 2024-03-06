@@ -3,7 +3,7 @@ function SaveSummaryResults(model,filename)
 %   The type of file depends on the file extension
 %   *.csv, *.xlsx and *.mat are allowed
 %   USAGE:
-%       SaveSummaryResults(arg,filename)
+%       SaveSummaryResults(model,filename)
 %   INPUT:
 %       model - cThermoeconomicModel object
 %       filename - name of the output file (with extension)
@@ -22,6 +22,7 @@ function SaveSummaryResults(model,filename)
     if isstring(filename)
         filename=convertStringsToChars(filename);
     end
+    % Save summary results
     log=saveSummary(model,filename);
     log.printLogger;
 end

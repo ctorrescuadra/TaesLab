@@ -59,18 +59,18 @@ classdef cModelFPR < cProcessModel
 			obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             obj.c0=zeros(1,obj.NrOfFlows);
 			obj.c0(obj.ps.Resources.flows)=1.0;
-			obj.isWaste=(obj.NrOfWastes>0);
 			obj.DefaultGraph=cType.Tables.PROCESS_ICT;
-			if (nargin==2)
+			if (nargin==2) && (obj.NrOfWastes>0)
+				obj.isWaste=true;
 				obj.setWasteTable(wd);
                 obj.setWasteOperators;
 			end
 		end
 
 		function res=get.SystemOutput(obj)
-			% Get the system output exergy values vector
-				res=obj.TableFP(1:end-1,end);
-			end
+		% Get the system output exergy values vector
+			res=obj.TableFP(1:end-1,end);
+		end
 	
 		function res=get.FinalDemand(obj)
 		% Override getFinalDemand
@@ -338,8 +338,6 @@ classdef cModelFPR < cProcessModel
 				res=diag(opR.mValues(:,opR.mRows))';
 			end
         end
-
-
 	end
 	
 	methods (Access=private)

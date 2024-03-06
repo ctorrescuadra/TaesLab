@@ -21,7 +21,7 @@ classdef (Sealed) cModelResults < cStatusLogger
                 return
             end
             obj.results=cell(1,cType.MAX_RESULT_INFO);
-            dm=data.getResultInfo;
+            dm=getResultInfo(data);
             obj.setResults(dm);
             obj.status=cType.VALID;
         end

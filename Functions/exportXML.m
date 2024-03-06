@@ -27,7 +27,6 @@ function log=exportXML(data,filename)
     end
 	try
 		writestruct(data,filename,'StructNodeName','root','AttributeSuffix','Id');
-        log.messageLog(cType.INFO,'File %s has been saved',filename);
 	catch err
         log.messageLog(cType.ERROR,err.message);
         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);

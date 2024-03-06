@@ -1,16 +1,11 @@
-classdef TableViewer < handle
-% ShowTables is a GUI funtion that shows the table index of a collection of results.
+classdef TablesPanel < handle
+% TablesPanel is a GUI funtion that shows the table index of a collection of results.
 %   When select a table, it is shown in the web browser and show the graph if it exists.
 %   USAGE:
-%       ShowTables(res,params)
+%       TablesPanel(res,params)
 %   INPUT:
-%       res - A cResultInfo or a cThermoeconomicModel object
-%       param - Optional parameters
-%           View: Select the way to show the table
-%               CONSOLE - show in console (default)
-%               GUI - use uitable
-%               HTML- use web browser
-%   See also cResultInfo, cThermoeconomicModel
+%       res - cResultInfo containig the tables to show 
+%   See also cResultInfo, cThermoeconomicModel, cDataModel
 %
     properties(Access=private)
         fig             % Base Figure
@@ -21,28 +16,30 @@ classdef TableViewer < handle
         tableView       % View Table option
     end
     methods
-        function app=TableViewer(arg)
+        function app=TablesPanel(arg)
         % Built an instance of the object
             log=cStatusLogger();
             if nargin<1
                 log.printError('Usage: TableViewer(res)');
                 return
             end
-            % Check Input parameters
-            if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
-                log.printError('Invalid result parameter');
-                return
+            % Check Input parameter
+            switch getClassId(arg)
+                case cType.ClassId.RESULT_INFO
+                    res=arg;
+                case cType.ClassId.DATA_MODEL
+                    res=arg.getResultInfo;
+                case cType.ClassId.RESULT_MODEL
+                    res=arg.resultModelInfo;
+                otherwise
+                    log.printError('Invalid result parameter');
+                    return
             end
             % Check input parameters
             if isOctave
                 app.tableView=cType.TableView.GUI;
             else
                 app.tableView=cType.TableView.HTML;
-            end
-            if isa(arg,'cThermoeconomicModel')
-                res=arg.getModelInfo;
-            else
-                res=arg;
             end
             tbl=res.getTableIndex;
             % Create figure

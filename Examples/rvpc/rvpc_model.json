@@ -1,5 +1,6 @@
 {
 	"ProductiveStructure": {
+        "name": "rvpc_model",
 		"flows": [
 			{
 				"key": "B1",

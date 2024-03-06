@@ -38,6 +38,8 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.NodesPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesPAT=cProductiveDiagram.adjacencyTable(productiveMatrix,nodenames);
             obj.DefaultGraph=cType.Tables.FLOWS_DIAGRAM;
+            obj.ModelName=ps.ModelName;
+            obj.State=ps.State;
             obj.status=cType.VALID;
         end
 

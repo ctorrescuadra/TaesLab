@@ -28,12 +28,18 @@ function res=ShowResults(arg,varargin)
         log.printError('Usage: ShowResults(res)');
 		return
     end
-    % Check Input parameters
-	if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
-		log.printError('Invalid result parameter');
-		return
-	end
     % Check input parameters
+    switch getClassId(arg)
+        case cType.ClassId.RESULT_INFO
+            res=arg;
+        case cType.ClassId.DATA_MODEL
+            res=arg.getResultInfo;
+        case cType.ClassId.RESULT_MODEL
+            res=arg.resultModelInfo;
+        otherwise
+            log.printError('Invalid result parameter');
+        return
+    end
     p = inputParser;
     p.addParameter('Table','',@ischar);
     p.addParameter('Show',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
@@ -49,11 +55,11 @@ function res=ShowResults(arg,varargin)
     param=p.Results;
     % If table is empty printResults
     if isempty(param.Table)
-        printResults(arg);
+        printResults(res);
         return
     end
     % Get table
-    tbl=getTable(arg,param.Table);
+    tbl=getTable(res,param.Table);
     if ~isValid(tbl)
         tbl.printLogger;
         return

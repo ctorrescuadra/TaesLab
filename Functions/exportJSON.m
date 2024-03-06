@@ -26,7 +26,6 @@ function log=exportJSON(data,filename)
 		fid=fopen(filename,'wt');
 		fwrite(fid,text);
 		fclose(fid);
-        log.messageLog(cType.INFO,'File %s has been saved',filename);
 	catch err
         log.messageLog(cType.ERROR,err.message);
         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);

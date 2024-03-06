@@ -3,6 +3,7 @@ classdef cDataModel < cStatusLogger
 % It receives the data from the cReadModel interface classes, then validates
 % and organizes the information to be used by the calculation algorithms
 %   Methods:
+%       res=obj.getResultInfo
 %       res=obj.getExergyData(state)
 %       log=obj.setExergyData(state,values)
 %       res=obj.getResourceData(sample)
@@ -15,11 +16,10 @@ classdef cDataModel < cStatusLogger
 %       res=obj.getWasteFlows
 %       res=obj.checkCostTables
 %       res=obj.getTable(name)
-%       obj.setModelName(name)   
+%       obj.showDataModel(name,option)
 %       log=obj.saveDataModel(filename)
-%       obj.viewDataModel(name,option)
 %       res=obj.getTablesDirectory;
-%       obj.viewTablesDirectory(option)
+%       obj.showTablesDirectory(option)  
 %       log=obj.saveTablesDirectory(filename)
 %       
 %   See also cResultInfo, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
@@ -148,6 +148,7 @@ classdef cDataModel < cStatusLogger
             else
                 obj.ModelInfo=obj.getTableModel;
             end
+            obj.setClassId(cType.ClassId.DATA_MODEL);
        end
 
     	function res=get.NrOfFlows(obj)
@@ -192,7 +193,15 @@ classdef cDataModel < cStatusLogger
         function res=get.isDiagnosis(obj)
         % check if diagnosis data is available
 			res=(obj.NrOfStates>1);
-		end
+        end
+        
+        %%%
+        % Get Data model information
+        %%%
+        function res=getResultInfo(obj)
+        % Get the cResultInfo object associated to the data model tables
+            res=obj.ModelInfo;
+        end
 
         function res=getExergyData(obj,state)
         % get the exergy data for a state
@@ -325,58 +334,15 @@ classdef cDataModel < cStatusLogger
             res=true;
         end
 
-        function setModelName(obj,name)
-        % Set the name of the data model
-            obj.ModelName=name;
-        end
-
-        function res=getTable(obj,name)
+        %%%
+        % Gat data model tables
+        %%%
+        function res=getTable(obj,name,varargin)
         % get the model table
-            res=getTable(obj.ModelInfo,name);
-        end
-      
-		function log=saveDataModel(obj,filename)
-		% Save data model depending of filename extension
-			log=cStatusLogger(cType.VALID);
-			% Check inputs
-			if ~isValid(obj)
-				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
-                return
-			end
-            if ~cType.checkFileWrite(filename)
-				log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
-                return
-            end
-			% Save data model depending of fileType
-			fileType=cType.getFileType(filename);
-			switch fileType
-				case cType.FileType.JSON
-					log=saveAsJSON(obj.ModelData,filename);
-                case cType.FileType.XML
-                    log=saveAsXML(obj.ModelData,filename);
-				case cType.FileType.CSV
-                    log=saveAsCSV(obj.ModelInfo,filename);
-				case cType.FileType.XLSX
-                    log=saveAsXLS(obj.ModelInfo,filename);
-                case cType.FileType.TXT
-                    log=saveAsTXT(obj.ModelInfo,filename);
-                case cType.FileType.HTML
-                    log=saveAsHTML(obj.ModelInfo,filename);
-                case cType.FileType.LaTeX
-                    log=saveAsLaTeX(obj.ModelInfo,filename);
-                case cType.FileType.MAT
-					log=obj.saveAsMAT(filename);
-				otherwise
-					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
-			end
-        end
-
-        function printDataModel(obj)
-        % Print the data model tables
-            printResults(obj.ModelInfo);
+            res=getTable(obj.ModelInfo,name,varargin{:});
         end
         
-        function viewTable(obj,name,varargin)
+        function showDataModel(obj,name,varargin)
         % View a table in a GUI Table
         %   Input:
         %       name - [optional] Name of the table
@@ -396,6 +362,52 @@ classdef cDataModel < cStatusLogger
             end
         end
 
+        function log=saveDataModel(obj,filename)
+		% Save data model depending of filename extension
+        %   Valid extension are: txt, csv, html, xlsx, json, xml, mat
+        %   Input:
+        %       filename - name of the file including extension.
+        %    
+			log=cStatusLogger(cType.VALID);
+			% Check inputs
+			if ~isValid(obj)
+				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
+                return
+			end
+            if ~cType.checkFileWrite(filename)
+				log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+                return
+            end
+			% Save data model depending of fileType
+			fileType=cType.getFileType(filename);
+            switch fileType
+				case cType.FileType.JSON
+					log=saveAsJSON(obj.ModelData,filename);
+                case cType.FileType.XML
+                    log=saveAsXML(obj.ModelData,filename);
+				case cType.FileType.CSV
+                    log=saveAsCSV(obj.ModelInfo,filename);
+				case cType.FileType.XLSX
+                    log=saveAsXLS(obj.ModelInfo,filename);
+                case cType.FileType.TXT
+                    log=saveAsTXT(obj.ModelInfo,filename);
+                case cType.FileType.HTML
+                    log=saveAsHTML(obj.ModelInfo,filename);
+                case cType.FileType.LaTeX
+                    log=saveAsLaTeX(obj.ModelInfo,filename);
+                case cType.FileType.MAT
+					log=obj.saveAsMAT(filename);
+				otherwise
+					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
+            end
+            if isValid(log)
+				log.messageLog(cType.INFO,'File %s has been saved',filename);
+            end
+        end
+
+        %%%
+        % Tables Directory functions
+        %%%
         function res=getTablesDirectory(obj,varargin)
         % Get the Tables directory object
         %   Input:
@@ -408,12 +420,12 @@ classdef cDataModel < cStatusLogger
             res=getTablesDirectory(obj.FormatData,varargin{:});
         end
 
-        function viewTablesDirectory(obj,varargin)
+        function showTablesDirectory(obj,varargin)
         % View the Tables directory
         %   Input:
         %       options - TableView option
         %
-            ViewTablesDirectory(obj.FormatData,varargin{:});
+            showTablesDirectory(obj.FormatData,varargin{:});
         end
 
         function saveTablesDirectory(obj,filename)
@@ -422,9 +434,11 @@ classdef cDataModel < cStatusLogger
         %   Input:
         %       filename - name of the file including extension.
         %    
-            SaveTablesDirectory(obj.FormatData,filename);
+            saveTablesDirectory(obj.FormatData,filename);
         end
+
     end
+
     methods(Access=private)
         function log=saveAsMAT(obj,filename)
         % Save the cDataModel as a MAT file
@@ -446,7 +460,6 @@ classdef cDataModel < cStatusLogger
             % Save the object
             try
 				save(filename,'obj');
-                log.messageLog(cType.INFO,'File %s has been saved',filename)
 			catch err
                 log.messageLog(cType.ERROR,err.message);
                 log.messageLog(cType.ERROR,'File %s cannot be written',filename);

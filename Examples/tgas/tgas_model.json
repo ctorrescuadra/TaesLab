@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "tgas_model",
     "flows": [
       {
         "key": "NG",
@@ -444,7 +445,7 @@
     ]
   },
   "WasteDefinition": {
-    "wastes": [{
+    "wastes": {
       "flow": "QG",
       "type": "IRREVERSIBILITY",
       "recycle": 0,
@@ -458,16 +459,16 @@
           "value": 0.25
         }
       ]
-    }]
+    }
   },
   "ResourcesCost": {
     "Samples": [
       {
         "sampleId": "Base",
-        "flows": [{
+        "flows": {
           "key": "NG",
           "value": 1.32
-        }],
+        },
         "processes": [
           {
             "key": "COMB",
@@ -493,10 +494,10 @@
       },
       {
         "sampleId": "STACK",
-        "flows": [{
+        "flows": {
           "key": "NG",
           "value": 1.082
-        }],
+        },
         "processes": [
           {
             "key": "COMB",
@@ -522,10 +523,10 @@
       },
       {
         "sampleId": "TGASR",
-        "flows": [{
+        "flows": {
           "key": "NG",
           "value": 1.32
-        }],
+        },
         "processes": [
           {
             "key": "COMB",

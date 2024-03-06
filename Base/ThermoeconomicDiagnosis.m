@@ -43,7 +43,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         res.printError('Diagnosis Method is NOT Activated')
         return
     end
-    % Read productive structure
+    % Check data model
     if ~data.isValid
         data.printLogger;
         res.printError('Invalid data model. See Error log');
@@ -87,13 +87,12 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         fp0=cModelFPR(rex0);
         fp1=cModelFPR(rex1);
     end
-    % Make the thermoeconomic diagnosis
+    % Execute thermoeconomic diagnosis
     method=cType.getDiagnosisMethod(param.DiagnosisMethod);
     dgn=cDiagnosis(fp0,fp1,method);
     % Get diagnosis results
     if dgn.isValid
         res=dgn.getResultInfo(data.FormatData);
-        res.setProperties(data.ModelName,param.State);
     else
         dgn.printLogger;
         res.printError('Invalid Thermoeconomic Diagnosis. See error log');

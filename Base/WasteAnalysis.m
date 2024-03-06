@@ -47,7 +47,7 @@ function res = WasteAnalysis(data,varargin)
     end
     % 
     param=p.Results;
-    % Check Productive Structure
+    % Check data model
     if ~data.isValid
 	    data.printLogger;
 	    res.printError('Invalid data model. See error log');
@@ -117,7 +117,6 @@ function res = WasteAnalysis(data,varargin)
     % Execute recycling analysis
     if isValid(ra)
         res=ra.getResultInfo(data.FormatData,param);
-        res.setProperties(data.ModelName,param.State);
     else
         ra.printLogger;
         res.printError('Invalid Recycling Analysis. See Error Log');

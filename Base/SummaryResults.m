@@ -1,4 +1,4 @@
-function res = SummaryResults(data)
+function res = SummaryResults(data,varargin)
 % Get the summary cost results of a plant
 %   USAGE:
 %       res=SummaryResults(data)
@@ -20,15 +20,32 @@ function res = SummaryResults(data)
 %           cType.SummaryTables.FLOW_GENERAL_UNIT_COST (gfuc)
 %   See also cReadModel, cModelSummary, cResultInfo
 %
-    res=cStatusLogger(cType.ERROR);
-    if ~isa(data,'cDataModel') || ~isValid(data)
-        res.printError('Invalid data parameter. It should be a valid cDataModel object');
+    res=cStatusLogger();
+    checkModel=@(x) isa(x,'cDataModel');
+    %Check and initialize parameters
+    p = inputParser;
+    p.addRequired('data',checkModel);
+    p.addParameter('Show',false,@islogical);
+    p.addParameter('SaveAs','',@ischar);
+    try
+        p.parse(data,varargin{:});
+    catch err
+        res.printError(err.message);
+        res.printError('Usage: cRecyclingAnalysis(data,param)')
         return
     end
+    param=p.Results;
     if data.NrOfStates>1
         model=cThermoeconomicModel(data,'Summary',true);
         res=model.summaryResults;
     else
         res.printWarning('Summary Results requires more than one state');
+    end
+    % Show and Save results if required
+    if param.Show
+        printResults(res);
+    end
+    if ~isempty(param.SaveAs)
+        SaveResults(res,param.SaveAs);
     end
 end

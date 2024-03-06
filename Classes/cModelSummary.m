@@ -76,6 +76,9 @@ classdef cModelSummary < cResultId
             obj.Irreversibility=pI;
             obj.StateNames=model.StateNames;
             obj.ps=model.productiveStructure.Info;
+            obj.DefaultGraph=cType.Tables.SUMMARY_FLOW_UNIT_COST;
+            obj.ModelName=model.ModelName;
+            obj.State='SUMMARY';
         end
 
         function res=getResultInfo(obj,fmt)

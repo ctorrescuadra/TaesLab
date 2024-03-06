@@ -124,6 +124,8 @@ classdef cDiagnosis < cResultId
             % Object Status Information
             obj.Method=method;
             obj.DefaultGraph=cType.Tables.MALFUNCTION_COST;
+            obj.ModelName=fp1.ModelName;
+            obj.State=fp1.State;
             obj.status=cType.VALID;
         end
 
@@ -227,12 +229,12 @@ classdef cDiagnosis < cResultId
             mdwr=sparse(idx,idx,obj.DWr(idx),N,N+1);
             mf=obj.tMF(1:N,:);
             obj.DW=obj.DWt;
-            obj.DCW=obj.dpuk.cPE .* obj.DW0';
+            obj.DCW=obj.dpuk.cPE .* obj.DWt';
             obj.DFin=obj.opI*[mf,obj.DWt];
             obj.DFex=zeros(N,N+1);
             dfr=obj.opI*mdwr;
             obj.DIT=obj.DFin+dfr+mdwr;
-            obj.vMCR=zeros(1,N);
+            obj.vMCR=obj.dpuk.cPE .* obj.DWr';
             obj.MFC=obj.tDF;
         end
         

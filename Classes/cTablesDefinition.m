@@ -83,13 +83,13 @@ classdef cTablesDefinition < cStatusLogger
             end
         end
         
-
-        function ViewTablesDirectory(obj,varargin)
-        % View the Tables Directory as GUI
+        function showTablesDirectory(obj,varargin)
+        % Show the Tables Directory
+        %   options - view table ooptions
             viewTable(obj.tDirectory,varargin{:});
         end
 
-        function SaveTablesDirectory(obj,filename)
+        function saveTablesDirectory(obj,filename)
         % Save result tables in different file formats depending on file extension
         %   Valid extension are: *.json, *.xml, *.csx, *.xlsx, *.txt, *.html, *.tex
         %   Usage:

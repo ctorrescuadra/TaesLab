@@ -28,7 +28,7 @@ function res=DiagramFP(data,varargin)
 		return
 	end
 	param=p.Results;
-	% Check Productive Structure
+	% Check Data Model
 	if ~data.isValid
 		data.printLogger;
 		res.printError('Invalid data model. See error log');
@@ -52,7 +52,6 @@ function res=DiagramFP(data,varargin)
         res.printError('Invalid Diagram FP. See error log');
     end
 	res=dfp.getResultInfo(data.FormatData);
-    res.setProperties(data.ModelName,param.State);
     % Show and Save results if required
     if param.Show
         printResults(res);

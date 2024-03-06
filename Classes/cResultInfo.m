@@ -8,16 +8,15 @@ classdef cResultInfo < cStatusLogger
 %   - Save the results in files: XLSX, CSV, TXT and HTML
 %   The diferent types (ResultId) of cResultInfo object are defined in cType.ResultId
 %   Methods:
-%       res=obj.getTable(name)
-%       obj.printTable(name)
-%       obj.viewTable(name,option);
-%       res=obj.getTableIndex
-%       obj.viewTableIndex(option);
-%       obj.printResults;
+%       obj.printResults
+%       obj.showResults(table,option)
+%       res=obj.getTable(name,varmode)
+%       res=obj.getTableIndex(varmode)
+%       obj.showTableIndex(option);
+%       obj.showGraph(name,options)
 %       log=obj.saveResults(filename)
 %       res=obj.getResultTables(varmode,fmt)
 %       obj.summaryDiagnosis
-%       obj.showGraph(name,options)
 % See: cResultTableBuilder, cTable
 %
     properties (GetAccess=public, SetAccess=private)
@@ -58,46 +57,30 @@ classdef cResultInfo < cStatusLogger
             obj.Tables=tables;
             obj.tableIndex=cTableIndex(obj);
             obj.NrOfTables=obj.tableIndex.NrOfRows;
-            obj.ModelName='';
-            obj.State='';
+            if isa(info,'cResultId')
+                obj.setProperties(info.ModelName,info.State);
+            end
+            obj.setClassId(cType.ClassId.RESULT_INFO);
             obj.status=info.status;
         end
 
-        function res = getTable(obj,name)
-        % Get the table called name
-        %   Usage:
-        %       res=obj.getTable(name)
-        %   Input:
-        %       name - Name of the table
-        %   Output:
-        %       res - cTable object
-            res = cStatusLogger;
-            if obj.existTable(name)
-                res=obj.Tables.(name);
-            else
-                res.printError('Table name %s does NOT exists',name);
+
+        %%%
+        % Show Result Tables
+        function printResults(obj)
+        % Print the tables on console
+            log=cStatus();
+            if ~isValid(obj)
+                log.printError('Invalid object to print')
+                return
             end
+            cellfun(@(x) printTable(x),obj.tableIndex.Content);
         end
 
-        function printTable(obj,name)
-        % Print an individual table
-        %   Usage:
-        %       obj.printTable(table)
-        %   Input:
-        %       name - Name of the table
-            log=cStatus(cType.VALID);
-            tbl=obj.getTable(name);
-            if isValid(tbl)
-                tbl.printTable;
-            else
-                log.printError('Table name %s does NOT exists',name);
-            end
-        end
-
-        function viewTable(obj,name,varargin)
+        function showResults(obj,name,varargin)
         % View an individual table
         %   Usage:
-        %       obj.viewTable(table,option)
+        %       obj.showResultsTable(table,option)
         %   Input:
         %       name - Name of the table
         %       option - Way to display the table
@@ -106,6 +89,10 @@ classdef cResultInfo < cStatusLogger
         %           cType.TableView.HTML (default)
         %
             log=cStatus(cType.VALID);
+            if nargin==1
+                printResults(obj);
+                return
+            end
             tbl=obj.getTable(name);
             if isValid(tbl)
                 viewTable(tbl,varargin{:});
@@ -114,12 +101,30 @@ classdef cResultInfo < cStatusLogger
             end
         end
 
-        function res=getTableIndex(obj)
-        % Get the Table Index
-            res=obj.tableIndex;
+        function res = getTable(obj,name,varargin)
+        % Get the table called name
+        %   Usage:
+        %       res=obj.getTable(name)
+        %   Input:
+        %       name - Name of the table
+        %       option - varmode option
+        %   Output:
+        %       res - cTable object
+            res = cStatusLogger;
+            if obj.existTable(name)
+                tbl=obj.Tables.(name);
+            else
+                res.printError('Table name %s does NOT exists',name);
+            end
+            res=exportTable(tbl,varargin{:});
         end
 
-        function viewTableIndex(obj,varargin)
+        function res=getTableIndex(obj,varargin)
+        % Get the Table Index
+            res=exportTable(obj.tableIndex,varargin{:});
+        end
+
+        function showTableIndex(obj,varargin)
         % View the index tables
         %   Usage:
         %       obj.viewTableIndex(table,option)
@@ -134,16 +139,74 @@ classdef cResultInfo < cStatusLogger
             tbl.viewTable(varargin{:});
         end
 
-        function printResults(obj)
-        % Print the tables on console
-            log=cStatus();
-            if ~isValid(obj)
-                log.printError('Invalid object to print')
-                return
+        function showGraph(obj,graph,varargin)
+        % Show graph with options
+        %   Usage:
+        %       obj.showGraph(graph, options)
+        %   Input:
+        %       graph - [optional] graph table name
+        %       varagin - graph options
+        % See also cGraphResults, cTableResults
+            log=cStatus(cType.VALID);
+            option=[];
+            if nargin==1
+                graph=obj.Info.DefaultGraph;
             end
-            cellfun(@(x) printTable(x),obj.tableIndex.Content);
+	        tbl=getTable(obj,graph);
+	        if ~isValid(tbl)
+		        log.printError('Invalid graph table: %s',graph);
+		        return
+	        end
+	        % Get default optional parameters
+            if isempty(varargin)
+                switch tbl.GraphType
+		            case cType.GraphType.DIAGNOSIS
+			            option=true;
+		            case cType.GraphType.WASTE_ALLOCATION
+				        option=obj.Info.wasteFlow;
+                    case cType.GraphType.DIGRAPH
+                        option=obj.Info.getNodeTable(graph);
+		            case cType.GraphType.SUMMARY
+                        if tbl.isFlowsTable
+					        option=obj.Info.getDefaultFlowVariables;
+				        else
+					        option=obj.Info.getDefaultProcessVariables;
+                        end
+                end
+            else
+                option=varargin{:};
+            end
+	        % Show Graph
+	        showGraph(tbl,option);
         end
 
+        %%%
+        % Thermoeconomic Diagnosis info methods
+        %%%
+        function res=getDiagnosisSummary(obj)
+        % get the Fuel Impact/Malfunction Cost as a string including format and unit
+            res=[];
+            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                format=obj.Tables.dit.Format;
+                unit=obj.Tables.dit.Unit;
+                tfmt=['Fuel Impact:',format,' ',unit];
+                res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
+                tfmt=['Malfunction Cost:',format,' ',unit];
+                res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
+            end
+        end
+
+        function summaryDiagnosis(obj)
+        % Show diagnosis summary results
+            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                res=obj.getDiagnosisSummary;
+                fprintf('%s\n%s\n',res.FuelImpact,res.MalfunctionCost);
+            end
+        end
+
+        %%%
+        % Save result tables
+        %%%
         function log=saveResults(obj,filename)
         % Save result tables in different file formats depending on file extension
         %   Accepted extensions: xlsx, csv, html, txt, tex
@@ -204,75 +267,6 @@ classdef cResultInfo < cStatusLogger
             names=obj.getListOfTables;
             tables=cellfun(@(x) exportTable(obj,x,varmode,fmt),names,'UniformOutput',false);
             res=cell2struct(tables,names,1);
-        end
-
-        function res=getFuelImpact(obj)
-        % get the Fuel Impact as a string including format and unit
-            res='WARNING: Fuel Impact NOT Available';
-            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                format=obj.Tables.dit.Format;
-                unit=obj.Tables.dit.Unit;
-                tfmt=['Fuel Impact:',format,' ',unit];
-                res=sprintf(tfmt,obj.Info.FuelImpact);
-            end
-        end
-
-        function summaryDiagnosis(obj)
-        % Show diagnosis summary results
-            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                format=obj.Tables.mfc.Format;
-                unit=obj.Tables.mfc.Unit;
-                tfmt=['Fuel Impact:',format,' ',unit,'\n'];
-                fprintf(tfmt,obj.Info.FuelImpact);
-                tfmt=['Malfunction Cost:',format,' ',unit,'\n'];
-                fprintf(tfmt,obj.Info.TotalMalfunctionCost);
-            end
-        end
-
-        function fuelImpact(obj)
-        % Print the fuel impact of the actual diagnosis state
-            fprintf('%s\n',obj.getFuelImpact);
-        end
-
-        function showGraph(obj,graph,varargin)
-        % Show graph with options
-        %   Usage:
-        %       obj.showGraph(graph, options)
-        %   Input:
-        %       graph - [optional] graph table name
-        %       varagin - graph options
-        % See also cGraphResults, cTableResults
-            log=cStatus(cType.VALID);
-            option=[];
-            if nargin==1
-                graph=obj.Info.DefaultGraph;
-            end
-	        tbl=getTable(obj,graph);
-	        if ~isValid(tbl)
-		        log.printError('Invalid graph table: %s',graph);
-		        return
-	        end
-	        % Get default optional parameters
-            if isempty(varargin)
-                switch tbl.GraphType
-		            case cType.GraphType.DIAGNOSIS
-			            option=true;
-		            case cType.GraphType.WASTE_ALLOCATION
-				        option=obj.Info.wasteFlow;
-                    case cType.GraphType.DIGRAPH
-                        option=obj.Info.getNodeTable(graph);
-		            case cType.GraphType.SUMMARY
-                        if tbl.isFlowsTable
-					        option=obj.Info.getDefaultFlowVariables;
-				        else
-					        option=obj.Info.getDefaultProcessVariables;
-                        end
-                end
-            else
-                option=varargin{:};
-            end
-	        % Show Graph
-	        showGraph(tbl,option);
         end
 
 		%%%
@@ -339,21 +333,21 @@ classdef cResultInfo < cStatusLogger
 			% Save Index file
 			tidx=obj.tableIndex;
 			fname=strcat(folder,filesep,'index',ext);
-			slog=tidx.exportCSV(fname);
+			slog=exportCSV(tidx.Values,fname);
 			if ~slog.isValid
 				log.addLogger(slog);
 				log.messageLog(cType.ERROR,'Index file is NOT saved');
 			end
 			% Save each table in a file
-			for i=1:obj.NrOfTables
+            for i=1:obj.NrOfTables
 				tbl=obj.tableIndex.Content{i};
 				fname=strcat(folder,filesep,tbl.Name,ext);
-				slog=tbl.exportCSV(fname);
+				slog=exportCSV(tbl.Values,fname);
 				if ~slog.isValid
 					log.addLogger(slog);
 					log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
 				end
-			end
+            end
 		end
 
         function log=saveAsXLS(obj,filename)
@@ -415,13 +409,13 @@ classdef cResultInfo < cStatusLogger
 						log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
 					end
 				end
-			end
-			if isOctave
+            end
+            if isOctave
 				fId=xlsclose(fId);
 				if ~isempty(fId)
 					log.messageLog(cType.ERROR,'Result file %s is NOT saved',filename);
 				end
-			end
+            end
 		end
 		
 		function log=saveAsHTML(obj,filename)

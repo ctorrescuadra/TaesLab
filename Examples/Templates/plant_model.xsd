@@ -6,6 +6,7 @@
                 <xs:element name="ProductiveStructure">
                     <xs:complexType>
                         <xs:sequence>
+                            <xs:element name="name" type="xs:string" />  
                             <xs:element name="flows" maxOccurs="unbounded">
                                 <xs:complexType>
                                     <xs:sequence>

@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "steam_model",
     "flows": [
       {
         "key": "B1",

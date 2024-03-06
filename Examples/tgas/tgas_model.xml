@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <ProductiveStructure>
+        <name>tgas_model</name>
         <flows>
             <key>NG</key>
             <type>RESOURCE</type>

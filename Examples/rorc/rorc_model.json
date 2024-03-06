@@ -1,5 +1,6 @@
 {
   "ProductiveStructure": {
+    "name": "rorc_model",
     "flows": [
       {
         "key": "B1",
