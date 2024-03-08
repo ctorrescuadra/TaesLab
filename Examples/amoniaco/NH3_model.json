@@ -1,0 +1,655 @@
+{
+  "ProductiveStructure": {
+    "name": "NH3_model",
+    "flows": [
+      {
+        "key": "H2",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "N2",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B14",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B15",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B16",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NH3",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "B18",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B19",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P20",
+        "type": "WASTE"
+      },
+      {
+        "key": "B21",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B22",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "A23",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "A24",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "A25",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "AR26",
+        "type": "WASTE"
+      },
+      {
+        "key": "WC1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "WC2",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "Q29",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "MIX1",
+        "fuel": "H2+N2",
+        "product": "B3",
+        "type": "PRODUCTIVE",
+        "description": "H2+N2 mix"
+      },
+      {
+        "key": "MIX2",
+        "fuel": "B3+B22",
+        "product": "B4",
+        "type": "PRODUCTIVE",
+        "description": "H2+N2+recycle mix"
+      },
+      {
+        "key": "MIX3",
+        "fuel": "B8+B11",
+        "product": "B12",
+        "type": "PRODUCTIVE",
+        "description": "Converter mix"
+      },
+      {
+        "key": "MIX4",
+        "fuel": "B19",
+        "product": "P20",
+        "type": "DISSIPATIVE",
+        "description": "Dissipative purge mix"
+      },
+      {
+        "key": "MIX5",
+        "fuel": "A25",
+        "product": "AR26",
+        "type": "DISSIPATIVE",
+        "description": "Dissipative water mix"
+      },
+      {
+        "key": "SPLIT1",
+        "fuel": "B7",
+        "product": "B8+B9",
+        "type": "PRODUCTIVE",
+        "description": "Converter split"
+      },
+      {
+        "key": "SPLIT2",
+        "fuel": "B18",
+        "product": "B19+B21",
+        "type": "PRODUCTIVE",
+        "description": "Separator split"
+      },
+      {
+        "key": "COMP1",
+        "fuel": "WC1",
+        "product": "B5-B4",
+        "type": "PRODUCTIVE",
+        "description": "1st stage compressor"
+      },
+      {
+        "key": "COMP2",
+        "fuel": "WC2",
+        "product": "B7-B6",
+        "type": "PRODUCTIVE",
+        "description": "2nd stage compressor"
+      },
+      {
+        "key": "HEX1",
+        "fuel": "B5-B6",
+        "product": "A24-A23",
+        "type": "PRODUCTIVE",
+        "description": "First compressor Intercooler"
+      },
+      {
+        "key": "HEX2",
+        "fuel": "B13-B14",
+        "product": "B10-B9",
+        "type": "PRODUCTIVE",
+        "description": "Converter preheater"
+      },
+      {
+        "key": "HEX3",
+        "fuel": "B14-B15",
+        "product": "A25-A24",
+        "type": "PRODUCTIVE",
+        "description": "Cooling water cooler"
+      },
+      {
+        "key": "HEX4",
+        "fuel": "B15-B16",
+        "product": "Q29",
+        "type": "DISSIPATIVE",
+        "description": "Cooling air cooler"
+      },
+      {
+        "key": "REAC1",
+        "fuel": "B10",
+        "product": "B11",
+        "type": "PRODUCTIVE",
+        "description": "1st bed converter/reactor"
+      },
+      {
+        "key": "REAC2",
+        "fuel": "B12",
+        "product": "B13",
+        "type": "PRODUCTIVE",
+        "description": "2nd bed converter/reactor"
+      },
+      {
+        "key": "SEP1",
+        "fuel": "B16-B18",
+        "product": "NH3",
+        "type": "PRODUCTIVE",
+        "description": "NH3 separator"
+      },
+      {
+        "key": "RCY1",
+        "fuel": "B21",
+        "product": "B22",
+        "type": "PRODUCTIVE",
+        "description": "Recycle"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "State1",
+      "exergy": [
+        {
+          "key": "H2",
+          "value": 7236.14178991334
+        },
+        {
+          "key": "N2",
+          "value": 90.3444265662723
+        },
+        {
+          "key": "B3",
+          "value": 7271.18742527516
+        },
+        {
+          "key": "B4",
+          "value": 39943.2775736808
+        },
+        {
+          "key": "B5",
+          "value": 40616.655068322
+        },
+        {
+          "key": "B6",
+          "value": 40515.8803175493
+        },
+        {
+          "key": "B7",
+          "value": 40989.7545865713
+        },
+        {
+          "key": "B8",
+          "value": 20494.8772932856
+        },
+        {
+          "key": "B9",
+          "value": 20494.8772932856
+        },
+        {
+          "key": "B10",
+          "value": 20731.0424138886
+        },
+        {
+          "key": "B11",
+          "value": 20679.3328535875
+        },
+        {
+          "key": "B12",
+          "value": 41103.3705942421
+        },
+        {
+          "key": "B13",
+          "value": 40997.9786447012
+        },
+        {
+          "key": "B14",
+          "value": 40702.9028533578
+        },
+        {
+          "key": "B15",
+          "value": 40122.2639814382
+        },
+        {
+          "key": "B16",
+          "value": 40073.6331215848
+        },
+        {
+          "key": "NH3",
+          "value": 6400.22872391582
+        },
+        {
+          "key": "B18",
+          "value": 33025.5784166968
+        },
+        {
+          "key": "B19",
+          "value": 330.255784166968
+        },
+        {
+          "key": "P20",
+          "value": 330.255632853974
+        },
+        {
+          "key": "B21",
+          "value": 32695.3226325298
+        },
+        {
+          "key": "B22",
+          "value": 32695.3226325298
+        },
+        {
+          "key": "A23",
+          "value": 1259.81546687015
+        },
+        {
+          "key": "A24",
+          "value": 1289.36251987102
+        },
+        {
+          "key": "A25",
+          "value": 1702.68725189075
+        },
+        {
+          "key": "AR26",
+          "value": 1702.68725189075
+        },
+        {
+          "key": "WC1",
+          "value": 823.959618483699
+        },
+        {
+          "key": "WC2",
+          "value": 571.024574961843
+        },
+        {
+          "key": "Q29",
+          "value": 48.630859853401489
+        }
+      ]
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kW/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "P20",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "AR26",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "Q29",
+        "type": "RESOURCES",
+        "recycle": 0
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": [
+      {
+        "sampleId": "HA30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 1.5205882352941176
+          },
+          {
+            "key": "N2",
+            "value": 7.0149253731343286
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.034
+          },
+          {
+            "key": "WC2",
+            "value": 1.034
+          }
+        ]
+      },
+      {
+        "sampleId": "WA30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 1.6441176470588235
+          },
+          {
+            "key": "N2",
+            "value": 7.5848032564450483
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.118
+          },
+          {
+            "key": "WC2",
+            "value": 1.118
+          }
+        ]
+      },
+      {
+        "sampleId": "PA30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 2.0852941176470585
+          },
+          {
+            "key": "N2",
+            "value": 9.6200814111261863
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.418
+          },
+          {
+            "key": "WC2",
+            "value": 1.418
+          }
+        ]
+      },
+      {
+        "sampleId": "HP30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 1.5786259541984733
+          },
+          {
+            "key": "N2",
+            "value": 7.0149253731343286
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.034
+          },
+          {
+            "key": "WC2",
+            "value": 1.034
+          }
+        ]
+      },
+      {
+        "sampleId": "WP30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 1.7068702290076336
+          },
+          {
+            "key": "N2",
+            "value": 7.5848032564450483
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.118
+          },
+          {
+            "key": "WC2",
+            "value": 1.118
+          }
+        ]
+      },
+      {
+        "sampleId": "PP30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 2.164885496183206
+          },
+          {
+            "key": "N2",
+            "value": 9.6200814111261863
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.418
+          },
+          {
+            "key": "WC2",
+            "value": 1.418
+          }
+        ]
+      },
+      {
+        "sampleId": "HS30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 1.2844720496894411
+          },
+          {
+            "key": "N2",
+            "value": 7.0149253731343286
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.034
+          },
+          {
+            "key": "WC2",
+            "value": 1.034
+          }
+        ]
+      },
+      {
+        "sampleId": "WA30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 1.3888198757763976
+          },
+          {
+            "key": "N2",
+            "value": 7.5848032564450483
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.118
+          },
+          {
+            "key": "WC2",
+            "value": 1.118
+          }
+        ]
+      },
+      {
+        "sampleId": "PA30",
+        "flows": [
+          {
+            "key": "H2",
+            "value": 1.7614906832298134
+          },
+          {
+            "key": "N2",
+            "value": 9.6200814111261863
+          },
+          {
+            "key": "A23",
+            "value": 0
+          },
+          {
+            "key": "WC1",
+            "value": 1.418
+          },
+          {
+            "key": "WC2",
+            "value": 1.418
+          }
+        ]
+      }
+    ]
+  }
+}

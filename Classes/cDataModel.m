@@ -1,9 +1,8 @@
-classdef cDataModel < cStatusLogger
+classdef cDataModel < cResultSet
 % cDataModel is the data dispatcher for the thermoeconomic analysis classes.
 % It receives the data from the cReadModel interface classes, then validates
 % and organizes the information to be used by the calculation algorithms
 %   Methods:
-%       res=obj.getResultInfo
 %       res=obj.getExergyData(state)
 %       log=obj.setExergyData(state,values)
 %       res=obj.getResourceData(sample)
@@ -15,7 +14,14 @@ classdef cDataModel < cStatusLogger
 %       res=obj.existSample(sample)
 %       res=obj.getWasteFlows
 %       res=obj.checkCostTables
-%       res=obj.getTable(name)
+%       res=obj.getResultInfo
+%       obj.printResults
+%       obj.showResults(name,options)
+%       res=obj.getTable(name,options)
+%       res=obj.getTableIndex(options)
+%       obj.showTableIndex(options)
+%       obj.saveResults(filename)
+%       obj.saveTable(name,filename)
 %       obj.showDataModel(name,option)
 %       log=obj.saveDataModel(filename)
 %       res=obj.getTablesDirectory;
@@ -51,7 +57,7 @@ classdef cDataModel < cStatusLogger
         % Creates the cDataModel object
         %   rdm - cReadModel object with the data model
             % Check Data Structure
-            obj=obj@cStatusLogger(cType.VALID);
+            obj=obj@cResultSet(cType.ClassId.DATA_MODEL);
             if ~isa(rdm,'cReadModel') || ~isValid(rdm)
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 return
@@ -148,7 +154,6 @@ classdef cDataModel < cStatusLogger
             else
                 obj.ModelInfo=obj.getTableModel;
             end
-            obj.setClassId(cType.ClassId.DATA_MODEL);
        end
 
     	function res=get.NrOfFlows(obj)
@@ -198,11 +203,6 @@ classdef cDataModel < cStatusLogger
         %%%
         % Get Data model information
         %%%
-        function res=getResultInfo(obj)
-        % Get the cResultInfo object associated to the data model tables
-            res=obj.ModelInfo;
-        end
-
         function res=getExergyData(obj,state)
         % get the exergy data for a state
         %   Input:
@@ -337,12 +337,7 @@ classdef cDataModel < cStatusLogger
         %%%
         % Gat data model tables
         %%%
-        function res=getTable(obj,name,varargin)
-        % get the model table
-            res=getTable(obj.ModelInfo,name,varargin{:});
-        end
-        
-        function showDataModel(obj,name,varargin)
+        function showDataModel(obj,varargin)
         % View a table in a GUI Table
         %   Input:
         %       name - [optional] Name of the table
@@ -352,14 +347,7 @@ classdef cDataModel < cStatusLogger
         %           cType.TableView.GUI
         %           cType.TableView.HTML (default)
         %
-            if nargin==1
-                printResults(obj.ModelInfo);
-                return
-            end
-            tbl=obj.getTable(name);
-            if tbl.isValid
-                viewTable(tbl.varargin{:});
-            end
+            showResults(obj,varargin{:})
         end
 
         function log=saveDataModel(obj,filename)
@@ -370,6 +358,9 @@ classdef cDataModel < cStatusLogger
         %    
 			log=cStatusLogger(cType.VALID);
 			% Check inputs
+            if nargin<2
+                log.messageLog(cType.ERROR,'Invalid number of arguments');
+            end
 			if ~isValid(obj)
 				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
                 return
@@ -396,7 +387,7 @@ classdef cDataModel < cStatusLogger
                 case cType.FileType.LaTeX
                     log=saveAsLaTeX(obj.ModelInfo,filename);
                 case cType.FileType.MAT
-					log=obj.saveAsMAT(filename);
+					log=exportMAT(obj,filename);
 				otherwise
 					log.messageLog(cType.WARNING,'File extension %s is not supported',filename);
             end
@@ -436,36 +427,9 @@ classdef cDataModel < cStatusLogger
         %    
             saveTablesDirectory(obj.FormatData,filename);
         end
-
     end
 
     methods(Access=private)
-        function log=saveAsMAT(obj,filename)
-        % Save the cDataModel as a MAT file
-            log=cStatusLogger(cType.VALID);
-            if isOctave
-				log.messageLog(cType.ERROR,'Save MAT files is not implemented in Octave');
-	            return
-            end
-			if nargin==1 % Default name
-                [~,name]=fileparts(obj.ModelFile);
-                filename=strcat(name,cType.FileExt.MAT);
-			end
-			% Determine fullfile
-			path=fileparts(filename);
-            if isempty(path)
-				fname=fullfile(pwd,filesep,filename);
-            end
-			obj.ModelFile=fname;
-            % Save the object
-            try
-				save(filename,'obj');
-			catch err
-                log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s cannot be written',filename);
-            end
-        end
-
         function res=getTableModel(obj)
         % Get the cModelTable with the data model tables
             ps=obj.ProductiveStructure;

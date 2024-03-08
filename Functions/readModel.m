@@ -18,7 +18,7 @@ function res=readModel(filename)
         case cType.FileType.XLSX
             res=cReadModelXLS(filename);
         case cType.FileType.MAT
-            res=importMAT(filename);  
+            res=ImportDataModel(filename);  
         otherwise
             res.messageLog(cType.ERROR,'File extension %s is not supported',filename);
             return

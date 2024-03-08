@@ -65,7 +65,7 @@ classdef (Sealed) cTableCell < cTableResult
             res=cell(N,M);
             for j=1:M
                 fmt=obj.Format{j+1};
-                if strContains(fmt,'f') % Octave - MATLAB compatibility
+                if ismember('f',fmt)
                     res(:,j)=cellfun(@(x) sprintf(fmt,x),obj.Data(:,j),'UniformOutput',false);
                 else
                     res(:,j)=obj.Data(:,j);

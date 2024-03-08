@@ -3,9 +3,9 @@ function SaveDataModel(data,filename)
 %   The files *.csv, *.xlsx, *.json, *.xml and *.mat are allowed
 %   It calls cReadModel method saveDataModel
 %   USAGE:
-%       SaveDataModel(arg,filename)
+%       SaveDataModel(data,filename)
 %   INPUT:
-%       arg - cDataModel or cThermoeconomicModel object
+%       data - cDataModel or cThermoeconomicModel object
 %       filename - name of the output file (with extension)
 % See also cDataModel, cThermoecononicModel
 %

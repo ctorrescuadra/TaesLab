@@ -24,29 +24,16 @@ function res=ShowResults(arg,varargin)
 % See also cResultInfo, cThermoeconomicModel
 %
     log=cStatusLogger(cType.ERROR);
-    if nargin<1
-        log.printError('Usage: ShowResults(res)');
-		return
-    end
-    % Check input parameters
-    switch getClassId(arg)
-        case cType.ClassId.RESULT_INFO
-            res=arg;
-        case cType.ClassId.DATA_MODEL
-            res=arg.getResultInfo;
-        case cType.ClassId.RESULT_MODEL
-            res=arg.resultModelInfo;
-        otherwise
-            log.printError('Invalid result parameter');
-        return
-    end
+    % Check input
+    checkModel=@(x) isa(x,'cResultSet');
     p = inputParser;
+    p.addRequired('arg',checkModel);
     p.addParameter('Table','',@ischar);
     p.addParameter('Show',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@ischar);
     try
-		p.parse(varargin{:});
+		p.parse(arg,varargin{:});
     catch err
         log.printError(err.message);
         log.printError('Usage: ViewTable(arg,options)');
@@ -55,11 +42,11 @@ function res=ShowResults(arg,varargin)
     param=p.Results;
     % If table is empty printResults
     if isempty(param.Table)
-        printResults(res);
+        printResults(arg);
         return
     end
     % Get table
-    tbl=getTable(res,param.Table);
+    tbl=getTable(arg,param.Table);
     if ~isValid(tbl)
         tbl.printLogger;
         return

@@ -1,4 +1,4 @@
-classdef cResultInfo < cStatusLogger
+classdef cResultInfo < cResultSet
 % cResultInfo is a class container of the application results
 % It stores the tables and the application class info.
 % It provide methods to:
@@ -15,6 +15,7 @@ classdef cResultInfo < cStatusLogger
 %       obj.showTableIndex(option);
 %       obj.showGraph(name,options)
 %       log=obj.saveResults(filename)
+%       log=obj.saveTable(name,filename)
 %       res=obj.getResultTables(varmode,fmt)
 %       obj.summaryDiagnosis
 % See: cResultTableBuilder, cTable
@@ -43,6 +44,7 @@ classdef cResultInfo < cStatusLogger
         %   tables - struct containig the result tables
         %
             % Check parameters
+            obj=obj@cResultSet(cType.ClassId.RESULT_INFO);
             if ~isa(info,'cResultId')
                 obj.messageLog(cType.ERROR,'Invalid ResultId object');
                 return
@@ -60,11 +62,8 @@ classdef cResultInfo < cStatusLogger
             if isa(info,'cResultId')
                 obj.setProperties(info.ModelName,info.State);
             end
-            obj.setClassId(cType.ClassId.RESULT_INFO);
             obj.status=info.status;
         end
-
-
         %%%
         % Show Result Tables
         function printResults(obj)
@@ -107,20 +106,34 @@ classdef cResultInfo < cStatusLogger
         %       res=obj.getTable(name)
         %   Input:
         %       name - Name of the table
-        %       option - varmode option
+        %       option - varmode option:
+        %           cType.VarMode.NONE: Return a struct with the cTable objects (default)
+        %           cType.VarMode.CELL: Return a struct with cell values
+        %           cType.VarMode.STRUCT: Return a struct with structured array values
+        %           cType.VarModel.TABLE: Return a struct of Matlab tables
         %   Output:
-        %       res - cTable object
+        %       res - table info, depends on option
             res = cStatusLogger;
+            if nargin<2
+                res.printError('No Table provided');
+                return
+            end
             if obj.existTable(name)
                 tbl=obj.Tables.(name);
             else
                 res.printError('Table name %s does NOT exists',name);
+                return
             end
             res=exportTable(tbl,varargin{:});
         end
 
         function res=getTableIndex(obj,varargin)
         % Get the Table Index
+        %   options - VarMode options
+        %       cType.VarMode.NONE: Return a struct with the cTable objects
+        %       cType.VarMode.CELL: Return a struct with cell values
+        %       cType.VarMode.STRUCT: Return a struct with structured array values
+        %       cType.VarModel.TABLE: Return a struct of Matlab tables
             res=exportTable(obj.tableIndex,varargin{:});
         end
 
@@ -145,7 +158,7 @@ classdef cResultInfo < cStatusLogger
         %       obj.showGraph(graph, options)
         %   Input:
         %       graph - [optional] graph table name
-        %       varagin - graph options
+        %       options - graph options
         % See also cGraphResults, cTableResults
             log=cStatus(cType.VALID);
             option=[];
@@ -181,30 +194,6 @@ classdef cResultInfo < cStatusLogger
         end
 
         %%%
-        % Thermoeconomic Diagnosis info methods
-        %%%
-        function res=getDiagnosisSummary(obj)
-        % get the Fuel Impact/Malfunction Cost as a string including format and unit
-            res=[];
-            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                format=obj.Tables.dit.Format;
-                unit=obj.Tables.dit.Unit;
-                tfmt=['Fuel Impact:',format,' ',unit];
-                res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
-                tfmt=['Malfunction Cost:',format,' ',unit];
-                res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
-            end
-        end
-
-        function summaryDiagnosis(obj)
-        % Show diagnosis summary results
-            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                res=obj.getDiagnosisSummary;
-                fprintf('%s\n%s\n',res.FuelImpact,res.MalfunctionCost);
-            end
-        end
-
-        %%%
         % Save result tables
         %%%
         function log=saveResults(obj,filename)
@@ -217,6 +206,10 @@ classdef cResultInfo < cStatusLogger
         %   Output:
         %       log - cStatusLogger object with error messages
             log=cStatusLogger(cType.VALID);
+            if nargin < 2
+                log.messageLog(cType.ERROR,'No filename provided');
+                return
+            end
             if ~isValid(obj)
                 log.messageLog(cType.ERROR,'Invalid cResultInfo object')
                 return
@@ -237,6 +230,8 @@ classdef cResultInfo < cStatusLogger
                     slog=obj.saveAsTXT(filename);
                 case cType.FileType.LaTeX
                     slog=obj.saveAsLaTeX(filename);
+                case cType.FileType.MAT
+                    slog=exportMAT(obj,filename);
             otherwise
                 log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
                 return
@@ -247,6 +242,27 @@ classdef cResultInfo < cStatusLogger
 			end
         end
 
+        function log=saveTable(obj,tname,filename)
+        % saveTable save the table name in a file depending extension
+        %   Usage:
+        %       obj.saveTable(tname, filename)
+        %   Input:
+        %       tname - name of the table
+        %       filename - name of the file with extension
+        %
+            log=cStatusLogger(cType.VALID);
+            if nargin < 3
+                log.messageLog(cType.ERROR,'Invalid input parameters');
+                return
+            end
+            tbl=obj.getTable(tname);
+            if isValid(tbl)
+                log=saveTable(tbl,filename);
+            else
+                log.messageLog(cType.ERROR,'Table name %s does NOT exists',tname);
+            end
+        end
+    
         function res=getResultTables(obj,varmode,fmt)
         % Get the result tables in different format mode
         %   Usage:
@@ -254,9 +270,9 @@ classdef cResultInfo < cStatusLogger
         %   Input:
         %       mode - Select the output object. The valid values are:
         %           cType.VarMode.NONE: Return a struct with the cTable objects
-	    %           cType.VarMode.CELL: Return a struct with cell values
-	    %           cType.VarMode.STRUCT: Return a struct with structured array values
-	    %           cType.VarModel.TABLE: Return a struct of Matlab tables
+        %           cType.VarMode.CELL: Return a struct with cell values
+        %           cType.VarMode.STRUCT: Return a struct with structured array values
+        %           cType.VarModel.TABLE: Return a struct of Matlab tables
         %       fmt  - true/false value, indicating if the table format is applied to the output. By default the value is false.
         %   Output
         %       res - Struct with the result tables in the selected format
@@ -267,6 +283,30 @@ classdef cResultInfo < cStatusLogger
             names=obj.getListOfTables;
             tables=cellfun(@(x) exportTable(obj,x,varmode,fmt),names,'UniformOutput',false);
             res=cell2struct(tables,names,1);
+        end
+
+        %%%
+        % Thermoeconomic Diagnosis info methods
+        %%%
+        function res=getDiagnosisSummary(obj)
+        % get the Fuel Impact/Malfunction Cost as a string including format and unit
+            res=[];
+            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                format=obj.Tables.dit.Format;
+                unit=obj.Tables.dit.Unit;
+                tfmt=['Fuel Impact:',format,' ',unit];
+                res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
+                tfmt=['Malfunction Cost:',format,' ',unit];
+                res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
+            end
+        end
+    
+        function summaryDiagnosis(obj)
+        % Show diagnosis summary results
+            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                res=obj.getDiagnosisSummary;
+                fprintf('%s\n%s\n',res.FuelImpact,res.MalfunctionCost);
+            end
         end
 
 		%%%
@@ -333,7 +373,7 @@ classdef cResultInfo < cStatusLogger
 			% Save Index file
 			tidx=obj.tableIndex;
 			fname=strcat(folder,filesep,'index',ext);
-			slog=exportCSV(tidx.Values,fname);
+			slog=exportCSV(tidx,fname);
 			if ~slog.isValid
 				log.addLogger(slog);
 				log.messageLog(cType.ERROR,'Index file is NOT saved');
@@ -342,7 +382,7 @@ classdef cResultInfo < cStatusLogger
             for i=1:obj.NrOfTables
 				tbl=obj.tableIndex.Content{i};
 				fname=strcat(folder,filesep,tbl.Name,ext);
-				slog=exportCSV(tbl.Values,fname);
+				slog=exportCSV(tbl,fname);
 				if ~slog.isValid
 					log.addLogger(slog);
 					log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
@@ -394,7 +434,7 @@ classdef cResultInfo < cStatusLogger
 				end
 			end
 			% Save tables
-			for i=1:obj.NrOfTables
+            for i=1:obj.NrOfTables
 				tbl=obj.tableIndex.Content{i};
 				if isOctave
 					[fId,status]=oct2xls(tbl.Values,fId,tbl.Name);

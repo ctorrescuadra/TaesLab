@@ -6,7 +6,8 @@
 %
 % Read Data Models
 %   ReadDataModel           - Read a data model file.
-%   CheckDataModel          - Read a data model file and check if all elements are valid.        
+%   CheckDataModel          - Read a data model file and check if all elements are valid.
+%   ImportDataModel         - Read a data model MAT file previously saved      
 %
 % Get the Thermoeconomic Results
 %   ThermoeconomicTool      - Get the complete thermoeconomic model of a plant
@@ -22,10 +23,11 @@
 %
 % Save Results Information
 %   SaveDataModel           - Saves the data model into a file.
-%   SaveResults             - Saves a cResultInfo object into a file.
+%   SaveResults             - Saves a cResultSet object into a file.
 %   SaveDiagramFP           - Saves the Diagram FP adjacency tables into a file
 %   SaveProductiveDiagram   - Saves the productive structure adjacency tables into a file.
 %   SaveSummaryResults      - Saves the summary cost tables into a file
+%   SaveTable               - Save an individual table of the model
 %   ExportDataModel         - Copy a model data file in another format
 %
 % Results Presentation

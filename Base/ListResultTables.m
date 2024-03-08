@@ -4,7 +4,7 @@ function res=ListResultTables(varargin)
 %       res=ListResultTables(options)
 %   INPUT:
 %       options - an structure contains additional parameters
-%           View: Select the way to show the table
+%           Show: Select the way to show the table
 %               CONSOLE - show in console (default)
 %               GUI - use uitable
 %               HTML- use web browser
@@ -31,7 +31,7 @@ function res=ListResultTables(varargin)
     log=cStatusLogger(cType.ERROR);
     % Check input parameters
     p = inputParser;
-    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('Show',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@ischar);
     p.addParameter('Columns',cType.DirColsDefault,@iscell)
@@ -39,7 +39,7 @@ function res=ListResultTables(varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: ViewTable(arg,options)');
+        log.printError('Usage: res=ListResultTables(options)');
         return
     end
     param=p.Results;
@@ -55,7 +55,7 @@ function res=ListResultTables(varargin)
         res=exportTable(tbl,option);
     end
     % View the table
-    option=cType.getTableView(param.View);
+    option=cType.getTableView(param.Show);
     viewTable(tbl,option);
     % Save table 
     if ~isempty(param.SaveAs)

@@ -8,7 +8,7 @@ function ShowGraph(arg,varargin)
 %   USAGE:
 %       ShowGraph(arg, param)
 %   INPUT:
-%       arg - cResultInfo or cThermoeconomicModel object
+%       arg - cResultSet object
 %       param - options depending on grah type
 %           Graph: Name of the graph
 %			ShowOutput: Use for diagnosis tables
@@ -18,7 +18,7 @@ function ShowGraph(arg,varargin)
 % See also cThermoeconomicModel
 %
     log=cStatus(cType.VALID);
-	if ~(isa(arg,'cThermoeconomicModel') || isa(arg,'cResultInfo')) || ~isValid(arg)
+	if ~(isa(arg,'cResultSet')) || ~isValid(arg)
 		log.printError('Invalid result parameter');
 		return
 	end
@@ -36,32 +36,18 @@ function ShowGraph(arg,varargin)
         return
     end
 	param=p.Results;
-	if isa(arg,'cThermoeconomicModel')
-		if isempty(param.Graph)
-			log.printError('Graph parameter is missing')
-			log.printError('Usage: ShowModelGraph(res,graph,options)');
-			return
-		end
-		iTable=arg.getTableInfo(param.Graph);
-		if ~isempty(iTable) && iTable.graph
-			res=arg.getResultInfo(iTable.resultId);
-		elseif ~iTable.graph
-			log.printError('Table %s have not graph',param.Graph);
-			return
-		else
-			log.printError('Graph %s does not exists',param.Graph);
-			return
-		end
-	else
-		if	isempty(param.Graph)
+	if isempty(param.Graph)
+		if isa(arg,'cResultInfo')
 			param.Graph=arg.Info.DefaultGraph;
+		else
+			log.printError('Graph parameter is missing')
+			log.printError('Usage: ShowGraph(res,graph,options)');
+			return
 		end
-		res=arg;
-	end		
-
+	end
     % Get the table values
-	tbl=getTable(res,param.Graph);
-	if ~isValid(tbl)
+	tbl=getTable(arg,param.Graph);
+	if ~isValid(tbl) || ~tbl.isGraph
 		log.printError('Invalid graph table: %s',param.Graph);
 		return
 	end
@@ -69,21 +55,21 @@ function ShowGraph(arg,varargin)
 	option=[];
 	switch tbl.GraphType
 		case cType.GraphType.DIAGNOSIS
-			if res.Info.Method==cType.DiagnosisMethod.WASTE_INTERNAL
+			if arg.Info.Method==cType.DiagnosisMethod.WASTE_INTERNAL
 				option=param.ShowOutput;
             else
 				option=true;
 			end
 		case cType.GraphType.DIGRAPH
-			option=res.Info.getNodeTable(param.Graph);
+			option=arg.Info.getNodeTable(param.Graph);
 		case cType.GraphType.WASTE_ALLOCATION
-            option=res.Info.wasteFlow;
+            option=arg.Info.wasteFlow;
 		case cType.GraphType.SUMMARY
 			if isempty(param.Variables)
 				if tbl.isFlowsTable
-					param.Variables=res.Info.getDefaultFlowVariables;
+					param.Variables=arg.Info.getDefaultFlowVariables;
 				else
-					param.Variables=res.Info.getDefaultProcessVariables;
+					param.Variables=arg.Info.getDefaultProcessVariables;
 				end
 			end
 			option=param.Variables;

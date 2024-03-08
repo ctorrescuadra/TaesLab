@@ -91,9 +91,9 @@ classdef (Abstract) cTable < cStatusLogger
             [fileType,ext]=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.CSV
-                    log=exportCSV(obj.Values,filename);
+                    log=exportCSV(obj,filename);
                 case cType.FileType.XLSX
-                    log=exportXLS(obj.Values,filename);
+                    log=exportXLS(obj,filename);
                 case cType.FileType.JSON
                     log=exportJSON(obj.getStructTable,filename);
                 case cType.FileType.XML
@@ -113,6 +113,11 @@ classdef (Abstract) cTable < cStatusLogger
 
         function res=exportTable(obj,varmode)
         % Get table values in diferent formats
+        %   options - VarMode options
+        %       cType.VarMode.NONE: Return a struct with the cTable objects
+        %       cType.VarMode.CELL: Return a struct with cell values
+        %       cType.VarMode.STRUCT: Return a struct with structured array values
+        %       cType.VarModel.TABLE: Return a struct of Matlab tables
             if nargin==1
                 varmode=cType.VarMode.NONE;
             end        
@@ -219,26 +224,154 @@ classdef (Abstract) cTable < cStatusLogger
                 res=size(obj.Values,dim);
             end
         end
+        %%%
+        % Export table Mathods
+        %%%
+        function log=exportCSV(obj,filename)
+        % exportCSV saves table values as CSV file
+            log=cStatusLogger(cType.VALID);
+            % Validate parameters
+            data=obj.Values;
+            if (nargin~=2) || (~ischar(filename)) || ~iscell(data)
+                log.messageLog(cType.ERROR,'Invalid input arguments');
+                return
+            end
+            if ~cType.checkFileWrite(filename)
+                obj.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+                return
+            end
+            % Save data as CSV
+            try
+                if isOctave
+                    cell2csv(filename,data);
+                else
+                    writecell(data,filename);
+                end
+                log.messageLog(cType.INFO,'File %s has been saved',filename);
+            catch err
+                log.messageLog(cType.ERROR,err.message);
+                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+            end
+        end
+    
+        function log=exportXLS(obj,filename)
+        % exportXLS saves table cell as XLS file
+            log=cStatusLogger(cType.VALID);
+            data=obj.Values;
+            % Check inputs
+            if (nargin~=2) || (~ischar(filename)) || ~iscell(data)
+                log.messageLog(cType.ERROR,'Invalid input arguments');
+                return
+            end     
+            if ~cType.checkFileWrite(filename)
+                obj.messageLog(cType.ERROR,'Invalid file name: %s',filename)
+                return
+            end
+  
+            % Save data into file
+            if isOctave
+                xls=xlsopen(filename,1);
+                [xls,status]=oct2xls(data,xls);
+                xls=xlsclose(xls);
+                if status && isempty(xls)
+                    log.messageLog(cType.INFO,'File %s has been saved',filename);
+                else
+                    log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                end
+            else 
+                try
+                    writecell(data,filename);
+                    log.messageLog(cType.INFO,'File %s has been saved',filename);           
+                catch err
+                    log.messageLog(cType.ERROR,err.message);
+                    log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                end
+            end
+        end  
+               
+        function log=exportTXT(obj,filename)
+        % Save a table as text file
+            log=cStatusLogger(cType.VALID);
+            % Check Inputs
+            if (nargin~=2) || (~ischar(filename)) || ~isa(obj,'cTable')
+                log.messageLog(cType.ERROR,'Invalid input arguments');
+                return
+            end
+            if ~cType.checkFileWrite(filename)
+                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+                return
+            end
+            % Save the file
+            try
+                fId = fopen (filename, 'wt');
+                printTable(obj,fId)
+                fclose(fId);
+                log.messageLog(cType.INFO,'File %s has been saved',filename)
+            catch err
+                log.messageLog(cType.ERROR,err.message)
+                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+            end
+        end
+                
+        function log=exportHTML(obj,filename)
+        % Save a table as HTML file
+            log=cStatusLogger(cType.VALID);
+            % Check Inputs
+            if (nargin~=2) || (~ischar(filename)) || ~isa(obj,'cTable')
+                log.messageLog(cType.ERROR,'Invalid input arguments');
+                return
+            end
+            if ~cType.checkFileWrite(filename)
+                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+                return
+            end
+            % Get the HTML file
+            html=cBuildHTML(obj);
+            log=html.saveTable(filename);
+            if isValid(log)
+                    log.messageLog(cType.INFO,'File %s has been saved',filename)
+            end
+        end
+    
+        function log=exportLaTeX(tbl,filename)
+        % exportLaTeX generates the LaTex table code file of cTable object
+            log=cStatusLogger(cType.VALID);
+            % Check Inputs
+            if (nargin~=2) || (~ischar(filename)) || ~isa(tbl,'cTable')
+                log.messageLog(cType.ERROR,'Invalid input arguments');
+                return
+            end
+            if ~cType.checkFileWrite(filename)
+                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+                return
+            end
+            obj=cBuildLaTeX(tbl);
+            log=obj.exportTable(filename);
+            if isValid(log)
+                log.messageLog(cType.INFO,'File %s has been saved',filename)
+            end
+        end 
     end
+    
     methods(Access=protected)
         function viewTableGUI(obj)
-            % View the values of the table (tbl) in a uitable graphic object
-                vt=cViewTable(obj);
-                if isValid(vt)
-                    vt.showTable
-                else
-                    printLogger(vt);
-                end
+        % View the values of the table (tbl) in a uitable graphic object
+            vt=cViewTable(obj);
+            if isValid(vt)
+                vt.showTable
+            else
+                printLogger(vt);
             end
+        end
     
-            function viewTableHTML(obj)
-            % View a table in the web browser
-                vh=cBuildHTML(obj);
-                if isValid(vh)
-                    vh.showTable
-                else
-                    printLogger(vh);
-                end
+        function viewTableHTML(obj)
+        % View a table in the web browser
+            vh=cBuildHTML(obj);
+            if isValid(vh)
+                vh.showTable
+            else
+                printLogger(vh);
             end
+        end
     end
 end

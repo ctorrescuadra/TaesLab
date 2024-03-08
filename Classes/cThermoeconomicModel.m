@@ -1,4 +1,4 @@
-classdef cThermoeconomicModel < cStatusLogger
+classdef cThermoeconomicModel < cResultSet
 % cThermoeconomicModel is an interactive tool for thermoeconomic analysis
 % It is the main class of TaesLab package, and provide the following functionality:
 %   - Read and check a thermoeconomic data model
@@ -47,18 +47,24 @@ classdef cThermoeconomicModel < cStatusLogger
 %   Tables Info Methods
 %       res=obj.getTablesDirectiory
 %       res=obj.getTableInfo(name)
-%       res=obj.getTable(name)
+%       res=obj.getTable(name,options)
+%       res=obj.getTableIndex(options)
 %   Show Methods
-%       obj.showResults(name)
+%       res=obj.getResultInfo
+%       obj.printResults
+%       obj.showResults(name,options)
+%       obj.showTableIndex(options)
+%       obj.showGraph(name,options)
 %       obj.showSummary(name)
 %       obj.showTableDirectory(option)
 %       obj.showGraph(name,options)
 %   Save Methods
-%       log=obj.saveModelResults(filename)
+%       log=obj.saveResults(filename)
 %       log=obj.saveDataModel(filename)
 %       log=obj.saveDiagramFP(filename)
 %       log=obj.saveProductiveDiagram(filename)
 %       log=obj.saveSummary(filename)
+%       log=obj.saveTable(name,filename)
 %   Waste Methods
 %       res=obj.wasteAllocation
 %       res=obj.setWasteType(key,type)
@@ -120,7 +126,7 @@ classdef cThermoeconomicModel < cStatusLogger
         %     data - cReadModel object 
         %     varargin - optional paramaters (see ThermoeconomicTool)
         %   
-            obj=obj@cStatusLogger(cType.VALID);
+            obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
             if ~isa(data,'cDataModel')
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 printLogger(obj);
@@ -137,7 +143,6 @@ classdef cThermoeconomicModel < cStatusLogger
             obj.results=cModelResults(data);
             obj.DataModel=data;
             obj.ModelName=data.ModelName;
-            obj.setClassId(cType.ClassId.RESULT_MODEL);
             % Check optional input parameters
             p = inputParser;
             p.addParameter('State',data.States{1},@ischar);
@@ -407,41 +412,6 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
-        function res=getResultInfo(obj,id)
-        % Get the result info
-            res=cStatusLogger(cType.ERROR);
-            if nargin==1
-                res=obj.resultModelInfo;
-                return
-            end
-            switch id
-            case cType.ResultId.PRODUCTIVE_STRUCTURE
-                res=obj.productiveStructure;
-            case cType.ResultId.THERMOECONOMIC_STATE
-                res=obj.thermoeconomicState;
-            case cType.ResultId.THERMOECONOMIC_ANALYSIS
-                res=obj.thermoeconomicAnalysis;
-            case cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                res=obj.thermoeconomicDiagnosis;
-            case cType.ResultId.SUMMARY_RESULTS
-                res=obj.getSummaryResults;          
-            case cType.ResultId.PRODUCTIVE_DIAGRAM
-                res=obj.productiveDiagram;  
-            case cType.ResultId.DIAGRAM_FP
-                res=obj.diagramFP;
-            case cType.ResultId.WASTE_ANALYSIS
-                res=obj.wasteAnalysis;
-            case cType.ResultId.EXERGY_COST_CALCULATOR
-                res=obj.thermoeconomicAnalysis;
-            case cType.ResultId.DATA_MODEL
-                res=obj.dataModelInfo;
-            case cType.ResultId.RESULT_MODEL
-                res=obj.resultModelInfo;
-            otherwise
-                res.printError('Invalid ResultId: %d',id)
-            end
-        end
-
         %%%
         % Utility methods
         %
@@ -531,7 +501,7 @@ classdef cThermoeconomicModel < cStatusLogger
         end
 
         %%%
-        % Table methods
+        % Tables Directory methods
         function res=getTablesDirectory(obj,varargin)
         % Create the tables directory of the active model
         %   Input:
@@ -563,63 +533,6 @@ classdef cThermoeconomicModel < cStatusLogger
             end
         end
 
-        function res=getTableInfo(obj,name)
-        % Get table properties
-        % 
-            res=getTableInfo(obj.fmt,name);
-        end
-
-        function tbl=getTable(obj,name,varargin)
-        % Get the table called name
-        %   Input:
-        %       name - Name of the table
-            tbl=cStatus(cType.ERROR);
-            tInfo=getTableInfo(obj.fmt,name);
-            if isempty(tInfo)
-                tbl.printError('Invalid table name: %s',name);
-                return
-            else
-               res=obj.getResultInfo(tInfo.resultId);
-               if isempty(res)
-                    tbl.printError('Result %s is not available',tInfo.Code);
-                    return
-               end
-               tbl=res.getTable(name,varargin{:});
-            end
-        end
-
-        %%%
-        % Result presentation methods
-        %%%
-        function showResults(obj,name,varargin)
-        % Show Model Tables
-        %   Input:
-        %       name - (optional) Name of the table
-        %       option - TableView options
-            if nargin==1
-                printResults(obj.resultModelInfo);
-                return
-            end
-            tbl=obj.getTable(name);
-            if tbl.isValid
-                viewTable(tbl,varargin{:});
-            end
-        end
-
-        function showSummary(obj,name,varargin)
-        % Show Summary tables
-            msr=obj.getSummaryResults;
-            if isempty(msr)
-                obj.printDebugInfo('Summary Results not available')
-                return
-            end
-            if nargin==1
-                printResults(msr)
-            else
-                showResults(msr,name,varargin{:})
-            end
-        end
-
         function showTablesDirectory(obj,varargin)
         % View Tables directory
         %   Input:
@@ -628,47 +541,41 @@ classdef cThermoeconomicModel < cStatusLogger
             viewTable(tbl,varargin{:});
         end
 
-        function showGraph(obj,name,varargin)
-        % Show the graph of a result table
-        %   Usage:
-        %       obj.showGraph(name, option)
-        %   Input:
-        %       name - graph table name
-        %       option - graph options
-        % See also cResultInfo/showGraph
-            log=cStatus(cType.VALID);
-            if nargin<2
-                log.printError('Graph parameter missing: %s',name);
-                return
-            end
-            tInfo=getTableInfo(obj.fmt,name);
-            if isempty(tInfo)
-                log.printError('Invalid table name: %s',name);
-                return
-            else
-                res=obj.getResultInfo(tInfo.resultId);
-            end
-            if isempty(res)
-                log.printError('There is not results for %s available',name);
-                return
-            end
-            showGraph(res,name,varargin{:})
+        function res=getTableInfo(obj,name)
+        % Get table properties
+        % 
+            res=getTableInfo(obj.fmt,name);
         end
 
         %%%
-        % Save Results methods
-        %
-        function log=saveResults(obj,filename)
-        % Save results in a file 
-        % The following types are availables (XLSX, CSV, MAT)
-        %  Input:
-        %   filename - Name of the file
-        %  Output:
-        %   log - cStatusLogger object containing the status and error messages
-            mt=obj.resultModelInfo;
-            log=saveResults(mt,filename);
+        % Specific Result presentation methods
+        %%%
+        function showSummary(obj,name,varargin)
+        % Show Summary tables
+            res=obj.getSummaryResults;
+            if isempty(res)
+                obj.printDebugInfo('Summary Results not available')
+                return
+            end
+            if nargin==1
+                printResults(res)
+            else
+                showResults(res,name,varargin{:})
+            end
         end
 
+        function showDataModel(obj,name,varargin)
+        % Show Data Model tables
+            res=obj.DataModel;
+            if nargin==1
+                printResults(res)
+            else
+                showResults(res,name,varargin{:})
+            end
+        end
+        %%%
+        % Save Results methods
+        %%%
         function log=saveSummary(obj,filename)
         % Save the summary tables into a filename
         % The following file types are availables (JSON,XML,XLSX,CSV,MAT)
@@ -676,6 +583,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
+            log=cStatus();
+            if nargin~=2
+                log.printError('Usage: saveDataModel(model,filename)');
+                return
+            end       
             msr=obj.getSummaryResults;
             if isempty(msr) || ~isValid(msr)
                 obj.printDebugInfo('Summary Results not available');
@@ -691,6 +603,11 @@ classdef cThermoeconomicModel < cStatusLogger
         %   filename - Name of the file
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
+            log=cStatus();
+            if nargin~=2
+                log.printError('Usage: saveDataModel(model,filename)');
+                return
+            end
             log=saveDataModel(obj.DataModel,filename);
         end
 
@@ -702,6 +619,10 @@ classdef cThermoeconomicModel < cStatusLogger
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
+            if nargin~=2
+                log.printError('Usage: saveDiagramFP(model,filename)');
+                return
+            end
             % Save tables atfp, atcfp
             res=obj.diagramFP;
             if ~isValid(res)
@@ -720,6 +641,10 @@ classdef cThermoeconomicModel < cStatusLogger
         %  Output:
         %   log - cStatusLogger object containing the status and error messages
             log=cStatus();
+            if nargin~=2
+                log.printError('Usage: saveProductiveDiagram(model,filename)');
+                return
+            end
             % Save fat,pat and fpat tables
             res=obj.productiveDiagram;
             if ~isValid(res)

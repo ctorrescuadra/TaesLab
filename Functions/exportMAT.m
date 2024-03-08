@@ -27,7 +27,6 @@ function log=exportMAT(obj,filename)
     end
     try
 	    save(filename,'obj');
-        log.messageLog(cType.INFO,'File %s has been saved',filename);
     catch err
         log.messageLog(cType.ERROR,err.message);
         log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);

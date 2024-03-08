@@ -23,7 +23,7 @@ function obj = importMAT(filename)
 		obj.messageLog(cType.ERROR,'Error reading file %s',filename);
 		return
 	end
-	if isa(var,'cDataModel') && isValid(var)
+	if isValid(var)
         obj=var;
 		obj.clearLogger;
 	else
