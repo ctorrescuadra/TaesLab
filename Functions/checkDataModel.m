@@ -17,6 +17,7 @@ function data = checkDataModel(filename)
     end
     % If filename is a MAT file then is already done
     if isa(rdm,'cDataModel')
+        rdm.messageLog(cType.INFO,'Data model file %s has been loaded',filename);
         data=rdm;
         return
     end

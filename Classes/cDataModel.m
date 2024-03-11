@@ -312,13 +312,7 @@ classdef cDataModel < cResultSet
 
         function res=getWasteFlows(obj)
         % Get a cell array of the waste flows
-            res={};
-            if ~obj.isWaste
-                return;
-            end
-            ps=obj.ProductiveStructure;
-            idx=ps.Waste.flows;
-            res={ps.Flows(idx).key};
+            res=obj.WasteData.Flows;
         end
         
         function res=checkCostTables(obj,value)

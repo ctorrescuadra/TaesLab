@@ -45,57 +45,55 @@ classdef cModelData < cStatusLogger
 
         function res=get.ProductiveStructure(obj)
         % get ProductiveStructure data
+            res=[];
             if obj.isValid
                 res=obj.dm.ProductiveStructure;
-            else
-                res=[];
+
             end
         end
     
         function res=get.ExergyStates(obj)
         % get ExergyStates data
+            res=[];
             if obj.isValid
                 res=obj.dm.ExergyStates;
-            else
-                res=[];
             end
+ 
         end
     
         function res=get.WasteDefinition(obj)
         % get WasteDefinition data
+            res=[];
             if obj.isValid && obj.isWaste
                 res=obj.dm.WasteDefinition;
-            else
-                res=[];
             end
         end
     
         function res=get.ResourcesCost(obj)
         % get ResourcesCost data
+            res=[];
             if obj.isValid && obj.isResourceCost
                 res=obj.dm.ResourcesCost;
-            else
-                res=[];
             end
         end    
     
         function res=get.Format(obj)
         % get Format data
+            res=[];
             if obj.isValid
                 res=obj.dm.Format;
-            else
-                res=[];
+ 
             end
         end
 
         function res=isWaste(obj)
-        %isWaste Indicate is optional waste element exists
+        % isWaste Indicate is optional waste element exists
             id=cType.DataId.WASTE;
             res = isfield(obj.dm,cType.DataElements{id});
         end
 
         function res=isResourceCost(obj)
-        %isResources Indicate is optional resources cost element exists
+        % isResources Indicate is optional resources cost element exists
             id=cType.DataId.RESOURCES;
             res = isfield(obj.dm,cType.DataElements{id});
         end
