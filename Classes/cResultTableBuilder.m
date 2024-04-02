@@ -615,8 +615,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=createCellTable(obj,props,data,rowNames,colNames)
-        % Create a cell table and set parameters from cPrintConfig
-            res=cTableCell(data,rowNames,colNames);
+        % Set parameters from cPrintConfig and create cTableCell
             p.key=props.key;
             p.Description=props.description;   
             p.Unit=obj.getTableUnits(props);
@@ -624,31 +623,33 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             p.FieldNames={props.fields.name};
             p.ShowNumber=props.number;
             p.GraphType=props.graph;
-            res.setProperties(p);
+            res=cTableCell.create(data,rowNames,colNames,p);
         end
             
         function res=createMatrixTable(obj,props,data,rowNames,colNames)
-        % Create a matrix table and set parameters from cPrintConfig
-            res=cTableMatrix(data,rowNames,colNames,props.rowTotal,props.colTotal);
+        % Set parameters from cPrintConfig and create cTableMatrix
             p.key=props.key;
             p.Description=props.header;    
             p.Unit=obj.getUnit(props.type);
             p.Format=obj.getFormat(props.type);
             p.GraphType=props.graph;
             p.GraphOptions=props.options;
-            res.setProperties(p);
+            p.rowTotal=props.rowTotal;
+            p.colTotal=props.colTotal;
+            res=cTableMatrix.create(data,rowNames,colNames,p);
         end
 
         function res=createSummaryTable(obj,props,data,rowNames,colNames)
-        % Create a summary table (as cTableMatrix and set parameters)
-            res=cTableMatrix(data,rowNames,colNames,false,false);
+        % Create a summary table (as cTableMatrix)
             p.key=props.key;
             p.Description=props.header;    
             p.Unit=obj.getUnit(props.type);
             p.Format=obj.getFormat(props.type);
             p.GraphType=props.graph;
             p.GraphOptions=props.options;
-            res.setProperties(p);
+            p.rowTotal=false;
+            p.colTotal=false;
+            res=cTableMatrix.create(data,rowNames,colNames,p);
         end
     end
 end

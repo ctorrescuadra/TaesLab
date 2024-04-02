@@ -46,7 +46,7 @@ classdef (Sealed) cTableCell < cTableResult
         end
 		
         function setProperties(obj,p)
-        % Set table properties: Description, Unit, Format, FieldNames
+        % Set table properties: Description, Unit, Format, FieldNames, ...
             obj.Name=p.key;
             obj.Description=p.Description;
             obj.Unit=p.Unit;
@@ -179,5 +179,26 @@ classdef (Sealed) cTableCell < cTableResult
             end	
             fprintf(fId,'\n');
         end
+    end
+    methods(Static)
+        function tbl=create(data,rowNames,colNames,param)
+        % Create a cTableCell given the additional properties
+        %   Input:
+        %       data - Cell Array containing the data
+        %       rowNames - Cell Array containing the row's names
+        %       colNames - Cell Array containing the column's names
+        %       param - additional properties:
+        %           Name: Name of the table
+        %           Description: table description
+        %           Unit: cell array with the unit name of the data columns
+        %           Format: cell array with the format of the data columns
+        %           GraphType: type of graph asociated
+        %           FieldNames: optional field name of the columns
+        %           ShowNumber: true/false show column number option
+        % See also cResultTableBuilder
+            tbl=cTableCell(data,rowNames,colNames);
+            tbl.setProperties(param);
+        end
+
     end
 end

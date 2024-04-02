@@ -2,7 +2,7 @@ classdef (Sealed) cTableMatrix < cTableResult
 % cTableMatrix Implements cTable interface to store the matrix results of ExIOLab.
 %   It store the row/col summary of the matrix
 %   Methods:
-%       obj=cTableMatrix(data,rowNames,colNames,RowSum,ColSum)
+%       obj=cTableMatrix(data,rowNames,colNames,RowTotal,ColTotal)
 %       status=obj.checkTableSize;
 %       obj.setState
 %       obj.setProperties(p)
@@ -25,39 +25,39 @@ classdef (Sealed) cTableMatrix < cTableResult
 % See also cTableResult, cTable
 %
     properties (Access=private)
-        RowSum			% Row summary true/false
-        ColSum			% Column summary true/false
+        RowTotal			% Row Total true/false
+        ColTotal			% Column Total true/false
     end
     properties (GetAccess=public,SetAccess=private)
         GraphOptions    % Graph Type
     end
     methods
-        function obj=cTableMatrix(data,rowNames,colNames,rowSum,colSum)
+        function obj=cTableMatrix(data,rowNames,colNames,rowTotal,colTotal)
         % Table constructor
         %  Input:
         %   data - Matrix containing the data
         %   rowNames - Cell Array containing the row's names
         %   colNames - Cell Array containing the column's names
-        %   rowSum - true/false row summary computation
-        %   colSum - true/false column summary computation
-            if rowSum
+        %   rowTotal - true/false row total sum
+        %   colTotal - true/false column total sum
+            if rowTotal
 				nrows=length(rowNames)+1;
 				rowNames{nrows}='Total';
                 data=[data;zerotol(sum(data))];
             end
-            if colSum
+            if colTotal
 				ncols=length(colNames)+1;
                 colNames{ncols}='Total';
                 data=[data,zerotol(sum(data,2))];
             end
-            if colSum && rowSum
+            if colTotal && rowTotal
                 data(end,end)=0.0;
             end
             obj.Data=num2cell(data);
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
-            obj.ColSum=colSum;
-            obj.RowSum=rowSum;
+            obj.ColTotal=colTotal;
+            obj.RowTotal=rowTotal;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames); 
             obj.status=obj.checkTableSize;
@@ -182,10 +182,10 @@ classdef (Sealed) cTableMatrix < cTableResult
 				fprintf(fId,sformat,obj.RowNames{i},obj.Data{i,:});
             end	
             % Total summary by rows
-            if obj.RowSum
+            if obj.RowTotal
                 fprintf(fId,'%s\n',lines);
                 tmp=obj.Data(end,:);
-                if obj.ColSum
+                if obj.ColTotal
                     tmp{end,end}='';
                 end
                 fprintf(fId,sformat,obj.RowNames{end},tmp{:});       
@@ -207,6 +207,27 @@ classdef (Sealed) cTableMatrix < cTableResult
 
         function res=isGeneralCostTable(obj)
             res=bitget(obj.GraphOptions,3);
+        end
+    end
+    methods(Static)
+        function res=create(data,rowNames,colNames,param)
+        % Create a cTableMatrix given the additional properties
+        %   Input:
+        %       data - Matrix containing the data
+        %       rowNames - Cell Array containing the row's names
+        %       colNames - Cell Array containing the column's names
+        %       param - additional properties:
+        %           rowTotal: true/false row total sum
+        %           colTotal: true/false column total sum
+        %           Name: Name of the table
+        %           Description: table description
+        %           Unit: unit name of the data
+        %           Format: format of the data
+        %           GraphType: type of graph asociated
+        %           GraphOptions: options of the graph
+        % See also cResultTableBuilder
+            res=cTableMatrix(data,rowNames,colNames,param.rowTotal,param.colTotal);
+            res.setProperties(param);
         end
     end
 end

@@ -219,6 +219,10 @@ classdef cDiagnosis < cResultId
             res=[obj.DWTEC,sum(obj.DWTEC)];
         end
 
+        function res=getDemmandCorrectionCost(obj)
+            tmp=obj.DCW-obj.DWTEC;
+            res=[tmp,sum(tmp)];
+        end
     end
 
     methods(Access=protected)

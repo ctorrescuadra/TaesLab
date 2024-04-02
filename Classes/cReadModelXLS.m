@@ -24,9 +24,15 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 					obj.messageLog(cType.ERROR,'File %s cannot be opened',cfgfile);
 					return
 				end
-			else %is Matlab interface
-				sht=sheetnames(cfgfile);
-				xls=cfgfile;
+            else %is Matlab interface
+                try
+				    sht=sheetnames(cfgfile);
+				    xls=cfgfile;
+                catch err
+                    obj.messageLog(cType.ERROR,err.message);
+					obj.messageLog(cType.ERROR,'File %s cannot be opened',cfgfile);
+					return
+                end
             end
             check=ismember(Sheets,sht);
             % Read mandatory tables
