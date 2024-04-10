@@ -6,7 +6,7 @@ classdef (Sealed) cTableCell < cTableResult
 %       obj.setState
 %       obj.setProperties(p)
 %       obj.printTable(fId)
-%       obj.viewTable(options)
+%       obj.showTable(options)
 %       log=obj.saveTable(filename)
 %       res=obj.exportTable(varmode,fmt)
 %       res=obj.isNumericTable
@@ -41,7 +41,8 @@ classdef (Sealed) cTableCell < cTableResult
             obj.NrOfCols=length(colNames);
             obj.status=obj.checkTableSize;
             if ~obj.isValid
-                obj.messageLog('Invalid table size (%d,%d)',size(data,1),size(data,2));
+                obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
+                return
             end
         end
 		
@@ -197,7 +198,9 @@ classdef (Sealed) cTableCell < cTableResult
         %           ShowNumber: true/false show column number option
         % See also cResultTableBuilder
             tbl=cTableCell(data,rowNames,colNames);
-            tbl.setProperties(param);
+            if tbl.isValid
+                tbl.setProperties(param);
+            end
         end
 
     end

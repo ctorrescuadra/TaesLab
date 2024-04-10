@@ -56,7 +56,7 @@ function res=ListResultTables(varargin)
     end
     % View the table
     option=cType.getTableView(param.Show);
-    viewTable(tbl,option);
+    showTable(tbl,option);
     % Save table 
     if ~isempty(param.SaveAs)
         log=saveTable(tbl,param.SaveAs);

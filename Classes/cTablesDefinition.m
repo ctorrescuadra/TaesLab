@@ -7,7 +7,7 @@ classdef cTablesDefinition < cStatusLogger
 %       obj=cTablesDirectory;
 %       res=obj.getTableProperties(name)
 %       res=obj.getTablesDirectory(varmode)
-%       res=obj.viewTablesDirectory(options)
+%       res=obj.showTablesDirectory(options)
 %       res=obj.saveTablesDirectory(filename)
 %   See also cFormatData
     properties(GetAccess=public,SetAccess=private)
@@ -86,7 +86,7 @@ classdef cTablesDefinition < cStatusLogger
         function showTablesDirectory(obj,varargin)
         % Show the Tables Directory
         %   options - view table ooptions
-            viewTable(obj.tDirectory,varargin{:});
+            showTable(obj.tDirectory,varargin{:});
         end
 
         function saveTablesDirectory(obj,filename)

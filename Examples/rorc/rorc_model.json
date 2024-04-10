@@ -353,7 +353,7 @@
   "WasteDefinition": {
     "wastes": {
       "flow": "QCND",
-      "type": "IRREVERSIBILITY",
+      "type": "EXERGY",
       "recycle": 0
     }
   },

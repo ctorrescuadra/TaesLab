@@ -5,7 +5,7 @@ classdef (Abstract) cTable < cStatusLogger
 %       status=obj.checkTableSize;
 %       obj.setState
 %       obj.printTable(fId)
-%       obj.viewTable(options)
+%       obj.showTable(options)
 %       log=obj.saveTable(filename)
 %       res=obj.exportTable(varmode)
 %       res=obj.isNumericTable
@@ -54,7 +54,7 @@ classdef (Abstract) cTable < cStatusLogger
             res=obj.Description;
         end
 
-        function viewTable(obj,option)
+        function showTable(obj,option)
         % View Table in GUI or HTML
         %   Usage:
         %       option - select form to view a table
@@ -69,9 +69,9 @@ classdef (Abstract) cTable < cStatusLogger
             case cType.TableView.CONSOLE
                 printTable(obj);
             case cType.TableView.GUI
-                viewTableGUI(obj)
+                showTableGUI(obj)
             case cType.TableView.HTML
-                viewTableHTML(obj)
+                showTableHTML(obj)
             end
 
         end
@@ -354,7 +354,7 @@ classdef (Abstract) cTable < cStatusLogger
     end
     
     methods(Access=protected)
-        function viewTableGUI(obj)
+        function showTableGUI(obj)
         % View the values of the table (tbl) in a uitable graphic object
             vt=cViewTable(obj);
             if isValid(vt)
@@ -364,7 +364,7 @@ classdef (Abstract) cTable < cStatusLogger
             end
         end
     
-        function viewTableHTML(obj)
+        function showTableHTML(obj)
         % View a table in the web browser
             vh=cBuildHTML(obj);
             if isValid(vh)

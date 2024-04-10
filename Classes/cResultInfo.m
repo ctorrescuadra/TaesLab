@@ -79,7 +79,7 @@ classdef cResultInfo < cResultSet
         function showResults(obj,name,varargin)
         % View an individual table
         %   Usage:
-        %       obj.showResultsTable(table,option)
+        %       obj.showResults(table,option)
         %   Input:
         %       name - Name of the table
         %       option - Way to display the table
@@ -94,7 +94,7 @@ classdef cResultInfo < cResultSet
             end
             tbl=obj.getTable(name);
             if isValid(tbl)
-                viewTable(tbl,varargin{:});
+                showTable(tbl,varargin{:});
             else
                 log.printError('Table name %s does NOT exists',name);
             end
@@ -140,7 +140,7 @@ classdef cResultInfo < cResultSet
         function showTableIndex(obj,varargin)
         % View the index tables
         %   Usage:
-        %       obj.viewTableIndex(table,option)
+        %       obj.showTableIndex(table,option)
         %   Input:
         %       name - Name of the table
         %       option - Way to display the table
@@ -149,7 +149,7 @@ classdef cResultInfo < cResultSet
         %           cType.TableView.HTML
         %       
             tbl=obj.tableIndex;
-            tbl.viewTable(varargin{:});
+            tbl.showTable(varargin{:});
         end
 
         function showGraph(obj,graph,varargin)
@@ -364,7 +364,7 @@ classdef cResultInfo < cResultSet
 				fclose (fid);
 			catch err
 				log.messageLog(cType.ERROR,err.message)
-				log.messageLog('Writting file info %s',filename);
+				log.messageLog(cType.ERROR,'Writting file info %s',filename);
 				return
 			end
 			if ~exist(folder,'dir')

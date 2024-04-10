@@ -51,22 +51,23 @@ classdef cFormatData < cTablesDefinition
 			end
 			res=obj.tableIndex(idx);
 		end
-    end
 
-    methods(Access=protected)			
 		function format=getFormat(obj,id)
 		% get the format of a type of variable
 		%  Input:
 		%   id - Variable type
 			format=obj.cfgTypes(id).format;
 		end
-			
+				
 		function unit=getUnit(obj,id)
 		% get the variable unit of a type
 		%  Input:
 		%   id - Variable type
 			unit=obj.cfgTypes(id).unit;
-		end
+		end		
+    end
+
+    methods(Access=protected)			
 			
 		function res=getTableHeader(obj,props)
 		% get the table header cell array

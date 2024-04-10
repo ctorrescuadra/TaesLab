@@ -9,7 +9,7 @@ classdef (Sealed) cTableMatrix < cTableResult
 %       status=obj.checkTableSize;
 %       obj.setState
 %       obj.printTable(fId)
-%       obj.viewTable(options)
+%       obj.showTable(options)
 %       log=obj.saveTable(filename)
 %       res=obj.exportTable(varmode,fmt)
 %       res=obj.isNumericTable
@@ -210,7 +210,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
     end
     methods(Static)
-        function res=create(data,rowNames,colNames,param)
+        function tbl=create(data,rowNames,colNames,param)
         % Create a cTableMatrix given the additional properties
         %   Input:
         %       data - Matrix containing the data
@@ -226,8 +226,10 @@ classdef (Sealed) cTableMatrix < cTableResult
         %           GraphType: type of graph asociated
         %           GraphOptions: options of the graph
         % See also cResultTableBuilder
-            res=cTableMatrix(data,rowNames,colNames,param.rowTotal,param.colTotal);
-            res.setProperties(param);
+            tbl=cTableMatrix(data,rowNames,colNames,param.rowTotal,param.colTotal);
+            if tbl.isValid
+                tbl.setProperties(param);
+            end
         end
     end
 end

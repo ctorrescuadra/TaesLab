@@ -3,7 +3,7 @@ classdef cTableIndex < cTable
 %   Methods:
 %       obj=cTableIndex(res)
 %       obj.printTable(fId)
-%       obj.viewTable(options)
+%       obj.showTable(options)
 %       log=obj.saveTable(filename)
 %       res=obj.exportTable(varmode)
 % See also cTable

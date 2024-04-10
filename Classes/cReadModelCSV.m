@@ -37,7 +37,7 @@ classdef cReadModelCSV < cReadModelTable
                         return
                     end
                 else
-				    obj.messageLog('File %s not found',fname);
+				    obj.messageLog(cType.ERROR,'File %s not found',fname);
                     return
                 end
             end

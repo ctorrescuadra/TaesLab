@@ -538,7 +538,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Input:
         %       options - TableView options
             tbl=getTablesDirectory(obj);
-            viewTable(tbl,varargin{:});
+            showTable(tbl,varargin{:});
         end
 
         function res=getTableInfo(obj,name)

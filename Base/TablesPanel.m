@@ -82,7 +82,7 @@ classdef TablesPanel < handle
                graph=app.tableIndex.RowNames{idx};
                showGraph(app.resultInfo,graph);
             else
-                viewTable(app.activeTable,app.tableView);
+                showTable(app.activeTable,app.tableView);
             end
         end
 

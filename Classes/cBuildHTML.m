@@ -21,7 +21,7 @@ classdef cBuildHTML < cStatusLogger
         % 
             obj=obj@cStatusLogger(cType.VALID);
             if ~isa(tbl,'cTable')
-                obj.messageLog('Invalid input argument');
+                obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
             end
             obj.isIndexTable=isa(tbl,'cTableIndex') && (nargin==2);

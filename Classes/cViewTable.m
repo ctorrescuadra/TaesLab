@@ -1,7 +1,7 @@
 classdef cViewTable < cStatusLogger
 % cViewTable view individual tables in uitable windows
 % It is used as interface of cTableResult by means of function:
-% 	viewTable(tbl,state)
+% 	showTable(tbl,state)
 % Methods:
 % 	obj=cViewTable(tbl,state)
 %   obj.showTable

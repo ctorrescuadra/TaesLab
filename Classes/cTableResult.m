@@ -5,7 +5,7 @@ classdef (Abstract) cTableResult < cTable
 %       obj.setState
 %       obj.setProperties(p)
 %       obj.printTable(fId)
-%       obj.viewTable(options)
+%       obj.showTable(options)
 %       log=obj.saveTable(filename)
 %       res=obj.exportTable(varmode,fmt)
 %       res=obj.isNumericTable
