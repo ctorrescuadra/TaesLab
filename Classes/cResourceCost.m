@@ -32,7 +32,7 @@ classdef cResourceCost < cStatusLogger
 			pid=exm.ps.Resources.processes;
 			sid=exm.ps.Resources.streams;
 			obj.cs0(sid)=obj.c0(fid);
-            if isa(exm,'cProcessModel')
+            if isa(exm,'cModelFPR')
 				obj.ce=exm.getProcessResourceCost(obj.c0);
 			else
 				obj.ce(pid)=obj.c0(fid);

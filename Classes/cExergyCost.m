@@ -9,17 +9,14 @@ classdef (Sealed) cExergyCost < cExergyModel
 %		[cost,ucost]=obj.getDirectProcessCost(fcosts)
 %   	[cost,ucost]=obj.getGeneralProcessCost(fcosts,rsc)
 %		res=obj.getProcessICT(fICT,rsc)
-%	 Methods inherited from cExergyModel:
-%   	res=obj.getStreamProcessTable
-%		res=obj.getFlowProcessTable
-%   	res=obj.getStreamsCost
+%       res=obj.getStreamsCost(fcost,rsc);
 % See also cExergyModel
 	properties(GetAccess=public,SetAccess=private)
         AdjacencyMatrix     % Structure containing the adjacency submatrices
         IncidenceMatrix     % Structure containing the incidence matrices including waste
 		mG	                % Characteristic matrix
 		WasteTable          % Waste Table Info
-		mL                  % Production Operator
+		opB                 % Production Operator
 		opR                 % Waste Operator
         isWaste=false       % Waste is well defined
 	end
@@ -40,19 +37,17 @@ classdef (Sealed) cExergyCost < cExergyModel
             M=obj.NrOfFlows;
 			N=obj.NrOfProcesses;
 			tbl=obj.FlowProcessTable;
-			obj.mV=divideCol(tbl.tV,obj.FlowsExergy);
+			obj.mV=tbl.mV;
 			obj.mF=divideCol(tbl.tF(:,1:N),obj.ProductExergy);
 			obj.mF0=divideCol(tbl.tF(:,1:N),obj.FuelExergy);
-			mP=divideCol(tbl.tP,obj.FlowsExergy);
-			obj.mP=mP(1:N,:);
-			obj.c0=mP(end,:);
+			obj.mP=tbl.mP(1:N,:);
+			obj.c0=tbl.mP(end,:);
 			obj.mG=obj.mF*obj.mP+obj.mV;
-			obj.mL=zerotol(inv(full(eye(M)-obj.mG)));
+			obj.opB=zerotol(inv(full(eye(M)-obj.mG)));
             if (nargin==2) && isa(wd,'cWasteData')
                 obj.setWasteOperators(wd);
             end
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
-            obj.status=cType.VALID;
 		end
 
         function res=get.AdjacencyMatrix(obj)
@@ -92,19 +87,20 @@ classdef (Sealed) cExergyCost < cExergyModel
             wft=obj.wasteFlowsTable(wt);
             if obj.isValid		
                 aR=wft.mRows;
-                aux=wft.mValues*obj.mP*obj.mL;
+                aux=wft.mValues*obj.mP*obj.opB;
                 obj.mR=wft;
                 obj.opR=cSparseRow(aR,(eye(NR)-aux(:,aR))\aux);
                 obj.isWaste=true;
             end
         end
+
         function res=getDirectFlowsCost(obj)
         % Get the exergy cost of flows
         %  Output
         %   res - cost of flows structure (CI,CR,C,cI,cR,c);
             zero=zeros(1,obj.NrOfFlows);		
             B=obj.FlowsExergy;
-            cE=obj.c0*obj.mL;
+            cE=obj.c0*obj.opB;
             CE=cE .* B;
             if obj.isWaste
                 cR=cE*obj.opR;
@@ -128,8 +124,8 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   res - cost of flows structure (B,CE,CZ,CR,C,cE,cZ,cR,c)
             zero=zeros(1,obj.NrOfFlows);	
             B=obj.FlowsExergy;
-            cE=rsc.c0 * obj.mL;
-            cZ=rsc.zP * obj.mP*obj.mL;
+            cE=rsc.c0 * obj.opB;
+            cZ=rsc.zP * obj.mP*obj.opB;
             CE=cE .* B;
             CZ=cZ .* B;
             if obj.isWaste
@@ -161,7 +157,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 cn=cm*obj.mF0+rsc.zF;
             end
             ce=cn .* (obj.UnitConsumption-1);
-            fict=[scaleRow(obj.mP*obj.mL,ce);cm];
+            fict=[scaleRow(obj.mP*obj.opB,ce);cm];
             if obj.isWaste
                 cmR=scaleRow(obj.opR,sum(fict));
                 rict=cSparseRow(obj.dprocess,cmR.mValues,obj.NrOfProcesses+1);
@@ -258,6 +254,33 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res=[opIn;cn];
             end
         end
+
+        function scost=getStreamsCost(obj,ucost,rsc)
+            czoption=(nargin==3);
+            E=obj.StreamsExergy.ET;
+            tbl=obj.StreamProcessTable;
+            if czoption
+                cse=rsc.cs0;
+            else
+                cse=tbl.mP(end,:);
+            end
+            cE=obj.streamsUnitCost(ucost.cE,cse);
+			CE=cE.*E;
+			cR=obj.streamsUnitCost(ucost.cR);
+			CR=cR.*E;
+			if czoption
+                zps=rsc.zP*tbl.mP(1:end-1,:);
+				cZ=obj.streamsUnitCost(ucost.cZ,zps);
+				CZ=cZ.*E;
+				c=cE+cZ+cR;
+				C=CE+CZ+CR;
+				scost=struct('E',E,'CE',CE,'CZ',CZ,'CR',CR,'C',C,'cE',cE,'cZ',cZ,'cR',cR,'c',c);
+			else
+				c=cE+cR;
+				C=CE+CR;
+				scost=struct('E',E,'CE',CE,'CR',CR,'C',C,'cE',cE,'cR',cR,'c',c);
+			end
+        end
     end   
     
     methods(Access=private)
@@ -283,13 +306,13 @@ classdef (Sealed) cExergyCost < cExergyModel
                         sol(~obj.ActiveProcesses)=0.0;
                     case cType.WasteAllocation.DEFAULT
                         idx=aR(i);
-                        tmp=scaleCol(obj.mL(:,idx),obj.FlowsExergy(idx));
+                        tmp=scaleCol(obj.opB(:,idx),obj.FlowsExergy(idx));
                         sol(obj.ps.Resources.processes)=tmp(obj.ps.Resources.flows)';
                     case cType.WasteAllocation.IRREVERSIBILITY
                         idx=aR(i);
-                        sol=scaleRow(obj.mP*obj.mL(:,idx),kn);
+                        sol=scaleRow(obj.mP*obj.opB(:,idx),kn);
                     otherwise
-                        obj.messageLog(cType.ERROR,'Waste type %d allocation NOT Allowed',wt.Type(i));
+                        obj.messageLog(cType.ERROR,'Waste type %s allocation NOT Allowed',wt.Type{i});
                         return
                 end
                 pR(i,:)=sol/sum(sol);
@@ -312,6 +335,19 @@ classdef (Sealed) cExergyCost < cExergyModel
             else
                 v0=rsc.c0+rsc.zF*obj.mP;
                 cm=v0/(eye(M)-obj.mV-obj.mF0*obj.mP);
+            end
+        end
+
+        function res=streamsUnitCost(obj,ucost,c0)
+        % Calculate the streams cost given the flows cost
+        % Input:
+        %   ucost - Unit cost of flows
+        %   c0 - [optional] Resources cost
+            tbl=obj.StreamProcessTable;
+            if nargin==3
+                res=c0+ucost*tbl.mH;
+            else
+                res=ucost*tbl.mH;
             end
         end
     end      

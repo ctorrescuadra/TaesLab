@@ -17,7 +17,7 @@ function B=divideRow(A,x)
 	end
 	[N,~]=size(A);
 	if(N~=length(x))
-		log.printError('Matrix dimensions must agree: %d %d',M,length(x));
+		log.printError('Matrix dimensions must agree: %d %d',N,length(x));
 		return
 	end
     x(x~=0)=1./x(x~=0);

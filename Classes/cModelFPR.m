@@ -1,10 +1,10 @@
-classdef cModelFPR < cProcessModel
+classdef cModelFPR < cExergyModel
 % cModelFPR Computes the system costs using the process model algorith
 % 	It performs the thermoeconomic analysis of a plant state, including
 %  	cost of flows and processes, irreversibilty cost tables and FP tables.
 % 	Methods:
 %		obj=cModelFPR(pm)
-%		obj.setWasteOperators
+%		res=obj.getProcessResourcesCost(c0)
 %		res=obj.getDirectProcessCost
 %		res=obj.getGeneralProcessCost(rsc)
 %		res=obj.getDirectProcessUnitCost
@@ -15,7 +15,8 @@ classdef cModelFPR < cProcessModel
 %		res=obj.getDirectFlowsCost(ucost)
 %		res=obj.getGeneralFlowsCost(ucost,rsc)
 %		res=obj.getFlowsICT(ict,rsc)
-%		res=get.WasteWeight
+%		res=obj.getStreamsCost(ucost,rsc)
+%		res=getWasteWeight
 %		
 	properties (GetAccess=public, SetAccess=private)
 		fpOperators           % FP representation operators (mFP,opCP)
@@ -31,7 +32,7 @@ classdef cModelFPR < cProcessModel
     end
 
     properties(Access=private)
-        c0
+        c0,cs0
     end
 	
 	methods
@@ -40,7 +41,7 @@ classdef cModelFPR < cProcessModel
 		%	Inputs:
 		%	 rex - cExergyData object
         %    wd - cWasteData object
-			obj=obj@cProcessModel(rex);
+			obj=obj@cExergyModel(rex);
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
 			N=obj.NrOfProcesses;
 			% Fuel-Product Exergy values
@@ -59,6 +60,7 @@ classdef cModelFPR < cProcessModel
 			obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             obj.c0=zeros(1,obj.NrOfFlows);
 			obj.c0(obj.ps.Resources.flows)=1.0;
+            obj.cs0=obj.StreamProcessTable.mP(end,:);
 			obj.DefaultGraph=cType.Tables.PROCESS_ICT;
 			if (nargin==2) && (obj.NrOfWastes>0)
 				obj.isWaste=true;
@@ -98,6 +100,18 @@ classdef cModelFPR < cProcessModel
         function res=getResultInfo(obj,fmt,options)
 		% Get cResultInfo object
             res=fmt.getThermoeconomicAnalysisResults(obj,options);
+        end
+
+ 		function res=getProcessResourceCost(obj,c0)			
+		% Get the Processes Resources cost given the unit cost of resource flows
+		% Use the matrices of Table FP building
+		%  	Input:
+		%   	c0 - External resources costs of flows
+		%	Output:
+		%	   res - Process resources cost (ce)
+            tbl=obj.FlowProcessTable;
+            mF0=divideCol(tbl.tF(:,1:end-1),obj.FuelExergy);
+			res=c0*tbl.mL*mF0;
         end
 
         function setWasteOperators(obj,sWaste)
@@ -328,7 +342,38 @@ classdef cModelFPR < cProcessModel
 			else
 				res(end,:)=obj.flowsUnitCost(tIC(end,:),cz.c0);
 			end
-        end    
+        end
+
+		function scost=getStreamsCost(obj,ucost,rsc)
+		% Get the cost of streams from unit processes cost
+		%  Inputs:
+		%   ucost - unit cost of products
+		%   rsc -  Cost of external resources
+		%  Outputs:
+		%   scost - streams cost values (E,CE,CZ,CR,C,cE,cZ,cR,c)
+			czoption=(nargin==3);
+			E=obj.StreamsExergy.ET;
+			if czoption
+				cse=rsc.cs0;
+			else
+				cse=obj.cs0;
+			end
+			cE=obj.streamsUnitCost(ucost.cPE,cse);
+			CE=cE.*E;
+			cR=obj.streamsUnitCost(ucost.cPR);
+			CR=cR.*E;
+			if czoption
+				cZ=obj.streamsUnitCost(ucost.cPZ);
+				CZ=cZ.*E;
+				c=cE+cZ+cR;
+				C=CE+CZ+CR;
+				scost=struct('E',E,'CE',CE,'CZ',CZ,'CR',CR,'C',C,'cE',cE,'cZ',cZ,'cR',cR,'c',c);
+			else
+				c=cE+cR;
+				C=CE+CR;
+				scost=struct('E',E,'CE',CE,'CR',CR,'C',C,'cE',cE,'cR',cR,'c',c);
+			end
+		end
 
 		function res=getWasteWeight(obj)
 		% Get the waste weight.  The diagonal of the S matrix.
@@ -341,6 +386,38 @@ classdef cModelFPR < cProcessModel
 	end
 	
 	methods (Access=private)
+        function res=flowsUnitCost(obj,cp,c0)
+		% Compute the flows unit cost given the product cost
+		% Use the matrices of Table FP building
+		%	Input: 
+		%		cp - unit cost of product
+		%		c0 - unit cost of resource flows (optional)
+		%	Output:
+		%	   res - unit cost of flows
+            tbl=obj.FlowProcessTable;
+			aux=cp*tbl.mP(1:end-1,:);
+			if nargin==3
+				aux=aux+c0;
+			end
+			res=aux*tbl.mL;
+        end
+
+        function res=streamsUnitCost(obj,cp,c0)
+		% Compute the flows unit cost given the product cost
+		% Use the matrices of Table FP building
+		%	Input: 
+		%		cp - unit cost of product
+		%		c0 - unit cost of resource flows (optional)
+		%	Output:
+		%	   res - unit cost of flows
+            tbl=obj.StreamProcessTable;
+			aux=cp*tbl.mP(1:end-1,:);
+			if nargin==3
+				aux=aux+c0;
+			end
+			res=aux*tbl.mL;
+        end
+
 		function res=getMinCost(obj,rsc)
 		% Get minimun cost for a given cost of external resources
 		%  Input:

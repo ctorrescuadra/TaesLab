@@ -351,20 +351,20 @@
     ]
   },
   "WasteDefinition": {
-    "wastes": {
+    "wastes": [{
       "flow": "QCND",
-      "type": "EXERGY",
+      "type": "DEFAULT",
       "recycle": 0
-    }
+    }]
   },
   "ResourcesCost": {
     "Samples": [
       {
         "sampleId": "External",
-        "flows": {
+        "flows": [{
           "key": "QBLR",
           "value": 0.5
-        },
+        }],
         "processes": [
           {
             "key": "BLR",
@@ -390,10 +390,10 @@
       },
       {
         "sampleId": "Internal",
-        "flows": {
+        "flows": [{
           "key": "QBLR",
           "value": 0
-        },
+        }],
         "processes": [
           {
             "key": "BLR",

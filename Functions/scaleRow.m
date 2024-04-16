@@ -15,7 +15,7 @@ function B=scaleRow(A,x)
     end
     [N,~]=size(A);
     if(N~=length(x))
-        log.printError('Matrix dimensions must agree: %d %d',M,length(x));
+        log.printError('Matrix dimensions must agree: %d %d',N,length(x));
         return
     end   
     if issparse(A)

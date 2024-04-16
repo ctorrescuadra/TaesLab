@@ -1,11 +1,8 @@
 classdef cExergyModel < cResultId
 % cExergyModel Container class of the exergy flows, streams and processes values
-%  	It contains the Adjacency table of the productive structure of a state of the plant
-% Methods:  
-%	res=obj.getStreamProcessTable
-%	res=obj.getFlowProcessTable
-%   res=obj.getStreamsCost(fcost,pcost,rsc)
-% See also cExergyCostModel, cProcessModel
+%  	It contains the Adjacency Table of the productive structure of a state of the plant
+%   and the FlowProcess and StreamProcess matrices models
+% See also cExergyCostModel, cModelFPR
 %
 	properties (GetAccess=public, SetAccess=protected)
 		NrOfFlows        	  % Number of Flows
@@ -17,6 +14,8 @@ classdef cExergyModel < cResultId
 		StreamsExergy    	  % Exergy values of streams
 		AdjacencyTable   	  % Adjacency table of the productive structure with exergy values
 		FlowProcessTable      % Flow Process Table
+        StreamProcessTable    % Stream Process Table
+        TableFP               % Table FP
 		FuelExergy            % Fuel Exergy
 		ProductExergy         % Product Exergy
 		Irreversibility       % Irreversibility
@@ -40,37 +39,58 @@ classdef cExergyModel < cResultId
 				return
             end
 			obj.status=cType.VALID;
-			obj.NrOfFlows=rex.ps.NrOfFlows;
-			obj.NrOfProcesses=rex.ps.NrOfProcesses;
-			obj.NrOfStreams=rex.ps.NrOfStreams;
-			obj.NrOfWastes=rex.ps.NrOfWastes;
-			% build Adjacency matrices
+			M=rex.ps.NrOfFlows;
+			NS=rex.ps.NrOfStreams;
+			% Build Exergy Adjacency tables
 			B=rex.FlowsExergy;
 			E=rex.StreamsExergy.E;
             ET=rex.StreamsExergy.ET;
+			vP=rex.ProcessesExergy.vP;
 			tbl=rex.ps.AdjacencyMatrix;
-			mAE=scaleRow(tbl.AE,B);
-			mAS=scaleCol(tbl.AS,B);
-			mAF=scaleRow(tbl.AF,E);
-            mAP=scaleCol(tbl.AP,E);
-			% Build the Flow-ProcessTable
-			mgS=divideRow(mAS,ET);
-			mgF=divideRow(mAF,ET);
-			tF=mAE*mgF;
-			tP=mAP*mgS;
+			tAE=scaleRow(tbl.AE,B);
+			tAS=scaleCol(tbl.AS,B);
+			tAF=scaleRow(tbl.AF,E);
+            tAP=scaleCol(tbl.AP,E);
+			obj.AdjacencyTable=struct('tAE',tAE,'tAS',tAS,'tAF',tAF,'tAP',tAP);
+			% Build the Stream-Process Table
+            fs=rex.ps.FlowStreamEdges;
+			tbV=sparse(fs.from,fs.to,B,NS,NS,M);
+			mbV=divideCol(tbV,ET);
+			mbF=divideCol(tAF,vP);
+			mbP=divideCol(tAP,ET);
+			mS=double(tbl.AS);
+			mE=divideCol(tAE,ET);
+			% Build the Flow-Process Table
+			mgV=mE*mS;
+			tgV=scaleCol(mgV,B);
+			mgF=mE*mbF;
+			tgF=scaleCol(mgF,vP);
+			mgP=mbP*mS;
+			tgP=scaleCol(mgP,B);
+			% Build table FP
 			if rex.ps.isModelIO
-				tV=sparse(obj.NrOfFlows,obj.NrOfFlows); % zero matrix
+				mgL=eye(M);
+				mbL=eye(NS)+mbV;
+				tfp=mgP*tgF;
 			else
-				tV=mAE*mgS;
+				mgL=(eye(M)-mgV)\eye(M);
+				mbL=eye(NS)+mS*mgL*mE;
+				tfp=mgP*mgL*tgF;
 			end
+			mH=mE*(eye(NS)+mbF*mbP);
 			% build the object
+			obj.StreamProcessTable=struct('tV',tbV,'tF',tAF,'tP',tAP,'mV',mbV,'mF',mbF,'mP',mbP,'mL',mbL,'mH',mH);
+			obj.FlowProcessTable=struct('tV',tgV,'tF',tgF,'tP',tgP,'mV',mgV,'mF',mgF,'mP',mgP,'mL',mgL);
+			obj.TableFP=full(tfp);
             obj.ps=rex.ps;
+            obj.NrOfFlows=rex.ps.NrOfFlows;
+			obj.NrOfProcesses=rex.ps.NrOfProcesses;
+			obj.NrOfStreams=rex.ps.NrOfStreams;
+			obj.NrOfWastes=rex.ps.NrOfWastes;
 			obj.FlowsExergy=B;			
 			obj.ProcessesExergy=rex.ProcessesExergy;
 			obj.StreamsExergy=rex.StreamsExergy;
             obj.ActiveProcesses=rex.ActiveProcesses;
-            obj.AdjacencyTable=struct('mAE',mAE,'mAS',mAS,'mAF',mAF,'mAP',mAP);
-			obj.FlowProcessTable=struct('tF',tF,'tP',tP,'tV',tV);
 			obj.DefaultGraph=cType.Tables.TABLE_FP;
             obj.ModelName=obj.ps.ModelName;
             obj.State=rex.State;
@@ -124,41 +144,5 @@ classdef cExergyModel < cResultId
         % Get the cResultInfo object
             res=fmt.getExergyResults(obj);
         end
-		
-		function res=getStreamProcessTable(obj)
-		% get the Stream-Procces table
-			fs=obj.ps.FlowStreamEdges;
-			tV=sparse(fs.from,fs.to,obj.FlowsExergy,obj.NrOfStreams,obj.NrOfStreams,obj.NrOfFlows);
-			res=struct('tF',obj.AdjacencyTable.mAF,'tP',obj.AdjacencyTable.mAP,'tV',tV);
-		end
-	
-		function res=getStreamsCost(obj,fcosts,pcosts,rsc)
-		% Get the cost of the streams as function of flows and process costs.
-			czoption=(nargin==4);
-			E=obj.StreamsExergy.ET;
-			tmp=divideCol(obj.AdjacencyTable.mAP,E);
-			if czoption
-				cs0=rsc.cs0;
-			else
-				cs0=tmp(end,:);
-			end
-			mP=tmp(1:end-1,:);
-			mE=divideCol(obj.AdjacencyTable.mAE,E);
-			cE=cs0+fcosts.cE*mE+pcosts.cPE*mP;
-			CE= cE .* E;
-			cR=fcosts.cR*mE + pcosts.cPR*mP;
-			CR=cR .* E;
-			if czoption
-				cZ = fcosts.cZ*mE+pcosts.cPZ*mP;
-				c = cE + cR + cZ;
-				CZ = cZ .* E;
-				C = c .* E;
-				res=struct('E',E,'CE',CE,'CZ',CZ,'CR',CR,'C',C,'cE',cE,'cZ',cZ,'cR',cR,'c',c);
-			else
-				c = cE + cR;
-				C = c .* E;
-				res=struct('E',E,'CE',CE,'CR',CR,'C',C,'cE',cE,'cR',cR,'c',c);
-			end
-		end
 	end		
 end

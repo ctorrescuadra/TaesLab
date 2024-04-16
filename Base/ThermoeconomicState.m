@@ -50,7 +50,7 @@ function res=ThermoeconomicState(data,varargin)
 		res.printError('Exergy values are NOT correct. See error log');
 		return
 	end
-	pm=cProcessModel(ex);
+	pm=cExergyModel(ex);
 	% Set Results
 	if isValid(pm)
 		res=pm.getResultInfo(data.FormatData);
