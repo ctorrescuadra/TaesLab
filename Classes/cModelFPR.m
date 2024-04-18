@@ -12,8 +12,7 @@ classdef cModelFPR < cExergyModel
 %		res=obj.getCostTableFP
 %		res=obj.getCostTableFPR(rsc)
 %		res=obj.getProcessICT(rsc)
-%		res=obj.getDirectFlowsCost(ucost)
-%		res=obj.getGeneralFlowsCost(ucost,rsc)
+%		res=obj.getFlowsCost(ucost,rsc)
 %		res=obj.getFlowsICT(ict,rsc)
 %		res=obj.getStreamsCost(ucost,rsc)
 %		res=getWasteWeight
@@ -292,40 +291,36 @@ classdef cModelFPR < cExergyModel
 			end		
 		end
 
-		function fcost=getDirectFlowsCost(obj,ucost)
-		% get the cost of flows from unit processes cost
-		%  Inputs:
-		%   ucost - unit cost of products
-		%  Outputs:
-		%   fcost - flows cost values (B,CE,CR,C,cE,cR,c)
-		%	scost - stream cost values (CSE,CSR,CS,cSE,cSR,cS)
-			B=obj.FlowsExergy;
-			cE=obj.flowsUnitCost(ucost.cPE,obj.c0);
-			cR=obj.flowsUnitCost(ucost.cPR);
-			c=cE+cR;
-			CE=cE.*B;
-			CR=cR.*B;
-			C=CE+CR;
-			fcost=struct('B',B,'CE',CE,'CR',CR,'C',C,'cE',cE,'cR',cR,'c',c);
-		end
-
-		function fcost=getGeneralFlowsCost(obj,ucost,rsc)
+		function fcost=getFlowsCost(obj,ucost,rsc)
 		% get the cost of flows from unit processes cost
 		%  Inputs:
 		%   ucost - unit cost of products
 		%   rsc -  Cost of external resources
 		%  Outputs:
 		%   fcost - flows cost values (B,CE,CZ,CR,C,cE,cZ,cR,c)
+			czoption=(nargin==3);
 			B=obj.FlowsExergy;
-			cE=obj.flowsUnitCost(ucost.cPE,rsc.c0);
-			cZ=obj.flowsUnitCost(ucost.cPZ);
-			cR=obj.flowsUnitCost(ucost.cPR);
-			c=cE+cZ+cR;
+            if czoption
+                cb0=rsc.c0;
+            else
+                cb0=obj.c0;
+            end
+			cE=obj.flowsUnitCost(ucost.cPE,cb0);
 			CE=cE.*B;
-			CZ=cZ.*B;
+			cR=obj.flowsUnitCost(ucost.cPR);
 			CR=cR.*B;
-			C=CE+CZ+CR;
-			fcost=struct('B',B,'CE',CE,'CZ',CZ,'CR',CR,'C',C,'cE',cE,'cZ',cZ,'cR',cR,'c',c);
+			if czoption
+				cZ=obj.flowsUnitCost(ucost.cPZ);
+				CZ=cZ.*B;
+				c=cE+cZ+cR;
+				C=CE+CZ+CR;
+				fcost=struct('B',B,'CE',CE,'CZ',CZ,'CR',CR,'C',C,'cE',cE,'cZ',cZ,'cR',cR,'c',c);
+			else
+				c=cE+cR;
+				C=CE+CR;
+				fcost=struct('B',B,'CE',CE,'CR',CR,'C',C,'cE',cE,'cR',cR,'c',c);
+			end
+
         end
 
         function res=getFlowsICT(obj,tIC,cz)

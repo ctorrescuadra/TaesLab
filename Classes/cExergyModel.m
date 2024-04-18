@@ -77,7 +77,7 @@ classdef cExergyModel < cResultId
 				mbL=eye(NS)+mS*mgL*mE;
 				tfp=mgP*mgL*tgF;
 			end
-			mH=mE*(eye(NS)+mbF*mbP);
+			mH=mE*(eye(NS)+mbF(:,1:end-1)*mbP(1:end-1,:));
 			% build the object
 			obj.StreamProcessTable=struct('tV',tbV,'tF',tAF,'tP',tAP,'mV',mbV,'mF',mbF,'mP',mbP,'mL',mbL,'mH',mH);
 			obj.FlowProcessTable=struct('tV',tgV,'tF',tgF,'tP',tgP,'mV',mgV,'mF',mgF,'mP',mgP,'mL',mgL);

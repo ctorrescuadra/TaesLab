@@ -298,6 +298,118 @@
 		},
 		{
 			"id": 7,
+			"key": "dscost",
+			"number": false,
+			"description": "Streams Exergy Cost",
+			"resultId": 3,
+			"graph": 0,
+			"columns": 8,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "E",
+					"header": "E",
+					"type": 4
+				},
+				{
+					"name": "C",
+					"header": "E*",
+					"type": 4
+				},
+				{
+					"name": "CE",
+					"header": "Ce*",
+					"type": 4
+				},
+				{
+					"name": "CR",
+					"header": "Cr*",
+					"type": 4
+				},
+				{
+					"name": "c",
+					"header": "k*",
+					"type": 5
+				},
+				{
+					"name": "cE",
+					"header": "ke*",
+					"type": 5
+				},
+				{
+					"name": "cR",
+					"header": "kr*",
+					"type": 5
+				}
+			]
+		},
+		{
+			"id": 8,
+			"key": "gscost",
+			"number": false,
+			"description": "Streams Generalized Cost",
+			"resultId": 3,
+			"graph": 0,
+			"columns": 10,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "E",
+					"header": "E",
+					"type": 4
+				},
+				{
+					"name": "C",
+					"header": "C",
+					"type": 6
+				},
+				{
+					"name": "CE",
+					"header": "CE",
+					"type": 6
+				},
+				{
+					"name": "CZ",
+					"header": "Cz",
+					"type": 6
+				},
+				{
+					"name": "CR",
+					"header": "Cr",
+					"type": 6
+				},
+				{
+					"name": "c",
+					"header": "c",
+					"type": 7
+				},
+				{
+					"name": "cE",
+					"header": "ce",
+					"type": 7
+				},
+				{
+					"name": "cZ",
+					"header": "cz",
+					"type": 7
+				},
+				{
+					"name": "cR",
+					"header": "cr",
+					"type": 7
+				}
+			]
+		},
+		{
+			"id": 9,
 			"key": "dgn",
 			"number": false,
 			"description": "Diagnosis Summary",
@@ -343,7 +455,7 @@
 			]
 		},
 		{
-			"id": 8,
+			"id": 10,
 			"key": "processes",
 			"number": true,
 			"description": "Processes Definition Table",
@@ -374,7 +486,7 @@
 			]
 		},
 		{
-			"id": 9,
+			"id": 11,
 			"key": "streams",
 			"number": true,
 			"description": "Productive Groups Definition Table",
@@ -400,7 +512,7 @@
 			]
 		},
 		{
-			"id": 10,
+			"id": 12,
 			"key": "flows",
 			"number": true,
 			"description": "Flows Definition Table",
@@ -431,7 +543,7 @@
 			]
 		},
 		{
-			"id": 11,
+			"id": 13,
 			"key": "eprocesses",
 			"number": false,
 			"description": "Processes Exergy Table",
@@ -472,7 +584,7 @@
 			]
 		},
 		{
-			"id": 12,
+			"id": 14,
 			"key": "estreams",
 			"number": false,
 			"description": "Productive Groups Exergy Table",
@@ -498,7 +610,7 @@
 			]
 		},
 		{
-			"id": 13,
+			"id": 15,
 			"key": "eflows",
 			"number": false,
 			"description": "Flows Exergy Table",
@@ -529,7 +641,7 @@
 			]
 		},
 		{
-			"id": 14,
+			"id": 16,
 			"key": "atfp",
 			"number": false,
 			"description": "Diagram FP",
@@ -560,7 +672,7 @@
 			]
 		},
 		{
-			"id": 15,
+			"id": 17,
 			"key": "atcfp",
 			"number": false,
 			"description": "Cost Diagram FP",
@@ -591,7 +703,7 @@
 			]
 		},		
 		{
-			"id": 16,
+			"id": 18,
 			"key": "wd",
 			"number": false,
 			"description": "Waste Definition Table",
@@ -617,7 +729,7 @@
 			]
 		},
 		{
-			"id": 17,
+			"id": 19,
 			"key": "fat",
 			"number": false,
 			"description": "Flows Diagram",
@@ -643,7 +755,7 @@
 			]
 		},
 		{
-			"id": 18,
+			"id": 20,
 			"key": "fpat",
 			"number": false,
 			"description": "Flow-Process Diagram",
@@ -669,7 +781,7 @@
 			]
 		},
 		{
-			"id": 19,
+			"id": 21,
 			"key": "pat",
 			"number": false,
 			"description": "Productive Diagram",

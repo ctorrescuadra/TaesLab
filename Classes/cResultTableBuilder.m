@@ -110,12 +110,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl=struct();
             if options.DirectCost
                 dfcost=ect.getDirectFlowsCost;
-                [dcost,udcost]=ect.getDirectProcessCost(dfcost);
+                [dcost,udcost]=ect.getProcessCost(dfcost);
                 dfict=ect.getFlowsICT;
                 dict=ect.getProcessICT(dfict);
+                dscost=ect.getStreamsCost(dfcost);
                 tbl.dfcost=obj.getFlowCostTable(cType.Tables.FLOW_EXERGY_COST,dfcost);
                 tbl.dcost=obj.getProcessCostTable(cType.Tables.PROCESS_COST,dcost);
-                tbl.udcost=obj.getProcessCostTable(cType.Tables.PROCESS_UNIT_COST,udcost);
+                tbl.ducost=obj.getProcessCostTable(cType.Tables.PROCESS_UNIT_COST,udcost);
+                tbl.dscost=obj.getStreamCostTable(cType.Tables.STREAM_EXERGY_COST,dscost);
                 tbl.dfict=obj.getFlowICTable(cType.Tables.FLOW_ICT,dfict);
                 tbl.dict=obj.getProcessICTable(cType.Tables.PROCESS_ICT,dict);
                 if ect.isWaste
@@ -126,12 +128,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             if options.GeneralCost
                 cz=options.ResourcesCost;
                 gfcost=ect.getGeneralFlowsCost(cz);
-                [gcost,ugcost]=ect.getGeneralProcessCost(gfcost,cz);
+                [gcost,ugcost]=ect.getProcessCost(gfcost,cz);
                 gfict=ect.getFlowsICT(cz);
                 gict=ect.getProcessICT(gfict,cz);
+                gscost=ect.getStreamsCost(gfcost,cz);
                 tbl.gfcost=obj.getFlowCostTable(cType.Tables.FLOW_GENERAL_COST,gfcost);
                 tbl.gcost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_COST,gcost);
-                tbl.ugcost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_UNIT_COST,ugcost);
+                tbl.gucost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_UNIT_COST,ugcost);
+                tbl.gscost=obj.getStreamCostTable(cType.Tables.STREAM_GENERAL_COST,gscost);
                 tbl.gfict=obj.getFlowICTable(cType.Tables.FLOW_GENERAL_ICT,gfict);
                 tbl.gict=obj.getProcessICTable(cType.Tables.PROCESS_GENERAL_ICT,gict);
             end
@@ -155,13 +159,15 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             if options.DirectCost
                 dcost=mfp.getDirectProcessCost;
                 udcost=mfp.getDirectProcessUnitCost;
-                dfcost=mfp.getDirectFlowsCost(udcost);    
+                dfcost=mfp.getFlowsCost(udcost);
+                dscost=mfp.getStreamsCost(udcost);    
                 dcfpr=mfp.getCostTableFPR;
                 dict=mfp.getProcessICT;
                 dfict=mfp.getFlowsICT(dict);               
                 tbl.dcost=obj.getProcessCostTable(cType.Tables.PROCESS_COST,dcost);
                 tbl.ducost=obj.getProcessCostTable(cType.Tables.PROCESS_UNIT_COST,udcost);
                 tbl.dfcost=obj.getFlowCostTable(cType.Tables.FLOW_EXERGY_COST,dfcost);
+                tbl.dscost=obj.getStreamCostTable(cType.Tables.STREAM_EXERGY_COST,dscost);
                 tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dcfp);
                 tbl.dict=obj.getProcessICTable(cType.Tables.PROCESS_ICT,dict);
                 tbl.dfict=obj.getFlowICTable(cType.Tables.FLOW_ICT,dfict);
@@ -173,13 +179,15 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 cz=options.ResourcesCost;
                 gcost=mfp.getGeneralProcessCost(cz);
                 ugcost=mfp.getGeneralProcessUnitCost(cz);
-                gfcost=mfp.getGeneralFlowsCost(ugcost,cz);    
+                gfcost=mfp.getFlowsCost(ugcost,cz);
+                gscost=mfp.getStreamsCost(ugcost,cz);   
                 gcfp=mfp.getCostTableFPR(cz);
                 gict=mfp.getProcessICT(cz);
                 gfict=mfp.getFlowsICT(gict,cz);   
                 tbl.gcost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_COST,gcost);
                 tbl.gucost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_UNIT_COST,ugcost);
                 tbl.gfcost=obj.getFlowCostTable(cType.Tables.FLOW_GENERAL_COST,gfcost);
+                tbl.gscost=obj.getStreamCostTable(cType.Tables.STREAM_GENERAL_COST,gscost);
                 tbl.gict=obj.getProcessICTable(cType.Tables.PROCESS_GENERAL_ICT,gict);
                 tbl.gfict=obj.getFlowICTable(cType.Tables.FLOW_GENERAL_ICT,gfict);
                 tbl.gcfp=obj.getTableFP(cType.Tables.GENERAL_COST_TABLE,gcfp);
@@ -534,7 +542,27 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 values(:,j-1)=cost.(fieldNames{j});
             end
             res=obj.createCellTable(tp,num2cell(values),rowNames,colNames);
-        end 
+        end
+
+        function res=getStreamCostTable(obj,id,scost)
+        % get a cTableCell with the exergy cost of streams
+        %  Input:
+        %	id - Table id
+        %   fcost - flows cost structure values
+            tp=obj.getCellTableProperties(id);
+            rowNames=obj.streamKeys;        
+            colNames=obj.getTableHeader(tp);
+            fieldNames={tp.fields.name};
+            nrows=length(rowNames);
+            ncols=tp.columns-1;
+            values=zeros(nrows,ncols);
+            for j=2:length(fieldNames)
+                values(:,j-1)=scost.(fieldNames{j});
+            end           
+            res=obj.createCellTable(tp,num2cell(values),rowNames,colNames);
+        end
+
+
         
         function res=getFlowICTable(obj,id,values)
         % get a cTableMatrix with the flows ICT (Irrreversibility Cost Tables)
@@ -583,7 +611,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   values - Malfunction table values
             tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION);
             rowNames=obj.processKeys;
-            DPt=[cType.Symbols.delta,'Pt'];
+            DPt=[cType.Symbols.delta,'Ps'];
             colNames=horzcat(' ',rowNames(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end

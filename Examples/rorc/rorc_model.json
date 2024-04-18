@@ -129,39 +129,39 @@
         ]
       },
       {
-        "stateId": "noIHE",
+        "stateId": "TRB75",
         "exergy": [
           {
             "key": "B1",
-            "value": 83.57
+            "value": 89.43
           },
           {
             "key": "B2",
-            "value": 17.9
+            "value": 19.54
           },
           {
             "key": "B3",
-            "value": 17.9
+            "value": 16.94
           },
           {
             "key": "B4",
-            "value": 5.784
+            "value": 6.19
           },
           {
             "key": "B5",
-            "value": 7.877
+            "value": 8.43
           },
           {
             "key": "B6",
-            "value": 7.877
+            "value": 10.31
           },
           {
             "key": "QBLR",
-            "value": 106.9
+            "value": 106.3
           },
           {
             "key": "WP",
-            "value": 2.447
+            "value": 2.619
           },
           {
             "key": "WN",
@@ -169,7 +169,7 @@
           },
           {
             "key": "QCND",
-            "value": 12.116
+            "value": 10.75
           }
         ]
       },
@@ -214,7 +214,7 @@
           },
           {
             "key": "QCND",
-            "value": 10.379
+            "value": 10.379000000000001
           }
         ]
       },
@@ -264,39 +264,39 @@
         ]
       },
       {
-        "stateId": "TRB75",
+        "stateId": "noIHE",
         "exergy": [
           {
             "key": "B1",
-            "value": 89.43
+            "value": 83.57
           },
           {
             "key": "B2",
-            "value": 19.54
+            "value": 17.9
           },
           {
             "key": "B3",
-            "value": 16.94
+            "value": 17.9
           },
           {
             "key": "B4",
-            "value": 6.19
+            "value": 5.784
           },
           {
             "key": "B5",
-            "value": 8.43
+            "value": 7.877
           },
           {
             "key": "B6",
-            "value": 10.31
+            "value": 7.877
           },
           {
             "key": "QBLR",
-            "value": 106.3
+            "value": 106.9
           },
           {
             "key": "WP",
-            "value": 2.619
+            "value": 2.447
           },
           {
             "key": "WN",
@@ -304,7 +304,7 @@
           },
           {
             "key": "QCND",
-            "value": 10.75
+            "value": 12.116
           }
         ]
       }
@@ -353,7 +353,7 @@
   "WasteDefinition": {
     "wastes": [{
       "flow": "QCND",
-      "type": "DEFAULT",
+      "type": "IRREVERSIBILITY",
       "recycle": 0
     }]
   },

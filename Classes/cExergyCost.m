@@ -6,8 +6,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %   	res=obj.getDirectFlowsCost
 %   	res=obj.getGeneralFlowsCost(rsc)
 %		res=obj.getFlowsICT(rsc)               
-%		[cost,ucost]=obj.getDirectProcessCost(fcosts)
-%   	[cost,ucost]=obj.getGeneralProcessCost(fcosts,rsc)
+%		[cost,ucost]=obj.getProcessCost(fcosts,rsc)
 %		res=obj.getProcessICT(fICT,rsc)
 %       res=obj.getStreamsCost(fcost,rsc);
 % See also cExergyModel
@@ -166,40 +165,8 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res=fict;
             end
         end
-
-		function [res1,res2]=getDirectProcessCost(obj,fcosts)
-		% get the cost related to processes.
-		%  Inputs:
-		%   fcosts - structure containing the flows costs
-		%  Output:
-		%   res1 - exergy costs of processes (CF,CR,CP,CPI,CPR)
-		%   res2 - unit exergy costs of proceses (cF,cR, cP, cPI, cPR)
-		%
-			zero=zeros(1,obj.NrOfProcesses);
-			cPE=fcosts.cE*obj.mF;
-			cF=fcosts.c*obj.mF0;
-            CPE=cPE .* obj.ProductExergy;
-            CF=cF .* obj.FuelExergy;
-			if (obj.isWaste)
-                cR=fcosts.c*obj.mR;
-                cPR=fcosts.cR*obj.mF+cR;
-                cP=cPE+cPR;
-                CR=cR .* obj.ProductExergy;
-                CP=cP .* obj.ProductExergy;
-                CPR=cPR .* obj.ProductExergy;
-			else
-				CP=CPE;
-				cP=cPE;
-				cR=zero;
-				CR=zero;
-				cPR=zero;
-				CPR=zero;
-			end
-            res1=struct('CP',CP,'CPE',CPE,'CPR',CPR,'CF',CF,'CR',CR);
-			res2=struct('cP',cP,'cPE',cPE,'cPR',cPR,'cF',cF,'cR',cR,'k',obj.UnitConsumption);
-	    end
         
-		function [res1,res2]=getGeneralProcessCost(obj,fcosts,rsc)
+		function [res1,res2]=getProcessCost(obj,fcosts,rsc)
 		% Get the cost related to processes.
 		%  Inputs:
 		%   fcosts - structure containing the flows costs
@@ -208,30 +175,36 @@ classdef (Sealed) cExergyCost < cExergyModel
 		%   res1 - exergy costs of processes (CP,CPE,CPZ,CPR,CF,CR,Z)
 		%   res2 - unit exergy costs of proceses (cP,cPE,cPZ,cPR,cF,cR)
 		%
+            czoption=(nargin==3);
 			zero=zeros(1,obj.NrOfProcesses);
-            cPE=fcosts.cE*obj.mF;
-			cF=fcosts.c*obj.mF0;
-            cPZ=fcosts.cZ*obj.mF+rsc.zP;
+            cPE=obj.processUnitCost(fcosts.cE);
             CPE=cPE .* obj.ProductExergy;
+			cF=fcosts.c*obj.mF0;
             CF=cF .* obj.FuelExergy;
-            CPZ = cPZ .* obj.ProductExergy;
-            if (obj.isWaste)
+            if obj.isWaste
                 cR=fcosts.c*obj.mR;
-                cPR=fcosts.cR*obj.mF+cR;
-                cP=cPE+cPZ+cPR;
                 CR=cR .* obj.ProductExergy;
-                CP=cP .* obj.ProductExergy;
+                cPR=obj.processUnitCost(fcosts.cR,cR);
                 CPR=cPR .* obj.ProductExergy;
 			else
-				CP=CPE+CPZ;
-				cP=cPE+cPZ;
 				cR=zero;
 				CR=zero;
 				cPR=zero;
 				CPR=zero;
             end
-			res1=struct('CP',CP,'CPE',CPE,'CPR',CPR,'CPZ',CPZ,'CF',CF,'CR',CR,'Z',rsc.Z);
-			res2=struct('cP',cP,'cPE',cPE,'cPR',cPR,'cPZ',cPZ,'cF',cF,'cR',cR);
+            if czoption
+                cPZ=obj.processUnitCost(fcosts.cZ,rsc.zP);
+                CPZ = cPZ .* obj.ProductExergy;
+                cP=cPE+cPZ+cPR;
+                CP=CPE+CPZ+CPR;
+			    res1=struct('CP',CP,'CPE',CPE,'CPR',CPR,'CPZ',CPZ,'CF',CF,'CR',CR,'Z',rsc.Z);
+			    res2=struct('cP',cP,'cPE',cPE,'cPR',cPR,'cPZ',cPZ,'cF',cF,'cR',cR);
+            else
+                cP=cPE+cPR;
+                CP=CPE+CPR;
+                res1=struct('CP',CP,'CPE',CPE,'CPR',CPR,'CF',CF,'CR',CR);
+                res2=struct('cP',cP,'cPE',cPE,'cPR',cPR,'cF',cF,'cR',cR,'k',obj.UnitConsumption);
+            end
         end  
         
         function res=getProcessICT(obj,fICT,rsc)
@@ -246,7 +219,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             ce=cn .* (obj.UnitConsumption-1);
             opIn=fICT(1:end-1,:)*obj.mF+diag(ce);
-            if obj.NrOfWastes>0
+            if obj.isWaste
                 tmp=scaleRow(obj.mR,sum(fICT));
                 opEx=cSparseRow(obj.dprocess,tmp.mValues);
                 res=[opIn+opEx;cn];
@@ -257,17 +230,24 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function scost=getStreamsCost(obj,ucost,rsc)
             czoption=(nargin==3);
-            E=obj.StreamsExergy.ET;
             tbl=obj.StreamProcessTable;
+            zero=zeros(1,obj.NrOfStreams);
+            E=obj.StreamsExergy.ET;
             if czoption
                 cse=rsc.cs0;
             else
                 cse=tbl.mP(end,:);
             end
+            cbR=ucost.c*obj.mR*tbl.mP(1:end-1,:);
             cE=obj.streamsUnitCost(ucost.cE,cse);
 			CE=cE.*E;
-			cR=obj.streamsUnitCost(ucost.cR);
-			CR=cR.*E;
+            if obj.isWaste
+			    cR=obj.streamsUnitCost(ucost.cR,cbR);
+			    CR=cR.*E;
+            else
+                cR=zero;
+                CR=zero;
+            end
 			if czoption
                 zps=rsc.zP*tbl.mP(1:end-1,:);
 				cZ=obj.streamsUnitCost(ucost.cZ,zps);
@@ -348,6 +328,18 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res=c0+ucost*tbl.mH;
             else
                 res=ucost*tbl.mH;
+            end
+        end
+
+        function res=processUnitCost(obj,ucost,c0)
+        % Calculate the processes cost given the flows cost
+        % Input:
+        %   ucost - Unit cost of flows
+        %   c0 - [optional] Resources cost
+            if nargin==3
+                res=c0+ucost*obj.mF;
+            else
+                res=ucost*obj.mF;
             end
         end
     end      

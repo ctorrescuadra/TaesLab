@@ -88,6 +88,9 @@ classdef (Abstract) cReadModelTable < cReadModel
             isWasteAllocation=existTable(tm,twa);
             if  isWasteAllocation || isWasteDefinition
                 pswd=obj.WasteData(tm);
+                if isempty(pswd)
+                    return
+                end
                 wf={pswd.wastes.flow};
                 wdef=0;
                 % Waste Definition

@@ -20,6 +20,7 @@
 %   WasteAnalysis           - Provide waste recycling analysis of a plant state
 %   SummaryResults          - Get the summary results of a data model
 %   ExergyCostCalculator    - Calculate the exergy cost values of a plant state
+%   TotalMalfunctionCost    - Get detailed breakdown of total malfunction cost
 %
 % Save Results Information
 %   SaveDataModel           - Saves the data model into a file.
