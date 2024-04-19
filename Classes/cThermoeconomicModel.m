@@ -56,8 +56,8 @@ classdef cThermoeconomicModel < cResultSet
 %       obj.showTableIndex(options)
 %       obj.showGraph(name,options)
 %       obj.showSummary(name)
+%       obj.showSummaryGraph(name,options)
 %       obj.showTableDirectory(option)
-%       obj.showGraph(name,options)
 %   Save Methods
 %       log=obj.saveResults(filename)
 %       log=obj.saveDataModel(filename)
@@ -563,6 +563,17 @@ classdef cThermoeconomicModel < cResultSet
                 showResults(res,name,varargin{:})
             end
         end
+
+        function showSummaryGraph(obj,varargin)
+        % Show Summary Graphs
+            res=obj.getSummaryResults;
+            if isempty(res)
+                obj.printDebugInfo('Summary Results not available')
+                return
+            end
+            showGraph(res,varargin{:});
+        end
+
 
         function showDataModel(obj,name,varargin)
         % Show Data Model tables

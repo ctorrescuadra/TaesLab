@@ -86,7 +86,8 @@ classdef cGraphResults < cStatusLogger
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
-			bar(obj.yValues,'stacked','edgecolor','none','barwidth',0.5,'parent',ax); 
+			bar(obj.yValues,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
+			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
 		end
 
@@ -105,6 +106,7 @@ classdef cGraphResults < cStatusLogger
 			'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
 			bar(obj.xValues,obj.yValues,'edgecolor','none','barwidth',0.8,'parent',ax);
+			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
 		end
 
@@ -114,6 +116,7 @@ classdef cGraphResults < cStatusLogger
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
 			plot(obj.xValues,obj.yValues,'Marker','diamond');
+			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
 		end
 
@@ -420,7 +423,6 @@ classdef cGraphResults < cStatusLogger
 		function setGraphParameters(obj,ax)
 			hold(ax,'off');
 			title(ax,obj.Title,'fontsize',14);
-			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			set(ax,'xtick',obj.xValues,'xticklabel',obj.Categories);
 			xlabel(ax,obj.xLabel,'fontsize',12);
 			ylabel(ax,obj.yLabel,'fontsize',12);

@@ -126,12 +126,12 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 sol.setWasteOperators;
                 if obj.directCost
                     ucost=sol.getDirectProcessUnitCost;
-                    fc=sol.getDirectFlowsCost(ucost);
+                    fc=sol.getFlowsCost(ucost);
                     yd(i,:)=fc.c(outputId);
                 end
                 if obj.generalCost
                     ucost=sol.getGeneralProcessUnitCost(obj.resourceCost);
-                    fc=sol.getGeneralFlowsCost(ucost,obj.resourceCost);
+                    fc=sol.getFlowsCost(ucost,obj.resourceCost);
                     yg(i,:)=fc.c(outputId);
                 end
             end

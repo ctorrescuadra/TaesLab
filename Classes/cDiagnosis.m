@@ -97,7 +97,7 @@ classdef cDiagnosis < cResultId
             obj.DW0=fp1.SystemOutput - fp0.SystemOutput;
             obj.DWt=fp1.FinalDemand - fp0.FinalDemand;
             obj.DWr=obj.DW0-obj.DWt;
-            obj.vDI=(fp1.Irreversibility - fp0.Irreversibility) + obj.DWr';
+            obj.vDI=(fp1.Irreversibility - fp0.Irreversibility);
             % Cost Information
             obj.opI=fp1.pfOperators.opI;
             obj.dpuk=fp1.getDirectProcessUnitCost;
@@ -169,7 +169,7 @@ classdef cDiagnosis < cResultId
 
         function res=getDemandVariation(obj)
         % Get the system demand variation
-            res=[obj.DWt', sum(obj.DWt)];
+            res=[obj.DW', sum(obj.DW)];
         end
             
         function res=getDemandVariationCost(obj)
@@ -229,16 +229,13 @@ classdef cDiagnosis < cResultId
         function wasteOutputMethod(obj)
         % Compute internal variables with WASTE_EXTERNAL method
             N=obj.NrOfProcesses;
-            idx=obj.iwr;
-            mdwr=sparse(idx,idx,obj.DWr(idx),N,N+1);
             mf=obj.tMF(1:N,:);
-            obj.DW=obj.DWt;
-            obj.DCW=obj.dpuk.cPE .* obj.DWt';
-            obj.DFin=obj.opI*[mf,obj.DWt];
+            obj.DW=obj.DW0;
+            obj.DCW=obj.dpuk.cPE .* obj.DW0';
+            obj.DFin=obj.opI*[mf,obj.DW0];
             obj.DFex=zeros(N,N+1);
-            dfr=obj.opI*mdwr;
-            obj.DIT=obj.DFin+dfr+mdwr;
-            obj.vMCR=obj.dpuk.cPE .* obj.DWr';
+            obj.DIT=obj.DFin;
+            obj.vMCR=zeros(1,N);
             obj.MFC=obj.tDF;
         end
         
@@ -250,6 +247,7 @@ classdef cDiagnosis < cResultId
             cPE=obj.dpuk.cPE;
             obj.DW=obj.DWt;
             obj.DCW=obj.dpuk.cP .* obj.DWt';
+            obj.vDI=obj.vDI+obj.DWr';
             % Prepare internal variables
             mf=obj.tMF(1:N,:);
             mr=full(scaleCol(fp1.WasteOperators.mKR-fp0.WasteOperators.mKR,fp0.ProductExergy));
