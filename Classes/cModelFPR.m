@@ -262,7 +262,8 @@ classdef cModelFPR < cExergyModel
 				cp0=obj.getMinCost(rsc);
 				ict=zerotol([scaleRow(obj.pfOperators.opI,cp0);cp0]);
 			else
-				ict=zerotol([obj.pfOperators.opI;ones(1,N)]);
+				cp0=obj.getMinCost;
+				ict=zerotol([obj.pfOperators.opI;cp0]);
 			end
 			if obj.isWaste
             	mopCR=scaleRow(obj.WasteOperators.opR,sum(ict));
@@ -280,14 +281,14 @@ classdef cModelFPR < cExergyModel
 		%   res - Process ICT table
 		%
 			narginchk(1,2);
-			N=obj.NrOfProcesses;
 			mR=obj.WasteOperators.opR;
 			opI=cModelFPR.updateOperator(obj.pfOperators.opI,mR)+mR;
 			if nargin==2
 				cp0=obj.getMinCost(rsc);
 				res=zerotol([scaleRow(opI,cp0);cp0]);
 			else
-				res=zerotol([opI;ones(1,N)]);
+				cp0=obj.getMinCost;
+				res=zerotol([opI;cp0]);
 			end		
 		end
 

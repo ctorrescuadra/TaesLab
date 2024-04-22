@@ -109,7 +109,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       gict:  generalized irreversibility cost table of processes
             tbl=struct();
             if options.DirectCost
-                dfcost=ect.getDirectFlowsCost;
+                dfcost=ect.getFlowsCost;
                 [dcost,udcost]=ect.getProcessCost(dfcost);
                 dfict=ect.getFlowsICT;
                 dict=ect.getProcessICT(dfict);
@@ -127,7 +127,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             end
             if options.GeneralCost
                 cz=options.ResourcesCost;
-                gfcost=ect.getGeneralFlowsCost(cz);
+                gfcost=ect.getFlowsCost(cz);
                 [gcost,ugcost]=ect.getProcessCost(gfcost,cz);
                 gfict=ect.getFlowsICT(cz);
                 gict=ect.getProcessICT(gfict,cz);

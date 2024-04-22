@@ -12,7 +12,6 @@ classdef cExergyModel < cResultId
 		FlowsExergy      	  % Exergy values of flows
 		ProcessesExergy  	  % Structure containing the fuel, product of a process
 		StreamsExergy    	  % Exergy values of streams
-		AdjacencyTable   	  % Adjacency table of the productive structure with exergy values
 		FlowProcessTable      % Flow Process Table
         StreamProcessTable    % Stream Process Table
         TableFP               % Table FP
@@ -51,11 +50,7 @@ classdef cExergyModel < cResultId
 			tAS=scaleCol(tbl.AS,B);
 			tAF=scaleRow(tbl.AF,E);
             tAP=scaleCol(tbl.AP,E);
-			obj.AdjacencyTable=struct('tAE',tAE,'tAS',tAS,'tAF',tAF,'tAP',tAP);
 			% Build the Stream-Process Table
-            fs=rex.ps.FlowStreamEdges;
-			tbV=sparse(fs.from,fs.to,B,NS,NS,M);
-			mbV=divideCol(tbV,ET);
 			mbF=divideCol(tAF,vP);
 			mbP=divideCol(tAP,ET);
 			mS=double(tbl.AS);
@@ -70,16 +65,15 @@ classdef cExergyModel < cResultId
 			% Build table FP
 			if rex.ps.isModelIO
 				mgL=eye(M);
-				mbL=eye(NS)+mbV;
+				mbL=eye(NS)+mS*mE;
 				tfp=mgP*tgF;
 			else
 				mgL=(eye(M)-mgV)\eye(M);
 				mbL=eye(NS)+mS*mgL*mE;
 				tfp=mgP*mgL*tgF;
 			end
-			mH=mE*(eye(NS)+mbF(:,1:end-1)*mbP(1:end-1,:));
 			% build the object
-			obj.StreamProcessTable=struct('tV',tbV,'tF',tAF,'tP',tAP,'mV',mbV,'mF',mbF,'mP',mbP,'mL',mbL,'mH',mH);
+			obj.StreamProcessTable=struct('tE',tAE,'tS',tAS,'tF',tAF,'tP',tAP,'mE',mE,'mS',mS,'mF',mbF,'mP',mbP,'mL',mbL);
 			obj.FlowProcessTable=struct('tV',tgV,'tF',tgF,'tP',tgP,'mV',mgV,'mF',mgF,'mP',mgP,'mL',mgL);
 			obj.TableFP=full(tfp);
             obj.ps=rex.ps;
