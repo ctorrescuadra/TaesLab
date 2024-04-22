@@ -4,11 +4,8 @@ classdef cModelFPR < cExergyModel
 %  	cost of flows and processes, irreversibilty cost tables and FP tables.
 % 	Methods:
 %		obj=cModelFPR(pm)
-%		res=obj.getProcessResourcesCost(c0)
-%		res=obj.getDirectProcessCost
-%		res=obj.getGeneralProcessCost(rsc)
-%		res=obj.getDirectProcessUnitCost
-%		res=obj.getGeneralProcessUnitCost(rsc)
+%		res=obj.getProcessCost(rsc)
+%		res=obj.getProcessUnitCost(rsc)
 %		res=obj.getCostTableFP
 %		res=obj.getCostTableFPR(rsc)
 %		res=obj.getProcessICT(rsc)
@@ -101,18 +98,6 @@ classdef cModelFPR < cExergyModel
             res=fmt.getThermoeconomicAnalysisResults(obj,options);
         end
 
- 		function res=getProcessResourceCost(obj,c0)			
-		% Get the Processes Resources cost given the unit cost of resource flows
-		% Use the matrices of Table FP building
-		%  	Input:
-		%   	c0 - External resources costs of flows
-		%	Output:
-		%	   res - Process resources cost (ce)
-            tbl=obj.FlowProcessTable;
-            mF0=divideCol(tbl.tF(:,1:end-1),obj.FuelExergy);
-			res=c0*tbl.mL*mF0;
-        end
-
         function setWasteOperators(obj,sWaste)
 		% Set the Waste Operators values
 		% Input:
@@ -121,43 +106,29 @@ classdef cModelFPR < cExergyModel
 			if nargin==1
 				sWaste=obj.wasteProcessTable;
 				sWaste.opCR=cModelFPR.computeWasteOperator(sWaste.mRP,obj.fpOperators.opCP);
-				sWaste.opR=cModelFPR.computeWasteOperator(sWaste.mKR,obj.pfOperators.opP);			else
+				sWaste.opR=cModelFPR.computeWasteOperator(sWaste.mKR,obj.pfOperators.opP);
 			end
             obj.WasteOperators=sWaste;
-		end
-		
-		function res=getDirectProcessCost(obj)
-		% Get processes cost values
-		% Output:
-		%   res - structure containing cost values (CP,CPE,CPR,CF,CR)
-			N=obj.NrOfProcesses;
-			zero=zeros(1,N);
-			aux=obj.TableFP(end,1:N);
-			CPE=aux * obj.fpOperators.opCP;
-			if obj.isWaste
-				CPR=CPE * obj.WasteOperators.opCR;
-				CP=CPE+CPR;
-				CR=CP * obj.WasteOperators.mRP;
-			else
-				CP=CPE;
-				CPR=zero;
-				CR=zero;
-			end
-			CF=aux+CP*obj.fpOperators.mFP(1:end,1:end-1);
-			res=struct('CP',CP,'CPE',CPE,'CPR',CPR,'CF',CF,'CR',CR);
-		end		  
+		end  
 
-		function res=getGeneralProcessCost(obj,rsc)
+		function res=getProcessCost(obj,rsc)
 			% return processes cost values
 			% Input:
 			%   rsc - [optional] external costs
 			% Output:
-			%   res - structure containing general cost values (CPE,CPZ,CPR,CP,CF,CR,Z) 
+			%   res - structure containing general cost values (CPE,CPZ,CPR,CP,CF,CR,Z)
+			czoption=(nargin==2);
 			N=obj.NrOfProcesses;
 			zero=zeros(1,N);
-			Ce=rsc.ce .* obj.ProcessesExergy.vF(1:N);
-			CPE=Ce * obj.fpOperators.opCP;
-			CPZ=rsc.Z * obj.fpOperators.opCP;
+			if czoption
+				Ce=rsc.ce .* obj.FuelExergy;
+				CPE=Ce * obj.fpOperators.opCP;
+				CPZ=rsc.Z * obj.fpOperators.opCP;
+			else
+				Ce=obj.TableFP(end,1:N);
+				CPE=Ce * obj.fpOperators.opCP;
+				CPZ=zero;
+			end
 			if obj.isWaste
 				CPR=(CPE+CPZ)*obj.WasteOperators.opCR;
 				CP=CPE+CPZ+CPR;
@@ -167,43 +138,36 @@ classdef cModelFPR < cExergyModel
 				CP=CPE+CPZ;
 				CR=zero;
 			end
-			CF= Ce+CP*obj.fpOperators.mFP(1:end,1:end-1);
-			res=struct('CP',CP,'CPE',CPE,'CPZ',CPZ,'CPR',CPR,'CF',CF,'CR',CR,'Z',rsc.Z);
-		end
-
-		function res = getDirectProcessUnitCost(obj)
-		% get Process Unit Cost
-        %  Output:
-        %   res - struct containing direct unit cost values (cP,cPE,cPR,cF,cR,k)
-			N=obj.NrOfProcesses;
-			zero=zeros(1,N);
-			cPE=obj.pfOperators.mKP(end,1:N)*obj.pfOperators.opP;
-            if obj.isWaste
-				cPR=cPE*obj.WasteOperators.opR;
-				cP=cPE+cPR;
-				cR=cP*obj.WasteOperators.mKR;
+			CF= Ce+CP*obj.fpOperators.mFP(:,1:end-1);
+			if czoption
+				res=struct('CP',CP,'CPE',CPE,'CPZ',CPZ,'CPR',CPR,'CF',CF,'CR',CR,'Z',rsc.Z);
 			else
-				cP=cPE;
-				cPR=zero;
-				cR=zero;
-            end
-            vK=obj.ProcessesExergy.vK(1:N);
-			cF=obj.pfOperators.mPF(end,1:N)+cP*obj.pfOperators.mPF(1:end-1,1:end);
-			res=struct('cP',cP,'cPE',cPE,'cPR',cPR,'cF',cF,'cR',cR,'k',vK);
+				res=struct('CP',CP,'CPE',CPE,'CPR',CPR,'CF',CF,'CR',CR);
+			end
 		end
 		
-		function res = getGeneralProcessUnitCost(obj,rsc)
+		function res = getProcessUnitCost(obj,rsc)
 		% Get Generalized Process Unit Cost
 		%  Inputs:
 		%   rsc - Resources cost
         %  Outputs:
         %   res - struct containing general process cost values (cP,cPE,cPZ,cPR,cF,cR)
 		%
+			czoption=(nargin==2);
 			N=obj.NrOfProcesses;
-			zero=zeros(1,N);     
-			auxE = rsc.ce .* obj.UnitConsumption;
-			cPE= auxE * obj.pfOperators.opP;
-			cPZ= rsc.zP * obj.pfOperators.opP;
+			zero=zeros(1,N);
+            vK=obj.UnitConsumption;
+			if czoption
+                ce=rsc.ce;
+                ke=rsc.ce .* vK;
+				cPE= ke * obj.pfOperators.opP;
+				cPZ= rsc.zP * obj.pfOperators.opP;
+			else
+				ce=obj.pfOperators.mPF(end,:);
+                ke=ce .* vK;
+				cPE= ke * obj.pfOperators.opP;
+				cPZ= zero;
+			end
 			if obj.isWaste
 				cPR=(cPE+cPZ)*obj.WasteOperators.opR;
 				cP=cPE+cPZ+cPR;
@@ -213,13 +177,17 @@ classdef cModelFPR < cExergyModel
 				cP=cPE+cPZ;
 				cR=zero;
 			end
-			cF=rsc.ce+cP*obj.pfOperators.mPF(1:end-1,1:end);
-			res=struct('cP',cP,'cPE',cPE,'cPZ',cPZ,'cPR',cPR,'cF',cF,'cR',cR);
+			cF=ce+cP*obj.pfOperators.mPF(1:end-1,1:end);
+			if czoption
+				res=struct('cP',cP,'cPE',cPE,'cPZ',cPZ,'cPR',cPR,'cF',cF,'cR',cR);
+			else
+				res=struct('cP',cP,'cPE',cPE,'cPR',cPR,'cF',cF,'cR',cR,'k',vK);
+			end
 		end  
 		
 		function res = getCostTableFP(obj)
 		% Get the FP Cost Table considering only internal irreversibilities
-			cost=[obj.getDirectProcessUnitCost.cPE,1];
+			cost=[obj.getProcessUnitCost.cPE,1];
 			res=scaleRow(obj.TableFP,cost);
 		end
 
@@ -235,10 +203,10 @@ classdef cModelFPR < cExergyModel
 			if nargin==2
 				Ce= rsc.ce .* obj.ProcessesExergy.vF(1:N);
 				aux=[Ce+rsc.Z,0];
-				cost=obj.getGeneralProcessUnitCost(rsc);
+				cost=obj.getProcessUnitCost(rsc);
 			else
 				aux=obj.TableFP(end,:);
-				cost=obj.getDirectProcessUnitCost;	
+				cost=obj.getProcessUnitCost;	
 			end
 			tmp=obj.TableFP(1:N,:);
 			if obj.isWaste

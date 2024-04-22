@@ -157,8 +157,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl=struct();
             dcfp=mfp.getCostTableFP;
             if options.DirectCost
-                dcost=mfp.getDirectProcessCost;
-                udcost=mfp.getDirectProcessUnitCost;
+                dcost=mfp.getProcessCost;
+                udcost=mfp.getProcessUnitCost;
                 dfcost=mfp.getFlowsCost(udcost);
                 dscost=mfp.getStreamsCost(udcost);    
                 dcfpr=mfp.getCostTableFPR;
@@ -177,8 +177,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             end
             if options.GeneralCost
                 cz=options.ResourcesCost;
-                gcost=mfp.getGeneralProcessCost(cz);
-                ugcost=mfp.getGeneralProcessUnitCost(cz);
+                gcost=mfp.getProcessCost(cz);
+                ugcost=mfp.getProcessUnitCost(cz);
                 gfcost=mfp.getFlowsCost(ugcost,cz);
                 gscost=mfp.getStreamsCost(ugcost,cz);   
                 gcfp=mfp.getCostTableFPR(cz);

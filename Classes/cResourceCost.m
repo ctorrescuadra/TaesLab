@@ -24,19 +24,15 @@ classdef cResourceCost < cStatusLogger
 				obj.messageLog(cType.ERROR,'No exergy data model');
 				return
 			end
-			% Set Flows Properties
+			% Set Resources properties
 			obj.c0=rd.c0;
 			obj.cs0=zeros(1,exm.ps.NrOfStreams);
-            obj.ce=zeros(1,exm.ps.NrOfProcesses);
-			fid=exm.ps.Resources.flows;
-			pid=exm.ps.Resources.processes;
 			sid=exm.ps.Resources.streams;
+            fid=exm.ps.Resources.flows;
 			obj.cs0(sid)=obj.c0(fid);
-            if isa(exm,'cModelFPR')
-				obj.ce=exm.getProcessResourceCost(obj.c0);
-			else
-				obj.ce(pid)=obj.c0(fid);
-            end
+			% Process Resources Cost
+			tbl=exm.FlowProcessTable;
+			obj.ce=obj.c0 * tbl.mL * tbl.mF0(:,1:end-1);
 			% Set Process Properties
             idx=~exm.ActiveProcesses;
 			obj.Z=rd.Z;

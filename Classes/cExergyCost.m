@@ -38,8 +38,8 @@ classdef (Sealed) cExergyCost < cExergyModel
             NS=obj.NrOfStreams;
 			tbl=obj.FlowProcessTable;
 			obj.mV=tbl.mV;
-			obj.mF=divideCol(tbl.tF(:,1:N),obj.ProductExergy);
-			obj.mF0=divideCol(tbl.tF(:,1:N),obj.FuelExergy);
+			obj.mF=tbl.mF(:,1:N);
+			obj.mF0=tbl.mF0(:,1:N);
 			obj.mP=tbl.mP(1:N,:);
 			obj.c0=tbl.mP(end,:);
 			obj.mG=obj.mF * obj.mP + obj.mV;

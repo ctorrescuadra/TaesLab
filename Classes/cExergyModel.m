@@ -45,6 +45,7 @@ classdef cExergyModel < cResultId
 			E=rex.StreamsExergy.E;
             ET=rex.StreamsExergy.ET;
 			vP=rex.ProcessesExergy.vP;
+            vF=rex.ProcessesExergy.vF;
 			tbl=rex.ps.AdjacencyMatrix;
 			tAE=scaleRow(tbl.AE,B);
 			tAS=scaleCol(tbl.AS,B);
@@ -52,6 +53,7 @@ classdef cExergyModel < cResultId
             tAP=scaleCol(tbl.AP,E);
 			% Build the Stream-Process Table
 			mbF=divideCol(tAF,vP);
+			mbF0=divideCol(tAF,vF);
 			mbP=divideCol(tAP,ET);
 			mS=double(tbl.AS);
 			mE=divideCol(tAE,ET);
@@ -59,6 +61,7 @@ classdef cExergyModel < cResultId
 			mgV=mE*mS;
 			tgV=scaleCol(mgV,B);
 			mgF=mE*mbF;
+			mgF0=mE*mbF0;
 			tgF=scaleCol(mgF,vP);
 			mgP=mbP*mS;
 			tgP=scaleCol(mgP,B);
@@ -73,8 +76,8 @@ classdef cExergyModel < cResultId
 				tfp=mgP*mgL*tgF;
 			end
 			% build the object
-			obj.StreamProcessTable=struct('tE',tAE,'tS',tAS,'tF',tAF,'tP',tAP,'mE',mE,'mS',mS,'mF',mbF,'mP',mbP,'mL',mbL);
-			obj.FlowProcessTable=struct('tV',tgV,'tF',tgF,'tP',tgP,'mV',mgV,'mF',mgF,'mP',mgP,'mL',mgL);
+			obj.StreamProcessTable=struct('tE',tAE,'tS',tAS,'tF',tAF,'tP',tAP,'mE',mE,'mS',mS,'mF',mbF,'mF0',mbF0,'mP',mbP,'mL',mbL);
+			obj.FlowProcessTable=struct('tV',tgV,'tF',tgF,'tP',tgP,'mV',mgV,'mF',mgF,'mF0',mgF0,'mP',mgP,'mL',mgL);
 			obj.TableFP=full(tfp);
             obj.ps=rex.ps;
             obj.NrOfFlows=rex.ps.NrOfFlows;
