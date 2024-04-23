@@ -182,7 +182,11 @@ classdef cSparseRow < cStatusLogger
 				case 1
 					obj=cSparseRow(obj1.mRows,obj1.mValues*obj2);
 				case 2
-					obj=obj1(:,obj2.mRows)*obj2.mValues;
+                    if isscalar(obj1)
+                        obj=cSparseRow(obj2.mRows,obj1*obj2.mValues);
+                    else
+					    obj=obj1(:,obj2.mRows)*obj2.mValues;
+                    end
 				case 3
 					obj=cSparseRow(obj1.mRows,obj1.mValues(:,obj1.mRows)*obj2.mValues);
 			end

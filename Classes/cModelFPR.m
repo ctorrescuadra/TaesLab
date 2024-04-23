@@ -1,7 +1,9 @@
 classdef cModelFPR < cExergyModel
 % cModelFPR Computes the system costs using the process model algorith
 % 	It performs the thermoeconomic analysis of a plant state, including
-%  	cost of flows and processes, irreversibilty cost tables and FP tables.
+%  	cost of flows, streams and processes, irreversibilty-cost tables
+%   and FPR cost tables. 
+%   It also obtains the cost operators for streams and flows.
 % 	Methods:
 %		obj=cModelFPR(pm)
 %		res=obj.getProcessCost(rsc)
@@ -12,7 +14,8 @@ classdef cModelFPR < cExergyModel
 %		res=obj.getFlowsCost(ucost,rsc)
 %		res=obj.getFlowsICT(ict,rsc)
 %		res=obj.getStreamsCost(ucost,rsc)
-%		res=getWasteWeight
+%       res=obj.getFlowOperators;
+%       res=obj.getStreamOperators;
 %		
 	properties (GetAccess=public, SetAccess=private)
 		fpOperators           % FP representation operators (mFP,opCP)
@@ -51,9 +54,10 @@ classdef cModelFPR < cExergyModel
 			obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
 			mPF=divideCol(tFP(:,1:N),vF);
 			mKP=divideCol(tFP(:,1:N),vP);
-			opP=inv(eye(N)-mKP(1:N,1:N));
+			opP=inv(eye(N)-mKP(1:N,:));
+			opP0=inv(eye(N)-mPF(1:N,:));
 			opI=scaleRow(opP,vK-1);
-			obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
+			obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opP0',opP0,'opI',opI);
             obj.c0=zeros(1,obj.NrOfFlows);
 			obj.c0(obj.ps.Resources.flows)=1.0;
             obj.cs0=obj.StreamProcessTable.mP(end,:);
@@ -75,7 +79,7 @@ classdef cModelFPR < cExergyModel
 			res=obj.SystemOutput;
 			if obj.isWaste
 				idx=obj.ps.Waste.processes;
-				res(idx)=scaleRow(obj.TableFP(idx,end),obj.WasteOperators.mSR);
+				res(idx)=scaleRow(obj.TableFP(idx,end),obj.WasteOperators.wSR);
 			end
 		end    
 			
@@ -105,8 +109,8 @@ classdef cModelFPR < cExergyModel
 		%  		If it is not provided, they are calculated.
 			if nargin==1
 				sWaste=obj.wasteProcessTable;
-				sWaste.opCR=cModelFPR.computeWasteOperator(sWaste.mRP,obj.fpOperators.opCP);
-				sWaste.opR=cModelFPR.computeWasteOperator(sWaste.mKR,obj.pfOperators.opP);
+				[sWaste.opCR,sWaste.mRPS]=cModelFPR.computeWasteOperator(sWaste.mRP,obj.fpOperators.opCP);
+				[sWaste.opR,sWaste.mKRS]=cModelFPR.computeWasteOperator(sWaste.mKR,obj.pfOperators.opP);
 			end
             obj.WasteOperators=sWaste;
 		end  
@@ -211,7 +215,7 @@ classdef cModelFPR < cExergyModel
 			tmp=obj.TableFP(1:N,:);
 			if obj.isWaste
 				tR=obj.WasteOperators.tR;
-				recycle=scaleRow(obj.TableFP(tR.mRows,end),obj.WasteOperators.mSR);
+				recycle=scaleRow(obj.TableFP(tR.mRows,end),obj.WasteOperators.wSR);
 				tmp(tR.mRows,:)=[tR.mValues,recycle];
 			end
 			res=[scaleRow(tmp,cost.cP);aux];
@@ -337,15 +341,52 @@ classdef cModelFPR < cExergyModel
 				C=CE+CR;
 				scost=struct('E',E,'CE',CE,'CR',CR,'C',C,'cE',cE,'cR',cR,'c',c);
 			end
-		end
+        end
 
-		function res=getWasteWeight(obj)
-		% Get the waste weight.  The diagonal of the S matrix.
-			res=[];
-			if obj.isWaste
-				opR=obj.WasteOperators.opR;
-				res=diag(opR.mValues(:,opR.mRows))';
-			end
+        function res=getFlowsOperators(obj)
+        % Get the flows matrix operators
+        %   Output:
+        %    res - structure containing the following matrices
+        %       mG: Flows Characteristic matrix
+        %       opB: Exergy operator
+        %       opI: Flow-Process Irreversibility operator
+        %       opR: Flows Waste operator
+        %
+            M=obj.NrOfFlows;
+            wflows=obj.ps.Waste.flows;
+            tbl=obj.FlowProcessTable;
+            mP=tbl.mP(1:end-1,:);
+            mG=tbl.mV+tbl.mF(:,1:end-1)*mP;
+            opB=eye(M)/(eye(M)-mG);
+            paux=mP*opB;
+            opI=scaleRow(paux,obj.UnitConsumption-1);
+            wtmp=obj.WasteOperators;
+            waux=wtmp.mKRS*wtmp.mKR.mValues;
+            opR=cSparseRow(wflows,waux*paux,M);
+            res=struct('mG',mG,'opB',opB,'opI',opI,'opR',opR);
+        end
+
+        function res=getStreamOperators(obj)
+        % Get the stream matrix operators
+        %   Output:
+        %    res - structure containing the following matrices
+        %       mG: Streams Characteristic matrix
+        %       opE: Stream Exergy operator
+        %       opI: Stream-Process Irreversibility operator
+        %       opR: Streams Waste operator
+        %
+            NS=obj.NrOfStreams;
+            wstreams=obj.ps.Waste.streams;
+            tbl=obj.StreamProcessTable;
+            mP=tbl.mP(1:end-1,:);
+            mG=tbl.mS*tbl.mE+tbl.mF(:,1:end-1)*mP;
+            opE=eye(NS)/(eye(NS)-mG);
+            paux=mP*opE;
+            opI=scaleRow(paux,obj.UnitConsumption-1);
+            wtmp=obj.WasteOperators;
+            waux=wtmp.mKRS*wtmp.mKR.mValues;
+            opR=cSparseRow(wstreams,waux*paux,NS);
+            res=struct('mG',mG,'opE',opE,'opI',opI,'opR',opR);
         end
 	end
 	
@@ -392,7 +433,7 @@ classdef cModelFPR < cExergyModel
 				res=ones(1,N);
 			else
 				q0=rsc.ce+rsc.zF;
-				res=q0/(eye(N)-obj.pfOperators.mPF(1:N,1:N));
+				res=q0*obj.opP0;
 			end
 		end
 
@@ -482,17 +523,19 @@ classdef cModelFPR < cExergyModel
 			mRP=cSparseRow(aR,sol);
 			tR=cSparseRow(aR,scaleRow(sol,vP(aR)));
 			mKR=cSparseRow(aR,divideCol(tR.mValues,vP));
-			res=struct('mRP',mRP,'mKR',mKR,'tR',tR,'mSR',wt.RecycleRatio);
+			res=struct('mRP',mRP,'mKR',mKR,'tR',tR,'wSR',wt.RecycleRatio);
 		end 
 	end
     
 	methods (Static,Access=private)
-		function res=computeWasteOperator(mR,oP)
+		function [res1,res2]=computeWasteOperator(mR,oP)
 		% Compute waste operator
 			aR=mR.mRows;
-			NR=length(aR);
+            N=mR.NR;
 			tmp=mR*oP;
-			res=cSparseRow(aR,(eye(NR)-tmp.mValues(:,aR))\tmp.mValues);
+			res1=cSparseRow(aR,(eye(N)-tmp.mValues(:,aR))\tmp.mValues);
+			res2=eye(N)+res1.mValues(:,aR);
+			
         end
 		
 		function res=updateOperator(op,opR)

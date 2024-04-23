@@ -87,7 +87,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         function res=getExergyCostResults(obj,ect,options)
         % Generate the exergy cost result tables
         %  Input:
-        %   ect - cExergyCost object
+        %   ect - cFlowProcessModel object
         %   options - structure containing the fields
         %       DirectCost - Direct Cost Tables will be obtained
         %       GeneralCost - General Cost Tables will be obtained

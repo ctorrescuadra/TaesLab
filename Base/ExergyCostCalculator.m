@@ -28,7 +28,7 @@ function res=ExergyCostCalculator(data,varargin)
 %       		gfcost: Generalizaed Cost of flows
 %       		gict: Irreversibility generalized cost table 
 %       		gfict: Flows Irreversibility generalized cost table 
-% See also  cReadModel, cExergyCost, cResultInfo
+% See also  cReadModel, cFlowProcessModel, cResultInfo
 %
 	res=cStatusLogger();
 	checkModel=@(x) isa(x,'cDataModel');
@@ -67,9 +67,9 @@ function res=ExergyCostCalculator(data,varargin)
 	% Read Waste definition and compute waste operator
     if(data.NrOfWastes>0)
 		wd=data.WasteData;
-	    ect=cExergyCost(ex,wd);
+	    ect=cFlowProcessModel(ex,wd);
     else
-        ect=cExergyCost(ex);
+        ect=cFlowProcessModel(ex);
     end
     if ~ect.isValid
 		ect.printLogger;
