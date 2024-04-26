@@ -1,6 +1,6 @@
 classdef cDiagnosis < cResultId
 % cDiagnosis make Thermoeconomic Diagnosis Analysis
-%   It compares two states of the plant given by two cModelFPR objects.
+%   It compares two states of the plant given by two cExergyCost objects.
 %   Two method could be applied:
 %   WASTE_EXTERNAL considers waste as a system output
 %   WASTE_INTERNAL internalize the waste cost according waste table allocation
@@ -57,15 +57,15 @@ classdef cDiagnosis < cResultId
 	methods
 		function obj=cDiagnosis(fp0,fp1,method)
         % Diagnosis Constructor
-        %  fp0: cModelFPR object for reference state
-        %  fp1: cModelFPR object for operation state
+        %  fp0: cExergyCost object for reference state
+        %  fp1: cExergyCost object for operation state
         %  method: Diagnosis Method used. 
         %   cType.DiagnosisMethod.WASTE_EXTERNAL
         %   cType.DiagnosisMethod.WASTE_INTERNAL   
             obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
             % Check Arguments
-            if ~isa(fp0,'cModelFPR') || ~isa(fp1,'cModelFPR')
-                obj.messageLog(cType.ERROR,'Input parameters are not cModelFPR objects');
+            if ~isa(fp0,'cExergyCost') || ~isa(fp1,'cExergyCost')
+                obj.messageLog(cType.ERROR,'Input parameters are not cExergyCost objects');
                 return
             end
             if (fp0.ps~=fp1.ps)
@@ -100,8 +100,8 @@ classdef cDiagnosis < cResultId
             obj.vDI=(fp1.Irreversibility - fp0.Irreversibility);
             % Cost Information
             obj.opI=fp1.pfOperators.opI;
-            obj.dpuk=fp1.getDirectProcessUnitCost;
-            dpuk0=fp0.getDirectProcessUnitCost;
+            obj.dpuk=fp1.getProcessUnitCost;
+            dpuk0=fp0.getProcessUnitCost;
             obj.DcP=obj.dpuk.cP-dpuk0.cP;
             % Malfunction and Disfunction Matrix
             obj.tMF=scaleCol(obj.DKP,fp0.ProductExergy);
@@ -242,7 +242,7 @@ classdef cDiagnosis < cResultId
         function wasteInternalMethod(obj,fp0,fp1)
         % Compute internal variables with WASTE_INTERNAL method
             N=obj.NrOfProcesses;
-            opR=fp1.WasteOperators.opR;
+            opR=fp1.pfOperators.opR;
             cP=obj.dpuk.cP;
             cPE=obj.dpuk.cPE;
             obj.DW=obj.DWt;
@@ -250,7 +250,7 @@ classdef cDiagnosis < cResultId
             obj.vDI=obj.vDI+obj.DWr';
             % Prepare internal variables
             mf=obj.tMF(1:N,:);
-            mr=full(scaleCol(fp1.WasteOperators.mKR-fp0.WasteOperators.mKR,fp0.ProductExergy));
+            mr=full(scaleCol(fp1.pfOperators.mKR-fp0.pfOperators.mKR,fp0.ProductExergy));
             dr=opR*mf;
             mfr=[mf+mr,obj.DWt];
             % Compute Malfunction Cost

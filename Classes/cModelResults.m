@@ -42,7 +42,9 @@ classdef (Sealed) cModelResults < cStatusLogger
         %   Output
         %       res - previous cResultInfo stored
             res=obj.getResults(id);
-            obj.results{id}=[];
+            if ~isempty(obj.results{id})
+                obj.results{id}=[];
+            end
         end
 
         function setResults(obj,res)
@@ -53,6 +55,9 @@ classdef (Sealed) cModelResults < cStatusLogger
             res0=obj.results{id};
             if cModelResults.checkAssign(res0,res)
                 obj.results{id}=res;
+                if id<=cType.MAX_RESULT
+                    obj.clearResults(cType.ResultId.RESULT_MODEL);
+                end
             end
         end
 

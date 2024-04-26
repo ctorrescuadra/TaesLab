@@ -6,7 +6,8 @@ classdef cResourceCost < cStatusLogger
 	properties (GetAccess=public, SetAccess=private)
 		c0      % Unit cost of external resources
 		cs0     % Unit cost of external stream
-		ce      % Processes Resources Costs
+		ce      % Process Resource Unit Costs
+        Ce      % Process Resource Cost
 		Z       % Cost associated to processes
         zP      % Cost associated to process per unit of Product
         zF      % Cost associated to process per unit of Fuel
@@ -26,13 +27,11 @@ classdef cResourceCost < cStatusLogger
 			end
 			% Set Resources properties
 			obj.c0=rd.c0;
-			obj.cs0=zeros(1,exm.ps.NrOfStreams);
-			sid=exm.ps.Resources.streams;
-            fid=exm.ps.Resources.flows;
-			obj.cs0(sid)=obj.c0(fid);
+			obj.cs0=rd.c0*exm.StreamProcessTable.mS';
 			% Process Resources Cost
 			tbl=exm.FlowProcessTable;
 			obj.ce=obj.c0 * tbl.mL * tbl.mF0(:,1:end-1);
+			obj.Ce=obj.ce .* exm.FuelExergy;
 			% Set Process Properties
             idx=~exm.ActiveProcesses;
 			obj.Z=rd.Z;

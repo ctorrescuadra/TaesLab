@@ -1,5 +1,5 @@
 % Thermoeconomic Analysis Toolbox
-% Version 1.4 (R2023b) 03-Mar-2024
+% Version 1.5 (R2023b) 26-Apr-2024
 %
 % Apps
 %   TaesApp                 - TaesLab App.
@@ -19,7 +19,6 @@
 %   ThermoeconomicDiagnosis - Compares a plant state with its reference state
 %   WasteAnalysis           - Provide waste recycling analysis of a plant state
 %   SummaryResults          - Get the summary results of a data model
-%   ExergyCostCalculator    - Calculate the exergy cost values of a plant state
 %   TotalMalfunctionCost    - Get detailed breakdown of total malfunction cost
 %
 % Save Results Information

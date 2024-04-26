@@ -378,12 +378,12 @@
 				},
 				{
 					"name": "CZ",
-					"header": "Cz",
+					"header": "CZ",
 					"type": 6
 				},
 				{
 					"name": "CR",
-					"header": "Cr",
+					"header": "CR",
 					"type": 6
 				},
 				{
@@ -393,17 +393,17 @@
 				},
 				{
 					"name": "cE",
-					"header": "ce",
+					"header": "cE",
 					"type": 7
 				},
 				{
 					"name": "cZ",
-					"header": "cz",
+					"header": "cZ",
 					"type": 7
 				},
 				{
 					"name": "cR",
-					"header": "cr",
+					"header": "cR",
 					"type": 7
 				}
 			]

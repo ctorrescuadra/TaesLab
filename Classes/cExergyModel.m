@@ -2,7 +2,7 @@ classdef cExergyModel < cResultId
 % cExergyModel Container class of the exergy flows, streams and processes values
 %  	It contains the Adjacency Table of the productive structure of a state of the plant
 %   and the FlowProcess and StreamProcess matrices models
-% See also cFlowProcessModelModel, cModelFPR
+% See also cExergyCost
 %
 	properties (GetAccess=public, SetAccess=protected)
 		NrOfFlows        	  % Number of Flows

@@ -49,20 +49,20 @@ classdef cModelSummary < cResultId
             pI=zeros(NrOfProcesses+1,obj.NrOfStates);
             rex=zeros(NrOfFlows,obj.NrOfStates);
             for j=1:obj.NrOfStates
-                cost=rstates{j}.getDirectProcessCost;
+                cost=rstates{j}.getProcessCost;
                 obj.setValues(cType.SummaryId.PROCESS_DIRECT_COST,j,cost.CP');
-                ucost=rstates{j}.getDirectProcessUnitCost;
+                ucost=rstates{j}.getProcessUnitCost;
                 obj.setValues(cType.SummaryId.PROCESS_DIRECT_UNIT_COST,j,ucost.cP');
-                fcost=rstates{j}.getFlowsCost(ucost);
+                fcost=rstates{j}.getFlowsCost;
                 obj.setValues(cType.SummaryId.FLOW_DIRECT_COST,j,fcost.C');
                 obj.setValues(cType.SummaryId.FLOW_DIRECT_UNIT_COST,j,fcost.c');
                 if model.isResourceCost
                     rsc=getResourceCost(model.ResourceData,rstates{j});
-                    cost=rstates{j}.getGeneralProcessCost(rsc);
+                    cost=rstates{j}.getProcessCost(rsc);
                     obj.setValues(cType.SummaryId.PROCESS_GENERALIZED_COST,j,cost.CP');
-                    ucost=rstates{j}.getGeneralProcessUnitCost(rsc);
+                    ucost=rstates{j}.getProcessUnitCost(rsc);
                     obj.setValues(cType.SummaryId.PROCESS_GENERALIZED_UNIT_COST,j,ucost.cP');
-                    fcost=rstates{j}.getFlowsCost(ucost,rsc);
+                    fcost=rstates{j}.getFlowsCost(rsc);
                     obj.setValues(cType.SummaryId.FLOW_GENERALIZED_COST,j,fcost.C');
                     obj.setValues(cType.SummaryId.FLOW_GENERALIZED_UNIT_COST,j,fcost.c');
                 end

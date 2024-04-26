@@ -8,7 +8,7 @@ classdef (Sealed) cDiagramFP < cResultId
         function obj = cDiagramFP(mfp)
         % Construct an instance of this class
         %  Input:
-        %   mfp - cModelFPR
+        %   mfp - cExergyCost
         %
             obj=obj@cResultId(cType.ResultId.DIAGRAM_FP);
             % Create the edges of the tables 

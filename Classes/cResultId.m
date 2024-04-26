@@ -1,6 +1,6 @@
 classdef cResultId < cStatusLogger
 % cResultId base class to define the ResultId of the classes which provide results
-% 	It is used in: cProductiveStructure, cExergyModel, cModelFPR, cDiagnosis, 
+% 	It is used in: cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
 %	cRecyclingAnalysis, cDiagramFP, cWasteData and cSummaryResults
 %
 	properties(GetAccess=public,SetAccess=protected)

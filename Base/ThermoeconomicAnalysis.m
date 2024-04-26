@@ -32,7 +32,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %       gcfp: Fuel-Product generalized cost table
 %       gict: Irreversibility generalized cost table 
 %       gfict: Flows Irreversibility generalized cost table 
-% See also cModelFPR, cReadModel, cResultInfo
+% See also cExergyCost, cReadModel, cResultInfo
 %
     res=cStatusLogger();
     % Check input parameters
@@ -70,9 +70,9 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	end
     % Read Waste and compute Model FP
     if(data.NrOfWastes>0)
-        fpm=cModelFPR(ex,data.WasteData); 
+        fpm=cExergyCost(ex,data.WasteData); 
     else
-        fpm=cModelFPR(ex);
+        fpm=cExergyCost(ex);
     end
     if ~fpm.isValid
         fpm.printLogger;

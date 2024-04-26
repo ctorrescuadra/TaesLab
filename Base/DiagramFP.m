@@ -10,7 +10,7 @@ function res=DiagramFP(data,varargin)
 %           SaveAs - Save results in an external file 
 % 	OUTPUT:
 %		res - cResultInfo object contains the adjacency FP table and additional variables
-% See also cModelFPR, cResultInfo
+% See also cExergyCost, cResultInfo
 %
 	res=cStatusLogger(); 
 	checkModel=@(x) isa(x,'cDataModel');
@@ -45,7 +45,7 @@ function res=DiagramFP(data,varargin)
         return
 	end	
 	% Get FP Diagram model and set results
-	pm=cModelFPR(ex);
+	pm=cExergyCost(ex);
     dfp=cDiagramFP(pm);
     if ~isValid(dfp)
         dfp.printLogger;

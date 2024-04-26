@@ -76,7 +76,8 @@ function res = WasteAnalysis(data,varargin)
         return
 	end
 	% Compute the Model FPR
-    mfp=cModelFPR(ex,wd);
+    %mfp=cExergyCost(ex,wd);
+    mfp=cExergyCost(ex,wd);
     if ~isValid(mfp)
         mfp.printLogger;
         res.printError('Invalid model FPR. See error log');

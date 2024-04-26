@@ -106,11 +106,11 @@ classdef cThermoeconomicModel < cResultSet
 
     properties(Access=private)
         results            % cResultInfo cell array
-        rstate             % cModelFPR object cell array
+        rstate             % cExergyCost object cell array
         fmt                % cResultTableBuilder object
         rsd                % cResourceData object
         rsc                % cResourceCost object
-        fp0                % Actual reference cModelFPR
+        fp0                % Actual reference cExergyCost
         fp1                % Actual operation cModelFRR
         debug              % debug info control
         directCost=true    % Direct cost are obtained
@@ -184,9 +184,9 @@ classdef cThermoeconomicModel < cResultSet
                 end
                 if obj.isWaste
                     wd=data.WasteData;
-                    obj.rstate{i}=cModelFPR(rex,wd);
+                    obj.rstate{i}=cExergyCost(rex,wd);
                 else
-                    obj.rstate{i}=cModelFPR(rex);
+                    obj.rstate{i}=cExergyCost(rex);
                 end
             end
             % Set Operation and Reference State
@@ -395,21 +395,18 @@ classdef cThermoeconomicModel < cResultSet
         function res=resultModelInfo(obj)
         % Get a cResultInfo object with all tables of the active model
             id=cType.ResultId.RESULT_MODEL;
-            res=obj.getResults(id);
-            if isempty(res)
-                tables=struct();
-                tmp=obj.getModelResults;
-                for k=1:numel(tmp)
-                    dm=tmp{k};
-                    list=dm.getListOfTables;
-                    for i=1:dm.NrOfTables
-                        tables.(list{i})=dm.Tables.(list{i});
-                    end
+            tables=struct();
+            tmp=obj.getModelResults;
+            for k=1:numel(tmp)
+                dm=tmp{k};
+                list=dm.getListOfTables;
+                for i=1:dm.NrOfTables
+                    tables.(list{i})=dm.Tables.(list{i});
                 end
-                res=cResultInfo(cResultId(id),tables);
-                res.setProperties(obj.ModelName,obj.State);
-                obj.setResults(res);
             end
+            res=cResultInfo(cResultId(id),tables);
+            res.setProperties(obj.ModelName,obj.State);
+            obj.setResults(res);
         end
 
         %%%
@@ -490,7 +487,7 @@ classdef cThermoeconomicModel < cResultSet
         end
 
         function res=getResultStates(obj)
-        % Get the cModelFPR object of each state 
+        % Get the cExergyCost object of each state 
         %   Internal application use: cModelSummary
             res=obj.rstate;
         end
@@ -692,7 +689,7 @@ classdef cThermoeconomicModel < cResultSet
                 log.printError('Invalid waste type %s - %s',key,wtype);
                 return
             end
-            obj.fp1.setWasteOperators;
+            obj.fp1.updateWasteOperators;
             obj.setThermoeconomicAnalysis;
             obj.setSummaryResults;
             if obj.isDiagnosis
@@ -715,7 +712,7 @@ classdef cThermoeconomicModel < cResultSet
                 log.prinError('Invalid waste %s allocation values',key);
                 return
             end
-            obj.fp1.setWasteOperators;
+            obj.fp1.updateWasteOperators;
             obj.setThermoeconomicAnalysis;
             obj.setSummaryResults;
             if obj.isDiagnosis
@@ -738,7 +735,7 @@ classdef cThermoeconomicModel < cResultSet
                 log.printError('Invalid waste %s recycling values',key);
                 return 
             end
-            obj.fp1.setWasteOperators;
+            obj.fp1.updateWasteOperators;
             obj.setThermoeconomicAnalysis;
             obj.setSummaryResults;
             if obj.isDiagnosis
@@ -924,12 +921,12 @@ classdef cThermoeconomicModel < cResultSet
             end
             idx=data.getStateId(state);
             rex=data.ExergyData{idx};
-            % Compute cModelFPR
+            % Compute cExergyCost
             if obj.isWaste
                 wd=data.WasteData;
-                obj.rstate{idx}=cModelFPR(rex,wd);
+                obj.rstate{idx}=cExergyCost(rex,wd);
             else
-                obj.rstate{idx}=cModelFPR(rex);
+                obj.rstate{idx}=cExergyCost(rex);
             end
             % Get results
             if strcmp(obj.State,state)
@@ -1125,7 +1122,6 @@ classdef cThermoeconomicModel < cResultSet
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
-            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         function res=checkReferenceState(obj,state)
@@ -1171,7 +1167,6 @@ classdef cThermoeconomicModel < cResultSet
                 end
             end
             obj.setSummaryResults;
-            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
         
         function res=checkCostTables(obj,value)
@@ -1203,7 +1198,6 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             obj.setThermoeconomicAnalysis;
-            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         function res=checkDiagnosisMethod(obj,value)
@@ -1238,13 +1232,11 @@ classdef cThermoeconomicModel < cResultSet
 
         function triggerActiveWaste(obj)
             obj.setRecyclingResults;
-            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         function triggerDiagnosisChange(obj)
         % Trigger diagnosis parameters (ReferenceState, DiagnosisMethod) change
             obj.setThermoeconomicDiagnosis;
-            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         function res=checkSummary(obj,value)
@@ -1283,7 +1275,6 @@ classdef cThermoeconomicModel < cResultSet
 
         function triggerRecyclingChange(obj)
             obj.setRecyclingResults;
-            obj.clearResults(cType.ResultId.RESULT_MODEL);
         end
 
         %%%

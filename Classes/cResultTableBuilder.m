@@ -5,7 +5,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 %       obj=cResultTableBuilder(cfglocal,ps)
 %       res=obj.getProductiveStructureResults(ps)
 %       res=obj.getExergyResults(pm)
-%       res=obj.getExergyCostResults(pm,options)
 %       res=obj.getThermoeconomicAnalysisResults(mfp,options)
 %       res=obj.getThermoeconomicDiagnosisResults(dgn)
 %       res=obj.getDiagramFP(pm)
@@ -83,65 +82,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=cResultInfo(pm,tbl);
             res.setResultId(cType.ResultId.THERMOECONOMIC_STATE);
         end
-        
-        function res=getExergyCostResults(obj,ect,options)
-        % Generate the exergy cost result tables
-        %  Input:
-        %   ect - cFlowProcessModel object
-        %   options - structure containing the fields
-        %       DirectCost - Direct Cost Tables will be obtained
-        %       GeneralCost - General Cost Tables will be obtained
-        %       ResourceCost - [optional] cResourceData object if
-        %       generalized cost is required
-        %  Output:
-        %   res - cResultInfo object (EXERGY_COST_CALCULATION) with the result tables
-        %    Direct Cost Tables:
-        %       dfcost: direct exergy cost of flows
-        %       dcost: direct exergy cost of processes
-        %       udcost: unit direct cost of processes
-        %       dfict: direct irreversibility cost table of flows
-        %       dict: direct irreversibility cost table of processes
-        %    Generalized Cost Tables:
-        %       gfcost: generalized exergy cost of flows
-        %       gcost: generalizd exergy cost of processes
-        %       ugcost: unit generalized cost of processes
-        %       gfict: generalized irreversibility cost table of flows
-        %       gict:  generalized irreversibility cost table of processes
-            tbl=struct();
-            if options.DirectCost
-                dfcost=ect.getFlowsCost;
-                [dcost,udcost]=ect.getProcessCost(dfcost);
-                dfict=ect.getFlowsICT;
-                dict=ect.getProcessICT(dfict);
-                dscost=ect.getStreamsCost(dfcost);
-                tbl.dfcost=obj.getFlowCostTable(cType.Tables.FLOW_EXERGY_COST,dfcost);
-                tbl.dcost=obj.getProcessCostTable(cType.Tables.PROCESS_COST,dcost);
-                tbl.ducost=obj.getProcessCostTable(cType.Tables.PROCESS_UNIT_COST,udcost);
-                tbl.dscost=obj.getStreamCostTable(cType.Tables.STREAM_EXERGY_COST,dscost);
-                tbl.dfict=obj.getFlowICTable(cType.Tables.FLOW_ICT,dfict);
-                tbl.dict=obj.getProcessICTable(cType.Tables.PROCESS_ICT,dict);
-                if ect.isWaste
-                    tbl.wd=obj.getWasteDefinition(ect.WasteTable);
-                    tbl.wa=obj.getWasteAllocation(ect.WasteTable);
-                end
-            end
-            if options.GeneralCost
-                cz=options.ResourcesCost;
-                gfcost=ect.getFlowsCost(cz);
-                [gcost,ugcost]=ect.getProcessCost(gfcost,cz);
-                gfict=ect.getFlowsICT(cz);
-                gict=ect.getProcessICT(gfict,cz);
-                gscost=ect.getStreamsCost(gfcost,cz);
-                tbl.gfcost=obj.getFlowCostTable(cType.Tables.FLOW_GENERAL_COST,gfcost);
-                tbl.gcost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_COST,gcost);
-                tbl.gucost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_UNIT_COST,ugcost);
-                tbl.gscost=obj.getStreamCostTable(cType.Tables.STREAM_GENERAL_COST,gscost);
-                tbl.gfict=obj.getFlowICTable(cType.Tables.FLOW_GENERAL_ICT,gfict);
-                tbl.gict=obj.getProcessICTable(cType.Tables.PROCESS_GENERAL_ICT,gict);
-            end
-            res=cResultInfo(ect,tbl);
-        end
-            
+                  
         function res=getThermoeconomicAnalysisResults(obj,mfp,options)
         % Get a structure containing the tables for Thermoeconomic Analysis function
         %   Input:
@@ -155,17 +96,17 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       res - cResultInfo object (THERMOECONOMIC_ANALYSIS) with the result tables
         %
             tbl=struct();
-            dcfp=mfp.getCostTableFP;
             if options.DirectCost
                 dcost=mfp.getProcessCost;
-                udcost=mfp.getProcessUnitCost;
-                dfcost=mfp.getFlowsCost(udcost);
-                dscost=mfp.getStreamsCost(udcost);    
-                dcfpr=mfp.getCostTableFPR;
+                ducost=mfp.getProcessUnitCost;
+                dfcost=mfp.getFlowsCost;
+                dscost=mfp.getStreamsCost;
+                dcfp=mfp.getCostTableFP(ducost);  
+                dcfpr=mfp.getDirectCostTableFPR(ducost);
                 dict=mfp.getProcessICT;
-                dfict=mfp.getFlowsICT(dict);               
+                dfict=mfp.getFlowsICT;               
                 tbl.dcost=obj.getProcessCostTable(cType.Tables.PROCESS_COST,dcost);
-                tbl.ducost=obj.getProcessCostTable(cType.Tables.PROCESS_UNIT_COST,udcost);
+                tbl.ducost=obj.getProcessCostTable(cType.Tables.PROCESS_UNIT_COST,ducost);
                 tbl.dfcost=obj.getFlowCostTable(cType.Tables.FLOW_EXERGY_COST,dfcost);
                 tbl.dscost=obj.getStreamCostTable(cType.Tables.STREAM_EXERGY_COST,dscost);
                 tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dcfp);
@@ -178,14 +119,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             if options.GeneralCost
                 cz=options.ResourcesCost;
                 gcost=mfp.getProcessCost(cz);
-                ugcost=mfp.getProcessUnitCost(cz);
-                gfcost=mfp.getFlowsCost(ugcost,cz);
-                gscost=mfp.getStreamsCost(ugcost,cz);   
-                gcfp=mfp.getCostTableFPR(cz);
+                gucost=mfp.getProcessUnitCost(cz);
+                gfcost=mfp.getFlowsCost(cz);
+                gscost=mfp.getStreamsCost(cz);   
+                gcfp=mfp.getGeneralCostTableFPR(cz,gucost);
                 gict=mfp.getProcessICT(cz);
-                gfict=mfp.getFlowsICT(gict,cz);   
+                gfict=mfp.getFlowsICT(cz);   
                 tbl.gcost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_COST,gcost);
-                tbl.gucost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_UNIT_COST,ugcost);
+                tbl.gucost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_UNIT_COST,gucost);
                 tbl.gfcost=obj.getFlowCostTable(cType.Tables.FLOW_GENERAL_COST,gfcost);
                 tbl.gscost=obj.getStreamCostTable(cType.Tables.STREAM_GENERAL_COST,gscost);
                 tbl.gict=obj.getProcessICTable(cType.Tables.PROCESS_GENERAL_ICT,gict);

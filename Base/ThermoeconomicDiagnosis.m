@@ -81,11 +81,11 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     % Read Waste, compute Model FP
     if  data.isWaste
 		wd=data.WasteData;
-        fp0=cModelFPR(rex0,wd);
-        fp1=cModelFPR(rex1,wd);
+        fp0=cExergyCost(rex0,wd);
+        fp1=cExergyCost(rex1,wd);
     else
-        fp0=cModelFPR(rex0);
-        fp1=cModelFPR(rex1);
+        fp0=cExergyCost(rex0);
+        fp1=cExergyCost(rex1);
     end
     % Execute thermoeconomic diagnosis
     method=cType.getDiagnosisMethod(param.DiagnosisMethod);
