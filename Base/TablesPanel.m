@@ -24,17 +24,12 @@ classdef TablesPanel < handle
                 return
             end
             % Check Input parameter
-            switch getClassId(arg)
-                case cType.ClassId.RESULT_INFO
-                    res=arg;
-                case cType.ClassId.DATA_MODEL
-                    res=arg.getResultInfo;
-                case cType.ClassId.RESULT_MODEL
-                    res=arg.resultModelInfo;
-                otherwise
-                    log.printError('Invalid result parameter');
-                    return
-            end
+            if isa(arg,'cResultSet')
+                res=getResultInfo(arg);
+            else
+                log.printError('Invalid input argument');
+                return
+            end          
             % Check input parameters
             if isOctave
                 app.tableView=cType.TableView.GUI;

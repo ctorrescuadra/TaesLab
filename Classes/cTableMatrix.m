@@ -53,7 +53,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             if colTotal && rowTotal
                 data(end,end)=0.0;
             end
-            obj.Data=num2cell(data);
+            obj.Data=num2cell(zerotol(data));
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
             obj.ColTotal=colTotal;

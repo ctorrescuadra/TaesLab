@@ -111,7 +111,7 @@ classdef (Abstract) cTable < cStatusLogger
             end
         end
 
-        function res=exportTable(obj,varmode)
+        function res=exportTable(obj,varmode,~)
         % Get table values in diferent formats
         %   options - VarMode options
         %       cType.VarMode.NONE: Return a struct with the cTable objects

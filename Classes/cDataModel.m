@@ -331,6 +331,11 @@ classdef cDataModel < cResultSet
         %%%
         % Gat data model tables
         %%%
+        function res=dataModelInfo(obj)
+        % Get data model result info
+            res=obj.ModelInfo;
+        end
+
         function showDataModel(obj,varargin)
         % View a table in a GUI Table
         %   Input:

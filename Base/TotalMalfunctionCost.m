@@ -39,5 +39,6 @@ function tbl = TotalMalfunctionCost(res)
     p.GraphType=0;
     p.GraphOptions=0;
     tbl=cTableMatrix.create(data,rowNames,colNames,p);
+    res.summaryDiagnosis;
     printTable(tbl);
 end

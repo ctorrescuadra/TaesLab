@@ -14,7 +14,7 @@ classdef cResultSet < cStatusLogger
 %   obj.saveTable(name,filename)
 %
 % See also cResultInfo, cThermoeconomicModel, cDataModel
-    properties(Access=protected)
+    properties(Access=public)
         classId  % Class Id (see cType.ClassId)
     end
 
@@ -26,12 +26,6 @@ classdef cResultSet < cStatusLogger
             obj.classId=id;
         end
 
-        function res = getClassId(obj)
-        % Get the class identifier
-        %   Detailed explanation goes here
-            res = obj.classId;
-        end
-
         function res = getResultInfo(obj)
         % Get the associated result info
             res=[];
@@ -39,7 +33,7 @@ classdef cResultSet < cStatusLogger
             case cType.ClassId.RESULT_MODEL
                 res=obj.resultModelInfo;
             case cType.ClassId.DATA_MODEL
-                res=obj.ModelInfo;
+                res=obj.dataModelInfo;
             case cType.ClassId.RESULT_INFO
                 res=obj;
             end
@@ -53,47 +47,60 @@ classdef cResultSet < cStatusLogger
             res=getResultInfo(obj);
             printResults(res);
         end
+
         function showResults(obj,varargin)
         % Show the result set 
         % See also cResultInfo/showResults
             res=getResultInfo(obj);
             showResults(res,varargin{:});
         end
+
+        function res=getListOfTables(obj)
+        % Get the list of tables as cell array
+            tmp=getResultInfo(obj);
+            res=fieldnames(tmp.Tables);
+        end
+
         function tbl=getTable(obj,varargin)
         % Get the table info
         % See also cResultInfo/getTable
             res=getResultInfo(obj);
             tbl=getTable(res,varargin{:});
         end
+
         function tbl=getTableIndex(obj,varargin)
         % Get the table index info
         % See also cResultInfo/getTableIndex
             res=getResultInfo(obj);
             tbl=getTableIndex(res,varargin{:});
         end
+
         function showTableIndex(obj,varargin)
         % Show the table index
         % See also cResultInfo/getTableIndex
             res=getResultInfo(obj);
             showTableIndex(res,varargin{:});
         end
-        function showGraph(obj,varargin)
-        % Show the graph
-        % See also cResultInfo/showGraph
-            res=getResultInfo(obj);
-            showGraph(res,varargin{:});
-        end
+
         function log=saveResults(obj,varargin)
         % Save the results set
         % See also cResultInfo/saveResults
             res=getResultInfo(obj);
             log=saveResults(res,varargin{:});
         end
+
         function log=saveTable(obj,varargin)
         % Save a table of the result set
         % See also cResultInfo/saveTable
             res=getResultInfo(obj);
             log=saveTable(res,varargin{:});
+        end
+
+        function tbl=exportTable(obj,varargin)
+        % Save a table of the result set
+        % See also cResultInfo/saveTable
+            res=getResultInfo(obj);
+            tbl=exportTable(res,varargin{:});
         end
     end
 end

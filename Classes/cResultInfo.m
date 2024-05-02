@@ -16,7 +16,6 @@ classdef cResultInfo < cResultSet
 %       obj.showGraph(name,options)
 %       log=obj.saveResults(filename)
 %       log=obj.saveTable(name,filename)
-%       res=obj.getResultTables(varmode,fmt)
 %       obj.summaryDiagnosis
 % See: cResultTableBuilder, cTable
 %
@@ -262,28 +261,6 @@ classdef cResultInfo < cResultSet
                 log.messageLog(cType.ERROR,'Table name %s does NOT exists',tname);
             end
         end
-    
-        function res=getResultTables(obj,varmode,fmt)
-        % Get the result tables in different format mode
-        %   Usage:
-        %       res = obj.getResultTables(mode, fmt)
-        %   Input:
-        %       mode - Select the output object. The valid values are:
-        %           cType.VarMode.NONE: Return a struct with the cTable objects
-        %           cType.VarMode.CELL: Return a struct with cell values
-        %           cType.VarMode.STRUCT: Return a struct with structured array values
-        %           cType.VarModel.TABLE: Return a struct of Matlab tables
-        %       fmt  - true/false value, indicating if the table format is applied to the output. By default the value is false.
-        %   Output
-        %       res - Struct with the result tables in the selected format
-            narginchk(2,3);
-            if (nargin==2) || ~isa(fmt,'logical') || ~obj.isResultTable
-                fmt=false;
-            end
-            names=obj.getListOfTables;
-            tables=cellfun(@(x) exportTable(obj,x,varmode,fmt),names,'UniformOutput',false);
-            res=cell2struct(tables,names,1);
-        end
 
         %%%
         % Thermoeconomic Diagnosis info methods
@@ -298,6 +275,19 @@ classdef cResultInfo < cResultSet
                 res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
                 tfmt=['Malfunction Cost:',format,' ',unit];
                 res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
+            end
+        end
+
+        function res=exportTable(obj,name,varmode,fmt)
+        % Export a table using diferent formats.
+            res=[];
+            narginchk(3,4);
+            if (nargin<4)
+                fmt=false;
+            end
+            tbl=obj.getTable(name);
+            if isValid(tbl)
+                res=tbl.exportTable(varmode,fmt);
             end
         end
     
@@ -333,11 +323,6 @@ classdef cResultInfo < cResultSet
         function status=existTable(obj,name)
         % Check if there is a table called name
             status=isfield(obj.Tables,name);
-        end
-
-        function res=getListOfTables(obj)
-        % Get the list of tables as cell array
-            res=fieldnames(obj.Tables);
         end
 
         function log=saveAsCSV(obj,filename)
@@ -460,7 +445,7 @@ classdef cResultInfo < cResultSet
 		
 		function log=saveAsHTML(obj,filename)
 		% Save result tables as HTML files.
-		%	Create a index file and a folder containing all the table files%
+		%	Create a index file and a folder containing all the table files
 		%   Usage:
 		%       log=obj.saveAsHTML(filename)
 		%   Input:
@@ -542,19 +527,5 @@ classdef cResultInfo < cResultSet
 			end
 			fclose(fId);
 		end
-    end
-
-    methods(Access=private)
-        function res=exportTable(obj,name,varmode,fmt)
-        % Export a table using diferent formats. Internal use.
-            res=[];
-            if nargin==3
-                fmt=false;
-            end
-            tbl=obj.getTable(name);
-            if isValid(tbl)
-                res=tbl.exportTable(varmode,fmt);
-            end
-        end
     end
 end

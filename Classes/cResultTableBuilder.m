@@ -356,8 +356,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
-            data(:,1)=num2cell(values.E);
-            data(:,2)=num2cell(values.ET);
+            data(:,1)=num2cell(zerotol(values.E));
+            data(:,2)=num2cell(zerotol(values.ET));
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
             
@@ -464,7 +464,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             for j=2:length(fieldNames)
                 values(:,j-1)=fcost.(fieldNames{j});
             end           
-            res=obj.createCellTable(tp,num2cell(values),rowNames,colNames);
+            res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
         end
             
         function res=getProcessCostTable(obj,id,cost)
@@ -482,7 +482,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             for j=2:length(fieldNames)
                 values(:,j-1)=cost.(fieldNames{j});
             end
-            res=obj.createCellTable(tp,num2cell(values),rowNames,colNames);
+            res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
         end
 
         function res=getStreamCostTable(obj,id,scost)
@@ -500,7 +500,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             for j=2:length(fieldNames)
                 values(:,j-1)=scost.(fieldNames{j});
             end           
-            res=obj.createCellTable(tp,num2cell(values),rowNames,colNames);
+            res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
         end
 
 
@@ -537,12 +537,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             colNames=obj.getTableHeader(tp);
             nrows=length(rowNames);
             data=cell(nrows,6);     
-            data(:,1)=num2cell(dgn.getMalfunction);
-            data(:,2)=num2cell(dgn.getIrreversibilityVariation);
-            data(:,3)=num2cell(dgn.getDemandVariation);
-            data(:,4)=num2cell(dgn.getMalfunctionCost);
-            data(:,5)=num2cell(dgn.getWasteMalfunctionCost);
-            data(:,6)=num2cell(dgn.getDemandVariationCost);
+            data(:,1)=num2cell(zerotol(dgn.getMalfunction));
+            data(:,2)=num2cell(zerotol(dgn.getIrreversibilityVariation));
+            data(:,3)=num2cell(zerotol(dgn.getDemandVariation));
+            data(:,4)=num2cell(zerotol(dgn.getMalfunctionCost));
+            data(:,5)=num2cell(zerotol(dgn.getWasteMalfunctionCost));
+            data(:,6)=num2cell(zerotol(dgn.getDemandVariationCost));
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
          

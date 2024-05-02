@@ -9,24 +9,24 @@ classdef (Sealed) cExergyCost < cExergyModel
 %       res=obj.getStreamCost(rsc)
 %		res=obj.getProcessICT(rsc)               
 %	    res=obj.getFlowICT(rsc)
-%       res=obj.getCostTableFP
-%       res=obj.getCostTableFPR(rsc)
+%       res=obj.getCostTableFP(ucost)
+%       res=obj.getCostTableFPR(rsc,ucost)
 % See also cExergyModel
 	properties(GetAccess=public,SetAccess=private)
-        SystemOutput
-        FinalDemand
-        Resources
-        SystemUnitConsumption
-        RecirculationFactor
-        WasteWeight
-        fpOperators
-        pfOperators
-        StreamOperators
-        FlowOperators
-        isWaste
-        WasteTable
-        TableR
-        RecycleRatio
+        SystemOutput           % System Output of processes
+        FinalDemand            % Final Demand of processes
+        Resources              % External resources of processes
+        SystemUnitConsumption  % Total unit consumption of the system
+        RecirculationFactor    % Recirculation factor of each process
+        WasteWeight            % Weight of each waste
+        fpOperators            % Structure containing FP Operators (mFP, mRP, opCP,opCR)
+        pfOperators            % Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
+        StreamOperators        % Stream operators structure (mG, opE, opI, opR)  
+        FlowOperators          % Flow operators structure (mG, opB, opI, opR)
+        isWaste                % Indicate if system have wastes
+        WasteTable             % cWasteTable object
+        TableR                 % Table R (waste allocation)
+        RecycleRatio           % Recycle ratio of each waste
 	end
 
 	properties (Access=private)
@@ -69,6 +69,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             opCP=cExergyCost.similarMatrix(opP,obj.ProductExergy);
             obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
+            % Initialize waste operators
             if (nargin==2) && (obj.NrOfWastes>0)
 				obj.isWaste=true;
                 setWasteTable(obj,wd)
@@ -77,12 +78,12 @@ classdef (Sealed) cExergyCost < cExergyModel
 		end
 
         function res=get.SystemOutput(obj)
-            % Get the system output exergy values vector
-                res=obj.TableFP(1:end-1,end);
-            end
+        % Get the system output exergy values vector
+            res=obj.TableFP(1:end-1,end);
+        end
         
         function res=get.FinalDemand(obj)
-        % Override getFinalDemand
+        % Get final demand vector of the system 
             res=obj.SystemOutput;
             if obj.isWaste
                 idx=obj.ps.Waste.processes;
@@ -96,6 +97,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
     
         function res=get.SystemUnitConsumption(obj)
+        % Get the total unit consumtion of the sistem
             res=sum(obj.Resources)/sum(obj.FinalDemand);
         end
                     
@@ -105,7 +107,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
     
         function res=get.WasteWeight(obj)
-        % Get the waste weight.  The diagonal of the S matrix.
+        % Get the waste weight.
             res=[];
             if obj.isWaste
                 opR=obj.fpOperators.opR;
@@ -125,33 +127,30 @@ classdef (Sealed) cExergyCost < cExergyModel
 		% Output:
 		%   res - structure containing cost values (CPE,CPZ,CPR,CP,CF,CR,Z)
 			czoption=(nargin==2);
+            res=struct();
 			N=obj.NrOfProcesses;
 			zero=zeros(1,N);
             aux=obj.fpOperators;
 			if czoption
                 Ce=rsc.Ce;
-				CPE=Ce * aux.opCP;
-				CPZ=rsc.Z * aux.opCP;
+                res.Z=rsc.Z;
+				res.CPE=Ce * aux.opCP;
+				res.CPZ=res.Z * aux.opCP;
 			else
 				Ce=obj.TableFP(end,1:N);
-				CPE=Ce * aux.opCP;
-				CPZ=zero;
+				res.CPE=Ce * aux.opCP;
+				res.CPZ=zero;
 			end
 			if obj.isWaste
-				CPR=(CPE+CPZ) * aux.opR;
-				CP=CPE + CPZ + CPR;
-				CR=CP * aux.mRP;
+				res.CPR=(res.CPE+res.CPZ) * aux.opR;
+				res.CP=res.CPE + res.CPZ + res.CPR;
+				res.CR=res.CP * aux.mRP;
 			else
-				CPR=zero;
-				CP=CPE+CPZ;
-				CR=zero;
+				res.CPR=zero;
+				res.CP=CPE+CPZ;
+				res.CR=zero;
 			end
-			CF= Ce+CP*obj.fpOperators.mFP(:,1:end-1);
-			if czoption
-				res=struct('CP',CP,'CPE',CPE,'CPZ',CPZ,'CPR',CPR,'CF',CF,'CR',CR,'Z',rsc.Z);
-			else
-				res=struct('CP',CP,'CPE',CPE,'CPR',CPR,'CF',CF,'CR',CR);
-			end
+			res.CF= Ce+res.CP*obj.fpOperators.mFP(:,1:end-1);
 		end
 
         function res = getProcessUnitCost(obj,rsc)
@@ -160,37 +159,32 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   rsc - [optional] Resources cost
         %  Outputs:
         %   res - struct containing general process cost values (cP,cPE,cPZ,cPR,cF,cR)
-        %
+            res=struct();
             czoption=(nargin==2);
             N=obj.NrOfProcesses;
             zero=zeros(1,N);
-            vK=obj.UnitConsumption;
+            res.k=obj.UnitConsumption;
             if czoption
                 ce= rsc.ce;
-                ke=ce .* vK;
-                cPE= ke * obj.pfOperators.opP;
-                cPZ= rsc.zP * obj.pfOperators.opP;
+                ke=ce .* res.k;
+                res.cPE= ke * obj.pfOperators.opP;
+                res.cPZ= rsc.zP * obj.pfOperators.opP;
             else
                 ce=obj.pfOperators.mPF(end,:);
-                ke=ce .* vK;
-                cPE= ke * obj.pfOperators.opP;
-                cPZ= zero;
+                ke=ce .* res.k;
+                res.cPE= ke * obj.pfOperators.opP;
+                res.cPZ= zero;
             end
             if obj.isWaste
-                cPR=(cPE+cPZ)*obj.pfOperators.opR;
-                cP=cPE+cPZ+cPR;
-                cR=cP*obj.pfOperators.mKR;
+                res.cPR=(res.cPE+res.cPZ)*obj.pfOperators.opR;
+                res.cP=res.cPE+res.cPZ+res.cPR;
+                res.cR=res.cP*obj.pfOperators.mKR;
             else
-                cPR=zero;
-                cP=cPE+cPZ;
-                cR=zero;
+                res.cPR=zero;
+                res.cP=res.cPE+res.cPZ;
+                res.cR=zero;
             end
-            cF=ce+cP*obj.pfOperators.mPF(1:end-1,1:end);
-            if czoption
-                res=struct('cP',cP,'cPE',cPE,'cPZ',cPZ,'cPR',cPR,'cF',cF,'cR',cR);
-            else
-                res=struct('cP',cP,'cPE',cPE,'cPR',cPR,'cF',cF,'cR',cR,'k',vK);
-            end
+            res.cF=ce+res.cP*obj.pfOperators.mPF(1:end-1,1:end);
         end  
 
         function res=getFlowsCost(obj,rsc)
@@ -200,76 +194,72 @@ classdef (Sealed) cExergyCost < cExergyModel
         %  Output
         %   res - cost of flows structure (B,CE,CZ,CR,C,cE,cZ,cR,c)
             czoption=(nargin==2);
-            zero=zeros(1,obj.NrOfFlows);	
-            B=obj.FlowsExergy;
+            res=struct();
+            zero=zeros(1,obj.NrOfFlows);	   
             aux=obj.FlowOperators;
             tbl=obj.FlowProcessTable;
+            res.B=obj.FlowsExergy;
             if czoption
-                cE=rsc.c0 * aux.opB;
-                CE=cE .* B;
-                cZ=rsc.zP * tbl.mP(1:end-1,:)*aux.opB;  
-                CZ=cZ .* B;
+                res.cE=rsc.c0 * aux.opB;
+                res.CE=res.cE .* res.B;
+                res.cZ=rsc.zP * tbl.mP(1:end-1,:)*aux.opB;  
+                res.CZ=res.cZ .* res.B;
             else
-                cE=tbl.mP(end,:) * aux.opB;
-                CE=cE .* B;
-                cZ=zero;
-                CZ=zero;
+                res.cE=tbl.mP(end,:) * aux.opB;
+                res.CE=res.cE .* res.B;
+                res.cZ=zero;
+                res.CZ=zero;
             end
             if obj.isWaste
-                cR=(cE+cZ)*aux.opR;
-                CR=cR .* B;
-                c=cE+cZ+cR;
-                C=CE+CZ+CR;
+                res.cR=(res.cE+res.cZ)*aux.opR;
+                res.CR=res.cR .* res.B;
+                res.c=res.cE+res.cZ+res.cR;
+                res.C=res.CE+res.CZ+res.CR;
             else
-                cR=zero;
-                CR=zero;
-                c=cE+cZ;
-                C=CE+CZ;
-            end
-            if czoption
-                res=struct('B',B,'CE',CE,'CZ',CZ,'CR',CR,'C',C,'cE',cE,'cZ',cZ,'cR',cR,'c',c);
-            else
-                res=struct('B',B,'CE',CE,'CR',CR,'C',C,'cE',cE,'cR',cR,'c',c);    	
+                res.cR=zero;
+                res.CR=zero;
+                res.c=res.cE+res.cZ;
+                res.C=res.CE+res.CZ;
             end
         end
 
         function res=getStreamsCost(obj,rsc)
             czoption=(nargin==2);
+            res=struct();
             zero=zeros(1,obj.NrOfStreams);
-            E=obj.StreamsExergy.ET;
             aux=obj.StreamOperators;
             tbl=obj.StreamProcessTable;
+            res.E=obj.StreamsExergy.ET;
             if czoption
-                cE=rsc.cs0 * aux.opE;
-                CE=cE .* E;
-                cZ=rsc.zP * tbl.mP(1:end-1,:)*aux.opE;  
-                CZ=cZ .* E;
+                res.cE=rsc.cs0 * aux.opE;
+                res.CE=res.cE .* res.E;
+                res.cZ=rsc.zP * tbl.mP(1:end-1,:)*aux.opE;  
+                res.CZ=res.cZ .* res.E;
             else
-                cE=tbl.mP(end,:) * aux.opE;
-                CE=cE .* E;
-                cZ=zero;
-                CZ=zero;
+                res.cE=tbl.mP(end,:) * aux.opE;
+                res.CE=res.cE .* res.E;
+                res.cZ=zero;
+                res.CZ=zero;
             end
             if obj.isWaste
-                cR=(cE+cZ)*aux.opR;
-                CR=cR .* E;
-                c=cE+cZ+cR;
-                C=CE+CZ+CR;
+                res.cR=(res.cE+res.cZ)*aux.opR;
+                res.CR=res.cR .* res.E;
+                res.c=res.cE+res.cZ+res.cR;
+                res.C=res.CE+res.CZ+res.CR;
             else
-                cR=zero;
-                CR=zero;
-                c=cE+cZ;
-                C=CE+CZ;
-            end
-            if czoption
-                res=struct('E',E,'CE',CE,'CZ',CZ,'CR',CR,'C',C,'cE',cE,'cZ',cZ,'cR',cR,'c',c);
-            else
-                res=struct('E',E,'CE',CE,'CR',CR,'C',C,'cE',cE,'cR',cR,'c',c);    	
+                res.cR=zero;
+                res.CR=zero;
+                res.c=res.cE+res.cZ;
+                res.C=res.CE+res.CZ;
             end
         end   
             
         function res = getCostTableFP(obj,ucost)
         % Get the FP Cost Table considering only internal irreversibilities
+        % Input:
+        %   ucost - [optional] unit cost of product. If omitted is calculated
+        %   res - Direct Cost FP table
+
             if nargin==1
                 ucost=obj.getProcessUnitCost;
             end
@@ -278,13 +268,10 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
 
         function res = getDirectCostTableFPR(obj,ucost)
-        % Get FPR CostTable
+        % Get FPR CostTable with direct costs
         %  Inputs:
-        %   ucost - [optional] Unitary costs of processes.
-        %       If ommited is calculated
-        %  Outputs:
-        %   res - FPR Cost Table
-        %
+        %   ucost - [optional] Unitary costs of processes. If ommited is calculated
+        %   res - Direct Cost FPR table
             if nargin==1
                 ucost=obj.getProcessUnitCost;
             end	
@@ -300,12 +287,12 @@ classdef (Sealed) cExergyCost < cExergyModel
         end 
     
         function res = getGeneralCostTableFPR(obj,rsc,ucost)
-        % Get FPR CostTable
+        % Get FPR CostTable with generalized costs
         %  Inputs:
         %   rsc - Resources cost
-        %  Outputs:
-        %   res - FPR Cost Table
-        %
+        %   ucost - [optional] Unitary costs of processes. If ommited is calculated        
+        %  Output:
+        %   res - Generalized Cost FPR table
             if nargin<2
                 ucost=obj.getProcessUnitCost(rsc);
             end	
@@ -396,7 +383,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             opP=obj.pfOperators.opP;
             opI=obj.pfOperators.opI;
             vP=obj.ProductExergy;
-                % Compute direct exergy cost for type 2 allocation
+            % Compute direct exergy cost for type 2 allocation
             if (any(wt.typeId==cType.WasteAllocation.COST))
                 cp=obj.computeCostR(aR);
             end
@@ -430,7 +417,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 end
                 sol(i,:)=tmp/sum(tmp);
             end
-            % Create Waste Tables
+            % Create Waste Tables object
             sol=scaleRow(sol,1-wt.RecycleRatio);
             wt.updateValues(sol);
             mRP=cSparseRow(aR,sol);
@@ -481,8 +468,6 @@ classdef (Sealed) cExergyCost < cExergyModel
             obj.WasteTable=wd.getWasteTable;
         end
 
-
-
         function res=getMinCost(obj,rsc)
         % Calculate the minimun cost of the flows
         %  Input:
@@ -496,7 +481,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
     
         function cp=computeCostR(obj,aR)
-	    % Compute cost production cost including waste allocation, using table FP info
+	    % Compute production cost including waste allocation, using table FP info
 		    N=obj.NrOfProcesses;
 		    tmp=zeros(N,N);
 		    aP=setdiff(1:N,aR);

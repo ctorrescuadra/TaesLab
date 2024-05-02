@@ -15,7 +15,7 @@ function ShowGraph(arg,varargin)
 %			WasteFlow: Waste flow key for waste allocation and recycling
 %			Variables: Use for summary results. 
 %				Cell array with the variables to represent
-% See also cThermoeconomicModel
+% See also cGraphResults
 %
     log=cStatus(cType.VALID);
 	if ~(isa(arg,'cResultSet')) || ~isValid(arg)
@@ -32,21 +32,32 @@ function ShowGraph(arg,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: ShowModelGraph(res,graph,options)');
+        log.printError('Usage: ShowGraph(res,graph,options)');
         return
     end
 	param=p.Results;
-	if isempty(param.Graph)
-		if isa(arg,'cResultInfo')
-			param.Graph=arg.Info.DefaultGraph;
-		else
-			log.printError('Graph parameter is missing')
-			log.printError('Usage: ShowGraph(res,graph,options)');
-			return
-		end
-	end
+    switch arg.classId
+        case cType.ClassId.RESULT_INFO
+            if isempty(param.Graph)
+			    param.Graph=arg.Info.DefaultGraph;
+            end
+            res=arg;
+        case cType.ClassId.RESULT_MODEL
+            if isempty(param.Graph)
+			   log.printError('Not enough input arguments');
+               return
+            end
+            res=arg.getResultInfoTable(param.Graph);
+        otherwise
+            log.printError('Invalid input argument');
+            return
+    end
+    if isempty(res)
+        log.printError('Invalid input argument');
+        return
+    end
     % Get the table values
-	tbl=getTable(arg,param.Graph);
+	tbl=getTable(res,param.Graph);
 	if ~isValid(tbl) || ~tbl.isGraph
 		log.printError('Invalid graph table: %s',param.Graph);
 		return
@@ -55,15 +66,15 @@ function ShowGraph(arg,varargin)
 	option=[];
 	switch tbl.GraphType
 		case cType.GraphType.DIAGNOSIS
-			if arg.Info.Method==cType.DiagnosisMethod.WASTE_INTERNAL
+			if res.Info.Method==cType.DiagnosisMethod.WASTE_INTERNAL
 				option=param.ShowOutput;
             else
 				option=true;
 			end
 		case cType.GraphType.DIGRAPH
-			option=arg.Info.getNodeTable(param.Graph);
+			option=res.Info.getNodeTable(param.Graph);
 		case cType.GraphType.WASTE_ALLOCATION
-            option=arg.Info.wasteFlow;
+            option=res.Info.wasteFlow;
 		case cType.GraphType.SUMMARY
 			if isempty(param.Variables)
 				if tbl.isFlowsTable
