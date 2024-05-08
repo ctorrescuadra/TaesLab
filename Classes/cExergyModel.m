@@ -71,7 +71,7 @@ classdef cExergyModel < cResultId
 				mbL=eye(NS)+mS*mE;
 				tfp=mgP*tgF;
 			else
-				mgL=(eye(M)-mgV)\eye(M);
+				mgL=eye(M)/(eye(M)-mgV);
 				mbL=eye(NS)+mS*mgL*mE;
 				tfp=mgP*mgL*tgF;
 			end
@@ -114,7 +114,7 @@ classdef cExergyModel < cResultId
         end
 
         function res=get.Efficiency(obj)
-            res= vDivide(obj.ProductExergy,obj.FuelExergy);
+            res=vDivide(obj.ProductExergy,obj.FuelExergy);
         end
 
 		function res=get.TotalResources(obj)

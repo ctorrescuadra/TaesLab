@@ -356,8 +356,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
-            data(:,1)=num2cell(zerotol(values.E));
-            data(:,2)=num2cell(zerotol(values.ET));
+            data(:,1)=num2cell(values.E);
+            data(:,2)=num2cell(values.ET);
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
             

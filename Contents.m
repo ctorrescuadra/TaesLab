@@ -33,6 +33,7 @@
 % Results Presentation
 %   ListResultTables        - List the result tables properties
 %   ShowResults             - Show model results tables
+%   ExportResults           - Export result tables in diferent formats
 %	ShowGraph               - Show the graph of a model result table
 %
 % GUI functions

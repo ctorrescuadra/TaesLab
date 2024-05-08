@@ -94,10 +94,10 @@ classdef cDiagnosis < cResultId
             end
             % Product Variation
             obj.iwr=fp1.ps.Waste.processes;
-            obj.DW0=fp1.SystemOutput - fp0.SystemOutput;
-            obj.DWt=fp1.FinalDemand - fp0.FinalDemand;
-            obj.DWr=obj.DW0-obj.DWt;
-            obj.vDI=(fp1.Irreversibility - fp0.Irreversibility);
+            obj.DW0=zerotol(fp1.SystemOutput - fp0.SystemOutput);
+            obj.DWt=zerotol(fp1.FinalDemand - fp0.FinalDemand);
+            obj.DWr=zerotol(obj.DW0-obj.DWt);
+            obj.vDI=zerotol(fp1.Irreversibility - fp0.Irreversibility);
             % Cost Information
             obj.opI=fp1.pfOperators.opI;
             obj.dpuk=fp1.getProcessUnitCost;
@@ -143,6 +143,7 @@ classdef cDiagnosis < cResultId
         % Get cResultInfo object
             res=fmt.getDiagnosisResults(obj);
         end
+
         function res=getUnitConsumptionVariation(obj)
         % Get the unit consumption variation
             res=sum(obj.DKP,1);

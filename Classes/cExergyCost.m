@@ -44,26 +44,27 @@ classdef (Sealed) cExergyCost < cExergyModel
 			N=obj.NrOfProcesses;
             NS=obj.NrOfStreams;
             vK=obj.UnitConsumption;
+            vk1=zerotol(vK-1);
             % Get Stream Operators
             spt=obj.StreamProcessTable;
             mH=spt.mF(:,1:N)*spt.mP(1:N,:)+spt.mS*spt.mE;
             opE=eye(NS)/(eye(NS)-mH);
             obj.opEP=spt.mP(1:N,:)*opE;
-            opEI=scaleRow(obj.opEP,vK-1);
+            opEI=scaleRow(obj.opEP,vk1);
             obj.StreamOperators=struct('mH',mH,'opE',opE,'opI',opEI);
             % Get Flow Operators;
 			fpt=obj.FlowProcessTable;
             mG=fpt.mF(:,1:N)*fpt.mP(1:N,:)+fpt.mV;
             opB=eye(M)+spt.mE*opE*spt.mS;
             obj.opBP=fpt.mP(1:N,:)*opB;
-            opBI=scaleRow(obj.opBP,vK-1);
+            opBI=scaleRow(obj.opBP,vk1);
             obj.FlowOperators=struct('mG',mG,'opB',opB,'opI',opBI);
             % Get Process Operators
             tfp=obj.TableFP;        
             mPF=divideCol(tfp(:,1:N),obj.FuelExergy);
             mKP=scaleCol(mPF,vK);
-            opP=eye(N)+spt.mP(1:N,:)*opE*spt.mF(:,1:N);
-            opI=scaleRow(opP,vK-1);
+            opP=zerotol(eye(N)+spt.mP(1:N,:)*opE*spt.mF(:,1:N));
+            opI=scaleRow(opP,vk1);
             obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
             opCP=cExergyCost.similarMatrix(opP,obj.ProductExergy);
@@ -103,7 +104,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                     
         function res=get.RecirculationFactor(obj)
         % Get the recirculation factor of the processes
-            res=diag(obj.fpOperators.opCP)'-1;
+            res=zerotool(diag(obj.fpOperators.opCP)'-1);
         end
     
         function res=get.WasteWeight(obj)

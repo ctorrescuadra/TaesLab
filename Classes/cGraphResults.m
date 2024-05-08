@@ -18,7 +18,7 @@ classdef cGraphResults < cStatusLogger
     methods
         function obj = cGraphResults(tbl, varargin)
 		% Constructor. Create the object with the graph properties  
-             obj=obj@cStatusLogger(cType.VALID);
+            obj=obj@cStatusLogger(cType.VALID);
 			if ~isa(tbl,'cTableResult')
 				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
 				return
@@ -83,10 +83,16 @@ classdef cGraphResults < cStatusLogger
 
 		function graphCost(obj)
 		% Plot the ICT graph cost
+
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
-			bar(obj.yValues,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
+			b=bar(obj.yValues,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
+			M=numel(obj.Legend);
+			cm=colormap(jet(M));
+			for i=1:M
+				set(b(i),'facecolor',cm(i,:));
+			end
 			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
 		end
@@ -105,6 +111,7 @@ classdef cGraphResults < cStatusLogger
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 			'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
+			colormap(jet);
 			bar(obj.xValues,obj.yValues,'edgecolor','none','barwidth',0.8,'parent',ax);
 			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
@@ -115,6 +122,7 @@ classdef cGraphResults < cStatusLogger
 			f=figure('name',obj.Name,'numbertitle','off',...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
+			colormap(jet);
 			plot(obj.xValues,obj.yValues,'Marker','diamond');
 			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
@@ -385,13 +393,21 @@ classdef cGraphResults < cStatusLogger
 			f=figure('name',obj.Name, 'numbertitle','off',...
 				'units','normalized','position',[0.05 0.1 0.4 0.6]);
 			ax=axes(f,'position', [0.1 0.1 0.75 0.8]);
+			M=numel(obj.Legend);
+			cm=colormap(jet(M));
 			hold(ax,'on');
 			zt=obj.yValues;
 			zt(zt>0)=0; % Plot negative values
-			bar(zt,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
+			b1=bar(zt,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
+			for i=1:M
+				set(b1(i),'facecolor',cm(i,:));
+			end
 			zt=obj.yValues;
 			zt(zt<0)=0; % Plot positive values
-			bar(zt,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
+			b2=bar(zt,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
+			for i=1:M
+				set(b2(i),'facecolor',cm(i,:));
+			end
 			obj.setGraphParameters(ax);
 		end
 	
@@ -405,13 +421,12 @@ classdef cGraphResults < cStatusLogger
 			b=bar(obj.yValues,...
 				'EdgeColor','none','BarWidth',0.5,...
 				'BarLayout','stacked',...
-				'FaceColor','flat',...
 				'BaseValue',obj.BaseLine,...
 				'Parent',ax);
 			M=numel(obj.Legend);
-			cm=colormap(jet(M));
+			cm=colormap(jet(M));				
 			for i=1:M
-				b(i).CData=cm(i,:);
+				b(i).FaceColor=cm(i,:);
 			end
 			bs=b.BaseLine;
 			bs.BaseValue=obj.BaseLine;

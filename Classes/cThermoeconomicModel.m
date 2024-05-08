@@ -45,7 +45,7 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.getResultStates
 %       res=obj.getModelResults
 %   Tables Info Methods
-%       res=obj.getTablesDirectiory
+%       res=obj.getTablesDirectory
 %       res=obj.getTableInfo(name)
 %       res=obj.getResultInfoTable(name)
 %       res=obj.getTable(name,options)
@@ -1102,7 +1102,7 @@ classdef cThermoeconomicModel < cResultSet
                 else
                     ra=cWasteAnalysis(obj.fp1,true,obj.ActiveWaste);
                 end
-                obj.printDebugInfo('Compute Recycling Analysis');
+                obj.printDebugInfo('Compute Recycling Analysis: %s',obj.ActiveWaste);
             else
                 ra=cWasteAnalysis(obj.fp1);
             end
