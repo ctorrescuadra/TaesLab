@@ -113,7 +113,8 @@ classdef (Sealed) cWasteAnalysis < cResultId
             outputId=[tmp,idx];
             obj.OutputFlows={ps.Flows(outputId).key};
             % Save original values
-            wrc=obj.wasteTable.RecycleRatio(wId); % Save original value
+            wrc=obj.wasteTable.RecycleRatio(wId);
+            wval=obj.wasteTable.Values;
             sol=obj.modelFP;
             % Generate the table
             x=(0:0.1:1)';
@@ -136,7 +137,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             obj.gValues=[x,yg];
             % Restore original values
             wd.setRecycleRatio(wId,wrc);
-            sol.updateWasteOperators;
+            wd.setTableValues(wval);
         end
     end
 end

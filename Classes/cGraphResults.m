@@ -83,13 +83,13 @@ classdef cGraphResults < cStatusLogger
 
 		function graphCost(obj)
 		% Plot the ICT graph cost
-
-			f=figure('name',obj.Name, 'numbertitle','off', ...
+			M=numel(obj.Legend);
+			cm=turbo(M);
+			f=figure('name',obj.Name, 'numbertitle','off','colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
 			b=bar(obj.yValues,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
-			M=numel(obj.Legend);
-			cm=colormap(jet(M));
+
 			for i=1:M
 				set(b(i),'facecolor',cm(i,:));
 			end
@@ -108,10 +108,9 @@ classdef cGraphResults < cStatusLogger
 
 		function graphSummary(obj)
 		% Plot the summary graph
-			f=figure('name',obj.Name, 'numbertitle','off', ...
+			f=figure('name',obj.Name, 'numbertitle','off', 'colormap',turbo,...
 			'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
-			colormap(jet);
 			bar(obj.xValues,obj.yValues,'edgecolor','none','barwidth',0.8,'parent',ax);
 			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
@@ -119,18 +118,17 @@ classdef cGraphResults < cStatusLogger
 
 		function graphRecycling(obj)
 		% Plot the graph recycling
-			f=figure('name',obj.Name,'numbertitle','off',...
+			f=figure('name',obj.Name,'numbertitle','off','colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
-			colormap(jet);
-			plot(obj.xValues,obj.yValues,'Marker','diamond');
+			plot(obj.xValues,obj.yValues,'Marker','diamond','LineWidth',1);
 			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
 		end
 
 		function pieChartWasteAllocation(obj)
 		% Plot the waste allocation pie chart
-			f=figure('name',obj.Name,'numbertitle','off',...
+			f=figure('name',obj.Name,'numbertitle','off','colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
 			if isMatlab
@@ -144,7 +142,7 @@ classdef cGraphResults < cStatusLogger
 		end
 
 		function graphWasteAllocation(obj)
-			f=figure('name',obj.Name, 'numbertitle','off', ...
+			f=figure('name',obj.Name, 'numbertitle','off', 'colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
 			barh(obj.xValues,obj.yValues,'stacked','edgecolor','none','parent',ax); 
@@ -390,11 +388,11 @@ classdef cGraphResults < cStatusLogger
 		function graphDiagnosis_OC(obj)
 		% Show the diagnosis graph (Octave Version)
 		%
-			f=figure('name',obj.Name, 'numbertitle','off',...
+			M=numel(obj.Legend);
+			cm=turbo(M);
+			f=figure('name',obj.Name, 'numbertitle','off','colormap',turbo,...
 				'units','normalized','position',[0.05 0.1 0.4 0.6]);
 			ax=axes(f,'position', [0.1 0.1 0.75 0.8]);
-			M=numel(obj.Legend);
-			cm=colormap(jet(M));
 			hold(ax,'on');
 			zt=obj.yValues;
 			zt(zt>0)=0; % Plot negative values
@@ -414,7 +412,9 @@ classdef cGraphResults < cStatusLogger
 		function graphDiagnosis_ML(obj)
 		% Show the diagnosis graph (Matlab version)
 		%
-			f = figure('numbertitle','off','Name',obj.Name,...
+			M=numel(obj.Legend);
+			cm=turbo(M);
+			f = figure('numbertitle','off','Name',obj.Name,'colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.4 0.6],'color',[1,1,1]);
 			ax = axes(f,'Position',[0.1 0.1 0.85 0.8]);
 			hold(ax,'on');
@@ -422,9 +422,7 @@ classdef cGraphResults < cStatusLogger
 				'EdgeColor','none','BarWidth',0.5,...
 				'BarLayout','stacked',...
 				'BaseValue',obj.BaseLine,...
-				'Parent',ax);
-			M=numel(obj.Legend);
-			cm=colormap(jet(M));				
+				'Parent',ax);			
 			for i=1:M
 				b(i).FaceColor=cm(i,:);
 			end

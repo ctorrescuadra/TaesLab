@@ -75,7 +75,7 @@ classdef cWasteTable < cStatusLogger
             if size(obj.Values,2)~=length(val)
                 return
             end
-            if any(val>0) && isempty(find(val<0,1))
+            if any(val(:)>0) && isempty(find(val<0,1))
                 obj.typeId(id)=0;
                 obj.Type{id}='MANUAL';
                 obj.Values(id,:)=val;
@@ -170,6 +170,15 @@ classdef cWasteTable < cStatusLogger
             if ~cType.isEmpty(id)
                 wf=obj.ps.Waste.flows;
                 idx=find(wf==id);
+            end
+        end
+
+        function status=setTableValues(obj,val)
+        % Set the waste table values (internal use)
+            status=false;
+            if all(size(val)==size(obj.Values))
+                obj.Values=val;
+                status=true;
             end
         end
     end                    

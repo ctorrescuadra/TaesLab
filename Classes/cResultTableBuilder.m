@@ -502,9 +502,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             end           
             res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
         end
-
-
-        
+   
         function res=getFlowICTable(obj,id,values)
         % get a cTableMatrix with the flows ICT (Irrreversibility Cost Tables)
         %   Input:

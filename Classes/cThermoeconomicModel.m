@@ -56,8 +56,8 @@ classdef cThermoeconomicModel < cResultSet
 %       obj.showTableIndex(options)
 %       obj.showGraph(name,options)
 %       obj.showSummary(name)
-%       obj.showSummaryGraph(name,options)
 %       obj.showTableDirectory(option)
+%       obj.summaryGraph(name,options)
 %   Save Methods
 %       log=obj.saveResults(filename)
 %       log=obj.saveDataModel(filename)
@@ -612,7 +612,7 @@ classdef cThermoeconomicModel < cResultSet
             end
         end
 
-        function showSummaryGraph(obj,varargin)
+        function summaryGraph(obj,varargin)
         % Show Summary Graphs
             res=obj.getSummaryResults;
             if isempty(res)
@@ -758,7 +758,7 @@ classdef cThermoeconomicModel < cResultSet
             end  
             wt=obj.fp1.WasteTable;
             if ~wt.setValues(key,val)
-                log.prinError('Invalid waste %s allocation values',key);
+                log.printError('Invalid waste %s allocation values',key);
                 return
             end
             obj.fp1.updateWasteOperators;
