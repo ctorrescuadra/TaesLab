@@ -31,11 +31,10 @@ classdef ViewResults < matlab.apps.AppBase
         % get the graph parameter
             obj=cGraphResults(tbl);
             M=numel(obj.Legend);
-            app.UIAxes.Visible='off';
-            if ~isempty(app.Colorbar)
-                app.Colorbar.Visible='off';
+            cm=turbo(M);
+            if app.isColorbar
+                delete(app.Colorbar);
             end
-            app.UIAxes.Colormap=turbo(M);
             % Plot the bar graph
             b=bar(obj.yValues,...
                 'EdgeColor','none','BarWidth',0.5,...
@@ -44,7 +43,7 @@ classdef ViewResults < matlab.apps.AppBase
                 'FaceColor','flat',...
                 'Parent',app.UIAxes);
             for i=1:M
-                b(i).CData=app.UIAxes.Colormap(i,:);
+                b(i).CData=cm(i,:);
             end
             app.SetGraphParameters(obj);
             app.UIAxes.Visible='on';
@@ -55,11 +54,11 @@ classdef ViewResults < matlab.apps.AppBase
             % get the graph parameters
             obj=cGraphResults(tbl);
             M=numel(obj.Legend);
-            app.UIAxes.Visible='off';
-            if ~isempty(app.Colorbar)
-                app.Colorbar.Visible='off';
+            cm=turbo(M);
+            if app.isColorbar
+                delete(app.Colorbar);
             end
-            app.UIAxes.Colormap=turbo(M);
+
             % Plot the bar graph
             b=bar(obj.yValues,...
                     'EdgeColor','none','BarWidth',0.5,...
@@ -68,7 +67,7 @@ classdef ViewResults < matlab.apps.AppBase
                     'FaceColor','flat',...
                     'Parent',app.UIAxes);
             for i=1:M
-                b(i).CData=app.UIAxes.Colormap(i,:);
+                b(i).CData=cm(i,:);
             end
             bs=b.BaseLine;
             bs.BaseValue=0.0;
@@ -88,21 +87,15 @@ classdef ViewResults < matlab.apps.AppBase
             end
             obj=cGraphResults(tbl,var);
             % plot the graph
-            M=numel(obj.Legend);
-            app.UIAxes.Visible='off';
-            if ~isempty(app.Colorbar)
-                app.Colorbar.Visible='off';
+            if app.isColorbar
+                delete(app.Colorbar);
             end
-            app.UIAxes.Colormap=turbo(M);
             % Plot the bar graph
-            b=bar(obj.xValues, obj.yValues,...
+            bar(obj.xValues, obj.yValues,...
                     'EdgeColor','none','BarWidth',0.5,...
                     'BaseValue',obj.BaseLine,...
                     'FaceColor','flat',...
                     'Parent',app.UIAxes);
-            for i=1:M
-                b(i).CData=app.UIAxes.Colormap(i,:);
-            end
             app.SetGraphParameters(obj);
             app.UIAxes.Visible='on';
         end
@@ -113,12 +106,12 @@ classdef ViewResults < matlab.apps.AppBase
             wkey=tbl.ColNames{end};
             obj=cGraphResults(tbl,wkey);
             % plot the graph
-            app.UIAxes.Visible='off';
-            if ~isempty(app.Colorbar)
-                app.Colorbar.Visible='off';
+            if app.isColorbar
+                delete(app.Colorbar);
             end
 		    plot(obj.xValues,obj.yValues,...
                 'Marker','diamond',...
+                'LineWidth',1,...
                 'Parent',app.UIAxes);
             app.SetGraphParameters(obj);
             app.UIAxes.Visible='on';
@@ -129,9 +122,8 @@ classdef ViewResults < matlab.apps.AppBase
             % Get graph Properties
             obj=cGraphResults(tbl);
             % Plot the bar graph
-            app.UIAxes.Visible='off';
-            if ~isempty(app.Colorbar)
-                app.Colorbar.Visible='off';
+            if app.isColorbar
+                delete(app.Colorbar);
             end
             bar(obj.xValues,obj.yValues',...
                 'EdgeColor','none',...
@@ -156,6 +148,7 @@ classdef ViewResults < matlab.apps.AppBase
 
         function ShowDiagramFP(app,tbl)
             obj=cGraphResults(tbl);
+            app.UIAxes.YLimMode="auto";
             r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
             app.UIAxes.Colormap=red2blue;
             plot(app.UIAxes,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
@@ -208,7 +201,7 @@ classdef ViewResults < matlab.apps.AppBase
             app.UIAxes.YLim=[obj.BaseLine, tmp(2)];
             app.UIAxes.TickLabelInterpreter='none';
             app.UIAxes.Legend.Location='northeastoutside';
-            app.UIAxes.Legend.Orientation='vertical';     
+            app.UIAxes.Legend.Orientation='vertical';    
         end
         
         % Show the index table in table panel
@@ -235,40 +228,51 @@ classdef ViewResults < matlab.apps.AppBase
         
         % Show table in graph panel
         function ViewGraph(app,tbl,res)
-            if tbl.isGraph
-                switch tbl.GraphType
-                    case cType.GraphType.COST
-                        app.GraphCost(tbl);
-                    case cType.GraphType.DIAGNOSIS
-                        app.GraphDiagnosis(tbl);
-                    case cType.GraphType.SUMMARY
-                        app.GraphSummary(tbl,res)
-                    case cType.GraphType.DIAGRAM_FP
-                        app.ShowDiagramFP(tbl);
-                    case cType.GraphType.DIGRAPH_FP
-                        app.ShowDiagramFP(tbl);
-                    case cType.GraphType.DIGRAPH
-                        app.ShowDigraph(tbl,res);
-                    case cType.GraphType.RECYCLING
-                        app.GraphRecycling(tbl);
-                    case cType.GraphType.WASTE_ALLOCATION
-                        app.GraphWasteAllocation(tbl);
-                end
-            end            
+            switch tbl.GraphType
+                case cType.GraphType.COST
+                    app.GraphCost(tbl);
+                case cType.GraphType.DIAGNOSIS
+                    app.GraphDiagnosis(tbl);
+                case cType.GraphType.SUMMARY
+                    app.GraphSummary(tbl,res)
+                case cType.GraphType.DIAGRAM_FP
+                    app.ShowDiagramFP(tbl);
+                case cType.GraphType.DIGRAPH_FP
+                    app.ShowDiagramFP(tbl);
+                case cType.GraphType.DIGRAPH
+                    app.ShowDigraph(tbl,res);
+                case cType.GraphType.RECYCLING
+                    app.GraphRecycling(tbl);
+                case cType.GraphType.WASTE_ALLOCATION
+                    app.GraphWasteAllocation(tbl);
+            end           
         end
 
         % Clear Tab contents befere new results calculation
         function ClearTabContent(app)
             app.Table.Visible=false;
-            app.UIAxes.Visible=false;
-            if ~isempty(app.Colorbar)
-                app.Colorbar.Visible=false;
+            app.ClearGraphTab;
+            app.LogField.Text='';
+        end
+        % Clear Graph Tab
+        function ClearGraphTab(app)
+            app.UIAxes.Visible="off";
+            if app.isColorbar
+                delete(app.Colorbar);
             end
             if ~isempty(app.UIAxes.Legend)
                 app.UIAxes.Legend.Visible=false;
             end
-            delete(app.UIAxes.Children)
-            app.LogField.Text='';
+            delete(app.UIAxes.Children);
+        end
+
+        % Check if Colorbar object is defined
+        function res=isColorbar(app)
+            try
+                res=~isempty(app.Colorbar);
+            catch
+                res=false;
+            end
         end
     end
 
@@ -326,10 +330,14 @@ classdef ViewResults < matlab.apps.AppBase
                 logtext=sprintf(' INFO: %s for State %s. %s ',...
                 resultNode.Text,tbl.State,resultNode.UserData);
                 app.LogField.Text=logtext;
-                app.ViewTable(tbl);
+                app.ViewTable(tbl);               
                 app.TabGroup.SelectedTab=app.TablesTab;
-                app.ViewGraph(tbl,resultNode.NodeData.Info);
-                app.ExpandedNode=resultNode;
+                if tbl.isGraph
+                    app.ViewGraph(tbl,resultNode.NodeData.Info);
+                    app.ExpandedNode=resultNode;
+                else
+                    app.ClearGraphTab;
+                end
             elseif isa(tbl,'cResultInfo')
                 app.ViewIndexTable(tbl);
                 app.TabGroup.SelectedTab=app.IndexTab;
@@ -363,6 +371,8 @@ classdef ViewResults < matlab.apps.AppBase
             app.ViewTable(tbl);
             if tbl.isGraph
                 app.ViewGraph(tbl,app.TableIndex.Info);
+            else
+                app.ClearGraphTab;
             end
             if indices(2)==cType.GRAPH_COLUMN
                 app.TabGroup.SelectedTab=app.GraphsTab;
@@ -468,7 +478,8 @@ classdef ViewResults < matlab.apps.AppBase
             app.UIAxes.XColor = [0 0 0];
             app.UIAxes.Box = 'on';
             app.UIAxes.Visible = 'off';
-            app.UIAxes.Position = [1 1 675 445];
+            app.UIAxes.Position = [1 1 700 445];
+            app.UIAxes.Colormap=turbo;
 
             % Create LogField
             app.LogField = uilabel(app.GridLayout);

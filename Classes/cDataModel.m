@@ -63,7 +63,6 @@ classdef cDataModel < cResultSet
                 return
             end
             data=rdm.ModelData;
-            obj.isWaste=data.isWaste;
             obj.isResourceCost=data.isResourceCost;
             % Check and get Productive Structure
             ps=cProductiveStructure(data.ProductiveStructure);
@@ -104,7 +103,7 @@ classdef cDataModel < cResultSet
             end
             % Check Waste
             if ps.NrOfWastes > 0
-                if obj.isWaste
+                if data.isWaste
                     tmp=data.WasteDefinition;
                 else
                     tmp=ps.WasteData;
@@ -115,10 +114,11 @@ classdef cDataModel < cResultSet
                 if ~isValid(wd)
 	                obj.addLogger(wd);
 					obj.messageLog(cType.ERROR,'Waste Definition is NOT valid. See error log');
-                elseif obj.isWaste
-					obj.messageLog(cType.INFO,'Waste Definition is valid');			
+                elseif data.isWaste
+					obj.messageLog(cType.INFO,'Waste Definition is valid');	
                 end
                 obj.WasteData=wd;
+                obj.isWaste=true;	
             else
 				obj.messageLog(cType.INFO,'The plant has NOT waste');
             end
