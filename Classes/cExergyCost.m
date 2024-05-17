@@ -148,7 +148,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 				res.CR=res.CP * aux.mRP;
 			else
 				res.CPR=zero;
-				res.CP=CPE+CPZ;
+				res.CP=res.CPE+res.CPZ;
 				res.CR=zero;
 			end
 			res.CF= Ce+res.CP*obj.fpOperators.mFP(:,1:end-1);

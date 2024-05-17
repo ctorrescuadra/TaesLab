@@ -192,6 +192,19 @@ classdef cResultInfo < cResultSet
 	        showGraph(tbl,option);
         end
 
+        function res=exportTable(obj,name,varmode,fmt)
+        % Export a table using diferent formats.
+            res=[];
+            narginchk(3,4);
+            if (nargin<4)
+                    fmt=false;
+            end
+            tbl=obj.getTable(name);
+            if isValid(tbl)
+                res=tbl.exportTable(varmode,fmt);
+            end
+        end
+
         %%%
         % Save result tables
         %%%
@@ -277,19 +290,6 @@ classdef cResultInfo < cResultSet
                 res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
             end
         end
-
-        function res=exportTable(obj,name,varmode,fmt)
-        % Export a table using diferent formats.
-            res=[];
-            narginchk(3,4);
-            if (nargin<4)
-                fmt=false;
-            end
-            tbl=obj.getTable(name);
-            if isValid(tbl)
-                res=tbl.exportTable(varmode,fmt);
-            end
-        end
     
         function summaryDiagnosis(obj)
         % Show diagnosis summary results
@@ -297,6 +297,36 @@ classdef cResultInfo < cResultSet
                 res=obj.getDiagnosisSummary;
                 fprintf('%s\n%s\n',res.FuelImpact,res.MalfunctionCost);
             end
+        end
+
+        function totalMalfunctionCost(obj)
+        % Show malfunction cost summary
+            log=cStatus();
+            dgn=obj.Info;
+            if ~isa(dgn,'cDiagnosis')
+                log.printError('Invalid input argument');
+                return
+            end
+            % Retrieve information
+            N=dgn.NrOfProcesses+1;
+            data=zeros(N,3);
+            data(:,1)=dgn.getMalfunctionCost';
+            data(:,2)=dgn.getWasteMalfunctionCost';
+            data(:,3)=dgn.getDemmandCorrectionCost';
+            % Build the results table
+            rowNames=obj.Tables.dgn.RowNames;
+            colNames={'Key','MF*','MR*','MPt*'};
+            p.Format=obj.Tables.mfc.Format;
+            p.Unit=obj.Tables.mfc.Unit;
+            p.rowTotal=false;
+            p.colTotal=true;
+            p.key='tmfc';
+            p.Description='Total Malfunction Cost';
+            p.GraphType=0;
+            p.GraphOptions=0;
+            tbl=cTableMatrix.create(data,rowNames,colNames,p);
+            obj.summaryDiagnosis;
+            printTable(tbl);
         end
 
 		%%%

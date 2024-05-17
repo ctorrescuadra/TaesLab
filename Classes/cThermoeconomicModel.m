@@ -25,13 +25,14 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.thermoeconomicAnalysis
 %       res=obj.thermoeconomicDiagnosis
 %       res=obj.summaryDiagnosis
+%       res=obj.totalMalfunctionCost
 %       res=obj.wasteAnalysis
 %       res=obj.diagramFP
 %       res=obj.productiveDiagram
 %       res=obj.summaryResults
 %       res=obj.dataModelInfo
 %       res=obj.resultModelInfo
-%       res=obj.getResultInfo(Id)
+%       res=obj.getResults(id)
 %   Model Info Methods
 %       res=obj.showProperties
 %       res=obj.StateNames
@@ -396,17 +397,25 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.getResults(cType.ResultId.DIAGRAM_FP);
         end
 
-        function res=dataModelInfo(obj)
-        % Get the data model cResultInfo object
-          res=obj.getResults(cType.ResultId.DATA_MODEL);
-        end
-            
         function summaryDiagnosis(obj)
         % Get the diagnosis results summary
             res=obj.thermoeconomicDiagnosis;
             if ~isempty(res)
                 res.summaryDiagnosis;
             end
+        end
+
+        function totalMalfunctionCost(obj)
+        % Get the total malfunction cost summary
+            res=obj.thermoeconomicDiagnosis;
+            if ~isempty(res)
+                res.totalMalfunctionCost;
+            end
+        end
+
+        function res=dataModelInfo(obj)
+        % Get the data model cResultInfo object
+          res=obj.getResults(cType.ResultId.DATA_MODEL);
         end
 
         function res=resultModelInfo(obj)
@@ -424,6 +433,11 @@ classdef cThermoeconomicModel < cResultSet
             res=cResultInfo(cResultId(id),tables);
             res.setProperties(obj.ModelName,obj.State);
             obj.setResults(res);
+        end
+
+        function res=getResults(obj,index)
+        % Get the result info
+            res=getResults(obj.results,index);
         end
 
         %%%
@@ -1311,11 +1325,6 @@ classdef cThermoeconomicModel < cResultSet
 
         %%%
         % cModelResults methods
-        function res=getResults(obj,index)
-        % Get the result info
-            res=getResults(obj.results,index);
-        end
-
         function clearResults(obj,index)
         % Clear the result info
             clearResults(obj.results,index);

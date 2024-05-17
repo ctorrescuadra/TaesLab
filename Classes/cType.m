@@ -151,6 +151,8 @@ classdef cType
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
             'WASTE_ANALYSIS',4,'THERMOECONOMIC_DIAGNOSIS',5,'PRODUCTIVE_DIAGRAM',6,'DIAGRAM_FP',7,...
 			'SUMMARY_RESULTS',8,'DATA_MODEL',9,'RESULT_MODEL',10);
+		% Icon Files
+		IconFile={'ps.png','ts.png','ta.png','wa.png','td.png','pd.png','fp.png','sr.png','md.png','mr.png'};
 		% Names for cModelResults	
 		Results={'Productive Structure','Thermoeconomic State','Thermoeconomic Analysis',...
 			'Waste Analysis','Thermoeconomic Diagnosis','Productive Diagram','Diagram FP',...
@@ -173,9 +175,6 @@ classdef cType
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html','LaTeX','.tex');
         % HTML/CCS style file
 		CSSFILE='styles.css';
-		% Icon Files
-		IconFile=struct('ProductiveStructure','ps.png','ThermoeconomicState','ts.png','ThermoeconomicAnalysis','ta.png',...
-            'ThermoeconomicDiagnosis','td.png','WasteAnalysis','wa.png','SummaryResults','sr.png','ModelResults','mr.png');
         % Taess app welcome image
 		TaesImage='TaesLab.png';
         % Taess app Resources folder
@@ -487,7 +486,7 @@ classdef cType
 
 		function res=getIcon(icon)
 		% Get app icons path
-			filename=cType.IconFile.(icon);
+			filename=cType.IconFile{icon};
             path=fileparts(mfilename('fullpath'));         
             if isOctave
 				folder='icon32';
