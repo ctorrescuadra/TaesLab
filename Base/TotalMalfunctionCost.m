@@ -1,22 +1,32 @@
-function tbl = TotalMalfunctionCost(res)
+function tbl = TotalMalfunctionCost(arg)
 % TotalMalfunctionCost shows a table with the detailed breakdown
 % of the total malfunction cost index
 %   Usage: 
 %       TotalMalfunctionCost(res)
 %   Input:
-%       res - cResultInfo with diagnosis information
+%       arg - cResultSet with diagnosis information
 %   Output:
 %       tbl - cTableMatrix with the results
 % See also cDiagnosis
 %
     % Check Parameters
     tbl=cStatus();
-    if ~isa(res,'cResultInfo')
-        tbl.printError('Invalid input argument');
-        return
-    end
-    dgn=res.Info;
-    if ~isa(dgn,'cDiagnosis')
+    switch arg.classId
+    case cType.ClassId.RESULT_INFO
+        dgn=arg.Info;
+        if ~isa(dgn,'cDiagnosis')
+            tbl.printError('Invalid input argument');
+            return
+        end
+        res=arg;
+    case cType.ClassId.RESULT_MODEL
+        res=arg.thermoeconomicDiagnosis;
+        if isempty(res)
+            tbl.printError('Invalid input argument');
+            return
+        end
+        dgn=res.Info;
+    otherwise
         tbl.printError('Invalid input argument');
         return
     end
