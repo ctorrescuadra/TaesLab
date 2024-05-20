@@ -331,7 +331,7 @@ classdef cDataModel < cResultSet
         %%%
         % Gat data model tables
         %%%
-        function res=dataModelInfo(obj)
+        function res=getResultInfo(obj)
         % Get data model result info
             res=obj.ModelInfo;
         end

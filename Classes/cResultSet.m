@@ -25,19 +25,6 @@ classdef cResultSet < cStatusLogger
             obj=obj@cStatusLogger(cType.VALID);
             obj.classId=id;
         end
-
-        function res = getResultInfo(obj)
-        % Get the associated result info
-            res=[];
-            switch obj.classId
-            case cType.ClassId.RESULT_MODEL
-                res=obj.resultModelInfo;
-            case cType.ClassId.DATA_MODEL
-                res=obj.dataModelInfo;
-            case cType.ClassId.RESULT_INFO
-                res=obj;
-            end
-        end
         %%%
         % Result Set functions.
         %%%

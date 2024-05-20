@@ -32,6 +32,10 @@ classdef (Sealed) cModelResults < cStatusLogger
         %       id - ResultId index
         %   Output:
         %       res - cResultInfo with ResultId equal to index
+            res=[];
+            if ~ismember(id,1:cType.MAX_RESULT_INFO)
+                return
+            end
             res=obj.results{id};
         end
 
@@ -41,6 +45,9 @@ classdef (Sealed) cModelResults < cStatusLogger
         %       id - ResultId index to remove from the container
         %   Output
         %       res - previous cResultInfo stored
+            if ~ismember(id,1:cType.MAX_RESULT_INFO)
+                return
+            end
             res=obj.getResults(id);
             if ~isempty(obj.results{id})
                 obj.results{id}=[];
@@ -51,6 +58,9 @@ classdef (Sealed) cModelResults < cStatusLogger
         % Store the cResultInfo in the results container using ResultId as index
         %   Input:
         %       res - cResultInfo to store
+            if ~isa(res,'cResultInfo')
+                return
+            end
             id=res.ResultId;
             res0=obj.results{id};
             if cModelResults.checkAssign(res0,res)

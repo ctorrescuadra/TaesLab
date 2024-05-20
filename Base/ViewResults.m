@@ -280,7 +280,7 @@ classdef ViewResults < matlab.apps.AppBase
     methods (Access = private)
 
         % Code that executes after component creation
-        function startupFcn(app, res)
+        function startupFcn(app, arg)
             log=cStatus();
             if nargin~=2
                 log.printError('Values to show are required');
@@ -288,18 +288,25 @@ classdef ViewResults < matlab.apps.AppBase
                 delete(app);
                 return
             end
-            if isa(res,'cResultInfo')
-                val={res};
-                mt=res;
-            elseif isa(res,'cThermoeconomicModel')
-                val=res.getModelResults;
-                mt=res.resultModelInfo;
-            else
-                log.printError('Results must be a cResultInfo object');
+            if ~isa(arg,'cResultSet')
+                log.printError('Results must be a cResultSet object');
                 delete(app);
                 return
             end
-            app.UIFigure.Name=['View Results ','[',res.ModelName,'/',res.State,']'];
+            mt=arg.getResultInfo;
+            switch arg.classId
+            case cType.ClassId.RESULT_INFO
+                val={mt};
+                state=arg.State;
+            case cType.ClassId.RESULT_MODEL
+                val=arg.getModelResults;
+                state=arg.State;
+            case cType.ClassId.DATA_MODEL
+                val={mt};
+                state='DATA';
+            end
+ 
+            app.UIFigure.Name=['View Results ','[',arg.ModelName,'/',state,']'];
             % Create Tree nodes
             for i=1:numel(val)
                 tmp=val{i};
@@ -313,7 +320,7 @@ classdef ViewResults < matlab.apps.AppBase
                     tn.NodeData=tmp.Tables.(tables{j});
                 end
             end
-            app.State=res.State;
+            app.State=state;
             app.ViewIndexTable(mt);
             app.TabGroup.SelectedTab=app.IndexTab;
         end

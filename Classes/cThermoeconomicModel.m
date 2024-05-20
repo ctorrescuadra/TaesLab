@@ -31,8 +31,7 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.productiveDiagram
 %       res=obj.summaryResults
 %       res=obj.dataModelInfo
-%       res=obj.resultModelInfo
-%       res=obj.getResults(id)
+%       res=obj.getResultInfo(id)
 %   Model Info Methods
 %       res=obj.showProperties
 %       res=obj.StateNames
@@ -372,14 +371,30 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.getResults(cType.ResultId.THERMOECONOMIC_ANALYSIS);
         end
 
+        function res=wasteAnalysis(obj)
+        % Get the Recycling Analysis cResultInfo object
+            res=obj.getResults(cType.ResultId.WASTE_ANALYSIS);
+        end
+
         function res=thermoeconomicDiagnosis(obj)
         % Get the Thermoeconomic Diagnosis cResultInfo object
             res=obj.getResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
         end
 
-        function res=wasteAnalysis(obj)
-        % Get the Recycling Analysis cResultInfo object
-            res=obj.getResults(cType.ResultId.WASTE_ANALYSIS);
+        function summaryDiagnosis(obj)
+        % Get the diagnosis results summary
+            res=obj.thermoeconomicDiagnosis;
+            if ~isempty(res)
+                res.summaryDiagnosis;
+            end
+        end
+    
+        function totalMalfunctionCost(obj)
+        % Get the total malfunction cost summary
+            res=obj.thermoeconomicDiagnosis;
+            if ~isempty(res)
+                res.totalMalfunctionCost;
+            end
         end
 
         function res=summaryResults(obj)
@@ -397,47 +412,18 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.getResults(cType.ResultId.DIAGRAM_FP);
         end
 
-        function summaryDiagnosis(obj)
-        % Get the diagnosis results summary
-            res=obj.thermoeconomicDiagnosis;
-            if ~isempty(res)
-                res.summaryDiagnosis;
-            end
-        end
-
-        function totalMalfunctionCost(obj)
-        % Get the total malfunction cost summary
-            res=obj.thermoeconomicDiagnosis;
-            if ~isempty(res)
-                res.totalMalfunctionCost;
-            end
-        end
-
         function res=dataModelInfo(obj)
         % Get the data model cResultInfo object
           res=obj.getResults(cType.ResultId.DATA_MODEL);
         end
 
-        function res=resultModelInfo(obj)
-        % Get a cResultInfo object with all tables of the active model
-            id=cType.ResultId.RESULT_MODEL;
-            tables=struct();
-            tmp=obj.getModelResults;
-            for k=1:numel(tmp)
-                dm=tmp{k};
-                list=dm.getListOfTables;
-                for i=1:dm.NrOfTables
-                    tables.(list{i})=dm.Tables.(list{i});
-                end
-            end
-            res=cResultInfo(cResultId(id),tables);
-            res.setProperties(obj.ModelName,obj.State);
-            obj.setResults(res);
-        end
-
-        function res=getResults(obj,index)
+        function res=getResultInfo(obj,index)
         % Get the result info
-            res=getResults(obj.results,index);
+            if (nargin==1) || index==cType.MAX_RESULT_INFO
+                res=obj.resultModelInfo;
+            else
+                res=obj.getResults(index);
+            end
         end
 
         %%%
@@ -540,7 +526,7 @@ classdef cThermoeconomicModel < cResultSet
             atm=zeros(tbl.NrOfRows,1);
             % Get the initial state of the table
             for i=1:cType.ResultId.SUMMARY_RESULTS
-                rid=obj.getResults(i);
+                rid=obj.getResultInfo(i);
                 if ~isempty(rid)
                     list=rid.getListOfTables;
                     idx=cellfun(@(x) getIndex(tDict,x),list);
@@ -586,7 +572,7 @@ classdef cThermoeconomicModel < cResultSet
                 printDebugInfo(obj,'Table %s does not exists',table);
                 return
             end
-            res=obj.getResults(tinfo.resultId);
+            res=obj.getResultInfo(tinfo.resultId);
             if isempty(res)
                 printDebugInfo(obj,'Table %s is not available',table);
                 return
@@ -1000,7 +986,7 @@ classdef cThermoeconomicModel < cResultSet
             obj.setSummaryResults;
         end
     end
-    %%%
+    %%%%%%
     % Internal Methods
     methods(Access=private)
         function printDebugInfo(obj,varargin)
@@ -1081,7 +1067,7 @@ classdef cThermoeconomicModel < cResultSet
             if ~obj.Summary
                 obj.setSummary(true);
             end
-            res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
+            res=obj.getResultInfo(cType.ResultId.SUMMARY_RESULTS);
         end
 
         function setSummaryResults(obj)
@@ -1090,7 +1076,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             id=cType.ResultId.SUMMARY_RESULTS;
-            res=obj.getResults(id);
+            res=obj.getResultInfo(id);
             if obj.Summary
                 sr=cModelSummary(obj);
                 if sr.isValid
@@ -1325,6 +1311,30 @@ classdef cThermoeconomicModel < cResultSet
 
         %%%
         % cModelResults methods
+        function res=resultModelInfo(obj)
+        % Get a cResultInfo object with all tables of the active model
+            id=cType.ResultId.RESULT_MODEL;
+            res=obj.getResults(id);
+            if isempty(res)
+                tables=struct();
+                tmp=getModelResults(obj.results);
+                for k=1:numel(tmp)
+                    dm=tmp{k};
+                    list=dm.getListOfTables;
+                    for i=1:dm.NrOfTables
+                        tables.(list{i})=dm.Tables.(list{i});
+                    end
+                end
+                res=cResultInfo(cResultId(id),tables);
+                res.setProperties(obj.ModelName,obj.State);
+                obj.setResults(res);
+            end
+        end
+
+        function res=getResults(obj,index)
+            res=getResults(obj.results,index);
+        end
+
         function clearResults(obj,index)
         % Clear the result info
             clearResults(obj.results,index);

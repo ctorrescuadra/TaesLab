@@ -63,6 +63,12 @@ classdef cResultInfo < cResultSet
             end
             obj.status=info.status;
         end
+
+        function res=getResultInfo(obj)
+        % getResultInfo - get cResultInfo object from cResultSet
+            res=obj;
+        end
+
         %%%
         % Show Result Tables
         function printResults(obj)

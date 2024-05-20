@@ -1,4 +1,4 @@
-classdef ThermoeconomicPanel < handle
+classdef TaesPanel < handle
 % Graphic user interface to select the thermoeconomic model parameters.
 % Compatible App for Matlab/Octave
 % Execute the basic functions of class cThermoeconomicModel:
@@ -55,7 +55,7 @@ classdef ThermoeconomicPanel < handle
     end
 
     methods
-        function app=ThermoeconomicPanel()
+        function app=TaesPanel()
 		% ThermoeconomicPanel constructor
             % Initialize application variabbles
             app.console=false;
