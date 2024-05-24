@@ -1,5 +1,5 @@
 % Thermoeconomic Analysis Toolbox
-% Version 1.5 (R2023b) 26-Apr-2024
+% Version 1.6 (R2023b) 23-May-2024
 %
 % Apps
 %   TaesApp                 - TaesLab App.
@@ -23,10 +23,10 @@
 %
 % Save Results Information
 %   SaveDataModel           - Saves the data model into a file.
-%   SaveResults             - Saves a cResultSet object into a file.
+%   SaveResults             - Saves a cResultSet object tables into a file.
 %   SaveDiagramFP           - Saves the Diagram FP adjacency tables into a file
 %   SaveProductiveDiagram   - Saves the productive structure adjacency tables into a file.
-%   SaveSummaryResults      - Saves the summary cost tables into a file
+%   SaveSummaryResults      - Saves the summary tables into a file
 %   SaveTable               - Save an individual table of the model
 %   ExportDataModel         - Copy a model data file in another format
 %
@@ -37,8 +37,8 @@
 %	ShowGraph               - Show the graph of a model result table
 %
 % GUI functions
-%   ThermoeconomicPanel     - GUI to select the thermoeconomic model parameters.
+%   TaesTool                - Octave compatible alternative to TaesApp
 %   ViewResults             - View the model results in a GUI App
-%   TablesPanel             - Show Tables and Graphs from the Matlab workarea
+%   TablesPanel             - Interactive Table Viewer
 %
-% See also cResultInfo, cThermoeconomicModel.
+% See also cResultSet.

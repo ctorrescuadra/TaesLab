@@ -3,14 +3,15 @@ function res=ShowResults(arg,varargin)
 %   USAGE:
 %       res=ShowResults(arg,options)
 %   INPUT:
-%       arg - cResultInfo or cThermoeconomicModel
+%       arg - cResultSet object
 %       options - an structure contains additional parameters
 %           Table: Name of the table to show. 
 %               If empty print on console all the results tables
-%           Show: Select the way to show the table
+%           View: Select the way to show the table
 %               CONSOLE - show in console (default)
 %               GUI - use uitable
 %               HTML- use web browser
+%           Index: (false/true) Use the Table Index panel to select the tables
 %           ExportAs: Select the VarMode to output the table
 %               NONE - return the cTable object (default)
 %               CELL - return the table as cell array
@@ -29,7 +30,8 @@ function res=ShowResults(arg,varargin)
     p = inputParser;
     p.addRequired('arg',checkModel);
     p.addParameter('Table','',@ischar);
-    p.addParameter('Show',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('Index',false,@islogical);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@ischar);
     try
@@ -40,28 +42,33 @@ function res=ShowResults(arg,varargin)
         return
     end
     param=p.Results;
-    % If table is empty printResults
+    % If table is empty printResults or use TablesPanel
     if isempty(param.Table)
-        printResults(arg);
-        return
-    end
-    % Get table
-    tbl=getTable(arg,param.Table);
-    if ~isValid(tbl)
-        tbl.printLogger;
-        return
-    end
-    % Export the table
-    if nargout>0
-        option=cType.getVarMode(param.ExportAs);
-        res=exportTable(tbl,option);
-    end
-    % View the table
-    option=cType.getTableView(param.Show);
-    showTable(tbl,option);
-    % Save table 
-    if ~isempty(param.SaveAs)
-        log=saveTable(tbl,param.SaveAs);
-        log.printLogger;
+        if param.Index
+            tp=cTablesPanel(param.View);
+            tp.setIndexTable(arg);
+        else
+            printResults(arg);
+        end   
+    else
+    % Select the table to show
+        tbl=getTable(arg,param.Table);
+        if ~isValid(tbl)
+            tbl.printLogger;
+            return
+        end
+        % Export the table
+        if nargout>0
+            option=cType.getVarMode(param.ExportAs);
+            res=exportTable(tbl,option);
+        end
+        % View the table
+        option=cType.getTableView(param.View);
+        showTable(tbl,option);
+        % Save table 
+        if ~isempty(param.SaveAs)
+            log=saveTable(tbl,param.SaveAs);
+            log.printLogger;
+        end
     end
 end

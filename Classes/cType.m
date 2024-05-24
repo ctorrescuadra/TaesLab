@@ -362,6 +362,11 @@ classdef cType
 			res=fieldnames(cType.CostTables);
 		end
 
+		function res=TableViewOptions()
+			% Get a cell array with the Cost Tables Type options
+			res=fieldnames(cType.TableView);
+		end
+
 		function res=DiagnosisOptions()
 		% Get a cell array with the Diagnosis Type options
 			res=fieldnames(cType.DiagnosisMethod);
