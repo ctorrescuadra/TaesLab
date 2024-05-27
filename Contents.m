@@ -10,7 +10,7 @@
 %   ImportDataModel         - Read a data model MAT file previously saved      
 %
 % Get the Thermoeconomic Results
-%   ThermoeconomicTool      - Get the complete thermoeconomic model of a plant
+%   ThermoeconomicModel     - Get the complete thermoeconomic model of a plant
 %   ProductiveStructure     - Show information of productive structure of a plant
 %   ProductiveDiagram       - Get the adjacency tables of the productive structure
 %   DiagramFP               - Get the Diagram FP info of a plant state

@@ -11,6 +11,10 @@ function SaveResults(arg,filename)
 % See also cResultInfo, cThermoeconomicModel or cDataModel
 %
     log=cStatus(cType.VALID);
+    if ~isa(arg,'cResultSet')       
+        log.printError('Usage: SaveResults(res,filename)');
+        return
+    end
     % Check Input parameters
     if (nargin~=2) || ~isText(filename)
         log.printError('Usage: SaveResults(res,filename)');

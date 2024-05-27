@@ -1,9 +1,13 @@
 % recycling_analysis
 % Script to launch function RecyclingAnalysis
-% Generates the adjacency matrix of the Fuel-Product table
+% Generates waste recycling analysis
 % Select the data file model as <folder>_model.<ext>
-% Prompt some parameters interactively
+% Prompt input parameters interactively
+% Output:
+%	res - cResultInfo containing waste analysis info
+%
 % Select data model
+options=struct('Console','Y','Save','N');
 data=selectDataModel();
 if ~data.isValid
     data.printLogger;
@@ -31,5 +35,8 @@ end
 % Get Results
 res=WasteAnalysis(data,param);
 if ~res.isError
-	tbl=outputResults(res);
+	outputResults(res,options);
+	res.printInfo('Results (res) available in Workspace');
+else
+	printLogger(res);
 end

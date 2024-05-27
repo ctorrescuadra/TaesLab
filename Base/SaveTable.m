@@ -20,6 +20,9 @@ function SaveTable(arg,table,filename)
     if isstring(filename)
         filename=convertStringsToChars(filename);
     end
+    if ~isa(table,'cTable')
+        log.printError('Usage: SaveTable(res,table,filename)');
+    end
     log=saveTable(arg,table,filename);
     printLogger(log);
 end

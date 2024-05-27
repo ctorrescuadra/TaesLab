@@ -1,6 +1,6 @@
 classdef (Sealed) cModelResults < cStatusLogger
     %cModelResults is a class container of the model results
-    %   This class store the results of cThermoeconomicTool according to its ResultId
+    %   This class store the results of cThermoeconomicModel according to its ResultId
     %   cModelResults methods:
     %       obj=cModelResults(data)
     %       res=obj.getResults(id)

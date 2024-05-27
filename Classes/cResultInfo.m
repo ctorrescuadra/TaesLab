@@ -14,6 +14,8 @@ classdef cResultInfo < cResultSet
 %       res=obj.getTableIndex(varmode)
 %       obj.showTableIndex(option);
 %       obj.showGraph(name,options)
+%       res=obj.exportTable(table,varmode,format)
+%       res=obj.exportResults(varmode,format)
 %       log=obj.saveResults(filename)
 %       log=obj.saveTable(name,filename)
 %       obj.summaryDiagnosis
@@ -200,6 +202,17 @@ classdef cResultInfo < cResultSet
 
         function res=exportTable(obj,name,varmode,fmt)
         % Export a table using diferent formats.
+        %  Input:
+        %   name - name of the table
+        %   varmode - result type.
+        %       NONE: cTable (default)
+        %       CELL: cell array
+        %       STRUCT: struct array
+        %       TABLE: Matlab table object
+        %   fmt - Format values (false/true)
+        % Output:
+        %   res - Table values in the required format
+        %
             res=[];
             narginchk(3,4);
             if (nargin<4)
@@ -209,6 +222,27 @@ classdef cResultInfo < cResultSet
             if isValid(tbl)
                 res=tbl.exportTable(varmode,fmt);
             end
+        end
+
+        function res=exportResults(obj,varmode,fmt)
+        % Export result tables into a structure using diferent formats.
+        %  Input:
+        %   name - name of the table
+        %   varmode - result type.
+        %       NONE: cTable (default)
+        %       CELL: cell array
+        %       STRUCT: struct array
+        %       TABLE: Matlab table object
+        %   fmt - Format values (false/true)
+        %  Output:
+        %   res - structure with the tables in the required format
+        %
+            if nargin==2
+                fmt=false;
+            end
+            names=obj.getListOfTables;
+            tables=cellfun(@(x) exportTable(obj,x,varmode,fmt),names,'UniformOutput',false);
+            res=cell2struct(tables,names,1);
         end
 
         %%%

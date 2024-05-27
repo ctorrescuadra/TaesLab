@@ -1,10 +1,10 @@
-% summary_results
-% Script to launch function SummaryResults
-% Shows summary cost result for different states
+% productive_structure
+% Script to launch function ProductiveStructure
+% Show information about productive structure
 % Select the data file model as <folder>_model.<ext>
 % Prompt input parameters interactively
 % Output:
-%	res - cResultInfo containing Summary Results
+%	res - cResultInfo containing Productive Structure info
 %
 % Select data file model
 options=struct('Console','Y','Save','N');
@@ -15,9 +15,9 @@ if data.isError
 	return
 end
 % Show results
-res=SummaryResults(data);
+res=ProductiveStructure(data);
 if ~res.isError
-	outputResults(res,options);
+	outputResults(res);
 	res.printInfo('Results (res) available in Workspace');
 else
 	printLogger(res);

@@ -1,4 +1,4 @@
-model=ThermoeconomicTool('NH3_model.xlsx','Debug',false,'CostTables','GENERALIZED');
+model=ThermoeconomicModel('NH3_model.xlsx','Debug',false,'CostTables','GENERALIZED');
 rs=model.SampleNames;
 for i=1:numel(rs)
   rfile=strcat('NH3_',rs{i},'.xlsx');

@@ -122,6 +122,8 @@ classdef (Abstract) cTable < cStatusLogger
                 varmode=cType.VarMode.NONE;
             end        
             switch varmode
+                case cType.VarMode.NONE
+                    res=obj;
                 case cType.VarMode.CELL
                     res=obj.Values;
                 case cType.VarMode.STRUCT

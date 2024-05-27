@@ -1,10 +1,13 @@
-% show_thermoeconomic_state
+% thermoeconomic_state
 % Script to launch function ThermoeconomicState
-% Show information about productive structure an exergy of a thermoeconomic state
+% Show information about the exergy values of a thermoeconomic state
 % Select the data file model as <folder>_model.<ext>
-% Prompt some parameters interactively
+% Prompt parameters interactively
+% Output:
+%	res - cResultInfo containing thermoconomic state info
 %
 % Select data file model
+options=struct('Console','Y','Save','N');
 data=selectDataModel();
 if ~data.isValid
   data.printLogger;
@@ -18,6 +21,9 @@ if data.NrOfStates>1
 end
 % Show results
 res=ThermoeconomicState(data,param);
-if res.isValid
-	tbl=outputResults(res);
+if ~res.isError
+	outputResults(res,options);
+	res.printInfo('Results (res) available in Workspace');
+else
+	printLogger(res);
 end

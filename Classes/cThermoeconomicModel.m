@@ -124,7 +124,7 @@ classdef cThermoeconomicModel < cResultSet
         % Construct an instance of the thermoeconomic model
         %   Input:
         %     data - cReadModel object 
-        %     varargin - optional paramaters (see ThermoeconomicTool)
+        %     varargin - optional paramaters (see ThermoeconomicModel)
         %   
             obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
             if ~isa(data,'cDataModel')
