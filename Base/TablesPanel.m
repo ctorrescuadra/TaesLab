@@ -37,7 +37,7 @@ classdef TablesPanel < cTaesLab
             % Create figure
             ss=get(groot,'ScreenSize');
             xsize=ss(3)/4;
-            ysize=ss(4)/1.7;
+            ysize=ss(4)/1.8;
             xpos=0.55*ss(3);
             ypos=(ss(4)-ysize)/2;
             app.fig=figure('visible','off','menubar','none',...
@@ -56,7 +56,7 @@ classdef TablesPanel < cTaesLab
                    'FontWeight','bold',...
                    'horizontalalignment', 'left',...
                    'Position', [0.015 0.95 0.5 0.04]);
-            cw=num2cell([xsize*0.21 xsize*0.64 xsize*0.12]);
+            cw=num2cell([xsize*0.21 xsize*0.64 xsize*0.125]);
             format={'char','char','char'};
             app.table_control = uitable (app.fig,...
                 'ColumnName',{'Table','Description','Graph'},...
@@ -64,7 +64,7 @@ classdef TablesPanel < cTaesLab
                 'ColumnWidth',cw,'ColumnFormat',format,...
                 'FontName','Verdana','FontSize',8,...
                 'CellSelectionCallback',@(src,evt) app.selectTable(src,evt),...
-                'units', 'normalized','position',[0.015 0.01 0.97 0.95]);
+                'units', 'normalized','position',[0.012 0.01 0.978 0.95]);
         end
 
         function setIndexTable(app,res)
