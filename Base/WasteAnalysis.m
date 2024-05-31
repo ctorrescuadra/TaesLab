@@ -76,7 +76,6 @@ function res = WasteAnalysis(data,varargin)
         return
 	end
 	% Compute the Model FPR
-    %mfp=cExergyCost(ex,wd);
     mfp=cExergyCost(ex,wd);
     if ~isValid(mfp)
         mfp.printLogger;
@@ -113,7 +112,7 @@ function res = WasteAnalysis(data,varargin)
             ra=cWasteAnalysis(mfp,true,param.ActiveWaste); 
         end
     else
-        ra=cWasteAnalysis(mfp); 
+        ra=cWasteAnalysis(mfp,false,param.ActiveWaste); 
     end
     % Execute recycling analysis
     if isValid(ra)

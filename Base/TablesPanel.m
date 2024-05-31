@@ -5,12 +5,12 @@ classdef TablesPanel < cTaesLab
 %   Table values could be show in the console, in a web browser or in a uitable.
 %   In addition the current ResultSet could be save into a file using File->Save menu option
 %
-%   Methods:
-%     tp=cTablePanel(option)
-%     tp.setTableIndex(res)
-%     tp.setTableView(option)
+% Methods:
+%   tp=cTablePanel(option)
+%   tp.setTableIndex(res)
+%   tp.setTableView(option)
 %       
-%   See also cResultSet
+% See also cResultSet
 %
     properties(Access=private)
         fig             % Base Figure
@@ -31,9 +31,9 @@ classdef TablesPanel < cTaesLab
         %     HTML: Show the table in a web browser as a HTML table
         %
             if nargin==0
-                option=cType.DEFAULT_TABLEVIEW;
+                option=cType.TableView.CONSOLE;
             end
-            app.tableView=cType.getTableView(option);
+            app.tableView=option;
             % Create figure
             ss=get(groot,'ScreenSize');
             xsize=ss(3)/4;
@@ -55,7 +55,7 @@ classdef TablesPanel < cTaesLab
                    'fontname','Verdana','fontsize',8,...
                    'FontWeight','bold',...
                    'horizontalalignment', 'left',...
-                   'Position', [0.015 0.95 0.5 0.04]);
+                   'Position', [0.015 0.955 0.5 0.04]);
             cw=num2cell([xsize*0.21 xsize*0.64 xsize*0.125]);
             format={'char','char','char'};
             app.table_control = uitable (app.fig,...
@@ -90,9 +90,12 @@ classdef TablesPanel < cTaesLab
         % Set the table view option
         %  Input: 
         %   option - table view options, as in the constructor
-            if cType.checkTableView(option)
-                app.tableView=cType.getTableView(option);
-            end
+                app.tableView=option;
+        end
+
+        function closeApp(app,~,~)
+        % Close callback
+            delete(app.fig);
         end
     end
 
@@ -142,11 +145,6 @@ classdef TablesPanel < cTaesLab
         function hideTable(app)
         % Hide the table panel 
             set(app.fig,'Visible','off')
-        end
-
-        function closeApp(app,~,~)
-        % Close callback
-            delete(app.fig);
         end
     end
 end

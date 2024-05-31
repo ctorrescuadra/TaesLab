@@ -32,6 +32,10 @@ classdef (Sealed) cWasteAnalysis < cResultId
         %       rsd - Resources data
             obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
             % Check mandatory parameters
+            if nargin < 3
+                obj.messageLog(cType.ERROR,'Invalid number of parameters');
+                return
+            end
             if ~isa(fpm,'cExergyCost') || ~fpm.isValid
                 obj.addLogger(fpm);
                 obj.messageLog(cType.ERROR,'Invalid FPR model');
@@ -42,28 +46,20 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 obj.messageLog(cType.ERROR,'Model has NOT waste');
                 return
             end
-            wt=fpm.WasteTable;
-            switch nargin
-            case 1
-                recycling=false;
-                wkey=wt.WasteKeys{1};
-            case 2
-                if ~islogical(recycling)
-                    res.printError('Invalid recycling parameter');
-                    return
-                end
-                wkey=wt.WasteKeys{1};
-            case 3
-                if ~ischar(wkey)
-                    obj.messageLog(cType.ERROR,'Invalid wkey parameters');
-                    return
-                end
-                wid=fpm.WasteTable.getWasteIndex(wkey);
-                if isempty(wid)
-                    res.printError('Invalid waste flow key %s',wkey);
-                    return
-                end
-            case 4
+            if ~islogical(recycling)
+                res.messageLog(cType.ERROR,'Invalid recycling parameter');
+                return
+            end
+            if ~ischar(wkey)
+                obj.messageLog(cType.ERROR,'Invalid wkey parameters');
+                return
+            end
+            wid=fpm.WasteTable.getWasteIndex(wkey);
+            if isempty(wid)
+                res.messageLog(cType.ERROR,'Invalid waste flow key %s',wkey);
+                return
+            end
+            if nargin==4
                 if isa(rsd,'cResourceData') && rsd.isValid
                     obj.isResourceCost=true;
                     obj.generalCost=true;
@@ -74,14 +70,11 @@ classdef (Sealed) cWasteAnalysis < cResultId
                     obj.messageLog(cType.ERROR,'Invalid resource cost data');
                     return
                 end
-            otherwise
-                obj.messageLog(cType.ERROR,'Invalid number of parameters');
-                return
             end
             % Assign object variables
             obj.modelFP=fpm;
             obj.wasteFlow=wkey;
-            obj.wasteTable=wt;
+            obj.wasteTable=fpm.WasteTable;
             obj.Recycling=recycling;
             if recycling
                 obj.recyclingAnalysis;

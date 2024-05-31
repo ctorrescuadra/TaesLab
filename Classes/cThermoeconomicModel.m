@@ -346,6 +346,7 @@ classdef cThermoeconomicModel < cResultSet
         % Set debug control variable
             if islogical(dbg) && (obj.debug~=dbg)
                 obj.debug=dbg;
+                obj.printInfo('Debug is set to %s',upper(log2str(dbg)));
             end
         end
 
@@ -1104,7 +1105,7 @@ classdef cThermoeconomicModel < cResultSet
                 end
                 obj.printDebugInfo('Compute Recycling Analysis: %s',obj.ActiveWaste);
             else
-                ra=cWasteAnalysis(obj.fp1);
+                ra=cWasteAnalysis(obj.fp1,false,obj.ActiveWaste);
             end
             if isValid(ra)
                 param=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);

@@ -12,7 +12,7 @@ classdef TaesTool < handle
 %   - Save variables in the base workspace
 %   - View Result in tables and graphs
 %
-%	USAGE: app=TaesToolPanel;
+%	USAGE: app=TaesTool;
 % See also cThermoeconomicModel
 %
     properties(Access=private)
@@ -35,6 +35,7 @@ classdef TaesTool < handle
 		gr_checkbox     % Select graphic widget
         sr_checkbox     % Summary Results widget
         mn_save         % Save Result menu
+        mn_debug        % Debug menu
         ptindex         % Table Index panel
         menu            % Results Menu cell array widgets
         ptb             % Toolbar cell array widgets
@@ -42,8 +43,10 @@ classdef TaesTool < handle
     end
 
     % Application variables
+    properties(GetAccess=public,SetAccess=private)
+        model   
+    end        % cThermoeconomicModel object
 	properties(Access=private)
-        model           % cThermoeconomicModel object
         stateNames      % State Names
         sampleNames     % Resource Sample names
         wasteFlows      % Waste Flows
@@ -53,6 +56,7 @@ classdef TaesTool < handle
         tableView       % table view option
         tableIndex      % Current table index object
         currentNode     % Current cResultInfo
+        debug           % Debug control
     end
 
     methods
@@ -70,9 +74,9 @@ classdef TaesTool < handle
 		%%%%%%%%%%%%%%%%%%%%%%%%%%
 		% Callback Functions
 		%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % Get data model file callback
 		function getFile(app,~,~)
-		% Get data model file callback
-		% Select file and path
+            % Select file and path
 			app.initInputParameters;
             [file,path]=uigetfile({'*.json;*.csv;*.xlsx;*.xml;*.mat','Suported Data Models'});
 			if file
@@ -87,8 +91,12 @@ classdef TaesTool < handle
 			end
 			% Read and Check Data Model
 			data=checkDataModel(file);
-			if isValid(data) % Activate widgets
-				tm=cThermoeconomicModel(data,'Debug',false);
+            % Activate widgets
+			if isValid(data) 
+                if app.debug
+                    printLogger(data);
+                end
+				tm=cThermoeconomicModel(data,'Debug',app.debug);
 				set(app.mfile_text,'backgroundcolor',[0.95 1 0.95]);
                 app.enableResults(cType.ResultId.PRODUCTIVE_STRUCTURE);
 				app.enableResults(cType.ResultId.THERMOECONOMIC_STATE);
@@ -120,33 +128,32 @@ classdef TaesTool < handle
 				else
 					set(app.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
 				end
-				logtext=' INFO: Valid Data Model';
                 app.ViewIndexTable(tm.getResultInfo)
                 app.model=tm;
             else
 				set(app.mfile_text,'backgroundcolor',[1 0.5 0.5]);
 				logtext=' ERROR: Invalid Data Model. See Console Log';
                 printLogger(data);
+                set(app.log,'string',logtext);
 			end
-			set(app.log,'string',logtext);
         end
 
         function activateSummary(app,~,~)
-		% Get activate Summary callback
+		% Activate Summary callback
 			val=get(app.sr_checkbox,'value');
+            app.model.Summary=val;
+
 			if val
-				app.model.Summary=true;
                 app.enableResults(cType.ResultId.SUMMARY_RESULTS);
                 app.ViewIndexTable(app.model.summaryResults);
 			else
-				app.model.Summary=false;
-                app.disableResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
+                app.disableResults(cType.ResultId.SUMMARY_RESULTS);
                 app.ViewIndexTable(app.model.getResultInfo);
 			end
         end
 
         function activateRecycling(app,~,~)
-		% Get activate Summary callback
+		% Activate Recycling callback
 			val=get(app.ra_checkbox,'value');
             app.model.Recycling=val;
             if val
@@ -165,7 +172,7 @@ classdef TaesTool < handle
         end
 
         function getTableView(app,~,~)
-        % Select Cost Table callback
+        % Select Table View callback
             pos=get(app.tv_popup,'value');
             app.tableView=pos;
         end
@@ -188,7 +195,7 @@ classdef TaesTool < handle
         end
 
         function getReferenceState(app,~,~)
-		% Get state callback
+		% Get reference state callback
 			ind=get(app.state_popup,'value');
 			app.model.ReferenceState=app.stateNames{ind};
             if app.model.isDiagnosis
@@ -213,7 +220,7 @@ classdef TaesTool < handle
         end
 
 		function getDiagnosisMethod(app,~,~)
-		% Get WasteDiagnosis callback
+		% Get Diagnosis Method callback
             values=get(app.tdm_popup,'string');
             pos=get(app.tdm_popup,'value');
 			app.model.DiagnosisMethod=values{pos};
@@ -227,7 +234,7 @@ classdef TaesTool < handle
         end
 
         function getActiveWaste(app,~,~)
-        % Get WasteDiagnosis callback
+        % Get ActiveWaste callback
             values=get(app.wf_popup,'string');
             pos=get(app.wf_popup,'value');
             app.model.ActiveWaste=values{pos};
@@ -246,9 +253,11 @@ classdef TaesTool < handle
                 if isValid(slog)
 				    app.resultFile=file;
 				    set(app.ofile_text,'string',file);
-				    logtext=sprintf(' INFO: %s saved in file %s',res.ResultName, file);			    
+				    logtext=sprintf(' INFO: %s saved in file %s',res.ResultName, file); 
+                    printInfo(app.model,'Result %s saved in file %s',res.ResultName, file);
                 else
                     logtext=sprintf(' ERROR: Result file %s could NOT be saved', file);
+                    printError(app.model,'Result file %s could NOT be saved', file);
                 end
                 set(app.log,'string',logtext);
             end
@@ -258,14 +267,13 @@ classdef TaesTool < handle
         % Show Index Table callback
             set(app.log,'string','');
             idx=get(src,'UserData');
-            res=app.model.getResultInfo(idx);
+            res=getResultInfo(app.model,idx);
             if ~isempty(res) && res.isValid
                 app.ViewIndexTable(res);
-                logtext=sprintf(' INFO: Show %s tables',res.ResultName);
 			else
-				logtext=sprintf('ERROR: Result %s is not available',res.ResultName);
+				logtext=sprintf('ERROR: Result %s is not available',cType.ResultVar{idx});
+                set(app.log,'string',logtext);
             end
-			set(app.log,'string',logtext);
         end
 
         function getResult(app,src,~)
@@ -279,7 +287,7 @@ classdef TaesTool < handle
                 assignin('base', varname, res);
                 logtext=sprintf(' INFO: Results store in %s',varname);
 			else
-				logtext=sprintf('ERROR: Result %s is not available',res.ResultName);
+				logtext=sprintf('ERROR: Result %s is not available',cType.ResultVar{idx});
             end
 			set(app.log,'string',logtext);
         end
@@ -307,13 +315,22 @@ classdef TaesTool < handle
             end
             idx=indices(1);
             tbl=app.tableIndex.Content{idx};
-
             sg=(indices(2)==cType.GRAPH_COLUMN);
             if tbl.isGraph && sg
                 graph=app.tableIndex.RowNames{idx};
                 showGraph(app.currentNode,graph);
             else
                 showTable(tbl,app.tableView);
+            end
+        end
+
+        function setDebug(app,evt,~)
+        % Menu Debug callback
+            val=get(evt,'checked');
+            [nv1,app.debug]=switchOnOff(val);
+            set(evt,'checked',nv1);
+            if isValid(app.model)
+                setDebug(app.model,app.debug);
             end
         end
 
@@ -339,6 +356,8 @@ classdef TaesTool < handle
             set(app.table_control,'Data',data);
             app.tableIndex=tbl;
             app.currentNode=res;
+            logtext=sprintf(' INFO: Show %s tables',res.ResultName);
+            set(app.log,'string',logtext);
         end
 
         function disableResults(app,id)
@@ -360,16 +379,15 @@ classdef TaesTool < handle
         % Create Figure Components
 			% Determine the scale depending on screen size
             ss=get(groot,'ScreenSize');
-            xsize=ss(3)/1.8;
-            ysize=ss(4)/1.8;
+            xsize=900; ysize=500;
             xpos=(ss(3)-xsize)/2;
             ypos=(ss(4)-ysize)/2;
-            
             % Create figure
             hf=figure('visible','off','menubar','none',...
 			          'name','Thermoeconomic Analysis Panel',...
-                      'numbertitle','off','color',[0.96 0.96 0.96],...
-                      'resize','off','Position',[xpos,ypos,xsize,ysize]);
+                      'numbertitle','off','color',[0.94 0.94 0.94],...
+                      'resize','off','Position',[xpos,ypos,xsize,ysize],...
+                      'CloseRequestFcn',@app.closeApp);
 
             % Tool Bar
 			tb = uitoolbar(hf);
@@ -392,6 +410,10 @@ classdef TaesTool < handle
 				'callback', @(src,evt) app.getFile(src,evt));
             app.mn_save=uimenu (f,'label','Save','accelerator', 's',...
                 'callback', @(src,evt) app.saveResult(src,evt));
+            app.debug=true;
+            app.mn_debug=uimenu (f,'label','Debug','accelerator','d',...,
+                'enable','on','checked','on',...
+                'callback',@(src,evt) app.setDebug(src,evt));
             uimenu (f, 'label', 'Close', 'accelerator', 'q', ...
 				'callback', @(src,evt) app.closeApp(src,evt));
             app.menu=cell(1,cType.MAX_RESULT_INFO);
@@ -578,6 +600,8 @@ classdef TaesTool < handle
 					'callback', @(src,evt) app.activateSummary(src,evt),...
 					'position', [0.44 0.335 0.47 0.045]);
 
+            app.outputFileName=[cType.RESULT_FILE,'.xlsx'];
+            app.resultFile=[pwd,filesep,app.outputFileName];
 			app.ofile_text = uicontrol (p1,'style', 'text',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',10,...
@@ -632,8 +656,6 @@ classdef TaesTool < handle
 
 		function initInputParameters(app)
 		    % Initialize widgets
-            app.outputFileName=[cType.RESULT_FILE,'.xlsx'];
-		    app.resultFile=[pwd,filesep,app.outputFileName];
 			set(app.mfile_text,'backgroundcolor',[1 0.5 0.5]);
             set(app.mn_save,'enable','off');
 			set(app.save_buttom,'enable','off');
@@ -653,6 +675,7 @@ classdef TaesTool < handle
             app.tableView=cType.TableView.CONSOLE;
             app.tableIndex=[];
             app.currentNode=[];
+            app.model=cStatus(false);
             for i=1:cType.MAX_RESULT_INFO
                 app.disableResults(i);
             end
