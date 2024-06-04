@@ -3,7 +3,10 @@ function res = SummaryResults(data,varargin)
 %   USAGE:
 %       res=SummaryResults(data)
 %   INPUT:
-%       data - cReadModel object containing the data model 
+%       data - cReadModel object containing the data model
+%   	options - Structure contains additional parameters (optional)
+%           Show -  Show results on console (true/false)
+%           SaveAs - Save results in an external file
 %   OUTPUT:
 %       res - cResultInfo object with the summary results
 %          It contains the following tables:

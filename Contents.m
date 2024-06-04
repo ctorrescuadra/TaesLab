@@ -1,5 +1,5 @@
 % Thermoeconomic Analysis Toolbox
-% Version 1.6 (R2023b) 23-May-2024
+% Version 1.6 (R2024a) 03-Jun-2024
 %
 % Apps
 %   TaesApp                 - TaesLab App.
@@ -39,6 +39,7 @@
 % GUI functions
 %   TaesTool                - Octave compatible alternative to TaesApp
 %   ViewResults             - View the model results in a GUI App
-%   TablesPanel             - Interactive Table Viewer
+%   ResultsPanel            - Interactive Results Viewer
+%   TaesPanel               - Select parameters for Thermoeconomic Model
 %
 % See also cResultSet.

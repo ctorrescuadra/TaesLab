@@ -50,6 +50,10 @@ classdef cDataModel < cResultSet
         ModelInfo               % cResultInfo data model tables from cReadModel interface
         ModelFile               % Name of the model filename used by the cReadModel interface
         ModelName               % Name of the model
+        ResultId                % ResultId
+        ResultName              % Result Name (cResultId)
+        State                   % State Name (cResultId)
+        DefaultGraph            % Default Graph (cResultId)
     end
 
     methods
@@ -148,7 +152,13 @@ classdef cDataModel < cResultSet
             % Set object properties
             obj.ModelData=data;
             obj.ModelFile=rdm.ModelFile;
+            % Set ResultId properties
+            obj.ResultId=cType.ResultId.DATA_MODEL;
+            obj.ResultName=cType.Results{obj.ResultId};
             obj.ModelName=rdm.ModelName;
+            obj.State='DATA_MODEL';
+            obj.DefaultGraph='';
+            % Get the cResultInfo object
             if rdm.isTableModel
                 obj.ModelInfo=rdm.getTableModel;
             else
@@ -531,8 +541,7 @@ classdef cDataModel < cResultSet
 				    tables.(sheet)=tbl;
                 end
             end
-		    info=cResultId(cType.ResultId.DATA_MODEL);
-            res=cResultInfo(info,tables);
+            res=cResultInfo(obj,tables);
             res.setProperties(obj.ModelName,'DATA_MODEL')
         end
     end

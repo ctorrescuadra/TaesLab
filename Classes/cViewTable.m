@@ -1,16 +1,11 @@
-classdef cViewTable < cStatusLogger
-% cViewTable view individual tables in uitable windows
-% It is used as interface of cTableResult by means of function:
-% 	showTable(tbl,state)
+classdef cViewTable < cTaesLab
+% cViewTable shows a table of results via GUI (uitable)
+% 	called by showTable/cTable method with GUI option
 % Methods:
 % 	obj=cViewTable(tbl,state)
 %   obj.showTable
 	properties (Access=private)
 		hf			% uifigure object
-		xpos       	% X coordinates for position
-		ypos       	% Y coordinates for position
-		xsize      	% X window size
-		ysize      	% Y window size
 		colWidth 	% Width of columns
 		descr      	% Table description
 		data       	% Table data
@@ -26,17 +21,16 @@ classdef cViewTable < cStatusLogger
 		% cViewTable - object constructor
 		% 	Input:
 		%	 tbl - cResultTable object
-		%    state - Thermoeconomic state name
-			obj=obj@cStatusLogger(cType.VALID);
+		%
 			% Parameters depending of software platform
 			if isOctave
-				param=struct('ColumnScale',8,'RowWidth',20,'xMin',240,...
-					'xScale',0.8,'yScale',0.8,'xoffset',10,'yoffset',10,...
-					'FontName','Consolas','FontSize',10);
+				param=struct('ColumnScale',8,'RowWidth',21,'xMin',160,...
+					'xScale',0.8,'yScale',0.8,'xoffset',4,'yoffset',2,...
+					'FontName','Verdana','FontSize',8);
 			else
-				param=struct('ColumnScale',7,'RowWidth',23,'xMin',240,...
-				'xScale',0.8,'yScale',0.8,'xoffset',12,'yoffset',23,...
-				'FontName','FixedWidth','FontSize',12);
+				param=struct('ColumnScale',8,'RowWidth',23,'xMin',160,...
+					'xScale',0.8,'yScale',0.8,'xoffset',12,'yoffset',2,...
+					'FontName','Verdana','FontSize',8);
 			end
 			% Set object properties
 			obj.rowNames=tbl.RowNames;
@@ -49,22 +43,17 @@ classdef cViewTable < cStatusLogger
 			% Set the window size and position
 			ss=get(groot,'ScreenSize');
 			xs=min(param.xScale*ss(3),sum(wcol)+param.xoffset);
-			obj.xsize=max(param.xMin,xs);
-			obj.ysize=min(param.yScale*ss(4),(tbl.NrOfRows+1)*param.RowWidth+param.yoffset);	
-			obj.xpos=(ss(3)-obj.xsize)/2;
-			obj.ypos=(ss(4)-obj.ysize)/2;
+			ys=max(tbl.NrOfRows,2)*param.RowWidth;
+			xsize=max(param.xMin,xs);
+			ysize=min(param.yScale*ss(4),ys+param.yoffset);	
+			xpos=(ss(3)-obj.xsize)/2;
+			ypos=(ss(4)-obj.ysize)/2;
 			obj.colWidth=num2cell(wcol(2:end));
 			obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
             obj.data=tbl.formatData;
-			if isOctave
-				obj.hf=figure('visible','off','menubar','none','toolbar','none',...
-					'name',obj.descr,'numbertitle','off',...
-					'position',[obj.xpos,obj.ypos,obj.xsize,obj.ysize]);
-			else
-				obj.hf=uifigure('visible','off','menubar','none','toolbar','none',...
-					'name',obj.descr,'numbertitle','off',...
-					'position',[obj.xpos,obj.ypos,obj.xsize,obj.ysize]);
-			end
+			obj.hf=figure('visible','off','menubar','none','toolbar','none',...
+				'name',obj.descr,'numbertitle','off',...
+				'position',[xpos,ypos,xsize,ysize]);
 		end
 
 		function showTable(obj)

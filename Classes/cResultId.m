@@ -4,7 +4,7 @@ classdef cResultId < cStatusLogger
 %	cRecyclingAnalysis, cDiagramFP, cWasteData and cSummaryResults
 %
 	properties(GetAccess=public,SetAccess=protected)
-		ResultId=cType.ResultId.DATA_MODEL % Result Id
+		ResultId     % Result Id
 		ResultName   % Result Name
         ModelName    % Model Name
         State        % State Name
@@ -14,8 +14,8 @@ classdef cResultId < cStatusLogger
 	methods
 		function obj = cResultId(id)
         % Class constructor
-		% 	Input:
-		%		id - Result identifier. See cType.ResultId
+		%  Input:
+		%	id - Result identifier. See cType.ResultId
             if (nargin==1) &&isscalar(id) && isnumeric(id)
 				N=length(cType.Results);
 				if any (id==1:N)

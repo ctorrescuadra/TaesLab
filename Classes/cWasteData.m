@@ -13,7 +13,7 @@ classdef cWasteData < cStatusLogger
 		TypeId      	% Waste Type Id
 		Values      	% Waste Allocation values
 		RecycleRatio    % Recycle Ratio
-		ps              % Productive Structure Handler
+		ps              % Productive Structure handler
 	end
     
 	methods

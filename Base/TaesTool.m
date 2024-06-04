@@ -1,4 +1,4 @@
-classdef TaesTool < handle
+classdef TaesTool < cTaesLab
 % Graphic user interface to select the thermoeconomic model parameters.
 % Compatible App for Matlab/Octave
 % Execute the basic functions of class cThermoeconomicModel:
@@ -327,7 +327,7 @@ classdef TaesTool < handle
         function setDebug(app,evt,~)
         % Menu Debug callback
             val=get(evt,'checked');
-            [nv1,app.debug]=switchOnOff(val);
+            [nv1,app.debug]=toggleState(val);
             set(evt,'checked',nv1);
             if isValid(app.model)
                 setDebug(app.model,app.debug);

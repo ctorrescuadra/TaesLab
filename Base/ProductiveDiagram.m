@@ -12,6 +12,7 @@ function res=ProductiveDiagram(data,varargin)
 %		The following tables are obtained
 %		  	fat - Flows adjacency matrix
 %         	pat - Productive adjacency matrix
+%           fpat - Flow-Process adjacency matrix
 % See also cReadModel, cProductiveStructure, cResultInfo
 %
 	res=cStatusLogger();

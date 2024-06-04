@@ -72,8 +72,9 @@ classdef (Abstract) cTable < cStatusLogger
                 showTableGUI(obj)
             case cType.TableView.HTML
                 showTableHTML(obj)
+            otherwise
+                obj.printWarning('Invalid Table View option');
             end
-
         end
         
         function log = saveTable(obj,filename)

@@ -9,7 +9,7 @@ function SaveTable(arg,table,filename)
 %       arg - cResultSet object
 %       table - table name
 %       filename - name of the output file (with extension)
-% See also cResultInfo, cThermoeconomicModel or cDataModel
+% See also cResultSet
 %
     log=cStatus(cType.VALID);
     % Check Input parameters

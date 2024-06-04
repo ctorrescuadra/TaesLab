@@ -1,13 +1,13 @@
-classdef TablesPanel < cTaesLab
-% cTablesPanel is a GUI class that let to show the results interactively
+classdef ResultsPanel < cTaesLab
+% cResultsPanel is a GUI class that let to show the results interactively
 %   The class create a figure panel and show the Index Table of the selected cResultSet
 %   From the Index Table you can select the table or graphic to show.
 %   Table values could be show in the console, in a web browser or in a uitable.
 %   In addition the current ResultSet could be save into a file using File->Save menu option
 %
 % Methods:
-%   tp=cTablePanel(option)
-%   tp.setTableIndex(res)
+%   tp=ResultsPanel(option)
+%   tp.setResults(res)
 %   tp.setTableView(option)
 %       
 % See also cResultSet
@@ -17,12 +17,11 @@ classdef TablesPanel < cTaesLab
         tname           % Table label
         table_control   % uitable component
         tableIndex      % cTableIndex of the results
-        activeTable     % Current table to show
         resultInfo      % Result Info object
         tableView       % View Table option
     end
     methods
-        function app=TablesPanel(option)
+        function app=ResultsPanel(option)
         % Built an instance of the object
         %  Input:
         %   option - Table View option
@@ -41,9 +40,10 @@ classdef TablesPanel < cTaesLab
             xpos=0.55*ss(3);
             ypos=(ss(4)-ysize)/2;
             app.fig=figure('visible','off','menubar','none',...
-                'name','TablesPanel',...
+                'name','Results Panel',...
                 'numbertitle','off','color',[0.94 0.94 0.94],...
-                'resize','on','Position',[xpos,ypos,xsize,ysize]);
+                'resize','on','Position',[xpos,ypos,xsize,ysize],...
+                'CloseRequestFcn',@app.closeApp);
             f=uimenu (app.fig,'label', '&File', 'accelerator', 'f');
             uimenu (f, 'label', 'Close', 'accelerator', 'q',...
                     'callback', @(src,evt) app.closeApp);
@@ -67,7 +67,7 @@ classdef TablesPanel < cTaesLab
                 'units', 'normalized','position',[0.012 0.01 0.978 0.95]);
         end
 
-        function setIndexTable(app,res)
+        function setResults(app,res)
         % get the table index of a result set and show the table panel
         %  Input:
         %   res - cResultSet 
@@ -83,14 +83,14 @@ classdef TablesPanel < cTaesLab
             set(app.table_control,'Data',data);
             app.tableIndex=tbl;
             app.resultInfo=res;
-            app.showTable;
+            app.viewTable;
         end
 
         function setTableView(app,option)
         % Set the table view option
         %  Input: 
         %   option - table view options, as in the constructor
-                app.tableView=option;
+            app.tableView=option;
         end
 
         function closeApp(app,~,~)
@@ -107,13 +107,13 @@ classdef TablesPanel < cTaesLab
                 return
             end
             idx=indices(1);
-            app.activeTable=app.tableIndex.Content{idx};
+            tbl=app.tableIndex.Content{idx};
             sg=(indices(2)==cType.GRAPH_COLUMN);
-            if app.activeTable.isGraph && sg
+            if tbl.isGraph && sg
                graph=app.tableIndex.RowNames{idx};
                showGraph(app.resultInfo,graph);
             else
-                showTable(app.activeTable,app.tableView);
+                showTable(tbl,app.tableView);
             end
         end
 
@@ -136,7 +136,7 @@ classdef TablesPanel < cTaesLab
             end
         end
 
-        function showTable(app)
+        function viewTable(app)
         % Show the table panel on top window
             set(app.fig,'Visible','on');
             figure(app.fig);

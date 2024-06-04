@@ -1,4 +1,4 @@
-classdef ThermoeconomicPanel < handle
+classdef TaesPanel < cTaesLab
 % Graphic user interface to select the thermoeconomic model parameters.
 % Compatible App for Matlab/Octave
 % Execute the basic functions of class cThermoeconomicModel:
@@ -54,7 +54,7 @@ classdef ThermoeconomicPanel < handle
         outputFileName  % Sort output file name
         tableView       % table view option
         tableIndex      % Current table index object
-        tablePanel      % TablesPanel object
+        resPanel      % ResultsPanel object
         currentNode     % Current cResultInfo
         debug           % Control debug mode
         console         % Console mode
@@ -62,7 +62,7 @@ classdef ThermoeconomicPanel < handle
 
     methods
         % TaesTool constructor
-        function app=ThermoeconomicPanel()
+        function app=TaesPanel()
             % Initialize application variabbles
 			app.model=cStatusLogger();
             % Create GUI components
@@ -174,7 +174,7 @@ classdef ThermoeconomicPanel < handle
         % Select Cost Table callback
             pos=get(app.tv_popup,'value');
             app.tableView=pos-1;
-            app.tablePanel.setTableView(app.tableView);
+            app.resPanel.setTableView(app.tableView);
         end
 
 		function getState(app,~,~)
@@ -307,7 +307,7 @@ classdef ThermoeconomicPanel < handle
         function setDebug(app,evt,~)
         % Menu Debug callback
             val=get(evt,'checked');
-            [nv1,app.debug]=switchOnOff(val);
+            [nv1,app.debug]=toggleState(val);
             set(evt,'checked',nv1);
             if isValid(app.model)
                 setDebug(app.model,app.debug);
@@ -317,7 +317,7 @@ classdef ThermoeconomicPanel < handle
         function showConsole(app,evt,~)
         % Menu Console callback
             val=get(evt,'checked');
-            [nv1,app.console]=switchOnOff(val);
+            [nv1,app.console]=toggleState(val);
             set(evt,'checked',nv1);
         end
 
@@ -329,7 +329,7 @@ classdef ThermoeconomicPanel < handle
 
         function closeApp(app,~,~)
         % Close callback
-            app.tablePanel.closeApp;
+            app.resPanel.closeApp;
             delete(app.fig);
         end
 
@@ -339,7 +339,7 @@ classdef ThermoeconomicPanel < handle
         function ViewIndexTable(app,res)
         % View the index table into the table panel
             if app.tableView
-                app.tablePanel.setIndexTable(res);
+                app.resPanel.setIndexTable(res);
             elseif app.console
                 showResults(res);
             end
@@ -368,7 +368,7 @@ classdef ThermoeconomicPanel < handle
 			% Determine the scale depending on screen size
             ss=get(groot,'ScreenSize');
             xsize=400; ysize=500;
-            xpos=ss(3)/3;
+            xpos=ss(3)/2-xsize;
             ypos=(ss(4)-ysize)/2;
             % Create figure
             hf=figure('visible','off','menubar','none',...
@@ -622,7 +622,7 @@ classdef ThermoeconomicPanel < handle
 			set(hf,'visible','on');
             app.fig=hf;
             % Assing Table Index Panel
-            app.tablePanel=TablesPanel(cType.TableView.NONE);
+            app.resPanel=ResultsPanel(cType.TableView.NONE);
         end
 
 		function initInputParameters(app)

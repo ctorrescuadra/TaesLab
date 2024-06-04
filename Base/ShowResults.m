@@ -30,7 +30,7 @@ function res=ShowResults(arg,varargin)
     p = inputParser;
     p.addRequired('arg',checkModel);
     p.addParameter('Table','',@ischar);
-    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('View',cType.TableView.CONSOLE,@cType.checkTableView);
     p.addParameter('Index',false,@islogical);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@ischar);
@@ -42,11 +42,11 @@ function res=ShowResults(arg,varargin)
         return
     end
     param=p.Results;
-    % If table is empty printResults or use TablesPanel
+    % If table is empty printResults or use ResultsPanel
     if isempty(param.Table)
         if param.Index
-            tp=cTablesPanel(param.View);
-            tp.setIndexTable(arg);
+            tp=ResultsPanel(param.View);
+            tp.setResults(arg);
         else
             printResults(arg);
         end   

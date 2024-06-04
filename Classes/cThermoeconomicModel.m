@@ -17,8 +17,8 @@ classdef cThermoeconomicModel < cResultSet
 %       obj.setDiagnosisMethod(value)
 %       obj.setActiveWaste(value)
 %       obj.setRecycling(value)
-%       obj.setDebug(value)
 %       obj.setSumary(value)
+%       obj.setDebug(value)
 %   Results Info Methods
 %       res=obj.productiveStructure
 %       res=obj.termoeconomicState(state)
@@ -46,6 +46,7 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.getModelResults
 %   Tables Info Methods
 %       res=obj.getTablesDirectory
+%       res=obj.showTablesDirectory
 %       res=obj.getTableInfo(name)
 %       res=obj.getResultInfoTable(name)
 %       res=obj.getTable(name,options)
@@ -91,6 +92,9 @@ classdef cThermoeconomicModel < cResultSet
         WasteFlows          % Names of the waste flows
         ResourceData        % Resource Data object
         ResourceCost        % Resource Cost object
+        ResultId            % ResultId
+        ResultName          % Result Name
+        DefaultGraph        % Default Graph
     end
 
     properties(Access=public)
@@ -142,7 +146,11 @@ classdef cThermoeconomicModel < cResultSet
             % Create Results Container.
             obj.results=cModelResults(data);
             obj.DataModel=data;
+            % Set cResultId properties
+            obj.ResultId=cType.ResultId.RESULT_MODEL;
+            obj.ResultName=cType.Results{obj.ResultId};
             obj.ModelName=data.ModelName;
+            obj.DefaultGraph='';
             % Check optional input parameters
             p = inputParser;
             p.addParameter('State',data.States{1},@ischar);
@@ -1326,7 +1334,7 @@ classdef cThermoeconomicModel < cResultSet
                         tables.(list{i})=dm.Tables.(list{i});
                     end
                 end
-                res=cResultInfo(cResultId(id),tables);
+                res=cResultInfo(obj,tables);
                 res.setProperties(obj.ModelName,obj.State);
                 obj.setResults(res);
             end

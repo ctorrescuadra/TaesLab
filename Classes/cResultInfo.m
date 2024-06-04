@@ -46,7 +46,7 @@ classdef cResultInfo < cResultSet
         %
             % Check parameters
             obj=obj@cResultSet(cType.ClassId.RESULT_INFO);
-            if ~isa(info,'cResultId')
+            if ~isValidResult(info)
                 obj.messageLog(cType.ERROR,'Invalid ResultId object');
                 return
             end
@@ -60,9 +60,7 @@ classdef cResultInfo < cResultSet
             obj.Tables=tables;
             obj.tableIndex=cTableIndex(obj);
             obj.NrOfTables=obj.tableIndex.NrOfRows;
-            if isa(info,'cResultId')
-                obj.setProperties(info.ModelName,info.State);
-            end
+            obj.setProperties(info.ModelName,info.State);
             obj.status=info.status;
         end
 
@@ -237,6 +235,11 @@ classdef cResultInfo < cResultSet
         %  Output:
         %   res - structure with the tables in the required format
         %
+            res=[];
+            if nargin < 2
+                obj.printError('Not enough input arguments');
+                return
+            end
             if nargin==2
                 fmt=false;
             end
@@ -259,7 +262,7 @@ classdef cResultInfo < cResultSet
         %       log - cStatusLogger object with error messages
             log=cStatusLogger(cType.VALID);
             if nargin < 2
-                log.messageLog(cType.ERROR,'No filename provided');
+                log.messageLog(cType.ERROR,'filename missing');
                 return
             end
             if ~isValid(obj)

@@ -43,6 +43,12 @@ classdef cStatus < cTaesLab
 		% Test is class status is Error
 			test=(obj.status==cType.ERROR);
 		end
+
+		function test=isValidResult(obj)
+		% Test if class is ResultId
+			test=(isa(obj,'cResultId') || isa(obj,'cDataModel') || isa(obj,'cThermoeconomicModel'));
+			test=test && isValid(obj);
+		end
 		
 		function printError(obj,varargin)
 		% Print error message
