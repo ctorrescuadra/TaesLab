@@ -1,19 +1,20 @@
 function res=ProductiveDiagram(data,varargin)
-% Get the adjacency tables of the productive structure
-%	USAGE:
-%		res=ProductiveDiagram(data)
-% 	INPUT:
-%		data - cReadModel object containing the data model information
-%   	options - Structure contains additional parameters (optional)
-%           Show -  Show results on console (true/false)
-%           SaveAs - Save results in an external file
-% 	OUTPUT:
-%		res - cResultInfo object containing productive structure info.
-%		The following tables are obtained
-%		  	fat - Flows adjacency matrix
-%         	pat - Productive adjacency matrix
-%           fpat - Flow-Process adjacency matrix
-% See also cReadModel, cProductiveStructure, cResultInfo
+% ProductiveDiagram gets the adjacency tables of the productive structure.
+%  USAGE:
+%   res=ProductiveDiagram(data).
+%  INPUT:
+%   data - ccDataModel object containing the data model information of the plant
+%   options - Structure containing additional parameters (optional)
+%       Show - Show the results in the console (true/false).
+%       SaveAs - Name of the file where the results will be saved. 
+%  OUTPUT:
+%   res - cResultInfo object containing information of the productive structure.
+%   The following tables are obtained:
+%       fat - Flow adjacency matrix
+%       pat - Productive adjacency matrix
+%       fpat - Flow-Process adjacency matrix
+%
+% See also cProductiveDiagram, cResultInfo
 %
 	res=cStatusLogger();
 	checkModel=@(x) isa(x,'cDataModel');

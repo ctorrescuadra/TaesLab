@@ -1,5 +1,5 @@
 function log=exportMAT(obj,filename)
-% exportMAT save an object as MAT file
+% exportMAT save a TaesLab object as MAT file
 %   USAGE:
 %       log=exportMAT(obj, filename)
 %   INPUT:
@@ -13,7 +13,7 @@ function log=exportMAT(obj,filename)
         log.messageLog(cType.ERROR,'Invalid input arguments');
         return
     end
-    if ~isa(obj,'cStatusLogger') || ~isValid(obj)
+    if ~isa(obj,'cTaesLab') || ~isValid(obj)
         log.messageLog(cType.ERROR,'Invalid object to save');
         return
     end

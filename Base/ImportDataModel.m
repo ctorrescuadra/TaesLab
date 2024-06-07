@@ -1,11 +1,13 @@
 function obj = ImportDataModel(filename)
-% ImportDataModel creates a cDataModel object from a previous saved MAT file
-%   USAGE:
-%       obj=ImportDataModel(matfile)
-%	INPUT:
-%		filename - Existing MAT file containing a cDataModel object
-%  	OUTPUT:
-%   	obj - cDataModel object
+% ImportDataModel creates a cDataModel object from a previously saved MAT file.
+%  USAGE:
+% 	obj=ImportDataModel(matfile)
+%  INPUT:
+% 	filename - Existing MAT file containing a cDataModel object
+%  OUTPUT:
+% 	obj - cDataModel object
+%
+% See also cDataModel
 %
     obj=cStatusLogger();
 	% Check input arguments

@@ -1,15 +1,20 @@
 function res=DiagramFP(data,varargin)
-% Get the Diagram FP of a plant State
-%	USAGE:
-%		res=DiagramFP(data, options)
-% 	INPUT:
-%		data - cReadModel Object containing the data information
-%   	option - a structure contains additional parameters (optional)
-%			State - Indicate a state to get exergy values. If not provided, first state is used
-%           Show -  Show results on console (true/false)
-%           SaveAs - Save results in an external file 
+% DiagramFP gets the Diagram FP tables for a plant State
+%  USAGE:
+%	res=DiagramFP(data, options)
+%  INPUT:
+%	data - cReadModel Object containing the data model information
+%   option - a structure contains additional parameters (optional)
+%		State - Indicate a state to get exergy values. 
+%               If it is not provided, the first state is used.
+%       Show -  Show results on console (true/false)
+%       SaveAs - Save results in an external file 
 % 	OUTPUT:
-%		res - cResultInfo object contains the adjacency FP table and additional variables
+%	 res - cResultInfo object contains the FP diagram tables
+%    The following tables are obtained:
+%		atfp - Diagram FP adjacency matrix                                     
+%       atcfp - Cost Diagram FP adjacency matrix
+%      
 % See also cExergyCost, cResultInfo
 %
 	res=cStatusLogger(); 

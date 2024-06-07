@@ -48,7 +48,6 @@ classdef cModelData < cStatusLogger
             res=[];
             if obj.isValid
                 res=obj.dm.ProductiveStructure;
-
             end
         end
     
@@ -82,7 +81,6 @@ classdef cModelData < cStatusLogger
             res=[];
             if obj.isValid
                 res=obj.dm.Format;
- 
             end
         end
 

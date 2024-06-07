@@ -131,12 +131,18 @@ classdef cDiagnosis < cResultId
 
         function res=get.FuelImpact(obj)
         % Get Fuel Impact value
-            res=obj.DFT;
+            res=0;
+            if obj.isValid
+                res=obj.DFT;
+            end
         end
 
         function res=get.TotalMalfunctionCost(obj)
         % Total Malfunction Cost (Internal and External)
-            res=obj.A0;
+            res=0;
+            if obj.isValid
+                res=obj.A0;
+            end
         end
 
         function res=getResultInfo(obj,fmt)

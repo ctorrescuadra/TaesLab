@@ -1,24 +1,34 @@
 function res=ShowResults(arg,varargin)
-% ShowResults shows the tables results, export and save them in diferent format
-%   USAGE:
-%       res=ShowResults(arg,options)
-%   INPUT:
-%       arg - cResultSet object
-%       options - an structure contains additional parameters
-%           Table: Name of the table to show. 
-%               If empty print on console all the results tables
-%           View: Select the way to show the table
-%               CONSOLE - show in console (default)
-%               GUI - use uitable
-%               HTML- use web browser
-%           Index: (false/true) Use the Table Index panel to select the tables
-%           ExportAs: Select the VarMode to output the table
-%               NONE - return the cTable object (default)
-%               CELL - return the table as cell array
-%               STRUCT - return the table as structured array
-%               TABLE - return a matlab table
-%           SaveAs: Save the table in an external file. 
-%               If it is empty the table is not save
+% ShowResults is the console interface to show the results 
+%   Depending on the options you could work with all the results or one specific table
+%   If 'Table' option is not selected it works at results set level
+%   If 'Index' option is selected, the tables to show could be selected via the Results Panel
+%   or displayed on the console.
+%   Results could be exported to diferent variable format with the option 'ExportAs'
+%   and could be saved into a file in diferent formats with the option 'SaveAs'
+%   If 'Table' option is selected the table could be shown in the console, web browser or GUI table
+%   depending the 'View' option.
+%   Individual tables could be also exported or save into file with options 'ExportAs', 'SaveAs'
+%
+% USAGE:
+%   ShowResults(arg,options)
+% INPUT:
+%   arg - cResultSet object
+%   options - an structure contains additional parameters
+%    Table: Name of the table to show. 
+%           If empty print on console all the results tables
+%    View: Select the way to show the table
+%     CONSOLE - show in console (default)
+%     GUI - use uitable
+%     HTML- use web browser
+%    Index: (false/true) Use the Table Index panel to select the tables
+%    ExportAs: Select the VarMode to output the ResultSet/Table
+%     NONE - return the cTable object (default)
+%     CELL - return the table as cell array
+%     STRUCT - return the table as structured array
+%     TABLE - return a matlab table
+%    SaveAs: Save the ResultSet/Table in an external file. 
+%            See SaveResults/SaveTable function
 %   OUTPUT:
 %       res - table object in the format specified in ExportAs
 %  
@@ -30,7 +40,7 @@ function res=ShowResults(arg,varargin)
     p = inputParser;
     p.addRequired('arg',checkModel);
     p.addParameter('Table','',@ischar);
-    p.addParameter('View',cType.TableView.CONSOLE,@cType.checkTableView);
+    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
     p.addParameter('Index',false,@islogical);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@ischar);
@@ -42,16 +52,27 @@ function res=ShowResults(arg,varargin)
         return
     end
     param=p.Results;
-    % If table is empty printResults or use ResultsPanel
+    % If no table is select work with the results set
     if isempty(param.Table)
+        % Export the results
+        if nargout>0
+            option=cType.getVarMode(param.ExportAs);
+            res=exportResults(arg,option);
+        end
+        % Save the Results
+        if ~isempty(param.SaveAs)
+            SaveResults(arg,param.SaveAs);
+        end
+        % Show the Results
         if param.Index
-            tp=ResultsPanel(param.View);
+            option=cType.getTableView(param.View);
+            tp=ResultsPanel(option);
             tp.setResults(arg);
         else
             printResults(arg);
-        end   
+        end
     else
-    % Select the table to show
+    % If table is select work at table level
         tbl=getTable(arg,param.Table);
         if ~isValid(tbl)
             tbl.printLogger;
@@ -62,13 +83,12 @@ function res=ShowResults(arg,varargin)
             option=cType.getVarMode(param.ExportAs);
             res=exportTable(tbl,option);
         end
+        % Save table 
+        if ~isempty(param.SaveAs)
+            SaveTable(tbl,param.SaveAs);
+        end
         % View the table
         option=cType.getTableView(param.View);
         showTable(tbl,option);
-        % Save table 
-        if ~isempty(param.SaveAs)
-            log=saveTable(tbl,param.SaveAs);
-            log.printLogger;
-        end
     end
 end

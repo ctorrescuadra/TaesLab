@@ -1,11 +1,11 @@
 function obj = importMAT(filename)
-% importMAT creates a data model object from a previous saved MAT file
+% importMAT creates a TaesLab object from a previous saved MAT file
 %   USAGE:
 %       obj=importMAT(matfile)
 %	INPUT:
-%		filename - Existing MAT file containing a cDataModel object
+%		filename - Existing MAT file containing a TaesLab object
 %  	OUTPUT:
-%   	obj - cDataModel object
+%   	obj - cTaesLab object
 %
     obj=cStatusLogger;
 	% Check input arguments
@@ -23,7 +23,7 @@ function obj = importMAT(filename)
 		obj.messageLog(cType.ERROR,'Error reading file %s',filename);
 		return
 	end
-	if isValid(var)
+	if isa(var,'cTaesLab') && isValid(var)
         obj=var;
 		obj.clearLogger;
 	else

@@ -1,19 +1,20 @@
 function res=ProductiveStructure(data,varargin)
-% Show information about the productive structure of a plant
-%	USAGE:
-%		res=ProductiveStructure(data,options)
-% 	INPUT:
-%		data - cReadModel object containing the data model information
-%   	options - Structure contains additional parameters (optional)
-%           Show -  Show results on console (true/false)
-%           SaveAs - Save results in an external file
-% 	OUTPUT:
-%		res - cResultInfo object containing productive structure info.
-%		The following tables are obtained
-%		  	flows - Flows definition table
-%         	streams - Streams definition tables
-%         	processes - Processes definition tables
-% See also cReadModel, cProductiveStructure, cResultInfo
+% ProductiveStructure gets the information about the productive structure of the plant
+%  USAGE:
+%   res=ProductiveStructure(data,options)
+%  INPUT:
+%   data - cDataModel object containing the data model information
+%   options - Structure containing additional parameters (optional)
+%       Show - Show the results in the console (true/false)
+%       SaveAs - Name of the file where the results will be saved. 
+%  OUTPUT:
+%	res - cResultInfo object containing the productive structure info.
+%	The following tables are obtained
+%       flows - Flows definition table
+%       streams - Streams definition table
+%       processes - Processes definition table
+%
+% See also cProductiveStructure, cResultInfo
 %
 	res=cStatusLogger();
 	checkModel=@(x) isa(x,'cDataModel');
@@ -31,17 +32,14 @@ function res=ProductiveStructure(data,varargin)
     end
     param=p.Results;
 	% Check data model
-	if data.isError
-		data.printLogger;
-		res.printError('Invalid productive structure. See error log');
-		return
-	end
-	if data.isWarning
-		data.printLogger;
-		res.printWarning('Productive structure is not well defined. See error log');
-	end
+    ps=data.ProductiveStructure;
+    if ~ps.isValid
+        data.printLogger;
+        data.printError('Invalid productive structure. See error log');
+        return
+    end     
 	% Get Productive Structure info
-	res=getResultInfo(data.ProductiveStructure,data.FormatData);
+	res=getResultInfo(ps,data.FormatData);
     % Show and Save results if required
     if param.Show
         printResults(res);

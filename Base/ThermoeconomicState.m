@@ -1,22 +1,23 @@
 function res=ThermoeconomicState(data,varargin)
-% Get the exergy balances and the Fuel-Product table for a plant state
-%	USAGE:
-%		res=ThermoeconomicState(data, options)
-% 	INPUT:
-%		data - cReadModel Object containing the data information
-%   	options - A structure contains additional parameters:
-%			State - Indicate a state to get exergy values.
-%               If not provided, first state is used
-%           Show -  Show results on console (true/false)
-%           SaveAs - Save results in an external file
-% 	OUTPUT:
-%		res - cResultsInfo object contains the results of the exergy analysis for the required state
-%   	The following tables are obtained:
-%		  	eflows - exergy of flows
-%         	estreams - exergy of the streams
-%         	eprocesses - exergy table of the processes
-%         	tfp - Exergy Fuel-Product table
-% See also cReadModel, cProcessModel, cResultInfo
+% ThermoeconomicState gets the exergy balances and the Fuel-Product table for a plant state
+%  USAGE:
+%	res=ThermoeconomicState(data, options)
+%  INPUT:
+%   data - cReadModel Object containing the data information
+%   options - A structure contains additional parameters:
+%    State - Indicate a state to get exergy values.
+%            If not provided, first state is used
+%    Show -  Show results on console (true/false)
+%    SaveAs - Save results in an external file
+%  OUTPUT:
+%   res - cResultsInfo object contains the results of the exergy analysis for the required state
+%   The following tables are obtained:
+%		eflows - exergy of flows
+%       estreams - exergy of the streams
+%       eprocesses - exergy table of the processes
+%       tfp - Exergy Fuel-Product table
+%
+% See also cDataModel, cExergyModel, cResultInfo
 %
 	res=cStatusLogger(); 
 	checkModel=@(x) isa(x,'cDataModel');

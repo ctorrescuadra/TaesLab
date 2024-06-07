@@ -23,6 +23,7 @@ classdef cTableIndex < cTable
                 return
             end
             % Get tables of the results and build table
+            obj.status=cType.VALID;
             tnames=res.getListOfTables;
             obj.ColNames={'Key','Description','Graph'};
             obj.RowNames=tnames';
@@ -38,7 +39,6 @@ classdef cTableIndex < cTable
             obj.Info=res.Info;
             obj.setColumnFormat;
             obj.setColumnWidth;
-            obj.status=cType.VALID;
         end
 
         function setColumnFormat(obj)

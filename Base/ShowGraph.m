@@ -3,18 +3,18 @@ function ShowGraph(arg,varargin)
 %   If a cThermoeconomicModel is used the name of the graph
 %   should be provided. If a cResultInfo is used and the name
 %   of the graph is not provided the default graph is used
-%   Depending on the graph, additional options could be used,
-% 
-%   USAGE:
-%       ShowGraph(arg, param)
-%   INPUT:
-%       arg - cResultSet object
-%       param - options depending on grah type
-%           Graph: Name of the graph
-%			ShowOutput: Use for diagnosis tables
-%			WasteFlow: Waste flow key for waste allocation and recycling
-%			Variables: Use for summary results. 
-%				Cell array with the variables to represent
+%   Depending on the graph, additional options could be used, 
+% USAGE:
+%  	ShowGraph(arg, param)
+% INPUT:
+% 	arg - cResultSet object
+%   param - options depending on grah type
+%   	Graph: Name of the graph
+%		ShowOutput: Use for diagnosis tables
+%		WasteFlow: Waste flow key for waste allocation and recycling
+%		Variables: Use for summary results. 
+%			Cell array with the variables to represent
+%
 % See also cGraphResults
 %
     log=cStatus(cType.VALID);

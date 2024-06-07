@@ -1,25 +1,27 @@
 function res=ThermoeconomicDiagnosis(data,varargin)
-% Compares an operation state of the plant with the reference state, and get the diagnosis tables
-%   USAGE:
-%       res=ThermoeconomicDiagnosis(data, options)     
-%   INPUT:
-% 	    data - cReadModel object containing the thermoeconomic data model
-%       options - a structure contains the additional parameters:
-%           ReferenceState - Reference State for diagnosis. If not provided first state is used.
-%           State - Operation State for diagnosis. If not provided second state is used
-%           DiagnosisMethod - Select the method to compute diagnosis
-%               WASTE_EXTERNAL: Waste are considered output, and method compute cost variation
-%               WASTE_INTERNAL: Waste are allocated to productive units, and method compute Malfunction cost of wastes
-%           Show -  Show results on console (true/false)
-%           SaveAs - Save results in an external file
-%   OUTPUT:
-%       res - cResultInfo object contains the results of thermoeconomic diagnosis.
-%           It contains the following tables
-%               cType.Tables.DIAGNOSIS (dgn)
-%               cType.Tables.MALFUNCTION (mf)
-%               cType.Tables.MALFUNCTION_COST (mfc)
-%               cType.Tables.IRREVERSIBILITY_VARIATION (dit)
-% See also cReadModel, cResultInfo, cDiagnosis
+% ThermoeconomicDiagnosis Compares two states of the plant 
+%   It compares a state with the reference state and gets the diagnosis result tables
+%  USAGE:
+%   res=ThermoeconomicDiagnosis(data, options)     
+%  INPUT:
+% 	data - cReadModel object containing the thermoeconomic data model
+%   options - a structure contains the additional parameters:
+%    ReferenceState - Reference State for diagnosis. If not provided first state is used.
+%    State - Operation State for diagnosis. If not provided second state is used
+%    DiagnosisMethod - Select the method to compute diagnosis
+%       WASTE_EXTERNAL: Waste are considered output, and method compute cost variation
+%       WASTE_INTERNAL: Waste are allocated to productive units, and method compute Malfunction cost of wastes
+%    Show -  Show results on console (true/false)
+%    SaveAs - Save results in an external file
+%  OUTPUT:
+%   res - cResultInfo object contains the results of thermoeconomic diagnosis.
+%   The following tables are obtained:
+%       cType.Tables.DIAGNOSIS (dgn)
+%       cType.Tables.MALFUNCTION (mf)
+%       cType.Tables.MALFUNCTION_COST (mfc)
+%       cType.Tables.IRREVERSIBILITY_VARIATION (dit)
+%
+% See also cDataModel, cDiagnosis, cResultInfo
 %
     res=cStatusLogger();
     % Check input parameters

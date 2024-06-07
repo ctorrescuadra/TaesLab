@@ -46,8 +46,11 @@ classdef cTablesDefinition < cStatusLogger
 
         function res=get.TablesDefinition(obj)
         % Get a struct with the tables properties
-            res=struct('CellTables',obj.cfgTables,'MatrixTables',obj.cfgMatrices,...
-                'SummaryTables',obj.cfgSummary);
+            res=struct();
+            if obj.isValid
+                res=struct('CellTables',obj.cfgTables,'MatrixTables',obj.cfgMatrices,...
+                    'SummaryTables',obj.cfgSummary);
+            end
         end
 
         function res=getTableProperties(obj,name)

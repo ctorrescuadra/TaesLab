@@ -1,4 +1,4 @@
-classdef cViewTable < cTaesLab
+classdef cViewTable < cStatus
 % cViewTable shows a table of results via GUI (uitable)
 % 	called by showTable/cTable method with GUI option
 % Methods:
@@ -46,14 +46,15 @@ classdef cViewTable < cTaesLab
 			ys=max(tbl.NrOfRows,2)*param.RowWidth;
 			xsize=max(param.xMin,xs);
 			ysize=min(param.yScale*ss(4),ys+param.yoffset);	
-			xpos=(ss(3)-obj.xsize)/2;
-			ypos=(ss(4)-obj.ysize)/2;
+			xpos=(ss(3)-xsize)/2;
+			ypos=(ss(4)-ysize)/2;
 			obj.colWidth=num2cell(wcol(2:end));
 			obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
             obj.data=tbl.formatData;
 			obj.hf=figure('visible','off','menubar','none','toolbar','none',...
 				'name',obj.descr,'numbertitle','off',...
 				'position',[xpos,ypos,xsize,ysize]);
+			obj.status=cType.VALID;
 		end
 
 		function showTable(obj)

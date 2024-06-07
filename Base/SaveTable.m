@@ -1,19 +1,18 @@
-function SaveTable(arg,table,filename)
-% SaveResults saves a cResultSet into a file
-%   The type of file depends on the file extension
-%   *.csv, *.xlsx and *.mat are allowed
-%   It calls cResultInfo method saveResults
-%   USAGE:
-%       SaveResults(res,filename)
-%   INPUT:
-%       arg - cResultSet object
-%       table - table name
-%       filename - name of the output file (with extension)
+function SaveTable(table,filename)
+% SaveTable saves a cTable into a file
+%   The file type depends on the filename extension
+%   *.csv, *.xlsx, *.json, *.xml, *.txt, *.html, *.tex and *.mat are allowed
+% USAGE:
+%   SaveResults(res,filename)
+% INPUT:
+%   table - cTable object
+%   filename - name of the output file (with extension)
+%
 % See also cResultSet
 %
     log=cStatus(cType.VALID);
     % Check Input parameters
-    if (nargin~=3) || ~isText(filename)
+    if (nargin~=2) || ~isText(filename)
         log.printError('Usage: SaveTable(res,table,filename)');
         return
     end
@@ -21,8 +20,8 @@ function SaveTable(arg,table,filename)
         filename=convertStringsToChars(filename);
     end
     if ~isa(table,'cTable')
-        log.printError('Usage: SaveTable(res,table,filename)');
+        log.printError('Usage: SaveTable(table,filename)');
     end
-    log=saveTable(arg,table,filename);
+    log=saveTable(table,filename);
     printLogger(log);
 end

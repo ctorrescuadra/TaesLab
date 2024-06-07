@@ -64,74 +64,110 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
         function res=get.FlowKeys(obj)
 		% Get the Flows keys as cell array
-			res={obj.Flows.key};
+			res=[];
+			if obj.isValid
+				res={obj.Flows.key};
+			end
 		end
 
 		function res=get.ProcessKeys(obj)
 		% Get the Processes keys as cell array
-			res={obj.Processes.key};
+			res=[];
+			if obj.isValid
+				res={obj.Processes.key};
+			end
 		end
 
 		function res=get.StreamKeys(obj)
 		% Get the Streams keys as cell array
-			res={obj.Streams.key};
+			res=[];
+			if obj.isValid
+				res={obj.Streams.key};
+			end
         end
 		
 		function res=get.Waste(obj)
 		% Get an array with flows defined as waste.
-			res.flows=find(bitget(obj.flowtypes,cType.WASTE));
-			res.streams=find(bitget(obj.streamtypes,cType.WASTE));
-			res.processes=find(bitget(obj.processtypes,cType.WASTE));
+			res=[];
+			if obj.isValid
+				res.flows=find(bitget(obj.flowtypes,cType.WASTE));
+				res.streams=find(bitget(obj.streamtypes,cType.WASTE));
+				res.processes=find(bitget(obj.processtypes,cType.WASTE));
+			end
 		end
 		
 		function res=get.Resources(obj)
 		% Get a structure with the flows,streams and processes defined as Resources
-			res.flows=find(obj.flowtypes==cType.Flow.RESOURCE);
-			res.streams=[obj.Flows(res.flows).from];
-			ind=[obj.Flows(res.flows).to];
-			res.processes=[obj.Streams(ind).process];
+			res=[];
+			if obj.isValid
+				res.flows=find(obj.flowtypes==cType.Flow.RESOURCE);
+				res.streams=[obj.Flows(res.flows).from];
+				ind=[obj.Flows(res.flows).to];
+				res.processes=[obj.Streams(ind).process];
+			end
 		end
 
 		function res=get.NrOfResources(obj)
 		% Get the number of resources
-			res=sum(obj.flowtypes==cType.Flow.RESOURCE);
+			res=0;
+			if obj.isValid
+				res=sum(obj.flowtypes==cType.Flow.RESOURCE);
+			end
 		end
 
 		function res=get.ProductiveProcesses(obj)
 		% Get a structure with the productive processes
-			id=find(obj.processtypes==cType.Process.PRODUCTIVE);
-			res.key={obj.Processes(id).key};
-            res.id=id;
+			res=[];
+			if obj.isValid
+				id=find(obj.processtypes==cType.Process.PRODUCTIVE);
+				res.key={obj.Processes(id).key};
+            	res.id=id;
+			end
 		end
 
 		function res=get.FinalProducts(obj)
 	    % Get a structure with the flows,streams and processes defined as Final Products
-			res.flows=find(obj.flowtypes==cType.Flow.OUTPUT);
-			res.streams=[obj.Flows(res.flows).to];
-			ind=[obj.Flows(res.flows).from];
-			res.processes=[obj.Streams(ind).process];
+			res=[];
+			if obj.isValid
+				res.flows=find(obj.flowtypes==cType.Flow.OUTPUT);
+				res.streams=[obj.Flows(res.flows).to];
+				ind=[obj.Flows(res.flows).from];
+				res.processes=[obj.Streams(ind).process];
+			end
 		end
 
 		function res=get.NrOfFinalProducts(obj)
 		% Get the number of final product
-			res=numel(find(obj.flowtypes==cType.Flow.OUTPUT));
+			res=0;
+			if obj.isValid
+				res=numel(find(obj.flowtypes==cType.Flow.OUTPUT));
+			end
 		end
 
 		function res=get.SystemOutput(obj)
 		% Get a structure with the flows, streams and processes defined as System Output
-            res.flows=[obj.FinalProducts.flows,obj.Waste.flows];
-            res.streams=[obj.FinalProducts.streams,obj.Waste.streams];
-            res.processes=[obj.FinalProducts.processes,obj.Waste.processes];
+			res=[];
+			if obj.isValid
+            	res.flows=[obj.FinalProducts.flows,obj.Waste.flows];
+            	res.streams=[obj.FinalProducts.streams,obj.Waste.streams];
+            	res.processes=[obj.FinalProducts.processes,obj.Waste.processes];
+			end
         end
 
 		function res=get.NrOfSystemOutput(obj)
 		% Get the number of system output
-			res=obj.NrOfFinalProducts+obj.NrOfWastes;
+			res=0;
+			if obj.isValid
+				res=obj.NrOfFinalProducts+obj.NrOfWastes;
+			end
 		end
 
         function res=get.FlowStreamEdges(obj)
         % Get a structure array with the stream edges of the flows
-            res=struct('from',[obj.Flows.from],'to',[obj.Flows.to]);
+			res=[];
+			if obj.isValid
+            	res=struct('from',[obj.Flows.from],'to',[obj.Flows.to]);
+			end
         end
 
 		function res=getResultInfo(obj,fmt)

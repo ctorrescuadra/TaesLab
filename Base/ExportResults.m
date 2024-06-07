@@ -1,19 +1,20 @@
 function res = ExportResults(arg,varargin)
-% ShowResults shows the tables results, export and save them in diferent format
-%   USAGE:
-%       res=ShowResults(arg,options)
-%   INPUT:
-%       arg - cResultSet object
-%       options - an structure contains additional parameters
-%           Table: Name of the table to show. 
-%           ExportAs: Select the VarMode to output the table
-%               NONE - return the cTable object (default)
-%               CELL - return the table as cell array
-%               STRUCT - return the table as structured array
-%               TABLE - return a matlab table
-%           Format: true/false. Use table formatted
-%   OUTPUT:
-%       res - table object in the format specified in ExportAs
+% ExportResults exports the results tables to different formats.
+%  USAGE:
+%   res=ExportResults(arg,options)
+%  INPUT:
+%   arg - cResultSet object
+%   options - a structure containing additional parameters (optional)
+%       Table: Name of the table to export. If it is not selected a structure with all
+%              results tables is created
+%       ExportAs: Selects the output VarMode of the table/s.
+%        NONE - returns the cTable object (default).
+%        CELL - returns the table as an array of cells.
+%        STRUCT - returns the table as a structured array.
+%        TABLE - returns a matlab table object.
+%       Format: true/false. Use table format
+%  OUTPUT:
+%   res - Table/s in the format specified by ExportAs.
 %  
 % See also cResultSet
 %

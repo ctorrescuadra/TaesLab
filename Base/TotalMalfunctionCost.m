@@ -1,12 +1,13 @@
 function tbl = TotalMalfunctionCost(arg)
 % TotalMalfunctionCost shows a table with the detailed breakdown
-% of the total malfunction cost index
-%   Usage: 
-%       TotalMalfunctionCost(res)
-%   Input:
-%       arg - cResultSet with diagnosis information
-%   Output:
-%       tbl - cTableMatrix with the results
+%   of the total malfunction cost indicator
+%  USAGE: 
+%   TotalMalfunctionCost(res)
+%  INPUT:
+%   arg - cResultSet with diagnosis information
+%  OUTPUT:
+%   tbl - cTableMatrix with the results
+%
 % See also cDiagnosis
 %
     % Check Parameters

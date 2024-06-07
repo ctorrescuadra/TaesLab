@@ -95,46 +95,73 @@ classdef cExergyModel < cResultId
     
 		function res=get.FuelExergy(obj)
 		% get the fuel exergy of processes
-			res=obj.ProcessesExergy.vF(1:end-1);
+			res=[];
+			if obj.isValid
+				res=obj.ProcessesExergy.vF(1:end-1);
+			end
 		end
 
 		function res=get.ProductExergy(obj)
 		% get the product exergy of processes
-			res=obj.ProcessesExergy.vP(1:end-1);
+			res=[];
+			if obj.isValid
+				res=obj.ProcessesExergy.vP(1:end-1);
+			end
 		end
 
 		function res=get.Irreversibility(obj)
 		% get the irreversibility of prcesses
-			res=obj.ProcessesExergy.vI(1:end-1);
+			res=[];
+			if obj.isValid
+				res=obj.ProcessesExergy.vI(1:end-1);
+			end
 		end
 
 		function res=get.UnitConsumption(obj)
 		% get the unit consumption of the processes
-			res=obj.ProcessesExergy.vK(1:end-1);
+			res=[];
+			if obj.isValid
+				res=obj.ProcessesExergy.vK(1:end-1);
+			end
         end
 
         function res=get.Efficiency(obj)
-            res=vDivide(obj.ProductExergy,obj.FuelExergy);
+			res=[];
+			if obj.isValid
+            	res=vDivide(obj.ProductExergy,obj.FuelExergy);
+			end
         end
 
 		function res=get.TotalResources(obj)
 		% Get total exergy of resources
-			res=obj.ProcessesExergy.vF(end);
+			res=[];
+			if obj.isValid
+				res=obj.ProcessesExergy.vF(end);
+			end
 		end
 
 		function res=get.FinalProducts(obj)
 		% Get total exergy of final products
-			res=obj.ProcessesExergy.vP(end);
+			res=[];
+			if obj.isValid
+				res=obj.ProcessesExergy.vP(end);
+			end
 		end
 
 		function res=get.TotalUnitConsumption(obj)
 		% Get total unit consumption
-			res=obj.ProcessesExergy.vK(end);
+			res=[];
+			if obj.isValid
+				res=obj.ProcessesExergy.vK(end);
+			end
 		end
 
 		function res=get.TotalIrreversibility(obj)
 		% Get the total irreversibility of the system
-			res=obj.ProcessesExergy.vI(end);
+			res=[];
+			if obj.isValid
+				res=obj.ProcessesExergy.vI(end);
+			end
         end
 
         function res=getResultInfo(obj,fmt)

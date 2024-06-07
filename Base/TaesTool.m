@@ -1,18 +1,17 @@
 classdef TaesTool < cTaesLab
-% Graphic user interface to select the thermoeconomic model parameters.
-% Compatible App for Matlab/Octave
-% Execute the basic functions of class cThermoeconomicModel:
+% TaesLab user interface compatible for Matlab/Octave
+%  Execute the basic functions of class cThermoeconomicModel:
 %   - productiveStructure
 %   - thermoeconomicState
 %   - thermoeconomicAnalysis
 %   - thermoeconomicDiagnosis
 %	- wasteAnalysis
-% and perform the following operations:
+%  and perform the following operations:
 %   - Save the results in several formats (xlsx, csv, html, txt,..)
 %   - Save variables in the base workspace
 %   - View Result in tables and graphs
+% USAGE: app=TaesTool;
 %
-%	USAGE: app=TaesTool;
 % See also cThermoeconomicModel
 %
     properties(Access=private)

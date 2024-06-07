@@ -1,5 +1,14 @@
 classdef ViewResults < matlab.apps.AppBase
-
+% ViewResults is a Matlab app to view cResultSet objects
+%  It lets show the tables and graph of a cResultSet in a
+%  similar way than TaesApp
+%  USAGE:
+%   ViewResults(res)
+%  INPUT:
+%   res - cResultSet object
+%
+% See also cThermoeconomicTool
+%
     % Properties that correspond to app components
     properties (Access = private)
         UIFigure          matlab.ui.Figure

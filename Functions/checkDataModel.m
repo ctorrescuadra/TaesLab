@@ -7,7 +7,9 @@ function data = checkDataModel(filename)
 %       filename - name of the data model file
 %   OUTPUT:
 %       data - cDataModel object
-%   See also ReadDataModel, CheckDataModel  
+%
+%   See also cReadModel, cDataModel
+%
     rdm=readModel(filename);
     % Check if data model file is correct
     if ~isValid(rdm)
@@ -16,13 +18,12 @@ function data = checkDataModel(filename)
         return
     end
     % If filename is a MAT file then is already done
-    if isa(rdm,'cDataModel')
-        rdm.messageLog(cType.INFO,'Data model file %s has been loaded',filename);
+ 
+    if isa(rdm,'cReadModel') 
+        data=rdm.getDataModel;
+    else % Import MAT data model
         data=rdm;
-        return
     end
-    % Get the data model for cReadModel 
-    data=rdm.getDataModel;
     if isValid(data)
         data.messageLog(cType.INFO,'Data Model %s is valid',data.ModelName);
     else

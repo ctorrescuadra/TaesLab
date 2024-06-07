@@ -36,7 +36,10 @@ classdef (Abstract) cTable < cStatusLogger
     methods
         function res=get.Values(obj)
         % get the table Values
-            res=[obj.ColNames;[obj.RowNames',obj.Data]];
+            res=cStatus();
+            if obj.isValid
+                res=[obj.ColNames;[obj.RowNames',obj.Data]];
+            end
         end 
          
         function status = checkTableSize(obj)

@@ -1,34 +1,35 @@
 function res = WasteAnalysis(data,varargin)
-% Provide a recycling analysis of the plant
-% Given a waste flow calculates the cost of output flows (final products and wastes)
-% when it is recycled from 0 to %100.
-%   USAGE: 
-%       res = RecyclingAnalysis(data, options)
-%   INPUT:
-%       data - cReadModel object
-%       options - A structure containing optional parameters 
-%           State: Operation state
-%           WasteFlow: WasteFlow key to analyze
-%           Recycling: Waste Recycling analysis
-%           CostTables: Select the recycling tables to obtain
-%               DIRECT - Only Direct cost are selected (default)
-%               GENERALIZED - Only Generalized costs are selected
-%               ALL - Both Direct and Generalized are selected
-%           ResourceSample: Resource sample name
-%           Show -  Show results on console (true/false)
-%           SaveAs - Save results in an external file
+% WasteAnalysis performs a recycling analysis of the plant
+%   Given a waste stream, it calculates the cost of the output streams (final products and waste).
+%   when recycling from 0 to %100. 
+%   If Recycling is not selected,  only a waste allocation analysis is provided.
+%  USAGE: 
+%   res = RecyclingAnalysis(data, options)
+%  INPUT:
+%   data - cReadModel object
+%   options - A structure containing optional parameters 
+%    State: Operation state
+%    WasteFlow: WasteFlow key to analyze
+%    Recycling: Waste Recycling analysis (true/false)
+%    CostTables: Select the recycling tables to obtain
+%       DIRECT - Only Direct cost are selected (default)
+%       GENERALIZED - Only Generalized costs are selected
+%       ALL - Both Direct and Generalized are selected
+%    ResourceSample: Resource sample name
+%    Show - Show the results in the console (true/false)
+%    SaveAs - Name of the file where the results will be saved. 
+%  OUTPUT:
+%    res - cResultInfo object with the waste analysis tables:
+%       cType.Tables.WASTE_DEFINITION (wd)
+%       cType.Tables.WASTE_ALLOCATION (wa)
+%       cType.Tables.WASTE_RECYCLING_DIRECT (rad)
+%       cType.Tables.WASTE_RECYCLING_GENERAL (rag)
 %
-%   OUTPUT:
-%       res - cResultInfo object with the waste analysis tables:
-%               cType.Tables.WASTE_DEFINITION (wd)
-%               cType.Tables.WASTE_ALLOCATION (wa)
-%               cType.Tables.WASTE_RECYCLING_DIRECT (rad)
-%               cType.Tables.WASTE_RECYCLING_GENERAL (rag)
 % See also cDataModel, cRecyclingAnalysis, cResultInfo
 %
     res=cStatusLogger();
     checkModel=@(x) isa(x,'cDataModel');
-    %Check and initialize parameters
+    % Check and initialize parameters
     p = inputParser;
     p.addRequired('data',checkModel);
     p.addParameter('State','',@ischar);
@@ -52,8 +53,7 @@ function res = WasteAnalysis(data,varargin)
 	    data.printLogger;
 	    res.printError('Invalid data model. See error log');
 	    return
-    end
-    
+    end  
     % Read waste info
     if data.NrOfWastes<1
 	    res.printError(cType.ERROR,'Data model must have waste')

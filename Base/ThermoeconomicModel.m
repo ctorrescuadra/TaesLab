@@ -1,28 +1,30 @@
 function model=ThermoeconomicModel(filename,varargin)
-% Create a cThermoeconomicModel object from a data model file for interactive analysis
-%   USAGE:
-%       model = ThermoeconomicModel(filename, options)
-%   INPUT:
+% ThermoeconomicModel creates a cThermoeconomicModel object from a data model file 
+%   for further interactive analysis.
+%  USAGE:
+%   model = ThermoeconomicModel(filename, options)
+%  INPUT:
 %   filename - data model filename
 %   options - optional parameters
-%       State: Operation state name
-%       ReferenceState: Reference State name
-%       ResourceSample: Resource Sample name
-%       CostTables - Cost Tables output
-%           DIRECT - Direct Exergy Cost Tables only
-%           GENERALIZED - Generalized Cost Tables only
-%           ALL - Both direct and generalized
-%       DiagnosisMethod - Diagnosis method to allocate wastes
-%           NONE - Deactivate diagnosis
-%           WASTE_EXTERNAL - Consider waste as output
-%           WASTE_INTERNAL - Allocate waste increase to productive processes 
-%      ActiveWaste: Name of the active waste flow for analysis
-%      Recycling: Activate Recycling Analysis
-%      Summary: Activate Summary Results
-%      Debug:  Print Debug information during execution
+%    State: Operation state name
+%    ReferenceState: Reference State name
+%    ResourceSample: Resource Sample name
+%    CostTables - Cost Tables output
+%       DIRECT - Direct Exergy Cost Tables only
+%       GENERALIZED - Generalized Cost Tables only
+%       ALL - Both direct and generalized
+%    DiagnosisMethod - Diagnosis method to allocate wastes
+%       NONE - Deactivate diagnosis
+%       WASTE_EXTERNAL - Consider waste as output
+%       WASTE_INTERNAL - Allocate waste increase to productive processes 
+%    ActiveWaste: Name of the active waste flow for analysis
+%    Recycling: Activate Recycling Analysis
+%    Summary: Activate Summary Results
+%    Debug:  Print Debug information during execution
 %  OUTPUT:
-%   model - cThermoeconomicModel object
-%  See also cThermoeconomicModel
+%    model - cThermoeconomicModel object
+%
+% See also cThermoeconomicModel
 %
     model=cStatusLogger();
     % Check input parameters

@@ -1,12 +1,13 @@
-function SaveDataModel(data,filename)
-% SaveResultModel saves the data model into a file and log the result
+function SaveDataModel(arg,filename)
+% SaveDataModel saves the data model into a file 
 %   The files *.csv, *.xlsx, *.json, *.xml and *.mat are allowed
-%   It calls cReadModel method saveDataModel
-%   USAGE:
-%       SaveDataModel(data,filename)
-%   INPUT:
-%       data - cDataModel or cThermoeconomicModel object
-%       filename - name of the output file (with extension)
+%   It calls cReadModel/saveDataModel
+%  USAGE:
+%   SaveDataModel(arg,filename)
+%  INPUT:
+%   arg - cDataModel or cThermoeconomicModel object
+%   filename - name of the output file (with extension)
+%
 % See also cDataModel, cThermoecononicModel
 %
     log=cStatus(cType.VALID);
@@ -15,7 +16,14 @@ function SaveDataModel(data,filename)
         log.printError('Usage: SaveDataModel(model,filename)');
         return
     end
-    if ~isa(data,'cDataModel') || ~isValid(data)
+    if ~isValid(arg)
+        log.printError('Invalid data model');
+    end
+    if isa(arg,'cDataModel')
+        data=arg;
+    elseif isa(arg,'cThermoeconomicModel')
+        data=arg.DataModel;
+    else
         log.printError('Invalid model. It should be a cDataModel or cThermoeconomicModel object');
         return
     end

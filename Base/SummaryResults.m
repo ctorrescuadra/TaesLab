@@ -1,27 +1,28 @@
 function res = SummaryResults(data,varargin)
-% Get the summary cost results of a plant
-%   USAGE:
-%       res=SummaryResults(data)
-%   INPUT:
-%       data - cReadModel object containing the data model
-%   	options - Structure contains additional parameters (optional)
-%           Show -  Show results on console (true/false)
-%           SaveAs - Save results in an external file
+% SummaryResults get the summary cost results of a plant
+%  USAGE:
+%   res=SummaryResults(data)
+%  INPUT:
+%   data - cReadModel object containing the data model
+%   options - Structure contains additional parameters (optional)
+%    Show -  Show results on console (true/false)
+%    SaveAs - Save results in an external file
 %   OUTPUT:
-%       res - cResultInfo object with the summary results
-%          It contains the following tables:
-%           cType.SummaryTables.EXERGY (exergy)
-%           cType.SummaryTables.UNITCONSUMPTION (pku)
-%           cType.SummaryTables.PROCESS_COST (dpc)
-%           cType.SummaryTables.PROCESS_UNIT_COST (dpuc)
-%           cType.SummaryTables.FLOW_COST (dfc)
-%           cType.SummaryTables.FLOW_UNIT_COST (dfuc)
-%          If Resource Cost is defined:
-%           cType.SummaryTables.PROCESS_GENERAL_COST (gpc)
-%           cType.SummaryTables.PROCESS_GENERAL_UNIT_COST (gpuc)
-%           cType.SummaryTables.FLOW_GENERAL_COST (gfc)
-%           cType.SummaryTables.FLOW_GENERAL_UNIT_COST (gfuc)
-%   See also cReadModel, cModelSummary, cResultInfo
+%    res - cResultInfo object with the summary results
+%    It contains the following tables:
+%       cType.SummaryTables.EXERGY (exergy)
+%       cType.SummaryTables.UNITCONSUMPTION (pku)
+%       cType.SummaryTables.PROCESS_COST (dpc)
+%       cType.SummaryTables.PROCESS_UNIT_COST (dpuc)
+%       cType.SummaryTables.FLOW_COST (dfc)
+%       cType.SummaryTables.FLOW_UNIT_COST (dfuc)
+%    If Resource Cost is defined:
+%       cType.SummaryTables.PROCESS_GENERAL_COST (gpc)
+%       cType.SummaryTables.PROCESS_GENERAL_UNIT_COST (gpuc)
+%       cType.SummaryTables.FLOW_GENERAL_COST (gfc)
+%       cType.SummaryTables.FLOW_GENERAL_UNIT_COST (gfuc)
+%
+%   See also cDataModel, cModelSummary, cResultInfo
 %
     res=cStatusLogger();
     checkModel=@(x) isa(x,'cDataModel');

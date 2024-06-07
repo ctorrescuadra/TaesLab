@@ -266,7 +266,7 @@ classdef cProductiveStructureCheck < cResultId
 					if ~obj.cflw{idx}.from
 					    obj.cflw{idx}.from=sid;
 				    else
-						obj.messageLog(cType.WARNING,'Dlow %s has not correct (FROM) definition',obj.cflw{idx}.key);
+						obj.messageLog(cType.WARNING,'Flow %s has not correct (FROM) definition',obj.cflw{idx}.key);
 					end
 			    else
 					obj.messageLog(cType.WARNING,'Flow %s is not defined',out);

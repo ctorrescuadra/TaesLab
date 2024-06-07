@@ -1,4 +1,4 @@
-classdef cStack < cTaesLab
+classdef cStack < cStatus
 % cStack define a LIFO stack data structure
 %   Methods:
 %       s = cStack(initial_capacity)
@@ -33,7 +33,7 @@ classdef cStack < cTaesLab
 
         function res = get.Content(obj)
         % content - show the content of the stack as cell array
-            if isempty(obj)
+            if isValid(obj)
                 res=[];
             else
                 res = obj.buffer(obj.Count:-1:1);

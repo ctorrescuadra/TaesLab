@@ -70,27 +70,27 @@ classdef cDataModel < cResultSet
             obj.isResourceCost=data.isResourceCost;
             % Check and get Productive Structure
             ps=cProductiveStructure(data.ProductiveStructure);
+            obj.ProductiveStructure=ps;
             status=ps.status;
             if isValid(ps)
 				obj.messageLog(cType.INFO,'Productive Structure is valid');
             else
                 obj.addLogger(ps);
 				obj.messageLog(cType.ERROR,'Productive Structure is NOT valid. See error log');
-				return
+                return
             end
-            obj.ProductiveStructure=ps;
             % Check and get Format
             format=data.Format.definitions;		
             rfmt=cResultTableBuilder(format,obj.ProductiveStructure);
+            obj.FormatData=rfmt;
             status = rfmt.status & status;
             if isValid(rfmt)
 				obj.messageLog(cType.INFO,'Format Definition is valid');
             else
                 obj.addLogger(rfmt);
 				obj.messageLog(cType.ERROR,'Format Definition is NOT valid. See error log');
-				return
+                return
             end
-            obj.FormatData=rfmt;
             % Check Exergy
             obj.States={data.ExergyStates.States(:).stateId};
             obj.ExergyData=cell(1,obj.NrOfStates);
@@ -144,11 +144,6 @@ classdef cDataModel < cResultSet
             else
                obj.messageLog(cType.INFO,'No Resources Cost Data available')
             end
-            % Check Data Model
-            obj.status=status;
-            if ~obj.isValid
-                return
-            end
             % Set object properties
             obj.ModelData=data;
             obj.ModelFile=rdm.ModelFile;
@@ -158,16 +153,23 @@ classdef cDataModel < cResultSet
             obj.ModelName=rdm.ModelName;
             obj.State='DATA_MODEL';
             obj.DefaultGraph='';
+            % Check Data Model
+            obj.status=status;
+            if ~obj.isValid
+                return
+            end
             % Get the cResultInfo object
-            if rdm.isTableModel
-                obj.ModelInfo=rdm.getTableModel;
-            else
-                obj.ModelInfo=obj.getTableModel;
+            if obj.isValid
+                if rdm.isTableModel
+                    obj.ModelInfo=rdm.getTableModel;
+                else
+                    obj.ModelInfo=obj.getTableModel;
+                end
             end
        end
 
     	function res=get.NrOfFlows(obj)
-        % Return the number of flows of the system
+        % Get the number of flows of the system
             res=0;
             if obj.isValid
                 res=obj.ProductiveStructure.NrOfFlows;
@@ -175,7 +177,7 @@ classdef cDataModel < cResultSet
         end
     
         function res=get.NrOfProcesses(obj)
-        % Return the number of processes of the system
+        % Get the number of processes of the system
             res=0;
             if obj.isValid
                     res=obj.ProductiveStructure.NrOfProcesses;
@@ -183,7 +185,7 @@ classdef cDataModel < cResultSet
         end
     
         function res=get.NrOfWastes(obj)
-        % Return the number of wastes of the system
+        % Get the number of wastes of the system
             res=0;
             if obj.isValid
                 res=obj.ProductiveStructure.NrOfWastes;
@@ -198,7 +200,7 @@ classdef cDataModel < cResultSet
         end
     
         function res=get.NrOfResourceSamples(obj)
-        % get the number of resources samples
+        % Get the number of resources samples
             res=0;
             if ~isempty(obj.ResourceSamples) && obj.isResourceCost
                 res=numel(obj.ResourceSamples);
@@ -206,7 +208,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=get.isDiagnosis(obj)
-        % check if diagnosis data is available
+        % Check if diagnosis data is available
 			res=(obj.NrOfStates>1);
         end
         

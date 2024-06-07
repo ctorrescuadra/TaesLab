@@ -29,8 +29,11 @@ classdef cResultId < cStatusLogger
         end
 		
         function res=get.ResultName(obj)
-        % get the result name 
-            res=cType.Results{obj.ResultId};
+        % get the result name
+            res=[];
+            if obj.isValid
+                res=cType.Results{obj.ResultId};
+            end
         end
 	end
 end
