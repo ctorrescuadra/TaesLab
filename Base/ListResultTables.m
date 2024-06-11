@@ -13,7 +13,6 @@ function res=ListResultTables(varargin)
 %        CELL - return the table as array of cells
 %        STRUCT - returns the table as a structured array
 %        TABLE - returns a matlab table
-%       SaveAs: indicates the name of the file where the table will be saved. 
 %       Columns: Array of cells with the names of the columns to be displayed.
 %                If it is not selected, the default list of columns cType.DirColsDefault is shown
 %        DESCRIPTION - Description of the table
@@ -21,13 +20,14 @@ function res=ListResultTables(varargin)
 %        GRAPH - Indicates if it has graphical representation % TYPE - Type of cTable
 %        TYPE - Type of cTable
 %        CODE - Text of the code for cType.Tables
-%       RESULT_CODE - Text of the code for cType.ResultId
+%        RESULT_CODE - Text of the code for cType.ResultId
+%       SaveAs: indicates the name of the file where the table will be saved. 
 %  OUTPUT:
 %   res - table object in the format specified in ExportAs, with the selected columns
 %
 % See also cTablesDefinition
 %
-    log=cStatusLogger(cType.ERROR);
+    res=cStatus();
     % Check input parameters
     p = inputParser;
     p.addParameter('Show',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
@@ -37,8 +37,8 @@ function res=ListResultTables(varargin)
     try
 		p.parse(varargin{:});
     catch err
-        log.printError(err.message);
-        log.printError('Usage: res=ListResultTables(options)');
+        res.printError(err.message);
+        res.printError('Usage: res=ListResultTables(options)');
         return
     end
     param=p.Results;

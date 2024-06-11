@@ -10,14 +10,15 @@ classdef cFormatData < cTablesDefinition
 % See also printformat.json, cTablesDefinition
 %	
 	methods
-		function obj=cFormatData(format)
+		function obj=cFormatData(dm)
 		% Class Constructor
 		%	format - format configuration data
-			obj=obj@cTablesDefinition;          
-            if ~isstruct(format) || isscalar(format)
-				obj.messageLog(cType.ERROR,'Invalid format data provided');
+			obj=obj@cTablesDefinition;
+           if ~isa(dm,'cModelData') || ~isValid(dm)
+				obj.messageLog(cType.ERROR,'Invalid data model');
 				return
-            end
+            end 
+            format=dm.Format.definitions;
             if ~all(isfield(format,{'key','width','precision','unit'}))
                 obj.messageLog(cType.ERROR,'Invalid data. Fields missing');
                 return
@@ -27,7 +28,7 @@ classdef cFormatData < cTablesDefinition
                 fmt=format(i);
 			    id=cType.getFormatId(fmt.key);
                 if cType.isEmpty(id)
-			        obj.messageLog(cType.WARNING,'Invalid Format Key %s',fmt.key);
+			        obj.messageLog(cType.ERROR,'Invalid Format Key %s',fmt.key);
                     continue
                 end
                 val1=isfloat(fmt.width) && isfloat(fmt.precision);
@@ -37,7 +38,7 @@ classdef cFormatData < cTablesDefinition
                     obj.cfgTypes(id).unit=fmt.unit;
                     obj.cfgTypes(id).format=cfmt;
                 else
-                    obj.messageLog(cType.WARNING,'Bad format defined in %s',fmt.key);
+                    obj.messageLog(cType.ERROR,'Bad format defined in %s',fmt.key);
                 end
             end
 		end

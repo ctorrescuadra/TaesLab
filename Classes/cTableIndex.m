@@ -18,12 +18,12 @@ classdef cTableIndex < cTable
         %       res - cResultInfo object
         %
             % Check input parameters
+            obj.status=true;
             if ~isa(res,'cResultInfo')
                 obj.messageLog(cType.ERROR,'Invalid input argument')
                 return
             end
             % Get tables of the results and build table
-            obj.status=cType.VALID;
             tnames=res.getListOfTables;
             obj.ColNames={'Key','Description','Graph'};
             obj.RowNames=tnames';

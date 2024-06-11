@@ -10,15 +10,12 @@ function B=divideRow(A,x)
 %  	OUTPUT:
 %		B - Scaled Matrix 
 %
-	log=cStatus(cType.VALID);
-	B=[];
 	if nargin==1
 		x=sum(A,2);
 	end
 	[N,~]=size(A);
 	if(N~=length(x))
-		log.printError('Matrix dimensions must agree: %d %d',N,length(x));
-		return
+		error('Matrix dimensions must agree: %d %d',N,length(x));
 	end
     x(x~=0)=1./x(x~=0);
     B=scaleRow(A,x);

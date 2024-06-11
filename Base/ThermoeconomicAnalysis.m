@@ -35,7 +35,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %
 % See also cExergyCost, cDataModel, cResultInfo
 %
-    res=cStatusLogger();
+    res=cStatus();
     % Check input parameters
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
@@ -98,6 +98,11 @@ function res=ThermoeconomicAnalysis(data,varargin)
         param.ResourcesCost=rsc;
     end
     res=fpm.getResultInfo(data.FormatData,param);
+    if ~isValid(res)
+		res.printLogger;
+        res.printError('Invalid cResultInfo. See error log');
+		return
+    end
     % Show and Save results if required
     if param.Show
         printResults(res);

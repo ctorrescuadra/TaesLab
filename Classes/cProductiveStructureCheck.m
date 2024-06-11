@@ -28,15 +28,16 @@ classdef cProductiveStructureCheck < cResultId
     end
 
     methods
-		function obj = cProductiveStructureCheck(data)
+		function obj = cProductiveStructureCheck(dm)
 		% Class constructor.
         %   data - flow/process data structure from cReadDataModel
         	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
 			% Check/validate file content
-			if (nargin~=1) || ~isstruct(data) 
+            if ~isa(dm,'cModelData') || ~isValid(dm)
 				obj.messageLog(cType.ERROR,'Invalid data model');
 				return
-			end
+            end
+            data=dm.ProductiveStructure;
 			% Check data structure
             if ~all(isfield(data,{'flows','processes'}))
 				obj.messageLog(cType.ERROR,'Invalid data model. Fields Missing');
@@ -51,7 +52,6 @@ classdef cProductiveStructureCheck < cResultId
 				return
             end
             % Initialize productive structure info
-			obj.status=cType.VALID;
 			obj.NrOfProcesses=numel(data.processes);
 			obj.NrOfFlows=numel(data.flows);
 			obj.NrOfStreams=0;
@@ -250,10 +250,10 @@ classdef cProductiveStructureCheck < cResultId
 					if ~obj.cflw{idx}.to
 					    obj.cflw{idx}.to=sid;
 				    else
-						obj.messageLog(cType.WARNING,'Flow %s has not correct (TO) definition',obj.cflw{idx}.key);
+						obj.messageLog(cType.ERROR,'Flow %s has not correct (TO) definition',obj.cflw{idx}.key);
 					end
 			    else
-					obj.messageLog(cType.WARNING,'Flow %s is not defined',in);
+					obj.messageLog(cType.ERROR,'Flow %s is not defined',in);
                 end
                 finp(i)=idx;
             end
@@ -266,10 +266,10 @@ classdef cProductiveStructureCheck < cResultId
 					if ~obj.cflw{idx}.from
 					    obj.cflw{idx}.from=sid;
 				    else
-						obj.messageLog(cType.WARNING,'Flow %s has not correct (FROM) definition',obj.cflw{idx}.key);
+						obj.messageLog(cType.ERROR,'Flow %s has not correct (FROM) definition',obj.cflw{idx}.key);
 					end
 			    else
-					obj.messageLog(cType.WARNING,'Flow %s is not defined',out);
+					obj.messageLog(cType.ERROR,'Flow %s is not defined',out);
                 end
                 fout(i)=idx;
             end
@@ -303,12 +303,12 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jt % Check if flow is OUTPUT
 						    obj.cflw{i}.to=ns;
 				        else
-					        obj.messageLog(cType.WARNING,'Output flow %s has not correct (TO) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,'Output flow %s has not correct (TO) definition',obj.cflw{i}.key);
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
                             if (obj.cprc{k}.typeId == cType.Process.DISSIPATIVE)
-					    	    obj.messageLog(cType.WARNING,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
+					    	    obj.messageLog(cType.ERROR,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
                             end
                         end		
                 	    fstr(iout)=ns;
@@ -321,12 +321,12 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jt % Check if flow is WASTE
 						    obj.cflw{i}.to=ns;	
 					    else
-					        obj.messageLog(cType.WARNING,'Waste flow %s has not correct (TO) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,'Waste flow %s has not correct (TO) definition',obj.cflw{i}.key);
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
                             if (obj.cprc{k}.typeId == cType.Process.PRODUCTIVE)
-					    	    obj.messageLog(cType.WARNING,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
+					    	    obj.messageLog(cType.ERROR,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
                             end
                         end
                         fstr(iout)=ns;
@@ -338,7 +338,7 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jf % Check if flow is a resource
 						    obj.cflw{i}.from=ns;				
 					    else
-					        obj.messageLog(cType.WARNING,'Resource flow %s has not correct (FROM) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,'Resource flow %s has not correct (FROM) definition',obj.cflw{i}.key);
                         end
                 	    pstr(ires)=ns;
 				end
@@ -361,14 +361,14 @@ classdef cProductiveStructureCheck < cResultId
 			res=false;
 			if (obj.cflw{id}.from==obj.cflw{id}.to) %Check if there is a loop
 				if obj.cflw{id}.from==0
-					obj.messageLog(cType.WARNING,'Flow %s do not exist',obj.cflw{id}.key);
+					obj.messageLog(cType.ERROR,'Flow %s do not exist',obj.cflw{id}.key);
 				else
-					obj.messageLog(cType.WARNING,'Flow %s is defined as a LOOP',obj.cflw{id}.key);
+					obj.messageLog(cType.ERROR,'Flow %s is defined as a LOOP',obj.cflw{id}.key);
 				end
 			elseif (obj.cflw{id}.from==0) && (obj.cflw{id}.to~=0) % Check invalid FROM definition
-				obj.messageLog(cType.WARNING,'Flow %s has not correct (FROM) definition',obj.cflw{id}.key);
+				obj.messageLog(cType.ERROR,'Flow %s has not correct (FROM) definition',obj.cflw{id}.key);
 			elseif (obj.cflw{id}.to==0) && (obj.cflw{id}.from~=0) % Check invalid TO definition
-				obj.messageLog(cType.WARNING,'Flow %s has not correct (TO) definition',obj.cflw{id}.key);
+				obj.messageLog(cType.ERROR,'Flow %s has not correct (TO) definition',obj.cflw{id}.key);
 			else
 				res=true;
 			end

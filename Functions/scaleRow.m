@@ -7,16 +7,9 @@ function B=scaleRow(A,x)
 %   OUTPUT:
 %	    B - Scaled Matrix 
 %
-    log=cStatus(cType.VALID);
-    B=[];
-    if nargin<2
-        log.printError('Invalid arguments');
-        return
-    end
     [N,~]=size(A);
     if(N~=length(x))
-        log.printError('Matrix dimensions must agree: %d %d',N,length(x));
-        return
+        error('Matrix dimensions must agree: %d %d',N,length(x));
     end   
     if issparse(A)
         B=diag(sparse(x))*A;

@@ -71,7 +71,7 @@ classdef ResultsPanel < cTaesLab
         % get the table index of a result set and show the table panel
         %  Input:
         %   res - cResultSet 
-            log=cStatusLogger();
+            log=cStatus();
             % Check Input parameter
             if ~isa(res,'cResultSet') && res.isValid
                 log.printError('Invalid input argument');
@@ -131,7 +131,7 @@ classdef ResultsPanel < cTaesLab
                 if isValid(slog)
 				    log.printInfo('%s saved in file %s',descr, file);			    
                 else
-                    log.printInfo('Result file %s could NOT be saved', file);
+                    log.printError('Result file %s could NOT be saved', file);
                 end
             end
         end

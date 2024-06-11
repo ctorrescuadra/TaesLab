@@ -82,7 +82,6 @@ classdef (Sealed) cWasteAnalysis < cResultId
             obj.DefaultGraph=cType.Tables.WASTE_ALLOCATION;
             obj.ModelName=fpm.ModelName;
             obj.State=fpm.State;
-            obj.status=cType.VALID;
         end
 
         function res=getResultInfo(obj,fmt,param)

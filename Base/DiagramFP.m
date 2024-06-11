@@ -1,10 +1,10 @@
 function res=DiagramFP(data,varargin)
 % DiagramFP gets the Diagram FP tables for a plant State
 %  USAGE:
-%	res=DiagramFP(data, options)
+%	res = DiagramFP(data, options)
 %  INPUT:
 %	data - cReadModel Object containing the data model information
-%   option - a structure contains additional parameters (optional)
+%   options - a structure (pairs Name/Value) contains additional parameters.
 %		State - Indicate a state to get exergy values. 
 %               If it is not provided, the first state is used.
 %       Show -  Show results on console (true/false)
@@ -17,7 +17,7 @@ function res=DiagramFP(data,varargin)
 %      
 % See also cExergyCost, cResultInfo
 %
-	res=cStatusLogger(); 
+	res=cStatus(); 
 	checkModel=@(x) isa(x,'cDataModel');
 	% Check input parameters
 	p = inputParser;
@@ -55,8 +55,14 @@ function res=DiagramFP(data,varargin)
     if ~isValid(dfp)
         dfp.printLogger;
         res.printError('Invalid Diagram FP. See error log');
+		return
     end
 	res=dfp.getResultInfo(data.FormatData);
+	if ~isValid(res)
+		res.printLogger;
+        res.printError('Invalid cResultInfo. See error log');
+		return
+	end
     % Show and Save results if required
     if param.Show
         printResults(res);

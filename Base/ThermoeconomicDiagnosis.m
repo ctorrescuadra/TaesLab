@@ -23,7 +23,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %
 % See also cDataModel, cDiagnosis, cResultInfo
 %
-    res=cStatusLogger();
+    res=cStatus();
     % Check input parameters
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
@@ -98,6 +98,11 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     else
         dgn.printLogger;
         res.printError('Invalid Thermoeconomic Diagnosis. See error log');
+    end
+    if ~isValid(res)
+		res.printLogger;
+        res.printError('Invalid cResultInfo. See error log');
+		return
     end
     % Show and Save results if required
     if param.Show

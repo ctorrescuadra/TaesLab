@@ -132,8 +132,7 @@ classdef cThermoeconomicModel < cResultSet
         %   
             obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
             if ~isa(data,'cDataModel')
-                obj.messageLog(cType.ERROR,'Invalid data model');
-                printLogger(obj);
+                obj.printError(cType.ERROR,'Invalid data model');
                 return
             end
             % Check Data Model
@@ -166,7 +165,7 @@ classdef cThermoeconomicModel < cResultSet
                 p.parse(varargin{:});
             catch err
                 obj.printError(err.message);
-                obj.printError('Usage: cThermoeconomicModel(data,param)');
+                obj.printError('Usage: cThermoeconomicModel(data,options)');
                 return
             end
             param=p.Results;
@@ -706,7 +705,7 @@ classdef cThermoeconomicModel < cResultSet
         %  Input:
         %   filename - Name of the file
         %  Output:
-        %   log - cStatusLogger object containing the status and error messages
+        %   log - cStatus object containing the status and error messages
             log=cStatus();
             if nargin~=2
                 log.printError('Usage: saveProductiveDiagram(model,filename)');
@@ -1161,9 +1160,8 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkState(obj,state)
         % Ckeck the state information
             res=false;
-            log=cStatus();    
             if ~obj.DataModel.existState(state)
-                log.printWarning('Invalid state name %s',state);
+                obj.printWarning('Invalid state name %s',state);
                 return
             end
             if strcmp(obj.State,state)
@@ -1184,9 +1182,8 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkReferenceState(obj,state)
         % Check the reference state value
             res=false;
-            log=cStatus();
             if ~obj.DataModel.existState(state)
-                log.printWarning('Invalid state name %s',state);
+                obj.printWarning('Invalid state name %s',state);
                 return
             end
             if strcmp(obj.ReferenceState,state)
@@ -1201,9 +1198,8 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkResourceSample(obj,sample)
         % Check the resource sample value
             res=false;
-            log=cStatus(cType.VALID);
             if ~obj.DataModel.existSample(sample)
-                log.printWarning('Invalid resource sample %s',sample);
+                obj.printWarning('Invalid resource sample %s',sample);
                 return       
             end
             if isempty(sample) || strcmp(obj.ResourceSample,sample)
@@ -1226,10 +1222,9 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
-            log=cStatus();
             pct=cType.getCostTables(value);
             if cType.isEmpty(pct)
-                log.printWarning('Invalid Cost Tables parameter value: %s',value);
+                obj.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end
             if strcmp(obj.CostTables,value)
@@ -1237,7 +1232,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             if bitget(pct,cType.GENERALIZED) && ~obj.isResourceCost
-                log.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
+                obj.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
                 return
             end
             res=true;
@@ -1257,9 +1252,8 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkDiagnosisMethod(obj,value)
         % Check Diagnosis Method parameter
             res=false;
-            log=cStatus();
             if ~cType.checkDiagnosisMethod(value)
-                log.printWarning('Invalid Diagnosis method: %s',value);
+                obj.printWarning('Invalid Diagnosis method: %s',value);
                 return
             end
             if strcmp(obj.DiagnosisMethod,value)
@@ -1272,9 +1266,8 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkActiveWaste(obj,value)
         % Check Active Waste Parameter
             res=false;
-            log=cStatus();
             if ~ismember(value,obj.WasteFlows)
-                log.printWarning('Invalid waste flow: %s',value);
+                obj.printWarning('Invalid waste flow: %s',value);
                 return
             end
             if strcmp(obj.ActiveWaste,value)

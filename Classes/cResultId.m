@@ -20,7 +20,7 @@ classdef cResultId < cStatusLogger
 				N=length(cType.Results);
 				if any (id==1:N)
 					obj.ResultId=id;
-                    obj.status=cType.VALID;
+                    obj.status=true;
                     obj.ModelName='';
                     obj.State='';
                     obj.DefaultGraph='';

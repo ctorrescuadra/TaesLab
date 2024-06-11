@@ -126,7 +126,6 @@ classdef cDiagnosis < cResultId
             obj.DefaultGraph=cType.Tables.MALFUNCTION_COST;
             obj.ModelName=fp1.ModelName;
             obj.State=fp1.State;
-            obj.status=cType.VALID;
         end
 
         function res=get.FuelImpact(obj)

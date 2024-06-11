@@ -20,7 +20,6 @@ classdef (Sealed) cDiagramFP < cResultId
             obj.DefaultGraph=cType.Tables.DIAGRAM_FP;
             obj.ModelName=mfp.ModelName;
             obj.State=mfp.State;
-            obj.status=cType.VALID;
         end
 
         function res=getResultInfo(obj,fmt)

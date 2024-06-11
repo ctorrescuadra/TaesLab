@@ -30,7 +30,7 @@ if data.isResourceCost
 end
 % Solve and show results
 res=ThermoeconomicAnalysis(data,param);
-if ~res.isError
+if res.isValid
 	outputResults(res,options);
 	res.printInfo('Results (res) available in Workspace');
 else

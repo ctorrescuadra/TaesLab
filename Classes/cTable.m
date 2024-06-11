@@ -36,7 +36,7 @@ classdef (Abstract) cTable < cStatusLogger
     methods
         function res=get.Values(obj)
         % get the table Values
-            res=cStatus();
+            res={};
             if obj.isValid
                 res=[obj.ColNames;[obj.RowNames',obj.Data]];
             end
@@ -59,16 +59,19 @@ classdef (Abstract) cTable < cStatusLogger
 
         function showTable(obj,option)
         % View Table in GUI or HTML
-        %   Usage:
-        %       option - select form to view a table
-        %           cType.TableView.CONSOLE
-        %           cType.TableView.GUI
-        %           cType.TableView.HTML
+        %  Usage:
+        %   option - select form to view a table
+        %       cType.TableView.NONE
+        %       cType.TableView.CONSOLE
+        %       cType.TableView.GUI
+        %       cType.TableView.HTML
         %
             if nargin==1
                 option=cType.TableView.CONSOLE;
             end
             switch option
+            case cType.TableView.NONE
+                return
             case cType.TableView.CONSOLE
                 printTable(obj);
             case cType.TableView.GUI
@@ -352,7 +355,7 @@ classdef (Abstract) cTable < cStatusLogger
                 return
             end
             obj=cBuildLaTeX(tbl);
-            log=obj.exportTable(filename);
+            log=obj.saveTable(filename);
             if isValid(log)
                 log.messageLog(cType.INFO,'File %s has been saved',filename)
             end

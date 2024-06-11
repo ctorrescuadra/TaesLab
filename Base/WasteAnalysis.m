@@ -27,7 +27,7 @@ function res = WasteAnalysis(data,varargin)
 %
 % See also cDataModel, cRecyclingAnalysis, cResultInfo
 %
-    res=cStatusLogger();
+    res=cStatus();
     checkModel=@(x) isa(x,'cDataModel');
     % Check and initialize parameters
     p = inputParser;
@@ -120,6 +120,11 @@ function res = WasteAnalysis(data,varargin)
     else
         ra.printLogger;
         res.printError('Invalid Recycling Analysis. See Error Log');
+    end
+    if ~isValid(res)
+		res.printLogger;
+        res.printError('Invalid cResultInfo. See error log');
+		return
     end
     % Show and Save results if required
     if param.Show

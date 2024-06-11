@@ -249,14 +249,13 @@ classdef TaesPanel < cTaesLab
                 cd(path);
                 res=app.currentNode;
 				slog=saveResults(res,file);
+                printLogger(slog)
                 if isValid(slog)
 				    app.resultFile=file;
 				    set(app.ofile_text,'string',file);
-				    logtext=sprintf(' INFO: Save Results %s',res.ResultName);	
-                    printInfo(app.model,'Save Results %s into file %s',res.ResultName,file)		    
+				    logtext=sprintf(' INFO: Save Results %s',res.ResultName);		    
                 else
                     logtext=sprintf(' ERROR: Result file %s could NOT be saved', file);
-                    printError(app.model,'Result file %s could NOT be saved', file);
                 end
                 set(app.log,'string',logtext);
             end

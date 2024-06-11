@@ -33,14 +33,19 @@ classdef (Sealed) cResultTableBuilder < cFormatData
     end
     
     methods
-        function obj=cResultTableBuilder(data,ps)
+        function obj=cResultTableBuilder(dm,ps)
         % Create the cResultTableBuilder associated to a plant (productive structure)
         %  Input:
-        %   data - format data struct
-        %   ps - productive structure object
-            obj=obj@cFormatData(data);
+        %   data - cModelData object
+        %   ps - cProductiveStructure object
+            obj=obj@cFormatData(dm);
+            if ~isValid(obj)
+                obj.messageLog(cType.ERROR,'Invalid Format Data');
+                return
+            end
+
             if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
-				obj.messageLog(cType.ERROR,'No valid Productive Structure provided');
+				obj.messageLog(cType.ERROR,'Invalid Productive Structure');
                 return
             end
             obj.flowKeys=ps.FlowKeys;
@@ -432,7 +437,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getWasteAllocation(obj,wt)
-            res=cStatusLogger();
             tp=obj.getMatrixTableProperties(cType.Tables.WASTE_ALLOCATION);
             flw=obj.flowKeys;
             prc=obj.processKeys;
@@ -444,7 +448,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 values=tmp(idx,:);
                 res=obj.createMatrixTable(tp,values,rowNames,colNames);
             else
-                res.messageLog(cType.WARNING,'No Waste allocation table defined');
+                res=cStatus(cType.ERROR);
             end
         end
 

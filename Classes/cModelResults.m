@@ -16,6 +16,7 @@ classdef (Sealed) cModelResults < cStatusLogger
         %cModelResults Construct an instance of this class
         %  Initialize the results model from data model
         %   data - cDataModel object
+            obj=obj@cStatusLogger(cType.VALID);
             if ~isa(data,'cDataModel') || ~data.isValid
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 return
@@ -23,7 +24,6 @@ classdef (Sealed) cModelResults < cStatusLogger
             obj.results=cell(1,cType.MAX_RESULT_INFO);
             dm=getResultInfo(data);
             obj.setResults(dm);
-            obj.status=cType.VALID;
         end
 
         function res=getResults(obj,id)

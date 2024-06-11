@@ -28,7 +28,7 @@ doptions=cType.DiagnosisOptions;
 [~,param.DiagnosisMethod]=optionChoice('Select Diagnosis Method:',doptions(2:end));
 % Solve and show results
 res=ThermoeconomicDiagnosis(data,param);
-if ~res.isError
+if res.isValid
 	outputResults(res,options);
 	res.printInfo('Results (res) available in Workspace');
 else

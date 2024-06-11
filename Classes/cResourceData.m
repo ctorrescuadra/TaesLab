@@ -17,17 +17,25 @@ classdef cResourceData < cStatusLogger
 	end
 	
     methods
-		function obj=cResourceData(data,ps)
+		function obj=cResourceData(dm,ps,idx)
 		% Class constructor
-        %	data - Resources Cost data
+        %	data - cModelData object
 		%	ps - cProductiveStructure object
+		%	idx - Sample index
 		%
 		    % Check arguments and inititiliza class
 			obj=obj@cStatusLogger(cType.VALID);
-			if ~isstruct(data)    
+			if ~isa(dm,'cModelData') || ~dm.isValid    
 				obj.messageLog(cType.ERROR,'Invalid resource data.');
 				return
 			end
+            try
+                data=dm.getResourceSample(idx);
+            catch err
+                obj.messageLog(cType.ERROR,err.message);
+                obj.messageLog(cType.ERROR,'Invalid state index %d',idx);
+                return
+            end
 			obj.Z=zeros(1,ps.NrOfProcesses);
 			obj.c0=zeros(1,ps.NrOfFlows);
 		    % Read resources flows costs
@@ -75,7 +83,7 @@ classdef cResourceData < cStatusLogger
 						if (sz(i).value >= 0)
 							obj.Z(id)=sz(i).value;
 						else
-							obj.messageLog(cType.WARNING,'Value of process cost %s is negative: %f',sz(i).key,sz(i).value);
+							obj.messageLog(cType.ERROR,'Value of process cost %s is negative: %f',sz(i).key,sz(i).value);
 						end
                     else
 					    obj.messageLog(cType.ERROR,'Process key %s is missing',sz(i).key);
@@ -87,72 +95,68 @@ classdef cResourceData < cStatusLogger
 			obj.ps=ps;
 		end
 
-		function res=setProcessResource(obj,Z)
+		function setProcessResource(obj,Z)
 		% Set the Resources cost of processes
 		%  Input:
 		%   Z - Resources cost processes values
-			res=cStatus(cType.VALID);
             if length(Z) == obj.ps.NrOfProcesses
 				obj.Z=Z;
 			else
-				res.messageLog(cType.WARNING,'Invalid processes resources size',length(Z));
+				obj.messageLog(cType.WARNING,'Invalid processes resources size',length(Z));
 				return
             end
             if any(Z<0)
-				res.messageLog(cType.WARNING,'Values of process resources must be non-negatives');
+				obj.messageLog(cType.WARNING,'Values of process resources must be non-negatives');
 				return
             end
 		end
 
-		function res=setFlowResource(obj,c0)
+		function setFlowResource(obj,c0)
 		% Set the Resources unit cost of flows
 		%  Input:
 		%   c0 - Resources cost flows values
-			res=cStatusLogger(cType.VALID);
             if length(c0) == obj.ps.NrOfFlows
 				obj.c0=c0;
 			else
-				res.messageLog(cType.WARNING,'Invalid flows resources size',length(c0));
+				obj.messageLog(cType.WARNING,'Invalid flows resources size',length(c0));
 				return
             end
             if any(c0<0)
-				res.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
+				obj.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
 				return
             end
 		end
 
-		function res=setFlowResourceValue(obj,key,value)
+		function setFlowResourceValue(obj,key,value)
 		% Set the value of a resource
 		%	key - key of the resource
 		%	value - cost of the resource
-			res=cStatusLogger(cType.VALID);
 			id=obj.getResourceIndex(key);
             if cType.isEmpty(id)
-				res.messageLog(cType.WARNING,'Invalid key: %s',key);
+				obj.messageLog(cType.WARNING,'Invalid key: %s',key);
 				return
             end
             if value>=0
 	            obj.c0(id)=value;
             else
-				res.messageLog(cType.WARNING,'Flows resource cost values must be non-negatives');
+				obj.messageLog(cType.WARNING,'Flows resource cost values must be non-negatives');
 				return
             end
 		end
 
-		function res=setProcessResourceValue(obj,key,value)
+		function setProcessResourceValue(obj,key,value)
 		% Set the value of a resource
 		%	key - key of the resource
 		%	value - cost of the resource
-			res=cStatusLogger(cType.VALID);
 			id=obj.ps.getProcessId(key);
             if cType.isEmpty(id)
-				res.messageLog(cType.WARNING,'Invalid key: %s',key);
+				obj.messageLog(cType.WARNING,'Invalid key: %s',key);
 				return
             end
             if value>=0
 	            obj.Z(id)=value;
             else
-				res.messageLog(cType.WARNING,'Processes resource cost values must be non-negatives');
+				obj.messageLog(cType.WARNING,'Processes resource cost values must be non-negatives');
 				return
             end	
 		end

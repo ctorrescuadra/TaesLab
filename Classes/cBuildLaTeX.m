@@ -20,6 +20,12 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
         % Create an instance of the class
         %   Input:
         %       tbl - cTable object
+
+            obj=obj@cStatusLogger(cType.VALID);
+            if ~isa(tbl,'cTable')
+                obj.messageLog(cType.ERROR,'Invalid input argument');
+                return
+            end
             N=tbl.NrOfRows;
             M=tbl.NrOfCols;
             wc=tbl.getColumnWidth;
@@ -67,10 +73,10 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
             res=[res,sprintf('%s\n\n','\end{table}')];
         end
 
-        function log=exportTable(obj,filename)
+        function log=saveTable(obj,filename)
         % Save the table as LaTeX code into filename
         %   Usage:
-        %       obj.saveTable(filename);
+        %       obj.exportTable(filename);
         %   Input:
         %       filename - Name of the file
             log=cStatusLogger;
@@ -78,7 +84,6 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
                 fId = fopen (filename, 'wt');
                 fprintf(fId,'%s',obj.getLaTeXcode);
                 fclose(fId);
-                log.messageLog(cType.INFO,'File %s has been saved',filename);
             catch err
                 log.message(err.message);
                 log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);

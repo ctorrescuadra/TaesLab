@@ -172,7 +172,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     NrOfSamples=tbl.NrOfCols-2;
                     % Check ResourcesCost Table
                     if (NrOfSamples<1) || ~tbl.isNumericColumn(2:tbl.NrOfCols-1)
-                        obj.messageLog(cType.WARNING,'Invalid resource cost definition');
+                        obj.messageLog(cType.ERROR,'Invalid resource cost definition');
                         return
                     end
             
@@ -181,7 +181,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     idx=cellfun(@(x) cType.getResourcesId(x),tbl.Data(:,1));
                     fidx=find(idx==cType.Resources.FLOW);
                     if isempty(fidx)
-                        obj.messageLog(cType.WARNING,'No resource flows defined');
+                        obj.messageLog(cType.ERROR,'No resource flows defined');
                         return
                     end
                     % Buil Resources Cost data

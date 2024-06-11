@@ -32,9 +32,9 @@ function res=ShowResults(arg,varargin)
 %   OUTPUT:
 %       res - table object in the format specified in ExportAs
 %  
-% See also cResultInfo, cThermoeconomicModel
+% See also cResultInfo, cResultSet
 %
-    log=cStatusLogger(cType.ERROR);
+    log=cStatus(cType.ERROR);
     % Check input
     checkModel=@(x) isa(x,'cResultSet');
     p = inputParser;

@@ -3,13 +3,6 @@ classdef cStatusLogger < cStatus
 %	It include methods object comparison (eq, neq) and messages logger.
 % 	Methods:
 %   	obj=cStatusLogger(init_state)
-%   	test=obj.isValid()
-%   	test=obj.isError()
-%   	test=obj.isWarning()
-%   	obj.printMessage(error,text)
-%   	obj.printError(text)
-%   	obj.printWarning(text)
-%   	obj.printInfo(text)
 %   	obj.MessageLog(error,text)
 %   	obj.printLogger()
 %		obj.printLoggerType(type)
@@ -37,7 +30,7 @@ classdef cStatusLogger < cStatus
 		%  Input:
 		%   error - error code
 		%   text - message text
-			obj.status=error;
+			obj.status=logical(error);
 			message=obj.createMessage(error,varargin{:});
 			obj.logger.add(message);
 		end

@@ -21,6 +21,7 @@ classdef cWasteTable < cStatusLogger
         % cWasteTable Construct an instance of this class
         %   Input:
         %       wd - cWasteData object
+            obj=obj@cStatusLogger(cType.VALID);
             if ~isa(wd,'cWasteData') || ~wd.isValid
                 obj.messageLog(cType.ERROR,'Invalid cWasteData object')
             end
@@ -33,7 +34,6 @@ classdef cWasteTable < cStatusLogger
             obj.Flows=obj.ps.Waste.flows;
             obj.Values=wd.Values;
             obj.RecycleRatio=wd.RecycleRatio;
-            obj.status=true;
         end
 
 		function res=getValues(obj,arg)

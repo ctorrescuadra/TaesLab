@@ -18,7 +18,7 @@ function res = ExportResults(arg,varargin)
 %  
 % See also cResultSet
 %
-    log=cStatusLogger(cType.ERROR);
+    res=cStatus();
     % Check input
     checkModel=@(x) isa(x,'cResultSet');
     p = inputParser;
@@ -29,8 +29,8 @@ function res = ExportResults(arg,varargin)
     try
 		p.parse(arg,varargin{:});
     catch err
-        log.printError(err.message);
-        log.printError('Usage: ViewTable(arg,options)');
+        res.printError(err.message);
+        res.printError('Usage: ViewTable(arg,options)');
         return
     end
     param=p.Results;
@@ -47,7 +47,7 @@ function res = ExportResults(arg,varargin)
         if isValid(tbl)
             res=tbl.exportTable(varmode,param.Format);
         else
-            log.printError('Table %s is not available',name);
+            res.printError('Table %s is not available',name);
         end
     end
 end

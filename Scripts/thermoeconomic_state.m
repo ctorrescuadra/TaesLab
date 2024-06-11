@@ -21,7 +21,7 @@ if data.NrOfStates>1
 end
 % Show results
 res=ThermoeconomicState(data,param);
-if ~res.isError
+if res.isValid
 	outputResults(res,options);
 	res.printInfo('Results (res) available in Workspace');
 else

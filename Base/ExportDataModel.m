@@ -4,10 +4,10 @@ function ExportDataModel(inputFile, outputFile)
 % USAGE:
 %   ExportDataModel inputfile outputfile
 % INPUT:
-%   inputFile - Name of the input data model file % outputFile - Name of the input data model file
-%   outputFile - File name of the output data model file
+%   inputFile - Name of the input data model file 
+%   outputFile - Name of the output data model file
 %
-% See also cReadModel
+% See also cDataModel
 %
     data=ReadDataModel(inputFile);
     if isValid(data)

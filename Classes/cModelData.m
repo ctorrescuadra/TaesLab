@@ -1,4 +1,4 @@
-classdef cModelData < cStatusLogger
+classdef (Sealed) cModelData < cStatusLogger
     %cModelData container class of the Data Model structure
     %  cModelData methods:
     %    obj.isWaste
@@ -20,8 +20,9 @@ classdef cModelData < cStatusLogger
 
     methods
         function obj = cModelData(s)
-            %cModelData Construct an instance of this class
-            %   store the data structure and check it
+        %cModelData Construct an instance of this class
+        %   store the data structure and check it
+            obj=obj@cStatusLogger(cType.VALID);
             obj.dm=struct();
             for i=cType.MandatoryData
                 fld=cType.DataElements{i};
@@ -40,7 +41,6 @@ classdef cModelData < cStatusLogger
                     obj.(fld)=s.(fld);
                 end
             end
-            obj.status=cType.VALID;
         end
 
         function res=get.ProductiveStructure(obj)
@@ -57,7 +57,10 @@ classdef cModelData < cStatusLogger
             if obj.isValid
                 res=obj.dm.ExergyStates;
             end
- 
+        end
+
+        function res=getExergyState(obj,idx)
+            res=obj.dm.ExergyStates.States(idx);
         end
     
         function res=get.WasteDefinition(obj)
@@ -74,6 +77,11 @@ classdef cModelData < cStatusLogger
             if obj.isValid && obj.isResourceCost
                 res=obj.dm.ResourcesCost;
             end
+        end    
+
+        function res=getResourceSample(obj,idx)
+        % get ResourcesCost data
+            res=obj.dm.ResourcesCost.Samples(idx);
         end    
     
         function res=get.Format(obj)

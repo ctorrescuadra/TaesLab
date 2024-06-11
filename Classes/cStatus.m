@@ -4,8 +4,6 @@ classdef cStatus < cTaesLab
 % 	Methods:
 %   	obj=cStatus(init_status)
 %   	test=obj.isValid()
-%   	test=obj.isError()
-%   	test=obj.isWarning()
 %   	obj.printMessage(error,text)
 %   	obj.printError(text)
 %   	obj.printWarning(text)
@@ -21,11 +19,11 @@ classdef cStatus < cTaesLab
 		% Class Constructor. 
 		% Initialize class to manage errors
 		%	Input:
-		%		val - Initial state: cType.VALID or cType.ERROR
+		%		val - Initial state: true or false
             if nargin<1
-    	        obj.status=cType.ERROR;
+    	        obj.status=true;
             else
-                obj.status=val;
+                obj.status=logical(val);
             end
 		end
 				
@@ -33,16 +31,6 @@ classdef cStatus < cTaesLab
 		% Test is class status is Valid
 			test=(obj.status>cType.ERROR);
         end
-
-		function test=isWarning(obj)
-		% Test is class status is Warning
-			test=(obj.status==cType.WARNING);
-        end
-        
-		function test=isError(obj)
-		% Test is class status is Error
-			test=(obj.status==cType.ERROR);
-		end
 
 		function test=isValidResult(obj)
 		% Test if class is ResultId
@@ -92,7 +80,7 @@ classdef cStatus < cTaesLab
 		%   error - error code
 		%   text - text message
 			message=obj.createMessage(error,varargin{:});
-			obj.status=error;
+			obj.status=logical(error);
 			disp(message);
 		end
 	end

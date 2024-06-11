@@ -1,25 +1,36 @@
 function res=ThermoeconomicState(data,varargin)
-% ThermoeconomicState gets the exergy balances and the Fuel-Product table for a plant state
-%  USAGE:
-%	res=ThermoeconomicState(data, options)
-%  INPUT:
-%   data - cReadModel Object containing the data information
-%   options - A structure contains additional parameters:
-%    State - Indicate a state to get exergy values.
-%            If not provided, first state is used
-%    Show -  Show results on console (true/false)
-%    SaveAs - Save results in an external file
-%  OUTPUT:
-%   res - cResultsInfo object contains the results of the exergy analysis for the required state
-%   The following tables are obtained:
-%		eflows - exergy of flows
+%ThermoeconomicState - Get the exergy balances and the Fuel-Product table.
+%	Given a data model of a plant this function obtain the exergy analysis
+%   for a state of plant. 
+% 
+%	Syntax
+%	  res = ThermoeconomicState(data,Name,Value)
+% 
+%   Input Arguments
+%     data - cReadModel object containing the data information
+%    
+%   Name-Value Arguments
+%     State - State name of the exergy data. If not provided first state is used
+%		char array
+%     Show -  Show results on console.  
+%       true | false (default)
+%     SaveAs - Name of file (with extension) to save the results.
+%       char array 
+% 
+%   Output Arguments
+%     res - cResultsInfo object contains the results of the exergy analysis for the required state
+%     The following tables are obtained:
+%		eflows - exergy of the flows
 %       estreams - exergy of the streams
 %       eprocesses - exergy table of the processes
 %       tfp - Exergy Fuel-Product table
 %
-% See also cDataModel, cExergyModel, cResultInfo
+%   Example
+%     <a href="matlab:open ThermoeconomicStateDemo.mlx">Thermoeconomic State Demo</a>
 %
-	res=cStatusLogger(); 
+%   See also cDataModel, cExergyModel, cResultInfo
+%
+	res=cStatus(); 
 	checkModel=@(x) isa(x,'cDataModel');
 	% Check input parameters
 	p = inputParser;
@@ -58,6 +69,11 @@ function res=ThermoeconomicState(data,varargin)
 	else
 		pm.printLogger;
 		res.printError('Invalid Process Model. See error log');
+	end
+	if ~isValid(res)
+		res.printLogger;
+        res.printError('Invalid cResultInfo. See error log');
+		return
 	end
     % Show and Save results if required
     if param.Show

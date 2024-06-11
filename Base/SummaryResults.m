@@ -24,7 +24,7 @@ function res = SummaryResults(data,varargin)
 %
 %   See also cDataModel, cModelSummary, cResultInfo
 %
-    res=cStatusLogger();
+    res=cStatus();
     checkModel=@(x) isa(x,'cDataModel');
     %Check and initialize parameters
     p = inputParser;
@@ -43,7 +43,12 @@ function res = SummaryResults(data,varargin)
         model=cThermoeconomicModel(data,'Summary',true);
         res=model.summaryResults;
     else
-        res.printWarning('Summary Results requires more than one state');
+        res.printError('Summary Results requires more than one state');
+    end
+    if ~isValid(res)
+		res.printLogger;
+        res.printError('Invalid cResultInfo. See error log');
+		return
     end
     % Show and Save results if required
     if param.Show

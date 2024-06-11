@@ -1,4 +1,4 @@
-classdef cBuildHTML < cStatusLogger
+classdef (Sealed) cBuildHTML < cStatusLogger
 % cBuildHTML convert cTable object into HTML files
 %   If a cTableIndexobject is provided create a index table
 %   which indicate where are saved the HTML files of the cResultInfo tables. 

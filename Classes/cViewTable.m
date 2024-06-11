@@ -23,6 +23,7 @@ classdef cViewTable < cStatus
 		%	 tbl - cResultTable object
 		%
 			% Parameters depending of software platform
+			obj=obj@cStatus(cType.VALID);
 			if isOctave
 				param=struct('ColumnScale',8,'RowWidth',21,'xMin',160,...
 					'xScale',0.8,'yScale',0.8,'xoffset',4,'yoffset',2,...
@@ -54,7 +55,6 @@ classdef cViewTable < cStatus
 			obj.hf=figure('visible','off','menubar','none','toolbar','none',...
 				'name',obj.descr,'numbertitle','off',...
 				'position',[xpos,ypos,xsize,ysize]);
-			obj.status=cType.VALID;
 		end
 
 		function showTable(obj)

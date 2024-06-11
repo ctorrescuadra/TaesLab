@@ -1,4 +1,4 @@
-classdef cSparseRow < cStatusLogger
+classdef  cSparseRow < cStatus
 	% cSparseRow Defines objects to store matrix which contains a few non-null rows.
 	%	This class is used to manage  waste allocation matrices, and provide a set of
 	%   algebraic operations. 
@@ -38,7 +38,7 @@ classdef cSparseRow < cStatusLogger
 			obj.NR=size(vals,1);
 			obj.M=size(vals,2);
 			if (obj.NR ~= length(rows))
-				obj.messageLog(cType.ERROR,'Matrix dimensions must agree: %d %d',obj.NR,length(rows));
+				obj.status=false;
 				return
 			end
 			obj.mRows=rows;

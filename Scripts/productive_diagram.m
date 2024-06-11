@@ -9,14 +9,14 @@
 % Select data file model
 options=struct('Console','N','Save','Y');
 data=selectDataModel();
-if data.isError
+if ~data.isValid
 	data.printLogger;
 	data.printError('Invalid data model. See error log');
 	return
 end
 % Show results
 res=ProductiveDiagram(data);
-if ~res.isError
+if res.isValid
 	outputResults(res,options);
 	res.printInfo('Results (res) available in Workspace');
 else

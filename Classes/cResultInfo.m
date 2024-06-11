@@ -73,12 +73,12 @@ classdef cResultInfo < cResultSet
         % Show Result Tables
         function printResults(obj)
         % Print the tables on console
-            log=cStatus();
-            if ~isValid(obj)
-                log.printError('Invalid object to print')
-                return
+            if isValid(obj)
+                cellfun(@(x) printTable(x),obj.tableIndex.Content);
+            else
+                obj.printWarning('Invalid object');
             end
-            cellfun(@(x) printTable(x),obj.tableIndex.Content);
+   
         end
 
         function showResults(obj,name,varargin)
@@ -92,7 +92,6 @@ classdef cResultInfo < cResultSet
         %           cType.TableView.GUI
         %           cType.TableView.HTML (default)
         %
-            log=cStatus(cType.VALID);
             if nargin==1
                 printResults(obj);
                 return
@@ -101,44 +100,42 @@ classdef cResultInfo < cResultSet
             if isValid(tbl)
                 showTable(tbl,varargin{:});
             else
-                log.printError('Table name %s does NOT exists',name);
+                obj.printWarning('Table name %s does NOT exists',name);
             end
         end
 
-        function res = getTable(obj,name,varargin)
+        function res = getTable(obj,name)
         % Get the table called name
         %   Usage:
         %       res=obj.getTable(name)
         %   Input:
         %       name - Name of the table
-        %       option - varmode option:
-        %           cType.VarMode.NONE: Return a struct with the cTable objects (default)
-        %           cType.VarMode.CELL: Return a struct with cell values
-        %           cType.VarMode.STRUCT: Return a struct with structured array values
-        %           cType.VarModel.TABLE: Return a struct of Matlab tables
         %   Output:
-        %       res - table info, depends on option
-            res = cStatusLogger;
+        %       res - cTable 
+            res = cStatus();
             if nargin<2
-                res.printError('No Table provided');
-                return
+                res.printWarning('Table name is missing')
             end
             if obj.existTable(name)
-                tbl=obj.Tables.(name);
+                res=obj.Tables.(name);
             else
-                res.printError('Table name %s does NOT exists',name);
+                res.printWarning('Table name %s does NOT exists',name);
                 return
             end
-            res=exportTable(tbl,varargin{:});
         end
 
         function res=getTableIndex(obj,varargin)
         % Get the Table Index
+        %  Usage:
+        %   res=getTableIndex(obj,options)
+        %  Input:
         %   options - VarMode options
-        %       cType.VarMode.NONE: Return a struct with the cTable objects
-        %       cType.VarMode.CELL: Return a struct with cell values
-        %       cType.VarMode.STRUCT: Return a struct with structured array values
-        %       cType.VarModel.TABLE: Return a struct of Matlab tables
+        %       cType.VarMode.NONE: cTable object
+        %       cType.VarMode.CELL: cell array
+        %       cType.VarMode.STRUCT: structured array
+        %       cType.VarModel.TABLE: Matlab table
+        %  Output:
+        %   res - Table Index info in the format selected
             res=exportTable(obj.tableIndex,varargin{:});
         end
 
@@ -154,7 +151,11 @@ classdef cResultInfo < cResultSet
         %           cType.TableView.HTML
         %       
             tbl=obj.tableIndex;
-            tbl.showTable(varargin{:});
+            if isValid(tbl)
+                tbl.showTable(varargin{:});
+            else
+                obj.printWarning('Invalid Table index');
+            end
         end
 
         function showGraph(obj,graph,varargin)
@@ -165,14 +166,12 @@ classdef cResultInfo < cResultSet
         %       graph - [optional] graph table name
         %       options - graph options
         % See also cGraphResults, cTableResults
-            log=cStatus(cType.VALID);
-            option=[];
             if nargin==1
                 graph=obj.Info.DefaultGraph;
             end
 	        tbl=getTable(obj,graph);
 	        if ~isValid(tbl)
-		        log.printError('Invalid graph table: %s',graph);
+		        obj.printError('Invalid graph table: %s',graph);
 		        return
 	        end
 	        % Get default optional parameters
@@ -190,6 +189,8 @@ classdef cResultInfo < cResultSet
 				        else
 					        option=obj.Info.getDefaultProcessVariables;
                         end
+                    otherwise
+                        option=[];
                 end
             else
                 option=varargin{:};
@@ -203,10 +204,10 @@ classdef cResultInfo < cResultSet
         %  Input:
         %   name - name of the table
         %   varmode - result type.
-        %       NONE: cTable (default)
-        %       CELL: cell array
-        %       STRUCT: struct array
-        %       TABLE: Matlab table object
+       %       cType.VarMode.NONE: cTable object
+        %      cType.VarMode.CELL: cell array
+        %      cType.VarMode.STRUCT: structured array
+        %      cType.VarModel.TABLE: Matlab table
         %   fmt - Format values (false/true)
         % Output:
         %   res - Table values in the required format
@@ -227,10 +228,10 @@ classdef cResultInfo < cResultSet
         %  Input:
         %   name - name of the table
         %   varmode - result type.
-        %       NONE: cTable (default)
-        %       CELL: cell array
-        %       STRUCT: struct array
-        %       TABLE: Matlab table object
+       %       cType.VarMode.NONE: cTable object
+        %      cType.VarMode.CELL: cell array
+        %      cType.VarMode.STRUCT: structured array
+        %      cType.VarModel.TABLE: Matlab table
         %   fmt - Format values (false/true)
         %  Output:
         %   res - structure with the tables in the required format

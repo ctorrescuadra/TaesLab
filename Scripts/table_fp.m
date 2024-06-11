@@ -23,7 +23,7 @@ if data.NrOfStates>1
 end
 % Get TableFP
 res=DiagramFP(data,param);
-if ~res.isError
+if res.isValid
 	outputResults(res,options);
 	res.printInfo('Results (res) available in Workspace');
 else

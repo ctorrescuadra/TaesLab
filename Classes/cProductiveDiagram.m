@@ -40,7 +40,6 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.DefaultGraph=cType.Tables.FLOWS_DIAGRAM;
             obj.ModelName=ps.ModelName;
             obj.State=ps.State;
-            obj.status=cType.VALID;
         end
 
         function res = getNodeTable(obj,tbl)

@@ -17,14 +17,14 @@ function SaveDataModel(arg,filename)
         return
     end
     if ~isValid(arg)
-        log.printError('Invalid data model');
+        log.printError('File NOT saved. Invalid data model');
     end
     if isa(arg,'cDataModel')
         data=arg;
     elseif isa(arg,'cThermoeconomicModel')
         data=arg.DataModel;
     else
-        log.printError('Invalid model. It should be a cDataModel or cThermoeconomicModel object');
+        log.printError('File NOT saved. It should be a cDataModel or cThermoeconomicModel object');
         return
     end
     if isstring(filename)

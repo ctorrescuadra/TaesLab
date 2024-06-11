@@ -10,15 +10,12 @@ function B=divideCol(A,x)
 %  	OUTPUT:
 %		B - Scaled Matrix 
 %   
-	log=cStatus(cType.VALID);
-	B=[];
 	if nargin==1
 		x=sum(A,1);
 	end
 	[~,M]=size(A);
 	if(M~=length(x))
-		log.printError('Matrix dimensions must agree: %d %d',M,length(x));
-		return
+		error('Matrix dimensions must agree: %d %d',M,length(x));
 	end
     x(x~=0)=1./x(x~=0);
     B=scaleCol(A,x);

@@ -4,8 +4,8 @@ function model=ThermoeconomicModel(filename,varargin)
 %  USAGE:
 %   model = ThermoeconomicModel(filename, options)
 %  INPUT:
-%   filename - data model filename
-%   options - optional parameters
+%   filename - data model file name
+%   options - optional parameters (pairs Name/Value)
 %    State: Operation state name
 %    ReferenceState: Reference State name
 %    ResourceSample: Resource Sample name
@@ -26,7 +26,7 @@ function model=ThermoeconomicModel(filename,varargin)
 %
 % See also cThermoeconomicModel
 %
-    model=cStatusLogger();
+    model=cStatus(cType.VALID);
     % Check input parameters
     if (nargin<1) || ~isText(filename)
         model.printError('Usage: model=ThermoeconomicModel(filename, params)');

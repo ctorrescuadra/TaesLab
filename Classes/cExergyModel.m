@@ -37,7 +37,6 @@ classdef cExergyModel < cResultId
 				obj.messageLog(cType.ERROR,'Input parameter is not a valid cExergyData object');
 				return
             end
-			obj.status=cType.VALID;
 			M=rex.ps.NrOfFlows;
 			NS=rex.ps.NrOfStreams;
 			% Build Exergy Adjacency tables

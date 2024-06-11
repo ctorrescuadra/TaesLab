@@ -34,7 +34,7 @@ if data.NrOfWastes>1
 end
 % Get Results
 res=WasteAnalysis(data,param);
-if ~res.isError
+if res.isValid
 	outputResults(res,options);
 	res.printInfo('Results (res) available in Workspace');
 else

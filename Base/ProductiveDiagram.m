@@ -1,7 +1,7 @@
 function res=ProductiveDiagram(data,varargin)
 % ProductiveDiagram gets the adjacency tables of the productive structure.
 %  USAGE:
-%   res=ProductiveDiagram(data).
+%   res = ProductiveDiagram(data, options).
 %  INPUT:
 %   data - ccDataModel object containing the data model information of the plant
 %   options - Structure containing additional parameters (optional)
@@ -16,7 +16,7 @@ function res=ProductiveDiagram(data,varargin)
 %
 % See also cProductiveDiagram, cResultInfo
 %
-	res=cStatusLogger();
+	res=cStatus();
 	checkModel=@(x) isa(x,'cDataModel');
     %Check input parameters
     p = inputParser;
@@ -33,7 +33,17 @@ function res=ProductiveDiagram(data,varargin)
     param=p.Results;
 	% Get Productive Diagram info
 	pd=cProductiveDiagram(data.ProductiveStructure);
-    res=pd.getResultInfo(data.FormatData);  
+    if isValid(pd)
+        res=pd.getResultInfo(data.FormatData);
+    else
+        data.printLogger;
+        res.printError('Invalid productive structure. See error log');
+    end 
+    if ~isValid(res)
+		res.printLogger;
+        res.printError('Invalid cResultInfo. See error log');
+		return
+    end
     % Show and Save results if required
     if param.Show
         printResults(res);

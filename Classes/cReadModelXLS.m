@@ -13,7 +13,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 		%	cfgfile - xlsx file containig the model of the plant
 		%
             % Read configuration file
-            obj.status=cType.VALID;
+            obj.status=true;
             Sheets=cType.TableDataName;
             if isOctave
 				try
