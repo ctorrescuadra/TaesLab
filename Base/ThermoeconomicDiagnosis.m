@@ -1,27 +1,42 @@
 function res=ThermoeconomicDiagnosis(data,varargin)
-% ThermoeconomicDiagnosis Compares two states of the plant 
-%   It compares a state with the reference state and gets the diagnosis result tables
-%  USAGE:
-%   res=ThermoeconomicDiagnosis(data, options)     
-%  INPUT:
-% 	data - cReadModel object containing the thermoeconomic data model
-%   options - a structure contains the additional parameters:
-%    ReferenceState - Reference State for diagnosis. If not provided first state is used.
-%    State - Operation State for diagnosis. If not provided second state is used
-%    DiagnosisMethod - Select the method to compute diagnosis
-%       WASTE_EXTERNAL: Waste are considered output, and method compute cost variation
-%       WASTE_INTERNAL: Waste are allocated to productive units, and method compute Malfunction cost of wastes
-%    Show -  Show results on console (true/false)
-%    SaveAs - Save results in an external file
-%  OUTPUT:
-%   res - cResultInfo object contains the results of thermoeconomic diagnosis.
-%   The following tables are obtained:
-%       cType.Tables.DIAGNOSIS (dgn)
-%       cType.Tables.MALFUNCTION (mf)
-%       cType.Tables.MALFUNCTION_COST (mfc)
-%       cType.Tables.IRREVERSIBILITY_VARIATION (dit)
+%ThermoeconomicDiagnosis - Compare to states of the plant and make a thermoeconomic diagnosis
+%	This function makes a thermoeconomic diagnosis of the plant comparing two states 
+%   of the plant. Two diferent methods could be used: 'WASTE_EXTERNAL' accounts the increse of
+%   of the cost of wastes, and 'WASTE_INTERNAL' internalised the waste cost to the productive
+%   processes whose generate them. THe data model must have at least to states defined to 
+%   perform the analysis
+% 
+%	Syntax
+%	  res = ThermoeconomicDiagnosis(data,Name,Value)
+% 
+%   Input Arguments
+%     data - cReadModel object containing the data information
+%    
+%   Name-Value Arguments
+%     Reference State - Reference State. If not provided first state is used
+%       char array
+%     State - State to compare. If not provided second state is used
+%		char array
+%     DiagnosisMethod - Select the method to compute diagnosis
+%       'WASTE_EXTERNAL' Waste are considered output, and method compute waste cost variation
+%       'WASTE_INTERNAL' Waste are allocated to productive units, and method compute Malfunction cost of wastes
+%     Show -  Show the results on console.  
+%       true | false (default)
+%     SaveAs - Name of file (with extension) to save the results.
+%       char array | string
+% 
+%   Output Arguments
+%     res - cResultsInfo object contains the results of the thermoeconomic diagnosis for the required state
+%     The following tables are obtained:
+%		dgn - diagnosis summary table
+%       mf - malfunction table
+%       mfc - malfunction cost table
+%       dit - irreversibility variation
 %
-% See also cDataModel, cDiagnosis, cResultInfo
+%   Example
+%     <a href="matlab:open ThermoeconomicDiagnosisDemo.mlx">Thermoeconomic Diagnosis Demo</a>
+%
+%   See also cDataModel, cDiagnosis, cResultInfo
 %
     res=cStatus();
     % Check input parameters

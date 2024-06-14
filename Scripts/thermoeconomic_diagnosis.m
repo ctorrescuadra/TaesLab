@@ -8,14 +8,14 @@
 %
 % Select data model file
 options=struct('Console','Y','Save','N');
+param=struct();
 data=selectDataModel();
 if ~data.isValid
     data.printLogger;
 	data.printError('Invalid data model. See error log');
 	return
 end
-% Define function paramaters
-param=struct();
+% Define paramaters
 param.DiagnosisMethod=cType.DEFAULT_DIAGNOSIS;
 if data.isDiagnosis
 	states=data.States;
@@ -27,10 +27,10 @@ end
 doptions=cType.DiagnosisOptions;
 [~,param.DiagnosisMethod]=optionChoice('Select Diagnosis Method:',doptions(2:end));
 % Solve and show results
-res=ThermoeconomicDiagnosis(data,param);
-if res.isValid
-	outputResults(res,options);
-	res.printInfo('Results (res) available in Workspace');
+dgn=ThermoeconomicDiagnosis(data,param);
+if dgn.isValid
+	outputResults(dgn,options);
+	dgn.printInfo('Results (dgn) available in Workspace');
 else
-	printLogger(res);
+	printLogger(dgn);
 end

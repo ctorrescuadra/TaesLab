@@ -1,22 +1,35 @@
 function res=ProductiveStructure(data,varargin)
-% ProductiveStructure gets the information about the productive structure of the plant
-%  USAGE:
-%   res = ProductiveStructure(data,options)
-%  INPUT:
-%   data - cDataModel object containing the data model information
-%   options - Structure containing additional parameters (optional)
-%       Show - Show the results in the console (true/false)
-%       SaveAs - Name of the file where the results will be saved. 
-%  OUTPUT:
-%	res - cResultInfo object containing the productive structure info.
-%	The following tables are obtained
+%ProductiveStructure - Gets the information about the productive structure of a plant.
+%   This function obtains the information of the productive structure of
+%   the plant. If 'Show' option is activated it displays the productive
+%   structure tables on console. If 'SaveAs' option is used these tables
+%   are saved in an external file.
+%
+%  Syntax
+%    res = ProductiveStructure(data,Name,Value)
+%
+%   Input Arguments
+%     data - cReadModel object containing the data information
+%    
+%   Name-Value Arguments
+%     Show -  Show the results on console.  
+%       true | false (default)
+%     SaveAs - Name of file (with extension) to save the results.
+%       char array | string
+%
+%   Output Arguments
+%     res - cResultsInfo object contains the productive structure information
+%     The following tables are obtained:
 %       flows - Flows definition table
 %       streams - Streams definition table
 %       processes - Processes definition table
 %
-% See also cProductiveStructure, cResultInfo
+%   Example
+%     <a href="matlab:open ProductiveStructureDemo.mlx">Productive Structure Demo</a>
 %
-	res=cStatus();
+%   See also cDataModel, cProductiveStructure, cResultInfo
+%
+    res=cStatus();
 	checkModel=@(x) isa(x,'cDataModel');
     %Check input parameters
     p = inputParser;

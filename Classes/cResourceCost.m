@@ -17,7 +17,7 @@ classdef cResourceCost < cStatusLogger
 		% Set the resources cost values for a given state exm
 		%	Input:
 		%	 exm - cExergyModel object with state information
-			obj=obj@cStatusLogger(cType.VALID)
+			obj=obj@cStatusLogger(cType.VALID);
 			if ~isa(rd,'cResourceData') || ~rd.isValid
 				rd.messageLog(cType.ERROR,'Invalid resource cost data');
 				return

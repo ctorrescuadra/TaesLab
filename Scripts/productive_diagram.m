@@ -1,10 +1,9 @@
-% productive_diagram
-% Script to launch function ProductiveDiagram
-% Generate the productive structure tables
-% Select the data file model as <folder>_model.<ext>
-% Prompt parameters interactively
+%productive_diagram - Script to launch function ProductiveDiagram
+%   Generate the productive structure tables
+%   Select the data file model as <folder>_model.<ext>
+%   Prompt parameters interactively
 % Output:
-%	res - cResultInfo containing Productive Diagram info
+%	pd - cResultInfo containing Productive Diagram info
 %
 % Select data file model
 options=struct('Console','N','Save','Y');
@@ -15,10 +14,10 @@ if ~data.isValid
 	return
 end
 % Show results
-res=ProductiveDiagram(data);
-if res.isValid
-	outputResults(res,options);
-	res.printInfo('Results (res) available in Workspace');
+pd=ProductiveDiagram(data);
+if pd.isValid
+	outputResults(pd,options);
+	pd.printInfo('Results (pd) available in Workspace');
 else
-	printLogger(res);
+	printLogger(pd);
 end

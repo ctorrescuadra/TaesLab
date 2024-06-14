@@ -1,21 +1,35 @@
 function res=DiagramFP(data,varargin)
-% DiagramFP gets the Diagram FP tables for a plant State
-%  USAGE:
-%	res = DiagramFP(data, options)
-%  INPUT:
-%	data - cReadModel Object containing the data model information
-%   options - a structure (pairs Name/Value) contains additional parameters.
-%		State - Indicate a state to get exergy values. 
-%               If it is not provided, the first state is used.
-%       Show -  Show results on console (true/false)
-%       SaveAs - Save results in an external file 
-% 	OUTPUT:
+%DiagramFP - Gets the diagram FP tables for one plant State
+%	This function gets the adjacency tables of the diagram FP
+%   for one state of the plant. 
+%   These diagrams could be represented grafically using the function
+%   ShowGraph, by external graph software as yEd saving the adjancency
+%   tables of the graph in xlsx format.
+%  	
+%   Syntax
+%	  res = DiagramFP(data,Name,Value);
+%
+%   Input Arguments
+%	  data - cReadModel Object containing the data model information.
+%
+%   Name-Value Arguments
+%	  State - Indicate one valid state to get exergy values. 
+%  	    char array
+%     Show -  Show results on console
+%       true | false (default)
+%     SaveAs - Name of the file where the results are saved.
+%	    char array | string
+%
+% 	Output Arguments
 %	 res - cResultInfo object contains the FP diagram tables
 %    The following tables are obtained:
 %		atfp - Diagram FP adjacency matrix                                     
 %       atcfp - Cost Diagram FP adjacency matrix
-%      
-% See also cExergyCost, cResultInfo
+%   
+%   Examples
+%     <a href="matlab:open DiagramFpDemo.mlx">Diagram FP Demo</a>
+%    
+%   See also cDataModel, cExergyCost, cResultInfo
 %
 	res=cStatus(); 
 	checkModel=@(x) isa(x,'cDataModel');

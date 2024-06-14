@@ -1,44 +1,58 @@
 function res = WasteAnalysis(data,varargin)
-% WasteAnalysis performs a recycling analysis of the plant
-%   Given a waste stream, it calculates the cost of the output streams (final products and waste).
-%   when recycling from 0 to %100. 
-%   If Recycling is not selected,  only a waste allocation analysis is provided.
-%  USAGE: 
-%   res = RecyclingAnalysis(data, options)
-%  INPUT:
-%   data - cReadModel object
-%   options - A structure containing optional parameters 
-%    State: Operation state
-%    WasteFlow: WasteFlow key to analyze
-%    Recycling: Waste Recycling analysis (true/false)
-%    CostTables: Select the recycling tables to obtain
-%       DIRECT - Only Direct cost are selected (default)
-%       GENERALIZED - Only Generalized costs are selected
-%       ALL - Both Direct and Generalized are selected
-%    ResourceSample: Resource sample name
-%    Show - Show the results in the console (true/false)
-%    SaveAs - Name of the file where the results will be saved. 
-%  OUTPUT:
-%    res - cResultInfo object with the waste analysis tables:
-%       cType.Tables.WASTE_DEFINITION (wd)
-%       cType.Tables.WASTE_ALLOCATION (wa)
-%       cType.Tables.WASTE_RECYCLING_DIRECT (rad)
-%       cType.Tables.WASTE_RECYCLING_GENERAL (rag)
+%Waste Analysis perform a waste analysis of a plant state.
+%   It calculates the waste allocation for the criterias defined in the data model
+%   If it is activated obtains tables with direct and/or generalizad costs as 
+%   function of the recycling of a waste from 0 to 100 percent 
 %
-% See also cDataModel, cRecyclingAnalysis, cResultInfo
+%   Syntax
+%     res=WasteAnalysis(data,Name,Value)
+%
+%   Input Arguments
+% 	  data - cDataModel object whose contains the thermoeconomic data model
+%
+%   Name-Value Arguments
+%     State - Thermoeconomic state. If missing first sample is taken
+%       array char | string
+%     ActiveWaste: Waste Flow key to analyze. If missing first sample is taken
+%       array char | string
+%     Recycling: Waste Recycling analysis 
+%       false | true (default)
+%     CostTables - Indicate which cost tables are calculated
+%       'DIRECT' calculates direct exergy cost tables
+%       'GENERALIZED' calculates generalized exergy cost tables
+%       'ALL' calculate both kind of tables
+%     ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
+%       char array | string
+%     Show - Show the results in the console
+%       true | false (default)
+%     SaveAs - Name of the file where the results will be saved. 
+%       char array | string
+%
+%   Output Arguments
+%     res - cResultInfo object contains the results of thermoeconomic Analysis
+%     The following tables are obtained:
+%       wd - waste definition table
+%       wa - waste allocation table
+%       rad - recycling analysis direct cost
+%       rag - recycling analysis generalized cost
+%
+%   Example
+%     <a href="matlab:open RecyclingAnalysisDemo.mlx">Recycling Analysis Demo</a>
+%
+%   See also cDataModel, cWasteAnalysis, cResultInfo
 %
     res=cStatus();
     checkModel=@(x) isa(x,'cDataModel');
     % Check and initialize parameters
     p = inputParser;
     p.addRequired('data',checkModel);
-    p.addParameter('State','',@ischar);
-    p.addParameter('ResourceSample','',@ischar);
+    p.addParameter('State','',@isText);
+    p.addParameter('ResourceSample','',@isText);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
-    p.addParameter('ActiveWaste','',@ischar);
+    p.addParameter('ActiveWaste','',@isText);
     p.addParameter('Recycling',true,@islogical);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@ischar);
+    p.addParameter('SaveAs','',@isText);
     try
         p.parse(data,varargin{:});
     catch err
@@ -68,6 +82,8 @@ function res = WasteAnalysis(data,varargin)
     % Read exergy values
     if isempty(param.State)
         param.State=data.getStateName(1);
+    elseif isstring(param.State)
+        param.State=convertStringsToChars(param.State);
     end
 	ex=data.getExergyData(param.State);
 	if ~ex.isValid
@@ -85,12 +101,13 @@ function res = WasteAnalysis(data,varargin)
     wt=mfp.WasteTable;
     if isempty(param.ActiveWaste)
         param.ActiveWaste=wt.WasteKeys{1};
-    else
-        wid=wt.getWasteIndex(param.ActiveWaste);
-        if isempty(wid)
-            res.printError('Invalid waste key %s',param.ActiveWaste);
-            return
-        end
+    elseif isstring(param.ActiveWaste)
+        param.ActiveWaste=convertStringsToChars(param.ActiveWaste);
+    end
+    wid=wt.getWasteIndex(param.ActiveWaste);
+    if isempty(wid)
+        res.printError('Invalid waste key %s',param.ActiveWaste);
+        return
     end
     % Read external resources and get results
 	pct=cType.getCostTables(param.CostTables);
@@ -100,6 +117,8 @@ function res = WasteAnalysis(data,varargin)
         if data.isResourceCost && param.GeneralCost
             if isempty(param.ResourceSample)
 			    param.ResourceSample=data.getResourceSample(1);
+            elseif isstring(param.ResourceSample)
+                param.ResourceSample=convertStringsToChars(param.ResourceSample);
             end
 		    rsd=data.getResourceData(param.ResourceSample);
             if ~rsd.isValid

@@ -77,8 +77,7 @@ classdef cResultInfo < cResultSet
                 cellfun(@(x) printTable(x),obj.tableIndex.Content);
             else
                 obj.printWarning('Invalid object');
-            end
-   
+            end  
         end
 
         function showResults(obj,name,varargin)
@@ -99,8 +98,6 @@ classdef cResultInfo < cResultSet
             tbl=obj.getTable(name);
             if isValid(tbl)
                 showTable(tbl,varargin{:});
-            else
-                obj.printWarning('Table name %s does NOT exists',name);
             end
         end
 
@@ -114,13 +111,12 @@ classdef cResultInfo < cResultSet
         %       res - cTable 
             res = cStatus();
             if nargin<2
-                res.printWarning('Table name is missing')
+                res.printError('Table name is missing')
             end
             if obj.existTable(name)
                 res=obj.Tables.(name);
             else
-                res.printWarning('Table name %s does NOT exists',name);
-                return
+                res.printError('Table name %s does NOT exists',name);
             end
         end
 
@@ -215,7 +211,7 @@ classdef cResultInfo < cResultSet
             res=[];
             narginchk(3,4);
             if (nargin<4)
-                    fmt=false;
+                fmt=false;
             end
             tbl=obj.getTable(name);
             if isValid(tbl)

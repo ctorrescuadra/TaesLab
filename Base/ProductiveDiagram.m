@@ -1,20 +1,33 @@
 function res=ProductiveDiagram(data,varargin)
-% ProductiveDiagram gets the adjacency tables of the productive structure.
-%  USAGE:
-%   res = ProductiveDiagram(data, options).
-%  INPUT:
-%   data - ccDataModel object containing the data model information of the plant
-%   options - Structure containing additional parameters (optional)
-%       Show - Show the results in the console (true/false).
-%       SaveAs - Name of the file where the results will be saved. 
-%  OUTPUT:
-%   res - cResultInfo object containing information of the productive structure.
-%   The following tables are obtained:
+%ProductiveDiagram - Gets the productive diagrams of a plant.
+%   This functions obtains the productive diagrams of a plant.
+%   These diagrams could be represented grafically using the function
+%   ShowGraph, or saving the adjancency tables in xlsx format which can be
+%   used by external graph software as yEd
+%
+%  Syntax
+%    res = ProductiveStructure(data,Name,Value)
+%
+%   Input Arguments
+%     data - cReadModel object containing the data information
+%    
+%   Name-Value Arguments
+%     Show -  Show the results on console.  
+%       true | false (default)
+%     SaveAs - Name of file (with extension) to save the results.
+%       char array | string
+%
+%   Output Arguments
+%     res - cResultsInfo object contains the productive structure information
+%     The following tables are obtained:
 %       fat - Flow adjacency matrix
 %       pat - Productive adjacency matrix
 %       fpat - Flow-Process adjacency matrix
 %
-% See also cProductiveDiagram, cResultInfo
+%   Example
+%     <a href="matlab:open ProductiveStructureDemo.mlx">Productive Structure Demo</a>
+%
+%   See also cDataModel, cProductiveDiagram, cResultInfo
 %
 	res=cStatus();
 	checkModel=@(x) isa(x,'cDataModel');

@@ -1,39 +1,50 @@
 function res=ThermoeconomicAnalysis(data,varargin)
-% ThermoeconomicAnalysis gets the termoeconomic analysis of a plant state.
+%ThermoeconomicAnalysis gets the termoeconomic analysis of a plant state.
 %   It calculates the exergy cost, Fuel-Product and Irreversibility-Cost tables
-%  USAGE:
-%   res=ThermoeconomicAnalysis(data, options)
-%  INPUT:
-% 	data - cReadModel object whose contains the thermoeconomic data model
-%   options - an structure contains additional parameters:   
-%       State - Thermoeconomic state id. If missing first sample is taken   
-%       CostTables - Indicate which cost tables are calculated
-%        DIRECT:  calculates direct exergy cost tables
-%        GENERALIZED: calculates generalized exergy cost tables
-%        ALL: calculate both kind of tables
-%       ResourceSample - Select a sample in ResourcesCost table.  
-%        If missing first sample is taken
-%       Show - Show the results in the console (true/false)
-%       SaveAs - Name of the file where the results will be saved. 
-%  OUTPUT:
-%   res - cResultInfo object contains the results of thermoeconomic Analysis
-%      If DirectCost is selected (default) the following tables are obtained:
-%       dfcost: Direct Exergy Cost of flows
-%       dcost: Direct Exergy cost of processes
-%       udcost: Unit Direct Exergy Cost of processes table
-%       ict: Irreversibility Cost Table 
-%       fict: Flows Irreversibility Cost Table
-%       dcfp: Fuel-Product direct cost table
-%       dcfpr: Fuel-Product direct cost table (includes waste)
-%      If GeneralCost is selected, the following tables are obtained:
-%       gcost: Generalized cost of processes 
-%       ugcost: Unit Generalized Cost of processes
-%       gfcost: Generalized Cost of flows
-%       gcfp: Fuel-Product generalized cost table
-%       gict: Irreversibility generalized cost table 
-%       gfict: Flows Irreversibility generalized cost table 
+%   If ResourcesCost are defined in the data model, it calculates generalized cost
+%   for the selected 'ResourceSample' if it is required in the 'CostTables' parameter
+%   Syntax
+%     res=ThermoeconomicAnalysis(data,Name,Value)
 %
-% See also cExergyCost, cDataModel, cResultInfo
+%   Input Arguments
+% 	  data - cDataModel object which contains the data model
+%
+%   Name-Value Arguments
+%     State - Thermoeconomic state id. If missing first sample is taken
+%       array char | string
+%     CostTables - Indicate which cost tables are calculated
+%       'DIRECT' calculates direct exergy cost tables
+%       'GENERALIZED' calculates generalized exergy cost tables
+%       'ALL' calculate both kind of tables
+%     ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
+%       char array | string
+%     Show - Show the results in the console
+%       true | false (default)
+%     SaveAs - Name of the file where the results will be saved. 
+%       char array | string
+%
+%   Output Arguments
+%     res - cResultInfo object contains the results of thermoeconomic Analysis
+%       If DirectCost is selected (default) the following tables are obtained:
+%         dfcost: Direct Exergy Cost of flows
+%         dcost: Direct Exergy cost of processes
+%         udcost: Unit Direct Exergy Cost of processes table
+%         ict: Irreversibility Cost Table 
+%         fict: Flows Irreversibility Cost Table
+%         dcfp: Fuel-Product direct cost table
+%         dcfpr: Fuel-Product direct cost table (includes waste)
+%       If GeneralCost is selected, the following tables are obtained:
+%         gcost: Generalized cost of processes 
+%         ugcost: Unit Generalized Cost of processes
+%         gfcost: Generalized Cost of flows
+%         gcfp: Fuel-Product generalized cost table
+%         gict: Irreversibility generalized cost table 
+%         gfict: Flows Irreversibility generalized cost table
+%
+%   Example
+%     <a href="matlab:open ThermoeconomicAnalysisDemo.mlx">Thermoeconomic Analysis Demo</a>
+%
+%   See also cDataModel, cExergyCost, cResultInfo
 %
     res=cStatus();
     % Check input parameters

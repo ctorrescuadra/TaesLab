@@ -364,7 +364,7 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.getResults(cType.ResultId.PRODUCTIVE_STRUCTURE);
         end
 
-        function res=thermoeconomicState(obj,state)
+        function res=exergyAnalysis(obj,state)
         % Get the Thermoeconomic State cResultInfo object
         % containing the exergy and fuel product table
             if nargin==2

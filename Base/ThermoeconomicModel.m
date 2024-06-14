@@ -1,30 +1,47 @@
 function model=ThermoeconomicModel(filename,varargin)
-% ThermoeconomicModel creates a cThermoeconomicModel object from a data model file 
-%   for further interactive analysis.
-%  USAGE:
-%   model = ThermoeconomicModel(filename, options)
-%  INPUT:
-%   filename - data model file name
-%   options - optional parameters (pairs Name/Value)
-%    State: Operation state name
-%    ReferenceState: Reference State name
-%    ResourceSample: Resource Sample name
-%    CostTables - Cost Tables output
-%       DIRECT - Direct Exergy Cost Tables only
-%       GENERALIZED - Generalized Cost Tables only
-%       ALL - Both direct and generalized
-%    DiagnosisMethod - Diagnosis method to allocate wastes
-%       NONE - Deactivate diagnosis
-%       WASTE_EXTERNAL - Consider waste as output
-%       WASTE_INTERNAL - Allocate waste increase to productive processes 
-%    ActiveWaste: Name of the active waste flow for analysis
-%    Recycling: Activate Recycling Analysis
-%    Summary: Activate Summary Results
-%    Debug:  Print Debug information during execution
-%  OUTPUT:
-%    model - cThermoeconomicModel object
+%ThermoeconomicModel - Create a cThermoeconomicModel object from a data model file 
+%   This function creates a cThermoeconomicModel object containing all the needed information
+%   to perform a thermo-economic analysis of a plant.
+%   The class cThermoeconomicModel is the kernel of TaesLab and it has a set of methods
+%   that allow interactively obtaining all the results of a thermoeconomic analysis.
 %
-% See also cThermoeconomicModel
+%   Syntax
+%     model = ThermoeconomicModel(filename,Name,Value)
+%
+%   Input Arguments
+%     filename - Name of the file with the data mode
+%
+%   Name-Value Arguments
+%     ReferenceState - Reference state name. If it is not defined, first state is taken.
+%       char array | string
+%     State - Operation state name. If it is not defined, first state is taken.  
+%       char array | string
+%     ResourceSample - Resource Sample name. If it is not defined, first sample is taken
+%       char array | string
+%     CostTables - Cost Tables output
+%       'DIRECT' Direct Exergy Cost Tables only
+%       'GENERALIZED' Generalized Cost Tables only
+%       'ALL' - Both direct and generalized are obtained
+%     DiagnosisMethod - Diagnosis method to allocate wastes
+%       'NONE' - Deactivate diagnosis
+%       'WASTE_EXTERNAL' Consider waste as output
+%       'WASTE_INTERNAL' Allocate waste increase to productive processes 
+%     ActiveWaste - Name of the active waste flow for analysis. If it is not defined, first state is taken.
+%       char array | string
+%     Recycling - Activate Recycling Analysis
+%       true | false (default)    
+%     Summary - Activate Summary Results
+%       true | false (default)
+%     Debug - Print Debug information during execution
+%       true | false (default)
+%
+%   Output Argument
+%     model - cThermoeconomicModel object
+%
+%   Examples
+%     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
+%    
+%   See also cThermoeconomicModel
 %
     model=cStatus(cType.VALID);
     % Check input parameters

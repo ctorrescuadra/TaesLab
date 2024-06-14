@@ -1,13 +1,13 @@
-% recycling_analysis
-% Script to launch function RecyclingAnalysis
-% Generates waste recycling analysis
-% Select the data file model as <folder>_model.<ext>
-% Prompt input parameters interactively
+%recycling_analysis - Script to launch function WasteAnalysis
+%   Generates waste recycling analysis results
+%   Select the data file model as <folder>_model.<ext>
+%   Prompt input parameters interactively
 % Output:
-%	res - cResultInfo containing waste analysis info
+%	wa - cResultInfo containing waste analysis info
 %
 % Select data model
 options=struct('Console','Y','Save','N');
+param=struct();
 data=selectDataModel();
 if ~data.isValid
     data.printLogger;
@@ -15,7 +15,6 @@ if ~data.isValid
 	return
 end
 % Define parameters
-param=struct();
 if data.NrOfStates>1
 	[~,param.State]=optionChoice('Select State:',data.States);
 end
@@ -33,10 +32,10 @@ if data.NrOfWastes>1
     [~,param.WasteFlow]=optionChoice('Select Waste Flow:',data.WasteData.Flows);
 end
 % Get Results
-res=WasteAnalysis(data,param);
-if res.isValid
-	outputResults(res,options);
-	res.printInfo('Results (res) available in Workspace');
+wa=WasteAnalysis(data,param);
+if wa.isValid
+	outputResults(wa,options);
+	wa.printInfo('Results (wa) available in Workspace');
 else
-	printLogger(res);
+	printLogger(wa);
 end

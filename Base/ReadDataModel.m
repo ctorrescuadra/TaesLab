@@ -1,19 +1,32 @@
 function data=ReadDataModel(filename,varargin)
-% ReadDataModel loads a data model file into a cDataModel object.
-%   Checks that all the elements are valid, and show it in the console if 'Check'
-%   option is selected, optionally a copy of the data model (usualy a MAT file)
-%   could be selected if 'SaveAs' is selected.
-% USAGE:
-%   data=ReadDataModel(data,options)
-% INPUT:
-%   filename - file name of the data model
-%   options - Structure containing additional parameters (optional)
-%       Check - The validation of each element is shown in the console (true/false)
-%       SaveAs - Name of the file where the data model will be saved. 
-% OUTPUT:
-%	data - cDataModel containing all the model iformation.
+%ReadDataModel - Reads a data model file.
+%   This function loads a data model file into a cDataModel object.
+%   Checks that all the elements are valid, and show it in the console if 'Debug'
+%   option is selected. If 'Show' is selected display the data tables in Console.
+%   Optionally a copy of the data model (usualy a MAT file) could be created if 'SaveAs' is selected.
 %
-% See also cReadModel, cDataModel
+%   Syntax
+%     data = ReadDataModel(data,Name,Value);
+%   
+%   Input Arguments
+%     filename - Name of the data model file.
+%       char array | string
+%
+%   Name-Value Arguments
+%     Debug - The validation of each element is shown in the console.
+%       true | false (default)
+%     Show - Show the data tables in the console
+%       true | false (default)
+%     SaveAs - Name of the file where the data model will be saved.
+%       char array | string
+%
+%   Output Arguments
+%	data - cDataModel object containing all the model information.
+%
+%   Example
+%     <a href="matlab:open ReadDataModelDemo.mlx">Read Model Demo</a>
+%
+%   See also cReadModel, cDataModel
 %
     data=cStatus();
     % Check parameters
@@ -30,20 +43,24 @@ function data=ReadDataModel(filename,varargin)
     end
     % Optional parameters
     p = inputParser;
-    p.addParameter('Check',false,@islogical);
-    p.addParameter('SaveAs','',@ischar);
+    p.addParameter('Debug',false,@islogical);
+    p.addParameter('Show',false,@islogical);
+    p.addParameter('SaveAs','',@isText);
     try
 		p.parse(varargin{:});
     catch err
 		data.printError(err.message);
-        data.printError('Usage: LoadDataModel(data,options)');
+        data.printError('Usage: ReadDataModel(data,options)');
         return
     end
     param=p.Results;
     % Read data Model
     data=checkDataModel(filename);
-    if param.Check || ~isValid(data)
+    if param.Debug || ~isValid(data)
         printLogger(data);
+    end
+    if param.Show && isValid(data)
+        printResults(data);
     end
     % Optional copy
     if ~isempty(param.SaveAs) && isValid(data)

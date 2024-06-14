@@ -1,8 +1,7 @@
-% thermoeconomic_analysis
-% Script to launch function ThermoeconomicAnalysis
-% Compute the exergy cost and FP tables of a thermoeconomic state
-% Select the data file model as <folder>_model.<ext>
-% Prompt input parameters interactively
+%thermoeconomic_analysis - Script to launch function ThermoeconomicAnalysis
+% 	Compute the exergy cost and FP tables of a thermoeconomic state
+% 	Select the data file model as <folder>_model.<ext>
+% 	Prompt input parameters interactively
 % Output:
 %	res - cResultInfo containing thermoconomic analysis info
 %
@@ -29,10 +28,10 @@ if data.isResourceCost
     end
 end
 % Solve and show results
-res=ThermoeconomicAnalysis(data,param);
-if res.isValid
-	outputResults(res,options);
-	res.printInfo('Results (res) available in Workspace');
+ta=ThermoeconomicAnalysis(data,param);
+if ta.isValid
+	outputResults(ta,options);
+	ta.printInfo('Results (ta) available in Workspace');
 else
-	printLogger(res);
+	printLogger(ta);
 end

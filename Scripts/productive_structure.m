@@ -1,10 +1,9 @@
-% productive_structure
-% Script to launch function ProductiveStructure
-% Show information about productive structure
-% Select the data file model as <folder>_model.<ext>
-% Prompt input parameters interactively
+%productive_structure - Script to launch function ProductiveStructure
+% 	Show information about productive structure
+% 	Select the data file model as <folder>_model.<ext>
+% 	Prompt input parameters interactively
 % Output:
-%	res - cResultInfo containing Productive Structure info
+%	ps - cResultInfo containing Productive Structure info
 %
 % Select data file model
 options=struct('Console','Y','Save','N');
@@ -15,10 +14,10 @@ if ~data.isValid
 	return
 end
 % Show results
-res=ProductiveStructure(data);
-if res.isValid
-	outputResults(res);
-	res.printInfo('Results (res) available in Workspace');
+ps=ProductiveStructure(data);
+if ps.isValid
+	outputResults(res,options);
+	res.printInfo('Results (ps) available in Workspace');
 else
-	printLogger(res);
+	printLogger(ps);
 end

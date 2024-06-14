@@ -1,10 +1,10 @@
-function res=ThermoeconomicState(data,varargin)
-%ThermoeconomicState - Get the exergy balances and the Fuel-Product table.
-%	Given a data model of a plant this function obtain the exergy analysis
-%   for a state of plant. 
+function res=ExergyAnalysis(data,varargin)
+%ExergyAnalysis - Get the exergy balances for one state of the plant
+%	Given a data model of a plant this function performs an exergy analysis
+%   including the exergy balances and the Fuel-Product table.
 % 
 %	Syntax
-%	  res = ThermoeconomicState(data,Name,Value)
+%	  res = ExergyAnalysis(data,Name,Value)
 % 
 %   Input Arguments
 %     data - cReadModel object containing the data information
@@ -12,21 +12,21 @@ function res=ThermoeconomicState(data,varargin)
 %   Name-Value Arguments
 %     State - State name of the exergy data. If not provided first state is used
 %		char array
-%     Show -  Show results on console.  
+%     Show -  Show the results on console.  
 %       true | false (default)
 %     SaveAs - Name of file (with extension) to save the results.
-%       char array 
+%       char array | string
 % 
 %   Output Arguments
 %     res - cResultsInfo object contains the results of the exergy analysis for the required state
 %     The following tables are obtained:
 %		eflows - exergy of the flows
 %       estreams - exergy of the streams
-%       eprocesses - exergy table of the processes
+%       eprocesses - exergy balance of the processes
 %       tfp - Exergy Fuel-Product table
 %
 %   Example
-%     <a href="matlab:open ThermoeconomicStateDemo.mlx">Thermoeconomic State Demo</a>
+%     <a href="matlab:open ExergyAnalysisDemo.mlx">Exergy Analysis Demo</a>
 %
 %   See also cDataModel, cExergyModel, cResultInfo
 %
