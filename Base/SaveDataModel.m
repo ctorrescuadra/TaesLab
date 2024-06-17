@@ -1,12 +1,17 @@
 function SaveDataModel(arg,filename)
-% SaveDataModel saves the data model into a file 
-%   The files *.csv, *.xlsx, *.json, *.xml and *.mat are allowed
-%   It calls cReadModel/saveDataModel
-%  USAGE:
-%   SaveDataModel(arg,filename)
-%  INPUT:
-%   arg - cDataModel or cThermoeconomicModel object
-%   filename - name of the output file (with extension)
+%SaveDataModel - Saves the data model into a file 
+%   The file extensions *.csv, *.xlsx, *.json, *.xml and *.mat are allowed
+%   It could use a cDataModel or a cThermoeconomicModel object as input
+%   
+%   Syntax
+%     SaveDataModel(arg,filename)
+%
+%   Input Arguments:
+%     arg - cDataModel or cThermoeconomicModel object
+%     filename - name of the output file (with extension)
+%
+%   Example
+%     <a href="matlab:open SaveDataModelDemo.mlx">Save Data Model Demo</a>
 %
 % See also cDataModel, cThermoecononicModel
 %
@@ -34,5 +39,3 @@ function SaveDataModel(arg,filename)
     log=saveDataModel(data,filename);
     printLogger(log);
 end
-        
-

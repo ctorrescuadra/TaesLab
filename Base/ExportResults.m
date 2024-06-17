@@ -1,20 +1,32 @@
 function res = ExportResults(arg,varargin)
-% ExportResults exports the results tables to different formats.
-%  USAGE:
-%   res=ExportResults(arg,options)
-%  INPUT:
-%   arg - cResultSet object
-%   options - a structure containing additional parameters (optional)
-%       Table: Name of the table to export. If it is not selected a structure with all
-%              results tables is created
-%       ExportAs: Selects the output VarMode of the table/s.
-%        NONE - returns the cTable object (default).
-%        CELL - returns the table as an array of cells.
-%        STRUCT - returns the table as a structured array.
-%        TABLE - returns a matlab table object.
-%       Format: true/false. Use table format
-%  OUTPUT:
-%   res - Table/s in the format specified by ExportAs.
+%ExportResults - Export the results tables to a different format.
+%   This function gets the result tables in different formats.
+%   If 'Table' option is not used all the tables of the result set
+%   are converted to the desired format. If a table is selected,
+%   it return the table in the desired format
+%
+%   Syntax
+%     res=ExportResults(arg,Name,Value)
+%  
+%   Input Arguments
+%     arg - cResultSet object
+%
+%   Name-Value Arguments
+%     Table: Name of the table to export. 
+%       If it is not selected a structure with all result tables is created
+%       char array
+%     ExportAs: Selects the output VarMode of the table/s.
+%       'NONE' - returns the cTable object (default).
+%       'CELL' - returns the table as an array of cells.
+%       'STRUCT' - returns the table as a structured array.
+%       'TABLE' - returns a matlab table object.
+%     Format: Use the Format definition go output the tables
+%
+%   Output Arguments
+%     res - Table/s in the format specified by ExportAs.
+%
+%   Example
+%     <a href="matlab:open ExergyAnalysisDemo.mlx">Exergy Analysis Demo</a>
 %  
 % See also cResultSet
 %

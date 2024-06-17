@@ -46,13 +46,13 @@ function res = WasteAnalysis(data,varargin)
     % Check and initialize parameters
     p = inputParser;
     p.addRequired('data',checkModel);
-    p.addParameter('State','',@isText);
-    p.addParameter('ResourceSample','',@isText);
+    p.addParameter('State',data.getStateName(1),@ischar);
+    p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
-    p.addParameter('ActiveWaste','',@isText);
+    p.addParameter('ActiveWaste','',@ischar);
     p.addParameter('Recycling',true,@islogical);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@isText);
+    p.addParameter('SaveAs','',@ischar);
     try
         p.parse(data,varargin{:});
     catch err
@@ -80,11 +80,6 @@ function res = WasteAnalysis(data,varargin)
         return
     end
     % Read exergy values
-    if isempty(param.State)
-        param.State=data.getStateName(1);
-    elseif isstring(param.State)
-        param.State=convertStringsToChars(param.State);
-    end
 	ex=data.getExergyData(param.State);
 	if ~ex.isValid
         ex.printLogger;
@@ -101,8 +96,6 @@ function res = WasteAnalysis(data,varargin)
     wt=mfp.WasteTable;
     if isempty(param.ActiveWaste)
         param.ActiveWaste=wt.WasteKeys{1};
-    elseif isstring(param.ActiveWaste)
-        param.ActiveWaste=convertStringsToChars(param.ActiveWaste);
     end
     wid=wt.getWasteIndex(param.ActiveWaste);
     if isempty(wid)
@@ -117,8 +110,6 @@ function res = WasteAnalysis(data,varargin)
         if data.isResourceCost && param.GeneralCost
             if isempty(param.ResourceSample)
 			    param.ResourceSample=data.getResourceSample(1);
-            elseif isstring(param.ResourceSample)
-                param.ResourceSample=convertStringsToChars(param.ResourceSample);
             end
 		    rsd=data.getResourceData(param.ResourceSample);
             if ~rsd.isValid

@@ -1,13 +1,21 @@
 function obj = ImportDataModel(filename)
-% ImportDataModel creates a cDataModel object from a previously saved MAT file.
-%  USAGE:
-% 	obj=ImportDataModel(matfile)
-%  INPUT:
-% 	filename - Existing MAT file containing a cDataModel object
-%  OUTPUT:
-% 	obj - cDataModel object
+% ImportDataModel- Create a cDataModel object from a previously saved MAT file.
+%  	This function is equivalent to use <bold>ReadDataModel</bold> with a MAT file.
 %
-% See also cDataModel
+%	Syntax
+% 	  obj=ImportDataModel(matfile)
+%
+%   Input Argument
+% 	  matfile - Existing MAT file containing a cDataModel object
+%       char array | string
+%
+%   Output Arguments
+% 	  obj - cDataModel object
+%
+%   Example
+%     <a href="matlab:open SaveDataModelDemo.mlx">Save Data Model Demo</a>
+%
+% See also cReadModel
 %
     obj=cStatus();
 	% Check input arguments

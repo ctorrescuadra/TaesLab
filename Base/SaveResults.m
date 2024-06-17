@@ -1,12 +1,17 @@
 function SaveResults(arg,filename)
-% SaveResults saves a cResultSet into a file
-%   The file type depends on the file extension
-%   *.csv, *.xlsx and *.mat extensions are allowed
-% USAGE:
-%   SaveResults(res,filename)
-% INPUT:
-%   arg - cResultSet object
-%   filename - name of the output file (with extension)
+%SaveResults - Save the result tables into a file/s in diferent formats
+%   The accepted extensions are xlsx, csv, html, txt, tex and mat
+%   
+%   Syntax
+%     SaveResults(arg,filename)
+%
+%   Input Arguments:
+%     arg - cResultSet object
+%     filename - name of the output file (with extension)
+%       char array | string
+%
+%   Example
+%     <a href="matlab:open SaveResultsDemo.mlx">Save Results Demo</a>
 %
 % See also cResultSet
 %

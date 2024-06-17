@@ -152,8 +152,9 @@ classdef cThermoeconomicModel < cResultSet
             obj.DefaultGraph='';
             % Check optional input parameters
             p = inputParser;
-            p.addParameter('State',data.States{1},@ischar);
-            p.addParameter('ReferenceState',data.States{1},@ischar);
+            refstate=data.getStateName(1);
+            p.addParameter('State',refstate,@ischar);
+            p.addParameter('ReferenceState',refstate,@ischar);
             p.addParameter('ResourceSample','',@ischar);
             p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
             p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
@@ -174,11 +175,10 @@ classdef cThermoeconomicModel < cResultSet
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
             if data.isWaste
-                if param.ActiveWaste
-                    obj.ActiveWaste=param.ActiveWaste;
-                else
-                    obj.ActiveWaste=obj.WasteFlows{1};
+                if isempty(param.ActiveWaste)
+                    param.ActiveWaste=obj.WasteFlows{1};
                 end
+                obj.ActiveWaste=param.ActiveWaste;
             end
             % Read print formatted configuration
             obj.fmt=data.FormatData;
@@ -199,17 +199,13 @@ classdef cThermoeconomicModel < cResultSet
                 end
             end
             % Set Operation and Reference State
-            if isempty(param.State)
-                obj.State=data.States{1};
-            elseif data.existState(param.State)
+            if data.existState(param.State)
                 obj.State=param.State;
             else
                 obj.printError('Invalid state name %s',param.State);
                 return
             end
-            if isempty(param.ReferenceState)
-                obj.ReferenceState=data.States{1};
-            elseif data.existState(param.State)
+            if data.existState(param.ReferenceState)
                 obj.ReferenceState=param.ReferenceState;
             else
                 obj.printError('Invalid state name %s',param.ReferenceState);
@@ -222,10 +218,11 @@ classdef cThermoeconomicModel < cResultSet
             end
             if data.isResourceCost
                 if isempty(param.ResourceSample)
-                    obj.ResourceSample=data.ResourceSamples{1};
-                elseif data.existSample(param.ResourceSample)
+                    param.ResourceSample=data.getResourceSample(1);
+                end
+                if data.existSample(param.ResourceSample)
                     obj.ResourceSample=param.ResourceSample;
-                else % Default is used
+                else 
                     obj.printError('Invalid ResourceSample %s',param.ResourceSample);
                     return
                 end

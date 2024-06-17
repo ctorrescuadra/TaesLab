@@ -25,14 +25,14 @@
 %   SaveResults             - Saves the tables of a cResultSet object to a file.
 %   SaveSummary             - Saves the result summary tables to a file.
 %   SaveDataModel           - Saves the data model tables to a file.
-%   ExportDataModel         - Copies a data model file to another format.
+%   CopyDataModel           - Copies a data model file to another format.
 %
 % Display Results 
 %   ListResultTables        - Lists the properties of the result tables.
 %   ShowResults             - Displays the results tables of the model.
-%   ExportResults           - Exports the results tables in different formats.
 %   ShowTable               - Displays and/or saves an individual table.
 %   ShowGraph               - Displays the graph of a results table of the model.
+%   ExportResults           - Exports the results tables in different formats.
 %
 % GUI functions
 %   TaesPanel               - Select parameters for the thermo-economic model.

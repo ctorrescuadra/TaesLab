@@ -43,7 +43,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
     p.addRequired('data',checkModel);
-    p.addParameter('ReferenceState','',@ischar)
+    p.addParameter('ReferenceState',data.getStateName(1),@ischar)
 	p.addParameter('State','',@ischar);
     p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
     p.addParameter('Show',false,@islogical);
@@ -71,9 +71,6 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         data.printLogger;
         res.printError('There is NOT two states defined');
         return
-    end
-    if isempty(param.ReferenceState)
-        param.ReferenceState=data.getStateName(1);
     end
     if isempty(param.State)
         param.State=data.getStateName(2);

@@ -35,7 +35,7 @@ function res=ExergyAnalysis(data,varargin)
 	% Check input parameters
 	p = inputParser;
 	p.addRequired('data',checkModel);
-	p.addParameter('State','',@ischar);
+	p.addParameter('State',data.getStateName(1),@ischar);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs','',@ischar);
 	try
@@ -53,9 +53,6 @@ function res=ExergyAnalysis(data,varargin)
 		return
 	end	
 	% Read and check exergy values
-	if isempty(param.State)
-		param.State=data.getStateName(1);
-	end
 	ex=data.getExergyData(param.State);
 	if ~isValid(ex)
 		ex.printLogger;

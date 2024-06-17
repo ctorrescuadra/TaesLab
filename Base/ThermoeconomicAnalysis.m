@@ -51,7 +51,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
     p.addRequired('data',checkModel);
-	p.addParameter('State','',@ischar);
+	p.addParameter('State',data.getStateName(1),@ischar);
 	p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('Show',false,@islogical);
@@ -71,9 +71,6 @@ function res=ThermoeconomicAnalysis(data,varargin)
         return
     end
     % Read exergy
-    if isempty(param.State)
-		param.State=data.getStateName(1);
-    end
 	ex=data.getExergyData(param.State);
 	if ~isValid(ex)
         ex.printLogger;

@@ -6,9 +6,7 @@ classdef cDictionary < cStatusLogger
 %   	res=obj.getIndex(key)
 %   	res=obj.existsKey(key)
 %		res=obj.getEntries(format)
-% See also cMapList, cMapKey
-%
-  
+% 
     properties(Access=private)
         map
     end

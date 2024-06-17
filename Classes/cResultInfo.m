@@ -176,8 +176,12 @@ classdef cResultInfo < cResultSet
 		            case cType.GraphType.DIAGNOSIS
 			            option=true;
 		            case cType.GraphType.WASTE_ALLOCATION
-				        option=obj.Info.wasteFlow;
-                    case cType.GraphType.DIGRAPH
+                        tmp=obj.Info;
+                        if isa(obj.Info,'cThermoeconomicModel')
+                            tmp=tmp.wasteAnalysis.Info;
+                        end
+				        option=tmp.wasteFlow;
+                    case cType.GraphType.DIGRAPH                     
                         option=obj.Info.getNodeTable(graph);
 		            case cType.GraphType.SUMMARY
                         if tbl.isFlowsTable
