@@ -16,8 +16,8 @@ end
 % Show results
 ps=ProductiveStructure(data);
 if ps.isValid
-	outputResults(res,options);
-	res.printInfo('Results (ps) available in Workspace');
+	outputResults(ps,options);
+	ps.printInfo('Results (ps) available in Workspace');
 else
 	printLogger(ps);
 end

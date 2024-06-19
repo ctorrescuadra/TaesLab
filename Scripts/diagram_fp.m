@@ -18,12 +18,12 @@ end
 % Define parameters
 param=struct();
 if data.NrOfStates>1
-	[~,param.State]=optionChoice('Select State:',data.States);
+	[~,param.State]=optionChoice('Select State:',data.getStateNames);
 end
 % Get TableFP
 dfp=DiagramFP(data,param);
 if dfp.isValid
-	outputResults(res,options);
+	outputResults(dfp,options);
 	dfp.printInfo('Results (dfp) available in Workspace');
 else
 	printLogger(dfp);

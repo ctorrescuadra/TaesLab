@@ -1,5 +1,5 @@
 function res = WasteAnalysis(data,varargin)
-%Waste Analysis perform a waste analysis of a plant state.
+%WasteAnalysis - Perform a waste analysis of a plant state.
 %   It calculates the waste allocation for the criterias defined in the data model
 %   If it is activated obtains tables with direct and/or generalizad costs as 
 %   function of the recycling of a waste from 0 to 100 percent 
@@ -41,12 +41,12 @@ function res = WasteAnalysis(data,varargin)
 %
 %   See also cDataModel, cWasteAnalysis, cResultInfo
 %
-    res=cStatus();
+    res=cStatusLogger();
     checkModel=@(x) isa(x,'cDataModel');
     % Check and initialize parameters
     p = inputParser;
     p.addRequired('data',checkModel);
-    p.addParameter('State',data.getStateName(1),@ischar);
+    p.addParameter('State',data.getStateNames(1),@ischar);
     p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('ActiveWaste','',@ischar);
@@ -79,6 +79,16 @@ function res = WasteAnalysis(data,varargin)
         res.printError('Invalid waste data');
         return
     end
+     % Check Waste Key
+     if isempty(param.ActiveWaste)
+         param.ActiveWaste=data.getWasteNames(1);
+     end
+     wid=wd.Flows.getIndex(param.ActiveWaste);
+     if isempty(wid)
+         res.printError('Invalid waste key %s',param.ActiveWaste);
+         return
+     end
+
     % Read exergy values
 	ex=data.getExergyData(param.State);
 	if ~ex.isValid
@@ -92,16 +102,7 @@ function res = WasteAnalysis(data,varargin)
         mfp.printLogger;
         res.printError('Invalid model FPR. See error log');
     end
-    % Check Waste Key
-    wt=mfp.WasteTable;
-    if isempty(param.ActiveWaste)
-        param.ActiveWaste=wt.WasteKeys{1};
-    end
-    wid=wt.getWasteIndex(param.ActiveWaste);
-    if isempty(wid)
-        res.printError('Invalid waste key %s',param.ActiveWaste);
-        return
-    end
+ 
     % Read external resources and get results
 	pct=cType.getCostTables(param.CostTables);
 	param.DirectCost=bitget(pct,cType.DIRECT);
@@ -109,7 +110,7 @@ function res = WasteAnalysis(data,varargin)
     if param.Recycling   
         if data.isResourceCost && param.GeneralCost
             if isempty(param.ResourceSample)
-			    param.ResourceSample=data.getResourceSample(1);
+			    param.ResourceSample=data.getSampleNames(1);
             end
 		    rsd=data.getResourceData(param.ResourceSample);
             if ~rsd.isValid

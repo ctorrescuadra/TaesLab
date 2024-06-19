@@ -3,6 +3,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %   It calculates the exergy cost, Fuel-Product and Irreversibility-Cost tables
 %   If ResourcesCost are defined in the data model, it calculates generalized cost
 %   for the selected 'ResourceSample' if it is required in the 'CostTables' parameter
+%
 %   Syntax
 %     res=ThermoeconomicAnalysis(data,Name,Value)
 %
@@ -51,7 +52,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
     p.addRequired('data',checkModel);
-	p.addParameter('State',data.getStateName(1),@ischar);
+	p.addParameter('State',data.getStateNames(1),@ischar);
 	p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('Show',false,@islogical);
@@ -94,7 +95,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	param.GeneralCost=bitget(pct,cType.GENERALIZED);
     if data.isResourceCost && param.GeneralCost
         if isempty(param.ResourceSample)
-			param.ResourceSample=data.getResourceSample(1);
+			param.ResourceSample=data.getSampleNames(1);
         end
 		rd=data.getResourceData(param.ResourceSample);
 		rsc=getResourceCost(rd,fpm);

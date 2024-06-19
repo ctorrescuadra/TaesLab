@@ -402,10 +402,11 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             % Compute Waste table depending on waste definition type
             for i=1:NR
-                j=aR(i);       
+                j=aR(i); 
+                key=wt.Names{i};      
                 switch wt.typeId(i)
                     case cType.WasteAllocation.MANUAL
-                        tmp=wt.getValues(i);
+                        tmp=wt.getValues(key);
                         tmp(~obj.ActiveProcesses)=0.0;
                     case cType.WasteAllocation.RESOURCES  
                         tmp(aP)=mKP(end,aP).*opP(aP,j)';
@@ -423,9 +424,8 @@ classdef (Sealed) cExergyCost < cExergyModel
                         obj.messageLog(cType.ERROR,'Invalid Waste type allocation %s',wt.Type{i});
                         return
                 end
-                if isempty(find(tmp,1))	
-                    text=wt.WasteKeys{i};				
-                    obj.messageLog(cType.ERROR,'Invalid Allocation for waste flow %s', text);
+                if isempty(find(tmp,1))				
+                    obj.messageLog(cType.ERROR,'Invalid Allocation for waste flow %s', key);
                     return
                 end
                 sol(i,:)=tmp/sum(tmp);

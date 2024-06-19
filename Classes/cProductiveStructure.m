@@ -91,8 +91,8 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 			res=[];
 			if obj.isValid
 				res.flows=find(bitget(obj.flowtypes,cType.WASTE));
-				res.streams=find(bitget(obj.streamtypes,cType.WASTE));
-				res.processes=find(bitget(obj.processtypes,cType.WASTE));
+				res.streams=[obj.Flows(res.flows).from];
+				res.processes=[obj.Streams(res.streams).process];
 			end
 		end
 		

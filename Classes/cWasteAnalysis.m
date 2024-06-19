@@ -92,14 +92,10 @@ classdef (Sealed) cWasteAnalysis < cResultId
     methods(Access=private)
         function recyclingAnalysis(obj)
         % Do the recycling analysis for a waste flow
-            wd=obj.wasteTable;
+            wt=obj.wasteTable;
             ps=obj.modelFP.ps;
-            wId=wd.getWasteIndex(obj.wasteFlow);
-            if isempty(wId)
-                obj.messageLog(cType.ERROR,'Invalid waste key %s',wkey);
-                return
-            end
-            idx=wd.Flows(wId);
+            wId=wt.getWasteIndex(obj.wasteFlow);
+            idx=wt.Flows(wId);
             % Get Output Flows Id
             tmp=ps.FinalProducts.flows;
             outputId=[tmp,idx];
@@ -113,7 +109,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             yd=zeros(size(x,1),size(outputId,2));
             yg=zeros(size(x,1),size(outputId,2));     
             for i=1:size(x,1)
-                wd.setRecycleRatio(wId,x(i));
+                wt.setRecycleRatio(obj.wasteFlow,x(i));
                 sol.updateWasteOperators;
                 if obj.directCost
                     fc=sol.getFlowsCost;
@@ -128,8 +124,8 @@ classdef (Sealed) cWasteAnalysis < cResultId
             obj.dValues=[x,yd];
             obj.gValues=[x,yg];
             % Restore original values
-            wd.setRecycleRatio(wId,wrc);
-            wd.setTableValues(wval);
+            wt.setRecycleRatio(wId,wrc);
+            wt.setTableValues(wval);
         end
     end
 end

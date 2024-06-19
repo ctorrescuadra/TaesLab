@@ -110,7 +110,13 @@ classdef (Sealed) cModelData < cStatusLogger
         %   filename - name of the output file
         %  Output:
         %   log: cStatusLog class containing error messages ans status
-            log=exportXML(obj.dm,filename);
+            log=cStatusLogger(cType.VALID);
+            try
+                writestruct(obj.dm,filename,'StructNodeName','root','AttributeSuffix','Id');
+            catch err
+                log.messageLog(cType.ERROR,err.message);
+                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+            end
 		end
 
         function log=saveAsJSON(obj,filename)
@@ -118,8 +124,17 @@ classdef (Sealed) cModelData < cStatusLogger
         %  Input:
         %   filename - name of the output file
         %  Output:
-        %   log: cStatusLog class containing error messages ans statu
-            log=exportJSON(obj.dm,filename);
+        %   log: cStatusLog class containing error messages and status
+            log=cStatusLogger(cType.VALID);
+            try
+                text=jsonencode(obj.dm,'PrettyPrint',true);
+                fid=fopen(filename,'wt');
+                fwrite(fid,text);
+                fclose(fid);
+            catch err
+                log.messageLog(cType.ERROR,err.message);
+                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+            end
         end
     end
 end

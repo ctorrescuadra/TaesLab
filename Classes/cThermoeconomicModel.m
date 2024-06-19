@@ -152,7 +152,7 @@ classdef cThermoeconomicModel < cResultSet
             obj.DefaultGraph='';
             % Check optional input parameters
             p = inputParser;
-            refstate=data.getStateName(1);
+            refstate=data.getStateNames(1);
             p.addParameter('State',refstate,@ischar);
             p.addParameter('ReferenceState',refstate,@ischar);
             p.addParameter('ResourceSample','',@ischar);
@@ -176,7 +176,7 @@ classdef cThermoeconomicModel < cResultSet
             obj.DiagnosisMethod=param.DiagnosisMethod;
             if data.isWaste
                 if isempty(param.ActiveWaste)
-                    param.ActiveWaste=obj.WasteFlows{1};
+                    param.ActiveWaste=obj.WasteFlows.Values(1);
                 end
                 obj.ActiveWaste=param.ActiveWaste;
             end
@@ -218,7 +218,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             if data.isResourceCost
                 if isempty(param.ResourceSample)
-                    param.ResourceSample=data.getResourceSample(1);
+                    param.ResourceSample=data.getSampleNames(1);
                 end
                 if data.existSample(param.ResourceSample)
                     obj.ResourceSample=param.ResourceSample;
@@ -453,17 +453,17 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=get.StateNames(obj)
         % Show a list of the available state names
-            res=obj.DataModel.States;
+            res=obj.DataModel.getStateNames;
         end
 
         function res=get.SampleNames(obj)
         % Show a list of the avaliable resource samples
-            res=obj.DataModel.ResourceSamples;
+            res=obj.DataModel.getSampleNames;
         end
 
         function res=get.WasteFlows(obj)
         % Get waste flows list (cell array)
-            res=getWasteFlows(obj.DataModel);
+            res=obj.DataModel.WasteData.Flows;
         end
 
         function res=isResourceCost(obj)
@@ -728,19 +728,21 @@ classdef cThermoeconomicModel < cResultSet
             printTable(res.Tables.wa)
         end
 
-        function log=setWasteType(obj,key,wtype)
+        function log=setWasteType(obj,wtype)
         % Set the waste type allocation method for Active Waste
         %  Input
         %   wtype - waste allocation type (see cType)
         %
             log=cStatus(cType.VALID);
-            if nargin~=3
+            if nargin~=2
                log.printError('Usage: obj.setWasteType(key,wtype)');
                return
             end  
             wt=obj.fp1.WasteTable;
-            if ~wt.setType(key,wtype)  
-                log.printError('Invalid waste type %s - %s',key,wtype);
+            if wt.setType(obj.ActiveWaste,wtype)
+                obj.printDebugInfo('Change allocation type for waste %s',obj.ActiveWaste);
+            else
+                log.printError('Invalid waste type %s / %s',obj.ActiveWaste,wtype);
                 return
             end
             obj.fp1.updateWasteOperators;
@@ -751,19 +753,21 @@ classdef cThermoeconomicModel < cResultSet
             end
         end
 
-        function log=setWasteValues(obj,key,val)
+        function log=setWasteValues(obj,val)
         % Set the waste table values
         % Input
         %  id - Waste key
         %  val - vector containing the waste values
             log=cStatus(cType.VALID);
-            if nargin~=3
+            if nargin~=2
                log.printError('Usage: obj.setWasteValues(key,values)');
                return
             end  
             wt=obj.fp1.WasteTable;
-            if ~wt.setValues(key,val)
-                log.printError('Invalid waste %s allocation values',key);
+            if wt.setValues(obj.ActiveWaste,val)
+                obj.printDebugInfo('Change allocation values for waste %s',obj.ActiveWaste);
+            else
+                log.printError('Invalid waste %s allocation values',obj.ActiveWaste);
                 return
             end
             obj.fp1.updateWasteOperators;
@@ -774,19 +778,21 @@ classdef cThermoeconomicModel < cResultSet
             end
         end
    
-        function log=setWasteRecycled(obj,key,val)
+        function log=setWasteRecycled(obj,val)
         % Set the waste table values
         % Input
         %  id - Waste id
         %  val - vector containing the waste values
             log=cStatus(cType.VALID);
-            if nargin~=3
+            if nargin~=2
                log.printError('Usage: obj.setWasteRecycled(key,value)');
                return
             end 
             wt=obj.fp1.WasteTable;
-            if ~wt.setRecycleRatio(key,val)
-                log.printError('Invalid waste %s recycling values',key);
+            if wt.setRecycleRatio(obj.ActiveWaste,val)
+                obj.printDebugInfo('Change recycling ratio for waste %s',obj.ActiveWaste)
+            else
+                log.printError('Invalid waste %s recycling values',obj.ActiveWaste);
                 return 
             end
             obj.fp1.updateWasteOperators;
@@ -1263,7 +1269,7 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkActiveWaste(obj,value)
         % Check Active Waste Parameter
             res=false;
-            if ~ismember(value,obj.WasteFlows)
+            if ~obj.WasteFlows.existValue(value)
                 obj.printWarning('Invalid waste flow: %s',value);
                 return
             end

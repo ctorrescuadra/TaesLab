@@ -3,7 +3,7 @@ classdef cWasteTable < cStatusLogger
 %
 	properties (GetAccess=public,SetAccess=private)
 		NrOfWastes     % Number of Wastes
-        WasteKeys       % Waste Flows keys
+        Names          % Waste Flows names
         Flows          % Waste flows id
 		Type           % Type processing of wastes (text)
         typeId         % Type Id for processing wastes
@@ -13,7 +13,7 @@ classdef cWasteTable < cStatusLogger
 	end
 
 	properties (Access=private)
-		ps				% Productive Structure 
+        wlist           % Waste Flow List 
 	end
 
     methods
@@ -25,52 +25,49 @@ classdef cWasteTable < cStatusLogger
             if ~isa(wd,'cWasteData') || ~wd.isValid
                 obj.messageLog(cType.ERROR,'Invalid cWasteData object')
             end
-            obj.ps=wd.ps;
-            obj.NrOfWastes=obj.ps.NrOfWastes;
+            ps=wd.ps;
+            obj.wlist=wd.Flows;
+            obj.NrOfWastes=ps.NrOfWastes;
             obj.Type=wd.Type;
             obj.typeId=wd.TypeId;
-            obj.Processes=obj.ps.Waste.processes;
-            obj.WasteKeys=wd.Flows;
-            obj.Flows=obj.ps.Waste.flows;
+            obj.Processes=ps.Waste.processes;
+            obj.Names=wd.Flows.Entries;
+            obj.Flows=ps.Waste.flows;
             obj.Values=wd.Values;
             obj.RecycleRatio=wd.RecycleRatio;
         end
 
-		function res=getValues(obj,arg)
+        function res=getWasteIndex(obj,key)
+            res=obj.wlist.getIndex(key);
+        end
+
+		function res=getValues(obj,key)
         % Get the allocation ratios of a waste
         % Input:
-        %  arg - waste id (key or id)
+        %  key - waste id (key or id)
         % Output:
         %  res - vector with the allocation waste ratios of waste id
             res=[];
-            if ischar(arg)
-                id=obj.getWasteIndex(arg);
+            if ischar(key)
+                id=obj.getWasteIndex(key);
                 if isempty(id)
                     return
                 end
-            elseif isscalar(arg) && isnumeric(arg)
-                id = arg;
-            else
-                return
+                res=obj.Values(id,:);
             end
-            res=obj.Values(id,:);
         end
 
-        function status=setValues(obj,arg,val)
+        function status=setValues(obj,key,val)
         % set the cost distribution values of a waste
         % Input:
         %  arg - key/id of the waste
         %  val - Vector contains the distribution values
             status=false;
-            if ischar(arg)
-                id=obj.getWasteIndex(arg);
+            if ischar(key)
+                id=obj.getWasteIndex(key);
                 if isempty(id)
                     return
                 end
-            elseif isscalar(arg) && isnumeric(arg)
-                id=arg;
-            else
-                return
             end
             if size(obj.Values,2)~=length(val)
                 return
@@ -86,7 +83,7 @@ classdef cWasteTable < cStatusLogger
         function res=getType(obj,key)
         % get the waste type
         % Input:
-        %  arg - key/id of the waste
+        %  key - waste key
             res=[];
             if ischar(key)
                 id=obj.getWasteIndex(key);
@@ -96,21 +93,17 @@ classdef cWasteTable < cStatusLogger
             end
         end
 
-        function status=setType(obj,arg,type)
+        function status=setType(obj,key,type)
         % set the waste type
         % Input:
         %  arg - key/id of the waste
         %  type - new type value
             status=false;
-            if ischar(arg)
-                id=obj.getWasteIndex(arg);
+            if ischar(key)
+                id=obj.getWasteIndex(key);
                 if isempty(id)
                     return
                 end
-            elseif isscalar(arg) && isnumeric(arg)
-                    id=arg;
-            else
-                return
             end
             tId=cType.getWasteId(type);
             if ~cType.isEmpty(tId)
@@ -128,26 +121,23 @@ classdef cWasteTable < cStatusLogger
             if ischar(key)
                 id=obj.getWasteIndex(key);
                 if ~isempty(id)
-                        res=obj.RecycleRatio(id);
+                    res=obj.RecycleRatio(id);
                 end
             end		
         end
     
-        function status=setRecycleRatio(obj,arg,val)
+        function status=setRecycleRatio(obj,key,val)
         % set the recycle ratio
         % Input:
         %  arg - key/id of the waste
         %  val - recycle ratio value
             status=false;
-            if ischar(arg)
-                id=obj.getWasteIndex(arg);
-                if isempty(id)
-                    return
-                end
-            elseif isscalar(arg) && isnumeric(arg)
-                id=arg;
-            else
+            if ~ischar(key)
                 return
+            end
+            id=obj.getWasteIndex(key);
+            if isempty(id)
+               return
             end
             if val<0 || val>1
                 return
@@ -161,16 +151,6 @@ classdef cWasteTable < cStatusLogger
         % Input:
         %	val - waste allocation values
             obj.Values=val;
-        end
-    
-        function idx=getWasteIndex(obj,key)
-        %  Get the index of waste
-            idx=[];
-            id=obj.ps.getFlowId(key);
-            if ~cType.isEmpty(id)
-                wf=obj.ps.Waste.flows;
-                idx=find(wf==id);
-            end
         end
 
         function status=setTableValues(obj,val)

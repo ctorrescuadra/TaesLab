@@ -1,19 +1,23 @@
 function res=ListResultTables(varargin)
-% ListResultTables shows the list of existing result tables in TaesLab and their properties.
-%  USAGE:
-%   res=ListResultTables(options)
-%  INPUT:
-%   options - a structure containing additional parameters.
-%       Show: Selects how to show the table
-%        CONSOLE - display in the console (default)
-%        GUI - use a GUI table
-%        HTML - use a web browser
-%       ExportAs: Select the VarMode to get the table
-%        NONE - return the cTable object (default)
-%        CELL - return the table as array of cells
-%        STRUCT - returns the table as a structured array
-%        TABLE - returns a matlab table
-%       Columns: Array of cells with the names of the columns to be displayed.
+%ListResultTables - Shows the list of existing result tables in TaesLab and their properties.
+%   This function lets to select where to display this table using the option 'Show',
+%   export the table in diferent formats selecting the option 'ExportAs' or 'SaveAs' external file
+%   and to select the columns with the table properties with option 'Columns'
+%   
+%   Syntax
+%     res=ListResultTables(Name,Values)
+%
+%   Name-Values Arguments
+%     Show: Selects how to show the table
+%       CONSOLE - display in the console (default)
+%       GUI - use a GUI table
+%       HTML - use a web browser
+%     ExportAs: Select the VarMode to get the table
+%       NONE - return the cTable object (default)
+%       CELL - return the table as array of cells
+%       STRUCT - returns the table as a structured array
+%       TABLE - returns a matlab table
+%     Columns: Array of cells with the names of the columns to be displayed.
 %                If it is not selected, the default list of columns cType.DirColsDefault is shown
 %        DESCRIPTION - Description of the table
 %        RESULT_NAME - cResultInfo name of the table
@@ -21,9 +25,10 @@ function res=ListResultTables(varargin)
 %        TYPE - Type of cTable
 %        CODE - Text of the code for cType.Tables
 %        RESULT_CODE - Text of the code for cType.ResultId
-%       SaveAs: indicates the name of the file where the table will be saved. 
-%  OUTPUT:
-%   res - table object in the format specified in ExportAs, with the selected columns
+%     SaveAs: indicates the name of the file where the table will be saved.
+%
+%   Output Arguments
+%     res - table object in the format specified in ExportAs, with the selected columns
 %
 % See also cTablesDefinition
 %

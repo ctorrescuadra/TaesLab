@@ -8,7 +8,7 @@ classdef cWasteData < cStatusLogger
 %		wt=obj.getWasteTable;
 %
 	properties (GetAccess=public,SetAccess=private)
-		Flows			% Waste Flow keys
+		Flows			% Waste Flow List
 		Type        	% Waste Allocation types
 		TypeId      	% Waste Type Id
 		Values      	% Waste Allocation values
@@ -118,7 +118,7 @@ classdef cWasteData < cStatusLogger
 			end
 			% Create the object
 			if obj.isValid
-				obj.Flows={wd.flow};
+				obj.Flows=cSetList({wd.flow});
 				obj.Type={wd.type};
 				obj.TypeId=wasteType;
 				obj.Values=values;

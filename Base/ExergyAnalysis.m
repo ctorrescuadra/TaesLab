@@ -35,7 +35,7 @@ function res=ExergyAnalysis(data,varargin)
 	% Check input parameters
 	p = inputParser;
 	p.addRequired('data',checkModel);
-	p.addParameter('State',data.getStateName(1),@ischar);
+	p.addParameter('State',data.getStateNames(1),@ischar);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs','',@ischar);
 	try

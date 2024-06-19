@@ -56,8 +56,8 @@ function res = SummaryResults(data,varargin)
     if data.NrOfStates>1
         if data.isResourceCost
             if isempty(param.ResourceSample)
-                param.ResourceSample=data.getResourceSample(1);
-            elseif ~ismember(param.ResourceSample,data.ResourceSamples)
+                param.ResourceSample=data.getSampleNames(1);
+            elseif ~data.existSample(param.ResourceSample)
                 res.printError('Invalid Resource Sample %s',param.ResourceSample);
             end
         end

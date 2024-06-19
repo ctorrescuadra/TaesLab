@@ -113,7 +113,9 @@ classdef cResultInfo < cResultSet
             if nargin<2
                 res.printError('Table name is missing')
             end
-            if obj.existTable(name)
+            if strcmp(name,cType.TABLE_INDEX)
+                res=obj.getTableIndex;
+            elseif obj.existTable(name)
                 res=obj.Tables.(name);
             else
                 res.printError('Table name %s does NOT exists',name);

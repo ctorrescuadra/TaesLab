@@ -102,9 +102,9 @@ classdef (Abstract) cTable < cStatusLogger
                 case cType.FileType.XLSX
                     log=exportXLS(obj,filename);
                 case cType.FileType.JSON
-                    log=exportJSON(obj.getStructTable,filename);
+                    log=exportJSON(obj,filename);
                 case cType.FileType.XML
-                    log=exportXML(obj.getStructTable,filename);
+                    log=exportXML(obj,filename);
                 case cType.FileType.TXT
                     log=exportTXT(obj,filename);
                 case cType.FileType.HTML
@@ -115,6 +115,9 @@ classdef (Abstract) cTable < cStatusLogger
                     log=exportMAT(obj,filename);
                 otherwise
                     log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
+            end
+            if isValid(log)
+                log.message(cType.INFO,'File %s has been saved',filename);
             end
         end
 
@@ -302,7 +305,7 @@ classdef (Abstract) cTable < cStatusLogger
         % Save a table as text file
             log=cStatusLogger(cType.VALID);
             % Check Inputs
-            if (nargin~=2) || (~ischar(filename)) || ~isa(obj,'cTable')
+            if (nargin~=2) || (~ischar(filename)) 
                 log.messageLog(cType.ERROR,'Invalid input arguments');
                 return
             end
@@ -326,7 +329,7 @@ classdef (Abstract) cTable < cStatusLogger
         % Save a table as HTML file
             log=cStatusLogger(cType.VALID);
             % Check Inputs
-            if (nargin~=2) || (~ischar(filename)) || ~isa(obj,'cTable')
+            if (nargin~=2) || (~ischar(filename)) 
                 log.messageLog(cType.ERROR,'Invalid input arguments');
                 return
             end
@@ -342,11 +345,11 @@ classdef (Abstract) cTable < cStatusLogger
             end
         end
     
-        function log=exportLaTeX(tbl,filename)
+        function log=exportLaTeX(obj,filename)
         % exportLaTeX generates the LaTex table code file of cTable object
             log=cStatusLogger(cType.VALID);
             % Check Inputs
-            if (nargin~=2) || (~ischar(filename)) || ~isa(tbl,'cTable')
+            if (nargin~=2) || (~ischar(filename))
                 log.messageLog(cType.ERROR,'Invalid input arguments');
                 return
             end
@@ -354,12 +357,63 @@ classdef (Abstract) cTable < cStatusLogger
                 log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
                 return
             end
-            obj=cBuildLaTeX(tbl);
+            obj=cBuildLaTeX(obj);
             log=obj.saveTable(filename);
             if isValid(log)
                 log.messageLog(cType.INFO,'File %s has been saved',filename)
             end
-        end 
+        end
+
+        function log=exportJSON(obj,filename)
+        % save data model as JSON file
+        %  Input:
+        %   filename - name of the output file
+        %  Output:
+        %   log: cStatusLog class containing error messages and status
+            log=cStatusLogger(cType.VALID);
+            data=obj.getStructData;
+            if (nargin~=2) || (~ischar(filename))
+                log.messageLog(cType.ERROR,'Invalid input arguments');
+                return
+            end
+            if ~cType.checkFileWrite(filename)
+                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+                return
+            end
+            try
+                text=jsonencode(data,'PrettyPrint',true);
+                fid=fopen(filename,'wt');
+                fwrite(fid,text);
+                fclose(fid);
+            catch err
+                log.messageLog(cType.ERROR,err.message);
+                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+            end
+        end
+
+        function log=saveAsXML(obj,filename)
+        % save data model as XML file
+        %  Input:
+        %   filename - name of the output file
+        %  Output:
+        %   log: cStatusLog class containing error messages ans status
+            log=cStatusLogger(cType.VALID);
+            data=obj.getStructData;
+            if (nargin~=2) || (~ischar(filename))
+                log.messageLog(cType.ERROR,'Invalid input arguments');
+                return
+            end
+            if ~cType.checkFileWrite(filename)
+                log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
+                return
+            end
+            try
+                writestruct(data,filename,'StructNodeName','root','AttributeSuffix','Id');
+            catch err
+                log.messageLog(cType.ERROR,err.message);
+                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+            end
+        end
     end
     
     methods(Access=protected)

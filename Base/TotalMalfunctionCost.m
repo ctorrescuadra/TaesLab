@@ -1,15 +1,22 @@
 function tbl = TotalMalfunctionCost(arg)
-% TotalMalfunctionCost shows a table with the detailed breakdown
+%TotalMalfunctionCost - Shows a table with the detailed breakdown
 %   of the total malfunction cost indicator
-%  USAGE: 
-%   TotalMalfunctionCost(res)
-%  INPUT:
-%   arg - cResultSet with diagnosis information
-%  OUTPUT:
-%   tbl - cTableMatrix with the results
 %
-% See also cDiagnosis
+%   Syntax 
+%     TotalMalfunctionCost(res)
 %
+%   Input Arguments
+%     arg - cResultSet with diagnosis information
+%
+%   Output Arguments
+%     tbl - cTableMatrix with the results
+%
+%   Example
+%     <a href="matlab:open ThermoeconomicDiagnosisDemo.mlx">Thermoeconomic Diagnosis Demo</a>
+%
+%   See also cResultSet, cDiagnosis
+%
+    
     % Check Parameters
     tbl=cStatus();
     switch arg.classId

@@ -16,20 +16,20 @@ if ~data.isValid
 end
 % Define parameters
 if data.NrOfStates>1
-	[~,param.State]=optionChoice('Select State:',data.States);
+	[~,param.State]=optionChoice('Select State:',data.getStateNames);
 end
 % Use Resources Cost
 if data.isResourceCost
 	[oct,param.CostTables]=optionChoice('Select Cost Tables', cType.CostTablesOptions);
 	if bitget(oct,cType.GENERALIZED) && data.NrOfResourceSamples>1
-		[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.ResourceSamples);
+		[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.getSampleNames);
 	else
-		param.ResourceSample=data.ResourceSamples{1};
+		param.ResourceSample=data.getSampleNames(1);
 	end
 end
 % Select Waste Flows
 if data.NrOfWastes>1
-    [~,param.WasteFlow]=optionChoice('Select Waste Flow:',data.WasteData.Flows);
+    [~,param.ActiveWaste]=optionChoice('Select Waste Flow:',data.getWasteNames);
 end
 % Get Results
 wa=WasteAnalysis(data,param);

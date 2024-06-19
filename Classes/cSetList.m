@@ -13,7 +13,7 @@ classdef cSetList < cStatusLogger
         Entries={}    % Entries of the list - cell array
     end
     properties (Access=private)
-        st      % Internal structure
+        index      % Internal structure
     end
     methods
         function obj=cSetList(list)
@@ -35,9 +35,9 @@ classdef cSetList < cStatusLogger
                 return
             end
             % Create the internal structure
-            obj.st=struct();
+            obj.index=struct();
             for i=1:N
-                obj.st.(list{i})=i;
+                obj.index.(list{i})=i;
             end
             obj.Entries=list;
         end
@@ -45,28 +45,52 @@ classdef cSetList < cStatusLogger
         function res=existValue(obj,val)
         % Check if a value belong to the set
         %   val - char array 
-            res=isfield(obj.st,val);
+            res=isfield(obj.index,val);
         end
 
         function res=getIndex(obj,val)
         % Get the position of the val in the list
-            res=0;
-            if obj.existKey(val)
-                res=obj.st.(val);
+            res=[];
+            if obj.existValue(val)
+                res=obj.index.(val);
             end
         end
 
-        function res=getKey(obj,id)
-        % Get the element in the position id
+        function res=Values(obj,id)
+        % Get the element in the position id 
             res=[];
-            if id>0 && id <= length(obj)
+            % If no index is supplied resturn all values
+            if nargin==1
+                res=obj.Entries;
+                return
+            end
+            % Check index
+            aux=1:length(obj.Entries);
+            if ~all(ismember(id,aux))
+                return
+            end
+            % Return values or cells depending on index
+            if length(id)==1
                 res=obj.Entries{id};
+            else
+                res=obj.Entries(id);
+            end
+        end
+
+        function setValue(obj,id,val)
+            if id>0 && id <= length(obj)
+                obj.Entries{id}=val;
             end
         end
 
         function res=length(obj)
         % Overload function length
             res=length(obj.Entries);
+        end
+
+        function res=numel(obj)
+        % Overload function numel
+            res=numel(obj.Entries);
         end
 
         function res=size(obj)

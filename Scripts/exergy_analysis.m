@@ -17,11 +17,11 @@ if ~data.isValid
 end
 % Assign function paramater
 if data.NrOfStates>1
-	[~,param.State]=optionChoice('Select State:',data.States);
+	[~,param.State]=optionChoice('Select State:',data.getStateNames);
 end
 % Show results
 ea=ExergyAnalysis(data,param);
-if res.isValid
+if ea.isValid
 	outputResults(ea,options);
 	ea.printInfo('Results (ea) available in Workspace');
 else

@@ -1,5 +1,5 @@
 function obj = ImportDataModel(filename)
-% ImportDataModel- Create a cDataModel object from a previously saved MAT file.
+%ImportDataModel- Create a cDataModel object from a previously saved MAT file.
 %  	This function is equivalent to use <bold>ReadDataModel</bold> with a MAT file.
 %
 %	Syntax
