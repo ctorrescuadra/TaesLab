@@ -931,6 +931,17 @@
 		},
 		{
 			"id": 12,
+			"key": "tmfc",
+			"header": "Total Malfunction Cost",
+			"type": 8,
+			"graph": 2,
+			"options": 8,
+			"resultId": 5,
+			"rowTotal": false,
+			"colTotal": true
+		},
+		{
+			"id": 13,
 			"key": "wa",
 			"header": "Waste Allocation Table",
 			"type": 9,
@@ -941,7 +952,7 @@
 			"colTotal": false
 		},
 		{
-			"id": 13,
+			"id": 14,
 			"key": "rad",
 			"header": "Direct Cost Recycling Analysis",
 			"type": 5,
@@ -952,7 +963,7 @@
 			"colTotal": false
 		},
 		{
-			"id": 14,
+			"id": 15,
 			"key": "rag",
 			"header": "Generalized Cost Recycling Analysis",
 			"type": 7,

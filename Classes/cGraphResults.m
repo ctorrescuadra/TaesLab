@@ -216,23 +216,30 @@ classdef cGraphResults < cStatusLogger
 		% Input:
 		%	tbl - Name of the table
 		%	shout - Remove ENV info in graph
-			if nargin==2
+        % 
+            if nargin==2
 				shout=true;
-			end
+            end
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description,' [',tbl.State,']'];
-			if shout
+			if isDiagnosisTable
+                obj.Categories=tbl.RowNames(1:end-1);
+				obj.xValues=(1:tbl.NrOfRows-1)';
+				obj.yValues=cell2mat(tbl.Data(1:end-1,1:end-1));
+                obj.Legend=tbl.ColNames(2:end-1);
+            elseif shout
                 obj.Categories=tbl.ColNames(2:end);
 				obj.xValues=(1:tbl.NrOfCols-1)';
 				obj.yValues=cell2mat(tbl.Data(1:end-1,:))';
+                obj.Legend=tbl.RowNames(1:end-1);
             else % does not plot last bar
                 obj.Categories=tbl.ColNames(2:end-1);
 				obj.xValues=(1:tbl.NrOfCols-2)';
 				obj.yValues=cell2mat(tbl.Data(1:end-1,1:end-1))';
+                obj.Legend=tbl.RowNames(1:end-1);
 			end
 			obj.xLabel='Processes';
 			obj.yLabel=['Exergy ',tbl.Unit];
-			obj.Legend=tbl.RowNames(1:end-1);
 			obj.BaseLine=0.0;
 		end
 

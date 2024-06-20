@@ -197,18 +197,27 @@ classdef (Sealed) cTableMatrix < cTableResult
         %%%%
         % Graphic Interface functions
         %%%%
-        function res=isUnitCostTable(obj)
+        function res = isUnitCostTable(obj)
+        % Table is contains unit costs
             res=bitget(obj.GraphOptions,1);
         end
 
-        function res=isFlowsTable(obj)
+        function res = isFlowsTable(obj)
+        % Table is contains flows or processes
             res=bitget(obj.GraphOptions,2);
         end
 
-        function res=isGeneralCostTable(obj)
+        function res = isGeneralCostTable(obj)
+        % Table is general cost
             res=bitget(obj.GraphOptions,3);
         end
+
+        function res = isDiagnosisTable(obj)
+        % Table is TotalMalfuctionCost
+            res=bitget(obj.GraphOptions,4);
+        end
     end
+
     methods(Static)
         function tbl=create(data,rowNames,colNames,param)
         % Create a cTableMatrix given the additional properties

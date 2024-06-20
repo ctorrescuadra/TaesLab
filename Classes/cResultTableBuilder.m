@@ -155,6 +155,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.mf=obj.getMalfunctionTable(dgn.getMalfunctionTable);
             tbl.mfc=obj.getMalfunctionCostTable(dgn.getMalfunctionCostTable,dgn.Method);
             tbl.dit=obj.getIrreversibilityTable(dgn.getIrreversibilityTable);
+            tbl.tmfc=obj.getTotalMalfunctionCost(dgn);
             res=cResultInfo(dgn,tbl);
         end
 
@@ -582,6 +583,19 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             rowNames=[obj.processKeys,'MF'];
             DPt=[cType.Symbols.delta,'Pt'];
             colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
+            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+        end
+
+        function res=getTotalMalfunctionCost(obj,dgn)
+            M=3;
+            N=dgn.NrOfProcesses+1;
+            values=zeros(N,M);
+            values(:,1)=dgn.getMalfunctionCost';
+            values(:,2)=dgn.getWasteMalfunctionCost';
+            values(:,3)=dgn.getDemmandCorrectionCost';
+            tp=obj.getMatrixTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
+            rowNames=[obj.processKeys(1:end)];
+            colNames={'key','MF*','MR*','MPt*'};
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
 

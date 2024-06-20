@@ -19,7 +19,6 @@
 %   WasteAnalysis           - Waste recycling analysis of one state of the plant. 
 %   DiagramFP               - Gets the FP diagram of one state of the plant 
 %   SummaryResults          - Gets the summary results of a thermo-economic model.
-%   TotalMalfunctionCost    - Gets a detailed breakdown of the total cost of malfunctions. 
 %
 % Save Results Tables 
 %   SaveResults             - Saves the tables of a cResultSet object to a file.
