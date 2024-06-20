@@ -1,6 +1,8 @@
 function SaveResults(arg,filename)
-%SaveResults - Save the result tables into a file/s in diferent formats
-%   The accepted extensions are xlsx, csv, html, txt, tex and mat
+%SaveResult - Saves the result tables into a file
+%   The available format are: XLSX, CSV, TXT, HTML, LaTeX and MAT.
+%   Show a message about the status of the operation
+%   Used as interface of cResultsSet/saveResults
 %   
 %   Syntax
 %     SaveResults(arg,filename)
@@ -15,18 +17,15 @@ function SaveResults(arg,filename)
 %
 % See also cResultSet
 %
-    log=cStatus(cType.VALID);
-    if ~isa(arg,'cResultSet')       
-        log.printError('Usage: SaveResults(res,filename)');
-        return
-    end
+    log=cStatusLogger(cType.VALID);
     % Check Input parameters
-    if (nargin~=2) || ~isText(filename)
+    if (nargin~=2) || ~isFilename(filename)
         log.printError('Usage: SaveResults(res,filename)');
         return
     end
-    if isstring(filename)
-        filename=convertStringsToChars(filename);
+    if ~isa(arg,'cResultSet') || ~isValid(arg)     
+        log.printError('Invalid Result Set. File %s NOT saved',filename);
+        return
     end
     log=saveResults(arg,filename);
     printLogger(log);

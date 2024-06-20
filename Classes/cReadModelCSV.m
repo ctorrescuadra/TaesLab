@@ -26,7 +26,7 @@ classdef cReadModelCSV < cReadModelTable
                 sname=Sheets{i};
                 fname=strcat(sname,cType.FileExt.CSV);
                 filename=strcat(folder,cType.getPathDelimiter,fname);
-                if cType.checkFileRead(filename)
+                if exist(filename,'file')
                     tbl=cReadModelCSV.import(filename);
                     if tbl.isValid
                         tbl.setProperties(sname,cType.TableDataDescription{i})
@@ -46,7 +46,7 @@ classdef cReadModelCSV < cReadModelTable
                 sname=Sheets{i};
                 fname=strcat(sname,cType.FileExt.CSV);
                 filename=strcat(folder,filesep,fname);
-                if cType.checkFileRead(filename)
+                if exist(filename,'file')
                     tbl=cReadModelCSV.import(filename);
                     if tbl.isValid
                         tbl.setProperties(sname,cType.TableDataDescription{i})

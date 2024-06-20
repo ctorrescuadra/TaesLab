@@ -24,14 +24,14 @@ function res=ShowTable(tbl,varargin)
 %  
 % See also cResultInfo, cResultSet
 %
-    log=cStatus(cType.ERROR);
+    log=cStatus(cType.VALID);
     % Check input
     checkTable=@(x) isa(x,'cTable');
     p = inputParser;
     p.addRequired('tbl',checkTable);
     p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
-	p.addParameter('SaveAs','',@ischar);
+	p.addParameter('SaveAs','',@isFilename);
     try
 		p.parse(tbl,varargin{:});
     catch err
@@ -51,10 +51,9 @@ function res=ShowTable(tbl,varargin)
     end
     % Save table 
     if ~isempty(param.SaveAs)
-        log=saveTable(tbl,param.SaveAs);
-        printLogger(log);
+        SaveTable(tbl,param.SaveAs);
     end
     % View the table
     option=cType.getTableView(param.View);
-    showTable(tbl,option);
+    tbl.showTable(option);
 end

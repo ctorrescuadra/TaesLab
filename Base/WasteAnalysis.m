@@ -52,7 +52,7 @@ function res = WasteAnalysis(data,varargin)
     p.addParameter('ActiveWaste','',@ischar);
     p.addParameter('Recycling',true,@islogical);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@ischar);
+    p.addParameter('SaveAs','',@isFilename);
     try
         p.parse(data,varargin{:});
     catch err

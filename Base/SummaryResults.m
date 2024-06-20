@@ -44,7 +44,7 @@ function res = SummaryResults(data,varargin)
     p.addRequired('data',checkModel);
     p.addParameter('ResourceSample','',@ischar);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@ischar);
+    p.addParameter('SaveAs','',@isFilename);
     try
         p.parse(data,varargin{:});
     catch err

@@ -56,7 +56,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@ischar);
+    p.addParameter('SaveAs','',@isFilename);
     try
 		p.parse(data,varargin{:});
     catch err

@@ -555,7 +555,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION);
             rowNames=obj.processKeys;
             DPt=[cType.Symbols.delta,'Ps'];
-            colNames=horzcat(' ',rowNames(1:end-1),DPt);
+            colNames=horzcat('key',rowNames(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
             
@@ -570,7 +570,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             else
                 DPt=[cType.Symbols.delta,'Ps*'];
             end
-            colNames=horzcat(' ',obj.processKeys(1:end-1),DPt);
+            colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
             
@@ -581,7 +581,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tp=obj.getMatrixTableProperties(cType.Tables.IRREVERSIBILITY_VARIATION);
             rowNames=[obj.processKeys,'MF'];
             DPt=[cType.Symbols.delta,'Pt'];
-            colNames=horzcat(' ',obj.processKeys(1:end-1),DPt);
+            colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
 

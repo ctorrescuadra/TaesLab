@@ -9,16 +9,12 @@ function log=exportMAT(obj,filename)
 %       log - cStatusLogger containing the status of the save and error messages
 %
     log=cStatusLogger(cType.VALID);
-    if (nargin~=2) || (~ischar(filename))
+    if (nargin~=2) || (~isFilename(filename))
         log.messageLog(cType.ERROR,'Invalid input arguments');
         return
     end
     if ~isa(obj,'cTaesLab') || ~isValid(obj)
         log.messageLog(cType.ERROR,'Invalid object to save');
-        return
-    end
-    if ~cType.checkFileWrite(filename)
-        log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.MAT)

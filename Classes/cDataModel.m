@@ -376,17 +376,14 @@ classdef cDataModel < cResultSet
         %    
 			log=cStatusLogger(cType.VALID);
 			% Check inputs
-            if nargin<2
-                log.messageLog(cType.ERROR,'Invalid number of arguments');
+            if (nargin<2) || ~isFilename(filename)
+                log.messageLog(cType.ERROR,'Invalid arguments');
             end
 			if ~isValid(obj)
 				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
                 return
 			end
-            if ~cType.checkFileWrite(filename)
-				log.messageLog(cType.ERROR,'Invalid file name: %s',filename);
-                return
-            end
+
 			% Save data model depending of fileType
 			fileType=cType.getFileType(filename);
             switch fileType

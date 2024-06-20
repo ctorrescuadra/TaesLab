@@ -121,8 +121,7 @@ classdef ResultsPanel < cTaesLab
 		% Save results callback
             log=cStatus();
 			default_file=cType.RESULT_FILE;
-			[file,path,ext]=uiputfile({'*.xlsx','XLSX Files';'*.txt','TXT Files';'*.csv','CSV Files';'*.html', 'HTML files'},...
-                                        'Select File',default_file);
+			[file,path,ext]=uiputfile(cType.SAVE_RESULTS,'Select File',default_file);
             if ext % File has been selected
                 cd(path);
                 res=app.resultInfo;

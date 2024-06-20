@@ -47,7 +47,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 	p.addParameter('State','',@ischar);
     p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@ischar);
+    p.addParameter('SaveAs','',@isFilename);
     try
         p.parse(data,varargin{:});
     catch err

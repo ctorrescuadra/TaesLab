@@ -37,7 +37,7 @@ function res=ListResultTables(varargin)
     p = inputParser;
     p.addParameter('Show',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
-	p.addParameter('SaveAs','',@ischar);
+	p.addParameter('SaveAs','',@isFilename);
     p.addParameter('Columns',cType.DirColsDefault,@iscell)
     try
 		p.parse(varargin{:});
@@ -63,7 +63,6 @@ function res=ListResultTables(varargin)
     showTable(tbl,option);
     % Save table 
     if ~isempty(param.SaveAs)
-        log=saveTable(tbl,param.SaveAs);
-        log.printLogger;
+        SaveTable(tbl,param.SaveAs);
     end
 end

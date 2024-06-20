@@ -163,6 +163,14 @@ classdef cType
 		TABLE_INDEX='tindex';
         ResultIndex={'psindex','eaindex','taindex','waindex','tdindex','pdindex','fpindex','srindex',...
             'dmindex','rmindex'};
+		% Save extensions
+		SAVE_RESULTS={'*.xlsx','XLSX Files';'*.txt','TXT Files'; '*.csv','CSV Files'; ...
+		              '*.csv','CSV Files';'*.html','HTML Files';'*.tex','LaTeX Files';'*.mat','MAT Files'};
+		SAVE_DATA={'*.xlsx','XLSX Files';'*.json','JSON Files'; '*.csv','CSV Files';...
+		           '*.xml','XML Files';'*.mat','MAT Files'};
+		SAVE_TABLES={'*.xlsx','XLSX Files';'*.txt','TXT Files'; '*.csv','CSV Files'; ...
+		             '*.csv','CSV Files';'*.html','HTML Files';'*.tex','LaTeX Files';
+		             '*.json','JSON Files';'*.xml','XML Files';'*.mat','MAT Files'};
         % ClassId types
         ClassId=struct('RESULT_INFO',1,'DATA_MODEL',2,'RESULT_MODEL',3)
 		% Tables Directory configuration
@@ -424,31 +432,6 @@ classdef cType
                 res=idx;
             end
 		end
-
-		function res=checkFileWrite(filename)
-		% Check if file name is valid for write mode 
-			res=false;
-			if ~ischar(filename)
-				return
-			end
-			[~,file,ext]=fileparts(filename);
-			if regexp(strcat(file,ext),cType.FILE_PATTERN,'once')
-				res=true;
-			end
-		end
-
-		function res=checkFileRead(filename)
-		% Check if file name exists
-			res=false;
-            if ~ischar(filename)
-                return
-            end
-            [~,file,ext]=fileparts(filename);
-			if isempty(regexp(strcat(file,ext),cType.FILE_PATTERN,'once'))
-				return
-			end
-			res=exist(filename,'file');
-        end
 
         function res=checkFileExt(filename,fext)
 		% Check if filename has a valid extension

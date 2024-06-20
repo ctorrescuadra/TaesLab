@@ -28,24 +28,21 @@ function data=ReadDataModel(filename,varargin)
 %
 %   See also cReadModel, cDataModel
 %
-    data=cStatus();
+    data=cStatusLogger(cType.VALID);
     % Check parameters
-    if (nargin<1) || ~isText(filename)
-        data.printError('Usage: data=CheckDataModel(filename)');
+    if (nargin<1) || ~isFilename(filename)
+        data.printError('Usage: data=ReadDataModel(filename)');
         return
     end
-    if isstring(filename)
-        filename=convertStringsToChars(filename);
-    end
-    if ~cType.checkFileRead(filename)
-        data.printError('Invalid file name: %s', filename);
+    if ~exist(filename,'file')
+        data.printError('File %s does NOT exists',filename);
         return
     end
     % Optional parameters
     p = inputParser;
     p.addParameter('Debug',false,@islogical);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@isText);
+    p.addParameter('SaveAs','',@isFilename);
     try
 		p.parse(varargin{:});
     catch err

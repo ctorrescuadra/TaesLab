@@ -35,7 +35,7 @@ function res=ProductiveStructure(data,varargin)
     p = inputParser;
     p.addRequired('data',checkModel);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@ischar);
+    p.addParameter('SaveAs','',@isFilename);
     try
 		p.parse(data,varargin{:});
     catch err

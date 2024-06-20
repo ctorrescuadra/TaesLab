@@ -43,18 +43,18 @@ function model=ThermoeconomicModel(filename,varargin)
 %    
 %   See also cThermoeconomicModel
 %
-    model=cStatus(cType.VALID);
+    model=cStatusLogger(cType.VALID);
     % Check input parameters
-    if (nargin<1) || ~isText(filename)
+    if (nargin<1) || ~isFilename(filename)
         model.printError('Usage: model=ThermoeconomicModel(filename, params)');
+        return
+    end
+    if ~exist(filename,'file')
+        model.printError('File %s does NOT exists',filename);
         return
     end
     if isstring(filename)
         filename=convertStringsToChars(filename);
-    end
-    if ~cType.checkFileRead(filename)
-        model.printError('File %s does not exist',filename);
-        return
     end
     % Check Data Model file
         data=checkDataModel(filename);
@@ -63,7 +63,7 @@ function model=ThermoeconomicModel(filename,varargin)
         p = inputParser;
         refstate=data.getStateNames(1);
         p.addParameter('State',refstate,@ischar);
-        p.addParameter('ReferenceState',refstate,@isText);
+        p.addParameter('ReferenceState',refstate,@ischar);
         p.addParameter('ResourceSample','',@ischar);
         p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
         p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);

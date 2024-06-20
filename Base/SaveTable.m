@@ -9,24 +9,20 @@ function SaveTable(tbl,filename)
 %
 %   Input arguments
 %     tbl - cTable object
-%     filename - Name of the file (with extension) to dsave the table data
+%     filename - Name of the file (with extension) to save the table data
 %
 %   See also cTable
 %
-    log=cStatus(cType.VALID);
+    log=cStatusLogger(cType.VALID);
     % Check Input parameters
-    if (nargin<2) || ~isText(filename)
-        log.printError('Usage: SaveSummary(tbl,filename)');
+    if (nargin~=2) || ~isFilename(filename)
+        log.printError('Usage: SaveTable(table,filename)');
         return
     end
     if ~isa(tbl,'cTable') || ~isValid(tbl)
-        log.printError('File NOT saved. Invalid model object');
+        log.printError('Invalid table object. File %s NOT Saved', filename);
         return
     end
-    if isstring(filename)
-        filename=convertStringsToChars(filename);
-    end
     % Save table
-    log=saveTable(tbl,filename);
-    log.printLogger;
+    SaveTable(tbl,filename);
 end

@@ -1,27 +1,30 @@
 function SaveSummary(model,filename)
-% SaveSummary saves the summary cost tables into a file
-%   The type of file depends on the file extension
-%   *.csv, *.xlsx and *.mat are allowed
-% USAGE:
-%   SaveSummary(model,filename)
-% INPUT:
-%   model - cThermoeconomicModel object
-%   filename - name of the output file (with extension)
+%SaveSummary saves the summary model results into a file
+%   The available format are: XLSX, CSV, TXT, HTML, LaTeX and MAT.
+%   Show a message about the status of the operation
+%   Used as interface of cThermoeconomicModel/saveSummary
 %
-% See also cThermoeconomicModel
+%   Syntax:
+%     SaveTable(tbl,filename)
 %
-    log=cStatus(cType.VALID);
+%   Input arguments
+%     model - cThermoeconomicModel object
+%     filename - Name of the file (with extension) to save the table data
+%
+%   Example
+%     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
+%
+%   See also cThermoeconomicModel, cModelSummary
+%
+    log=cStatusLogger(cType.VALID);
     % Check Input parameters
-    if (nargin<2) || ~isText(filename)
-        log.printError('Usage: SaveSummary(arg,filename)');
+    if (nargin<2) || ~isFilename(filename)
+        log.printError('Usage: SaveSummary(model,filename)');
         return
     end
     if ~isa(model,'cThermoeconomicModel') || ~isValid(model)
-        log.printError('File NOT saved. Invalid model object');
+        log.printError('Invalid model object. File % NOT saved',filename);
         return
-    end
-    if isstring(filename)
-        filename=convertStringsToChars(filename);
     end
     % Save summary results
     log=saveSummary(model,filename);
