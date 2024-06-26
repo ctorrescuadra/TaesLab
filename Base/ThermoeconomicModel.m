@@ -1,9 +1,8 @@
 function model=ThermoeconomicModel(filename,varargin)
 %ThermoeconomicModel - Create a cThermoeconomicModel object from a data model file 
-%   This function creates a cThermoeconomicModel object containing all the needed information
-%   to perform a thermo-economic analysis of a plant.
-%   The class cThermoeconomicModel is the kernel of TaesLab and it has a set of methods
-%   that allow interactively obtaining all the results of a thermoeconomic analysis.
+%   This function creates a cThermoeconomicModel object. Once the object is created, all the
+%   public methods of the class could be used, allowing interactively obtaining all
+%   the results of a thermoeconomic analysis.
 %
 %   Syntax
 %     model = ThermoeconomicModel(filename,Name,Value)
@@ -43,10 +42,10 @@ function model=ThermoeconomicModel(filename,varargin)
 %    
 %   See also cThermoeconomicModel
 %
-    model=cStatusLogger(cType.VALID);
+    model=cStatus();
     % Check input parameters
     if (nargin<1) || ~isFilename(filename)
-        model.printError('Usage: model=ThermoeconomicModel(filename, params)');
+        model.printError('Usage: model=ThermoeconomicModel(filename,options)');
         return
     end
     if ~exist(filename,'file')

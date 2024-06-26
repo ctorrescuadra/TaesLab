@@ -28,13 +28,15 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %   Output Arguments
 %     res - cResultsInfo object contains the results of the thermoeconomic diagnosis for the required state
 %     The following tables are obtained:
-%		dgn - diagnosis summary table
-%       mf - malfunction table
-%       mfc - malfunction cost table
-%       dit - irreversibility variation
+%		dgn -  diagnosis summary table
+%       mf -   malfunction table
+%       mfc -  malfunction cost table
+%       dit -  irreversibility variation
+%       tmfc - total malfunction cost
 %
 %   Example
 %     <a href="matlab:open ThermoeconomicDiagnosisDemo.mlx">Thermoeconomic Diagnosis Demo</a>
+%     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
 %
 %   See also cDataModel, cDiagnosis, cResultInfo
 %
@@ -52,7 +54,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         p.parse(data,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: ThermoeconomicDiagnosis(data,param)');
+        res.printError('Usage: ThermoeconomicDiagnosis(data,options)');
         return
     end
     param=p.Results;

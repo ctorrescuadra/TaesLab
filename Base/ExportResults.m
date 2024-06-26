@@ -1,9 +1,13 @@
 function res = ExportResults(arg,varargin)
 %ExportResults - Export the results tables to a different format.
-%   This function gets the result tables in different formats.
-%   If 'Table' option is not used all the tables of the result set
-%   are converted to the desired format. If a table is selected,
-%   it return the table in the desired format
+%   This function gets the result tables in different formats:
+%     CELL - Table is converted in a cell array
+%     STRUCT - Table is converted in a structred array
+%     TABLE - Table is converted in a Matlab table object
+%   In none is selected a cTable object is obtained
+%   If 'Table' option is not used it returns a structure with 
+%   all the tables converted to the desired format. 
+%   If a 'Table' is selected, it return the table in the desired format.
 %
 %   Syntax
 %     res=ExportResults(arg,Name,Value)
@@ -20,7 +24,8 @@ function res = ExportResults(arg,varargin)
 %       'CELL' - returns the table as an array of cells.
 %       'STRUCT' - returns the table as a structured array.
 %       'TABLE' - returns a matlab table object.
-%     Format: Use the Format definition go output the tables
+%     Format: Use the Format definition to output the (numeric values) tables
+%       true | false (default)
 %
 %   Output Arguments
 %     res - Table/s in the format specified by ExportAs.
@@ -28,7 +33,7 @@ function res = ExportResults(arg,varargin)
 %   Example
 %     <a href="matlab:open ExergyAnalysisDemo.mlx">Exergy Analysis Demo</a>
 %  
-% See also cResultSet
+%  See also cResultSet, cTable.
 %
     res=cStatus();
     % Check input
@@ -42,7 +47,7 @@ function res = ExportResults(arg,varargin)
 		p.parse(arg,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: ViewTable(arg,options)');
+        res.printError('Usage: ExportResults(arg,options)');
         return
     end
     param=p.Results;

@@ -40,7 +40,7 @@ function res=ProductiveDiagram(data,varargin)
 		p.parse(data,varargin{:});
     catch err
 		res.printError(err.message);
-        res.printError('Usage: ProductiveStructure(data,param)');
+        res.printError('Usage: ProductiveDiagram(data,options)');
         return
     end
     param=p.Results;

@@ -212,7 +212,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=bitget(obj.GraphOptions,3);
         end
 
-        function res = isDiagnosisTable(obj)
+        function res = isTotalMalfunctionCost(obj)
         % Table is TotalMalfuctionCost
             res=bitget(obj.GraphOptions,4);
         end

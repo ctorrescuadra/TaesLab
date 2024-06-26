@@ -57,7 +57,7 @@ function res = WasteAnalysis(data,varargin)
         p.parse(data,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: cRecyclingAnalysis(data,param)')
+        res.printError('Usage: cRecyclingAnalysis(data,options)')
         return
     end
     % 

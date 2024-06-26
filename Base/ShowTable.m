@@ -1,30 +1,32 @@
 function res=ShowTable(tbl,varargin)
-% ShowTable let the show, export or save a table object in diferent formats 
-%  A table could be shown in the console, web browser or GUI table depending the 'View' option.
-%  Tables could be also exported or save into file with options 'ExportAs', 'SaveAs'
+%ShowTable - Show, export or save a table object in diferent ways 
+%   A table could be shown in the console, web browser or GUI table depending the 'View' option.
+%   Tables could be also exported or save into file with options 'ExportAs', 'SaveAs'
 %
-% USAGE:
-%   ShowTable(tbl,options)
-% INPUT:
-%   tbl - cTable object
-%   options - an structure contains additional parameters
-%    View: Select the way to show the table
-%     CONSOLE - show in console (default)
-%     GUI - use uitable
-%     HTML- use web browser
-%    ExportAs: Select the VarMode to output the ResultSet/Table
-%     NONE - return the cTable object (default)
-%     CELL - return the table as cell array
-%     STRUCT - return the table as structured array
-%     TABLE - return a matlab table
-%    SaveAs: Save the table in an external file. 
+%   Syntax
+%     ShowTable(tbl,Name,Value)
+%
+%   Input Argument
+%     tbl - cTable object
+%
+%   Name-Value Arguments
+%     View: Select the way to show the table
+%       CONSOLE - show in console (default)
+%       GUI - use uitable
+%       HTML- use web browser
+%     ExportAs: Select the VarMode to output the ResultSet/Table
+%       NONE - return the cTable object (default)
+%       CELL - return the table as cell array
+%       STRUCT - return the table as structured array
+%       TABLE - return a matlab table
+%     SaveAs: Save the table in an external file. 
 %   
-%   OUTPUT:
-%       res - table object in the format specified in ExportAs
+%   Output Arguments
+%     res - table object in the format specified in ExportAs
 %  
-% See also cResultInfo, cResultSet
+% See also cTable
 %
-    log=cStatus(cType.VALID);
+    log=cStatus();
     % Check input
     checkTable=@(x) isa(x,'cTable');
     p = inputParser;
@@ -36,7 +38,7 @@ function res=ShowTable(tbl,varargin)
 		p.parse(tbl,varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: ViewTable(arg,options)');
+        log.printError('Usage: ShowTable(tbl,options)');
         return
     end
     param=p.Results;

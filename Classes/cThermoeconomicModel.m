@@ -393,14 +393,6 @@ classdef cThermoeconomicModel < cResultSet
                 res.summaryDiagnosis;
             end
         end
-    
-        function totalMalfunctionCost(obj)
-        % Get the total malfunction cost summary
-            res=obj.thermoeconomicDiagnosis;
-            if ~isempty(res)
-                res.totalMalfunctionCost;
-            end
-        end
 
         function res=summaryResults(obj)
         % Get the Summary Results cResultInfo object

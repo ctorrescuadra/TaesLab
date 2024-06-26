@@ -84,7 +84,7 @@ classdef cResultInfo < cResultSet
         %       obj.showResults(table,option)
         %   Input:
         %       name - Name of the table
-        %       option - Way to display the table
+        %       option - Table view option
         %           cType.TableView.CONSOLE 
         %           cType.TableView.GUI
         %           cType.TableView.HTML (default)
@@ -141,7 +141,7 @@ classdef cResultInfo < cResultSet
         %       obj.showTableIndex(table,option)
         %   Input:
         %       name - Name of the table
-        %       option - Way to display the table
+        %       option - Table view option
         %           cType.TableView.CONSOLE (default)
         %           cType.TableView.GUI
         %           cType.TableView.HTML
@@ -528,9 +528,9 @@ classdef cResultInfo < cResultSet
             if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
                 format=obj.Tables.dit.Format;
                 unit=obj.Tables.dit.Unit;
-                tfmt=[' Fuel Impact:     ',format,' ',unit];
+                tfmt=['Fuel Impact:     ',format,' ',unit];
                 res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
-                tfmt=[' Malfunction Cost:',format,' ',unit];
+                tfmt=['Malfunction Cost:',format,' ',unit];
                 res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
             end
         end
@@ -541,36 +541,6 @@ classdef cResultInfo < cResultSet
                 res=obj.getDiagnosisSummary;
                 fprintf('%s\n%s\n\n',res.FuelImpact,res.MalfunctionCost);
             end
-        end
-
-        function totalMalfunctionCost(obj)
-        % Show malfunction cost summary
-            log=cStatus();
-            dgn=obj.Info;
-            if ~isa(dgn,'cDiagnosis')
-                log.printError('Invalid input argument');
-                return
-            end
-            % Retrieve information
-            N=dgn.NrOfProcesses+1;
-            data=zeros(N,3);
-            data(:,1)=dgn.getMalfunctionCost';
-            data(:,2)=dgn.getWasteMalfunctionCost';
-            data(:,3)=dgn.getDemmandCorrectionCost';
-            % Build the results table
-            rowNames=obj.Tables.dgn.RowNames;
-            colNames={'Key','MF*','MR*','MPt*'};
-            p.Format=obj.Tables.mfc.Format;
-            p.Unit=obj.Tables.mfc.Unit;
-            p.rowTotal=false;
-            p.colTotal=true;
-            p.key='tmfc';
-            p.Description='Total Malfunction Cost';
-            p.GraphType=0;
-            p.GraphOptions=0;
-            tbl=cTableMatrix.create(data,rowNames,colNames,p);
-            obj.summaryDiagnosis;
-            printTable(tbl);
         end
 
 		%%%

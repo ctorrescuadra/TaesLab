@@ -42,7 +42,7 @@ function res=ExergyAnalysis(data,varargin)
 		p.parse(data,varargin{:});
 	catch err
 		res.printError(err.message);
-        res.printError('Usage: ThermoeconomicState(data,param)');
+        res.printError('Usage: ExergyAnalysis(data,options)');
 		return
 	end
 	param=p.Results;

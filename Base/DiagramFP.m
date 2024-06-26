@@ -21,8 +21,8 @@ function res=DiagramFP(data,varargin)
 %	    char array | string
 %
 % 	Output Arguments
-%	 res - cResultInfo object contains the FP diagram tables
-%    The following tables are obtained:
+%	  res - cResultInfo object contains the FP diagram tables
+%     The following tables are obtained:
 %		atfp - Diagram FP adjacency matrix                                     
 %       atcfp - Cost Diagram FP adjacency matrix
 %   
@@ -43,7 +43,7 @@ function res=DiagramFP(data,varargin)
 		p.parse(data,varargin{:});
 	catch err
 		res.printError(err.message);
-        res.printError('Usage: DiagramFP(data,param)');
+        res.printError('Usage: DiagramFP(data,options)');
 		return
 	end
 	param=p.Results;

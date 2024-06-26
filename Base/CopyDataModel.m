@@ -16,6 +16,11 @@ function CopyDataModel(inputFile, outputFile)
 %
 % See also cDataModel, cReadModel
 %
+    log=cStatus();
+    if ~isFilename(inputFile) || ~isFilename(outputFile)
+        log.printError('Usage: CopyDataModel(inputFile,outputFile)');
+        return
+    end
     data=ReadDataModel(inputFile);
     if isValid(data)
         SaveDataModel(data,outputFile);

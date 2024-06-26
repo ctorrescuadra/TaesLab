@@ -1,21 +1,27 @@
 function ShowGraph(arg,varargin)
-% ShowGraph shows a result table as graph
-%   If a cThermoeconomicModel is used the name of the graph
+%ShowGraph - Shows a result table as graph
+%	If a cThermoeconomicModel is used the name of the graph
 %   should be provided. If a cResultInfo is used and the name
 %   of the graph is not provided the default graph is used
-%   Depending on the graph, additional options could be used, 
-% USAGE:
-%  	ShowGraph(arg, param)
-% INPUT:
-% 	arg - cResultSet object
-%   param - options depending on grah type
-%   	Graph: Name of the graph
-%		ShowOutput: Use for diagnosis tables
-%		WasteFlow: Waste flow key for waste allocation and recycling
-%		Variables: Use for summary results. 
-%			Cell array with the variables to represent
+%   Depending on the graph, additional options could be used.
 %
-% See also cGraphResults
+%	Syntax 
+%  	  ShowGraph(arg,Name,Value)
+% 
+%   Input Argument
+% 	  arg - cResultSet object
+%
+%   Name-Value Arguments
+%     Graph: Name of the table
+%       char array
+%     ShowOutput: Use for diagnosis tables
+%       true | false (default)
+%     WasteFlow: Waste flow key for waste allocation and recycling
+%       char array 
+%	  Variables: Use for summary results. 
+%	    cell array
+%
+% 	See also cGraphResults, cResultSet
 %
     log=cStatus(cType.VALID);
 	if ~(isa(arg,'cResultSet')) || ~isValid(arg)
@@ -32,7 +38,7 @@ function ShowGraph(arg,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: ShowGraph(res,graph,options)');
+        log.printError('Usage: ShowGraph(res,options)');
         return
     end
 	param=p.Results;

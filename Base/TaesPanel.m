@@ -1,18 +1,28 @@
 classdef TaesPanel < cTaesLab
-% Graphic user interface to select the thermoeconomic model parameters.
-%  Execute the basic functions of class cThermoeconomicModel:
-%   - productiveStructure
-%   - thermoeconomicState
-%   - thermoeconomicAnalysis
-%   - thermoeconomicDiagnosis
-%	- wasteAnalysis
-%  and perform the following operations:
-%   - Save the results in several formats (xlsx, csv, html, txt,..)
-%   - Save variables in the base workspace
-%   - View Result in tables and graphs
-% USAGE: app=TaesPanel;
+%TaesPanel - Graphic user interface to select the thermoeconomic model parameters.
+%   Execute the basic functions of class cThermoeconomicModel:
+%    - productiveStructure
+%    - thermoeconomicState
+%    - thermoeconomicAnalysis
+%    - thermoeconomicDiagnosis
+%	 - wasteAnalysis
+%   and perform the following operations:
+%    - Save the results in several formats (xlsx, csv, html, txt,..)
+%    - Save variables in the base workspace
+%    - View Result in tables and graphs.
 %
-% See also cThermoeconomicModel
+%   If ViewTable is active (~NONE) the ResultPanel is activate to select
+%   the table or the graph to show, if is not active and Show Console is
+%   active the result set is print on console.
+%   Pressing a toolbar result botton this result is activated, therefore
+%   the results are shown or saved into file.
+%   If the result is selected in the Result Menu is is save in the
+%   workspace, to work with it interactively.
+%
+%   Syntax
+%     app=TaesPanel;
+%
+%   See also cThermoeconomicModel
 %
     properties(Access=private)
         % Widgets definition
@@ -28,14 +38,14 @@ classdef TaesPanel < cTaesLab
         wf_popup        % Select Waste Flows widget
         tables_popup    % Select CostTables widget
 		tdm_popup       % Diagnosis method widget
-        tv_popup        % Table View  widget
         ra_checkbox     % Recycling Analysis widget
 		sh_checkbox     % Show in console widget
 		gr_checkbox     % Select graphic widget
         sr_checkbox     % Summary Results widget
         mn_save         % Save Result menu
-        mn_debug
-        mn_console
+        mn_debug        % Menu Debug
+        mn_console      % Console activation menu
+        mn_panel        % Panel Activation menu
         menu            % Results Menu cell array widgets
         ptb             % Toolbar cell array widgets
     end
@@ -44,6 +54,7 @@ classdef TaesPanel < cTaesLab
     properties(GetAccess=public,SetAccess=private)
         model;
     end
+
 	properties(Access=private)
         stateNames      % State Names
         sampleNames     % Resource Sample names
@@ -51,18 +62,18 @@ classdef TaesPanel < cTaesLab
         activeWaste     % Active Waste Flow for Recycling
         resultFile      % Full results file name
         outputFileName  % Sort output file name
-        tableView       % table view option
         tableIndex      % Current table index object
-        resPanel      % ResultsPanel object
+        resPanel        % ResultsPanel object
         currentNode     % Current cResultInfo
         debug           % Control debug mode
         console         % Console mode
+        panel           % Panel mode
+        viewOptions     % Table view options
     end
 
     methods
-        % TaesTool constructor
         function app=TaesPanel()
-            % Initialize application variabbles
+        % Create an instance of the object
 			app.model=cStatusLogger();
             % Create GUI components
             createComponents(app);
@@ -167,13 +178,6 @@ classdef TaesPanel < cTaesLab
             pos=get(app.tables_popup,'value');
             app.model.CostTables=values{pos};
             app.ViewIndexTable(app.model.thermoeconomicAnalysis);
-        end
-
-        function getTableView(app,~,~)
-        % Select Cost Table callback
-            pos=get(app.tv_popup,'value');
-            app.tableView=pos-1;
-            app.resPanel.setTableView(app.tableView);
         end
 
 		function getState(app,~,~)
@@ -311,11 +315,29 @@ classdef TaesPanel < cTaesLab
             end
         end
 
-        function showConsole(app,evt,~)
+        function setConsole(app,src,~)
         % Menu Console callback
-            val=get(evt,'checked');
+            val=get(src,'checked');
             [nv1,app.console]=toggleState(val);
-            set(evt,'checked',nv1);
+            set(src,'checked',nv1);
+            if app.console
+                set(app.mn_panel,'checked','off');
+                app.panel=false;
+                app.resPanel.hidePanel;
+            end
+        end
+
+        function setPanel(app,src,~)
+        % Menu Panel callback
+            val=get(src,'checked');
+            [nv1,app.panel]=toggleState(val);
+            set(src,'checked',nv1);
+            if app.panel
+                set(app.mn_console,'checked','off');
+                app.console=false;
+            else
+                app.resPanel.hidePanel;
+            end
         end
 
         function aboutTaes(~,~,~)
@@ -335,8 +357,8 @@ classdef TaesPanel < cTaesLab
 		%%%%%%%%%%%%%%%%%%%%%%%
         function ViewIndexTable(app,res)
         % View the index table into the table panel
-            if app.tableView
-                app.resPanel.setIndexTable(res);
+            if app.panel
+                app.resPanel.showResults(res);
             elseif app.console
                 showResults(res);
             end
@@ -395,15 +417,22 @@ classdef TaesPanel < cTaesLab
             app.mn_save=uimenu (f,'label','Save','accelerator', 's',...
                 'callback', @(src,evt) app.saveResult(src,evt));
             uimenu (f, 'label', 'Close', 'accelerator', 'q', ...
-				'callback', @(src,evt) app.closeApp(src,evt));          
+				'callback', @(src,evt) app.closeApp(src,evt));
+            %Debug Menu
             app.debug=true;
             app.mn_debug=uimenu (d,'label','Debug','accelerator','d',...,
                 'enable','on','checked','on',...
                 'callback',@(src,evt) app.setDebug(src,evt));
+            % Console Menu
             app.console=false;
-            app.mn_console=uimenu (d,'label','Console','accelerator','d',...,
+            app.mn_console=uimenu (d,'label','Console','accelerator','c',...,
                 'enable','on','checked','off',...
-                'callback',@(src,evt) app.showConsole(src,evt));
+                'callback',@(src,evt) app.setConsole(src,evt));
+            % Panel Menu
+            app.panel=false;
+            app.mn_panel=uimenu (d,'label','Panel','accelerator','p',...,
+                'enable','on','checked','off',...
+                'callback',@(src,evt) app.setPanel(src,evt));
             % Results Menu
             app.menu=cell(1,cType.MAX_RESULT_INFO);
             for i=1:cType.MAX_RESULT_INFO-2
@@ -517,14 +546,6 @@ classdef TaesPanel < cTaesLab
                    'tooltipstring','Select Result File',...
                    'position', [0.06 0.27 0.36 0.045]);
 
-            uicontrol (p1,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Table View:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Table View Mode',...
-                   'position', [0.06 0.20 0.36 0.045]);
-
 			% Object widgets
 			app.mfile_text = uicontrol (p1,'style', 'text',...
 					'units', 'normalized',...
@@ -593,15 +614,6 @@ classdef TaesPanel < cTaesLab
 					'horizontalalignment', 'left',...
 					'position', [0.44 0.27 0.47 0.045]);
 
-            app.tableView=cType.TableView.NONE;
-            app.tv_popup = uicontrol (p1,'style', 'popupmenu',...
-					'units', 'normalized',...
-                    'string', cType.TableViewOptions,...
-                    'enable','on',...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) app.getTableView(src,evt),...
-					'position', [0.44 0.20 0.47 0.045]);
-
             app.open_button = uicontrol (p1,'style', 'pushbutton',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
@@ -619,7 +631,7 @@ classdef TaesPanel < cTaesLab
 			set(hf,'visible','on');
             app.fig=hf;
             % Assing Table Index Panel
-            app.resPanel=ResultsPanel(cType.TableView.NONE);
+            app.resPanel=ResultsPanel;
         end
 
 		function initInputParameters(app)

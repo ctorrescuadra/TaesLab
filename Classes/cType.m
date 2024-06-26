@@ -95,7 +95,7 @@ classdef cType
 		DiagnosisMethod=struct('NONE',1,'WASTE_EXTERNAL',2,'WASTE_INTERNAL',3);
 		DEFAULT_DIAGNOSIS='WASTE_EXTERNAL';
 		% Options for Table View
-		TableView=struct('NONE',0,'CONSOLE',1,'GUI',2,'HTML',3);
+		TableView=struct('NONE',0,'CONSOLE',1,'HTML',2,'GUI',3);
 		DEFAULT_TABLEVIEW='CONSOLE';
 		% Input Tables
 		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...

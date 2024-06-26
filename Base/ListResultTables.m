@@ -30,7 +30,10 @@ function res=ListResultTables(varargin)
 %   Output Arguments
 %     res - table object in the format specified in ExportAs, with the selected columns
 %
-% See also cTablesDefinition
+%   Example
+%     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
+%
+%   See also cTablesDefinition
 %
     res=cStatus();
     % Check input parameters

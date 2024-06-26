@@ -10,9 +10,12 @@ classdef TaesTool < cTaesLab
 %     - Save the results in several formats (xlsx, csv, html, txt,..)
 %     - Save variables in the base workspace
 %     - View Result in tables and graphs
+%   The application has two panel, the Taess panel where the parametres
+%   of the Thermoeconomic Model are selected, and the results panel, where
+%   the user select the tables and graph to show.
 % 
 %   Syntax
-%     TaesTool;
+%     app=TaesTool;
 %
 %   See also cThermoeconomicModel
 %
@@ -296,12 +299,16 @@ classdef TaesTool < cTaesLab
         % Get Data model callback
         % Store the cDataModel object into workspace
             assignin('base', 'data', app.model.DataModel);
+            logtext=sprintf(' INFO: Results store in variable data');
+            set(app.log,'string',logtext);
         end
 
         function getResultModel(app,~,~)
         % Get Result model callback
         % Store model object into workspace
             assignin('base', 'model', app.model);
+            logtext=sprintf(' INFO: Results store in variable model');
+            set(app.log,'string',logtext);
         end
 
         function selectTable(app,~,event)

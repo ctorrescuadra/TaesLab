@@ -61,7 +61,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 		p.parse(data,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: ThermoeconomicAnalysis(data,param)');
+        res.printError('Usage: ThermoeconomicAnalysis(data,options)');
         return
     end
     param=p.Results;

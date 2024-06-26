@@ -49,7 +49,7 @@ function res = SummaryResults(data,varargin)
         p.parse(data,varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: SummaryResults(data,param)')
+        res.printError('Usage: SummaryResults(data,options)')
         return
     end
     param=p.Results;

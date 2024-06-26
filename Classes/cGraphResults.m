@@ -1,4 +1,4 @@
-classdef cGraphResults < cStatusLogger
+classdef (Sealed) cGraphResults < cStatusLogger
 % cGraphSummary plot as bar summary tables
     properties(GetAccess=public,SetAccess=private)
         Type        % Graph Type
@@ -222,7 +222,7 @@ classdef cGraphResults < cStatusLogger
             end
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description,' [',tbl.State,']'];
-			if isDiagnosisTable
+			if tbl.isTotalMalfunctionCost
                 obj.Categories=tbl.RowNames(1:end-1);
 				obj.xValues=(1:tbl.NrOfRows-1)';
 				obj.yValues=cell2mat(tbl.Data(1:end-1,1:end-1));
