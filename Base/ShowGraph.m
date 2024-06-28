@@ -21,6 +21,9 @@ function ShowGraph(arg,varargin)
 %	  Variables: Use for summary results. 
 %	    cell array
 %
+%   Example
+%     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
+%
 % 	See also cGraphResults, cResultSet
 %
     log=cStatus(cType.VALID);

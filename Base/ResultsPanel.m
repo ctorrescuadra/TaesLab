@@ -1,5 +1,5 @@
 classdef ResultsPanel < cStatus
-%ResultsPanel - Graphic user interface to sohow the results interactively
+%ResultsPanel - Graphic user interface to show the results interactively
 %   The class create a figure panel and show the Index Table of the selected cResultSet
 %   From the Index Table you can select the table or graphic to show.
 %   Table values could be show in the console, in a web browser or in a uitable.

@@ -11,9 +11,10 @@ classdef TaesPanel < cTaesLab
 %    - Save variables in the base workspace
 %    - View Result in tables and graphs.
 %
-%   If ViewTable is active (~NONE) the ResultPanel is activate to select
-%   the table or the graph to show, if is not active and Show Console is
-%   active the result set is print on console.
+%   If Panel is active in the View menu  the ResultPanel is activated
+%   then the user can select the table or the graph to show.
+%   If Console is active in the view menu, the results are shown
+%   on the console.
 %   Pressing a toolbar result botton this result is activated, therefore
 %   the results are shown or saved into file.
 %   If the result is selected in the Result Menu is is save in the
@@ -131,7 +132,7 @@ classdef TaesPanel < cTaesLab
 				end
 				dnames=cType.DiagnosisOptions;
                 if tm.isWaste
-                    app.wasteFlows=data.getWasteNames;
+                    app.wasteFlows=data.WasteFlows;
                     set(app.wf_popup,'enable','on','string',app.wasteFlows);
                     set(app.ra_checkbox,'enable','on');
 					set(app.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);

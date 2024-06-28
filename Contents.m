@@ -24,6 +24,7 @@
 %   SaveResults             - Saves the tables of a cResultSet object to a file.
 %   SaveSummary             - Saves the result summary tables to a file.
 %   SaveDataModel           - Saves the data model tables to a file.
+%   SaveTable               - Saves a table to a file
 %   CopyDataModel           - Copies a data model file to another format.
 %
 % Display Results 

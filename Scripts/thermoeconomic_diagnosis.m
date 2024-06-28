@@ -18,7 +18,7 @@ end
 % Define paramaters
 param.DiagnosisMethod=cType.DEFAULT_DIAGNOSIS;
 if data.isDiagnosis
-	states=data.States.Values;
+	states=data.StateNames;
 	[~,param.State]=optionChoice('Select State:',states(2:end));
 else
 	data.printError('An Operation State is required');

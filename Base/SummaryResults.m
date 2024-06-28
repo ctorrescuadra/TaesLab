@@ -20,17 +20,17 @@ function res = SummaryResults(data,varargin)
 %   Output Arguments
 %     res - cResultInfo object with the summary results
 %     It contains the following tables:
-%       cType.SummaryTables.EXERGY (exergy)
-%       cType.SummaryTables.UNITCONSUMPTION (pku)
-%       cType.SummaryTables.PROCESS_COST (dpc)
-%       cType.SummaryTables.PROCESS_UNIT_COST (dpuc)
-%       cType.SummaryTables.FLOW_COST (dfc)
-%       cType.SummaryTables.FLOW_UNIT_COST (dfuc)
+%       Exergy of the states (exergy)
+%       Unit consumption of the processes (pku)
+%       Direct Cost of the processes (dpc)
+%       Direct unit cost of the processes (dpuc)
+%       Direct flows cost (dfc)
+%       Direct unit flow costs (dfuc)
 %     If Resource Cost is defined:
-%       cType.SummaryTables.PROCESS_GENERAL_COST (gpc)
-%       cType.SummaryTables.PROCESS_GENERAL_UNIT_COST (gpuc)
-%       cType.SummaryTables.FLOW_GENERAL_COST (gfc)
-%       cType.SummaryTables.FLOW_GENERAL_UNIT_COST (gfuc)
+%       Generalized Processes cost (gpc)
+%       Generalized unit cost of processes (gpuc)
+%       Generalized cost of flows (gfc)
+%       Generalized unit cost of flows (gfuc)
 %
 %   Example
 %     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>

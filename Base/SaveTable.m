@@ -2,7 +2,7 @@ function SaveTable(tbl,filename)
 %SaveTable - Save a result table in diferent format
 %   The available format are: XLSX, CSV, TXT, HTML, LaTeX, JSON, XML and MAT.
 %   Show a message about the status of the operation
-%   Used as interface of cTable/SaveTable
+%   Used as interface of cTable/saveTable
 %
 %   Syntax:
 %     SaveTable(tbl,filename)
@@ -10,6 +10,9 @@ function SaveTable(tbl,filename)
 %   Input arguments
 %     tbl - cTable object
 %     filename - Name of the file (with extension) to save the table data
+%
+%   Example
+%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %
 %   See also cTable
 %
@@ -24,5 +27,6 @@ function SaveTable(tbl,filename)
         return
     end
     % Save table
-    SaveTable(tbl,filename);
+    log=tbl.saveTable(filename);
+    printLogger(log);
 end

@@ -36,11 +36,10 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %
 %   Example
 %     <a href="matlab:open ThermoeconomicDiagnosisDemo.mlx">Thermoeconomic Diagnosis Demo</a>
-%     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
 %
 %   See also cDataModel, cDiagnosis, cResultInfo
 %
-    res=cStatus();
+    res=cStatusLogger(cType.VALID);
     % Check input parameters
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
@@ -84,13 +83,11 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     % Read reference and operation  exergy values
     rex0=data.getExergyData(param.ReferenceState);
     if ~isValid(rex0)
-        rex0.printLogger;
         res.printError('Invalid exergy values. See error log');
         return
     end
     rex1=data.getExergyData(param.State);
     if ~isValid(rex1)
-        rex1.printLogger;
         res.printError('Invalid exergy values. See error log');
         return
     end

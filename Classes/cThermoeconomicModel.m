@@ -112,6 +112,7 @@ classdef cThermoeconomicModel < cResultSet
         results            % cResultInfo cell array
         rstate             % cExergyCost object cell array
         fmt                % cResultTableBuilder object
+        wd                 % cWasteData object
         rsd                % cResourceData object
         rsc                % cResourceCost object
         fp0                % Actual reference cExergyCost
@@ -175,8 +176,9 @@ classdef cThermoeconomicModel < cResultSet
             obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
             if data.isWaste
+                obj.wd=data.WasteData;
                 if isempty(param.ActiveWaste)
-                    param.ActiveWaste=obj.WasteFlows.Values(1);
+                    param.ActiveWaste=data.getWasteFlows(1);
                 end
                 obj.ActiveWaste=param.ActiveWaste;
             end
@@ -192,8 +194,7 @@ classdef cThermoeconomicModel < cResultSet
                     return
                 end
                 if obj.isWaste
-                    wd=data.WasteData;
-                    obj.rstate{i}=cExergyCost(rex,wd);
+                    obj.rstate{i}=cExergyCost(rex,obj.wd);
                 else
                     obj.rstate{i}=cExergyCost(rex);
                 end
@@ -445,17 +446,17 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=get.StateNames(obj)
         % Show a list of the available state names
-            res=obj.DataModel.getStateNames;
+            res=obj.DataModel.StateNames;
         end
 
         function res=get.SampleNames(obj)
         % Show a list of the avaliable resource samples
-            res=obj.DataModel.getSampleNames;
+            res=obj.DataModel.SampleNames;
         end
 
         function res=get.WasteFlows(obj)
         % Get waste flows list (cell array)
-            res=obj.DataModel.WasteData.Flows;
+            res=obj.DataModel.WasteFlows;
         end
 
         function res=isResourceCost(obj)
@@ -525,7 +526,7 @@ classdef cThermoeconomicModel < cResultSet
             for i=1:cType.ResultId.SUMMARY_RESULTS
                 rid=obj.getResultInfo(i);
                 if ~isempty(rid)
-                    list=rid.getListOfTables;
+                    list=rid.ListOfTables;
                     idx=cellfun(@(x) getIndex(tDict,x),list);
                     atm(idx)=true;
                 end
@@ -975,8 +976,7 @@ classdef cThermoeconomicModel < cResultSet
             rex=data.ExergyData{idx};
             % Compute cExergyCost
             if obj.isWaste
-                wd=data.WasteData;
-                obj.rstate{idx}=cExergyCost(rex,wd);
+                obj.rstate{idx}=cExergyCost(rex,obj.wd);
             else
                 obj.rstate{idx}=cExergyCost(rex);
             end
@@ -1261,7 +1261,7 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkActiveWaste(obj,value)
         % Check Active Waste Parameter
             res=false;
-            if ~obj.WasteFlows.existValue(value)
+            if ~obj.wd.existWaste(value)
                 obj.printWarning('Invalid waste flow: %s',value);
                 return
             end
@@ -1317,7 +1317,7 @@ classdef cThermoeconomicModel < cResultSet
                 tmp=getModelResults(obj.results);
                 for k=1:numel(tmp)
                     dm=tmp{k};
-                    list=dm.getListOfTables;
+                    list=dm.ListOfTables;
                     for i=1:dm.NrOfTables
                         tables.(list{i})=dm.Tables.(list{i});
                     end

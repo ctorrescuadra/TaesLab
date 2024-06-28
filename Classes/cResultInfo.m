@@ -26,6 +26,7 @@ classdef cResultInfo < cResultSet
         ResultName   % Result name
         Tables       % Struct containing the tables
         NrOfTables   % Number of tables
+        ListOfTable  % List of tables
         Info         % cResultId object containing the results
         ModelName    % Model Name
         State        % State Name
@@ -244,7 +245,7 @@ classdef cResultInfo < cResultSet
             if nargin==2
                 fmt=false;
             end
-            names=obj.getListOfTables;
+            names=obj.ListOfTables;
             tables=cellfun(@(x) exportTable(obj,x,varmode,fmt),names,'UniformOutput',false);
             res=cell2struct(tables,names,1);
         end

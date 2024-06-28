@@ -131,5 +131,29 @@ classdef cWasteData < cStatusLogger
 		% get the cWasteTable object
 			res=cWasteTable(obj);
 		end
+
+		function res=getWasteFlows(obj,varargin)
+		% Return the name of the corresponding index
+		% Input:
+		%  ind - state index to retrieve
+			res=obj.Flows.Values(varargin{:});
+		end
+			
+		function res=getWasteId(obj,key)
+		% Return the id of the corresponding waste key
+		% Input:
+		%  ind - state index to retrieve
+			res=obj.Flows.getIndex(key);
+		end
+			
+		function res=existWaste(obj,key)
+		% Determine if waste key is defined
+			res=obj.Flows.existValue(key);
+        end
+
+        function res=getFlowNr(obj,key)
+		% Determine the flow number of a waste
+            res=obj.ps.getFlowId(key);
+        end
 	end
 end	

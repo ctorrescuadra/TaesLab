@@ -16,13 +16,13 @@ end
 % Define paramaters
 param=struct();
 if data.NrOfStates>1
-	[~,param.State]=optionChoice('Select State:',data.getStateNames);
+	[~,param.State]=optionChoice('Select State:',data.StateNames);
 end
 % Use Resources Cost
 if data.isResourceCost
 	[oct,param.CostTables]=optionChoice('Select Output Tables:',cType.CostTablesOptions);
     if bitget(oct,cType.GENERALIZED) && data.NrOfResourceSamples>1
-		[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.getSampleNames);
+		[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.SampleNames);
 	else
 		param.ResourceSample=data.getSampleNames(1);
     end

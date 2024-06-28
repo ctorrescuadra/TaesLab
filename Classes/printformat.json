@@ -415,7 +415,7 @@
 			"description": "Diagnosis Summary",
 			"resultId": 5,
 			"graph": 0,
-			"columns": 7,
+			"columns": 8,
 			"fields": [
 				{
 					"name": "key",
@@ -430,6 +430,11 @@
 				{
 					"name": "DI",
 					"header": "\u0394I",
+					"type": 8
+				},
+				{
+					"name": "DR",
+					"header": "\u0394R",
 					"type": 8
 				},
 				{
@@ -942,6 +947,17 @@
 		},
 		{
 			"id": 13,
+			"key": "dft",
+			"header": "Fuel Impact Summary",
+			"type": 8,
+			"graph": 2,
+			"options": 8,
+			"resultId": 5,
+			"rowTotal": false,
+			"colTotal": true
+		},
+		{
+			"id": 14,
 			"key": "wa",
 			"header": "Waste Allocation Table",
 			"type": 9,
@@ -952,7 +968,7 @@
 			"colTotal": false
 		},
 		{
-			"id": 14,
+			"id": 15,
 			"key": "rad",
 			"header": "Direct Cost Recycling Analysis",
 			"type": 5,
@@ -963,7 +979,7 @@
 			"colTotal": false
 		},
 		{
-			"id": 15,
+			"id": 16,
 			"key": "rag",
 			"header": "Generalized Cost Recycling Analysis",
 			"type": 7,

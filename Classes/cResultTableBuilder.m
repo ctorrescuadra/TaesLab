@@ -156,6 +156,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.mfc=obj.getMalfunctionCostTable(dgn.getMalfunctionCostTable,dgn.Method);
             tbl.dit=obj.getIrreversibilityTable(dgn.getIrreversibilityTable);
             tbl.tmfc=obj.getTotalMalfunctionCost(dgn);
+            tbl.dft=obj.getFuelImpactSummary(dgn);
             res=cResultInfo(dgn,tbl);
         end
 
@@ -539,13 +540,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             rowNames=obj.processKeys;
             colNames=obj.getTableHeader(tp);
             nrows=length(rowNames);
-            data=cell(nrows,6);     
+            data=cell(nrows,7);     
             data(:,1)=num2cell(zerotol(dgn.getMalfunction));
             data(:,2)=num2cell(zerotol(dgn.getIrreversibilityVariation));
-            data(:,3)=num2cell(zerotol(dgn.getDemandVariation));
-            data(:,4)=num2cell(zerotol(dgn.getMalfunctionCost));
-            data(:,5)=num2cell(zerotol(dgn.getWasteMalfunctionCost));
-            data(:,6)=num2cell(zerotol(dgn.getDemandVariationCost));
+            data(:,3)=num2cell(zerotol(dgn.getWasteVariation));
+            data(:,4)=num2cell(zerotol(dgn.getDemandVariation));
+            data(:,5)=num2cell(zerotol(dgn.getMalfunctionCost));
+            data(:,6)=num2cell(zerotol(dgn.getWasteMalfunctionCost));
+            data(:,7)=num2cell(zerotol(dgn.getDemandVariationCost));
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
          
@@ -596,6 +598,22 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tp=obj.getMatrixTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
             rowNames=[obj.processKeys(1:end)];
             colNames={'key','MF*','MR*','MPt*'};
+            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+        end
+
+        function res=getFuelImpactSummary(obj,dgn)
+            M=3;
+            N=dgn.NrOfProcesses+1;
+            values=zeros(N,M);
+            values(:,1)=dgn.getIrreversibilityVariation';
+            values(:,2)=dgn.getWasteVariation';
+            values(:,3)=dgn.getDemandVariation';
+            tp=obj.getMatrixTableProperties(cType.Tables.FUEL_IMPACT);
+            rowNames=[obj.processKeys(1:end)];
+            DI=[cType.Symbols.delta,'I'];
+            DR=[cType.Symbols.delta,'R'];
+            DPs=[cType.Symbols.delta,'Ps'];
+            colNames={'key',DI,DR,DPs};
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
 

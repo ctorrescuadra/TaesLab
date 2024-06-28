@@ -44,7 +44,7 @@ classdef cResultSet < cStatusLogger
             showResults(res,varargin{:});
         end
 
-        function res=getListOfTables(obj)
+        function res=ListOfTables(obj)
         % Get the list of tables as cell array
             tmp=getResultInfo(obj);
             res=fieldnames(tmp.Tables);

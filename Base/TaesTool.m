@@ -125,7 +125,7 @@ classdef TaesTool < cTaesLab
 				end
 				dnames=cType.DiagnosisOptions;
 				if tm.isWaste
-                    app.wasteFlows=data.getWasteNames;
+                    app.wasteFlows=data.WasteFlows;
                     set(app.wf_popup,'enable','on','string',app.wasteFlows);
                     set(app.ra_checkbox,'enable','on');
 					set(app.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);

@@ -37,6 +37,7 @@ classdef cDiagnosis < cResultId
         DW0     % System output variation
         DWt     % Final demand variation
         DWr     % Waste variation
+        DR      % Waste variation (internal allocation)
         DcP     % Unit Cost Variation     
 	    tMF     % Malfunction Matrix
         tDF     % Disfunction Matrix
@@ -174,10 +175,9 @@ classdef cDiagnosis < cResultId
         end
 
         function res=getDemandVariation(obj)
-        % Get the system demand variation
-            res=[obj.DW', sum(obj.DW)];
-        end
-            
+            res=[obj.DWt', sum(obj.DWt)];
+        end   
+
         function res=getDemandVariationCost(obj)
         % get the output cost variation
             res=[obj.DCW,sum(obj.DCW)];
@@ -226,8 +226,14 @@ classdef cDiagnosis < cResultId
         end
 
         function res=getDemmandCorrectionCost(obj)
+        % Get Demand Correction
             tmp=obj.DCW-obj.DWTEC;
             res=[tmp,sum(tmp)];
+        end
+
+        function res=getWasteVariation(obj)
+        % Get waste variation
+            res=[obj.DR,sum(obj.DR)];
         end
     end
 
@@ -243,6 +249,7 @@ classdef cDiagnosis < cResultId
             obj.DIT=obj.DFin;
             obj.vMCR=zeros(1,N);
             obj.MFC=obj.tDF;
+            obj.DR=obj.DWr';
         end
         
         function wasteInternalMethod(obj,fp0,fp1)
@@ -253,7 +260,7 @@ classdef cDiagnosis < cResultId
             cPE=obj.dpuk.cPE;
             obj.DW=obj.DWt;
             obj.DCW=obj.dpuk.cP .* obj.DWt';
-            obj.vDI=obj.vDI+obj.DWr';
+            obj.DR=sum(fp1.TableR-fp0.TableR);
             % Prepare internal variables
             mf=obj.tMF(1:N,:);
             mr=full(scaleCol(fp1.pfOperators.mKR-fp0.pfOperators.mKR,fp0.ProductExergy));
@@ -263,6 +270,7 @@ classdef cDiagnosis < cResultId
             tMCR=scaleRow(mr,cP)+scaleRow(dr,cPE);
             obj.vMCR=sum(tMCR);
             obj.MFC=obj.tDF+tMCR;
+            obj.DR=sum(fp1.TableR-fp0.TableR);
             % Compute waste variation
             mdwr=[mr,zeros(N,1)]+opR*mfr;
             % Compute Irreversibility table

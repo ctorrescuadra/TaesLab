@@ -16,7 +16,7 @@ function res=ShowResults(arg,varargin)
 %     arg - cResultSet object
 %
 %   Name-Value Arguments 
-%     Table: Name of the table to show. If empty print on console all the results tables
+%     Table: Name of the table to show. If empty, print on console all the results tables
 %       char array
 %     View: Select the way to show the table
 %       'CONSOLE' - show in console (default)
@@ -34,7 +34,10 @@ function res=ShowResults(arg,varargin)
 %
 %   Output Arguments
 %     res - table object in the format specified in ExportAs
-%  
+%
+%   Example
+%     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
+%
 %   See also cResultSet
 %
     log=cStatus();
@@ -65,7 +68,7 @@ function res=ShowResults(arg,varargin)
         end
         % Show the Results
         if param.Panel
-            ResultsPanel(arg,param.View);
+            ResultsPanel(arg);
         elseif option>0
             printResults(arg);
         end
@@ -83,6 +86,7 @@ function res=ShowResults(arg,varargin)
         if nargout>0
             vm=cType.getVarMode(param.ExportAs);
             res=exportTable(tbl,vm);
+            return
         end
         % View the table
         showTable(tbl,option);

@@ -31,7 +31,7 @@ function res=ListResultTables(varargin)
 %     res - table object in the format specified in ExportAs, with the selected columns
 %
 %   Example
-%     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
+%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %
 %   See also cTablesDefinition
 %

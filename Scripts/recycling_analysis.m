@@ -16,7 +16,7 @@ if ~data.isValid
 end
 % Define parameters
 if data.NrOfStates>1
-	[~,param.State]=optionChoice('Select State:',data.getStateNames);
+	[~,param.State]=optionChoice('Select State:',data.StateNames);
 end
 % Use Resources Cost
 if data.isResourceCost
@@ -29,7 +29,7 @@ if data.isResourceCost
 end
 % Select Waste Flows
 if data.NrOfWastes>1
-    [~,param.ActiveWaste]=optionChoice('Select Waste Flow:',data.getWasteNames);
+    [~,param.ActiveWaste]=optionChoice('Select Waste Flow:',data.gWasteNames);
 end
 % Get Results
 wa=WasteAnalysis(data,param);

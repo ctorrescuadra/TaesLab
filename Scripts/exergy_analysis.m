@@ -17,7 +17,7 @@ if ~data.isValid
 end
 % Assign function paramater
 if data.NrOfStates>1
-	[~,param.State]=optionChoice('Select State:',data.getStateNames);
+	[~,param.State]=optionChoice('Select State:',data.StateNames);
 end
 % Show results
 ea=ExergyAnalysis(data,param);

@@ -24,7 +24,7 @@ classdef cTableIndex < cTable
                 return
             end
             % Get tables of the results and build table
-            tnames=res.getListOfTables;
+            tnames=res.ListOfTables;
             obj.ColNames={'Key','Description','Graph'};
             obj.RowNames=tnames';
             obj.NrOfCols=numel(obj.ColNames);

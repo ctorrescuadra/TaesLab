@@ -31,7 +31,7 @@ function res = ExportResults(arg,varargin)
 %     res - Table/s in the format specified by ExportAs.
 %
 %   Example
-%     <a href="matlab:open ExergyAnalysisDemo.mlx">Exergy Analysis Demo</a>
+%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %  
 %  See also cResultSet, cTable.
 %
@@ -54,7 +54,7 @@ function res = ExportResults(arg,varargin)
     varmode=cType.getVarMode(param.ExportAs);
     % Export tables
     if isempty(param.Table)
-        names=arg.getListOfTables;
+        names=arg.ListOfTables;
         tables=cellfun(@(x) exportTable(arg,x,varmode,param.Format),names,'UniformOutput',false);
         res=cell2struct(tables,names,1);
         return

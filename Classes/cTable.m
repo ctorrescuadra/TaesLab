@@ -117,7 +117,7 @@ classdef (Abstract) cTable < cStatusLogger
         end
         
         function res = isNumericColumn(obj,idx)
-        % Check if a column is numeric (base mathod)
+        % Check if a column is numeric (base method)
             tmp=cellfun(@isnumeric,obj.Data(:,idx));
             res=all(tmp(:));
         end
@@ -295,7 +295,7 @@ classdef (Abstract) cTable < cStatusLogger
                 
         function log=exportHTML(obj,filename)
         % Save a table as HTML file
-            log=cStatusLogger(cType.Valid);
+            log=cStatusLogger(cType.VALID);
             html=cBuildHTML(obj);
             if isValid(html)
                 log=html.saveTable(filename);
@@ -306,10 +306,10 @@ classdef (Abstract) cTable < cStatusLogger
     
         function log=exportLaTeX(obj,filename)
         % exportLaTeX generates the LaTex table code file of cTable object
-            log=cStatusLogger(cType.Valid);
+            log=cStatusLogger(cType.VALID);
             ltx=cBuildLaTeX(obj);
             if isValid(ltx)
-                log=obj.saveTable(filename);
+                log=ltx.saveTable(filename);
             else
                 log.addLogger(ltx);
             end
