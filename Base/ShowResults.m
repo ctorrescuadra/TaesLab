@@ -80,6 +80,7 @@ function res=ShowResults(arg,varargin)
     % If table is select work at table level
         tbl=getTable(arg,param.Table);
         if ~isValid(tbl)
+            printLogger(tbl);
             return
         end
         % Export the table

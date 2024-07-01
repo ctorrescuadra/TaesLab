@@ -15,14 +15,13 @@ classdef cExergyData < cStatusLogger
     end
     
 	methods
-		function obj=cExergyData(dm,ps,idx)
+		function obj=cExergyData(ps,data)
 		% Class constructor
-        %  dm - cModelData object
+        %  dm - cExergyState object
 		%  ps - cProductiveStructure object
-		%  i  - exergy state index
 			% Check arguments
 			obj=obj@cStatusLogger(cType.VALID);
-            if ~isa(dm,'cModelData') || ~isValid(dm)
+            if ~isstruct(data)
 				obj.messageLog(cType.ERROR,'Invalid exergy data provided');
 				return
             end
@@ -30,13 +29,7 @@ classdef cExergyData < cStatusLogger
 				obj.messageLog(cType.ERROR,'No Productive Structure provided');
                 return
             end
-            try
-                data=dm.getExergyState(idx);
-            catch err
-                obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,'Invalid state index %d',idx);
-                return
-            end
+ 
 			% Check data file content
 			if  ~any(isfield(data,{'stateId','exergy'}))
                 obj.messageLog(cType.ERROR,'Invalid data. Fields Missing');

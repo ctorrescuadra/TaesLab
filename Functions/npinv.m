@@ -1,12 +1,15 @@
 function [A,det]=npinv(A)
-% NPINV calculate the inverse of a M-Matrix, using the Gauss-Jordan algorithm
-% without pivoting and outer product approach
-%	USAGE:
+%npinv - calculate the inverse of a M-Matrix, using the Gauss-Jordan algorithm
+% 	without pivoting and outer product approach
+%	
+%	Usage
 %		[X,det]=npinv(A)
-%	INPUT:
+%
+%	Input Arguments
 %		A - M-Matrix
-%	OUTPUT:
-%		A - The inverse of the original matrix A
+%
+%	Output Arguments
+%		B - The inverse of the original matrix A
 %		det - determinant of the original matrix A
 %
 	det=1;
@@ -17,6 +20,7 @@ function [A,det]=npinv(A)
       	log.printError('The input matrix must be square');
       	return
     end
+	% Gauss-Jordan algorithm with outer product 
   	for k=1:sz(1)
     	dk=A(k,k);
     	if abs(dk)<cType.EPS

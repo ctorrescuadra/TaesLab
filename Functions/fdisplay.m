@@ -1,10 +1,13 @@
 function fdisplay(A,fmt)
-% fdisplay display a matrix A using C-like fmt
-%   USAGE:
+%fdisplay - Display a matrix A using C-like fmt
+%
+%   Syntax
 %       fdisplay(A, fmt)
-%   INPUT:
+%
+%   Input Arguments
 %       A - matrix
 %     fmt - C-like format string
+%
     label=inputname(1);    
     if isempty(label)
         label='ans';

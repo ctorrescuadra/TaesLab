@@ -294,7 +294,7 @@ classdef cDataModel < cResultSet
             exergy=cell2struct(tmp,fields,1);
             % Retrieve exergy state object and set value
             setExergyState(obj.ModelData,idx,exergy);
-            exs=getExergyState(obj.ModelData,idx);
+            display([obj.ModelData.ExergyStates.States(idx).exergy.values])
             % Check and create a cExergyData object
             rex=cExergyData(obj.ProductiveStructure,exs);
             if isValid(rex)

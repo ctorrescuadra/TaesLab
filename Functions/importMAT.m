@@ -1,13 +1,17 @@
 function obj = importMAT(filename)
-% importMAT creates a TaesLab object from a previous saved MAT file
-%   USAGE:
-%       obj=importMAT(matfile)
-%	INPUT:
-%		filename - Existing MAT file containing a TaesLab object
-%  	OUTPUT:
+%importMAT - Create a TaesLab object from a previous saved MAT file
+%
+%   Syntax
+%     obj=importMAT(matfile)
+%
+%	Input Argument
+%     filename - Existing MAT file containing a TaesLab object
+%       char array | string
+%
+%  	Output Argument
 %   	obj - cTaesLab object
 %
-    obj=cStatusLogger;
+    obj=cStatusLogger(cType.VALID);
 	% Check input arguments
     if isOctave
         obj.messageLog(cType.ERROR,'Read MAT files is not yet implemented for Octave');
@@ -23,7 +27,7 @@ function obj = importMAT(filename)
 		obj.messageLog(cType.ERROR,'Error reading file %s',filename);
 		return
 	end
-	if isa(var,'cTaesLab') && isValid(var)
+	if isa(var,'cStatusLogger') && isValid(var)
         obj=var;
 		obj.clearLogger;
 	else

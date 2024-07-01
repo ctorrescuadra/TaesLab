@@ -1,5 +1,6 @@
 function res=readModel(filename)
-% Read a data model file according its extension. Internal Function
+% readModel - Read a data model file according its extension. 
+%   Internal Function of ReadDataModel
 %   INPUT:
 %       filename - data model file name
 %   OUTPUT:
@@ -18,7 +19,7 @@ function res=readModel(filename)
         case cType.FileType.XLSX
             res=cReadModelXLS(filename);
         case cType.FileType.MAT
-            res=ImportDataModel(filename);  
+            res=importMAT(filename);  
         otherwise
             res.messageLog(cType.ERROR,'File extension %s is not supported',filename);
             return

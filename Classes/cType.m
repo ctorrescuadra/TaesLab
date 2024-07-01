@@ -177,7 +177,7 @@ classdef cType
 		% Tables Directory configuration
 		DirCols=struct('DESCRIPTION',1,'RESULT_NAME',2,'GRAPH',3,'TYPE',4,'CODE',5,'RESULT_CODE',6);
 		DirColNames={'Description','Results','Graph','Type','Code','Results Code'};
-		DirColsDefault={'DESCRIPTION','RESULT_NAME','GRAPH'};
+		DIR_COLS_DEFAULT={'DESCRIPTION','RESULT_NAME','GRAPH'};
         ACTIVE_TABLE_COLUMN=4;
 		GRAPH_COLUMN=3;
 		% Type of columns for uitables

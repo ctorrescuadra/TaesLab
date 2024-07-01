@@ -33,12 +33,13 @@ classdef (Sealed) cResultTableBuilder < cFormatData
     end
     
     methods
-        function obj=cResultTableBuilder(dm,ps)
+        function obj=cResultTableBuilder(ps,data)
         % Create the cResultTableBuilder associated to a plant (productive structure)
         %  Input:
-        %   data - cModelData object
         %   ps - cProductiveStructure object
-            obj=obj@cFormatData(dm);
+        %   data - cModelData object
+        %  
+            obj=obj@cFormatData(data);
             if ~isValid(obj)
                 obj.messageLog(cType.ERROR,'Invalid Format Data');
                 return

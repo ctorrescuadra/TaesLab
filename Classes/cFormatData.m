@@ -7,18 +7,20 @@ classdef cFormatData < cTablesDefinition
 %		res=obj.getTableHeader(id)
 %		res=obj.getTableFormat(id)
 %		res=obj.getTableUnits(id)
-% See also printformat.json, cTablesDefinition
+%
+%   See also printformat.json, cTablesDefinition
 %	
 	methods
-		function obj=cFormatData(dm)
+		function obj=cFormatData(data)
 		% Class Constructor
 		%	format - format configuration data
 			obj=obj@cTablesDefinition;
-           if ~isa(dm,'cModelData') || ~isValid(dm)
-				obj.messageLog(cType.ERROR,'Invalid data model');
+			if ~isstruct(data) || ~isfield(data,'definitions') 
+				obj.messageLog(cType.ERROR,'Invalid format data ');
 				return
-            end 
-            format=dm.Format.definitions;
+			end
+			
+            format=data.definitions;
             if ~all(isfield(format,{'key','width','precision','unit'}))
                 obj.messageLog(cType.ERROR,'Invalid data. Fields missing');
                 return
@@ -68,8 +70,7 @@ classdef cFormatData < cTablesDefinition
 		end		
     end
 
-    methods(Access=protected)			
-			
+    methods(Access=protected)						
 		function res=getTableHeader(obj,props)
 		% get the table header cell array
 		%  Input:

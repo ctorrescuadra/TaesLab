@@ -121,7 +121,6 @@ classdef cThermoeconomicModel < cResultSet
         directCost=true    % Direct cost are obtained
         generalCost=false  % General cost are obtained
         activeSet=false    % set variables control
-        activeResource=false % set active resource analysis
     end
 
     methods
@@ -514,12 +513,15 @@ classdef cThermoeconomicModel < cResultSet
 
         %%%
         % Tables Directory methods
-        function res=getTablesDirectory(obj,varargin)
+        function res=getTablesDirectory(obj,columns)
         % Create the tables directory of the active model
         %   Input:
-        %       options - VarMode options
+        %     options - Columns of table
         %
-            tbl=obj.fmt.getTablesDirectory;
+            if nargin==1
+                columns=cType.DIR_COLS_DEFAULT;
+            end
+            tbl=obj.fmt.getTablesDirectory(columns);
             tDict=obj.fmt.tDictionary;
             atm=zeros(tbl.NrOfRows,1);
             % Get the initial state of the table
@@ -536,24 +538,8 @@ classdef cThermoeconomicModel < cResultSet
             data=tbl.Data(rows,:);
             rowNames=tbl.RowNames(rows);
             colNames=tbl.ColNames;
-            tmp=cTableData(data,rowNames,colNames);
-            if nargin==1
-                res=tmp;
-                res.setProperties('tdir','Tables Directory');
-            else
-                res=exportTable(tmp,varargin{:});
-            end
-        end
-
-        function showTablesDirectory(obj,option)
-        % View Tables directory
-        %   Input:
-        %       options - TableView options
-            tbl=getTablesDirectory(obj);
-            if nargin==1
-                option=cType.DEFAULT_TABLEVIEW;
-            end
-            showTable(tbl,cType.getTableView(option));
+            res=cTableData(data,rowNames,colNames);
+            res.setProperties('tdir','Tables Directory');
         end
 
         function res=getTableInfo(obj,name)
@@ -564,22 +550,56 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=getResultInfoTable(obj,table)
         % Get the resultId associated to a table
-            res=[];
+            res=cStatusLogger(cType.VALID);
             tinfo=obj.getTableInfo(table);
             if isempty(tinfo)
-                printDebugInfo(obj,'Table %s does not exists',table);
+                res.messageLog(cType.ERROR,'Table %s does not exists',table);
                 return
             end
-            res=obj.getResultInfo(tinfo.resultId);
-            if isempty(res)
-                printDebugInfo(obj,'Table %s is not available',table);
+            tmp=obj.getResultInfo(tinfo.resultId);
+            if isempty(tmp) || ~isValid(tmp)
+                res.messageLog(cType.ERROR,'Table %s is not available',table);
                 return
             end
+            res=tmp;
+        end
+
+        function tbl=getTable(obj,name)
+           tbl=cStatusLogger(cType.VALID);
+           res=getResultInfoTable(obj,name);
+           if ~isValid(res)
+               tbl.addLogger(res);
+               return
+           end
+           tbl=getTable(res,name);
         end
         
         %%%
-        % Result presentation methods
+        % Results Set methods
         %%%
+        function showResults(obj,name,varargin)
+        % View an individual table
+        %   Usage:
+        %     obj.showResults(table,option)
+        %   Input:
+        %     name - Name of the table
+        %     option - Table view option
+        %       cType.TableView.CONSOLE 
+        %       cType.TableView.GUI
+        %       cType.TableView.HTML (default)
+        %
+            if nargin==1
+                res=obj.resultModelInfo;
+                printResults(res);
+                return
+            end
+            res=obj.getResultInfoTable(name);
+            if ~isValid(res)
+                printLogger(res);
+                return
+            end
+            showResults(res,name,varargin{:});
+        end
 
         function showGraph(obj,graph,varargin)
         % Show a graph table. 
@@ -593,9 +613,15 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             res=obj.getResultInfoTable(graph);
+            if ~isValid(res)
+                printLogger(res);
+                return
+            end
             showGraph(res,graph,varargin{:});
         end
 
+        %%%
+        %  Specific result presentation methods
         function showSummary(obj,name,varargin)
         % Show Summary tables
             res=obj.getSummaryResults;
@@ -608,16 +634,6 @@ classdef cThermoeconomicModel < cResultSet
             else
                 showResults(res,name,varargin{:})
             end
-        end
-
-        function summaryGraph(obj,varargin)
-        % Show Summary Graphs
-            res=obj.getSummaryResults;
-            if isempty(res)
-                obj.printDebugInfo('Summary Results not available')
-                return
-            end
-            showGraph(res,varargin{:});
         end
 
         function showDataModel(obj,name,varargin)
@@ -635,10 +651,11 @@ classdef cThermoeconomicModel < cResultSet
         function log=saveSummary(obj,filename)
         % Save the summary tables into a filename
         % The following file types are availables (JSON,XML,XLSX,CSV,MAT)
-        %  Input:
-        %   filename - Name of the file
-        %  Output:
-        %   log - cStatusLogger object containing the status and error messages
+        %   Input:
+        %     filename - Name of the file
+        %   Output:
+        %     log - cStatusLogger object containing the status and error messages
+        %
             log=cStatus();
             if nargin~=2
                 log.printError('Usage: saveDataModel(model,filename)');
@@ -704,7 +721,7 @@ classdef cThermoeconomicModel < cResultSet
             % Save fat,pat and fpat tables
             res=obj.productiveDiagram;
             if ~isValid(res)
-                res.printLogger(res)
+                res.printLogger;
                 log.printError('Productive Diagram object not available');
                 return
             end
@@ -799,40 +816,6 @@ classdef cThermoeconomicModel < cResultSet
         %%%
         % Resource Cost Methods
         %
-        function res=resourceAnalysis(obj,active)
-        % Manage the resource cost analysis
-        %   Input:
-        %       active - Indicate if resource analysis is active
-        %           TRUE: Create a new cResourceData object where changes are made
-        %           FALSE: Use the Model Resources Data as usual
-        %   Output:
-        %       res - cResourceCost object
-            res=cStatus(cType.VALID);
-            if nargin==1
-                active=false;
-            end
-            if ~obj.isGeneralCost
-                res.printError('No Generalized Cost activated');
-                return
-            end
-            obj.activeResource=active;
-            sample=obj.ResourceSample;
-            if active
-                id=obj.DataModel.getSampleId(sample);
-                dm=obj.DataModel;
-                data=dm.ModelData.ResourcesCost.Samples(id);
-                ps=obj.DataModel.ProductiveStructure;
-                obj.rsd=cResourceData(data,ps);
-                obj.rsc=getResourceCost(obj.rsd,obj.fp1);
-            else
-                obj.rsd=obj.getResourceData;
-                obj.rsc=getResourceCost(obj.rsd,obj.fp1);
-                obj.setThermoeconomicAnalysis;
-                obj.setSummaryResults;
-            end
-            res=obj.rsc;
-        end
-
         function res=setFlowResource(obj,c0)
         % Set the resources cost of the flows
         %   Input:
@@ -840,7 +823,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Output:
         %       res - cResourceCost object 
             res=cStatus(cType.VALID);
-            if ~obj.isGeneralCost || ~obj.activeResource
+            if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
 				return
             end
@@ -863,7 +846,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Output:
         %       res - cResourceCost object
             res=cStatus(cType.VALID);
-            if ~obj.isGeneralCost || ~obj.activeResource
+            if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
             end
@@ -885,7 +868,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Output:
         %       res - cResourceCost object
             res=cStatus(cType.VALID);
-            if ~obj.isGeneralCost || ~obj.activeResource
+            if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
             end          
@@ -908,7 +891,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Output:
         %       res - cResourceCost object
             res=cStatus(cType.VALID);
-            if ~obj.isGeneralCost || ~obj.activeResource
+            if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
             end
@@ -947,32 +930,32 @@ classdef cThermoeconomicModel < cResultSet
         function res=getExergyData(obj,state)
         % Get cExergyData object of a state
         %   Input:
-        %       state - State name. If missing, actual state is used 
+        %     state - State name. If missing, actual state is used 
             if nargin==1
                 state=obj.State;
             end
             res=getExergyData(obj.DataModel,state);
         end
 
-        function log=setExergyData(obj,state,values)
-        % Set exergy data values to a state
+        function log=setExergyData(obj,values)
+        % Set exergy data values to actual state
         %   Input:
-        %       state - Name of the State
-        %       values - Array with the exergy values of the flows
+        %     values - Array with the exergy values of the flows
+        %
             log=cStatusLogger(cType.VALID);
             % Check state is no reference 
-            if strcmp(obj.ReferenceState,state)
-                log.printError('Cannot change ReferenceState values');
+            if strcmp(obj.ReferenceState,obj.State)
+                log.printError('Cannot change Reference State values');
                 return
             end
             % Set exergy data for state
             data=obj.DataModel;
-            log=data.setExergyData(state,values);
+            log=data.setExergyData(obj.State,values);
             if ~isValid(log)
                 printLogger(log);
                 return
             end
-            idx=data.getStateId(state);
+            idx=data.getStateId(obj.State);
             rex=data.ExergyData{idx};
             % Compute cExergyCost
             if obj.isWaste
@@ -981,11 +964,7 @@ classdef cThermoeconomicModel < cResultSet
                 obj.rstate{idx}=cExergyCost(rex);
             end
             % Get results
-            if strcmp(obj.State,state)
-                obj.triggerStateChange;
-            else
-                obj.State=state;
-            end
+            obj.triggerStateChange;
             obj.setSummaryResults;
         end
     end

@@ -1,7 +1,7 @@
 classdef cResourceData < cStatusLogger
 % cResourceData gets and validates the external cost resources of a system
 % 	Methods:
-% 		obj=cResourceData(data)
+% 		obj=cResourceData(ps,data)
 %		obj.setFlowResource(c0)
 %   	obj.setProcessResource(Z)
 %		obj.setFlowResourceValue(key,value)
@@ -17,25 +17,17 @@ classdef cResourceData < cStatusLogger
 	end
 	
     methods
-		function obj=cResourceData(dm,ps,idx)
+		function obj=cResourceData(ps,data)
 		% Class constructor
-        %	data - cModelData object
 		%	ps - cProductiveStructure object
-		%	idx - Sample index
+        %	data - cModelData object
 		%
 		    % Check arguments and inititiliza class
 			obj=obj@cStatusLogger(cType.VALID);
-			if ~isa(dm,'cModelData') || ~dm.isValid    
+			if ~isstruct(data)  
 				obj.messageLog(cType.ERROR,'Invalid resource data.');
 				return
 			end
-            try
-                data=dm.getResourceSample(idx);
-            catch err
-                obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,'Invalid state index %d',idx);
-                return
-            end
 			obj.Z=zeros(1,ps.NrOfProcesses);
 			obj.c0=zeros(1,ps.NrOfFlows);
 		    % Read resources flows costs
@@ -95,68 +87,72 @@ classdef cResourceData < cStatusLogger
 			obj.ps=ps;
 		end
 
-		function setProcessResource(obj,Z)
+		function log=setProcessResource(obj,Z)
 		% Set the Resources cost of processes
 		%  Input:
 		%   Z - Resources cost processes values
+			log=cStatusLogger();
             if length(Z) == obj.ps.NrOfProcesses
 				obj.Z=Z;
 			else
-				obj.messageLog(cType.WARNING,'Invalid processes resources size',length(Z));
+				log.messageLog(cType.ERROR,'Invalid processes resources size',length(Z));
 				return
             end
             if any(Z<0)
-				obj.messageLog(cType.WARNING,'Values of process resources must be non-negatives');
+				log.messageLog(cType.ERROR,'Values of process resources must be non-negatives');
 				return
             end
 		end
 
-		function setFlowResource(obj,c0)
+		function log=setFlowResource(obj,c0)
 		% Set the Resources unit cost of flows
 		%  Input:
 		%   c0 - Resources cost flows values
+			log=cStatusLogger();
             if length(c0) == obj.ps.NrOfFlows
 				obj.c0=c0;
 			else
-				obj.messageLog(cType.WARNING,'Invalid flows resources size',length(c0));
+				log.messageLog(cType.ERROR,'Invalid flows resources size',length(c0));
 				return
             end
             if any(c0<0)
-				obj.messageLog(cType.WARNING,'Values of flows resources must be non-negatives');
+				log.messageLog(cType.ERROR,'Values of flows resources must be non-negatives');
 				return
             end
 		end
 
-		function setFlowResourceValue(obj,key,value)
+		function log=setFlowResourceValue(obj,key,value)
 		% Set the value of a resource
 		%	key - key of the resource
 		%	value - cost of the resource
+			log=cStatusLogger();
 			id=obj.getResourceIndex(key);
             if cType.isEmpty(id)
-				obj.messageLog(cType.WARNING,'Invalid key: %s',key);
+				log.messageLog(cType.ERROR,'Invalid key: %s',key);
 				return
             end
             if value>=0
 	            obj.c0(id)=value;
             else
-				obj.messageLog(cType.WARNING,'Flows resource cost values must be non-negatives');
+				log.messageLog(cType.ERROR,'Flows resource cost values must be non-negatives');
 				return
             end
 		end
 
-		function setProcessResourceValue(obj,key,value)
+		function log=setProcessResourceValue(obj,key,value)
 		% Set the value of a resource
 		%	key - key of the resource
 		%	value - cost of the resource
+			log=cStatusLogger();
 			id=obj.ps.getProcessId(key);
             if cType.isEmpty(id)
-				obj.messageLog(cType.WARNING,'Invalid key: %s',key);
+				log.messageLog(cType.ERROR,'Invalid key: %s',key);
 				return
             end
             if value>=0
 	            obj.Z(id)=value;
             else
-				obj.messageLog(cType.WARNING,'Processes resource cost values must be non-negatives');
+				log.messageLog(cType.ERROR,'Processes resource cost values must be non-negatives');
 				return
             end	
 		end

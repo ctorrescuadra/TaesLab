@@ -71,7 +71,7 @@ classdef cResultInfo < cResultSet
         end
 
         %%%
-        % Show Result Tables
+        % Result Set methods
         function printResults(obj)
         % Print the tables on console
             if isValid(obj)
@@ -107,8 +107,8 @@ classdef cResultInfo < cResultSet
         %   Input:
         %       name - Name of the table
         %   Output:
-        %       res - cTable 
-            res = cStatus();
+        %       res - cTable object
+            res = cStatusLogger(cType.VALID);
             if nargin<2
                 res.printError('Table name is missing')
             end
@@ -117,7 +117,7 @@ classdef cResultInfo < cResultSet
             elseif obj.existTable(name)
                 res=obj.Tables.(name);
             else
-                res.printError('Table name %s does NOT exists',name);
+                res.messageLog(cType.ERROR,'Table name %s does NOT exists',name);
             end
         end
 
@@ -177,11 +177,7 @@ classdef cResultInfo < cResultSet
 		            case cType.GraphType.DIAGNOSIS
 			            option=true;
 		            case cType.GraphType.WASTE_ALLOCATION
-                        tmp=obj.Info;
-                        if isa(obj.Info,'cThermoeconomicModel')
-                            tmp=tmp.wasteAnalysis.Info;
-                        end
-				        option=tmp.wasteFlow;
+           			    option=obj.Info.wasteFlow;
                     case cType.GraphType.DIGRAPH                     
                         option=obj.Info.getNodeTable(graph);
 		            case cType.GraphType.SUMMARY
@@ -197,7 +193,8 @@ classdef cResultInfo < cResultSet
                 option=varargin{:};
             end
 	        % Show Graph
-	        showGraph(tbl,option);
+            gr=cGraphResults(tbl,option);
+            gr.showGraph;
         end
 
         function res=exportTable(obj,name,varmode,fmt)
@@ -299,10 +296,10 @@ classdef cResultInfo < cResultSet
         function log=saveTable(obj,tname,filename)
         % saveTable save the table name in a file depending extension
         %   Usage:
-        %       obj.saveTable(tname, filename)
+        %     obj.saveTable(tname, filename)
         %   Input:
-        %       tname - name of the table
-        %       filename - name of the file with extension
+        %     tname - name of the table
+        %     filename - name of the file with extension
         %
             log=cStatusLogger(cType.VALID);
             if nargin < 3

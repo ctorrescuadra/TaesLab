@@ -1,13 +1,16 @@
 function B=divideCol(A,x)
-% divideCol computes A*inv(diag(x)) = A/diag(x)
-% 	Divide each colums of matrix A, by the corresponding element of vector x.
+%divideCol - Compute A*inv(diag(x)) = A/diag(x)
+%	Divide each colums of matrix A, by the corresponding element of vector x.
 % 	If x is not provided, the columns of the matrix are scaled by its sum
-%	USAGE:
+%
+%	Syntax
 %		B=divideCol(A,x)
-%  	INPUT:
+%  	
+%	Input Arguments
 %		A - Matrix to be scaled
 %		x - scale vector (optional)
-%  	OUTPUT:
+%  	
+%	Output Arguments
 %		B - Scaled Matrix 
 %   
 	if nargin==1

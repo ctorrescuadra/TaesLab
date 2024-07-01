@@ -1,5 +1,14 @@
 function str = log2str(x)
-% LOG2STR converts logical values into strings
+%log2str - Convert logical values into strings
+%
+%   Syntax
+%     str = log2str(x)
+%
+%   Input Argument
+%     x - logical variable
+%
+%   Output Argument
+%     str - true or false string
     if x
         str='true';
     else

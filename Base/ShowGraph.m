@@ -87,9 +87,9 @@ function ShowGraph(arg,varargin)
 		case cType.GraphType.SUMMARY
 			if isempty(param.Variables)
 				if tbl.isFlowsTable
-					param.Variables=arg.Info.getDefaultFlowVariables;
+					param.Variables=res.Info.getDefaultFlowVariables;
 				else
-					param.Variables=arg.Info.getDefaultProcessVariables;
+					param.Variables=res.Info.getDefaultProcessVariables;
 				end
 			end
 			option=param.Variables;

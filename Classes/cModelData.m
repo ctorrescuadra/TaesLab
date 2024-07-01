@@ -3,6 +3,9 @@ classdef (Sealed) cModelData < cStatusLogger
     %  cModelData methods:
     %    obj.isWaste
     %    obj.isResourcesCost
+    %    res=obj.getExergyState(id);
+    %    res=obj.getResourcesample(id);
+    %    obj.setExergyState(id,val)
     %    log=saveAsXML(filename)
     %    log=saveAsJSON(filename)
     %
@@ -28,7 +31,6 @@ classdef (Sealed) cModelData < cStatusLogger
                 fld=cType.DataElements{i};
                 if isfield(s,fld)
                     obj.dm.(fld)=s.(fld);
-                    obj.(fld)=s.(fld);
                 else
                     obj.messageLog(cType.ERROR,'Invalid model. Field %s is missing',fld);
                     return
@@ -38,7 +40,6 @@ classdef (Sealed) cModelData < cStatusLogger
                 fld=cType.DataElements{i};
                 if isfield(s,fld)
                     obj.dm.(fld)=s.(fld);
-                    obj.(fld)=s.(fld);
                 end
             end
         end
@@ -92,6 +93,14 @@ classdef (Sealed) cModelData < cStatusLogger
             end
         end
 
+        function res=getStateNames(obj)
+            res={obj.dm.ExergyStates.States(:).stateId};
+        end
+
+        function res=getSampleNames(obj)
+            res={obj.dm.ResourcesCost.Samples(:).sampleId};
+        end
+
         function res=isWaste(obj)
         % isWaste Indicate is optional waste element exists
             id=cType.DataId.WASTE;
@@ -104,6 +113,12 @@ classdef (Sealed) cModelData < cStatusLogger
             res = isfield(obj.dm,cType.DataElements{id});
         end
 
+
+        function setExergyState(obj,idx,val)
+        % Set the exergy values of a state
+            obj.dm.ExergyStates.States(idx).exergy=val;
+        end
+        
         function log=saveAsXML(obj,filename)
         % save data model as XML file
         %  Input:

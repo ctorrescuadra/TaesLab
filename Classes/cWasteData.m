@@ -4,8 +4,11 @@ classdef cWasteData < cStatusLogger
 %   structure is used
 % 	Methods:
 % 		obj=cWasteData(ps,data)
-%		res=obj.getWasteDefinition;
 %		wt=obj.getWasteTable;
+%		res=obj.getWasteFlows;
+%		res=obj.getWasteId(key)
+%		res=obj.existWaste(key)
+%		res=obj.getFlowNr(key)
 %
 	properties (GetAccess=public,SetAccess=private)
 		Flows			% Waste Flow List
@@ -17,14 +20,14 @@ classdef cWasteData < cStatusLogger
 	end
     
 	methods
-		function obj=cWasteData(dm,ps)
+		function obj=cWasteData(ps,data)
 		% Class constructor
 		%	ps - cProductiveStructure object
 		%	data - waste definition data from cReadModel
 		%
 			% Check input arguments
 			obj=obj@cStatusLogger(cType.VALID);
-			if ~isa(dm,'cModelData') || ~isValid(dm) 
+			if ~isstruct(data)
 				obj.messageLog(cType.ERROR,'Invalid waste data');
 				return
 			end
@@ -32,13 +35,7 @@ classdef cWasteData < cStatusLogger
 				obj.messageLog(cType.ERROR,'Invalid productive structure');
 				return
             end
-            % Take waste definition
-            if dm.isWaste
-                data=dm.WasteDefinition;
-            else
-                data=ps.WasteData;
-                obj.messageLog(cType.INFO,'Waste Definition is not available. Default is used');
-            end
+
 			% Check data structure
 			if  ~isfield(data,'wastes')
                 obj.messageLog(cType.ERROR,'Invalid waste date. Fields Missing');

@@ -30,8 +30,12 @@ function data=ReadDataModel(filename,varargin)
 %
     data=cStatusLogger(cType.VALID);
     % Check parameters
-    if (nargin<1) || ~isFilename(filename)
+    if nargin<1 
         data.printError('Usage: data=ReadDataModel(filename)');
+        return
+    end
+    if ~isFilename(filename)
+        data.printError('Invalid Filename %s', filename);
         return
     end
     if ~exist(filename,'file')

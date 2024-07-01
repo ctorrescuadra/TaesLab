@@ -85,12 +85,6 @@ classdef cTablesDefinition < cStatusLogger
                 res=obj.buildTablesDirectory(varargin{:});
             end
         end
-        
-        function showTablesDirectory(obj,varargin)
-        % Show the Tables Directory
-        %   options - view table ooptions
-            showTable(obj.tDirectory,varargin{:});
-        end
 
         function saveTablesDirectory(obj,filename)
         % Save result tables in different file formats depending on file extension
@@ -209,7 +203,7 @@ classdef cTablesDefinition < cStatusLogger
         % Get the tables directory as cTableData
             res=cStatusLogger;
             if nargin==1
-                cols=cType.DirColsDefault;
+                cols=cType.DIR_COLS_DEFAULT;
             end
             tI=obj.tableIndex;
             N=numel(tI);
