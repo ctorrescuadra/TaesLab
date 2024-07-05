@@ -6,24 +6,23 @@ classdef cDataModel < cResultSet
 %       res=obj.getExergyData(state)
 %       log=obj.setExergyData(state,values)
 %       res=obj.getResourceData(sample)
-%       res=obj.getStateNames(i)
-%       res=obj.getStateId(state)
 %       res=obj.existState(state)
-%       res=obj.getSampleNames(i)
-%       res=obj.getSampleId(sample)
+%  
 %       res=obj.existSample(sample)
 %       res=obj.getWasteFlows
 %       res=obj.checkCostTables
+%       res=obj.getTablesDirectory(columns)
+%       res=obj.getTableInfo(name)
+%   ResultSet methods
 %       res=obj.getResultInfo
-%       obj.printResults
+%       obj.showDataModel(name,option)
 %       obj.showResults(name,options)
 %       res=obj.getTable(name,options)
 %       res=obj.getTableIndex(options)
 %       obj.showTableIndex(options)
-%       obj.saveResults(filename)
-%       obj.saveTable(name,filename)
-%       obj.showDataModel(name,option)
+
 %       log=obj.saveDataModel(filename)
+%       log=obj.saveTable(name,filename)
 %       
 %   See also cResultSet, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
 %
@@ -32,7 +31,7 @@ classdef cDataModel < cResultSet
         NrOfProcesses           % Number of processes
         NrOfWastes              % Number of waste flows
         NrOfStates              % Number of exergy data simulations
-        NrOfResourceSamples     % Number of resource cost samples
+        NrOfSamples     % Number of resource cost samples
         isWaste                 % Indicate is the model has waste defined
         isResourceCost          % Indicate is the model has resource cost data
         isDiagnosis             % Indicate is the model has information to made diagnosis
@@ -52,10 +51,6 @@ classdef cDataModel < cResultSet
         ResultName              % Result Name (cResultId)
         State                   % State Name (cResultId)
         DefaultGraph            % Default Graph (cResultId)
-    end
-    properties(Access=private)
-        stateList               % States List
-        sampleList              % Samples List
     end
 
     methods
@@ -94,25 +89,26 @@ classdef cDataModel < cResultSet
                 return
             end
             % Check Exergy
-            tmp=cSetList(dm.getStateNames);
+            list=dm.getStateNames;
+            tmp=cDataset(list);
             if isValid(tmp)
-                obj.stateList=tmp;
+                obj.StateNames=list;
+                obj.ExergyData=tmp;
             else
                 obj.messageLog(cType.ERROR,'Invalid states list');
                 return
             end
-            obj.ExergyData=cell(1,obj.NrOfStates);
             for i=1:obj.NrOfStates
                 exs=dm.getExergyState(i);
                 rex=cExergyData(ps,exs);
                 status = rex.status & status;
                 if isValid(rex)
-					obj.messageLog(cType.INFO,'Exergy values [%s] are valid',obj.getStateNames(i));
+					obj.messageLog(cType.INFO,'Exergy values [%s] are valid',obj.StateNames{i});
 				else
 					obj.addLogger(rex)
-					obj.messageLog(cType.ERROR,'Exergy values [%s] are NOT valid. See Error Log',obj.getStateNames(i));
+					obj.messageLog(cType.ERROR,'Exergy values [%s] are NOT valid. See Error Log',obj.StateNames{i});
                 end
-                obj.ExergyData{i}=rex;
+                obj.ExergyData.setValues(i,rex);
             end
             % Check Waste
             if ps.NrOfWastes > 0
@@ -137,24 +133,25 @@ classdef cDataModel < cResultSet
             end
             % Check ResourceCost
             if obj.isResourceCost
-                tmp=cSetList(dm.getSampleNames);
+                list=dm.getSampleNames;
+                tmp=cDataset(list);
                 if isValid(tmp)
-                    obj.sampleList=tmp;
+                    obj.SampleNames=list;
+                    obj.ResourceData=tmp;
                 else
                     obj.messageLog(cType.ERROR,'Invalid resource samples list');
                     return
                 end
-                obj.ResourceData=cell(1,obj.NrOfResourceSamples);
-                for i=1:obj.NrOfResourceSamples
+                for i=1:obj.NrOfSamples
                     dmr=dm.getResourceSample(i);
                     rsc=cResourceData(ps,dmr);
                     status=rsc.status & status;
                     if isValid(rsc)
-						obj.messageLog(cType.INFO,'Resources Cost sample [%s] is valid',obj.getSampleNames(i));
-                        obj.ResourceData{i}=rsc;
+						obj.messageLog(cType.INFO,'Resources Cost sample [%s] is valid',obj.SampleNames{i});
+                        obj.ResourceData.setValues(i,rsc);
                     else
 						obj.addLogger(rsc);
-						obj.messageLog(cType.ERROR,'Resources Cost sample [%s] is NOT valid. See error log',obj.getSampleNames(i));
+						obj.messageLog(cType.ERROR,'Resources Cost sample [%s] is NOT valid. See error log',obj.SampleNames{i});
                     end
                 end
             else
@@ -210,16 +207,16 @@ classdef cDataModel < cResultSet
         function res=get.NrOfStates(obj)
         % get the number of states
             res=0;
-            if isValid(obj.stateList)
-                res=numel(obj.stateList);
+            if obj.isValid
+                res=numel(obj.StateNames);
             end
         end
     
-        function res=get.NrOfResourceSamples(obj)
+        function res=get.NrOfSamples(obj)
         % Get the number of resources samples
             res=0;
-            if obj.isResourceCost && isValid(obj.sampleList)
-                res=numel(obj.sampleList);
+            if obj.isValid
+                res=numel(obj.SampleNames);
             end
         end
 
@@ -228,24 +225,10 @@ classdef cDataModel < cResultSet
 			res=(obj.NrOfStates>1);
         end
 
-        function res=get.StateNames(obj)
-            res={};
-            if isValid(obj.stateList)
-                res=obj.stateList.Values;
-            end
-        end
-
-        function res=get.SampleNames(obj)
-            res={};
-            if obj.isResourceCost && isValid(obj.sampleList)
-                res=obj.sampleList.Values;
-            end
-        end
-
         function res=get.WasteFlows(obj)
             res={};
             if obj.isWaste && isValid(obj.WasteData)
-                res=obj.WasteData.Flows.Values;
+                res=obj.WasteData.Names;
             end
         end
         %%%
@@ -255,16 +238,9 @@ classdef cDataModel < cResultSet
         % get the exergy data for a state
         %   Input:
         %       state - state key name
-            res=cStatus();
-            if nargin==1
-                idx=1;
-            else
-                idx=obj.getStateId(state);
-            end
-            if isempty(idx)
+            res=obj.ExergyData.getValues(state);
+            if ~isValid(res)
                 res.printError('Invalid state %s',state);
-            else
-                res=obj.ExergyData{idx};
             end
         end
 
@@ -282,7 +258,7 @@ classdef cDataModel < cResultSet
                 return
             end
             % Validate state
-            idx=obj.getStateId(state);
+            idx=obj.ExergyData.getIndex(state);
             if ~idx
                 log.printError('State %s does not exists',state);
                 return
@@ -291,14 +267,13 @@ classdef cDataModel < cResultSet
             fields={'key','value'};
             keys=obj.ProductiveStructure.FlowKeys;
             tmp=[keys;num2cell(values)];
-            exergy=cell2struct(tmp,fields,1);
             % Retrieve exergy state object and set value
-            setExergyState(obj.ModelData,idx,exergy);
-            exs=getExergyState(obj.ModelData,idx);
+            exs.stateId=state;
+            exs.exergy=cell2struct(tmp,fields,1);
             % Check and create a cExergyData object
             rex=cExergyData(obj.ProductiveStructure,exs);
             if isValid(rex)
-                obj.ExergyData{idx}=rex;
+                obj.ExergyData.setValues(idx,rex);
             else
                 log.printError('Invalid exergy data');
                 printLogger(rex);
@@ -307,59 +282,22 @@ classdef cDataModel < cResultSet
 
         function res=getResourceData(obj,sample)
         % Get the resource data for a sample
-            res=cStatus(cType.ERROR);
-            if nargin==1
-                idx=1;
-            else
-                idx=obj.getSampleId(sample);
-            end
-            if isempty(idx)
-                res.printError('Invalid resource sample %s',sample);
-            else
-                res=obj.ResourceData{idx};
+            res=obj.ResourceData.getValues(sample);
+            if ~isValid(res)
+                res.printError('Invalid state %s',sample);
             end
         end
-
-        function res=getStateNames(obj,varargin)
-		% Return the state name of the corresponding index
-		% Input:
-		%  ind - state index to retrieve
-			res=obj.stateList.Values(varargin{:});
-		end
-
-		function res=getStateId(obj,state)
-		% return index of a state
-			res=obj.stateList.getIndex(state);
-		end
 		
 		function res=existState(obj,state)
 		% determine if state is defined in States
-			res=obj.stateList.existValue(state);
+			res=obj.ExergyData.getIndex(state);
         end
 
-        function res=getSampleNames(obj,varargin)
-		% Return the state number of the corresponding index
-		% Input:
-		%  ind - state index to retrieve
-			res=obj.sampleList.Values(varargin{:});
-		end
-		
-		function res=getSampleId(obj,sample)
-		% Return the state number of the corresponding index
-		% Input:
-		%  ind - state index to retrieve
-			res=obj.sampleList.getIndex(sample);
-		end
-		
 		function res=existSample(obj,sample)
 		% Determine if sample is defined in ResourceSamples
-			res=obj.sampleList.existValue(sample);
+			res=obj.ResourceData.getIndex(sample);
         end
  
-        function res=getWasteFlows(obj,varargin)
-            res=obj.WasteData.getWasteFlows(varargin{:});
-        end
-        
         function res=checkCostTables(obj,value)
         % Check if the CostTables parameter is valid
             res=false;
@@ -373,8 +311,20 @@ classdef cDataModel < cResultSet
             res=true;
         end
 
+        function res=getTablesDirectory(obj,varargin)
+        % Get the tables directory
+        %   Input
+        %     options - cell array with selected columns
+        %
+            res=getTablesDirectory(obj.FormatData,varargin{:});
+        end
+
+        function res=getTableInfo(obj,name)
+            res=getTableInfo(obj.FormatData,name);
+        end
+
         %%%
-        % Gat data model tables
+        % ResultSet Methods
         %%%
         function res=getResultInfo(obj)
         % Get data model result info
@@ -445,21 +395,22 @@ classdef cDataModel < cResultSet
 			% Flows Table
             index=cType.TableDataIndex.FLOWS;
             sheet=cType.TableDataName{index};
-            fNames={ps.Flows(:).key};
+            fNames={ps.Flows.key};
             colNames={'key','type'};
-            values={ps.Flows(:).type}';
+            values={ps.Flows.type}';
             tbl=cTableData(values,fNames,colNames);
             tbl.setProperties(sheet,cType.TableDataDescription{index})
 			tables.(sheet)=tbl;
 			% Process Table
             index=cType.TableDataIndex.PROCESSES;
             sheet=cType.TableDataName{index};
-            pNames={ps.Processes(1:end-1).key};
+            prc=ps.Processes(1:end-1);
+            pNames={prc.key};
             colNames={'key','fuel','product','type'};
             values=cell(obj.NrOfProcesses,3);
-            values(:,1)={ps.Processes(1:end-1).fuel}';
-            values(:,2)={ps.Processes(1:end-1).product}';
-            values(:,3)={ps.Processes(1:end-1).type}';
+            values(:,1)={prc.fuel}';
+            values(:,2)={prc.product}';
+            values(:,3)={prc.type}';
             tbl=cTableData(values,pNames,colNames);
             tbl.setProperties(sheet,cType.TableDataDescription{index})
 			tables.(sheet)=tbl;
@@ -469,7 +420,7 @@ classdef cDataModel < cResultSet
 			colNames=['key',obj.StateNames];			
 			values=zeros(obj.NrOfFlows,obj.NrOfStates);
             for i=1:obj.NrOfStates
-                rex=obj.ExergyData{i};
+                rex=obj.getExergyData(i);
 				values(:,i)=rex.FlowsExergy';
             end
             tbl=cTableData(num2cell(values),fNames,colNames);
@@ -493,17 +444,17 @@ classdef cDataModel < cResultSet
                 fId=ps.Resources.flows;
 				rNames=fNames(ps.Resources.flows);
 				rTypes=repmat({'FLOW'},numel(rNames),1);
-				rval=zeros(ps.NrOfResources,obj.NrOfResourceSamples);
-                for i=1:obj.NrOfResourceSamples
-                    rsc=obj.ResourceData{i};
+				rval=zeros(numel(fId),obj.NrOfSamples);
+                for i=1:obj.NrOfSamples
+                    rsc=obj.ResourceData.getValues(i);
 					rval(:,i)=rsc.c0(fId)';
                 end
 				cflow=[rTypes,num2cell(rval)];
 				% Processes
-				pval=zeros(obj.NrOfProcesses,obj.NrOfResourceSamples);
+				pval=zeros(obj.NrOfProcesses,obj.NrOfSamples);
 				pTypes=repmat({'PROCESS'},obj.NrOfProcesses,1);
-                for i=1:obj.NrOfResourceSamples
-                    rsc=obj.ResourceData{i};
+                for i=1:obj.NrOfSamples
+                    rsc=obj.ResourceData.getValues(i);
 					pval(:,i)=rsc.Z';		            
                 end
 				cprocess=[pTypes,num2cell(pval)];

@@ -349,7 +349,13 @@ classdef TaesTool < cTaesLab
 
         function closeApp(app,~,~)
         % Close callback
-            delete(app.fig);
+            selection = questdlg({'Close the Application?'},'Confirmation','OK','Cancel','OK');   
+            switch selection
+                case 'OK'
+                    delete(app.fig)                      
+                case 'Cancel'
+                    return     
+            end
         end
 
 		%%%%%%%%%%%%%%%%%%%%%%%

@@ -8,7 +8,8 @@ classdef cResourceData < cStatusLogger
 %		obj.setProcessResourceValue(key,value)
 %		obj.getResourceIndex(key)
 %		obj.getResourceCost(exm)
-	properties (GetAccess=public, SetAccess=private)
+	properties (GetAccess=public, SetAccess=private) 
+		sample  % Resource sample name
 		c0      % Unit cost of external resources
 		Z       % Cost associated to processes
 	end
@@ -22,8 +23,12 @@ classdef cResourceData < cStatusLogger
 		%	ps - cProductiveStructure object
         %	data - cModelData object
 		%
-		    % Check arguments and inititiliza class
 			obj=obj@cStatusLogger(cType.VALID);
+		    % Check arguments and inititiliza class
+			if ~isa(ps,'cProductiveStructure') || ~ps.isValid
+				obj.messageLog(cType.ERROR,'No Productive Structure provided');
+                return
+			end
 			if ~isstruct(data)  
 				obj.messageLog(cType.ERROR,'Invalid resource data.');
 				return
@@ -31,10 +36,12 @@ classdef cResourceData < cStatusLogger
 			obj.Z=zeros(1,ps.NrOfProcesses);
 			obj.c0=zeros(1,ps.NrOfFlows);
 		    % Read resources flows costs
-			if ~isfield(data,'flows')
+			if ~isfield(data,{'sampleId','flows'})
 				obj.messageLog(cType.ERROR,'Invalid data model. Fields missing');
 				return
 			end
+			obj.sample=data.sampleId;
+
 			if all(isfield(data.flows,{'key','value'}))
 					se=data.flows;
 			else

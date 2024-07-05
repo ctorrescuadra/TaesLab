@@ -12,7 +12,6 @@ classdef cResultSet < cStatusLogger
 %   obj.showGraph(name,options)
 %   obj.saveResults(filename)
 %   obj.saveTable(name,filename)
-%   res=obj.exportTable(name,options)
 %   res=obj.exportResults(options)
 %
 % See also cResultInfo, cThermoeconomicModel, cDataModel
@@ -42,6 +41,13 @@ classdef cResultSet < cStatusLogger
         % See also cResultInfo/showResults
             res=getResultInfo(obj);
             showResults(res,varargin{:});
+        end
+
+        function showGraph(obj,varargin)
+        % Show result set graphs
+        % See also cResultInfo/showGraph
+            res=getResultInfo(obj);
+            showGraph(res,varargin{:});
         end
 
         function res=ListOfTables(obj)
@@ -85,18 +91,11 @@ classdef cResultSet < cStatusLogger
             log=saveTable(res,varargin{:});
         end
 
-        function tbl=exportTable(obj,varargin)
-        % Get a tables of the result set in diferent formats
-        % See also cResultInfo/exportTable
-            res=getResultInfo(obj);
-            tbl=exportTable(res,varargin{:});
-        end
-
-        function tbl=exportResults(obj,varargin)
+        function res=exportResults(obj,varargin)
         % Get the tables of a result set in diferent formats
         % See also cResultInfo/exportTable
-            res=getResultInfo(obj);
-            tbl=exportResults(res,varargin{:});
+            cri=getResultInfo(obj);
+            res=exportResults(cri,varargin{:});
         end
     end
 end

@@ -21,10 +21,10 @@ end
 % Use Resources Cost
 if data.isResourceCost
 	[oct,param.CostTables]=optionChoice('Select Cost Tables', cType.CostTablesOptions);
-	if bitget(oct,cType.GENERALIZED) && data.NrOfResourceSamples>1
-		[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.getSampleNames);
+	if bitget(oct,cType.GENERALIZED) && data.NrOfSamples>1
+		[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.SampleNames);
 	else
-		param.ResourceSample=data.getSampleNames(1);
+		param.ResourceSample=data.SampleNames{1};
 	end
 end
 % Select Waste Flows

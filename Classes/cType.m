@@ -70,9 +70,9 @@ classdef cType
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance
 		DEFAULT_NUM_LENGHT=10     % Default number length (use in cTableData)
-		FUEL='FUEL'       % Fuel type option text
-		PRODUCT='PRODUCT' % Product type option text
-		FORMAT_ID='%3d'   % Line number format
+		FUEL='FUEL'               % Fuel type option text
+		PRODUCT='PRODUCT'         % Product type option text
+		FORMAT_ID='%3d'           % Line number format
 		% Node types
 		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3);
 		% Types of processes
@@ -202,6 +202,7 @@ classdef cType
 		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+.(xlsx|csv|mat|txt|json|xml|html|tex)$'
 		% Key Text Patterm
 		KEY_PATTERN='^[A-Z][A-Za-z0-9]+$'
+		NAME_PATTERN='[A-Za-z]\w+$'
 		KEY_LENGTH=2:8
     end
     %----------------------------

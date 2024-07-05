@@ -292,13 +292,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
-            for i=1:nrows       
-                sf=ps.Flows(i).from;
-                st=ps.Flows(i).to;
-                data{i,1}=obj.streamKeys{sf};
-                data{i,2}=obj.streamKeys{st};
-                data{i,3}=ps.Flows(i).type;
-            end
+            % Fill columns
+            sf=ps.Flows.from;
+            st=ps.Flows.to;
+            data(:,1)=obj.streamKeys(sf);
+            data(:,2)=obj.streamKeys(st);
+            data(:,3)={ps.Flows.type};
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end     
             
@@ -310,26 +309,23 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
-            for i=1:nrows
-                data{i,1}=ps.Streams(i).definition;
-                data{i,2}=ps.Streams(i).type;
-            end
+            data(:,1)={ps.Streams.definition};
+            data(:,2)={ps.Streams.type};
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end        
             
         function res=getProcessesTable(obj,ps)
         % Generates a cTableCell with the processes definition
             tp=obj.getCellTableProperties(cType.Tables.PROCESS_TABLE);
+            prc=ps.Processes(1:end-1);
             rowNames=obj.processKeys(1:end-1);
             colNames=obj.getTableHeader(tp);
             nrows=length(rowNames);
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
-            for i=1:nrows
-                data{i,1}=ps.Processes(i).fuel;
-                data{i,2}=ps.Processes(i).product;
-                data{i,3}=ps.Processes(i).type;
-            end
+            data(:,1)={prc.fuel};
+            data(:,2)={prc.product};
+            data(:,3)={prc.type};
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
                
@@ -344,12 +340,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             values=pm.FlowsExergy;
-            edges=pm.ps.FlowStreamEdges;
+            sf=pm.ps.Flows.from;
+            st=pm.ps.Flows.to;
             data=cell(nrows,ncols);
-            for i=1:nrows  
-                data{i,1}=obj.streamKeys{edges.from(i)};
-				data{i,2}=obj.streamKeys{edges.to(i)};
-            end
+            data(:,1)=obj.streamKeys(sf);
+			data(:,2)=obj.streamKeys(st);
             data(:,3)=num2cell(values);		
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end	    		
@@ -432,10 +427,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
-            for i=1:wt.NrOfWastes
-                data{i,1}=wt.Type{i};
-                data{i,2}=100*wt.RecycleRatio(i);
-            end
+            data(:,1)=wt.Type;
+            data(:,2)=num2cell(100*wt.RecycleRatio);
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
 

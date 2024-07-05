@@ -10,7 +10,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
         Recycling    % Indicate if recycling is available
         OutputFlows  % Output flows
         wasteFlow    % Actual waste flow key
-        wasteTable   % cWasteTable object
+        wasteTable   % cWasteData object
         dValues      % Recycling Analysis Direct Cost values
         gValues      % Recycling Analysis Generalized Cost values
     end
@@ -99,7 +99,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             % Get Output Flows Id
             tmp=ps.FinalProducts.flows;
             outputId=[tmp,idx];
-            obj.OutputFlows={ps.Flows(outputId).key};
+            obj.OutputFlows=ps.FlowKeys(outputId);
             % Save original values
             wrc=obj.wasteTable.RecycleRatio(wId);
             wval=obj.wasteTable.Values;
@@ -124,8 +124,8 @@ classdef (Sealed) cWasteAnalysis < cResultId
             obj.dValues=[x,yd];
             obj.gValues=[x,yg];
             % Restore original values
-            wt.setRecycleRatio(wId,wrc);
-            wt.setTableValues(wval);
+            wt.setRecycleRatio(obj.wasteFlow,wrc);
+            wt.updateValues(wval);
         end
     end
 end

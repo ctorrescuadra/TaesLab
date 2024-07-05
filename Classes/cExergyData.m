@@ -71,8 +71,8 @@ classdef cExergyData < cStatusLogger
 			tbl=ps.AdjacencyMatrix;
             BE=B*tbl.AE;
 			BS=B*tbl.AS';
-            fstreams=ps.FuelStreams;
-            pstreams=ps.ProductStreams;
+            fstreams=ps.getFuelStreams;
+            pstreams=ps.getProductStreams;
 			ET=zeros(1,NS);
 			ET(fstreams)=BE(fstreams);
 			ET(pstreams)=BS(pstreams);
@@ -97,7 +97,7 @@ classdef cExergyData < cStatusLogger
             ier=find(vI<0);
 			if ~isempty(ier)
 				for i=ier
-					obj.messageLog(cType.ERROR,'Irreversibility of process %s is negative %f',ps.Processes(i).key,vI(i));
+					obj.messageLog(cType.ERROR,'Irreversibility of process %s is negative %f',ps.ProcessKeys{i},vI(i));
 				end
 			end
             % Check fuel and product are non-null
@@ -106,10 +106,10 @@ classdef cExergyData < cStatusLogger
             if ~isempty(ier)
 				for i=ier
 					if vF(i)>0
-						obj.messageLog(cType.ERROR,'Product of process %s is zero',ps.Processes(i).key);
+						obj.messageLog(cType.ERROR,'Product of process %s is zero',ps.ProcessKeys{i});
 					else
 						bypass(i)=true;
-						obj.messageLog(cType.INFO,'Process %s is not Active',ps.Processes(i).key);
+						obj.messageLog(cType.INFO,'Process %s is not Active',ps.ProcessKeys{i});
 					end
 				end
             end

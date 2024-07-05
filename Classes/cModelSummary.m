@@ -44,31 +44,31 @@ classdef cModelSummary < cResultId
                 end
                 values{i}=zeros(NrOfRows,obj.NrOfStates);
             end
-            rstates=model.getResultStates;
             pku=zeros(NrOfProcesses+1,obj.NrOfStates);
             pI=zeros(NrOfProcesses+1,obj.NrOfStates);
             rex=zeros(NrOfFlows,obj.NrOfStates);
             for j=1:obj.NrOfStates
-                cost=rstates{j}.getProcessCost;
+                rstate=model.getResultState(j);
+                cost=rstate.getProcessCost;
                 obj.setValues(cType.SummaryId.PROCESS_DIRECT_COST,j,cost.CP');
-                ucost=rstates{j}.getProcessUnitCost;
+                ucost=rstate.getProcessUnitCost;
                 obj.setValues(cType.SummaryId.PROCESS_DIRECT_UNIT_COST,j,ucost.cP');
-                fcost=rstates{j}.getFlowsCost;
+                fcost=rstate.getFlowsCost;
                 obj.setValues(cType.SummaryId.FLOW_DIRECT_COST,j,fcost.C');
                 obj.setValues(cType.SummaryId.FLOW_DIRECT_UNIT_COST,j,fcost.c');
                 if model.isResourceCost
-                    rsc=getResourceCost(model.ResourceData,rstates{j});
-                    cost=rstates{j}.getProcessCost(rsc);
+                    rsc=getResourceCost(model.ResourceData,rstate);
+                    cost=rstate.getProcessCost(rsc);
                     obj.setValues(cType.SummaryId.PROCESS_GENERALIZED_COST,j,cost.CP');
-                    ucost=rstates{j}.getProcessUnitCost(rsc);
+                    ucost=rstate.getProcessUnitCost(rsc);
                     obj.setValues(cType.SummaryId.PROCESS_GENERALIZED_UNIT_COST,j,ucost.cP');
-                    fcost=rstates{j}.getFlowsCost(rsc);
+                    fcost=rstate.getFlowsCost(rsc);
                     obj.setValues(cType.SummaryId.FLOW_GENERALIZED_COST,j,fcost.C');
                     obj.setValues(cType.SummaryId.FLOW_GENERALIZED_UNIT_COST,j,fcost.c');
                 end
-                pku(:,j)=rstates{j}.ProcessesExergy.vK';
-                pI(:,j)=rstates{j}.ProcessesExergy.vI';
-                rex(:,j)=rstates{j}.FlowsExergy';
+                pku(:,j)=rstate.ProcessesExergy.vK';
+                pI(:,j)=rstate.ProcessesExergy.vI';
+                rex(:,j)=rstate.FlowsExergy';
             end
             obj.status=true;
             obj.ExergyData=rex;
@@ -89,13 +89,13 @@ classdef cModelSummary < cResultId
         function res=getDefaultFlowVariables(obj)
         % get the output flows keys
             id=obj.ps.SystemOutput.flows;
-            res={obj.ps.Flows(id).key};
+            res=obj.ps.FlowKeys(id);
         end
 
         function res=getDefaultProcessVariables(obj)
         % get the output flows keys
             id=obj.ps.SystemOutput.processes;
-            res={obj.ps.Processes(id).key};
+            res=obj.ps.ProcessKeys(id);
         end
     end
 

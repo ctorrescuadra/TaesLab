@@ -52,7 +52,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
     p.addRequired('data',checkModel);
-	p.addParameter('State',data.getStateNames(1),@ischar);
+	p.addParameter('State',data.StateNames{1},@ischar);
 	p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('Show',false,@islogical);
@@ -95,7 +95,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	param.GeneralCost=bitget(pct,cType.GENERALIZED);
     if data.isResourceCost && param.GeneralCost
         if isempty(param.ResourceSample)
-			param.ResourceSample=data.getSampleNames(1);
+			param.ResourceSample=data.SampleNames{1};
         end
 		rd=data.getResourceData(param.ResourceSample);
 		rsc=getResourceCost(rd,fpm);

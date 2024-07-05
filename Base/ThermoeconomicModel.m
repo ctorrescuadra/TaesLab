@@ -60,7 +60,7 @@ function model=ThermoeconomicModel(filename,varargin)
     % Check optional parameters and create cThermoeconomicModel obeject
     if isValid(data)
         p = inputParser;
-        refstate=data.getStateNames(1);
+        refstate=data.StateNames{1};
         p.addParameter('State',refstate,@ischar);
         p.addParameter('ReferenceState',refstate,@ischar);
         p.addParameter('ResourceSample','',@ischar);

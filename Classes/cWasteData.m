@@ -11,7 +11,10 @@ classdef cWasteData < cStatusLogger
 %		res=obj.getFlowNr(key)
 %
 	properties (GetAccess=public,SetAccess=private)
-		Flows			% Waste Flow List
+        NrOfWastes      % Number of wastes
+		Names			% Waste Flow names
+		Flows           % Waste Flows Id
+		Processes       % Dissipative Processes
 		Type        	% Waste Allocation types
 		TypeId      	% Waste Type Id
 		Values      	% Waste Allocation values
@@ -115,7 +118,10 @@ classdef cWasteData < cStatusLogger
 			end
 			% Create the object
 			if obj.isValid
-				obj.Flows=cSetList({wd.flow});
+				obj.NrOfWastes=ps.NrOfWastes;
+				obj.Names={wd.flow};
+				obj.Flows=ps.Waste.flows;
+				obj.Processes=ps.Waste.processes;
 				obj.Type={wd.type};
 				obj.TypeId=wasteType;
 				obj.Values=values;
@@ -124,33 +130,156 @@ classdef cWasteData < cStatusLogger
 			end
 		end
 
-		function res=getWasteTable(obj)
-		% get the cWasteTable object
-			res=cWasteTable(obj);
-		end
-
-		function res=getWasteFlows(obj,varargin)
+		function res=getWasteFlows(obj,idx)
 		% Return the name of the corresponding index
 		% Input:
-		%  ind - state index to retrieve
-			res=obj.Flows.Values(varargin{:});
+		%  idx - state index to retrieve
+			res=[];
+			if nargin==1
+				res=obj.Names;
+                return
+			end
+			aux=1:length(obj.Names);
+            if ~all(ismember(idx,aux))
+                return
+            end
+			if length(idx)==1
+                res=obj.Names{idx};
+            else
+                res=obj.Names(idx);
+			end
 		end
 			
-		function res=getWasteId(obj,key)
+		function res=getWasteIndex(obj,key)
 		% Return the id of the corresponding waste key
 		% Input:
 		%  ind - state index to retrieve
-			res=obj.Flows.getIndex(key);
+			res=false;
+			if ischar(key)
+				[~,res]=ismember(key,obj.Names);
+			end
 		end
 			
 		function res=existWaste(obj,key)
 		% Determine if waste key is defined
-			res=obj.Flows.existValue(key);
+			res=false;
+			if ischar(key)
+				res=ismember(key,obj.Names);
+			end
         end
 
-        function res=getFlowNr(obj,key)
-		% Determine the flow number of a waste
-            res=obj.ps.getFlowId(key);
-        end
+		function res=getValues(obj,key)
+		% Get the allocation ratios of a waste
+		% Input:
+		%  key - waste id (key or id)
+		% Output:
+		%  res - vector with the allocation waste ratios of waste id
+			res=[];
+			if ischar(key)
+				id=obj.getWasteIndex(key);
+				if isempty(id)
+					return
+				end
+				res=obj.Values(id,:);
+			end
+		end
+	
+		function status=setValues(obj,key,val)
+		% set the cost distribution values of a waste
+		% Input:
+		%  arg - key/id of the waste
+		%  val - Vector contains the distribution values
+			status=false;
+			if ischar(key)
+				id=obj.getWasteIndex(key);
+				if isempty(id)
+					return
+				end
+			end
+			if size(obj.Values,2)~=length(val)
+				return
+			end
+			if any(val(:)>0) && isempty(find(val<0,1))
+				obj.TypeId(id)=0;
+				obj.Type{id}='MANUAL';
+				obj.Values(id,:)=val;
+				status=true;
+			end
+		end
+		
+		function res=getType(obj,key)
+		% get the waste type
+		% Input:
+		%  key - waste key
+			res=[];
+			if ischar(key)
+				id=obj.getWasteIndex(key);
+				if ~isempty(id)
+					res=obj.Type{id};
+				end
+			end
+		end
+	
+		function status=setType(obj,key,type)
+		% set the waste type
+		% Input:
+		%  arg - key/id of the waste
+		%  type - new type value
+			status=false;
+			if ischar(key)
+				id=obj.getWasteIndex(key);
+				if isempty(id)
+					return
+				end
+			end
+			tId=cType.getWasteId(type);
+			if ~cType.isEmpty(tId)
+				obj.Type{id}=type;
+				obj.TypeId(id)=tId;
+				status=true;
+			end
+		end            
+					
+		function res=getRecycleRatio(obj,key)
+		% get the recycle ratio value of a waste
+		% Input:
+		%  arg - key/id of the waste
+			res=[];
+			if ischar(key)
+				id=obj.getWasteIndex(key);
+				if ~isempty(id)
+					res=obj.RecycleRatio(id);
+				end
+			end		
+		end
+		
+		function status=setRecycleRatio(obj,key,val)
+		% set the recycle ratio
+		% Input:
+		%  arg - key/id of the waste
+		%  val - recycle ratio value
+			status=false;
+			if ~ischar(key)
+				return
+			end
+			id=obj.getWasteIndex(key);
+			if isempty(id)
+				return
+			end
+			if val<0 || val>1
+				return
+			end
+			status=true;
+			obj.RecycleRatio(id)=val;
+		end			
+	
+		function status=updateValues(obj,val)
+		% Set the waste table values (internal use)
+			status=false;
+			if all(size(val)==size(obj.Values))
+				obj.Values=val;
+				status=true;
+			end
+		end                   
 	end
 end	

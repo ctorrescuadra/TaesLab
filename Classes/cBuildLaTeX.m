@@ -76,7 +76,7 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
         function log=saveTable(obj,filename)
         % Save the table as LaTeX code into filename
         %   Usage:
-        %       obj.exportTable(filename);
+        %       obj.saveTable(filename);
         %   Input:
         %       filename - Name of the file
             log=cStatusLogger;

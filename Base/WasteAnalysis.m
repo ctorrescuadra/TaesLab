@@ -46,7 +46,7 @@ function res = WasteAnalysis(data,varargin)
     % Check and initialize parameters
     p = inputParser;
     p.addRequired('data',checkModel);
-    p.addParameter('State',data.getStateNames(1),@ischar);
+    p.addParameter('State',data.StateNames{1},@ischar);
     p.addParameter('ResourceSample','',@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('ActiveWaste','',@ischar);
@@ -83,7 +83,7 @@ function res = WasteAnalysis(data,varargin)
      if isempty(param.ActiveWaste)
          param.ActiveWaste=data.getWasteFlows(1);
      end
-     wid=wd.Flows.getIndex(param.ActiveWaste);
+     wid=wd.getWasteIndex(param.ActiveWaste);
      if isempty(wid)
          res.printError('Invalid waste key %s',param.ActiveWaste);
          return
@@ -110,7 +110,7 @@ function res = WasteAnalysis(data,varargin)
     if param.Recycling   
         if data.isResourceCost && param.GeneralCost
             if isempty(param.ResourceSample)
-			    param.ResourceSample=data.getSampleNames(1);
+			    param.ResourceSample=data.SampleNames{1};
             end
 		    rsd=data.getResourceData(param.ResourceSample);
             if ~rsd.isValid

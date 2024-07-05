@@ -1,9 +1,10 @@
 function res=ShowTablesDirectory(varargin)
-%ShowTablesDirectory - Shows the list of existing result tables in TaesLab and their properties.
-%   This function lets to select where to display this table using the option 'Show',
-%   export the table in diferent formats selecting the option 'ExportAs' or 'SaveAs' external file
-%   and to select the columns with the table properties with option 'Columns'
-%   If a thermoeconomic model is provided, it lists the active model tables.
+%ShowTablesDirectory - Displays the list of existing TaesLab result tables and their properties.
+%   The 'Show' option allows to select how the table will be displayed. 
+%   The 'ExportAs' option allows you to export the table in different formats.
+%   The 'SaveAs' option allows you to save the table as an external file.
+%   The 'Columns' option allows you to select the columns of the table.
+%   If a thermoeconomic model is provided, the active tables of the model are listed.
 %    
 %   Syntax
 %     res=ListResultTables(Name,Values)
@@ -12,7 +13,7 @@ function res=ShowTablesDirectory(varargin)
 %   Input Arguments
 %       model - cThermoeconomicModel object (optional)
 %   Name-Values Arguments
-%     Show: Selects how to show the table
+%     View: Selects how to show the table
 %       CONSOLE - display in the console (default)
 %       GUI - use a GUI table
 %       HTML - use a web browser
@@ -22,13 +23,13 @@ function res=ShowTablesDirectory(varargin)
 %       STRUCT - returns the table as a structured array
 %       TABLE - returns a matlab table
 %     Columns: Array of cells with the names of the columns to be displayed.
-%                If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
-%        DESCRIPTION - Description of the table
-%        RESULT_NAME - cResultInfo name of the table
-%        GRAPH - Indicates if it has graphical representation % TYPE - Type of cTable
-%        TYPE - Type of cTable
-%        CODE - Text of the code for cType.Tables
-%        RESULT_CODE - Text of the code for cType.ResultId
+%              If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
+%       DESCRIPTION - Description of the table
+%       RESULT_NAME - cResultInfo name of the table
+%       GRAPH - Indicates if it has graphical representation
+%       TYPE - Type of cTable
+%       CODE - Text of the code for cType.Tables
+%       RESULT_CODE - Text of the code for cType.ResultId
 %     SaveAs: indicates the name of the file where the table will be saved.
 %
 %   Output Arguments
@@ -37,7 +38,7 @@ function res=ShowTablesDirectory(varargin)
 %   Example
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %
-%   See also cTablesDefinition
+%   See also cTablesDefinition, cThermoeconomicModel
 %
     res=cStatus();
     % Check if model is provided
@@ -49,7 +50,7 @@ function res=ShowTablesDirectory(varargin)
     end
     % Check input parameters
     p = inputParser;
-    p.addParameter('Show',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@isFilename);
     p.addParameter('Columns',cType.DIR_COLS_DEFAULT,@iscell)
@@ -79,7 +80,7 @@ function res=ShowTablesDirectory(varargin)
         return
     end
     % View the table
-    option=cType.getTableView(param.Show);
+    option=cType.getTableView(param.View);
     showTable(tbl,option);
     % Save table 
     if ~isempty(param.SaveAs)

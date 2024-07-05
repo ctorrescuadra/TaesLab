@@ -18,7 +18,7 @@ end
 if data.isResourceCost
 	[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.getSampleNames);
 else
-	param.ResourceSample=data.getSampleNames(1);
+	param.ResourceSample=data.SampleNames{1};
 end
 % Show results
 sr=SummaryResults(data,param);

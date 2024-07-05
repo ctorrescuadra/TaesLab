@@ -34,9 +34,6 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.getResultInfo(id)
 %   Model Info Methods
 %       res=obj.showProperties
-%       res=obj.StateNames
-%       res=obj.SampleNames
-%       res=obj.WasteFlows
 %       res=obj.isResourceCost
 %       res=obj.isGeneralCost
 %       res=obj.isDiagnosis
@@ -46,17 +43,17 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.getModelResults
 %   Tables Info Methods
 %       res=obj.getTablesDirectory
-%       res=obj.showTablesDirectory
 %       res=obj.getTableInfo(name)
 %       res=obj.getResultInfoTable(name)
 %       res=obj.getTable(name,options)
 %       res=obj.getTableIndex(options)
+%       res=obj.exportResults(options)
 %   Show Methods
 %       obj.printResults
 %       obj.showResults(name,options)
 %       obj.showTableIndex(options)
 %       obj.showGraph(name,options)
-%       obj.showSummary(name)
+%       obj.showSummary(name,options)
 %       obj.showTableDirectory(option)
 %       obj.summaryGraph(name,options)
 %   Save Methods
@@ -152,7 +149,7 @@ classdef cThermoeconomicModel < cResultSet
             obj.DefaultGraph='';
             % Check optional input parameters
             p = inputParser;
-            refstate=data.getStateNames(1);
+            refstate=data.StateNames{1};
             p.addParameter('State',refstate,@ischar);
             p.addParameter('ReferenceState',refstate,@ischar);
             p.addParameter('ResourceSample','',@ischar);
@@ -184,19 +181,20 @@ classdef cThermoeconomicModel < cResultSet
             % Read print formatted configuration
             obj.fmt=data.FormatData;
             % Load Exergy values (all states)
-            obj.rstate=cell(1,data.NrOfStates);
+            obj.rstate=cDataset(data.StateNames);
             for i=1:data.NrOfStates
-                rex=data.ExergyData{i};
+                rex=data.getExergyData(i);
                 if ~rex.isValid
                     obj.addLogger(rex);
                     obj.messageLog(cType.ERROR,'Invalid exergy values. See error log');
                     return
                 end
                 if obj.isWaste
-                    obj.rstate{i}=cExergyCost(rex,obj.wd);
+                    cex=cExergyCost(rex,obj.wd);
                 else
-                    obj.rstate{i}=cExergyCost(rex);
+                    cex=cExergyCost(rex);
                 end
+                obj.rstate.setValues(i,cex);
             end
             % Set Operation and Reference State
             if data.existState(param.State)
@@ -218,7 +216,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             if data.isResourceCost
                 if isempty(param.ResourceSample)
-                    param.ResourceSample=data.getSampleNames(1);
+                    param.ResourceSample=data.SampleNames{1};
                 end
                 if data.existSample(param.ResourceSample)
                     obj.ResourceSample=param.ResourceSample;
@@ -500,10 +498,10 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.DataModel.NrOfStates>1;
         end
 
-        function res=getResultStates(obj)
+        function res=getResultState(obj,idx)
         % Get the cExergyCost object of each state 
         %   Internal application use: cModelSummary
-            res=obj.rstate;
+            res=obj.rstate.getValues(idx);
         end
 
         function res=getModelResults(obj)
@@ -564,19 +562,25 @@ classdef cThermoeconomicModel < cResultSet
             res=tmp;
         end
 
-        function tbl=getTable(obj,name)
-           tbl=cStatusLogger(cType.VALID);
-           res=getResultInfoTable(obj,name);
-           if ~isValid(res)
-               tbl.addLogger(res);
-               return
-           end
-           tbl=getTable(res,name);
-        end
-        
         %%%
         % Results Set methods
         %%%
+        function tbl=getTable(obj,name,varargin)
+        % Get a table called name
+        %   Input:
+        %     name - name of the table
+        %     varmode - export table type (optional)
+        %     fmt - format number (optional)
+        %
+            tbl=cStatusLogger(cType.VALID);
+            res=getResultInfoTable(obj,name);
+            if ~isValid(res)
+                tbl.addLogger(res);
+                return
+            end
+            tbl=getTable(res,name,varargin{:});
+        end
+
         function showResults(obj,name,varargin)
         % View an individual table
         %   Usage:
@@ -645,6 +649,13 @@ classdef cThermoeconomicModel < cResultSet
                 showResults(res,name,varargin{:})
             end
         end
+
+        function showTablesDirectory(obj,varargin)
+        % Show tables directory
+            tbl=obj.getTablesDirectory;
+            showTable(tbl,varargin{:})
+        end
+
         %%%
         % Save Results methods
         %%%
@@ -955,14 +966,15 @@ classdef cThermoeconomicModel < cResultSet
                 printLogger(log);
                 return
             end
-            idx=data.getStateId(obj.State);
-            rex=data.ExergyData{idx};
+            idx=data.ExergyData.getIndex(obj.State);
+            rex=data.getExergyData(idx);
             % Compute cExergyCost
             if obj.isWaste
-                obj.rstate{idx}=cExergyCost(rex,obj.wd);
+                cex=cExergyCost(rex,obj.wd);
             else
-                obj.rstate{idx}=cExergyCost(rex);
+                cex=cExergyCost(rex);
             end
+            obj.rstate.setValues(idx,cex);
             % Get results
             obj.triggerStateChange;
             obj.setSummaryResults;
@@ -980,8 +992,7 @@ classdef cThermoeconomicModel < cResultSet
 
         function setStateInfo(obj)
         % Trigger exergy analysis
-            idx=obj.DataModel.getStateId(obj.State);
-            obj.fp1=obj.rstate{idx};
+            obj.fp1=obj.rstate.getValues(obj.State);
             if ~obj.activeSet
                 return
             end
@@ -1164,8 +1175,7 @@ classdef cThermoeconomicModel < cResultSet
                 obj.printDebugInfo('Reference and Operation State are the same');
                 return
             end
-            idx=obj.DataModel.getStateId(state);
-            obj.fp0=obj.rstate{idx};
+            obj.fp0=obj.rstate.getValues(state);
             res=true;
         end
  

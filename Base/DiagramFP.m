@@ -36,7 +36,7 @@ function res=DiagramFP(data,varargin)
 	% Check input parameters
 	p = inputParser;
 	p.addRequired('data',checkModel);
-	p.addParameter('State',data.getStateNames(1),@ischar);
+	p.addParameter('State',data.StateNames{1},@ischar);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs','',@isFilename);
 	try

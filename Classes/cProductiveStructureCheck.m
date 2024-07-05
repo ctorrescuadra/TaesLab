@@ -1,7 +1,7 @@
 classdef cProductiveStructureCheck < cResultId
 % cReadProductiveModel gets and validates the productive structure data model
 % 	Methods:
-% 		obj=readProductiveStructure(data)
+% 	  obj=readProductiveStructure(data)
 % See also cProductiveStructure
 %
 	properties(GetAccess=public,SetAccess=private)	
@@ -16,9 +16,6 @@ classdef cProductiveStructureCheck < cResultId
 	properties(Access=protected)
 		fDict           % Flows key dictionary
 		pDict           % Processes key dictionary
-        flowtypes       % Flows typeId array
-        processtypes    % Process typeId array
-        streamtypes     % Stream typeId array
     end
     properties(Access=private)
 		cflw			% Internal flows cell array
@@ -84,7 +81,7 @@ classdef cProductiveStructureCheck < cResultId
             end
 			obj.pDict=cDictionary({pdata.key});
 			if ~isValid(obj.pDict)
-				obj.addLogger(obj.fDict);
+				obj.addLogger(obj.pDict);
 				obj.messageLog(cType.ERROR,'Name of processes are duplicated');
 				return
 			end
@@ -109,9 +106,6 @@ classdef cProductiveStructureCheck < cResultId
 			    obj.Flows=cell2mat(obj.cflw);
 			    obj.Streams=cell2mat(obj.cstr);
 			    obj.Processes=cell2mat(obj.cprc);            
-                obj.flowtypes=[obj.Flows.typeId];
-			    obj.streamtypes=[obj.Streams.typeId];
-			    obj.processtypes=[obj.Processes.typeId];
 				obj.ModelName=data.name;
 				obj.State='SUMMARY';
             end

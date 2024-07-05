@@ -24,7 +24,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         StreamOperators        % Stream operators structure (mG, opE, opI, opR)  
         FlowOperators          % Flow operators structure (mG, opB, opI, opR)
         isWaste                % Indicate if system have wastes
-        WasteTable             % cWasteTable object
+        WasteTable             % cWasteData object
         TableR                 % Table R (waste allocation)
         RecycleRatio           % Recycle ratio of each waste
 	end
@@ -115,7 +115,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         % Get the recirculation factor of the processes
             res=[];
             if obj.isValid
-                res=zerotool(diag(obj.fpOperators.opCP)'-1);
+                res=zerotol(diag(obj.fpOperators.opCP)'-1);
             end
         end
     
@@ -397,14 +397,14 @@ classdef (Sealed) cExergyCost < cExergyModel
             opI=obj.pfOperators.opI;
             vP=obj.ProductExergy;
             % Compute direct exergy cost for type 2 allocation
-            if (any(wt.typeId==cType.WasteAllocation.COST))
+            if (any(wt.TypeId==cType.WasteAllocation.COST))
                 cp=obj.computeCostR(aR);
             end
             % Compute Waste table depending on waste definition type
             for i=1:NR
                 j=aR(i); 
                 key=wt.Names{i};      
-                switch wt.typeId(i)
+                switch wt.TypeId(i)
                     case cType.WasteAllocation.MANUAL
                         tmp=wt.getValues(key);
                         tmp(~obj.ActiveProcesses)=0.0;
@@ -478,7 +478,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
                 return
             end
-            obj.WasteTable=wd.getWasteTable;
+            obj.WasteTable=wd;
         end
 
         function res=getMinCost(obj,rsc)

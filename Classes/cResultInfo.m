@@ -26,7 +26,6 @@ classdef cResultInfo < cResultSet
         ResultName   % Result name
         Tables       % Struct containing the tables
         NrOfTables   % Number of tables
-        ListOfTable  % List of tables
         Info         % cResultId object containing the results
         ModelName    % Model Name
         State        % State Name
@@ -97,15 +96,18 @@ classdef cResultInfo < cResultSet
             tbl=obj.getTable(name);
             if isValid(tbl)
                 showTable(tbl,varargin{:});
+            else
+                tbl.printLogger;
             end
         end
 
-        function res = getTable(obj,name)
+        function res = getTable(obj,name,varargin)
         % Get the table called name
         %   Usage:
         %       res=obj.getTable(name)
         %   Input:
         %       name - Name of the table
+        %       options - VarMode option
         %   Output:
         %       res - cTable object
             res = cStatusLogger(cType.VALID);
@@ -113,12 +115,13 @@ classdef cResultInfo < cResultSet
                 res.printError('Table name is missing')
             end
             if strcmp(name,cType.TABLE_INDEX)
-                res=obj.getTableIndex;
+                tbl=obj.getTableIndex;
             elseif obj.existTable(name)
-                res=obj.Tables.(name);
+                tbl=obj.Tables.(name);
             else
                 res.messageLog(cType.ERROR,'Table name %s does NOT exists',name);
             end
+            res=exportTable(tbl,varargin{:});
         end
 
         function res=getTableIndex(obj,varargin)
@@ -194,30 +197,10 @@ classdef cResultInfo < cResultSet
             end
 	        % Show Graph
             gr=cGraphResults(tbl,option);
-            gr.showGraph;
-        end
-
-        function res=exportTable(obj,name,varmode,fmt)
-        % Export a table using diferent formats.
-        %  Input:
-        %   name - name of the table
-        %   varmode - result type.
-       %       cType.VarMode.NONE: cTable object
-        %      cType.VarMode.CELL: cell array
-        %      cType.VarMode.STRUCT: structured array
-        %      cType.VarModel.TABLE: Matlab table
-        %   fmt - Format values (false/true)
-        % Output:
-        %   res - Table values in the required format
-        %
-            res=[];
-            narginchk(3,4);
-            if (nargin<4)
-                fmt=false;
-            end
-            tbl=obj.getTable(name);
-            if isValid(tbl)
-                res=tbl.exportTable(varmode,fmt);
+            if isValid(gr)
+                gr.showGraph;
+            else
+                printLogger(gr);
             end
         end
 
@@ -225,8 +208,8 @@ classdef cResultInfo < cResultSet
         % Export result tables into a structure using diferent formats.
         %  Input:
         %   name - name of the table
-        %   varmode - result type.
-       %       cType.VarMode.NONE: cTable object
+        %   varmode - result type (optional)
+        %       cType.VarMode.NONE: cTable object
         %      cType.VarMode.CELL: cell array
         %      cType.VarMode.STRUCT: structured array
         %      cType.VarModel.TABLE: Matlab table
@@ -234,16 +217,15 @@ classdef cResultInfo < cResultSet
         %  Output:
         %   res - structure with the tables in the required format
         %
-            res=[];
-            if nargin < 2
-                obj.printError('Not enough input arguments');
+            switch nargin
+            case 1
+                res=obj.Tables;
                 return
-            end
-            if nargin==2
+            case 2
                 fmt=false;
             end
             names=obj.ListOfTables;
-            tables=cellfun(@(x) exportTable(obj,x,varmode,fmt),names,'UniformOutput',false);
+            tables=cellfun(@(x) exportTable(obj.Tables.(x),varmode,fmt),names,'UniformOutput',false);
             res=cell2struct(tables,names,1);
         end
 
@@ -268,7 +250,6 @@ classdef cResultInfo < cResultSet
                 log.messageLog(cType.ERROR,'Invalid cResultInfo object')
                 return
             end
-
             [fileType,ext]=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.CSV

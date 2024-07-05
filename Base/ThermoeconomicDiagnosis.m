@@ -44,7 +44,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
     p.addRequired('data',checkModel);
-    p.addParameter('ReferenceState',data.getStateNames(1),@ischar)
+    p.addParameter('ReferenceState',data.StateNames{1},@ischar)
 	p.addParameter('State','',@ischar);
     p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
     p.addParameter('Show',false,@islogical);
@@ -74,7 +74,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         return
     end
     if isempty(param.State)
-        param.State=data.getStateNames(2);
+        param.State=data.StateNames{2};
     end
     if strcmp(param.ReferenceState,param.State)
         res.printError('Reference and Operation States are the same')

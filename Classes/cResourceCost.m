@@ -4,6 +4,7 @@ classdef cResourceCost < cStatusLogger
 % 		obj=cResourceCost(data,exm)
 
 	properties (GetAccess=public, SetAccess=private)
+		sample  % Resource sample name
 		c0      % Unit cost of external resources
 		cs0     % Unit cost of external stream
 		ce      % Process Resource Unit Costs
@@ -27,6 +28,7 @@ classdef cResourceCost < cStatusLogger
 				return
 			end
 			% Set Resources properties
+			obj.sample=rd.sample;
 			obj.c0=rd.c0;
 			obj.cs0=rd.c0*exm.StreamProcessTable.mS';
 			% Process Resources Cost

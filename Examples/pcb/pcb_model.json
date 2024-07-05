@@ -1,0 +1,2653 @@
+{
+  "ProductiveStructure": {
+    "name": "pcb_model",
+    "flows": [
+      {
+        "key": "A1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "A2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "AB",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "AB1",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "AB2",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "B2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "B3",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "BABB",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "BC",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "BG1",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "BG2",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "BW",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "C11",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "C12",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "C2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "CACB",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "CB",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "CD",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "CI1",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "CI2",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "D1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "D2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "D3",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "D4",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "DC",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "DE",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "DW",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "E1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "E2",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "EF",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "EW",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "F1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "F2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "F3",
+        "type": "OUTPUT",
+        "Description": null
+      },
+      {
+        "key": "F4",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "FD",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "FK",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "FW",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "G1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "GI",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "H1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "H2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "HI",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "I1",
+        "type": "OUTPUT",
+        "Description": null
+      },
+      {
+        "key": "I2",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "IW1",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "IW2",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "J1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "J2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "JB",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "JC",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "K1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "K2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "K4",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "KF",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "KL",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "KW",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "L1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "L2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "L3",
+        "type": "OUTPUT",
+        "Description": null
+      },
+      {
+        "key": "L4",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "LM",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "LW",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "M1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "M2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "M3",
+        "type": "OUTPUT",
+        "Description": null
+      },
+      {
+        "key": "M4",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "MN",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "MW",
+        "type": "INTERNAL",
+        "Description": null
+      },
+      {
+        "key": "N1",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "N2",
+        "type": "RESOURCE",
+        "Description": null
+      },
+      {
+        "key": "N3",
+        "type": "OUTPUT",
+        "Description": null
+      },
+      {
+        "key": "N4",
+        "type": "WASTE",
+        "Description": null
+      },
+      {
+        "key": "NW",
+        "type": "INTERNAL",
+        "Description": null
+      }
+    ],
+    "processes": [
+      {
+        "key": "SRD",
+        "description": "Shredding",
+        "fuel": "A1+A2",
+        "product": "AB",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "SRDSEP",
+        "description": "Shredding separation En-Mat",
+        "fuel": "AB",
+        "product": "AB1+AB2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "REDENE",
+        "description": "Reduction (Energy part)",
+        "fuel": "AB1+JB",
+        "product": "BG1+BABB",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "REDMAT",
+        "description": "Reduction (Material part)",
+        "fuel": "B2+AB2+BABB+CB",
+        "product": "BC+BG2+BW",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "SLAGW",
+        "description": "Pyrometallurgical (Waste)",
+        "fuel": "BW",
+        "product": "B3",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "OXIENE",
+        "description": "Oxidation (Energy part)",
+        "fuel": "C11+JC",
+        "product": "CI1+CACB",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "OXIMAT",
+        "description": "Oxidation (Material part)",
+        "fuel": "C12+C2+BC+CACB+DC",
+        "product": "CD+CB+CI2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "FR",
+        "description": "Fire Refining",
+        "fuel": "D1+D2+D3+CD+FD",
+        "product": "DE+DC+DW",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "FRW",
+        "description": "Fire Refining gases waste",
+        "fuel": "DW",
+        "product": "D4",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "AC",
+        "description": "Anode casting",
+        "fuel": "E1+DE",
+        "product": "EF+EW",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "ACW",
+        "description": "Anode casting steam waste",
+        "fuel": "EW",
+        "product": "E2",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "ER",
+        "description": "Electrorefining",
+        "fuel": "F1+F2+EF+KF",
+        "product": "F3+FD+FK+FW",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "ERW",
+        "description": "Electrolytes Bleeded",
+        "fuel": "FW",
+        "product": "F4",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "AB",
+        "description": "Afterburner",
+        "fuel": "BG1+BG2+G1",
+        "product": "GI",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PUMP",
+        "description": "Pump",
+        "fuel": "H1+H2",
+        "product": "HI",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HE",
+        "description": "Heat exchanger",
+        "fuel": "GI+CI1+CI2+HI",
+        "product": "I1+IW1+IW2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HEW",
+        "description": "Heat exchanger waste",
+        "fuel": "IW1+IW2",
+        "product": "I2",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "AIR",
+        "description": "Air separation unit",
+        "fuel": "J1+J2",
+        "product": "JB+JC",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "DeCu",
+        "description": "Decoppering",
+        "fuel": "K1+K2+FK",
+        "product": "KL+KF+KW",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "DeCuW",
+        "description": "Decoppering waste",
+        "fuel": "KW",
+        "product": "K4",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "AgRe",
+        "description": "Silver recovery",
+        "fuel": "L1+L2+KL",
+        "product": "LM+L3+LW",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "AgReW",
+        "description": "Silver recovery waste",
+        "fuel": "LW",
+        "product": "L4",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "AuRe",
+        "description": "Gold recovery",
+        "fuel": "M1+M2+LM",
+        "product": "MN+M3+MW",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "AuReW",
+        "description": "Gold recovery waste",
+        "fuel": "MW",
+        "product": "M4",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "PdRe",
+        "description": "Palladium recovery",
+        "fuel": "N1+N2+MN",
+        "product": "N3+NW",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "PdReW",
+        "description": "Palladium recovery waste",
+        "fuel": "NW",
+        "product": "N4",
+        "type": "DISSIPATIVE"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Exergy",
+        "exergy": [
+          {
+            "key": "A1",
+            "value": 80173.625871283366
+          },
+          {
+            "key": "A2",
+            "value": 877.4
+          },
+          {
+            "key": "AB",
+            "value": 80173.625871283366
+          },
+          {
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 13995.332035287312
+          },
+          {
+            "key": "B2",
+            "value": 1551.5980110100579
+          },
+          {
+            "key": "B3",
+            "value": 9494.2509599539044
+          },
+          {
+            "key": "BABB",
+            "value": 2000
+          },
+          {
+            "key": "BC",
+            "value": 7366.3682729083293
+          },
+          {
+            "key": "BG1",
+            "value": 13311.381548150715
+          },
+          {
+            "key": "BG2",
+            "value": 4488.6755878126523
+          },
+          {
+            "key": "BW",
+            "value": 9494.2509599539044
+          },
+          {
+            "key": "C11",
+            "value": 1974.0043708957362
+          },
+          {
+            "key": "C12",
+            "value": 2.7722803870703281
+          },
+          {
+            "key": "C2",
+            "value": 1517.7314774427114
+          },
+          {
+            "key": "CACB",
+            "value": 0
+          },
+          {
+            "key": "CB",
+            "value": 5093.7800173578516
+          },
+          {
+            "key": "CD",
+            "value": 3525.3527549597461
+          },
+          {
+            "key": "CI1",
+            "value": 535.8612545524154
+          },
+          {
+            "key": "CI2",
+            "value": 148.08787667122368
+          },
+          {
+            "key": "D1",
+            "value": 4455.1553999217176
+          },
+          {
+            "key": "D2",
+            "value": 407.112808191088
+          },
+          {
+            "key": "D3",
+            "value": 77.961918282329151
+          },
+          {
+            "key": "D4",
+            "value": 2098.9100731338472
+          },
+          {
+            "key": "DC",
+            "value": 755.21211498339756
+          },
+          {
+            "key": "DE",
+            "value": 3642.7012516456193
+          },
+          {
+            "key": "DW",
+            "value": 2098.9100731338472
+          },
+          {
+            "key": "E1",
+            "value": 23.004962074669844
+          },
+          {
+            "key": "E2",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "EF",
+            "value": 2924.4182116711308
+          },
+          {
+            "key": "EW",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "F1",
+            "value": 1426.10387390689
+          },
+          {
+            "key": "F2",
+            "value": 159.93037774533582
+          },
+          {
+            "key": "F3",
+            "value": 2421.7633645441506
+          },
+          {
+            "key": "F4",
+            "value": 123.89102923680198
+          },
+          {
+            "key": "FD",
+            "value": 381.4396193807645
+          },
+          {
+            "key": "FK",
+            "value": 14.110803253484669
+          },
+          {
+            "key": "FW",
+            "value": 123.89102923680198
+          },
+          {
+            "key": "G1",
+            "value": 18.860842352260732
+          },
+          {
+            "key": "GI",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H1",
+            "value": 276.90367962963307
+          },
+          {
+            "key": "H2",
+            "value": 103.30918253911165
+          },
+          {
+            "key": "HI",
+            "value": 372.0729823894323
+          },
+          {
+            "key": "I1",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "I2",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "IW1",
+            "value": 5247.4459915332209
+          },
+          {
+            "key": "IW2",
+            "value": 182.41011268094772
+          },
+          {
+            "key": "J1",
+            "value": 1030.2258184707816
+          },
+          {
+            "key": "J2",
+            "value": 3470.96867
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "K1",
+            "value": 6318.6202630866837
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "K4",
+            "value": 0
+          },
+          {
+            "key": "KF",
+            "value": 4.8045569213592705
+          },
+          {
+            "key": "KL",
+            "value": 9.306246332125399
+          },
+          {
+            "key": "KW",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 2694.4458295273284
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "L3",
+            "value": 5.06312593284361
+          },
+          {
+            "key": "L4",
+            "value": 0
+          },
+          {
+            "key": "LM",
+            "value": 4.2431203992817892
+          },
+          {
+            "key": "LW",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 413.33354580790495
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "M3",
+            "value": 0.56517234264358829
+          },
+          {
+            "key": "M4",
+            "value": 0
+          },
+          {
+            "key": "MN",
+            "value": 3.6779480566382015
+          },
+          {
+            "key": "MW",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 7407.4112151954041
+          },
+          {
+            "key": "N2",
+            "value": 0
+          },
+          {
+            "key": "N3",
+            "value": 1.4336598236122811
+          },
+          {
+            "key": "N4",
+            "value": 2.2442882330259204
+          },
+          {
+            "key": "NW",
+            "value": 2.2442882330259204
+          }
+        ]
+      },
+      {
+        "stateId": "EX",
+        "exergy": [
+          {
+            "key": "A1",
+            "value": 1.3158956502926769E+6
+          },
+          {
+            "key": "A2",
+            "value": 877.4
+          },
+          {
+            "key": "AB",
+            "value": 1.3158956502926769E+6
+          },
+          {
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 1.2497173564566807E+6
+          },
+          {
+            "key": "B2",
+            "value": 1551.5980110100579
+          },
+          {
+            "key": "B3",
+            "value": 11902.819672788437
+          },
+          {
+            "key": "BABB",
+            "value": 2000
+          },
+          {
+            "key": "BC",
+            "value": 1.278857649107608E+6
+          },
+          {
+            "key": "BG1",
+            "value": 13311.381548150715
+          },
+          {
+            "key": "BG2",
+            "value": 4488.6755878126523
+          },
+          {
+            "key": "BW",
+            "value": 11902.819672788437
+          },
+          {
+            "key": "C11",
+            "value": 1974.0043708957362
+          },
+          {
+            "key": "C12",
+            "value": 2.7722803870703281
+          },
+          {
+            "key": "C2",
+            "value": 1517.7314774427114
+          },
+          {
+            "key": "CACB",
+            "value": 0
+          },
+          {
+            "key": "CB",
+            "value": 43271.605143516732
+          },
+          {
+            "key": "CD",
+            "value": 1.2425651072698529E+6
+          },
+          {
+            "key": "CI1",
+            "value": 535.8612545524154
+          },
+          {
+            "key": "CI2",
+            "value": 148.08787667122368
+          },
+          {
+            "key": "D1",
+            "value": 4455.1553999217176
+          },
+          {
+            "key": "D2",
+            "value": 407.112808191088
+          },
+          {
+            "key": "D3",
+            "value": 77.961918282329151
+          },
+          {
+            "key": "D4",
+            "value": 2098.9100731338472
+          },
+          {
+            "key": "DC",
+            "value": 6481.6711123055475
+          },
+          {
+            "key": "DE",
+            "value": 1.4219513389462312E+6
+          },
+          {
+            "key": "DW",
+            "value": 2098.9100731338472
+          },
+          {
+            "key": "E1",
+            "value": 23.004962074669844
+          },
+          {
+            "key": "E2",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "EF",
+            "value": 1.4212330559062567E+6
+          },
+          {
+            "key": "EW",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "F1",
+            "value": 1426.10387390689
+          },
+          {
+            "key": "F2",
+            "value": 159.93037774533582
+          },
+          {
+            "key": "F3",
+            "value": 76011.740077833208
+          },
+          {
+            "key": "F4",
+            "value": 1621.507715535414
+          },
+          {
+            "key": "FD",
+            "value": 185377.36130990041
+          },
+          {
+            "key": "FK",
+            "value": 1.1583835362615383E+6
+          },
+          {
+            "key": "FW",
+            "value": 1621.507715535414
+          },
+          {
+            "key": "G1",
+            "value": 18.860842352260732
+          },
+          {
+            "key": "GI",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H1",
+            "value": 276.90367962963307
+          },
+          {
+            "key": "H2",
+            "value": 103.30918253911165
+          },
+          {
+            "key": "HI",
+            "value": 372.0729823894323
+          },
+          {
+            "key": "I1",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "I2",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "IW1",
+            "value": 5247.4459915332209
+          },
+          {
+            "key": "IW2",
+            "value": 182.41011268094772
+          },
+          {
+            "key": "J1",
+            "value": 1030.2258184707816
+          },
+          {
+            "key": "J2",
+            "value": 3470.96867
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "K1",
+            "value": 6318.6202630866837
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "K4",
+            "value": 0
+          },
+          {
+            "key": "KF",
+            "value": 150.80471112207351
+          },
+          {
+            "key": "KL",
+            "value": 1.1582327315504162E+6
+          },
+          {
+            "key": "KW",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 2694.4458295273284
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "L3",
+            "value": 115512.24461875804
+          },
+          {
+            "key": "L4",
+            "value": 0
+          },
+          {
+            "key": "LM",
+            "value": 1.0427204869316581E+6
+          },
+          {
+            "key": "LW",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 413.33354580790495
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "M3",
+            "value": 819892.322702977
+          },
+          {
+            "key": "M4",
+            "value": 0
+          },
+          {
+            "key": "MN",
+            "value": 222828.1642286827
+          },
+          {
+            "key": "MW",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 7407.4112151954041
+          },
+          {
+            "key": "N2",
+            "value": 0
+          },
+          {
+            "key": "N3",
+            "value": 211242.22568586672
+          },
+          {
+            "key": "N4",
+            "value": 2.2442882330259204
+          },
+          {
+            "key": "NW",
+            "value": 11585.93854281586
+          }
+        ]
+      },
+      {
+        "stateId": "TR",
+        "exergy": [
+          {
+            "key": "A1",
+            "value": 2.2267606211042809E+6
+          },
+          {
+            "key": "A2",
+            "value": 877.4
+          },
+          {
+            "key": "AB",
+            "value": 2.2267606211042809E+6
+          },
+          {
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 2.1605823272682847E+6
+          },
+          {
+            "key": "B2",
+            "value": 1551.5980110100579
+          },
+          {
+            "key": "B3",
+            "value": 12188.474880560725
+          },
+          {
+            "key": "BABB",
+            "value": 2000
+          },
+          {
+            "key": "BC",
+            "value": 2.1939648382616476E+6
+          },
+          {
+            "key": "BG1",
+            "value": 13311.381548150715
+          },
+          {
+            "key": "BG2",
+            "value": 4488.6755878126523
+          },
+          {
+            "key": "BW",
+            "value": 12188.474880560725
+          },
+          {
+            "key": "C11",
+            "value": 1974.0043708957362
+          },
+          {
+            "key": "C12",
+            "value": 2.7722803870703281
+          },
+          {
+            "key": "C2",
+            "value": 1517.7314774427114
+          },
+          {
+            "key": "CACB",
+            "value": 0
+          },
+          {
+            "key": "CB",
+            "value": 47799.478693726822
+          },
+          {
+            "key": "CD",
+            "value": 2.1538235594358151E+6
+          },
+          {
+            "key": "CI1",
+            "value": 535.8612545524154
+          },
+          {
+            "key": "CI2",
+            "value": 148.08787667122368
+          },
+          {
+            "key": "D1",
+            "value": 4455.1553999217176
+          },
+          {
+            "key": "D2",
+            "value": 407.112808191088
+          },
+          {
+            "key": "D3",
+            "value": 77.961918282329151
+          },
+          {
+            "key": "D4",
+            "value": 2098.9100731338472
+          },
+          {
+            "key": "DC",
+            "value": 7160.8266730179785
+          },
+          {
+            "key": "DE",
+            "value": 2.4691173340979218E+6
+          },
+          {
+            "key": "DW",
+            "value": 2098.9100731338472
+          },
+          {
+            "key": "E1",
+            "value": 23.004962074669844
+          },
+          {
+            "key": "E2",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "EF",
+            "value": 2.4683990510579473E+6
+          },
+          {
+            "key": "EW",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "F1",
+            "value": 1426.10387390689
+          },
+          {
+            "key": "F2",
+            "value": 159.93037774533582
+          },
+          {
+            "key": "F3",
+            "value": 84739.479492522136
+          },
+          {
+            "key": "F4",
+            "value": 1799.1244068958267
+          },
+          {
+            "key": "FD",
+            "value": 321963.73569235782
+          },
+          {
+            "key": "FK",
+            "value": 2.0600749151807781E+6
+          },
+          {
+            "key": "FW",
+            "value": 1799.1244068958267
+          },
+          {
+            "key": "G1",
+            "value": 18.860842352260732
+          },
+          {
+            "key": "GI",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H1",
+            "value": 276.90367962963307
+          },
+          {
+            "key": "H2",
+            "value": 103.30918253911165
+          },
+          {
+            "key": "HI",
+            "value": 372.0729823894323
+          },
+          {
+            "key": "I1",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "I2",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "IW1",
+            "value": 5247.4459915332209
+          },
+          {
+            "key": "IW2",
+            "value": 182.41011268094772
+          },
+          {
+            "key": "J1",
+            "value": 1030.2258184707816
+          },
+          {
+            "key": "J2",
+            "value": 3470.96867
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "K1",
+            "value": 6318.6202630866837
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "K4",
+            "value": 0
+          },
+          {
+            "key": "KF",
+            "value": 168.1202662734604
+          },
+          {
+            "key": "KL",
+            "value": 2.0599067949145047E+6
+          },
+          {
+            "key": "KW",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 2694.4458295273284
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "L3",
+            "value": 124715.47240310164
+          },
+          {
+            "key": "L4",
+            "value": 0
+          },
+          {
+            "key": "LM",
+            "value": 1.9351913225114031E+6
+          },
+          {
+            "key": "LW",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 413.33354580790495
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "M3",
+            "value": 1.6762861099108066E+6
+          },
+          {
+            "key": "M4",
+            "value": 0
+          },
+          {
+            "key": "MN",
+            "value": 258905.21260059933
+          },
+          {
+            "key": "MW",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 7407.4112151954041
+          },
+          {
+            "key": "N2",
+            "value": 0
+          },
+          {
+            "key": "N3",
+            "value": 238302.36026859097
+          },
+          {
+            "key": "N4",
+            "value": 2.2442882330259204
+          },
+          {
+            "key": "NW",
+            "value": 20602.852332008246
+          }
+        ]
+      },
+      {
+        "stateId": "XRC",
+        "exergy": [
+          {
+            "key": "A1",
+            "value": 991038.59668288729
+          },
+          {
+            "key": "A2",
+            "value": 877.4
+          },
+          {
+            "key": "AB",
+            "value": 991038.59668288729
+          },
+          {
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 924860.30284689122
+          },
+          {
+            "key": "B2",
+            "value": 1551.5980110100579
+          },
+          {
+            "key": "B3",
+            "value": 9779.9061677261943
+          },
+          {
+            "key": "BABB",
+            "value": 2000
+          },
+          {
+            "key": "BC",
+            "value": 922473.55742694787
+          },
+          {
+            "key": "BG1",
+            "value": 13311.381548150715
+          },
+          {
+            "key": "BG2",
+            "value": 4488.6755878126523
+          },
+          {
+            "key": "BW",
+            "value": 9779.9061677261943
+          },
+          {
+            "key": "C11",
+            "value": 1974.0043708957362
+          },
+          {
+            "key": "C12",
+            "value": 2.7722803870703281
+          },
+          {
+            "key": "C2",
+            "value": 1517.7314774427114
+          },
+          {
+            "key": "CACB",
+            "value": 0
+          },
+          {
+            "key": "CB",
+            "value": 9621.65356756794
+          },
+          {
+            "key": "CD",
+            "value": 914783.8049209218
+          },
+          {
+            "key": "CI1",
+            "value": 535.8612545524154
+          },
+          {
+            "key": "CI2",
+            "value": 148.08787667122368
+          },
+          {
+            "key": "D1",
+            "value": 4455.1553999217176
+          },
+          {
+            "key": "D2",
+            "value": 407.112808191088
+          },
+          {
+            "key": "D3",
+            "value": 77.961918282329151
+          },
+          {
+            "key": "D4",
+            "value": 2098.9100731338472
+          },
+          {
+            "key": "DC",
+            "value": 1434.367675695828
+          },
+          {
+            "key": "DE",
+            "value": 1.0508086964033362E+6
+          },
+          {
+            "key": "DW",
+            "value": 2098.9100731338472
+          },
+          {
+            "key": "E1",
+            "value": 23.004962074669844
+          },
+          {
+            "key": "E2",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "EF",
+            "value": 1.0500904133633617E+6
+          },
+          {
+            "key": "EW",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "F1",
+            "value": 1426.10387390689
+          },
+          {
+            "key": "F2",
+            "value": 159.93037774533582
+          },
+          {
+            "key": "F3",
+            "value": 11149.502779233071
+          },
+          {
+            "key": "F4",
+            "value": 301.50772059721453
+          },
+          {
+            "key": "FD",
+            "value": 136967.81400183821
+          },
+          {
+            "key": "FK",
+            "value": 901705.48972249322
+          },
+          {
+            "key": "FW",
+            "value": 301.50772059721453
+          },
+          {
+            "key": "G1",
+            "value": 18.860842352260732
+          },
+          {
+            "key": "GI",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H1",
+            "value": 276.90367962963307
+          },
+          {
+            "key": "H2",
+            "value": 103.30918253911165
+          },
+          {
+            "key": "HI",
+            "value": 372.0729823894323
+          },
+          {
+            "key": "I1",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "I2",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "IW1",
+            "value": 5247.4459915332209
+          },
+          {
+            "key": "IW2",
+            "value": 182.41011268094772
+          },
+          {
+            "key": "J1",
+            "value": 1030.2258184707816
+          },
+          {
+            "key": "J2",
+            "value": 3470.96867
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "K1",
+            "value": 6318.6202630866837
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "K4",
+            "value": 0
+          },
+          {
+            "key": "KF",
+            "value": 22.120112072746164
+          },
+          {
+            "key": "KL",
+            "value": 901683.36961042043
+          },
+          {
+            "key": "KW",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 2694.4458295273284
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "L3",
+            "value": 9208.2909102764788
+          },
+          {
+            "key": "L4",
+            "value": 0
+          },
+          {
+            "key": "LM",
+            "value": 892475.078700144
+          },
+          {
+            "key": "LW",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 413.33354580790495
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "M3",
+            "value": 856394.35238017223
+          },
+          {
+            "key": "M4",
+            "value": 0
+          },
+          {
+            "key": "MN",
+            "value": 36080.726319973306
+          },
+          {
+            "key": "MW",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 7407.4112151954041
+          },
+          {
+            "key": "N2",
+            "value": 0
+          },
+          {
+            "key": "N3",
+            "value": 27061.568242547881
+          },
+          {
+            "key": "N4",
+            "value": 2.2442882330259204
+          },
+          {
+            "key": "NW",
+            "value": 9019.1580774254126
+          }
+        ]
+      }
+    ]
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 11,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "B3",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": [
+          {
+            "process": "REDMAT",
+            "value": 0.25
+          },
+          {
+            "process": "OXIMAT",
+            "value": 0.25
+          },
+          {
+            "process": "FR",
+            "value": 0.25
+          },
+          {
+            "process": "ER",
+            "value": 0.25
+          }
+        ]
+      },
+      {
+        "flow": "D4",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "FR",
+          "value": 1
+        }
+      },
+      {
+        "flow": "E2",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "AC",
+          "value": 1
+        }
+      },
+      {
+        "flow": "F4",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "ER",
+          "value": 1
+        }
+      },
+      {
+        "flow": "I2",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": [
+          {
+            "process": "REDMAT",
+            "value": 0.5
+          },
+          {
+            "process": "OXIMAT",
+            "value": 0.5
+          }
+        ]
+      },
+      {
+        "flow": "K4",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "DeCu",
+          "value": 1
+        }
+      },
+      {
+        "flow": "L4",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "AgRe",
+          "value": 1
+        }
+      },
+      {
+        "flow": "M4",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "AuRe",
+          "value": 1
+        }
+      },
+      {
+        "flow": "N4",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "PdRe",
+          "value": 1
+        }
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": [
+      {
+        "sampleId": "Total",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 2.14
+          },
+          {
+            "key": "B2",
+            "value": 6.273684772554291
+          },
+          {
+            "key": "C11",
+            "value": 1.06
+          },
+          {
+            "key": "C12",
+            "value": 1.06
+          },
+          {
+            "key": "C2",
+            "value": 7.2641035459221683
+          },
+          {
+            "key": "D1",
+            "value": 1.04
+          },
+          {
+            "key": "D2",
+            "value": 7.2641035459221683
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 2.14
+          },
+          {
+            "key": "F2",
+            "value": 0.31793682673134294
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 2.14
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 2.14
+          },
+          {
+            "key": "K1",
+            "value": 2.14
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 2.14
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 2.14
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 2.14
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "sampleId": "Min",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 0
+          },
+          {
+            "key": "B2",
+            "value": 0.13164150846698966
+          },
+          {
+            "key": "C11",
+            "value": 0
+          },
+          {
+            "key": "C12",
+            "value": 0
+          },
+          {
+            "key": "C2",
+            "value": 0
+          },
+          {
+            "key": "D1",
+            "value": 0
+          },
+          {
+            "key": "D2",
+            "value": 0
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 0
+          },
+          {
+            "key": "F2",
+            "value": 0
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 0
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 0
+          },
+          {
+            "key": "K1",
+            "value": 0
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 0
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 0
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 0
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "sampleId": "NG",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 0
+          },
+          {
+            "key": "B2",
+            "value": 0.57641124005931232
+          },
+          {
+            "key": "C11",
+            "value": 0
+          },
+          {
+            "key": "C12",
+            "value": 0
+          },
+          {
+            "key": "C2",
+            "value": 0.64917963304019421
+          },
+          {
+            "key": "D1",
+            "value": 1.04
+          },
+          {
+            "key": "D2",
+            "value": 0.64917963304019421
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 0
+          },
+          {
+            "key": "F2",
+            "value": 0.00075797913302774452
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 0
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 0
+          },
+          {
+            "key": "K1",
+            "value": 0
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 0
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 0
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 0
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "sampleId": "OIL",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 0
+          },
+          {
+            "key": "B2",
+            "value": 0.711678762605705
+          },
+          {
+            "key": "C11",
+            "value": 0
+          },
+          {
+            "key": "C12",
+            "value": 0
+          },
+          {
+            "key": "C2",
+            "value": 0.57679800615091836
+          },
+          {
+            "key": "D1",
+            "value": 0
+          },
+          {
+            "key": "D2",
+            "value": 0.57679800615091836
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 0
+          },
+          {
+            "key": "F2",
+            "value": 0.24574768089043419
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 0
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 0
+          },
+          {
+            "key": "K1",
+            "value": 0
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 0
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 0
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 0
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "sampleId": "Coal",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 0
+          },
+          {
+            "key": "B2",
+            "value": 2.7807196508643632
+          },
+          {
+            "key": "C11",
+            "value": 1.06
+          },
+          {
+            "key": "C12",
+            "value": 1.06
+          },
+          {
+            "key": "C2",
+            "value": 3.5886850945687812
+          },
+          {
+            "key": "D1",
+            "value": 0
+          },
+          {
+            "key": "D2",
+            "value": 3.5886850945687812
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 0
+          },
+          {
+            "key": "F2",
+            "value": 1.4876080022717485E-6
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 0
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 0
+          },
+          {
+            "key": "K1",
+            "value": 0
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 0
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 0
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 0
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "sampleId": "NO_REN",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 1.79
+          },
+          {
+            "key": "B2",
+            "value": 1.7341533471489148
+          },
+          {
+            "key": "C11",
+            "value": 0
+          },
+          {
+            "key": "C12",
+            "value": 0
+          },
+          {
+            "key": "C2",
+            "value": 2.0488313335376036
+          },
+          {
+            "key": "D1",
+            "value": 0
+          },
+          {
+            "key": "D2",
+            "value": 2.0488313335376036
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 1.79
+          },
+          {
+            "key": "F2",
+            "value": 0.059747254948029377
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 1.79
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 1.79
+          },
+          {
+            "key": "K1",
+            "value": 1.79
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 1.79
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 1.79
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 1.79
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "sampleId": "REN",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 0.35
+          },
+          {
+            "key": "B2",
+            "value": 0.33908026340900566
+          },
+          {
+            "key": "C11",
+            "value": 0
+          },
+          {
+            "key": "C12",
+            "value": 0
+          },
+          {
+            "key": "C2",
+            "value": 0.40060947862467106
+          },
+          {
+            "key": "D1",
+            "value": 0
+          },
+          {
+            "key": "D2",
+            "value": 0.40060947862467106
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 0.35
+          },
+          {
+            "key": "F2",
+            "value": 0.011682424151849316
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 0.35
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 0.35
+          },
+          {
+            "key": "K1",
+            "value": 0.35
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 0.35
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 0.35
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 0.35
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      }
+    ]
+  }
+}

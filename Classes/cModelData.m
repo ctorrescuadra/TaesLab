@@ -113,12 +113,6 @@ classdef (Sealed) cModelData < cStatusLogger
             res = isfield(obj.dm,cType.DataElements{id});
         end
 
-
-        function setExergyState(obj,idx,val)
-        % Set the exergy values of a state
-            obj.dm.ExergyStates.States(idx).exergy=val;
-        end
-        
         function log=saveAsXML(obj,filename)
         % save data model as XML file
         %  Input:

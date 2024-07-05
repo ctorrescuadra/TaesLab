@@ -416,8 +416,7 @@ classdef ViewResults < matlab.apps.AppBase
                     delete(app)                      
                 case 'Cancel'
                     return
-            end
-            delete(app);            
+            end        
         end
     end
 
