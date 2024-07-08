@@ -81,7 +81,7 @@ function res = WasteAnalysis(data,varargin)
     end
      % Check Waste Key
      if isempty(param.ActiveWaste)
-         param.ActiveWaste=data.getWasteFlows(1);
+         param.ActiveWaste=data.WasteFlows{1};
      end
      wid=wd.getWasteIndex(param.ActiveWaste);
      if isempty(wid)

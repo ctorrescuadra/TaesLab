@@ -5,555 +5,385 @@
       {
         "key": "A1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "PCB Scrap"
       },
       {
         "key": "A2",
         "type": "RESOURCE",
-        "Description": null
-      },
-      {
-        "key": "AB",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Electricity Scarp"
       },
       {
         "key": "AB1",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "PCB Shredder Plastic"
       },
       {
         "key": "AB2",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "PCN Shreader Metal"
       },
       {
         "key": "B2",
         "type": "RESOURCE",
-        "Description": null
-      },
-      {
-        "key": "B3",
-        "type": "WASTE",
-        "Description": null
-      },
-      {
-        "key": "BABB",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Flux RED"
       },
       {
         "key": "BC",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Black Copper"
       },
       {
-        "key": "BG1",
+        "key": "BG",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Heat Gases"
       },
       {
-        "key": "BG2",
+        "key": "B3",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Slag RED"
       },
       {
-        "key": "BW",
-        "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "C11",
+        "key": "C1",
         "type": "RESOURCE",
-        "Description": null
-      },
-      {
-        "key": "C12",
-        "type": "RESOURCE",
-        "Description": null
+        "Description": "Coke - H2"
       },
       {
         "key": "C2",
         "type": "RESOURCE",
-        "Description": null
-      },
-      {
-        "key": "CACB",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Flux OXI"
       },
       {
         "key": "CB",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Slag oxi"
       },
       {
         "key": "CD",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Rough Copper"
       },
       {
-        "key": "CI1",
+        "key": "CI",
         "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "CI2",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Gases OXI"
       },
       {
         "key": "D1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "NG -H2"
       },
       {
         "key": "D2",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Flux FR"
       },
       {
         "key": "D3",
         "type": "RESOURCE",
-        "Description": null
-      },
-      {
-        "key": "D4",
-        "type": "WASTE",
-        "Description": null
+        "Description": "Air"
       },
       {
         "key": "DC",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Slag FR"
       },
       {
         "key": "DE",
         "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "DW",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Anode Copper HT"
       },
       {
         "key": "E1",
         "type": "RESOURCE",
-        "Description": null
-      },
-      {
-        "key": "E2",
-        "type": "WASTE",
-        "Description": null
+        "Description": "Cold Water"
       },
       {
         "key": "EF",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Anode Copper LT"
       },
       {
-        "key": "EW",
+        "key": "E2",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Heat Water"
       },
       {
         "key": "F1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Electricity ER"
       },
       {
         "key": "F2",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Electrolite ER"
       },
       {
         "key": "F3",
         "type": "OUTPUT",
-        "Description": null
-      },
-      {
-        "key": "F4",
-        "type": "WASTE",
-        "Description": null
+        "Description": "Copper Cathode"
       },
       {
         "key": "FD",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Exahusted Anode"
       },
       {
         "key": "FK",
         "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "FW",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Slimes"
       },
       {
         "key": "G1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Air"
       },
       {
         "key": "GI",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Heat Gases"
       },
       {
         "key": "H1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Electricity Pump"
       },
       {
         "key": "H2",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Water"
       },
       {
-        "key": "HI",
-        "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "I1",
+        "key": "H3",
         "type": "OUTPUT",
-        "Description": null
+        "Description": "Steam"
       },
       {
-        "key": "I2",
-        "type": "WASTE",
-        "Description": null
-      },
-      {
-        "key": "IW1",
+        "key": "H4",
         "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "IW2",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Hot Gases"
       },
       {
         "key": "J1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Air"
       },
       {
         "key": "J2",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Electricity ASU"
       },
       {
         "key": "JB",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "O2 Reduction"
       },
       {
         "key": "JC",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "O2 OXI"
       },
       {
         "key": "K1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Electricity DeCu"
       },
       {
         "key": "K2",
         "type": "RESOURCE",
-        "Description": null
-      },
-      {
-        "key": "K4",
-        "type": "WASTE",
-        "Description": null
+        "Description": "Chemical DeCu"
       },
       {
         "key": "KF",
         "type": "INTERNAL",
-        "Description": null
+        "Description": "Cu Sulphate (CuSO4)"
       },
       {
         "key": "KL",
         "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "KW",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Slimes w/o Cu"
       },
       {
         "key": "L1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Electricity DeAg"
       },
       {
         "key": "L2",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Chemical DeAg"
       },
       {
         "key": "L3",
         "type": "OUTPUT",
-        "Description": null
-      },
-      {
-        "key": "L4",
-        "type": "WASTE",
-        "Description": null
+        "Description": "Ag"
       },
       {
         "key": "LM",
         "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "LW",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Slimes w/o Ag"
       },
       {
         "key": "M1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Electricity DeAu"
       },
       {
         "key": "M2",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Chemical DeAu"
       },
       {
         "key": "M3",
         "type": "OUTPUT",
-        "Description": null
-      },
-      {
-        "key": "M4",
-        "type": "WASTE",
-        "Description": null
+        "Description": "Au"
       },
       {
         "key": "MN",
         "type": "INTERNAL",
-        "Description": null
-      },
-      {
-        "key": "MW",
-        "type": "INTERNAL",
-        "Description": null
+        "Description": "Slimes w/o Au"
       },
       {
         "key": "N1",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Electricity Pd"
       },
       {
         "key": "N2",
         "type": "RESOURCE",
-        "Description": null
+        "Description": "Chemical Pd"
       },
       {
         "key": "N3",
         "type": "OUTPUT",
-        "Description": null
+        "Description": "Pd"
       },
       {
-        "key": "N4",
+        "key": "BW",
         "type": "WASTE",
-        "Description": null
+        "Description": "Slag Waste"
       },
       {
-        "key": "NW",
-        "type": "INTERNAL",
-        "Description": null
+        "key": "EW",
+        "type": "WASTE",
+        "Description": "Heat Water"
+      },
+      {
+        "key": "HW",
+        "type": "WASTE",
+        "Description": "Hot Gases Waste"
       }
     ],
     "processes": [
       {
         "key": "SRD",
-        "description": "Shredding",
+        "description": "Shredding (A)",
         "fuel": "A1+A2",
-        "product": "AB",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "SRDSEP",
-        "description": "Shredding separation En-Mat",
-        "fuel": "AB",
         "product": "AB1+AB2",
         "type": "PRODUCTIVE"
       },
       {
-        "key": "REDENE",
-        "description": "Reduction (Energy part)",
-        "fuel": "AB1+JB",
-        "product": "BG1+BABB",
+        "key": "RED",
+        "description": "Reduction (B)",
+        "fuel": "(AB1+JB-BG)+(B2+AB2+CB-B3)",
+        "product": "BC",
         "type": "PRODUCTIVE"
       },
       {
-        "key": "REDMAT",
-        "description": "Reduction (Material part)",
-        "fuel": "B2+AB2+BABB+CB",
-        "product": "BC+BG2+BW",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "SLAGW",
-        "description": "Pyrometallurgical (Waste)",
-        "fuel": "BW",
-        "product": "B3",
-        "type": "DISSIPATIVE"
-      },
-      {
-        "key": "OXIENE",
-        "description": "Oxidation (Energy part)",
-        "fuel": "C11+JC",
-        "product": "CI1+CACB",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "OXIMAT",
-        "description": "Oxidation (Material part)",
-        "fuel": "C12+C2+BC+CACB+DC",
-        "product": "CD+CB+CI2",
+        "key": "OXI",
+        "description": "Oxidation (C )",
+        "fuel": "C2+(C1+JC-CI)+(BC+DC-CB)",
+        "product": "CD",
         "type": "PRODUCTIVE"
       },
       {
         "key": "FR",
-        "description": "Fire Refining",
-        "fuel": "D1+D2+D3+CD+FD",
-        "product": "DE+DC+DW",
+        "description": "Fire Refining (D)",
+        "fuel": "D1+D2+D3+FD+(CD-DC)",
+        "product": "DE",
         "type": "PRODUCTIVE"
-      },
-      {
-        "key": "FRW",
-        "description": "Fire Refining gases waste",
-        "fuel": "DW",
-        "product": "D4",
-        "type": "DISSIPATIVE"
       },
       {
         "key": "AC",
-        "description": "Anode casting",
+        "description": "Anode casting (E )",
         "fuel": "E1+DE",
-        "product": "EF+EW",
+        "product": "EF+E2",
         "type": "PRODUCTIVE"
-      },
-      {
-        "key": "ACW",
-        "description": "Anode casting steam waste",
-        "fuel": "EW",
-        "product": "E2",
-        "type": "DISSIPATIVE"
       },
       {
         "key": "ER",
-        "description": "Electrorefining",
-        "fuel": "F1+F2+EF+KF",
-        "product": "F3+FD+FK+FW",
+        "description": "Electrorefining (F)",
+        "fuel": "F1+F2+KF+(EF-FD-FK)",
+        "product": "F3",
         "type": "PRODUCTIVE"
       },
       {
-        "key": "ERW",
-        "description": "Electrolytes Bleeded",
-        "fuel": "FW",
-        "product": "F4",
-        "type": "DISSIPATIVE"
-      },
-      {
         "key": "AB",
-        "description": "Afterburner",
-        "fuel": "BG1+BG2+G1",
+        "description": "Afterburner (G)",
+        "fuel": "G1+BG",
         "product": "GI",
         "type": "PRODUCTIVE"
       },
       {
-        "key": "PUMP",
-        "description": "Pump",
-        "fuel": "H1+H2",
-        "product": "HI",
-        "type": "PRODUCTIVE"
-      },
-      {
         "key": "HE",
-        "description": "Heat exchanger",
-        "fuel": "GI+CI1+CI2+HI",
-        "product": "I1+IW1+IW2",
+        "description": "Heat exchanger (H)",
+        "fuel": "H1+H2+(GI+CI-H4)",
+        "product": "H3",
         "type": "PRODUCTIVE"
-      },
-      {
-        "key": "HEW",
-        "description": "Heat exchanger waste",
-        "fuel": "IW1+IW2",
-        "product": "I2",
-        "type": "DISSIPATIVE"
       },
       {
         "key": "AIR",
-        "description": "Air separation unit",
+        "description": "Air separation unit (J)",
         "fuel": "J1+J2",
         "product": "JB+JC",
         "type": "PRODUCTIVE"
       },
       {
         "key": "DeCu",
-        "description": "Decoppering",
-        "fuel": "K1+K2+FK",
-        "product": "KL+KF+KW",
+        "description": "Decoppering (K)",
+        "fuel": "K1+K2+(FK-KF)",
+        "product": "KL",
         "type": "PRODUCTIVE"
-      },
-      {
-        "key": "DeCuW",
-        "description": "Decoppering waste",
-        "fuel": "KW",
-        "product": "K4",
-        "type": "DISSIPATIVE"
       },
       {
         "key": "AgRe",
-        "description": "Silver recovery",
-        "fuel": "L1+L2+KL",
-        "product": "LM+L3+LW",
+        "description": "Silver recovery (L)",
+        "fuel": "L1+L2+(KL-LM)",
+        "product": "L3",
         "type": "PRODUCTIVE"
-      },
-      {
-        "key": "AgReW",
-        "description": "Silver recovery waste",
-        "fuel": "LW",
-        "product": "L4",
-        "type": "DISSIPATIVE"
       },
       {
         "key": "AuRe",
-        "description": "Gold recovery",
-        "fuel": "M1+M2+LM",
-        "product": "MN+M3+MW",
+        "description": "Gold recovery (M)",
+        "fuel": "M1+M2+(LM-MN)",
+        "product": "M3",
         "type": "PRODUCTIVE"
-      },
-      {
-        "key": "AuReW",
-        "description": "Gold recovery waste",
-        "fuel": "MW",
-        "product": "M4",
-        "type": "DISSIPATIVE"
       },
       {
         "key": "PdRe",
-        "description": "Palladium recovery",
+        "description": "Palladium recovery (N)",
         "fuel": "N1+N2+MN",
-        "product": "N3+NW",
+        "product": "N3",
         "type": "PRODUCTIVE"
       },
       {
-        "key": "PdReW",
-        "description": "Palladium recovery waste",
-        "fuel": "NW",
-        "product": "N4",
+        "key": "SLGW",
+        "description": "Pyrometallurgical (Waste)",
+        "fuel": "B3",
+        "product": "BW",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "ACSW",
+        "description": "Anode casting steam waste",
+        "fuel": "E2",
+        "product": "EW",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "HEW",
+        "description": "Heat exchanger waste",
+        "fuel": "H4",
+        "product": "HW",
         "type": "DISSIPATIVE"
       }
     ]
@@ -572,10 +402,6 @@
             "value": 877.4
           },
           {
-            "key": "AB",
-            "value": 80173.625871283366
-          },
-          {
             "key": "AB1",
             "value": 66178.293835996054
           },
@@ -592,40 +418,20 @@
             "value": 9494.2509599539044
           },
           {
-            "key": "BABB",
-            "value": 2000
-          },
-          {
             "key": "BC",
             "value": 7366.3682729083293
           },
           {
-            "key": "BG1",
-            "value": 13311.381548150715
+            "key": "BG",
+            "value": 17800.057135963369
           },
           {
-            "key": "BG2",
-            "value": 4488.6755878126523
-          },
-          {
-            "key": "BW",
-            "value": 9494.2509599539044
-          },
-          {
-            "key": "C11",
-            "value": 1974.0043708957362
-          },
-          {
-            "key": "C12",
-            "value": 2.7722803870703281
+            "key": "C1",
+            "value": 1977
           },
           {
             "key": "C2",
             "value": 1517.7314774427114
-          },
-          {
-            "key": "CACB",
-            "value": 0
           },
           {
             "key": "CB",
@@ -636,12 +442,8 @@
             "value": 3525.3527549597461
           },
           {
-            "key": "CI1",
-            "value": 535.8612545524154
-          },
-          {
-            "key": "CI2",
-            "value": 148.08787667122368
+            "key": "CI",
+            "value": 683.94913122363914
           },
           {
             "key": "D1",
@@ -656,20 +458,12 @@
             "value": 77.961918282329151
           },
           {
-            "key": "D4",
-            "value": 2098.9100731338472
-          },
-          {
             "key": "DC",
             "value": 755.21211498339756
           },
           {
             "key": "DE",
             "value": 3642.7012516456193
-          },
-          {
-            "key": "DW",
-            "value": 2098.9100731338472
           },
           {
             "key": "E1",
@@ -684,10 +478,6 @@
             "value": 2924.4182116711308
           },
           {
-            "key": "EW",
-            "value": 232.72425416774288
-          },
-          {
             "key": "F1",
             "value": 1426.10387390689
           },
@@ -700,20 +490,12 @@
             "value": 2421.7633645441506
           },
           {
-            "key": "F4",
-            "value": 123.89102923680198
-          },
-          {
             "key": "FD",
             "value": 381.4396193807645
           },
           {
             "key": "FK",
             "value": 14.110803253484669
-          },
-          {
-            "key": "FW",
-            "value": 123.89102923680198
           },
           {
             "key": "G1",
@@ -732,24 +514,12 @@
             "value": 103.30918253911165
           },
           {
-            "key": "HI",
-            "value": 372.0729823894323
-          },
-          {
-            "key": "I1",
+            "key": "H3",
             "value": 8794.9356028080419
           },
           {
-            "key": "I2",
+            "key": "H4",
             "value": 5429.8561042141682
-          },
-          {
-            "key": "IW1",
-            "value": 5247.4459915332209
-          },
-          {
-            "key": "IW2",
-            "value": 182.41011268094772
           },
           {
             "key": "J1",
@@ -776,20 +546,12 @@
             "value": 0
           },
           {
-            "key": "K4",
-            "value": 0
-          },
-          {
             "key": "KF",
             "value": 4.8045569213592705
           },
           {
             "key": "KL",
             "value": 9.306246332125399
-          },
-          {
-            "key": "KW",
-            "value": 0
           },
           {
             "key": "L1",
@@ -804,16 +566,8 @@
             "value": 5.06312593284361
           },
           {
-            "key": "L4",
-            "value": 0
-          },
-          {
             "key": "LM",
             "value": 4.2431203992817892
-          },
-          {
-            "key": "LW",
-            "value": 0
           },
           {
             "key": "M1",
@@ -828,16 +582,8 @@
             "value": 0.56517234264358829
           },
           {
-            "key": "M4",
-            "value": 0
-          },
-          {
             "key": "MN",
             "value": 3.6779480566382015
-          },
-          {
-            "key": "MW",
-            "value": 0
           },
           {
             "key": "N1",
@@ -852,12 +598,16 @@
             "value": 1.4336598236122811
           },
           {
-            "key": "N4",
-            "value": 2.2442882330259204
+            "key": "BW",
+            "value": 9494.2509599539044
           },
           {
-            "key": "NW",
-            "value": 2.2442882330259204
+            "key": "EW",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "HW",
+            "value": 5429.8561042141682
           }
         ]
       },
@@ -871,10 +621,6 @@
           {
             "key": "A2",
             "value": 877.4
-          },
-          {
-            "key": "AB",
-            "value": 1.3158956502926769E+6
           },
           {
             "key": "AB1",
@@ -893,40 +639,20 @@
             "value": 11902.819672788437
           },
           {
-            "key": "BABB",
-            "value": 2000
-          },
-          {
             "key": "BC",
             "value": 1.278857649107608E+6
           },
           {
-            "key": "BG1",
-            "value": 13311.381548150715
+            "key": "BG",
+            "value": 17800.057135963369
           },
           {
-            "key": "BG2",
-            "value": 4488.6755878126523
-          },
-          {
-            "key": "BW",
-            "value": 11902.819672788437
-          },
-          {
-            "key": "C11",
-            "value": 1974.0043708957362
-          },
-          {
-            "key": "C12",
-            "value": 2.7722803870703281
+            "key": "C1",
+            "value": 1977
           },
           {
             "key": "C2",
             "value": 1517.7314774427114
-          },
-          {
-            "key": "CACB",
-            "value": 0
           },
           {
             "key": "CB",
@@ -937,12 +663,8 @@
             "value": 1.2425651072698529E+6
           },
           {
-            "key": "CI1",
-            "value": 535.8612545524154
-          },
-          {
-            "key": "CI2",
-            "value": 148.08787667122368
+            "key": "CI",
+            "value": 683.94913122363914
           },
           {
             "key": "D1",
@@ -957,20 +679,12 @@
             "value": 77.961918282329151
           },
           {
-            "key": "D4",
-            "value": 2098.9100731338472
-          },
-          {
             "key": "DC",
             "value": 6481.6711123055475
           },
           {
             "key": "DE",
             "value": 1.4219513389462312E+6
-          },
-          {
-            "key": "DW",
-            "value": 2098.9100731338472
           },
           {
             "key": "E1",
@@ -985,10 +699,6 @@
             "value": 1.4212330559062567E+6
           },
           {
-            "key": "EW",
-            "value": 232.72425416774288
-          },
-          {
             "key": "F1",
             "value": 1426.10387390689
           },
@@ -1001,20 +711,12 @@
             "value": 76011.740077833208
           },
           {
-            "key": "F4",
-            "value": 1621.507715535414
-          },
-          {
             "key": "FD",
             "value": 185377.36130990041
           },
           {
             "key": "FK",
             "value": 1.1583835362615383E+6
-          },
-          {
-            "key": "FW",
-            "value": 1621.507715535414
           },
           {
             "key": "G1",
@@ -1033,24 +735,12 @@
             "value": 103.30918253911165
           },
           {
-            "key": "HI",
-            "value": 372.0729823894323
-          },
-          {
-            "key": "I1",
+            "key": "H3",
             "value": 8794.9356028080419
           },
           {
-            "key": "I2",
+            "key": "H4",
             "value": 5429.8561042141682
-          },
-          {
-            "key": "IW1",
-            "value": 5247.4459915332209
-          },
-          {
-            "key": "IW2",
-            "value": 182.41011268094772
           },
           {
             "key": "J1",
@@ -1077,20 +767,12 @@
             "value": 0
           },
           {
-            "key": "K4",
-            "value": 0
-          },
-          {
             "key": "KF",
             "value": 150.80471112207351
           },
           {
             "key": "KL",
             "value": 1.1582327315504162E+6
-          },
-          {
-            "key": "KW",
-            "value": 0
           },
           {
             "key": "L1",
@@ -1105,16 +787,8 @@
             "value": 115512.24461875804
           },
           {
-            "key": "L4",
-            "value": 0
-          },
-          {
             "key": "LM",
             "value": 1.0427204869316581E+6
-          },
-          {
-            "key": "LW",
-            "value": 0
           },
           {
             "key": "M1",
@@ -1129,16 +803,8 @@
             "value": 819892.322702977
           },
           {
-            "key": "M4",
-            "value": 0
-          },
-          {
             "key": "MN",
             "value": 222828.1642286827
-          },
-          {
-            "key": "MW",
-            "value": 0
           },
           {
             "key": "N1",
@@ -1153,12 +819,16 @@
             "value": 211242.22568586672
           },
           {
-            "key": "N4",
-            "value": 2.2442882330259204
+            "key": "BW",
+            "value": 11902.819672788437
           },
           {
-            "key": "NW",
-            "value": 11585.93854281586
+            "key": "EW",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "HW",
+            "value": 5429.8561042141682
           }
         ]
       },
@@ -1172,10 +842,6 @@
           {
             "key": "A2",
             "value": 877.4
-          },
-          {
-            "key": "AB",
-            "value": 2.2267606211042809E+6
           },
           {
             "key": "AB1",
@@ -1194,40 +860,20 @@
             "value": 12188.474880560725
           },
           {
-            "key": "BABB",
-            "value": 2000
-          },
-          {
             "key": "BC",
             "value": 2.1939648382616476E+6
           },
           {
-            "key": "BG1",
-            "value": 13311.381548150715
+            "key": "BG",
+            "value": 17800.057135963369
           },
           {
-            "key": "BG2",
-            "value": 4488.6755878126523
-          },
-          {
-            "key": "BW",
-            "value": 12188.474880560725
-          },
-          {
-            "key": "C11",
-            "value": 1974.0043708957362
-          },
-          {
-            "key": "C12",
-            "value": 2.7722803870703281
+            "key": "C1",
+            "value": 1977
           },
           {
             "key": "C2",
             "value": 1517.7314774427114
-          },
-          {
-            "key": "CACB",
-            "value": 0
           },
           {
             "key": "CB",
@@ -1238,12 +884,8 @@
             "value": 2.1538235594358151E+6
           },
           {
-            "key": "CI1",
-            "value": 535.8612545524154
-          },
-          {
-            "key": "CI2",
-            "value": 148.08787667122368
+            "key": "CI",
+            "value": 683.94913122363914
           },
           {
             "key": "D1",
@@ -1258,20 +900,12 @@
             "value": 77.961918282329151
           },
           {
-            "key": "D4",
-            "value": 2098.9100731338472
-          },
-          {
             "key": "DC",
             "value": 7160.8266730179785
           },
           {
             "key": "DE",
             "value": 2.4691173340979218E+6
-          },
-          {
-            "key": "DW",
-            "value": 2098.9100731338472
           },
           {
             "key": "E1",
@@ -1286,10 +920,6 @@
             "value": 2.4683990510579473E+6
           },
           {
-            "key": "EW",
-            "value": 232.72425416774288
-          },
-          {
             "key": "F1",
             "value": 1426.10387390689
           },
@@ -1302,20 +932,12 @@
             "value": 84739.479492522136
           },
           {
-            "key": "F4",
-            "value": 1799.1244068958267
-          },
-          {
             "key": "FD",
             "value": 321963.73569235782
           },
           {
             "key": "FK",
             "value": 2.0600749151807781E+6
-          },
-          {
-            "key": "FW",
-            "value": 1799.1244068958267
           },
           {
             "key": "G1",
@@ -1334,24 +956,12 @@
             "value": 103.30918253911165
           },
           {
-            "key": "HI",
-            "value": 372.0729823894323
-          },
-          {
-            "key": "I1",
+            "key": "H3",
             "value": 8794.9356028080419
           },
           {
-            "key": "I2",
+            "key": "H4",
             "value": 5429.8561042141682
-          },
-          {
-            "key": "IW1",
-            "value": 5247.4459915332209
-          },
-          {
-            "key": "IW2",
-            "value": 182.41011268094772
           },
           {
             "key": "J1",
@@ -1378,20 +988,12 @@
             "value": 0
           },
           {
-            "key": "K4",
-            "value": 0
-          },
-          {
             "key": "KF",
             "value": 168.1202662734604
           },
           {
             "key": "KL",
             "value": 2.0599067949145047E+6
-          },
-          {
-            "key": "KW",
-            "value": 0
           },
           {
             "key": "L1",
@@ -1406,16 +1008,8 @@
             "value": 124715.47240310164
           },
           {
-            "key": "L4",
-            "value": 0
-          },
-          {
             "key": "LM",
             "value": 1.9351913225114031E+6
-          },
-          {
-            "key": "LW",
-            "value": 0
           },
           {
             "key": "M1",
@@ -1430,16 +1024,8 @@
             "value": 1.6762861099108066E+6
           },
           {
-            "key": "M4",
-            "value": 0
-          },
-          {
             "key": "MN",
             "value": 258905.21260059933
-          },
-          {
-            "key": "MW",
-            "value": 0
           },
           {
             "key": "N1",
@@ -1454,12 +1040,16 @@
             "value": 238302.36026859097
           },
           {
-            "key": "N4",
-            "value": 2.2442882330259204
+            "key": "BW",
+            "value": 12188.474880560725
           },
           {
-            "key": "NW",
-            "value": 20602.852332008246
+            "key": "EW",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "HW",
+            "value": 5429.8561042141682
           }
         ]
       },
@@ -1473,10 +1063,6 @@
           {
             "key": "A2",
             "value": 877.4
-          },
-          {
-            "key": "AB",
-            "value": 991038.59668288729
           },
           {
             "key": "AB1",
@@ -1495,40 +1081,20 @@
             "value": 9779.9061677261943
           },
           {
-            "key": "BABB",
-            "value": 2000
-          },
-          {
             "key": "BC",
             "value": 922473.55742694787
           },
           {
-            "key": "BG1",
-            "value": 13311.381548150715
+            "key": "BG",
+            "value": 17800.057135963369
           },
           {
-            "key": "BG2",
-            "value": 4488.6755878126523
-          },
-          {
-            "key": "BW",
-            "value": 9779.9061677261943
-          },
-          {
-            "key": "C11",
-            "value": 1974.0043708957362
-          },
-          {
-            "key": "C12",
-            "value": 2.7722803870703281
+            "key": "C1",
+            "value": 1977
           },
           {
             "key": "C2",
             "value": 1517.7314774427114
-          },
-          {
-            "key": "CACB",
-            "value": 0
           },
           {
             "key": "CB",
@@ -1539,12 +1105,8 @@
             "value": 914783.8049209218
           },
           {
-            "key": "CI1",
-            "value": 535.8612545524154
-          },
-          {
-            "key": "CI2",
-            "value": 148.08787667122368
+            "key": "CI",
+            "value": 683.94913122363914
           },
           {
             "key": "D1",
@@ -1559,20 +1121,12 @@
             "value": 77.961918282329151
           },
           {
-            "key": "D4",
-            "value": 2098.9100731338472
-          },
-          {
             "key": "DC",
             "value": 1434.367675695828
           },
           {
             "key": "DE",
             "value": 1.0508086964033362E+6
-          },
-          {
-            "key": "DW",
-            "value": 2098.9100731338472
           },
           {
             "key": "E1",
@@ -1587,10 +1141,6 @@
             "value": 1.0500904133633617E+6
           },
           {
-            "key": "EW",
-            "value": 232.72425416774288
-          },
-          {
             "key": "F1",
             "value": 1426.10387390689
           },
@@ -1603,20 +1153,12 @@
             "value": 11149.502779233071
           },
           {
-            "key": "F4",
-            "value": 301.50772059721453
-          },
-          {
             "key": "FD",
             "value": 136967.81400183821
           },
           {
             "key": "FK",
             "value": 901705.48972249322
-          },
-          {
-            "key": "FW",
-            "value": 301.50772059721453
           },
           {
             "key": "G1",
@@ -1635,24 +1177,12 @@
             "value": 103.30918253911165
           },
           {
-            "key": "HI",
-            "value": 372.0729823894323
-          },
-          {
-            "key": "I1",
+            "key": "H3",
             "value": 8794.9356028080419
           },
           {
-            "key": "I2",
+            "key": "H4",
             "value": 5429.8561042141682
-          },
-          {
-            "key": "IW1",
-            "value": 5247.4459915332209
-          },
-          {
-            "key": "IW2",
-            "value": 182.41011268094772
           },
           {
             "key": "J1",
@@ -1679,20 +1209,12 @@
             "value": 0
           },
           {
-            "key": "K4",
-            "value": 0
-          },
-          {
             "key": "KF",
             "value": 22.120112072746164
           },
           {
             "key": "KL",
             "value": 901683.36961042043
-          },
-          {
-            "key": "KW",
-            "value": 0
           },
           {
             "key": "L1",
@@ -1707,16 +1229,8 @@
             "value": 9208.2909102764788
           },
           {
-            "key": "L4",
-            "value": 0
-          },
-          {
             "key": "LM",
             "value": 892475.078700144
-          },
-          {
-            "key": "LW",
-            "value": 0
           },
           {
             "key": "M1",
@@ -1731,16 +1245,8 @@
             "value": 856394.35238017223
           },
           {
-            "key": "M4",
-            "value": 0
-          },
-          {
             "key": "MN",
             "value": 36080.726319973306
-          },
-          {
-            "key": "MW",
-            "value": 0
           },
           {
             "key": "N1",
@@ -1755,12 +1261,16 @@
             "value": 27061.568242547881
           },
           {
-            "key": "N4",
-            "value": 2.2442882330259204
+            "key": "BW",
+            "value": 9779.9061677261943
           },
           {
-            "key": "NW",
-            "value": 9019.1580774254126
+            "key": "EW",
+            "value": 232.72425416774288
+          },
+          {
+            "key": "HW",
+            "value": 5429.8561042141682
           }
         ]
       }
@@ -1809,16 +1319,16 @@
   "WasteDefinition": {
     "wastes": [
       {
-        "flow": "B3",
+        "flow": "BW",
         "type": "MANUAL",
         "recycle": 0,
         "values": [
           {
-            "process": "REDMAT",
+            "process": "RED",
             "value": 0.25
           },
           {
-            "process": "OXIMAT",
+            "process": "OXI",
             "value": 0.25
           },
           {
@@ -1832,16 +1342,7 @@
         ]
       },
       {
-        "flow": "D4",
-        "type": "MANUAL",
-        "recycle": 0,
-        "values": {
-          "process": "FR",
-          "value": 1
-        }
-      },
-      {
-        "flow": "E2",
+        "flow": "EW",
         "type": "MANUAL",
         "recycle": 0,
         "values": {
@@ -1850,64 +1351,19 @@
         }
       },
       {
-        "flow": "F4",
-        "type": "MANUAL",
-        "recycle": 0,
-        "values": {
-          "process": "ER",
-          "value": 1
-        }
-      },
-      {
-        "flow": "I2",
+        "flow": "HW",
         "type": "MANUAL",
         "recycle": 0,
         "values": [
           {
-            "process": "REDMAT",
+            "process": "RED",
             "value": 0.5
           },
           {
-            "process": "OXIMAT",
+            "process": "OXI",
             "value": 0.5
           }
         ]
-      },
-      {
-        "flow": "K4",
-        "type": "MANUAL",
-        "recycle": 0,
-        "values": {
-          "process": "DeCu",
-          "value": 1
-        }
-      },
-      {
-        "flow": "L4",
-        "type": "MANUAL",
-        "recycle": 0,
-        "values": {
-          "process": "AgRe",
-          "value": 1
-        }
-      },
-      {
-        "flow": "M4",
-        "type": "MANUAL",
-        "recycle": 0,
-        "values": {
-          "process": "AuRe",
-          "value": 1
-        }
-      },
-      {
-        "flow": "N4",
-        "type": "MANUAL",
-        "recycle": 0,
-        "values": {
-          "process": "PdRe",
-          "value": 1
-        }
       }
     ]
   },
@@ -1926,14 +1382,10 @@
           },
           {
             "key": "B2",
-            "value": 6.273684772554291
+            "value": 6.1420432640873015
           },
           {
-            "key": "C11",
-            "value": 1.06
-          },
-          {
-            "key": "C12",
+            "key": "C1",
             "value": 1.06
           },
           {
@@ -2019,111 +1471,6 @@
         ]
       },
       {
-        "sampleId": "Min",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 0.13164150846698966
-          },
-          {
-            "key": "C11",
-            "value": 0
-          },
-          {
-            "key": "C12",
-            "value": 0
-          },
-          {
-            "key": "C2",
-            "value": 0
-          },
-          {
-            "key": "D1",
-            "value": 0
-          },
-          {
-            "key": "D2",
-            "value": 0
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 0
-          },
-          {
-            "key": "F2",
-            "value": 0
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 0
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 0
-          },
-          {
-            "key": "K1",
-            "value": 0
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 0
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 0
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 0
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
         "sampleId": "NG",
         "flows": [
           {
@@ -2139,11 +1486,7 @@
             "value": 0.57641124005931232
           },
           {
-            "key": "C11",
-            "value": 0
-          },
-          {
-            "key": "C12",
+            "key": "C1",
             "value": 0
           },
           {
@@ -2244,11 +1587,7 @@
             "value": 0.711678762605705
           },
           {
-            "key": "C11",
-            "value": 0
-          },
-          {
-            "key": "C12",
+            "key": "C1",
             "value": 0
           },
           {
@@ -2349,11 +1688,7 @@
             "value": 2.7807196508643632
           },
           {
-            "key": "C11",
-            "value": 1.06
-          },
-          {
-            "key": "C12",
+            "key": "C1",
             "value": 1.06
           },
           {
@@ -2454,11 +1789,7 @@
             "value": 1.7341533471489148
           },
           {
-            "key": "C11",
-            "value": 0
-          },
-          {
-            "key": "C12",
+            "key": "C1",
             "value": 0
           },
           {
@@ -2559,11 +1890,7 @@
             "value": 0.33908026340900566
           },
           {
-            "key": "C11",
-            "value": 0
-          },
-          {
-            "key": "C12",
+            "key": "C1",
             "value": 0
           },
           {

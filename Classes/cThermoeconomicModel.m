@@ -174,7 +174,7 @@ classdef cThermoeconomicModel < cResultSet
             if data.isWaste
                 obj.wd=data.WasteData;
                 if isempty(param.ActiveWaste)
-                    param.ActiveWaste=data.getWasteFlows(1);
+                    param.ActiveWaste=data.WasteFlows{1};
                 end
                 obj.ActiveWaste=param.ActiveWaste;
             end

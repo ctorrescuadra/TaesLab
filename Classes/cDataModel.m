@@ -7,9 +7,7 @@ classdef cDataModel < cResultSet
 %       log=obj.setExergyData(state,values)
 %       res=obj.getResourceData(sample)
 %       res=obj.existState(state)
-%  
 %       res=obj.existSample(sample)
-%       res=obj.getWasteFlows
 %       res=obj.checkCostTables
 %       res=obj.getTablesDirectory(columns)
 %       res=obj.getTableInfo(name)
@@ -467,7 +465,7 @@ classdef cDataModel < cResultSet
             % Waste Table
             if (obj.NrOfWastes>0) && obj.isWaste
                 wd=obj.WasteData;
-                wnames=obj.getWasteFlows;
+                wnames=obj.WasteFlows;
 				% Waste Definition
 				index=cType.TableDataIndex.WASTEDEF;
                 sheet=cType.TableDataName{index};
