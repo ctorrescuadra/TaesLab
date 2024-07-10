@@ -1,14 +1,18 @@
 classdef cWasteData < cStatusLogger
 % cWasteData gets and validates the waste definition table.
-%   If waste table is not provided, the default waste table from productive
-%   structure is used
+%
 % 	Methods:
-% 		obj=cWasteData(ps,data)
-%		wt=obj.getWasteTable;
-%		res=obj.getWasteFlows;
-%		res=obj.getWasteId(key)
-%		res=obj.existWaste(key)
-%		res=obj.getFlowNr(key)
+% 	  obj=cWasteData(ps,data)
+%	  res=obj.getWasteFlows;
+%	  res=obj.getWasteIndex(key)
+%	  res=obj.existWaste(key)
+%	  res=obj.getValues(key)
+%     res=obj.getType(key)
+%     res=obj.getRecycleRatio(key)
+%	  log=obj.setType(key,val)
+%     log=obj.setValues(key,vals)
+%	  log=obj.setRecycleRatio(key,val)
+%	  log=obj.updateValues(vals)
 %
 	properties (GetAccess=public,SetAccess=private)
         NrOfWastes      % Number of wastes

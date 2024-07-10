@@ -379,8 +379,6 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function updateWasteOperators(obj)
         % Calculate the waste allocation ratios and cost operators.
-        %  Input:
-        %   wt - cWasteTable object
             wt=obj.WasteTable;
             NR=wt.NrOfWastes;
             N=obj.NrOfProcesses;

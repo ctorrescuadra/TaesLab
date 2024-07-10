@@ -293,8 +293,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
             % Fill columns
-            sf=ps.Flows.from;
-            st=ps.Flows.to;
+            sf=[ps.Flows.from];
+            st=[ps.Flows.to];
             data(:,1)=obj.streamKeys(sf);
             data(:,2)=obj.streamKeys(st);
             data(:,3)={ps.Flows.type};
@@ -340,8 +340,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             values=pm.FlowsExergy;
-            sf=pm.ps.Flows.from;
-            st=pm.ps.Flows.to;
+            sf=[pm.ps.Flows.from];
+            st=[pm.ps.Flows.to];
             data=cell(nrows,ncols);
             data(:,1)=obj.streamKeys(sf);
 			data(:,2)=obj.streamKeys(st);

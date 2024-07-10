@@ -226,7 +226,7 @@ classdef cTablesDefinition < cStatusLogger
                     case cType.DirCols.RESULT_NAME
                         data(:,i)=[cType.Results([tI.resultId])];
                     case  cType.DirCols.GRAPH
-                        data(:,i)=arrayfun(@(x) log2str(x), [tI.graph],'UniformOutput',false);
+                        data(:,i)=log2str([tI.graph]);
                     case  cType.DirCols.TYPE
                         data(:,i)=[cType.TypeTables([tI.type])];
                     case cType.DirCols.CODE

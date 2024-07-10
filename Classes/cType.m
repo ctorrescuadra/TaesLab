@@ -407,6 +407,14 @@ classdef cType
 			res=true;
 		end
 
+		function res=getCheckedText(val)
+		% Get 'on'/'off' text depending of a logical val
+			if val
+				res='on';
+			else
+				res='off';
+			end
+		end
 		function tableCode(name)
 		% Get the key code of a table
 			if ~ischar(name)

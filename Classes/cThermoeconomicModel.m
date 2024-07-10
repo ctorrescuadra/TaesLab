@@ -306,6 +306,7 @@ classdef cThermoeconomicModel < cResultSet
         % Set Active Waste
             if obj.checkActiveWaste(value)
                 obj.ActiveWaste=value;
+                obj.printDebugInfo('Set Active Waste to %s',value);
             end
             obj.setRecyclingResults;
         end
@@ -352,6 +353,20 @@ classdef cThermoeconomicModel < cResultSet
             end
         end
 
+        function toggleSummary(obj)
+        % toggle summary status
+            obj.Summary = ~obj.Summary;
+        end
+
+        function toggleRecycling(obj)
+        % toggle recycling status
+            obj.Recycling = ~obj.Recycling;
+        end
+
+        function toggleDebug(obj)
+        % toggle debug variable
+            setDebug(obj,~obj.debug);
+        end
         %%%
         % get cResultInfo object
         function res=productiveStructure(obj)
@@ -1267,6 +1282,10 @@ classdef cThermoeconomicModel < cResultSet
             if ~obj.activeSet
                 return
             end
+            if ~islogical(value)
+                obj.printDebugInfo('Invalid value. Must be true/false');
+                return
+            end
             if ~obj.isSummaryEnable
                 obj.printDebugInfo('Summary Results requires more than one state');
                 return
@@ -1284,6 +1303,11 @@ classdef cThermoeconomicModel < cResultSet
             if ~obj.activeSet
                 return
             end
+            if ~islogical(value)
+                obj.printDebugInfo('Invalid value. Must be true/false');
+                return
+            end
+
             if ~obj.isWaste
                 obj.printDebugInfo('Recycling Analysis requires waste');
                 return

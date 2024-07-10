@@ -145,7 +145,7 @@ classdef TaesTool < cTaesLab
         function activateSummary(app,~,~)
 		% Activate Summary callback
 			val=get(app.sr_checkbox,'value');
-            app.model.Summary=val;
+            app.model.Summary=logical(val);
 
 			if val
                 app.enableResults(cType.ResultId.SUMMARY_RESULTS);
@@ -159,7 +159,7 @@ classdef TaesTool < cTaesLab
         function activateRecycling(app,~,~)
 		% Activate Recycling callback
 			val=get(app.ra_checkbox,'value');
-            app.model.Recycling=val;
+            app.model.Recycling=logical(val);
             if val
                 app.ViewIndexTable(app.model.wasteAnalysis);
             else
@@ -333,11 +333,12 @@ classdef TaesTool < cTaesLab
 
         function setDebug(app,evt,~)
         % Menu Debug callback
-            val=get(evt,'checked');
-            [nv1,app.debug]=toggleState(val);
-            set(evt,'checked',nv1);
+            val=~app.debug;
+            check=cType.getCheckedText(val);
+            app.debug=val;
+            set(evt,'checked',check);
             if isValid(app.model)
-                setDebug(app.model,app.debug);
+                setDebug(app.model,val);
             end
         end
 

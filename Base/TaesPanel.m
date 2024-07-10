@@ -152,7 +152,7 @@ classdef TaesPanel < cTaesLab
         function activateSummary(app,~,~)
 		% Get activate Summary callback
 			val=get(app.sr_checkbox,'value');
-            app.model.Summary=val;
+            app.model.Summary=logical(val);
 			if val
                 app.enableResults(cType.ResultId.SUMMARY_RESULTS);
                 app.ViewIndexTable(app.model.summaryResults);
@@ -165,7 +165,7 @@ classdef TaesPanel < cTaesLab
         function activateRecycling(app,~,~)
 		% Get activate Summary callback
 			val=get(app.ra_checkbox,'value');
-            app.model.Recycling=val;
+            app.model.Recycling=logical(val);
             if val
                 app.ViewIndexTable(app.model.wasteAnalysis);
             else
@@ -308,19 +308,21 @@ classdef TaesPanel < cTaesLab
 
         function setDebug(app,evt,~)
         % Menu Debug callback
-            val=get(evt,'checked');
-            [nv1,app.debug]=toggleState(val);
-            set(evt,'checked',nv1);
+            val=~app.debug;
+            check=cType.getCheckedText(val);
+            app.debug=val;
+            set(evt,'checked',check);
             if isValid(app.model)
-                setDebug(app.model,app.debug);
+                setDebug(app.model,val);
             end
         end
 
         function setConsole(app,src,~)
         % Menu Console callback
-            val=get(src,'checked');
-            [nv1,app.console]=toggleState(val);
-            set(src,'checked',nv1);
+            val=~app.console;
+            check=cType.getCheckedText(val);
+            app.console=val;
+            set(src,'checked',check);
             if app.console
                 set(app.mn_panel,'checked','off');
                 app.panel=false;
@@ -330,9 +332,10 @@ classdef TaesPanel < cTaesLab
 
         function setPanel(app,src,~)
         % Menu Panel callback
-            val=get(src,'checked');
-            [nv1,app.panel]=toggleState(val);
-            set(src,'checked',nv1);
+            val=~app.panel;
+            check=cType.getCheckedText(val);
+            app.panel=val;
+            set(src,'checked',check);
             if app.panel
                 set(app.mn_console,'checked','off');
                 app.console=false;
@@ -387,7 +390,7 @@ classdef TaesPanel < cTaesLab
         % Create Figure Components
 			% Determine the scale depending on screen size
             ss=get(groot,'ScreenSize');
-            xsize=400; ysize=500;
+            xsize=400; ysize=480;
             xpos=ss(3)/2-xsize;
             ypos=(ss(4)-ysize)/2;
             % Create figure
@@ -620,14 +623,14 @@ classdef TaesPanel < cTaesLab
 					'fontname','Verdana','fontsize',9,...
 					'string','Load',....
 					'callback', @(src,evt) app.getFile(src,evt),...
-					'position', [0.06 0.05 0.25 0.06]);
+					'position', [0.06 0.04 0.25 0.06]);
 
 			app.save_buttom = uicontrol (p1,'style', 'pushbutton',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'string','Save',...
 					'callback', @(src,evt) app.saveResult(src,evt),...
-					'position', [0.66 0.05 0.25 0.06]);
+					'position', [0.66 0.04 0.25 0.06]);
             % Make the figure visible
 			set(hf,'visible','on');
             app.fig=hf;
