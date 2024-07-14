@@ -46,7 +46,7 @@ classdef cResultInfo < cResultSet
         %
             % Check parameters
             obj=obj@cResultSet(cType.ClassId.RESULT_INFO);
-            if ~isValidResult(info)
+            if ~isResultId(info)
                 obj.messageLog(cType.ERROR,'Invalid ResultId object');
                 return
             end
@@ -120,6 +120,7 @@ classdef cResultInfo < cResultSet
                 tbl=obj.Tables.(name);
             else
                 res.messageLog(cType.ERROR,'Table name %s does NOT exists',name);
+                return
             end
             res=exportTable(tbl,varargin{:});
         end

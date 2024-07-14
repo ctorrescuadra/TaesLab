@@ -1,7 +1,8 @@
 function res=ShowTable(tbl,varargin)
-%ShowTable - Show, export or save a table object in diferent ways 
-%   A table could be shown in the console, web browser or GUI table depending the 'View' option.
-%   Tables could be also exported or save into file with options 'ExportAs', 'SaveAs'
+%ShowTable - Allows to display, export or save a table object.
+%   Depending on the ' View ' option, a table can be displayed in different ways: 
+%   in the console, in a web browser or in a GUI table.
+%   Tables can be exported or saved to a file with the 'ExportAs' and 'SaveAs' options.
 %
 %   Syntax
 %     ShowTable(tbl,Name,Value)
@@ -30,10 +31,10 @@ function res=ShowTable(tbl,varargin)
 % See also cTable
 %
     log=cStatus();
+    checkModel=@(x) isa(tbl,'cTable');
     % Check input
-    checkTable=@(x) isa(x,'cTable');
     p = inputParser;
-    p.addRequired('tbl',checkTable);
+    p.addRequired('tbl',checkModel);
     p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@isFilename);
@@ -42,6 +43,7 @@ function res=ShowTable(tbl,varargin)
     catch err
         log.printError(err.message);
         log.printError('Usage: ShowTable(tbl,options)');
+        return
     end
     param=p.Results;
     if ~isValid(tbl)

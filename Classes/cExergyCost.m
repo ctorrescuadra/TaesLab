@@ -236,7 +236,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
         end
 
-        function res=getStreamsCost(obj,rsc)
+        function res=getStreamsCost0(obj,rsc)
             czoption=(nargin==2);
             res=struct();
             zero=zeros(1,obj.NrOfStreams);
@@ -265,8 +265,32 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res.c=res.cE+res.cZ;
                 res.C=res.CE+res.CZ;
             end
-        end   
-            
+        end 
+        
+        function res=getStreamsCost(obj,fcost)
+            res=struct();
+            zero=zeros(1,obj.NrOfStreams);
+            res.E=obj.StreamsExergy.E;
+            res.CE=obj.streamCosts(fcost.CE);
+            res.cE=vDivide(res.CE,res.E);
+            if obj.isWaste
+                res.CR=obj.streamCosts(fcost.CR);
+                res.cR=vDivide(res.CR,res.E);
+            else
+                res.CR=zero;
+                res.cR=zero;
+            end
+            if isfield(fcost,'CZ')
+                res.CZ=obj.streamCosts(fcost.CZ);
+                res.cZ=vDivide(res.CZ,res.E);
+                res.C=res.CE+res.CR+res.CZ;
+                res.c=res.cE+res.cR+res.cZ;
+            else
+                res.C=res.CE+res.CR;
+                res.c=res.cE+res.cR;
+            end
+        end
+
         function res = getCostTableFP(obj,ucost)
         % Get the FP Cost Table considering only internal irreversibilities
         % Input:
@@ -472,7 +496,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 obj.messageLog(cType.ERROR,'Model must define waste flows');
                 return
             end
-            if ~isa(wd,'cWasteData') || ~wd.isValid
+            if ~isa(wd,'cWasteData') || ~isValid(wd)
                 obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
                 return
             end
@@ -504,6 +528,17 @@ classdef (Sealed) cExergyCost < cExergyModel
 			    end
 		    end
 		    cp=ke/(eye(N)-tmp);
+        end
+
+        function res=streamCosts(obj,fcost)
+            tbl=obj.ps.AdjacencyMatrix;
+            fstreams=obj.ps.getFuelStreams;
+            pstreams=obj.ps.getProductStreams;
+            res=zeros(1,obj.NrOfStreams);
+            cbe=fcost*tbl.AE;
+            cbs=fcost*tbl.AS';
+            res(fstreams)=cbe(fstreams)-cbs(fstreams);
+            res(pstreams)=cbs(pstreams)-cbe(pstreams);
         end
     end
 end

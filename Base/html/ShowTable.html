@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>ShowTable</title>
+<meta name="generator" content="MATLAB 23.2">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2024-07-14">
+<meta name="DC.source" content="ShowTable.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<pre class="codeinput">
+<span class="keyword">function</span> res=ShowTable(tbl,varargin)
+<span class="comment">%ShowTable - Allows to display, export or save a table object.</span>
+<span class="comment">%   Depending on the ' View ' option, a table can be displayed in different ways:</span>
+<span class="comment">%   in the console, in a web browser or in a GUI table.</span>
+<span class="comment">%   Tables can be exported or saved to a file with the 'ExportAs' and 'SaveAs' options.</span>
+<span class="comment">%</span>
+<span class="comment">%   Syntax</span>
+<span class="comment">%     ShowTable(tbl,Name,Value)</span>
+<span class="comment">%</span>
+<span class="comment">%   Input Argument</span>
+<span class="comment">%     tbl - cTable object</span>
+<span class="comment">%</span>
+<span class="comment">%   Name-Value Arguments</span>
+<span class="comment">%     View: Select the way to show the table</span>
+<span class="comment">%       'CONSOLE' - show in console (default)</span>
+<span class="comment">%       'GUI' - use uitable</span>
+<span class="comment">%       'HTML' - use web browser</span>
+<span class="comment">%     ExportAs: Select the VarMode to output the ResultSet/Table</span>
+<span class="comment">%       'NONE' - return the cTable object (default)</span>
+<span class="comment">%       'CELL' - return the table as cell array</span>
+<span class="comment">%       'STRUCT' - return the table as structured array</span>
+<span class="comment">%       'TABLE' - return a matlab table</span>
+<span class="comment">%     SaveAs: Save the table in an external file.</span>
+<span class="comment">%</span>
+<span class="comment">%   Output Arguments</span>
+<span class="comment">%     res - table object in the format specified in ExportAs</span>
+<span class="comment">%</span>
+<span class="comment">%   Example</span>
+<span class="comment">%     &lt;a href="matlab:open TableInfoDemo.mlx"&gt;Tables Info Demo&lt;/a&gt;</span>
+<span class="comment">%</span>
+<span class="comment">% See also cTable</span>
+<span class="comment">%</span>
+    log=cStatus();
+    checkModel=@(x) isa(tbl,<span class="string">'cTable'</span>);
+    <span class="comment">% Check input</span>
+    p = inputParser;
+    p.addRequired(<span class="string">'tbl'</span>,checkModel);
+    p.addParameter(<span class="string">'View'</span>,cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+	p.addParameter(<span class="string">'ExportAs'</span>,cType.DEFAULT_VARMODE,@cType.checkVarMode);
+	p.addParameter(<span class="string">'SaveAs'</span>,<span class="string">''</span>,@isFilename);
+    <span class="keyword">try</span>
+		p.parse(tbl,varargin{:});
+    <span class="keyword">catch</span> err
+        log.printError(err.message);
+        log.printError(<span class="string">'Usage: ShowTable(tbl,options)'</span>);
+        <span class="keyword">return</span>
+    <span class="keyword">end</span>
+    param=p.Results;
+    <span class="keyword">if</span> ~isValid(tbl)
+        tbl.printLogger;
+        <span class="keyword">return</span>
+    <span class="keyword">end</span>
+    <span class="comment">% Export the table</span>
+    <span class="keyword">if</span> nargout&gt;0
+        option=cType.getVarMode(param.ExportAs);
+        res=exportTable(tbl,option);
+        <span class="keyword">return</span>
+    <span class="keyword">end</span>
+    <span class="comment">% View the table</span>
+    option=cType.getTableView(param.View);
+    tbl.showTable(option);
+    <span class="comment">% Save table</span>
+    <span class="keyword">if</span> ~isempty(param.SaveAs)
+        log=saveTable(tbl,param.SaveAs);
+        printLogger(log)
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre>
+<pre class="codeoutput">ERROR: cStatus. Not enough input arguments.
+ERROR: cStatus. Usage: ShowTable(tbl,options)
+</pre>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023b</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+function res=ShowTable(tbl,varargin)
+%ShowTable - Allows to display, export or save a table object.
+%   Depending on the ' View ' option, a table can be displayed in different ways: 
+%   in the console, in a web browser or in a GUI table.
+%   Tables can be exported or saved to a file with the 'ExportAs' and 'SaveAs' options.
+%
+%   Syntax
+%     ShowTable(tbl,Name,Value)
+%
+%   Input Argument
+%     tbl - cTable object
+%
+%   Name-Value Arguments
+%     View: Select the way to show the table
+%       'CONSOLE' - show in console (default)
+%       'GUI' - use uitable
+%       'HTML' - use web browser
+%     ExportAs: Select the VarMode to output the ResultSet/Table
+%       'NONE' - return the cTable object (default)
+%       'CELL' - return the table as cell array
+%       'STRUCT' - return the table as structured array
+%       'TABLE' - return a matlab table
+%     SaveAs: Save the table in an external file. 
+%   
+%   Output Arguments
+%     res - table object in the format specified in ExportAs
+%
+%   Example
+%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
+% 
+% See also cTable
+%
+    log=cStatus();
+    checkModel=@(x) isa(tbl,'cTable');
+    % Check input
+    p = inputParser;
+    p.addRequired('tbl',checkModel);
+    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
+	p.addParameter('SaveAs','',@isFilename);
+    try
+		p.parse(tbl,varargin{:});
+    catch err
+        log.printError(err.message);
+        log.printError('Usage: ShowTable(tbl,options)');
+        return
+    end
+    param=p.Results;
+    if ~isValid(tbl)
+        tbl.printLogger;
+        return
+    end
+    % Export the table
+    if nargout>0
+        option=cType.getVarMode(param.ExportAs);
+        res=exportTable(tbl,option);
+        return
+    end
+    % View the table
+    option=cType.getTableView(param.View);
+    tbl.showTable(option);
+    % Save table 
+    if ~isempty(param.SaveAs)
+        log=saveTable(tbl,param.SaveAs);
+        printLogger(log)
+    end
+end
+##### SOURCE END #####
+-->
+</body>
+</html>

@@ -1,6 +1,6 @@
 function SaveTable(tbl,filename)
-%SaveTable - Save a result table in diferent format
-%   The available format are: XLSX, CSV, TXT, HTML, LaTeX, JSON, XML and MAT.
+%SaveTable - Save a result table in different formats
+%   The available formats are XLSX, CSV, TXT, HTML, LaTeX, JSON, XML and MAT.
 %   Show a message about the status of the operation
 %   Used as interface of cTable/saveTable
 %
@@ -18,12 +18,16 @@ function SaveTable(tbl,filename)
 %
     log=cStatusLogger(cType.VALID);
     % Check Input parameters
-    if (nargin~=2) || ~isFilename(filename)
+    if (nargin~=2) 
         log.printError('Usage: SaveTable(table,filename)');
         return
     end
-    if ~isa(tbl,'cTable') || ~isValid(tbl)
-        log.printError('Invalid table object. File %s NOT Saved', filename);
+    if ~isValidTable(tbl)
+        log.printError('Invalid table object.');
+        return
+    end
+    if ~isFilename(filename)
+        log.printError('Invalid filename.');
         return
     end
     % Save table

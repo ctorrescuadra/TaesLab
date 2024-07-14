@@ -1,7 +1,7 @@
 classdef cTaesLab < handle
     %cTaesLab Base class of the TaesLab toolbox
     properties(GetAccess=protected,SetAccess=private)
-        objectId
+        objectId    % Unique object Id
     end
 
     methods

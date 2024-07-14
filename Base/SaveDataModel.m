@@ -1,8 +1,8 @@
 function SaveDataModel(arg,filename)
 %SaveDataModel - Saves a copy of the data model into a file 
-%   The available format are: XLSX, CSV, JSON, XML and MAT.
+%   The available formats are: XLSX, CSV, JSON, XML and MAT.
 %   Show a message about the status of the operation
-%   Used as interface of cDataModel/saveDataModel
+%   Used as the interface of cDataModel/saveDataModel
 %   
 %   Syntax
 %     SaveDataModel(arg,filename)
@@ -18,7 +18,7 @@ function SaveDataModel(arg,filename)
 %
     log=cStatusLogger(cType.VALID);
     % Check Input Parameters
-    if (nargin~=2) || ~isFilename(filename)
+    if (nargin~=2)
         log.printError('Usage: SaveDataModel(data,filename)');
         return
     end
@@ -27,11 +27,15 @@ function SaveDataModel(arg,filename)
     elseif isa(arg,'cThermoeconomicModel')
         data=arg.DataModel;
     else
-        log.printError('File NOT saved. It should be a cDataModel or cThermoeconomicModel object');
+        log.printError('File NOT saved. First input must be a cDataModel or cThermoeconomicModel object');
         return
     end
     if ~isValid(arg)
         log.printError('File NOT saved. Invalid data model');
+    end
+    if ~isFilename(filename)
+        log.printError('File NOT saved. Invalid filename.');
+        return
     end
     % Save the data model
     log=saveDataModel(data,filename);

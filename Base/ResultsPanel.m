@@ -1,13 +1,13 @@
 classdef ResultsPanel < cStatus
-%ResultsPanel - Graphic user interface to show the results interactively
-%   The class create a figure panel and show the Index Table of the selected cResultSet
-%   From the Index Table you can select the table or graphic to show.
-%   Table values could be show in the console, in a web browser or in a uitable.
-%   In addition the current ResultSet could be save into a file using File->Save menu option
+%ResultsPanel - Graphical user interface to display the results interactively.
+%   The class creates a panel and displays the table index of the chosen cResultSet.
+%   A table or graph can be selected by clicking on the corresponding table.
+%   In the View menu, you can choose where the tables are shown:  the console, a web browser or a GUI table.
+%   In addition, the current ResultSet can be saved to a file using the menu option File->Save.
 %
 %   Methods:
-%     ResultsPanel - creates the panel
-%     showResults  - show the results table index
+%     ResultsPanel(res) - creates the panel and shows the result
+%     showResults(res)  - shows  another results table index
 %     viewPanel    - show the panel on the top
 %     hidePanel    - hide the panel
 %       
@@ -37,7 +37,7 @@ classdef ResultsPanel < cStatus
         %
             app.createPanel;
             if nargin > 0
-                if isa(res,'cResultSet') && isValid(res)
+                if isResultSet(res)
                     app.showResults(res)
                 else
                     app.printError('Invalid Result');
@@ -49,8 +49,9 @@ classdef ResultsPanel < cStatus
         % Get the table index of the result set and show it in the table panel
         %  Input:
         %   res - cResultSet 
+        %
             % Check Input parameter
-            if ~isa(res,'cResultSet') && res.isValid
+            if ~isResultSet(res)
                 app.printWarning('Invalid result');
                 return
             end
@@ -76,7 +77,8 @@ classdef ResultsPanel < cStatus
             set(app.fig,'Visible','off')
         end
 
-        function setViewOption(app,idx)    
+        function setViewOption(app,idx)
+        % Set the actual view option and update menu
             if idx>0
                 app.tableView=idx;
                 cellfun(@(x) set(x,'Checked','off'),app.mn_view) 

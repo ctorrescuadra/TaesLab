@@ -1,5 +1,5 @@
-function res = log2str(val)
-%log2str - Convert logical values into strings
+function res=log2str(val)
+% Get the string representation of a logical value
 %
 %   Syntax
 %     str = log2str(x)
@@ -8,17 +8,17 @@ function res = log2str(val)
 %     val - logical variable or array
 %
 %   Output Argument
-%     str - true or false string or cell array
+%     res - string or cell array
 %
-    if ~isnumeric(val)
-        res='false';
+    if ~islogical(val) && ~isnumeric(val)
+        res=cType.FALSE;
         return
     end
     if length(val)>1
         res=arrayfun(@(x) log2str(x),val,'UniformOutput',false);
     elseif val
-        res='true';
+        res=cType.TRUE;
     else
-        res='false';
+        res=cType.FALSE;
     end
 end

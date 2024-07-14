@@ -1,9 +1,8 @@
 function res=ProductiveStructure(data,varargin)
-%ProductiveStructure - Gets the information about the productive structure of a plant.
-%   This function obtains the information of the productive structure of
-%   the plant. If 'Show' option is activated it displays the productive
-%   structure tables on console. If 'SaveAs' option is used these tables
-%   are saved in an external file.
+%ProductiveStructure - Gets information about the productive structure of a plant.
+%   This function obtains information on the productive structure of the plant. 
+%   If 'Show' option is activated it displays the productive structure tables on the console.
+%   If 'SaveAs' option is used these tables are saved in an external file.
 %
 %  Syntax
 %    res = ProductiveStructure(data,Name,Value)

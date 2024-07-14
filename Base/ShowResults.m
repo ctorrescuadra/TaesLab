@@ -10,7 +10,7 @@ function res=ShowResults(arg,varargin)
 %   Individual tables could be also exported or save into file with options 'ExportAs', 'SaveAs'
 %
 %   Syntax
-%     ShowResults(arg,Name,Value)
+%     res=ShowResults(arg,Name,Value)
 %   
 %   Input Arguments
 %     arg - cResultSet object
@@ -42,9 +42,8 @@ function res=ShowResults(arg,varargin)
 %
     log=cStatus();
     % Check input
-    checkModel=@(x) isa(x,'cResultSet');
     p = inputParser;
-    p.addRequired('arg',checkModel);
+    p.addRequired('arg',@isResultSet);
     p.addParameter('Table','',@ischar);
     p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
     p.addParameter('Panel',false,@islogical);
@@ -58,9 +57,9 @@ function res=ShowResults(arg,varargin)
         return
     end
     param=p.Results;
-    % If no table is select work with the results set
     option=cType.getTableView(param.View);
     vm=cType.getVarMode(param.ExportAs);
+    % If no table is selected work with the results set
     if isempty(param.Table)
         % Export the results
         if nargout>0

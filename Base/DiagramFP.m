@@ -3,7 +3,7 @@ function res=DiagramFP(data,varargin)
 %	This function gets the adjacency tables of the diagram FP
 %   for one state of the plant. 
 %   These diagrams could be represented grafically using the function
-%   ShowGraph, by external graph software as yEd saving the adjancency
+%   ShowGraph, or by external graph software as yEd saving the adjancency
 %   tables of the graph in xlsx format.
 %  	
 %   Syntax
@@ -31,7 +31,7 @@ function res=DiagramFP(data,varargin)
 %    
 %   See also cDataModel, cExergyCost, cResultInfo
 %
-	res=cStatus(); 
+	res=cStatus();
 	checkModel=@(x) isa(x,'cDataModel');
 	% Check input parameters
 	p = inputParser;

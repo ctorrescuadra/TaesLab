@@ -38,7 +38,7 @@ classdef cWasteData < cStatusLogger
 				obj.messageLog(cType.ERROR,'Invalid waste data');
 				return
 			end
-            if ~isa(ps,'cProductiveStructure') || ~ps.isValid
+            if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
 				obj.messageLog(cType.ERROR,'Invalid productive structure');
 				return
             end

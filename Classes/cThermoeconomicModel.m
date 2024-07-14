@@ -112,8 +112,8 @@ classdef cThermoeconomicModel < cResultSet
         wd                 % cWasteData object
         rsd                % cResourceData object
         rsc                % cResourceCost object
-        fp0                % Actual reference cExergyCost
-        fp1                % Actual operation cModelFRR
+        fp0                % cExergyCost actual reference state
+        fp1                % cExergyCost actual operation state
         debug              % debug info control
         directCost=true    % Direct cost are obtained
         generalCost=false  % General cost are obtained
@@ -128,17 +128,11 @@ classdef cThermoeconomicModel < cResultSet
         %     varargin - optional paramaters (see ThermoeconomicModel)
         %   
             obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
-            if ~isa(data,'cDataModel')
+            if ~isDataModel(data)
                 obj.printError(cType.ERROR,'Invalid data model');
                 return
             end
-            % Check Data Model
             obj.addLogger(data);
-            if ~data.isValid
-                obj.messageLog(cType.ERROR,'Invalid data model. See error log');
-                printLogger(obj);
-                return
-            end
             % Create Results Container.
             obj.results=cModelResults(data);
             obj.DataModel=data;
@@ -446,13 +440,13 @@ classdef cThermoeconomicModel < cResultSet
                 'ResourceSample',obj.ResourceSample,...
                 'CostTables',obj.CostTables,...
                 'DiagnosisMethod',obj.DiagnosisMethod,...
-                'IsResourceCost',log2str(obj.isResourceCost),...
-                'IsDiagnosis',log2str(obj.isDiagnosis),...
-                'IsWaste',log2str(obj.isWaste),...
                 'ActiveWaste',obj.ActiveWaste,...
                 'Summary',log2str(obj.Summary),...
                 'Recycling',log2str(obj.Recycling),...
-                'Debug',log2str(obj.debug));
+                'Debug',log2str(obj.debug),...
+                'IsResourceCost',log2str(obj.isResourceCost),...
+                'IsDiagnosis',log2str(obj.isDiagnosis),...
+                'IsWaste',log2str(obj.isWaste));
             disp(s);
         end
 
@@ -471,12 +465,28 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.DataModel.WasteFlows;
         end
 
+        function res=getStateId(obj,key)
+        % Get the State Id 
+            res=obj.DataModel.ExergyData.getIndex(key);
+        end
+
+        function res=getSampleId(obj,key)
+        % Get the Sample Id
+            res=obj.DataModel.ResourceData.getIndex(key);
+        end
+
+        function res=getWasteId(obj,key)
+        % Get the Waste flow Id
+            res=obj.wd.getWasteIndex(key);
+        end
+    
         function res=isResourceCost(obj)
         % Indicates if resources cost are defined
             res=obj.DataModel.isResourceCost;
         end
 
         function res=isGeneralCost(obj)
+        % Indicates if Generalized cost is activated
             res=obj.isResourceCost && obj.generalCost;
         end
 
@@ -588,12 +598,18 @@ classdef cThermoeconomicModel < cResultSet
         %     fmt - format number (optional)
         %
             tbl=cStatusLogger(cType.VALID);
-            res=getResultInfoTable(obj,name);
-            if ~isValid(res)
-                tbl.addLogger(res);
-                return
+            if strcmp(name,cType.TABLE_INDEX)
+                res=getResultInfo(obj);
+                tbl=res.getTableIndex;
+            else
+                res=getResultInfoTable(obj,name);
+                if isValid(res)
+                    tbl=getTable(res,name,varargin{:});
+                    return
+                else
+                    tbl.addLogger(res);
+                end     
             end
-            tbl=getTable(res,name,varargin{:});
         end
 
         function showResults(obj,name,varargin)
@@ -608,16 +624,16 @@ classdef cThermoeconomicModel < cResultSet
         %       cType.TableView.HTML (default)
         %
             if nargin==1
-                res=obj.resultModelInfo;
+                res=getResultInfo(obj);
                 printResults(res);
                 return
             end
-            res=obj.getResultInfoTable(name);
-            if ~isValid(res)
-                printLogger(res);
-                return
+            tbl=getTable(obj,name);
+            if isValid(tbl)
+                showTable(tbl,varargin{:});
+            else
+                tbl.printLogger;
             end
-            showResults(res,name,varargin{:});
         end
 
         function showGraph(obj,graph,varargin)
@@ -1176,7 +1192,6 @@ classdef cThermoeconomicModel < cResultSet
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
-            obj.setSummaryResults;
         end
 
         function res=checkReferenceState(obj,state)

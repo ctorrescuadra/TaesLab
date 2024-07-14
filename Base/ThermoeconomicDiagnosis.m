@@ -1,10 +1,10 @@
 function res=ThermoeconomicDiagnosis(data,varargin)
 %ThermoeconomicDiagnosis - Compare to states of the plant and make a thermoeconomic diagnosis
-%	This function makes a thermoeconomic diagnosis of the plant comparing two states 
-%   of the plant. Two diferent methods could be used: 'WASTE_EXTERNAL' accounts the increse of
-%   of the cost of wastes, and 'WASTE_INTERNAL' internalised the waste cost to the productive
-%   processes whose generate them. THe data model must have at least to states defined to 
-%   perform the analysis
+%   This function makes a thermoeconomic diagnosis of the plant, comparing two plant states. 
+%   Two different methods could be used to analyze the increase in waste generation: 
+%   'WASTE_EXTERNAL' accounts for the increase in the cost of waste, and
+%   'WASTE_INTERNAL' internalises the waste cost to the productive processes that generate them. 
+%   The data model must have at least two states defined to perform the analysis.
 % 
 %	Syntax
 %	  res = ThermoeconomicDiagnosis(data,Name,Value)

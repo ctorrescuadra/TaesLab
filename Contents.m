@@ -29,13 +29,13 @@
 %
 % Display Results 
 %   ShowTablesDirectory     - Lists the properties of the result tables.
-%   ShowResults             - Displays the results tables of the model.
-%   ShowTable               - Displays and/or saves an individual table.
-%   ShowGraph               - Displays the graph of a results table of the model.
+%   ShowResults             - Displays the model's results tables.
+%   ShowTable               - Displays an individual table.
+%   ShowGraph               - Displays the graph of associated to a results table.
 %   ExportResults           - Exports the results tables in different formats.
 %
 % GUI functions
 %   TaesPanel               - Select parameters for the thermo-economic model.
 %   ResultsPanel            - Interactive results viewer.
-%   ViewResults             - Display the results of the model in a GUI application.
+%   ViewResults             - Displays the model results in a GUI application.
 %

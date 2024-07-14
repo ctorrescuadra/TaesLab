@@ -1,9 +1,6 @@
 function ShowGraph(arg,varargin)
-%ShowGraph - Shows a result table as graph
-%	If a cThermoeconomicModel is used the name of the graph
-%   should be provided. If a cResultInfo is used and the name
-%   of the graph is not provided the default graph is used
-%   Depending on the graph, additional options could be used.
+%ShowGraph - Shows a result table as a graph.
+%	Depending on the graph, additional options could be used.
 %
 %	Syntax 
 %  	  ShowGraph(arg,Name,Value)
@@ -27,7 +24,7 @@ function ShowGraph(arg,varargin)
 % 	See also cGraphResults, cResultSet
 %
     log=cStatus(cType.VALID);
-	if ~(isa(arg,'cResultSet')) || ~isValid(arg)
+	if ~isResultSet(arg)
 		log.printError('Invalid result parameter');
 		return
 	end

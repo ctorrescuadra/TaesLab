@@ -22,7 +22,7 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
         %       tbl - cTable object
 
             obj=obj@cStatusLogger(cType.VALID);
-            if ~isa(tbl,'cTable')
+            if ~isValidTable(tbl)
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
             end

@@ -5,20 +5,20 @@ classdef TaesPanel < cTaesLab
 %    - thermoeconomicState
 %    - thermoeconomicAnalysis
 %    - thermoeconomicDiagnosis
-%	 - wasteAnalysis
+%    - wasteAnalysis
 %   and perform the following operations:
 %    - Save the results in several formats (xlsx, csv, html, txt,..)
 %    - Save variables in the base workspace
 %    - View Result in tables and graphs.
 %
-%   If Panel is active in the View menu  the ResultPanel is activated
-%   then the user can select the table or the graph to show.
-%   If Console is active in the view menu, the results are shown
-%   on the console.
-%   Pressing a toolbar result botton this result is activated, therefore
-%   the results are shown or saved into file.
-%   If the result is selected in the Result Menu is is save in the
-%   workspace, to work with it interactively.
+%   By clicking on a result button on the toolbar, the result is activated. 
+%   The results can then be displayed in the console if the 'Console' option
+%   in the View menu is activated. 
+%   The results can also be saved to a file using the 'Save' option in the File menu.  
+%   If 'Panel' is active in the View menu, the Results Panel is activated, 
+%   and the user can then select the table or graph to be displayed.
+%   If the result is selected in the Result Menu, it is saved in the workspace
+%   to work with it interactively.
 %
 %   Syntax
 %     app=TaesPanel;
@@ -40,13 +40,12 @@ classdef TaesPanel < cTaesLab
         tables_popup    % Select CostTables widget
 		tdm_popup       % Diagnosis method widget
         ra_checkbox     % Recycling Analysis widget
-		sh_checkbox     % Show in console widget
-		gr_checkbox     % Select graphic widget
         sr_checkbox     % Summary Results widget
         mn_save         % Save Result menu
         mn_debug        % Menu Debug
         mn_console      % Console activation menu
         mn_panel        % Panel Activation menu
+        mn_sync         % Sincronize parameters menu
         menu            % Results Menu cell array widgets
         ptb             % Toolbar cell array widgets
     end
@@ -118,6 +117,7 @@ classdef TaesPanel < cTaesLab
                 app.enableResults(cType.ResultId.DATA_MODEL);
                 app.enableResults(cType.ResultId.RESULT_MODEL);
                 set(app.mn_save,'enable','on');
+                set(app.mn_sync,'enable','on');
                 if data.NrOfStates>1
                 	set(app.sr_checkbox,'enable','on');
                 end
@@ -131,6 +131,7 @@ classdef TaesPanel < cTaesLab
                     set(app.tables_popup,'enable','on');
 				end
 				dnames=cType.DiagnosisOptions;
+                set(app.tdm_popup,'enable','on');
                 if tm.isWaste
                     app.wasteFlows=data.WasteFlows;
                     set(app.wf_popup,'enable','on','string',app.wasteFlows);
@@ -186,14 +187,12 @@ classdef TaesPanel < cTaesLab
 			ind=get(app.state_popup,'value');
 			app.model.State=app.stateNames{ind};
             if app.model.isDiagnosis
-				set(app.tdm_popup,'enable','on');
                 pdm=get(app.tdm_popup,'value');
 				if pdm ~= cType.DiagnosisMethod.NONE
                     app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
 				end
 			else
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-				set(app.tdm_popup,'enable','off');
             end
             app.ViewIndexTable(app.model.getResultInfo);
         end
@@ -203,7 +202,6 @@ classdef TaesPanel < cTaesLab
 			ind=get(app.state_popup,'value');
 			app.model.ReferenceState=app.stateNames{ind};
             if app.model.isDiagnosis
-				set(app.tdm_popup,'enable','on');
                 pdm=get(app.tdm_popup,'value');
 				if pdm ~= cType.DiagnosisMethod.NONE
                     app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
@@ -211,7 +209,6 @@ classdef TaesPanel < cTaesLab
 				end
 			else
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-				set(app.tdm_popup,'enable','off');
                 app.ViewIndexTable(app.model.getResultInfo);
             end
 		end
@@ -231,7 +228,7 @@ classdef TaesPanel < cTaesLab
 			if pos==cType.DiagnosisMethod.NONE
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.getResultInfo);
-			else
+            elseif app.model.isDiagnosis
                 app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
 			end
@@ -309,7 +306,7 @@ classdef TaesPanel < cTaesLab
         function setDebug(app,evt,~)
         % Menu Debug callback
             val=~app.debug;
-            check=cType.getCheckedText(val);
+            check=log2str(val);
             app.debug=val;
             set(evt,'checked',check);
             if isValid(app.model)
@@ -320,7 +317,7 @@ classdef TaesPanel < cTaesLab
         function setConsole(app,src,~)
         % Menu Console callback
             val=~app.console;
-            check=cType.getCheckedText(val);
+            check=log2str(val);
             app.console=val;
             set(src,'checked',check);
             if app.console
@@ -333,7 +330,7 @@ classdef TaesPanel < cTaesLab
         function setPanel(app,src,~)
         % Menu Panel callback
             val=~app.panel;
-            check=cType.getCheckedText(val);
+            check=log2str(val);
             app.panel=val;
             set(src,'checked',check);
             if app.panel
@@ -341,6 +338,30 @@ classdef TaesPanel < cTaesLab
                 app.console=false;
             else
                 app.resPanel.hidePanel;
+            end
+        end
+
+        function synchronizeParameters(app,~,~)
+        % Menu Synchronize callback. 
+        %   Synchronize the widgets with thermoeconomic model parameters 
+            tm=app.model;
+            set(app.sr_checkbox,'value',tm.Summary);
+            set(app.ra_checkbox,'value',tm.Recycling);
+            set(app.tables_popup,'value',cType.getCostTables(tm.CostTables));
+            set(app.tdm_popup,'value',cType.getDiagnosisMethod(tm.DiagnosisMethod));
+            set(app.state_popup,'value',app.model.getStateId(tm.State));
+            set(app.rstate_popup,'value',app.model.getStateId(tm.ReferenceState));
+            set(app.sample_popup,'value',app.model.getSampleId(tm.ResourceSample));
+            set(app.wf_popup,'value',app.model.getWasteId(tm.ActiveWaste));
+            if tm.isDiagnosis
+                app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
+            else
+                app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
+            end
+            if tm.Summary
+                app.enableResults(cType.ResultId.SUMMARY_RESULTS);
+            else
+                app.disableResults(cType.ResultId.SUMMARY_RESULTS);
             end
         end
 
@@ -437,6 +458,10 @@ classdef TaesPanel < cTaesLab
             app.mn_panel=uimenu (d,'label','Panel','accelerator','p',...,
                 'enable','on','checked','off',...
                 'callback',@(src,evt) app.setPanel(src,evt));
+            % Synchronize Menu
+            app.mn_sync=uimenu (d,'label','Synchronize','accelerator','z',...,
+            'enable','off','callback',@(src,evt) app.synchronizeParameters(src,evt));
+
             % Results Menu
             app.menu=cell(1,cType.MAX_RESULT_INFO);
             for i=1:cType.MAX_RESULT_INFO-2

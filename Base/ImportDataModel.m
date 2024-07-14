@@ -25,8 +25,7 @@ function obj = ImportDataModel(filename)
     end
     % Load and check the model
 	obj=importMAT(filename);
-	if ~isValid(obj) || ~isa(obj,'cDataModel')
-		printLogger(obj); 
-		obj.printError('Invalid MAT data model file %s',filename);
+	if ~isDataModel(obj)
+		printLogger(obj);
 	end
 end

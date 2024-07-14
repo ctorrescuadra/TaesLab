@@ -9,7 +9,7 @@ function obj = importMAT(filename)
 %       char array | string
 %
 %  	Output Argument
-%   	obj - cTaesLab object
+%   	obj - cStatusLogger object
 %
     obj=cStatusLogger(cType.VALID);
 	% Check input arguments
@@ -31,6 +31,6 @@ function obj = importMAT(filename)
         obj=var;
 		obj.clearLogger;
 	else
-		obj.messageLog(cType.ERROR,'Invalid MAT model file %s',filename);
+		obj.messageLog(cType.ERROR,'Invalid MAT model data file %s',filename);
 	end
 end

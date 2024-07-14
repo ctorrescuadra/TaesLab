@@ -1,6 +1,6 @@
 function res=ExergyAnalysis(data,varargin)
 %ExergyAnalysis - Get the exergy balances for one state of the plant
-%	Given a data model of a plant this function performs an exergy analysis
+%	Given a data model of a plant, this function performs an exergy analysis,
 %   including the exergy balances and the Fuel-Product table.
 % 
 %	Syntax
@@ -10,7 +10,7 @@ function res=ExergyAnalysis(data,varargin)
 %     data - cReadModel object containing the data information
 %    
 %   Name-Value Arguments
-%     State - State name of the exergy data. If not provided first state is used
+%     State - State name of the exergy data. If not provided, first state is used
 %		char array
 %     Show -  Show the results on console.  
 %       true | false (default)

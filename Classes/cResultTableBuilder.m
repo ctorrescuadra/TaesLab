@@ -106,7 +106,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 dcost=mfp.getProcessCost;
                 ducost=mfp.getProcessUnitCost;
                 dfcost=mfp.getFlowsCost;
-                dscost=mfp.getStreamsCost;
+                dscost=mfp.getStreamsCost(dfcost);
                 dcfp=mfp.getCostTableFP(ducost);  
                 dcfpr=mfp.getDirectCostTableFPR(ducost);
                 dict=mfp.getProcessICT;
@@ -127,7 +127,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 gcost=mfp.getProcessCost(cz);
                 gucost=mfp.getProcessUnitCost(cz);
                 gfcost=mfp.getFlowsCost(cz);
-                gscost=mfp.getStreamsCost(cz);   
+                gscost=mfp.getStreamsCost(gfcost);   
                 gcfp=mfp.getGeneralCostTableFPR(cz,gucost);
                 gict=mfp.getProcessICT(cz);
                 gfict=mfp.getFlowsICT(cz);   
@@ -489,7 +489,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         % get a cTableCell with the exergy cost of streams
         %  Input:
         %	id - Table id
-        %   fcost - flows cost structure values
+        %   scost - flows cost structure values
             tp=obj.getCellTableProperties(id);
             rowNames=obj.streamKeys;        
             colNames=obj.getTableHeader(tp);

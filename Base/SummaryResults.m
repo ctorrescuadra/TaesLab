@@ -1,7 +1,7 @@
 function res = SummaryResults(data,varargin)
-%SummaryResults - Get the summary cost results of a plant
-%   This funtion obtains the summary tables comparing the effciency and
-%   cost results for each state defined in the exergy data model.
+%SummaryResults - Gets the summary cost results for a plant.
+%   This function retrieves the summary tables comparing the efficiency
+%   and cost results for each state defined in the exergy data model.
 %
 %   Syntax
 %     res=SummaryResults(data,Name,Value)

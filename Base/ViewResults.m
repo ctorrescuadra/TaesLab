@@ -1,10 +1,8 @@
 classdef ViewResults < matlab.apps.AppBase
-% ViewResults - Matlab app to view cResultSet objects
-%   It lets show the tables and graph of a cResultSet in a
-%   similar way than TaesApp.
-%   In the left pannel, the table could be selected using
-%   a tree widget. On the right panel, the index table, 
-%   the tables and graph are shown using a Tab pannel.
+%ViewResults - Matlab application for displaying cResultSet objects.
+%   Allows to display the tables and graph of a cResultSet in a similar way to TaesApp.
+%   Tables can be selected using the tree widget in the left panel. 
+%   The index table, result tables and graphs are displayed in the right pane.
 %  
 %   Syntax
 %     ViewResults(res)

@@ -19,19 +19,21 @@ classdef cTableIndex < cTable
         %
             % Check input parameters
             obj.status=true;
-            if ~isa(res,'cResultInfo')
+            if ~isa(res,'cResultInfo') || ~isValid(res)
                 obj.messageLog(cType.ERROR,'Invalid input argument')
                 return
             end
             % Get tables of the results and build table
             tnames=res.ListOfTables;
+            descr=cellfun(@(x) res.Tables.(x).Description,tnames,'UniformOutput',false);
+            gtype=cellfun(@(x) res.Tables.(x).GraphType,tnames);
             obj.ColNames={'Key','Description','Graph'};
             obj.RowNames=tnames';
             obj.NrOfCols=numel(obj.ColNames);
             obj.NrOfRows=numel(obj.RowNames);
             obj.Data=cell(obj.NrOfRows,2);
-            obj.Data(:,1)=cellfun(@(x) res.Tables.(x).Description,tnames,'UniformOutput',false);
-            obj.Data(:,2)=cellfun(@(x) log2str(res.Tables.(x).GraphType),tnames,'UniformOutput',false);
+            obj.Data(:,1)=descr;
+            obj.Data(:,2)=log2str(gtype);
             obj.Name=cType.ResultIndex{res.ResultId};
             obj.Description=res.ResultName;
             obj.State='INDEX';

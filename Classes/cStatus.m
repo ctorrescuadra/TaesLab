@@ -3,7 +3,7 @@ classdef cStatus < cTaesLab
 %	It include methods to validate the status of the object,
 % 	Methods:
 %   	obj=cStatus(init_status)
-%   	test=obj.isValid()
+%   	test=obj.isValid
 %   	obj.printMessage(error,text)
 %   	obj.printError(text)
 %   	obj.printWarning(text)
@@ -28,16 +28,31 @@ classdef cStatus < cTaesLab
 		end
 				
 		function test=isValid(obj)
-		% Test is class status is Valid
+		% Test if object is Valid
 			test=(obj.status>cType.ERROR);
         end
 
-		function test=isValidResult(obj)
-		% Test if class is ResultId
+		function test=isResultId(obj)
+		% Test if object is a valid ResultId
 			test=(isa(obj,'cResultId') || isa(obj,'cDataModel') || isa(obj,'cThermoeconomicModel'));
 			test=test && isValid(obj);
 		end
-		
+
+		function test=isDataModel(obj)
+		% Test if object is a valid cDataModel
+			test=isa(obj,'cDataModel') && isValid(obj);
+		end
+
+		function test=isResultSet(obj)
+		% Test if object is a valid cResultSet
+			test=isa(obj,'cResultSet') && isValid(obj);
+		end
+
+		function test=isValidTable(obj)
+		% Test if object is a valid cResultSet
+			test=isa(obj,'cTable') && isValid(obj);
+		end
+
 		function printError(obj,varargin)
 		% Print error message
 		%  Input:

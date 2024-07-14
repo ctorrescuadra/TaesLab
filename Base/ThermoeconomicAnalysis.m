@@ -1,8 +1,10 @@
 function res=ThermoeconomicAnalysis(data,varargin)
 %ThermoeconomicAnalysis gets the termoeconomic analysis of a plant state.
-%   It calculates the exergy cost, Fuel-Product and Irreversibility-Cost tables
-%   If ResourcesCost are defined in the data model, it calculates generalized cost
-%   for the selected 'ResourceSample' if it is required in the 'CostTables' parameter
+%   Calculate the exergy cost, Fuel-Product and Irreversibility-Cost tables.
+%   If the data model has information on resource costs, generalised costs can be calculated, 
+%   otherwise only direct costs can be calculated.
+%   With the option 'CostTables' we choose the type of costs we want to calculate. 
+%   With the option 'ResourceSample' we choose the resource cost sample data.
 %
 %   Syntax
 %     res=ThermoeconomicAnalysis(data,Name,Value)

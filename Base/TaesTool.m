@@ -10,9 +10,9 @@ classdef TaesTool < cTaesLab
 %     - Save the results in several formats (xlsx, csv, html, txt,..)
 %     - Save variables in the base workspace
 %     - View Result in tables and graphs
-%   The application has two panel, the Taess panel where the parametres
-%   of the Thermoeconomic Model are selected, and the results panel, where
-%   the user select the tables and graph to show.
+%   The application has two panels: the Taess panel, where the parameters
+%   of the Thermoeconomic Model are selected, and the results panel, 
+%   where the user selects the tables and graphs to show.
 % 
 %   Syntax
 %     app=TaesTool;
@@ -124,13 +124,14 @@ classdef TaesTool < cTaesLab
                     set(app.tables_popup,'enable','on');
 				end
 				dnames=cType.DiagnosisOptions;
+                set(app.tdm_popup,'enable','on');
 				if tm.isWaste
                     app.wasteFlows=data.WasteFlows;
                     set(app.wf_popup,'enable','on','string',app.wasteFlows);
                     set(app.ra_checkbox,'enable','on');
-					set(app.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
+                    set(app.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
 				else
-					set(app.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
+                    set(app.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
 				end
                 app.ViewIndexTable(tm.getResultInfo)
                 app.model=tm;
@@ -186,14 +187,13 @@ classdef TaesTool < cTaesLab
 			ind=get(app.state_popup,'value');
 			app.model.State=app.stateNames{ind};
             if app.model.isDiagnosis
-				set(app.tdm_popup,'enable','on');
                 pdm=get(app.tdm_popup,'value');
 				if pdm ~= cType.DiagnosisMethod.NONE
                     app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
 				end
 			else
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-				set(app.tdm_popup,'enable','off');
+
             end
             app.ViewIndexTable(app.model.getResultInfo);
         end
@@ -203,15 +203,14 @@ classdef TaesTool < cTaesLab
 			ind=get(app.state_popup,'value');
 			app.model.ReferenceState=app.stateNames{ind};
             if app.model.isDiagnosis
-				set(app.tdm_popup,'enable','on');
-                pdm=get(app.tdm_popup,'value');
+
 				if pdm ~= cType.DiagnosisMethod.NONE
                     app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                     app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
 				end
 			else
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-				set(app.tdm_popup,'enable','off');
+
                 app.ViewIndexTable(app.model.getResultInfo);
             end
 		end
@@ -231,7 +230,7 @@ classdef TaesTool < cTaesLab
 			if pos==cType.DiagnosisMethod.NONE
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.getResultInfo);
-			else
+            elseif app.model.isDiagnosis
                 app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
 			end
@@ -334,7 +333,7 @@ classdef TaesTool < cTaesLab
         function setDebug(app,evt,~)
         % Menu Debug callback
             val=~app.debug;
-            check=cType.getCheckedText(val);
+            check=log2str(val);
             app.debug=val;
             set(evt,'checked',check);
             if isValid(app.model)
@@ -526,11 +525,19 @@ classdef TaesTool < cTaesLab
 
             uicontrol (p1,'style', 'text',...
                    'units', 'normalized',...
+                   'string', 'Table View:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Table View Mode',...
+                   'position', [0.06 0.41 0.36 0.045]);
+
+            uicontrol (p1,'style', 'text',...
+                   'units', 'normalized',...
                    'string', 'Recycling Analysis:',...
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Activate Recycling',...
-                   'position', [0.06 0.41 0.36 0.045]);
+                   'position', [0.06 0.34 0.36 0.045]);
 
             uicontrol (p1,'style', 'text',...
                    'units', 'normalized',...
@@ -538,7 +545,7 @@ classdef TaesTool < cTaesLab
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Summary Results',...
-                   'position', [0.06 0.34 0.36 0.045]);
+                   'position', [0.06 0.27 0.36 0.045]);
 
             uicontrol (p1,'style', 'text',...
                    'units', 'normalized',...
@@ -546,7 +553,7 @@ classdef TaesTool < cTaesLab
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Select Result File',...
-                   'position', [0.06 0.27 0.36 0.045]);
+                   'position', [0.06 0.20 0.36 0.045]);
 
             uicontrol (p1,'style', 'text',...
                    'units', 'normalized',...
@@ -554,7 +561,7 @@ classdef TaesTool < cTaesLab
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
                    'tooltipstring','Table View Mode',...
-                   'position', [0.06 0.20 0.36 0.045]);
+                   'position', [0.06 0.41 0.36 0.045]);
 
 			% object widget
 			app.mfile_text = uicontrol (p1,'style', 'text',...
@@ -602,17 +609,25 @@ classdef TaesTool < cTaesLab
 					'callback', @(src,evt) app.getActiveWaste(src,evt),...
 					'position', [0.44 0.48 0.47 0.045]);
 
+            tvopc=cType.TableViewOptions;
+            app.tv_popup = uicontrol (p1,'style', 'popupmenu',...
+                    'units', 'normalized',...
+                    'string', tvopc(2:end),...
+                    'fontname','Verdana','fontsize',9,...
+                    'callback', @(src,evt) app.getTableView(src,evt),...
+                    'position', [0.44 0.41 0.47 0.045]);
+
             app.ra_checkbox = uicontrol (p1,'style', 'checkbox',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) app.activateRecycling(src,evt),...
-					'position', [0.44 0.405 0.47 0.045]);
+					'position', [0.44 0.335 0.47 0.045]);
 
             app.sr_checkbox = uicontrol (p1,'style', 'checkbox',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) app.activateSummary(src,evt),...
-					'position', [0.44 0.335 0.47 0.045]);
+					'position', [0.44 0.265 0.47 0.045]);
 
             app.outputFileName=[cType.RESULT_FILE,'.xlsx'];
             app.resultFile=[pwd,filesep,app.outputFileName];
@@ -622,14 +637,6 @@ classdef TaesTool < cTaesLab
 					'string',app.outputFileName,...
 					'backgroundcolor',[0.95 1 0.95],...
 					'horizontalalignment', 'left',...
-					'position', [0.44 0.27 0.47 0.045]);
-
-            tvopc=cType.TableViewOptions;
-            app.tv_popup = uicontrol (p1,'style', 'popupmenu',...
-					'units', 'normalized',...
-                    'string', tvopc(2:end),...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) app.getTableView(src,evt),...
 					'position', [0.44 0.20 0.47 0.045]);
 
             app.open_button = uicontrol (p1,'style', 'pushbutton',...

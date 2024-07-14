@@ -70,6 +70,8 @@ classdef cType
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance
 		DEFAULT_NUM_LENGHT=10     % Default number length (use in cTableData)
+        TRUE='on'                 % Logical true text
+        FALSE='off'               % Logical false text                         
 		FUEL='FUEL'               % Fuel type option text
 		PRODUCT='PRODUCT'         % Product type option text
 		FORMAT_ID='%3d'           % Line number format
@@ -406,15 +408,7 @@ classdef cType
 			end
 			res=true;
 		end
-
-		function res=getCheckedText(val)
-		% Get 'on'/'off' text depending of a logical val
-			if val
-				res='on';
-			else
-				res='off';
-			end
-		end
+		
 		function tableCode(name)
 		% Get the key code of a table
 			if ~ischar(name)

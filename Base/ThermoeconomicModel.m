@@ -45,6 +45,7 @@ function model=ThermoeconomicModel(filename,varargin)
     model=cStatus();
     % Check input parameters
     if (nargin<1) || ~isFilename(filename)
+        model.printError('Invalid data model file name');
         model.printError('Usage: model=ThermoeconomicModel(filename,options)');
         return
     end

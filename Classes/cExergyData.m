@@ -25,7 +25,7 @@ classdef cExergyData < cStatusLogger
 				obj.messageLog(cType.ERROR,'Invalid exergy data provided');
 				return
             end
-            if ~isa(ps,'cProductiveStructure') || ~ps.isValid
+            if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
 				obj.messageLog(cType.ERROR,'No Productive Structure provided');
                 return
             end

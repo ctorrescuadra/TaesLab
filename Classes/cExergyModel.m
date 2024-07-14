@@ -33,7 +33,7 @@ classdef cExergyModel < cResultId
 		% Constructor of the exergy container.	
 		% rex - cExergyData object
 			obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_STATE);
-            if ~isa(rex,'cExergyData') || ~rex.isValid
+            if ~isa(rex,'cExergyData') || ~isValid(rex)
 				obj.messageLog(cType.ERROR,'Input parameter is not a valid cExergyData object');
 				return
             end

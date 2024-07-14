@@ -20,7 +20,7 @@ classdef (Sealed) cBuildHTML < cStatusLogger
         %    folder - Folder where the files will be save if tbl is a cTableIndex
         % 
             obj=obj@cStatusLogger(cType.VALID);
-            if ~isa(tbl,'cTable')
+            if ~isValidTable(tbl)
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
             end
