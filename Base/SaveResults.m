@@ -23,7 +23,7 @@ function SaveResults(arg,filename)
         log.printError('Usage: SaveResults(res,filename)');
         return
     end
-    if ~isResultSet(res)
+    if ~isResultSet(arg)
         log.printError('File NOT saved. Invalid Result Set.');
         return
     end

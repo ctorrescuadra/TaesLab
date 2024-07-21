@@ -13,34 +13,9 @@
         "Description": "Electricity Scarp"
       },
       {
-        "key": "AB1",
-        "type": "INTERNAL",
-        "Description": "PCB Shredder Plastic"
-      },
-      {
-        "key": "AB2",
-        "type": "INTERNAL",
-        "Description": "PCN Shreader Metal"
-      },
-      {
         "key": "B2",
         "type": "RESOURCE",
         "Description": "Flux RED"
-      },
-      {
-        "key": "BC",
-        "type": "INTERNAL",
-        "Description": "Black Copper"
-      },
-      {
-        "key": "BG",
-        "type": "INTERNAL",
-        "Description": "Heat Gases"
-      },
-      {
-        "key": "B3",
-        "type": "INTERNAL",
-        "Description": "Slag RED"
       },
       {
         "key": "C1",
@@ -51,21 +26,6 @@
         "key": "C2",
         "type": "RESOURCE",
         "Description": "Flux OXI"
-      },
-      {
-        "key": "CB",
-        "type": "INTERNAL",
-        "Description": "Slag oxi"
-      },
-      {
-        "key": "CD",
-        "type": "INTERNAL",
-        "Description": "Rough Copper"
-      },
-      {
-        "key": "CI",
-        "type": "INTERNAL",
-        "Description": "Gases OXI"
       },
       {
         "key": "D1",
@@ -83,24 +43,9 @@
         "Description": "Air"
       },
       {
-        "key": "DC",
-        "type": "INTERNAL",
-        "Description": "Slag FR"
-      },
-      {
-        "key": "DE",
-        "type": "INTERNAL",
-        "Description": "Anode Copper HT"
-      },
-      {
         "key": "E1",
         "type": "RESOURCE",
         "Description": "Cold Water"
-      },
-      {
-        "key": "EF",
-        "type": "INTERNAL",
-        "Description": "Anode Copper LT"
       },
       {
         "key": "F1",
@@ -113,29 +58,9 @@
         "Description": "Electrolite ER"
       },
       {
-        "key": "Cu",
-        "type": "OUTPUT",
-        "Description": "Copper Cathode"
-      },
-      {
-        "key": "FD",
-        "type": "INTERNAL",
-        "Description": "Exahusted Anode"
-      },
-      {
-        "key": "FK",
-        "type": "INTERNAL",
-        "Description": "Slimes"
-      },
-      {
         "key": "G1",
         "type": "RESOURCE",
         "Description": "Air"
-      },
-      {
-        "key": "GH",
-        "type": "INTERNAL",
-        "Description": "Heat Gases"
       },
       {
         "key": "H1",
@@ -148,16 +73,6 @@
         "Description": "Water"
       },
       {
-        "key": "STM",
-        "type": "OUTPUT",
-        "Description": "Steam"
-      },
-      {
-        "key": "H4",
-        "type": "INTERNAL",
-        "Description": "Hot Gases"
-      },
-      {
         "key": "J1",
         "type": "RESOURCE",
         "Description": "Air"
@@ -166,16 +81,6 @@
         "key": "J2",
         "type": "RESOURCE",
         "Description": "Electricity ASU"
-      },
-      {
-        "key": "JB",
-        "type": "INTERNAL",
-        "Description": "O2 Reduction"
-      },
-      {
-        "key": "JC",
-        "type": "INTERNAL",
-        "Description": "O2 OXI"
       },
       {
         "key": "K1",
@@ -188,16 +93,6 @@
         "Description": "Chemical DeCu"
       },
       {
-        "key": "KF",
-        "type": "INTERNAL",
-        "Description": "Cu Sulphate (CuSO4)"
-      },
-      {
-        "key": "KL",
-        "type": "INTERNAL",
-        "Description": "Slimes w/o Cu"
-      },
-      {
         "key": "L1",
         "type": "RESOURCE",
         "Description": "Electricity DeAg"
@@ -206,16 +101,6 @@
         "key": "L2",
         "type": "RESOURCE",
         "Description": "Chemical DeAg"
-      },
-      {
-        "key": "Ag",
-        "type": "OUTPUT",
-        "Description": "Ag"
-      },
-      {
-        "key": "LM",
-        "type": "INTERNAL",
-        "Description": "Slimes w/o Ag"
       },
       {
         "key": "M1",
@@ -228,16 +113,6 @@
         "Description": "Chemical DeAu"
       },
       {
-        "key": "Au",
-        "type": "OUTPUT",
-        "Description": "Au"
-      },
-      {
-        "key": "MN",
-        "type": "INTERNAL",
-        "Description": "Slimes w/o Au"
-      },
-      {
         "key": "N1",
         "type": "RESOURCE",
         "Description": "Electricity Pd"
@@ -248,9 +123,129 @@
         "Description": "Chemical Pd"
       },
       {
-        "key": "N3",
+        "key": "AB1",
         "type": "INTERNAL",
-        "Description": "Slimes Waste"
+        "Description": "PCB Shredder Plastic"
+      },
+      {
+        "key": "AB2",
+        "type": "INTERNAL",
+        "Description": "PCN Shreader Metal"
+      },
+      {
+        "key": "BC",
+        "type": "INTERNAL",
+        "Description": "Black Copper"
+      },
+      {
+        "key": "BG",
+        "type": "INTERNAL",
+        "Description": "Heat Gases"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL",
+        "Description": "Slag RED"
+      },
+      {
+        "key": "CB",
+        "type": "INTERNAL",
+        "Description": "Slag oxi"
+      },
+      {
+        "key": "CD",
+        "type": "INTERNAL",
+        "Description": "Rough Copper"
+      },
+      {
+        "key": "CI",
+        "type": "INTERNAL",
+        "Description": "Gases OXI"
+      },
+      {
+        "key": "DC",
+        "type": "INTERNAL",
+        "Description": "Slag FR"
+      },
+      {
+        "key": "DE",
+        "type": "INTERNAL",
+        "Description": "Anode Copper HT"
+      },
+      {
+        "key": "EF",
+        "type": "INTERNAL",
+        "Description": "Anode Copper LT"
+      },
+      {
+        "key": "FD",
+        "type": "INTERNAL",
+        "Description": "Exahusted Anode"
+      },
+      {
+        "key": "FK",
+        "type": "INTERNAL",
+        "Description": "Slimes"
+      },
+      {
+        "key": "H4",
+        "type": "INTERNAL",
+        "Description": "Hot Gases"
+      },
+      {
+        "key": "GH",
+        "type": "INTERNAL",
+        "Description": "Heat Gases"
+      },
+      {
+        "key": "JB",
+        "type": "INTERNAL",
+        "Description": "O2 Reduction"
+      },
+      {
+        "key": "JC",
+        "type": "INTERNAL",
+        "Description": "O2 OXI"
+      },
+      {
+        "key": "KF",
+        "type": "INTERNAL",
+        "Description": "Cu Sulphate (CuSO4)"
+      },
+      {
+        "key": "KL",
+        "type": "INTERNAL",
+        "Description": "Slimes w/o Cu"
+      },
+      {
+        "key": "LM",
+        "type": "INTERNAL",
+        "Description": "Slimes w/o Ag"
+      },
+      {
+        "key": "MN",
+        "type": "INTERNAL",
+        "Description": "Slimes w/o Au"
+      },
+      {
+        "key": "STM",
+        "type": "OUTPUT",
+        "Description": "Steam"
+      },
+      {
+        "key": "Cu",
+        "type": "OUTPUT",
+        "Description": "Copper Cathode"
+      },
+      {
+        "key": "Ag",
+        "type": "OUTPUT",
+        "Description": "Ag"
+      },
+      {
+        "key": "Au",
+        "type": "OUTPUT",
+        "Description": "Au"
       },
       {
         "key": "Pd",
@@ -266,11 +261,6 @@
         "key": "HGW",
         "type": "WASTE",
         "Description": "Hot Gases Waste"
-      },
-      {
-        "key": "NW",
-        "type": "WASTE",
-        "Description": "Slimes Waste"
       }
     ],
     "processes": [
@@ -361,7 +351,7 @@
       {
         "key": "PdRe",
         "description": "Palladium recovery (N)",
-        "fuel": "N1+N2+(MN-N3)",
+        "fuel": "N1+N2+MN",
         "product": "Pd",
         "type": "PRODUCTIVE"
       },
@@ -377,13 +367,6 @@
         "description": "Heat exchanger waste",
         "fuel": "H4",
         "product": "HGW",
-        "type": "DISSIPATIVE"
-      },
-      {
-        "key": "SLMW",
-        "description": "Slimes (Waste)",
-        "fuel": "N3",
-        "product": "NW",
         "type": "DISSIPATIVE"
       }
     ]
@@ -402,28 +385,8 @@
             "value": 877.4
           },
           {
-            "key": "AB1",
-            "value": 66178.293835996054
-          },
-          {
-            "key": "AB2",
-            "value": 1.0355662001665032E+6
-          },
-          {
             "key": "B2",
             "value": 1551.5980110100579
-          },
-          {
-            "key": "BC",
-            "value": 1.0543840209539761E+6
-          },
-          {
-            "key": "BG",
-            "value": 17800.057135963369
-          },
-          {
-            "key": "B3",
-            "value": 11207.74280336316
           },
           {
             "key": "C1",
@@ -432,18 +395,6 @@
           {
             "key": "C2",
             "value": 1517.7314774427114
-          },
-          {
-            "key": "CB",
-            "value": 32254.056410631896
-          },
-          {
-            "key": "CD",
-            "value": 1.0274565037477572E+6
-          },
-          {
-            "key": "CI",
-            "value": 683.94913122363914
           },
           {
             "key": "D1",
@@ -458,20 +409,8 @@
             "value": 77.961918282329151
           },
           {
-            "key": "DC",
-            "value": 4829.1007822415077
-          },
-          {
-            "key": "DE",
-            "value": 1.1764773775613287E+6
-          },
-          {
             "key": "E1",
             "value": 23.004962074669844
-          },
-          {
-            "key": "EF",
-            "value": 1.1757590945213542E+6
           },
           {
             "key": "F1",
@@ -482,24 +421,8 @@
             "value": 159.93037774533582
           },
           {
-            "key": "Cu",
-            "value": 54774.774587753811
-          },
-          {
-            "key": "FD",
-            "value": 153359.19264649265
-          },
-          {
-            "key": "FK",
-            "value": 966555.25514036044
-          },
-          {
             "key": "G1",
             "value": 18.860842352260732
-          },
-          {
-            "key": "GH",
-            "value": 17561.899402017785
           },
           {
             "key": "H1",
@@ -510,28 +433,12 @@
             "value": 103.30918253911165
           },
           {
-            "key": "STM",
-            "value": 8794.9356028080419
-          },
-          {
-            "key": "H4",
-            "value": 5429.8561042141682
-          },
-          {
             "key": "J1",
             "value": 1030.2258184707816
           },
           {
             "key": "J2",
             "value": 3470.96867
-          },
-          {
-            "key": "JB",
-            "value": 708.51843060302826
-          },
-          {
-            "key": "JC",
-            "value": 50.027420760144935
           },
           {
             "key": "K1",
@@ -542,28 +449,12 @@
             "value": 0
           },
           {
-            "key": "KF",
-            "value": 108.67125253454107
-          },
-          {
-            "key": "KL",
-            "value": 966446.583887826
-          },
-          {
             "key": "L1",
             "value": 2694.4458295273284
           },
           {
             "key": "L2",
             "value": 0
-          },
-          {
-            "key": "Ag",
-            "value": 73369.473883179162
-          },
-          {
-            "key": "LM",
-            "value": 893077.11000464682
           },
           {
             "key": "M1",
@@ -574,14 +465,6 @@
             "value": 0
           },
           {
-            "key": "Au",
-            "value": 739619.72002188757
-          },
-          {
-            "key": "MN",
-            "value": 153457.38998276048
-          },
-          {
             "key": "N1",
             "value": 7407.4112151954041
           },
@@ -590,8 +473,104 @@
             "value": 0
           },
           {
-            "key": "N3",
-            "value": 9667.6557316041435
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 1.0355662001665032E+6
+          },
+          {
+            "key": "BC",
+            "value": 1.0543840209539761E+6
+          },
+          {
+            "key": "BG",
+            "value": 17800.057135963369
+          },
+          {
+            "key": "B3",
+            "value": 11207.74280336316
+          },
+          {
+            "key": "CB",
+            "value": 32254.056410631896
+          },
+          {
+            "key": "CD",
+            "value": 1.0274565037477572E+6
+          },
+          {
+            "key": "CI",
+            "value": 683.94913122363914
+          },
+          {
+            "key": "DC",
+            "value": 4829.1007822415077
+          },
+          {
+            "key": "DE",
+            "value": 1.1764773775613287E+6
+          },
+          {
+            "key": "EF",
+            "value": 1.1757590945213542E+6
+          },
+          {
+            "key": "FD",
+            "value": 153359.19264649265
+          },
+          {
+            "key": "FK",
+            "value": 966555.25514036044
+          },
+          {
+            "key": "GH",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H4",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "KF",
+            "value": 108.67125253454107
+          },
+          {
+            "key": "KL",
+            "value": 966446.583887826
+          },
+          {
+            "key": "LM",
+            "value": 893077.11000464682
+          },
+          {
+            "key": "MN",
+            "value": 153457.38998276048
+          },
+          {
+            "key": "STM",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "Cu",
+            "value": 54774.774587753811
+          },
+          {
+            "key": "Ag",
+            "value": 73369.473883179162
+          },
+          {
+            "key": "Au",
+            "value": 739619.72002188757
           },
           {
             "key": "Pd",
@@ -604,10 +583,6 @@
           {
             "key": "HGW",
             "value": 5429.8561042141682
-          },
-          {
-            "key": "NW",
-            "value": 9667.6557316041435
           }
         ]
       },
@@ -623,28 +598,8 @@
             "value": 877.4
           },
           {
-            "key": "AB1",
-            "value": 66178.293835996054
-          },
-          {
-            "key": "AB2",
-            "value": 1.4754128962951419E+6
-          },
-          {
             "key": "B2",
             "value": 1551.5980110100579
-          },
-          {
-            "key": "BC",
-            "value": 1.495567133131674E+6
-          },
-          {
-            "key": "BG",
-            "value": 17800.057135963369
-          },
-          {
-            "key": "B3",
-            "value": 11297.732090417421
           },
           {
             "key": "C1",
@@ -653,18 +608,6 @@
           {
             "key": "C2",
             "value": 1517.7314774427114
-          },
-          {
-            "key": "CB",
-            "value": 33680.461746746274
-          },
-          {
-            "key": "CD",
-            "value": 1.4674271573803532E+6
-          },
-          {
-            "key": "CI",
-            "value": 683.94913122363914
           },
           {
             "key": "D1",
@@ -679,20 +622,8 @@
             "value": 77.961918282329151
           },
           {
-            "key": "DC",
-            "value": 5043.0535583315141
-          },
-          {
-            "key": "DE",
-            "value": 1.6821975218184248E+6
-          },
-          {
             "key": "E1",
             "value": 23.004962074669844
-          },
-          {
-            "key": "EF",
-            "value": 1.6814792387784503E+6
           },
           {
             "key": "F1",
@@ -703,24 +634,8 @@
             "value": 159.93037774533582
           },
           {
-            "key": "Cu",
-            "value": 57524.253771586227
-          },
-          {
-            "key": "FD",
-            "value": 219322.45532849868
-          },
-          {
-            "key": "FK",
-            "value": 1.4035120948275938E+6
-          },
-          {
             "key": "G1",
             "value": 18.860842352260732
-          },
-          {
-            "key": "GH",
-            "value": 17561.899402017785
           },
           {
             "key": "H1",
@@ -731,28 +646,12 @@
             "value": 103.30918253911165
           },
           {
-            "key": "STM",
-            "value": 8794.9356028080419
-          },
-          {
-            "key": "H4",
-            "value": 5429.8561042141682
-          },
-          {
             "key": "J1",
             "value": 1030.2258184707816
           },
           {
             "key": "J2",
             "value": 3470.96867
-          },
-          {
-            "key": "JB",
-            "value": 708.51843060302826
-          },
-          {
-            "key": "JC",
-            "value": 50.027420760144935
           },
           {
             "key": "K1",
@@ -763,28 +662,12 @@
             "value": 0
           },
           {
-            "key": "KF",
-            "value": 114.12613107561143
-          },
-          {
-            "key": "KL",
-            "value": 1.4033979686965183E+6
-          },
-          {
             "key": "L1",
             "value": 2694.4458295273284
           },
           {
             "key": "L2",
             "value": 0
-          },
-          {
-            "key": "Ag",
-            "value": 109671.24686031004
-          },
-          {
-            "key": "LM",
-            "value": 1.2937267218362081E+6
           },
           {
             "key": "M1",
@@ -795,14 +678,6 @@
             "value": 0
           },
           {
-            "key": "Au",
-            "value": 1.1268433038404656E+6
-          },
-          {
-            "key": "MN",
-            "value": 166883.41799574438
-          },
-          {
             "key": "N1",
             "value": 7407.4112151954041
           },
@@ -811,8 +686,104 @@
             "value": 0
           },
           {
-            "key": "N3",
-            "value": 14037.22412847646
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 1.4754128962951419E+6
+          },
+          {
+            "key": "BC",
+            "value": 1.495567133131674E+6
+          },
+          {
+            "key": "BG",
+            "value": 17800.057135963369
+          },
+          {
+            "key": "B3",
+            "value": 11297.732090417421
+          },
+          {
+            "key": "CB",
+            "value": 33680.461746746274
+          },
+          {
+            "key": "CD",
+            "value": 1.4674271573803532E+6
+          },
+          {
+            "key": "CI",
+            "value": 683.94913122363914
+          },
+          {
+            "key": "DC",
+            "value": 5043.0535583315141
+          },
+          {
+            "key": "DE",
+            "value": 1.6821975218184248E+6
+          },
+          {
+            "key": "EF",
+            "value": 1.6814792387784503E+6
+          },
+          {
+            "key": "FD",
+            "value": 219322.45532849868
+          },
+          {
+            "key": "FK",
+            "value": 1.4035120948275938E+6
+          },
+          {
+            "key": "GH",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H4",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "KF",
+            "value": 114.12613107561143
+          },
+          {
+            "key": "KL",
+            "value": 1.4033979686965183E+6
+          },
+          {
+            "key": "LM",
+            "value": 1.2937267218362081E+6
+          },
+          {
+            "key": "MN",
+            "value": 166883.41799574438
+          },
+          {
+            "key": "STM",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "Cu",
+            "value": 57524.253771586227
+          },
+          {
+            "key": "Ag",
+            "value": 109671.24686031004
+          },
+          {
+            "key": "Au",
+            "value": 1.1268433038404656E+6
           },
           {
             "key": "Pd",
@@ -825,10 +796,6 @@
           {
             "key": "HGW",
             "value": 5429.8561042141682
-          },
-          {
-            "key": "NW",
-            "value": 14037.22412847646
           }
         ]
       },
@@ -844,28 +811,8 @@
             "value": 877.4
           },
           {
-            "key": "AB1",
-            "value": 66178.293835996054
-          },
-          {
-            "key": "AB2",
-            "value": 1.1622444489267178E+7
-          },
-          {
             "key": "B2",
             "value": 1551.5980110100579
-          },
-          {
-            "key": "BC",
-            "value": 1.1780363468313694E+7
-          },
-          {
-            "key": "BG",
-            "value": 17800.057135963369
-          },
-          {
-            "key": "B3",
-            "value": 20574.297529313444
           },
           {
             "key": "C1",
@@ -874,18 +821,6 @@
           {
             "key": "C2",
             "value": 1517.7314774427114
-          },
-          {
-            "key": "CB",
-            "value": 180721.76939569783
-          },
-          {
-            "key": "CD",
-            "value": 1.1627236936898174E+7
-          },
-          {
-            "key": "CI",
-            "value": 683.94913122363914
           },
           {
             "key": "D1",
@@ -900,20 +835,8 @@
             "value": 77.961918282329151
           },
           {
-            "key": "DC",
-            "value": 27098.422516145965
-          },
-          {
-            "key": "DE",
-            "value": 1.3340608730729658E+7
-          },
-          {
             "key": "E1",
             "value": 23.004962074669844
-          },
-          {
-            "key": "EF",
-            "value": 1.3339890447689682E+7
           },
           {
             "key": "F1",
@@ -924,24 +847,8 @@
             "value": 159.93037774533582
           },
           {
-            "key": "Cu",
-            "value": 340954.91987214651
-          },
-          {
-            "key": "FD",
-            "value": 1.7399787161293542E+6
-          },
-          {
-            "key": "FK",
-            "value": 1.1252624109377664E+7
-          },
-          {
             "key": "G1",
             "value": 18.860842352260732
-          },
-          {
-            "key": "GH",
-            "value": 17561.899402017785
           },
           {
             "key": "H1",
@@ -952,28 +859,12 @@
             "value": 103.30918253911165
           },
           {
-            "key": "STM",
-            "value": 8794.9356028080419
-          },
-          {
-            "key": "H4",
-            "value": 5429.8561042141682
-          },
-          {
             "key": "J1",
             "value": 1030.2258184707816
           },
           {
             "key": "J2",
             "value": 3470.96867
-          },
-          {
-            "key": "JB",
-            "value": 708.51843060302826
-          },
-          {
-            "key": "JC",
-            "value": 50.027420760144935
           },
           {
             "key": "K1",
@@ -984,28 +875,12 @@
             "value": 0
           },
           {
-            "key": "KF",
-            "value": 676.44348466189513
-          },
-          {
-            "key": "KL",
-            "value": 1.1251947665893001E+7
-          },
-          {
             "key": "L1",
             "value": 2694.4458295273284
           },
           {
             "key": "L2",
             "value": 0
-          },
-          {
-            "key": "Ag",
-            "value": 40547.826601146866
-          },
-          {
-            "key": "LM",
-            "value": 1.1211399839291852E+7
           },
           {
             "key": "M1",
@@ -1016,14 +891,6 @@
             "value": 0
           },
           {
-            "key": "Au",
-            "value": 1.21715030240391E+6
-          },
-          {
-            "key": "MN",
-            "value": 9.9942495368879456E+6
-          },
-          {
             "key": "N1",
             "value": 7407.4112151954041
           },
@@ -1032,8 +899,104 @@
             "value": 0
           },
           {
-            "key": "N3",
-            "value": 112528.34427398071
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 1.1622444489267178E+7
+          },
+          {
+            "key": "BC",
+            "value": 1.1780363468313694E+7
+          },
+          {
+            "key": "BG",
+            "value": 17800.057135963369
+          },
+          {
+            "key": "B3",
+            "value": 20574.297529313444
+          },
+          {
+            "key": "CB",
+            "value": 180721.76939569783
+          },
+          {
+            "key": "CD",
+            "value": 1.1627236936898174E+7
+          },
+          {
+            "key": "CI",
+            "value": 683.94913122363914
+          },
+          {
+            "key": "DC",
+            "value": 27098.422516145965
+          },
+          {
+            "key": "DE",
+            "value": 1.3340608730729658E+7
+          },
+          {
+            "key": "EF",
+            "value": 1.3339890447689682E+7
+          },
+          {
+            "key": "FD",
+            "value": 1.7399787161293542E+6
+          },
+          {
+            "key": "FK",
+            "value": 1.1252624109377664E+7
+          },
+          {
+            "key": "GH",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H4",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "KF",
+            "value": 676.44348466189513
+          },
+          {
+            "key": "KL",
+            "value": 1.1251947665893001E+7
+          },
+          {
+            "key": "LM",
+            "value": 1.1211399839291852E+7
+          },
+          {
+            "key": "MN",
+            "value": 9.9942495368879456E+6
+          },
+          {
+            "key": "STM",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "Cu",
+            "value": 340954.91987214651
+          },
+          {
+            "key": "Ag",
+            "value": 40547.826601146866
+          },
+          {
+            "key": "Au",
+            "value": 1.21715030240391E+6
           },
           {
             "key": "Pd",
@@ -1046,10 +1009,6 @@
           {
             "key": "HGW",
             "value": 5429.8561042141682
-          },
-          {
-            "key": "NW",
-            "value": 112528.34427398071
           }
         ]
       }
@@ -1134,20 +1093,213 @@
             "value": 0.1
           }
         ]
-      },
-      {
-        "flow": "NW",
-        "type": "MANUAL",
-        "recycle": 0,
-        "values": {
-          "process": "SRD",
-          "value": 1
-        }
       }
     ]
   },
   "ResourcesCost": {
     "Samples": [
+      {
+        "sampleId": "NR",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "B2",
+            "value": 2.028452698038981
+          },
+          {
+            "key": "C1",
+            "value": 1.06
+          },
+          {
+            "key": "C2",
+            "value": 2.1802428963132168
+          },
+          {
+            "key": "D1",
+            "value": 1.04
+          },
+          {
+            "key": "D2",
+            "value": 2.1802428963132168
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "F2",
+            "value": 0.065549636930934907
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "K1",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "sampleId": "REN",
+        "flows": [
+          {
+            "key": "A1",
+            "value": 0
+          },
+          {
+            "key": "A2",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "B2",
+            "value": 0.094574780857150875
+          },
+          {
+            "key": "C1",
+            "value": 0
+          },
+          {
+            "key": "C2",
+            "value": 0.10168240521263457
+          },
+          {
+            "key": "D1",
+            "value": 0
+          },
+          {
+            "key": "D2",
+            "value": 0.10168240521263457
+          },
+          {
+            "key": "D3",
+            "value": 0
+          },
+          {
+            "key": "E1",
+            "value": 0
+          },
+          {
+            "key": "F1",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "F2",
+            "value": 0.0020405027327704507
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "H1",
+            "value": 0
+          },
+          {
+            "key": "H2",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "J1",
+            "value": 0
+          },
+          {
+            "key": "J2",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "K1",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "K2",
+            "value": 0
+          },
+          {
+            "key": "L1",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "L2",
+            "value": 0
+          },
+          {
+            "key": "M1",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "M2",
+            "value": 0
+          },
+          {
+            "key": "N1",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "N2",
+            "value": 0
+          }
+        ]
+      },
       {
         "sampleId": "Total",
         "flows": [
@@ -1161,7 +1313,7 @@
           },
           {
             "key": "B2",
-            "value": 6.2120115428054374
+            "value": 2.1230274788961321
           },
           {
             "key": "C1",
@@ -1169,7 +1321,7 @@
           },
           {
             "key": "C2",
-            "value": 7.3371315261967922
+            "value": 2.2819253015258512
           },
           {
             "key": "D1",
@@ -1177,7 +1329,7 @@
           },
           {
             "key": "D2",
-            "value": 7.3371315261967922
+            "value": 2.2819253015258512
           },
           {
             "key": "D3",
@@ -1193,7 +1345,7 @@
           },
           {
             "key": "F2",
-            "value": 0.31581198224320628
+            "value": 0.067590139663705362
           },
           {
             "key": "G1",
@@ -1242,814 +1394,6 @@
           {
             "key": "N1",
             "value": 2.0763406463263792
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "sampleId": "Min",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 0.13164150846698966
-          },
-          {
-            "key": "C1",
-            "value": 0
-          },
-          {
-            "key": "C2",
-            "value": 0.1458923816596899
-          },
-          {
-            "key": "D1",
-            "value": 0
-          },
-          {
-            "key": "D2",
-            "value": 0.1458923816596899
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 0
-          },
-          {
-            "key": "F2",
-            "value": 0
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 0
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 0
-          },
-          {
-            "key": "K1",
-            "value": 0
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 0
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 0
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 0
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "sampleId": "NG",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 0.57641124005931232
-          },
-          {
-            "key": "C1",
-            "value": 0
-          },
-          {
-            "key": "C2",
-            "value": 0.64917963304019421
-          },
-          {
-            "key": "D1",
-            "value": 1.04
-          },
-          {
-            "key": "D2",
-            "value": 0.64917963304019421
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 0
-          },
-          {
-            "key": "F2",
-            "value": 0.00075797913302774452
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 0
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 0
-          },
-          {
-            "key": "K1",
-            "value": 0
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 0
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 0
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 0
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "sampleId": "OIL",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 0.711678762605705
-          },
-          {
-            "key": "C1",
-            "value": 0
-          },
-          {
-            "key": "C2",
-            "value": 0.57679800615091836
-          },
-          {
-            "key": "D1",
-            "value": 0
-          },
-          {
-            "key": "D2",
-            "value": 0.57679800615091836
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 0
-          },
-          {
-            "key": "F2",
-            "value": 0.24574768089043419
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 0
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 0
-          },
-          {
-            "key": "K1",
-            "value": 0
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 0
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 0
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 0
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "sampleId": "Coal",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 2.7807196508643632
-          },
-          {
-            "key": "C1",
-            "value": 1.06
-          },
-          {
-            "key": "C2",
-            "value": 3.5886850945687812
-          },
-          {
-            "key": "D1",
-            "value": 0
-          },
-          {
-            "key": "D2",
-            "value": 3.5886850945687812
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 0
-          },
-          {
-            "key": "F2",
-            "value": 1.4876080022717485E-6
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 0
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 0
-          },
-          {
-            "key": "K1",
-            "value": 0
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 0
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 0
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 0
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "sampleId": "NR_Elec",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 1.7907016392155253
-          },
-          {
-            "key": "B2",
-            "value": 1.7348330957489673
-          },
-          {
-            "key": "C1",
-            "value": 0
-          },
-          {
-            "key": "C2",
-            "value": 2.0496344287385013
-          },
-          {
-            "key": "D1",
-            "value": 0
-          },
-          {
-            "key": "D2",
-            "value": 2.0496344287385013
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 1.7907016392155253
-          },
-          {
-            "key": "F2",
-            "value": 0.05977067451065033
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 1.7907016392155253
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 1.7907016392155253
-          },
-          {
-            "key": "K1",
-            "value": 1.7907016392155253
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 1.7907016392155253
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 1.7907016392155253
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 1.7907016392155253
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "sampleId": "NR_H2",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 0
-          },
-          {
-            "key": "C1",
-            "value": 0
-          },
-          {
-            "key": "C2",
-            "value": 0
-          },
-          {
-            "key": "D1",
-            "value": 0
-          },
-          {
-            "key": "D2",
-            "value": 0
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 0
-          },
-          {
-            "key": "F2",
-            "value": 0
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 0
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 0
-          },
-          {
-            "key": "K1",
-            "value": 0
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 0
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 0
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 0
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "sampleId": "R_Elec",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 0.28563900711085366
-          },
-          {
-            "key": "B2",
-            "value": 0.2767272850601003
-          },
-          {
-            "key": "C1",
-            "value": 0
-          },
-          {
-            "key": "C2",
-            "value": 0.326941982038708
-          },
-          {
-            "key": "D1",
-            "value": 0
-          },
-          {
-            "key": "D2",
-            "value": 0.326941982038708
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 0.28563900711085366
-          },
-          {
-            "key": "F2",
-            "value": 0.0095341601010917043
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 0.28563900711085366
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 0.28563900711085366
-          },
-          {
-            "key": "K1",
-            "value": 0.28563900711085366
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 0.28563900711085366
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 0.28563900711085366
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 0.28563900711085366
-          },
-          {
-            "key": "N2",
-            "value": 0
-          }
-        ]
-      },
-      {
-        "sampleId": "R_H2",
-        "flows": [
-          {
-            "key": "A1",
-            "value": 0
-          },
-          {
-            "key": "A2",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 0
-          },
-          {
-            "key": "C1",
-            "value": 0
-          },
-          {
-            "key": "C2",
-            "value": 0
-          },
-          {
-            "key": "D1",
-            "value": 0
-          },
-          {
-            "key": "D2",
-            "value": 0
-          },
-          {
-            "key": "D3",
-            "value": 0
-          },
-          {
-            "key": "E1",
-            "value": 0
-          },
-          {
-            "key": "F1",
-            "value": 0
-          },
-          {
-            "key": "F2",
-            "value": 0
-          },
-          {
-            "key": "G1",
-            "value": 0
-          },
-          {
-            "key": "H1",
-            "value": 0
-          },
-          {
-            "key": "H2",
-            "value": 0
-          },
-          {
-            "key": "J1",
-            "value": 0
-          },
-          {
-            "key": "J2",
-            "value": 0
-          },
-          {
-            "key": "K1",
-            "value": 0
-          },
-          {
-            "key": "K2",
-            "value": 0
-          },
-          {
-            "key": "L1",
-            "value": 0
-          },
-          {
-            "key": "L2",
-            "value": 0
-          },
-          {
-            "key": "M1",
-            "value": 0
-          },
-          {
-            "key": "M2",
-            "value": 0
-          },
-          {
-            "key": "N1",
-            "value": 0
           },
           {
             "key": "N2",

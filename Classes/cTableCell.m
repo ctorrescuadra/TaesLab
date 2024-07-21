@@ -180,6 +180,23 @@ classdef (Sealed) cTableCell < cTableResult
             end	
             fprintf(fId,'\n');
         end
+
+        function res=getColumnValues(obj,key)
+        % Get the values of a specfic column identified by 'FieldName'
+            res=[];
+            [~,idx]=ismember(key,obj.FieldNames);
+            if ~idx
+                return
+            end
+            tmp=obj.Values(2:end,idx)';
+            cf=getColumnFormat(obj);
+            switch cf(idx)
+            case cType.ColumnFormat.CHAR
+                res=tmp;
+            case cType.ColumnFormat.NUMERIC
+                res=cell2mat(tmp);
+            end
+        end
     end
     methods(Static)
         function tbl=create(data,rowNames,colNames,param)
