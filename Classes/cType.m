@@ -118,6 +118,7 @@ classdef cType
         RESULT_FILE='ModelResults';
 		SUMMARY_FILE='SummaryResults';
 		DIAGRAM_FILE='Diagram';
+        TABLE_FILE='table'
 		% Format config file
 		CFGFILE='printformat.json';
 		% Table Names and keys
@@ -185,6 +186,8 @@ classdef cType
 		% Type of columns for uitables
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
+        % TaesApp Tab Panels
+        Panels=struct('WELCOME',1,'INDEX',2,'TABLES',3,'GRAPHS',4,'LOG',5);
         % File Extensions
 		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7,'LaTeX',8);
 		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html','LaTeX','.tex');

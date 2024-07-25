@@ -240,7 +240,7 @@ classdef (Abstract) cTable < cStatusLogger
                         log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
             end
             if isValid(log)
-                log.messageLog(cType.INFO,'File %s has been saved',filename);
+                log.messageLog(cType.INFO,'Table %s has been saved in file %s',obj.Name, filename);
             end
         end
     
@@ -265,14 +265,14 @@ classdef (Abstract) cTable < cStatusLogger
             data=obj.Values;
             if isOctave
                 xls=xlsopen(filename,1);
-                [xls,status]=oct2xls(data,xls);
+                [xls,status]=oct2xls(data,xls,obj.Name);
                 xls=xlsclose(xls);
                 if ~status || isempty(xls)
                     log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
                 end
             else 
                 try
-                    writecell(data,filename);      
+                    writecell(data,filename,'Sheet',obj.Name);      
                 catch err
                     log.messageLog(cType.ERROR,err.message);
                     log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);

@@ -188,7 +188,7 @@ classdef (Sealed) cTableCell < cTableResult
             if ~idx
                 return
             end
-            tmp=obj.Values(2:end,idx)';
+            tmp=obj.Values(2:end,idx);
             cf=getColumnFormat(obj);
             switch cf(idx)
             case cType.ColumnFormat.CHAR

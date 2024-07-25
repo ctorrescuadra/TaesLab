@@ -26,8 +26,12 @@ classdef ViewResults < matlab.apps.AppBase
         GraphsTab         matlab.ui.container.Tab
         UIAxes            matlab.ui.control.UIAxes
         Tree              matlab.ui.container.Tree
-        ContextMenu       matlab.ui.container.ContextMenu
-        OpenAsFigureMenu  matlab.ui.container.Menu
+        ContextMenu1      matlab.ui.container.ContextMenu
+        OpenAsFigMenu     matlab.ui.container.Menu
+        ContextMenu2      matlab.ui.container.ContextMenu
+        SaveResultsMenu   matlab.ui.container.Menu
+        ContextMenu3      matlab.ui.container.ContextMenu
+        SaveTableMenu     matlab.ui.container.Menu
     end
    
     properties (Access = private)
@@ -35,6 +39,8 @@ classdef ViewResults < matlab.apps.AppBase
         Colorbar         % Colorbar
         ExpandedNode=[]  % Current Node
         TableIndex       % Table Index
+        CurrentTable     % Current Table
+        ResultInfo       % Result Info
     end
     
     methods (Access = private)
@@ -335,6 +341,7 @@ classdef ViewResults < matlab.apps.AppBase
             app.State=state;
             app.ViewIndexTable(mt);
             app.TabGroup.SelectedTab=app.IndexTab;
+            app.ResultInfo=mt;
         end
 
         % Selection changed function: Tree
@@ -351,6 +358,7 @@ classdef ViewResults < matlab.apps.AppBase
                 app.LogField.Text=logtext;
                 app.ViewTable(tbl);               
                 app.TabGroup.SelectedTab=app.TablesTab;
+                app.CurrentTable=tbl;
                 if tbl.isGraph
                     app.ViewGraph(tbl,resultNode.NodeData.Info);
                     app.ExpandedNode=resultNode;
@@ -388,6 +396,7 @@ classdef ViewResults < matlab.apps.AppBase
             idx=indices(1);
             tbl=app.TableIndex.Content{idx};
             app.ViewTable(tbl);
+            app.CurrentTable=tbl;
             if tbl.isGraph
                 app.ViewGraph(tbl,app.TableIndex.Info);
             else
@@ -401,10 +410,56 @@ classdef ViewResults < matlab.apps.AppBase
         end
 
         % Callback function: ContextMenu, OpenAsFigureMenu
-        function OpenAsFigureMenuSelected(app, ~)
+        function OpenAsFig(app, ~)
             newfigure = figure;
             copyobj(app.UIAxes, newfigure);
         end
+
+        % Callback function:  SaveResultsMenu
+        function SaveResults(app, ~)
+            % Save the model results
+            app.UIFigure.WindowStyle="normal";
+            default_file=strcat(cType.RESULT_FILE,cType.FileExt.XLSX);
+	        [file,path,ext]=uiputfile(cType.SAVE_RESULTS,'Select File',default_file);
+            app.UIFigure.WindowStyle="alwaysontop";
+            if ext % File has been selected
+                cd(path)
+                log=saveResults(app.ResultInfo,file);
+                if isvalid(log)
+                    logtext=sprintf(' INFO: Results Available in file %s',file);
+                else
+                    logtext=sprintf(' WARNING: Results have NOT saved. See Log');
+                end
+	        else
+		        logtext=sprintf(' WARNING: Results are NOT Available');
+            end
+            app.LogField.Text=logtext;
+        end
+
+        % Menu selected function: SaveTableMenu
+        function SaveTable(app, ~)
+            % Save the model results
+            logtext=sprintf(' WARNING: Table is NOT available');
+            if ~isempty(app.CurrentTable)
+                app.UIFigure.WindowStyle="normal";
+                default_file=strcat(cType.TABLE_FILE,cType.FileExt.XLSX);
+			    [file,path,ext]=uiputfile(cType.SAVE_TABLES,'Select File',default_file);
+                app.UIFigure.WindowStyle="alwaysontop";
+                if ext % File has been selected
+                    cd(path)
+                    log=saveTable(app.CurrentTable,file);
+                    if isvalid(log)
+                        logtext=sprintf(' INFO: Table saved in file %s',file);
+                    else
+                        logtext=sprintf(' WARNING: Table is NOT saved. See Log');
+                    end
+                else
+                    logtext=sprintf(' WARNING: Table is NOT saved');
+                end
+            end
+            app.LogField.Text=logtext;
+        end
+
 
         % Close request function: UIFigure
         function CloseApp(app, ~)
@@ -506,18 +561,38 @@ classdef ViewResults < matlab.apps.AppBase
             app.LogField.Layout.Column = [1 2];
             app.LogField.Text = '';
 
-            % Create ContextMenu
-            app.ContextMenu = uicontextmenu(app.UIFigure);
-            app.ContextMenu.ContextMenuOpeningFcn = createCallbackFcn(app, @OpenAsFigureMenuSelected, true);
+   	        % Create ContextMenu1
+            app.ContextMenu1 = uicontextmenu(app.UIFigure);
 
-            % Create OpenAsFigureMenu
-            app.OpenAsFigureMenu = uimenu(app.ContextMenu);
-            app.OpenAsFigureMenu.MenuSelectedFcn = createCallbackFcn(app, @OpenAsFigureMenuSelected, true);
-            app.OpenAsFigureMenu.Accelerator = 'F';
-            app.OpenAsFigureMenu.Text = 'Open As Figure';
+            % Create OpenAsFigMenu
+            app.OpenAsFigMenu = uimenu(app.ContextMenu1);
+            app.OpenAsFigMenu.MenuSelectedFcn = createCallbackFcn(app, @OpenAsFig, true);
+            app.OpenAsFigMenu.Text = 'Open As Fig';
             
-            % Assign app.ContextMenu
-            app.UIAxes.ContextMenu = app.ContextMenu;
+            % Assign app.ContextMenu1
+            app.GraphsTab.ContextMenu = app.ContextMenu1;
+     
+            % Create ContextMenu2
+            app.ContextMenu2 = uicontextmenu(app.UIFigure);
+
+            % Create SaveInWorkspaceMenu
+            app.SaveResultsMenu = uimenu(app.ContextMenu2);
+            app.SaveResultsMenu.MenuSelectedFcn = createCallbackFcn(app, @SaveResults, true);
+            app.SaveResultsMenu.Text = 'Save Results';
+            
+            % Assign app.ContextMenu2
+            app.Tree.ContextMenu = app.ContextMenu2;
+
+            % Create ContextMenu3
+            app.ContextMenu3 = uicontextmenu(app.UIFigure);
+
+            % Create SaveTableContextMenu
+            app.SaveTableMenu = uimenu(app.ContextMenu3);
+            app.SaveTableMenu.MenuSelectedFcn = createCallbackFcn(app, @SaveTable, true);
+            app.SaveTableMenu.Text = 'Save Table';
+            
+            % Assign app.ContextMenu3
+            app.TablesTab.ContextMenu = app.ContextMenu3;
 
             % Show the figure after all components are created
             app.UIFigure.Visible = 'on';

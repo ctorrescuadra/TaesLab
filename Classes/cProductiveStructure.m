@@ -4,12 +4,18 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 %   	res=obj.WasteData
 %   	res=obj.isModelIO
 %   	res=obj.FlowProcessEdges
+%		res=obj.FlowStreamEdges
 %   	res=obj.IncidenceMatrix
 %       res=obj.StructuralMatrix
 %       res=obj.ProductiveMatrix;
-%   	res=obj.getConfigInfo;
-%		id=obj.getProcessId(key)
-%		id=obj.getFlowId(key)
+%		res=obj.FlowProcessMatrix;
+%		res=obj.getProcessId(key)
+%		res=obj.getFlowId(key)
+%		res=obj.getFlowTypes(type)
+%       res=obj.getProcessTypes(type)
+%		res=obj.getStreamTypes(type)
+%       res=obj.getProductStreams;
+%		res=obj.getFuelStreams;
 % See also cReadProductiveModel
 %
 	properties (GetAccess=public, SetAccess=private)
@@ -186,7 +192,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
         % Get a structure array with the processes edges of the flows
             res=[];
             if obj.isValid
-			    fse=FlowStreamEdges;
+			    fse=obj.FlowStreamEdges;
 			    res.from=[obj.Streams(fse.from).process];
                 res.to=[obj.Streams(fse.to).process];
             end
