@@ -18,7 +18,10 @@ classdef ResultsPanel < cStatus
         tname           % Table label
         table_control   % uitable component
         tableIndex      % cTableIndex of the results
+        currentTable    % Sslected table
         mn_view         % Table View menu
+        mn_rsave        % Save Results menu
+        mn_tsave        % Save Table menu
     end
     properties(GetAccess=public,SetAccess=private)
         resultInfo      % Result Info object
@@ -60,8 +63,10 @@ classdef ResultsPanel < cStatus
             data=[tbl.RowNames', tbl.Data];
             set(app.tname,'string',tbl.Description)
             set(app.table_control,'Data',data);
+            set(app.mn_tsave,'enable','off');
             app.tableIndex=tbl;
             app.resultInfo=res;
+            app.currentTable=[];
             % show panel
             app.viewPanel;
         end
@@ -79,10 +84,11 @@ classdef ResultsPanel < cStatus
 
         function setViewOption(app,idx)
         % Set the actual view option and update menu
-            if idx>0
+            pos=idx+1;
+            if pos>0
                 app.tableView=idx;
                 cellfun(@(x) set(x,'Checked','off'),app.mn_view) 
-                set(app.mn_view{idx},'Checked','on');
+                set(app.mn_view{pos},'Checked','on');
             end
         end
 
@@ -107,18 +113,21 @@ classdef ResultsPanel < cStatus
                 'CloseRequestFcn',@app.closeApp);
             f=uimenu(app.fig,'label', '&File', 'accelerator', 'f');
             v=uimenu(app.fig,'label', '&View', 'accelerator', 'v');
+            app.mn_rsave=uimenu (f, 'label', 'Save Results', 'accelerator', 's',...
+                    'callback', @(src,evt) app.saveResults);
+            app.mn_tsave=uimenu (f, 'label', 'Save Table', 'accelerator', 't',...
+                    'enable','off','callback', @(src,evt) app.saveTable);
             uimenu (f, 'label', 'Close', 'accelerator', 'q',...
                     'callback', @(src,evt) app.closeApp);
-            uimenu (f, 'label', 'Save', 'accelerator', 's',...
-                    'callback', @(src,evt) app.saveResult);
             items=cType.TableViewOptions;
-            text=cellfun(@(x) [x(1),lower(x(2:end))],items(2:end),'UniformOutput',false);
+
+            text=cellfun(@(x) [x(1),lower(x(2:end))],items,'UniformOutput',false);
             for i=1:numel(text)
                 app.mn_view{i} = uimenu(v, 'Text', text{i}, ...,
                 'MenuSelectedFcn', @(src, event) app.selectViewOption(src, event));
             end
             app.tableView=cType.TableView.CONSOLE;
-            set(app.mn_view{1},'Checked','on');
+            set(app.mn_view{2},'Checked','on');
 
             app.tname=uicontrol (app.fig,'style', 'text',...
                    'string', '',...
@@ -153,6 +162,7 @@ classdef ResultsPanel < cStatus
             end
             idx=indices(1);
             tbl=app.tableIndex.Content{idx};
+            set(app.mn_tsave,'enable','on');
             sg=(indices(2)==cType.GRAPH_COLUMN);
             if tbl.isGraph && sg
                graph=app.tableIndex.RowNames{idx};
@@ -160,9 +170,10 @@ classdef ResultsPanel < cStatus
             else
                showTable(tbl,app.tableView);
             end
+            app.currentTable=tbl;
         end
 
-		function saveResult(app,~,~)
+		function saveResults(app,~,~)
 		% Save results callback
             log=cStatus();
 			default_file=cType.RESULT_FILE;
@@ -177,6 +188,27 @@ classdef ResultsPanel < cStatus
                 else
                     log.printError('Result file %s could NOT be saved', file);
                 end
+            end
+        end
+
+        function saveTable(app,~,~)
+        % SaveTable callback
+            log=cStatus();
+            if ~isempty(app.currentTable)
+                tbl=app.currentTable;
+                default_file=tbl.Name;
+                [file,path,ext]=uiputfile(cType.SAVE_TABLES,'Select File',default_file);
+                if ext % File has been selected
+                    cd(path);
+                    log=saveTable(tbl,file);
+                    if isValid(log)
+                        log.printInfo('%s saved in file %s', tbl.Name,file);			    
+                    else
+                        log.printError('Table %s could NOT be saved', tbl.Name);
+                    end
+                end
+            else
+                log.printError('Table NOT available');
             end
         end
     end

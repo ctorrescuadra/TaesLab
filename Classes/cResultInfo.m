@@ -9,16 +9,17 @@ classdef cResultInfo < cResultSet
 %   The diferent types (ResultId) of cResultInfo object are defined in cType.ResultId
 %   Methods:
 %       obj.printResults
-%       obj.showResults(table,option)
-%       res=obj.getTable(name,varmode)
+%       res=obj.getTable(name)
 %       res=obj.getTableIndex(varmode)
-%       obj.showTableIndex(option);
+%       obj.showResults(table,option)
 %       obj.showGraph(name,options)
-%       res=obj.exportTable(table,varmode,format)
+%       obj.showTableIndex(option);
 %       res=obj.exportResults(varmode,format)
 %       log=obj.saveResults(filename)
-%       log=obj.saveTable(name,filename)
 %       obj.summaryDiagnosis
+%       res=obj.ListOfTables
+%       res=obj.exportTable(name,varmode,format)
+%       log=obj.saveTable(name,filename)
 % See: cResultTableBuilder, cTable
 %
     properties (GetAccess=public, SetAccess=private)
@@ -72,7 +73,7 @@ classdef cResultInfo < cResultSet
         %%%
         % Result Set methods
         function printResults(obj)
-        % Print the tables on console
+        % Print the result tables on console
             if isValid(obj)
                 cellfun(@(x) printTable(x),obj.tableIndex.Content);
             end  
@@ -80,6 +81,7 @@ classdef cResultInfo < cResultSet
 
         function showResults(obj,name,varargin)
         % View an individual table
+        %   If no parameters are provided print the result tables on console.
         %   Usage:
         %       obj.showResults(table,option)
         %   Input:
@@ -101,28 +103,27 @@ classdef cResultInfo < cResultSet
             end
         end
 
-        function res = getTable(obj,name,varargin)
+        function res = getTable(obj,name)
         % Get the table called name
         %   Usage:
-        %       res=obj.getTable(name)
+        %     res=obj.getTable(name)
         %   Input:
-        %       name - Name of the table
-        %       options - VarMode option
+        %     name - Name of the table
         %   Output:
-        %       res - cTable object
+        %     res - cTable object
+        %
             res = cStatusLogger(cType.VALID);
             if nargin<2
-                res.printError('Table name is missing')
+                res.printError('Invalid number of parameters')
             end
             if strcmp(name,cType.TABLE_INDEX)
-                tbl=obj.getTableIndex;
+                res=obj.getTableIndex;
             elseif obj.existTable(name)
-                tbl=obj.Tables.(name);
+                res=obj.Tables.(name);
             else
                 res.messageLog(cType.ERROR,'Table name %s does NOT exists',name);
                 return
             end
-            res=exportTable(tbl,varargin{:});
         end
 
         function res=getTableIndex(obj,varargin)
@@ -208,9 +209,8 @@ classdef cResultInfo < cResultSet
         function res=exportResults(obj,varmode,fmt)
         % Export result tables into a structure using diferent formats.
         %  Input:
-        %   name - name of the table
         %   varmode - result type (optional)
-        %       cType.VarMode.NONE: cTable object
+        %      cType.VarMode.NONE: cTable object
         %      cType.VarMode.CELL: cell array
         %      cType.VarMode.STRUCT: structured array
         %      cType.VarModel.TABLE: Matlab table
@@ -275,27 +275,9 @@ classdef cResultInfo < cResultSet
 			end
         end
 
-        function log=saveTable(obj,tname,filename)
-        % saveTable save the table name in a file depending extension
-        %   Usage:
-        %     obj.saveTable(tname, filename)
-        %   Input:
-        %     tname - name of the table
-        %     filename - name of the file with extension
-        %
-            log=cStatusLogger(cType.VALID);
-            if nargin < 3
-                log.messageLog(cType.ERROR,'Invalid input parameters');
-                return
-            end
-            tbl=obj.getTable(tname);
-            if isValid(tbl)
-                log=saveTable(tbl,filename);
-            else
-                log.messageLog(cType.ERROR,'Table name %s does NOT exists',tname);
-            end
-        end
-
+        %%%%
+        % Save Results specific methods
+        %%%%
         function log=saveAsCSV(obj,filename)
         % Save result tables as CSV files, each table in a file
         %   Usage:

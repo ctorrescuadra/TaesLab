@@ -11,16 +11,16 @@ classdef cDataModel < cResultSet
 %       res=obj.checkCostTables
 %       res=obj.getTablesDirectory(columns)
 %       res=obj.getTableInfo(name)
+%       log=obj.saveDataModel(filename)
 %   ResultSet methods
 %       res=obj.getResultInfo
-%       obj.showDataModel(name,option)
+%       obj.printResults
 %       obj.showResults(name,options)
 %       res=obj.getTable(name,options)
 %       res=obj.getTableIndex(options)
 %       obj.showTableIndex(options)
-
-%       log=obj.saveDataModel(filename)
 %       log=obj.saveTable(name,filename)
+%       res=obj.exportTable(name,options)
 %       
 %   See also cResultSet, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
 %

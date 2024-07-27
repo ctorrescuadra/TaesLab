@@ -11,7 +11,6 @@ function pcbResults(inputFile,outputFile)
     M=model.DataModel.NrOfSamples;
     N=model.DataModel.NrOfFlows;
     L=model.DataModel.NrOfStates;
-    idx=model.productiveStructure.Info.getFlowTypes(cType.Flow.OUTPUT);
     res=zeros(N,M);
     for i=1:L
         model.State=states{i};
@@ -20,7 +19,7 @@ function pcbResults(inputFile,outputFile)
             tbl=model.getTable('gfcost');
             res(:,j)=tbl.getColumnValues('C');
         end
-        values=[colNames;[rowNames(idx)',num2cell(res(idx,:))]];
+        values=[colNames;[rowNames',num2cell(res)]];
         writecell(values,outputFile,'Sheet',states{i});
     end
     model.printInfo('Results have been saved in file %s',outputFile);

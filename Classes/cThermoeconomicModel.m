@@ -42,6 +42,7 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.getResultStates
 %       res=obj.getModelResults
 %   Tables Info Methods
+%       res=obj.ListOfTables
 %       res=obj.getTablesDirectory
 %       res=obj.getTableInfo(name)
 %       res=obj.getResultInfoTable(name)
@@ -590,12 +591,10 @@ classdef cThermoeconomicModel < cResultSet
         %%%
         % Results Set methods
         %%%
-        function tbl=getTable(obj,name,varargin)
+        function tbl=getTable(obj,name)
         % Get a table called name
         %   Input:
         %     name - name of the table
-        %     varmode - export table type (optional)
-        %     fmt - format number (optional)
         %
             tbl=cStatusLogger(cType.VALID);
             if strcmp(name,cType.TABLE_INDEX)
@@ -604,7 +603,7 @@ classdef cThermoeconomicModel < cResultSet
             else
                 res=getResultInfoTable(obj,name);
                 if isValid(res)
-                    tbl=getTable(res,name,varargin{:});
+                    tbl=getTable(res,name);
                     return
                 else
                     tbl.addLogger(res);
@@ -749,7 +748,7 @@ classdef cThermoeconomicModel < cResultSet
         end
 
         function log=saveProductiveDiagram(obj,filename)
-        % Save the proctive diagram adjacency tables into a file
+        % Save the productive diagram adjacency tables into a file
         % The following file types are availables (XLSX,CSV,MAT)
         %  Input:
         %   filename - Name of the file
@@ -769,7 +768,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             log=saveResults(res,filename);
         end
-       
+                 
         %%%
         % Waste Analysis methods
         %

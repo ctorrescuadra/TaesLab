@@ -17,7 +17,7 @@ function res = ExportResults(arg,varargin)
 %       'NONE' - returns the cTable object (default).
 %       'CELL' - returns the table as an array of cells.
 %       'STRUCT' - returns the table as a structured array.
-%       'TABLE' - returns a matlab table object.
+%       'TABLE' - returns a MATLAB table object.
 %     Format: Use the Format definition to output the (numeric values) tables
 %       true | false (default)
 %
@@ -29,7 +29,7 @@ function res = ExportResults(arg,varargin)
 %  
 %   See also cResultSet, cTable.
 %
-    res=cStatus();
+    res=cStatusLogger();
     % Check input
     p = inputParser;
     p.addRequired('arg',@isResultSet);
@@ -49,12 +49,6 @@ function res = ExportResults(arg,varargin)
     if isempty(param.Table)
         res=exportResults(arg,varmode,param.Format);
     else
-        name=param.Table;
-        tbl=arg.getTable(name);
-        if isValid(tbl)
-            res=exportTable(tbl,varmode,param.Format);
-        else
-            res.printError('Table %s is not available',name);
-        end
+        res=exportTable(arg,param.Table,varmode,param.Format);
     end
 end

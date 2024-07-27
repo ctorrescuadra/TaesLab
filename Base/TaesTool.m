@@ -38,7 +38,8 @@ classdef TaesTool < cTaesLab
 		sh_checkbox     % Show in console widget
 		gr_checkbox     % Select graphic widget
         sr_checkbox     % Summary Results widget
-        mn_save         % Save Result menu
+        mn_rsave        % Save Result menu
+        mn_tsave        % Save Table menu
         mn_debug        % Debug menu
         ptindex         % Table Index panel
         menu            % Results Menu cell array widgets
@@ -60,6 +61,7 @@ classdef TaesTool < cTaesLab
         tableView       % table view option
         tableIndex      % Current table index object
         currentNode     % Current cResultInfo
+        currentTable    % Current Table
         debug           % Debug control
     end
 
@@ -110,7 +112,7 @@ classdef TaesTool < cTaesLab
                 app.enableResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
                 app.enableResults(cType.ResultId.DATA_MODEL);
                 app.enableResults(cType.ResultId.RESULT_MODEL);
-                set(app.mn_save,'enable','on');
+                set(app.mn_rsave,'enable','on');
                 if data.NrOfStates>1
                 	set(app.sr_checkbox,'enable','on');
                 end
@@ -246,7 +248,7 @@ classdef TaesTool < cTaesLab
 
 		function saveResult(app,~,~)
 		% Save results callback
-			default_file=app.resultFile;
+			default_file=cType.RESULT_FILE;
             [file,path,ext]=uiputfile(cType.SAVE_RESULTS,'Select File',default_file);
             if ext % File has been selected
                 cd(path);
@@ -258,11 +260,37 @@ classdef TaesTool < cTaesLab
 				    set(app.ofile_text,'string',file);
 				    logtext=sprintf(' INFO: %s saved in file %s',res.ResultName, file); 
                 else
-                    logtext=sprintf(' ERROR: Result file %s could NOT be saved', file);
- 
+                    logtext=sprintf(' ERROR: Result file has NOT been saved');
                 end
-                set(app.log,'string',logtext);
+            else
+                logtext=sprintf(' ERROR: Result file is NOT available');
             end
+            set(app.log,'string',logtext);
+        end
+
+        function saveTable(app,~,~)
+        % Save Table callback
+            if ~isempty(app.currentTable)
+                tbl=app.currentTable;
+                default_file=tbl.Name;
+                [file,path,ext]=uiputfile(cType.SAVE_TABLES,'Select File',default_file);
+                if ext % File has been selected
+                    cd(path);
+                    slog=saveTable(tbl,file);
+                    printLogger(slog);
+                    if isValid(slog)
+                        logtext=sprintf(' INFO: Table %s saved in file %s',tbl.Name, file); 
+                    else
+                        logtext=sprintf(' ERROR: File %s could NOT be saved', file);     
+                    end
+                else
+                    logtext=sprintf(' ERROR: Table is NOT available');
+                end
+            else
+                set(app.mn_tsave,'enable','off');
+                logtext=sprintf(' ERROR: Table is NOT available');
+            end 
+            set(app.log,'string',logtext);
         end
 
         function showIndexTable(app,src,~)
@@ -270,6 +298,8 @@ classdef TaesTool < cTaesLab
             set(app.log,'string','');
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
+            app.currentTable=[];
+            set(app.mn_tsave,'enable','off')
             if ~isempty(res) && res.isValid
                 app.ViewIndexTable(res);
 			else
@@ -326,6 +356,8 @@ classdef TaesTool < cTaesLab
                 graph=app.tableIndex.RowNames{idx};
                 showGraph(app.currentNode,graph);
             else
+                app.currentTable=tbl;
+                set(app.mn_tsave,'enable','on')
                 showTable(tbl,app.tableView);
             end
         end
@@ -421,8 +453,10 @@ classdef TaesTool < cTaesLab
                 'callback', @(src,evt) app.aboutTaes(src,evt))
 			uimenu (f, 'label', 'Open', 'accelerator', 'o', ...
 				'callback', @(src,evt) app.getFile(src,evt));
-            app.mn_save=uimenu (f,'label','Save','accelerator', 's',...
+            app.mn_rsave=uimenu (f,'label','Save Result','accelerator', 'r',...
                 'callback', @(src,evt) app.saveResult(src,evt));
+            app.mn_tsave=uimenu (f,'label','Save Table','accelerator', 't',...
+                'callback', @(src,evt) app.saveTable(src,evt));
             app.debug=true;
             app.mn_debug=uimenu (f,'label','Debug','accelerator','d',...,
                 'enable','on','checked','on',...
@@ -678,7 +712,8 @@ classdef TaesTool < cTaesLab
 		function initInputParameters(app)
 		    % Initialize widgets
 			set(app.mfile_text,'backgroundcolor',[1 0.5 0.5]);
-            set(app.mn_save,'enable','off');
+            set(app.mn_rsave,'enable','off');
+            set(app.mn_tsave,'enable','off');
 			set(app.save_buttom,'enable','off');
             set(app.sr_checkbox,'enable','off');
             set(app.ra_checkbox,'enable','off');
@@ -696,6 +731,7 @@ classdef TaesTool < cTaesLab
             app.tableView=cType.TableView.CONSOLE;
             app.tableIndex=[];
             app.currentNode=[];
+            app.currentTable=[];
             app.model=cStatus(false);
             for i=1:cType.MAX_RESULT_INFO
                 app.disableResults(i);

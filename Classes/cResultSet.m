@@ -6,13 +6,14 @@ classdef cResultSet < cStatusLogger
 %   res=obj.getResultInfo
 %   obj.printResults
 %   obj.showResults(name,options)
-%   res=obj.getTable(name,options)
+%   res=obj.getTable(name,table)
 %   res=obj.getTableIndex(options)
 %   obj.showTableIndex(options)
 %   obj.showGraph(name,options)
-%   obj.saveResults(filename)
-%   obj.saveTable(name,filename)
+%   log=obj.saveResults(filename)
 %   res=obj.exportResults(options)
+%   log=obj.saveTable(name,filename)
+%   res=obj.exportTable(name,options)
 %
 % See also cResultInfo, cThermoeconomicModel, cDataModel
     properties(Access=public)
@@ -28,6 +29,64 @@ classdef cResultSet < cStatusLogger
         end
         %%%
         % Result Set functions.
+        %%%
+        function res=ListOfTables(obj)
+        % Get the list of tables as cell array
+            tmp=getResultInfo(obj);
+            res=fieldnames(tmp.Tables);
+        end
+
+        function log=saveTable(obj,tname,filename)
+        % saveTable save the table name in a file depending extension
+        %   Usage:
+        %     obj.saveTable(tname, filename)
+        %   Input:
+        %     tname - name of the table
+        %     filename - name of the file with extension
+        %
+            log=cStatusLogger(cType.VALID);
+            if nargin < 3
+                log.messageLog(cType.ERROR,'Invalid input parameters');
+                return
+            end
+            tbl=obj.getTable(tname);
+            if isValid(tbl)
+                log=saveTable(tbl,filename);
+            else
+                log.messageLog(cType.ERROR,'Table %s does NOT exists',tname);
+            end
+        end
+
+        function res=exportTable(obj,tname,varargin)
+        % exportTable export tname into the selected varmode/format
+        %   Usage:
+        %     obj.exportTable(tname,options)
+        %   Input:
+        %     tname - name of the table
+        %     options - optional parameters
+        %       varmode - result type
+        %         cType.VarMode.NONE: cTable object (default)
+        %         cType.VarMode.CELL: cell array
+        %         cType.VarMode.STRUCT: structured array
+        %         cType.VarModel.TABLE: Matlab table
+        %       fmt - Format values (false/true)
+        %
+            res=[];
+            log=cStatus();
+            if nargin < 2
+                log.printError('Invalid number of arguments')
+                return
+            end
+            tbl=obj.getTable(tname);
+            if isValid(tbl)
+                res=exportTable(tbl,varargin{:});
+            else
+                log.printError('Table %s does NOT exists',tname);
+            end
+        end
+
+        %%%
+        %  Methods implemented in cResultInfo
         %%%
         function printResults(obj)
         % Print the result set
@@ -48,12 +107,6 @@ classdef cResultSet < cStatusLogger
         % See also cResultInfo/showGraph
             res=getResultInfo(obj);
             showGraph(res,varargin{:});
-        end
-
-        function res=ListOfTables(obj)
-        % Get the list of tables as cell array
-            tmp=getResultInfo(obj);
-            res=fieldnames(tmp.Tables);
         end
 
         function tbl=getTable(obj,varargin)
@@ -84,18 +137,11 @@ classdef cResultSet < cStatusLogger
             log=saveResults(res,varargin{:});
         end
 
-        function log=saveTable(obj,varargin)
-        % Save a table of the result set
-        % See also cResultInfo/saveTable
-            res=getResultInfo(obj);
-            log=saveTable(res,varargin{:});
-        end
-
         function res=exportResults(obj,varargin)
         % Get the tables of a result set in diferent formats
         % See also cResultInfo/exportTable
-            cri=getResultInfo(obj);
-            res=exportResults(cri,varargin{:});
+            tmp=getResultInfo(obj);
+            res=exportResults(tmp,varargin{:});
         end
     end
 end
