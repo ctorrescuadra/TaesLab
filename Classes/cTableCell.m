@@ -48,7 +48,7 @@ classdef (Sealed) cTableCell < cTableResult
 		
         function setProperties(obj,p)
         % Set table properties: Description, Unit, Format, FieldNames, ...
-            obj.Name=p.key;
+            obj.Name=p.Name;
             obj.Description=p.Description;
             obj.Unit=p.Unit;
             obj.Format=p.Format;

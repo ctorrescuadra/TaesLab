@@ -613,7 +613,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 
         function res=createCellTable(obj,props,data,rowNames,colNames)
         % Set parameters from cPrintConfig and create cTableCell
-            p.key=props.key;
+            p.Name=props.key;
             p.Description=props.description;   
             p.Unit=obj.getTableUnits(props);
             p.Format=obj.getTableFormat(props);
@@ -625,7 +625,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             
         function res=createMatrixTable(obj,props,data,rowNames,colNames)
         % Set parameters from cPrintConfig and create cTableMatrix
-            p.key=props.key;
+            p.Name=props.key;
             p.Description=props.header;    
             p.Unit=obj.getUnit(props.type);
             p.Format=obj.getFormat(props.type);
@@ -638,7 +638,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 
         function res=createSummaryTable(obj,props,data,rowNames,colNames)
         % Create a summary table (as cTableMatrix)
-            p.key=props.key;
+            p.Name=props.key;
             p.Description=props.header;    
             p.Unit=obj.getUnit(props.type);
             p.Format=obj.getFormat(props.type);
