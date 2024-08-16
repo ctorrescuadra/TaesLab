@@ -43,14 +43,20 @@ function res=ShowTablesDirectory(varargin)
     res=cStatus();
     % Check if model is provided
     isModel=false;
-    if nargin>0 && isa(varargin{1},'cThermoeconomicModel')
+    if nargin && isa(varargin{1},'cThermoeconomicModel')
         isModel=true;
         model=varargin{1};
         varargin=varargin(2:end);
     end
+    % Select View depending of nargout
+    if nargout 
+        defaultView='NONE';
+    else
+        defaultView='CONSOLE';
+    end
     % Check input parameters
     p = inputParser;
-    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('View',defaultView,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@isFilename);
     p.addParameter('Columns',cType.DIR_COLS_DEFAULT,@iscell)

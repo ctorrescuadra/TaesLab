@@ -30,8 +30,8 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.diagramFP
 %       res=obj.productiveDiagram
 %       res=obj.summaryResults
-%       res=obj.dataModelInfo
-%       res=obj.getResultInfo(id)
+%       res=obj.dataInfo
+%       res=obj.stateResults
 %   Model Info Methods
 %       res=obj.showProperties
 %       res=obj.isResourceCost
@@ -39,17 +39,17 @@ classdef cThermoeconomicModel < cResultSet
 %       res=obj.isDiagnosis
 %       res=obj.isWaste
 %       res=obj.isSummaryEnable
-%       res=obj.getResultStates
-%       res=obj.getModelResults
 %   Tables Info Methods
 %       res=obj.ListOfTables
 %       res=obj.getTablesDirectory
 %       res=obj.getTableInfo(name)
-%       res=obj.getResultInfoTable(name)
 %       res=obj.getTable(name,options)
 %       res=obj.getTableIndex(options)
 %       res=obj.exportResults(options)
-%   Show Methods
+%       res=obj.getResultId(id)
+%       res=obj.getResultTable(name)
+%   ResultSet Methods
+%       obj.getResultInfo
 %       obj.printResults
 %       obj.showResults(name,options)
 %       obj.showTableIndex(options)
@@ -107,8 +107,8 @@ classdef cThermoeconomicModel < cResultSet
     end
 
     properties(Access=private)
-        results            % cResultInfo cell array
-        rstate             % cExergyCost object cell array
+        results            % cModelResults object
+        rstate             % cDataset of cExergyCost object
         fmt                % cResultTableBuilder object
         wd                 % cWasteData object
         rsd                % cResourceData object
@@ -366,7 +366,7 @@ classdef cThermoeconomicModel < cResultSet
         % get cResultInfo object
         function res=productiveStructure(obj)
         % Get the Productive Structure cResultInfo object
-            res=obj.getResults(cType.ResultId.PRODUCTIVE_STRUCTURE);
+            res=obj.getResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
         end
 
         function res=exergyAnalysis(obj,state)
@@ -375,23 +375,23 @@ classdef cThermoeconomicModel < cResultSet
             if nargin==2
                 obj.State=state;
             end
-            res=obj.getResults(cType.ResultId.THERMOECONOMIC_STATE);
+            res=obj.getResultId(cType.ResultId.THERMOECONOMIC_STATE);
         end
 
         function res=thermoeconomicAnalysis(obj)
         % Get the Thermoeconomic Analysis cResultInfo object
         % containing the direct and generalized cost tables
-            res=obj.getResults(cType.ResultId.THERMOECONOMIC_ANALYSIS);
+            res=obj.getResultId(cType.ResultId.THERMOECONOMIC_ANALYSIS);
         end
 
         function res=wasteAnalysis(obj)
         % Get the Recycling Analysis cResultInfo object
-            res=obj.getResults(cType.ResultId.WASTE_ANALYSIS);
+            res=obj.getResultId(cType.ResultId.WASTE_ANALYSIS);
         end
 
         function res=thermoeconomicDiagnosis(obj)
         % Get the Thermoeconomic Diagnosis cResultInfo object
-            res=obj.getResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
+            res=obj.getResultId(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
         end
 
         function summaryDiagnosis(obj)
@@ -404,31 +404,27 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=summaryResults(obj)
         % Get the Summary Results cResultInfo object
-            res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
+            res=obj.getResultId(cType.ResultId.SUMMARY_RESULTS);
         end
 
         function res=productiveDiagram(obj)
         % Get the productive diagram cResultInfo object
-            res=obj.getResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
+            res=obj.getResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
         end
 
         function res=diagramFP(obj)
         % Get the diagram FP cResultInfo object
-            res=obj.getResults(cType.ResultId.DIAGRAM_FP);
+            res=obj.getResultId(cType.ResultId.DIAGRAM_FP);
         end
 
-        function res=dataModelInfo(obj)
+        function res=dataInfo(obj)
         % Get the data model cResultInfo object
-          res=obj.getResults(cType.ResultId.DATA_MODEL);
+          res=obj.getResultId(cType.ResultId.DATA_MODEL);
         end
 
-        function res=getResultInfo(obj,index)
-        % Get the result info
-            if (nargin==1) || index==cType.MAX_RESULT_INFO
-                res=obj.resultModelInfo;
-            else
-                res=obj.getResults(index);
-            end
+        function res=stateResults(obj)
+        % Get the results model cResultInfo object
+            res=obj.buildResultInfo;
         end
 
         %%%
@@ -531,7 +527,8 @@ classdef cThermoeconomicModel < cResultSet
         end
 
         function res=getModelResults(obj)
-        % Get a cell array of cResultInfo objects of the current state (internal application use)
+        % Get a cell array of cResultInfo objects of the current state
+        %   Internal application use: ViewResults
             res=getModelResults(obj.results);
         end
 
@@ -550,7 +547,7 @@ classdef cThermoeconomicModel < cResultSet
             atm=zeros(tbl.NrOfRows,1);
             % Get the initial state of the table
             for i=1:cType.ResultId.SUMMARY_RESULTS
-                rid=obj.getResultInfo(i);
+                rid=obj.getResultId(i);
                 if ~isempty(rid)
                     list=rid.ListOfTables;
                     idx=cellfun(@(x) getIndex(tDict,x),list);
@@ -572,25 +569,22 @@ classdef cThermoeconomicModel < cResultSet
             res=getTableInfo(obj.fmt,name);
         end
 
-        function res=getResultInfoTable(obj,table)
-        % Get the resultId associated to a table
-            res=cStatusLogger(cType.VALID);
-            tinfo=obj.getTableInfo(table);
-            if isempty(tinfo)
-                res.messageLog(cType.ERROR,'Table %s does not exists',table);
-                return
-            end
-            tmp=obj.getResultInfo(tinfo.resultId);
-            if isempty(tmp) || ~isValid(tmp)
-                res.messageLog(cType.ERROR,'Table %s is not available',table);
-                return
-            end
-            res=tmp;
-        end
-
         %%%
         % Results Set methods
         %%%
+        function res=getResultInfo(obj,arg)
+            if nargin==1
+                res=obj.buildResultInfo;
+            elseif isnumeric(arg) && isscalar(arg)
+                res=getResultId(obj,arg);
+            elseif ischar(arg)
+                res=getResultTable(obj,arg);
+            else
+                res=cStatusLogger;
+                res.messageLog(cType.ERROR,'Invalid argument');
+            end
+        end
+
         function tbl=getTable(obj,name)
         % Get a table called name
         %   Input:
@@ -598,10 +592,10 @@ classdef cThermoeconomicModel < cResultSet
         %
             tbl=cStatusLogger(cType.VALID);
             if strcmp(name,cType.TABLE_INDEX)
-                res=getResultInfo(obj);
+                res=obj.buildResultInfo;
                 tbl=res.getTableIndex;
             else
-                res=getResultInfoTable(obj,name);
+                res=getResultTable(obj,name);
                 if isValid(res)
                     tbl=getTable(res,name);
                     return
@@ -646,7 +640,7 @@ classdef cThermoeconomicModel < cResultSet
                 obj.printDebugInfo('Not enough input arguments');
                 return
             end
-            res=obj.getResultInfoTable(graph);
+            res=obj.getResultTable(graph);
             if ~isValid(res)
                 printLogger(res);
                 return
@@ -1090,7 +1084,7 @@ classdef cThermoeconomicModel < cResultSet
             if ~obj.Summary
                 obj.setSummary(true);
             end
-            res=obj.getResultInfo(cType.ResultId.SUMMARY_RESULTS);
+            res=obj.getResultId(cType.ResultId.SUMMARY_RESULTS);
         end
 
         function setSummaryResults(obj)
@@ -1099,7 +1093,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             id=cType.ResultId.SUMMARY_RESULTS;
-            res=obj.getResultInfo(id);
+            res=obj.getResultId(id);
             if obj.Summary
                 sr=cModelSummary(obj);
                 if sr.isValid
@@ -1335,28 +1329,51 @@ classdef cThermoeconomicModel < cResultSet
 
         %%%
         % cModelResults methods
-        function res=resultModelInfo(obj)
-        % Get a cResultInfo object with all tables of the active model
-            id=cType.ResultId.RESULT_MODEL;
-            res=obj.getResults(id);
-            if isempty(res)
-                tables=struct();
-                tmp=getModelResults(obj.results);
-                for k=1:numel(tmp)
-                    dm=tmp{k};
-                    list=dm.ListOfTables;
-                    for i=1:dm.NrOfTables
-                        tables.(list{i})=dm.Tables.(list{i});
-                    end
-                end
-                res=cResultInfo(obj,tables);
-                res.setProperties(obj.ModelName,obj.State);
-                obj.setResults(res);
+        function res=getResultId(obj,index)
+        % Get the cResultInfo given the resultId
+            res=cStatusLogger(cType.ERROR);
+            tmp=getResults(obj.results,index);
+            if isempty(tmp)
+                res.messageLog(cType.ERROR,'Invalid ResultId');
+            else
+                res=tmp;
             end
         end
+        
+        function res=getResultTable(obj,table)
+        % Get the cResultInfo object associated to a table
+            res=cStatusLogger(cType.VALID);
+            tinfo=obj.getTableInfo(table);
+            if isempty(tinfo)
+                res.messageLog(cType.ERROR,'Table %s does not exists',table);
+                return
+            end
+            tmp=obj.getResultId(tinfo.resultId);
+            if ~isValid(tmp)
+                res.messageLog(cType.ERROR,'Table %s is not available',table);
+                return
+            end
+            res=tmp;
+        end
 
-        function res=getResults(obj,index)
-            res=getResults(obj.results,index);
+        function res=buildResultInfo(obj)
+        % Get a cResultInfo object with all tables of the active model
+            res=getResults(obj.results,cType.ResultId.RESULT_MODEL);
+            if ~isempty(res)
+                return
+            end
+            tables=struct();
+            tmp=getModelResults(obj.results);
+            for k=1:numel(tmp)
+                dm=tmp{k};
+                list=dm.ListOfTables;
+                for i=1:dm.NrOfTables
+                    tables.(list{i})=dm.Tables.(list{i});
+                end
+            end
+            res=cResultInfo(obj,tables);
+            res.setProperties(obj.ModelName,obj.State);
+            obj.setResults(res);
         end
 
         function clearResults(obj,index)

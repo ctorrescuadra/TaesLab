@@ -297,7 +297,7 @@ classdef TaesTool < cTaesLab
         % Show Index Table callback
             set(app.log,'string','');
             idx=get(src,'UserData');
-            res=getResultInfo(app.model,idx);
+            res=getResults(app.model,idx);
             app.currentTable=[];
             set(app.mn_tsave,'enable','off')
             if ~isempty(res) && res.isValid
@@ -313,7 +313,7 @@ classdef TaesTool < cTaesLab
         % Store the selected result into workspace
             set(app.log,'string','');
             idx=get(src,'UserData');
-            res=app.model.getResultInfo(idx);
+            res=getResultInfo(app.model,idx);
             if ~isempty(res) && res.isValid
                 varname=cType.ResultVar{idx};
                 assignin('base', varname, res);
@@ -429,7 +429,7 @@ classdef TaesTool < cTaesLab
             ypos=(ss(4)-ysize)/2;
             % Create figure
             hf=figure('visible','off','menubar','none',...
-			          'name','Thermoeconomic Analysis Panel',...
+			          'name','Thermoeconomic Analysis Tool',...
                       'numbertitle','off','color',[0.94 0.94 0.94],...
                       'resize','off','Position',[xpos,ypos,xsize,ysize],...
                       'CloseRequestFcn',@app.closeApp);

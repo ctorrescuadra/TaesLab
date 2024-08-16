@@ -280,7 +280,7 @@ classdef TaesPanel < cTaesLab
         % Store the selected result into workspace
             set(app.log,'string','');
             idx=get(src,'UserData');
-            res=app.model.getResultInfo(idx);
+            res=getResultInfo(app.model,idx);
             if ~isempty(res) && res.isValid
                 varname=cType.ResultVar{idx};
                 assignin('base', varname, res);

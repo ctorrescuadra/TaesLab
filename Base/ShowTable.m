@@ -5,7 +5,7 @@ function res=ShowTable(tbl,varargin)
 %   Tables can be exported or saved to a file with the 'ExportAs' and 'SaveAs' options.
 %
 %   Syntax
-%     ShowTable(tbl,Name,Value)
+%     res=ShowTable(tbl,Name,Value)
 %
 %   Input Argument
 %     tbl - cTable object
@@ -31,10 +31,9 @@ function res=ShowTable(tbl,varargin)
 % See also cTable
 %
     log=cStatus();
-    checkModel=@(x) isa(tbl,'cTable');
     % Check input
     p = inputParser;
-    p.addRequired('tbl',checkModel);
+    p.addRequired('tbl',@isValidTable);
     p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@isFilename);

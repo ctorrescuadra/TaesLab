@@ -317,7 +317,7 @@ classdef ViewResults < matlab.apps.AppBase
                 val={mt};
                 state=arg.State;
             case cType.ClassId.RESULT_MODEL
-                val=arg.getModelResults;
+                val=getModelResults(arg);
                 state=arg.State;
             case cType.ClassId.DATA_MODEL
                 val={mt};

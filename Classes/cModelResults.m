@@ -33,10 +33,9 @@ classdef (Sealed) cModelResults < cStatusLogger
         %   Output:
         %       res - cResultInfo with ResultId equal to index
             res=[];
-            if ~ismember(id,1:cType.MAX_RESULT_INFO)
-                return
+            if isscalar(id) && isnumeric(id) && ismember(id,1:cType.MAX_RESULT_INFO)
+                res=obj.results{id};
             end
-            res=obj.results{id};
         end
 
         function res=clearResults(obj,id)

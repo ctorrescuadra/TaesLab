@@ -53,7 +53,7 @@ function ShowGraph(arg,varargin)
 			   log.printError('Not enough input arguments');
                return
             end
-            res=arg.getResultInfoTable(param.Graph);
+            res=arg.getResultInfo(param.Graph);
         otherwise
             log.printError('Invalid input argument');
             return

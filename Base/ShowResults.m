@@ -41,11 +41,17 @@ function res=ShowResults(arg,varargin)
 %   See also cResultSet
 %
     log=cStatus();
+    % Select View depending of nargout
+    if nargout 
+        defaultView='NONE';
+    else
+        defaultView='CONSOLE';
+    end
     % Check input
     p = inputParser;
     p.addRequired('arg',@isResultSet);
     p.addParameter('Table','',@ischar);
-    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('View',defaultView,@cType.checkTableView);
     p.addParameter('Panel',false,@islogical);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs','',@isFilename);

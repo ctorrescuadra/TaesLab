@@ -130,6 +130,10 @@ classdef (Sealed) cExergyCost < cExergyModel
     
         function res=getResultInfo(obj,fmt,options)
         % Get the cResultInfo object
+            if nargin==2
+                options.DirectCost=true;
+                options.GeneralCost=false;
+            end
             res=fmt.getThermoeconomicAnalysisResults(obj,options);
         end
    
