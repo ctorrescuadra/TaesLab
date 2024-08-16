@@ -4,7 +4,7 @@ classdef cDataset < cStatusLogger
 %   and access by state name or sample name. It use a cell array to keep the access keys
 %   and a cell array of the same length to keep the objects.
 %   Methods
-%     obj=cDataSet(list)
+%     obj=cDataset(list)
 %     res=obj.getValues(arg)
 %     log=obj.setValues(arg,val)
 %     res=obj.existKey(key)
@@ -111,6 +111,21 @@ classdef cDataset < cStatusLogger
                 log.messageLog(cType.ERROR,'cDataset.setValues invalid key');
             end
         end
+
+        function res=length(obj)
+        % Overload function length
+            res=length(obj.Entries);
+        end
+
+        function res=numel(obj)
+        % Overload function numel
+            res=numel(obj.Entries);
+        end
+
+        function res=size(obj)
+        % Overload function size
+            res=size(obj.Entries);
+        end
     end
 
     methods(Access=private)
@@ -130,19 +145,5 @@ classdef cDataset < cStatusLogger
             res=isnumeric(idx) && isscalar(idx) && ismember(idx,1:obj.NrOfEntries);
         end
         
-        function res=length(obj)
-        % Overload function length
-            res=length(obj.Entries);
-        end
-
-        function res=numel(obj)
-        % Overload function numel
-            res=numel(obj.Entries);
-        end
-
-        function res=size(obj)
-        % Overload function size
-            res=size(obj.Entries);
-        end
     end
 end
