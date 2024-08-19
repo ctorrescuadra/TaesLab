@@ -36,7 +36,7 @@ function res=ShowResults(arg,varargin)
 %     res - table object in the format specified in ExportAs
 %
 %   Example
-%     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
+%     <a href="matlab:open ShowResultsDemo.mlx">Thermoeconomic Model Demo</a>
 %
 %   See also cResultSet
 %
@@ -89,10 +89,9 @@ function res=ShowResults(arg,varargin)
             return
         end
         % Export the table
-        if nargout>0
+        if nargout
             vm=cType.getVarMode(param.ExportAs);
             res=exportTable(tbl,vm);
-            return
         end
         % View the table
         showTable(tbl,option);

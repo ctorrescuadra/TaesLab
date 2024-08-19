@@ -28,7 +28,7 @@
 %   CopyDataModel           - Copies a data model file to another format.
 %
 % Display Results 
-%   ShowTablesDirectory     - Lists the properties of the result tables.
+%   ListResultTables        - Lists the results tables and their properties.
 %   ShowResults             - Displays the model's results tables.
 %   ShowTable               - Displays an individual table.
 %   ShowGraph               - Displays the graph of associated to a results table.

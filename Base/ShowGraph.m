@@ -58,7 +58,7 @@ function ShowGraph(arg,varargin)
             log.printError('Invalid input argument');
             return
     end
-    if isempty(res)
+    if ~isValid(res)
         log.printError('Invalid input argument');
         return
     end

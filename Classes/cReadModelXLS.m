@@ -7,6 +7,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 %	Methods inhereted from cReadModelTable
 %		res=obj.getTableModel
 %   See also cReadModel, cReadModelTable
+%
     methods
         function obj = cReadModelXLS(cfgfile)
         % Construct an instance of the class
@@ -71,13 +72,10 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
             end
             % Set Model properties
             obj.setModelProperties(cfgfile);
-            info=cResultId(cType.ResultId.DATA_MODEL);
-            tm=cResultInfo(info,tables);
-            sd=obj.buildDataModel(tm);
+            sd=obj.buildDataModel(tables);
             if isValid(obj)
                 obj.ModelData=cModelData(sd);
-                tm.setProperties(obj.ModelName,'DATA_MODEL');
-                obj.modelTables=tm;
+                obj.modelTables=tables;
             end
         end 
     end

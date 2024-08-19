@@ -166,16 +166,14 @@ classdef cDataModel < cResultSet
             obj.DefaultGraph='';
             % Check Data Model
             obj.status=status;
-            if ~obj.isValid
-                return
-            end
-            % Get the cResultInfo object
+            % Get the Model Info
             if obj.isValid
                 if rdm.isTableModel
-                    obj.ModelInfo=rdm.getTableModel;
+                    tables=rdm.getTableModel;
                 else
-                    obj.ModelInfo=obj.getTableModel;
+                    tables=obj.getTableModel;
                 end
+                obj.ModelInfo=createModelInfo(obj,tables);
             end
         end
 
@@ -491,8 +489,13 @@ classdef cDataModel < cResultSet
 				    tables.(sheet)=tbl;
                 end
             end
+            res=tables;
+        end
+
+        function res=createModelInfo(obj,tables)
+        % Create the cResultInfo object               
             res=cResultInfo(obj,tables);
-            res.setProperties(obj.ModelName,'DATA_MODEL')
+            res.setProperties(obj.ModelName,'DATA_MODEL');
         end
     end
 end

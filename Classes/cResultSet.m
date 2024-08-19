@@ -27,13 +27,23 @@ classdef cResultSet < cStatusLogger
             obj=obj@cStatusLogger(cType.VALID);
             obj.classId=id;
         end
+
+        function res=getResultInfo(obj)
+        % getResultInfo - get cResultInfo object from cResultSet
+        %   Default method class
+            res=obj;
+        end
+        
         %%%
         % Result Set functions.
         %%%
         function res=ListOfTables(obj)
         % Get the list of tables as cell array
+            res={};
             tmp=getResultInfo(obj);
-            res=fieldnames(tmp.Tables);
+            if isValid(tmp)
+                res=fieldnames(tmp.Tables);
+            end
         end
 
         function log=saveTable(obj,tname,filename)
@@ -71,17 +81,16 @@ classdef cResultSet < cStatusLogger
         %         cType.VarModel.TABLE: Matlab table
         %       fmt - Format values (false/true)
         %
-            res=[];
-            log=cStatus();
+            res=cStatusLogger(cType.ERROR);
             if nargin < 2
-                log.printError('Invalid number of arguments')
+                res.messageLog(cType.ERROR,'Invalid number of arguments')
                 return
             end
             tbl=obj.getTable(tname);
             if isValid(tbl)
                 res=exportTable(tbl,varargin{:});
             else
-                log.printError('Table %s does NOT exists',tname);
+                res.messageLog(cType.ERROR,'Table %s does NOT exists',tname);
             end
         end
 

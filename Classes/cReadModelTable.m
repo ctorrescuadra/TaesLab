@@ -24,40 +24,36 @@ classdef (Abstract) cReadModelTable < cReadModel
             res=[];
             tmp.name=obj.ModelName;
             % Productive Structure Tables
-            idx=cType.TableDataIndex.FLOWS;
-            ftbl=getTable(tm,cType.TableDataName{idx});
+            ftbl=tm.Flows;
             if isValid(ftbl)
                 tmp.flows=ftbl.getStructData;
             else
-                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+                obj.messageLog(cType.ERROR,'Table Flows NOT found');
                 return
             end
-            idx=cType.TableDataIndex.PROCESSES;
-            ptbl=getTable(tm,cType.TableDataName{idx});
+            ptbl=tm.Processes;
             if isValid(ptbl)
                 tmp.processes=ptbl.getStructData;
             else
-                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+                obj.messageLog(cType.ERROR,'Table Processes NOT found');
                 return
             end
             res.ProductiveStructure=tmp;
             % Get Format definition
-            idx=cType.TableDataIndex.FORMAT;
-            tbl=getTable(tm,cType.TableDataName{idx});
+            tbl=tm.Format;
             if isValid(tbl)  
                 if ~tbl.isNumericColumn(1:2)
                     obj.messageLog(cType.ERROR,'Invalid format table');
                 end
                 res.Format.definitions=tbl.getStructData;
             else
-                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+                obj.messageLog(cType.ERROR,'Table Format NOT found');
                 return
             end
             % Get Exergy states data
-            idx=cType.TableDataIndex.EXERGY;
-            tbl=getTable(tm,cType.TableDataName{idx});
+            tbl=tm.Exergy;
             if ~isValid(tbl)
-                obj.messageLog(cType.ERROR,'Table %s NOT found',cType.TableDataName{idx});
+                obj.messageLog(cType.ERROR,'Table Exergy NOT found');
                 return
             end
             NrOfStates=tbl.NrOfCols-1;
@@ -80,12 +76,8 @@ classdef (Abstract) cReadModelTable < cReadModel
             end
             res.ExergyStates=tmp;
             % Get Waste definition
-            index=cType.TableDataIndex.WASTEDEF;
-            twd=cType.TableDataName{index};
-            isWasteDefinition=existTable(tm,twd);
-            index=cType.TableDataIndex.WASTEALLOC;
-            twa=cType.TableDataName{index};
-            isWasteAllocation=existTable(tm,twa);
+            isWasteDefinition=isfield(tm,'WasteDefinition');
+            isWasteAllocation=isfield(tm,'WasteAllocation');
             if  isWasteAllocation || isWasteDefinition
                 pswd=obj.WasteData(tm);
                 if isempty(pswd)
@@ -95,7 +87,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 wdef=0;
                 % Waste Definition
                 if isWasteDefinition
-                    tbl=getTable(tm,twd);
+                    tbl=tm.WasteDefinition;
                     if (tbl.NrOfCols<2)
                         obj.messageLog(cType.ERROR,'Waste table. Invalid number of columns');
                         return
@@ -122,7 +114,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 end
                 % Waste Allocation Table
                 if isWasteAllocation
-                    tbl=getTable(tm,twa);
+                    tbl=tm.WasteAllocation;
                     NR=tbl.NrOfCols-1;
                     % Check Waste Allocation Table
                     if (NR<1) || ~tbl.isNumericTable
@@ -163,11 +155,9 @@ classdef (Abstract) cReadModelTable < cReadModel
                 res.WasteDefinition=pswd;
             end                               
             % Get Resources cost definition
-            index=cType.TableDataIndex.RESOURCES;
-            trsc=cType.TableDataName{index};
-            isResourceCost=existTable(tm,trsc);
+            isResourceCost=isfield(tm,'ResourcesCost');
             if isResourceCost
-                tbl=getTable(tm,trsc);
+                tbl=tm.ResourcesCost;
                 if isValid(tbl)
                     NrOfSamples=tbl.NrOfCols-2;
                     % Check ResourcesCost Table
@@ -210,7 +200,7 @@ classdef (Abstract) cReadModelTable < cReadModel
         % Get default waste data info
             res=[];
             % Search Wastes in Flows Table
-            ft=tm.Tables.Flows;
+            ft=tm.Flows;
             fl=[ft.RowNames];
             fields=[ft.ColNames(2:end)];
             cid=find(strcmp(fields,'type'),1);

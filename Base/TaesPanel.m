@@ -267,7 +267,7 @@ classdef TaesPanel < cTaesLab
             set(app.log,'string','');
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
-            if ~isempty(res) && res.isValid
+            if res.isValid
                 app.ViewIndexTable(res);
             else
                 logtext=sprintf('ERROR: Result %s is not available',cType.ResultVar{idx});
@@ -281,7 +281,7 @@ classdef TaesPanel < cTaesLab
             set(app.log,'string','');
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
-            if ~isempty(res) && res.isValid
+            if isValid(res)
                 varname=cType.ResultVar{idx};
                 assignin('base', varname, res);
                 logtext=sprintf(' INFO: Results store in %s',varname);

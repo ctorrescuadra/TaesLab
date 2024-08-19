@@ -1,6 +1,6 @@
 classdef cThermoeconomicModel < cResultSet
-% cThermoeconomicModel is an interactive tool for thermoeconomic analysis
-% It is the main class of TaesLab package, and provide the following functionality:
+% cThermoeconomicModel - Interactive tool for thermoeconomic analysis
+%   It is the main class of TaesLab package, and provide the following functionality:
 %   - Read and check a thermoeconomic data model
 %   - Compute direct and generalized exergy cost
 %   - Compare two thermoeconomic states (thermoeconomic diagnosis)
@@ -8,79 +8,116 @@ classdef cThermoeconomicModel < cResultSet
 %   - Get Summary Results
 %   - Save the data model and results in diferent formats, for further analysis
 %   - Show the results tables in console, as GUI tables or graphs
-% Methods:
+%
+% cThermoeconomicModel Properties:
+%   Public Properties
+%     State - Active thermoeconomic state
+%		char array
+%     ReferenceState - Active Reference state
+%	    char array
+%     ResourceSample - Active resource cost sample
+%	    char array
+%     CostTables - Type of selected Cost Result Tables
+%	    'DIRECT' | 'GENERALIZED' | 'ALL'
+%     DiagnosisMethod - Method to calculate diagnosis
+%	    'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
+%     Summary - Calculate Summary Results
+%	    true | false
+%     Recycling - Activate Recycling Analysis
+%	    true | false
+%     ActiveWaste - Active Waste for Recycling Analysis
+%		true | false
+%
+%   Public Get Access Properties
+%     DataModel - Data Model
+%       cDataModel object
+%     ModelName - Model Name
+%       char array
+%     StateNames - Names of the defined states
+%       cell array of chars
+%     SampleNames - Names of the defined resource samples
+%       cell array of chars
+%     WasteFlows - Names of the waste flows
+%       cell array of chars
+%     ResourceData - Current Resource Data values
+%       cResourceData object
+%     ResourceCost - Current Resource Cost values
+%       cResourceCost object
+%
+% cThermoeconomicModel methods
 %   Set Methods
-%       obj.setState(value)
-%       obj.setReferenceState(value)
-%       obj.setResourceSample(value)
-%       obj.setCostTables(value)
-%       obj.setDiagnosisMethod(value)
-%       obj.setActiveWaste(value)
-%       obj.setRecycling(value)
-%       obj.setSumary(value)
-%       obj.setDebug(value)
+%     setState            - Set State value
+%     setReferenceState   - Set Reference State value
+%     setResourceSample   - Set Resource Sample value
+%     setCostTables       - Set CostTables parameter
+%     setDiagnosisMethod  - Set DiagnosisMethod parameter
+%     setActiveWaste      - Set Active Waste value
+%     setRecycling        - Activate Recycling Analysis
+%     setSummary          - Activate Summary Results
+%     setDebug            - Set Debug mode
+%
 %   Results Info Methods
-%       res=obj.productiveStructure
-%       res=obj.termoeconomicState(state)
-%       res=obj.thermoeconomicAnalysis
-%       res=obj.thermoeconomicDiagnosis
-%       res=obj.summaryDiagnosis
-%       res=obj.totalMalfunctionCost
-%       res=obj.wasteAnalysis
-%       res=obj.diagramFP
-%       res=obj.productiveDiagram
-%       res=obj.summaryResults
-%       res=obj.dataInfo
-%       res=obj.stateResults
+%     productiveStructure     - Get Productive Structure cResultInfo
+%     exergyAnalysis          - Get ExergyAnalysis cResultInfo
+%     thermoeconomicAnalysis  - Get Thermoeconomic Analysis cResultInfo
+%     thermoeconomicDiagnosis - Get Thermoeconomic Diagnosis cResultInfo
+%     summaryDiagnosis        - Get Diagnosis Summary
+%     wasteAnalysis           - Get Waste Analysis cResultInfo
+%     diagramFP               - Get Diagram FP cResultInfo
+%     productiveDiagram       - Get Productive Diagrams cResultInfo
+%     summaryResults          - Get Summary cResultInfo
+%     dataInfo                - Get Data Model cResultInfo
+%     stateResults            - Get Model Results cResultInfo
+%
 %   Model Info Methods
-%       res=obj.showProperties
-%       res=obj.isResourceCost
-%       res=obj.isGeneralCost
-%       res=obj.isDiagnosis
-%       res=obj.isWaste
-%       res=obj.isSummaryEnable
+%     showProperties  - Show model properties
+%     isResourceCost  - Check if model has Resource Cost Data
+%     isGeneralCost   - Check if model compute Generalized Costs
+%     isDiagnosis     - Check if model compute Diagnosis
+%     isWaste         - Check if model has waste
+%     isSummaryEnable - Check if Summary Results are enabled
+%
 %   Tables Info Methods
-%       res=obj.ListOfTables
-%       res=obj.getTablesDirectory
-%       res=obj.getTableInfo(name)
-%       res=obj.getTable(name,options)
-%       res=obj.getTableIndex(options)
-%       res=obj.exportResults(options)
-%       res=obj.getResultId(id)
-%       res=obj.getResultTable(name)
+%     getTablesDirectory  - Get the tables directory 
+%     showTablesDirectory - Show the tables directory
+%
 %   ResultSet Methods
-%       obj.getResultInfo
-%       obj.printResults
-%       obj.showResults(name,options)
-%       obj.showTableIndex(options)
-%       obj.showGraph(name,options)
-%       obj.showSummary(name,options)
-%       obj.showTableDirectory(option)
-%       obj.summaryGraph(name,options)
-%   Save Methods
-%       log=obj.saveResults(filename)
-%       log=obj.saveDataModel(filename)
-%       log=obj.saveDiagramFP(filename)
-%       log=obj.saveProductiveDiagram(filename)
-%       log=obj.saveSummary(filename)
-%       log=obj.saveTable(name,filename)
+%     getResultInfo         - Get cResultInfo objects
+%     ListOfTables          - Get the current list of available tables
+%     getTable              - Get a cTable object by name
+%     getTableIndex         - Get the current Table Index object
+%     printResults          - Print on console the current results
+%     showResults           - Show the current results
+%     showSummary           - Show Summary results
+%     showTableIndex        - Show the Table Index
+%     showGraph             - Show a graph of the current model
+%     saveResults           - Save the curernt model in a file
+%     saveTable             - Save a table of the current model in a file
+%     saveDataModel         - Save the data model tables into a file
+%     saveDiagramFP         - Save the Diagram FP table into a file
+%     saveProductiveDiagram - Save the Productive Diagram tables into a file
+%     saveSummary           - Save Summary results into a file
+%     exportResults         - Export the model tables into a internal variable
+%     exportTable           - Export a table into a internal variable
+%
 %   Waste Methods
-%       res=obj.wasteAllocation
-%       res=obj.setWasteType(key,type)
-%       res=obj.setWasteValues(key,values)
-%       res=obj.setWasteRecycled(key,value)
+%     wasteAllocation  - Show waste allocation info 
+%     setWasteType     - Set the type of a waste
+%     setWasteValues   - Set the allocation values of a waste
+%     setWasteRecycled - Set the recycled ratio of a waste
+%
 %   Resources Methods
-%       res=obj.ResourceData
-%       res=obj.ResourceCost
-%       res=obj.getResourceData(sample)
-%       res=obj.resourceAnalysis(active)
-%       obj.setFlowResource(value)
-%       obj.setProcessResource(value)
-%       obj.setFlowResourceValue(key,value)
-%       obj.setProcessResourceValue(key,value)
+%     getResourceData         - Get the resource data of a sample
+%     setFlowResource         - Set the resource flows values
+%     setProcessResource      - Set the processes resource values
+%     setFlowResourceValue    - Set a value of the resource flows
+%     setProcessResourceValue - Set a value of the process resources
+%
 %   Exergy Data Methods
-%       rex=obj.getExergyData(state)
-%       log=obj.setExergyData(state,values)
+%     getExergyData - Get the exergy data of a state
+%     setExergyData - Set the exergy values of a state
+%
+%  See also cResultSet, cResultId
 %
     properties(GetAccess=public,SetAccess=private)
         DataModel           % Data Model
@@ -90,16 +127,16 @@ classdef cThermoeconomicModel < cResultSet
         WasteFlows          % Names of the waste flows
         ResourceData        % Resource Data object
         ResourceCost        % Resource Cost object
-        ResultId            % ResultId
-        ResultName          % Result Name
-        DefaultGraph        % Default Graph
+        ResultId            % ResultId (cResultId properties)
+        ResultName          % Result Name (cResultId properties)
+        DefaultGraph        % Default Graph (cResultId properties)
     end
 
     properties(Access=public)
         State                  % Active thermoeconomic state
         ReferenceState         % Active Reference state
         ResourceSample         % Active resource cost sample
-        CostTables             % Select tables to cost results
+        CostTables             % Selected Cost Result Tables
         DiagnosisMethod        % Method to calculate fuel impact of wastes
         Summary                % Calculate Summary Results
         Recycling              % Activate Recycling Analysis
@@ -369,12 +406,9 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.getResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
         end
 
-        function res=exergyAnalysis(obj,state)
-        % Get the Thermoeconomic State cResultInfo object
+        function res=exergyAnalysis(obj)
+        % Get the ExergyAnalysis cResultInfo object
         % containing the exergy and fuel product table
-            if nargin==2
-                obj.State=state;
-            end
             res=obj.getResultId(cType.ResultId.THERMOECONOMIC_STATE);
         end
 
@@ -404,7 +438,7 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=summaryResults(obj)
         % Get the Summary Results cResultInfo object
-            res=obj.getResultId(cType.ResultId.SUMMARY_RESULTS);
+            res=obj.getSummaryResults;
         end
 
         function res=productiveDiagram(obj)
@@ -425,6 +459,21 @@ classdef cThermoeconomicModel < cResultSet
         function res=stateResults(obj)
         % Get the results model cResultInfo object
             res=obj.buildResultInfo;
+        end
+
+        function res=getResultInfo(obj,arg)
+        % Get the cResultInfo with option
+        %   Internal funcion of TaesLab
+            if nargin==1
+                res=obj.buildResultInfo;
+            elseif isnumeric(arg) && isscalar(arg)
+                res=getResultId(obj,arg);
+            elseif ischar(arg)
+                res=getResultTable(obj,arg);
+            else
+                res=cStatusLogger;
+                res.messageLog(cType.ERROR,'Invalid argument');
+            end
         end
 
         %%%
@@ -548,7 +597,7 @@ classdef cThermoeconomicModel < cResultSet
             % Get the initial state of the table
             for i=1:cType.ResultId.SUMMARY_RESULTS
                 rid=obj.getResultId(i);
-                if ~isempty(rid)
+                if isValid(rid)
                     list=rid.ListOfTables;
                     idx=cellfun(@(x) getIndex(tDict,x),list);
                     atm(idx)=true;
@@ -572,19 +621,6 @@ classdef cThermoeconomicModel < cResultSet
         %%%
         % Results Set methods
         %%%
-        function res=getResultInfo(obj,arg)
-            if nargin==1
-                res=obj.buildResultInfo;
-            elseif isnumeric(arg) && isscalar(arg)
-                res=getResultId(obj,arg);
-            elseif ischar(arg)
-                res=getResultTable(obj,arg);
-            else
-                res=cStatusLogger;
-                res.messageLog(cType.ERROR,'Invalid argument');
-            end
-        end
-
         function tbl=getTable(obj,name)
         % Get a table called name
         %   Input:
@@ -598,7 +634,6 @@ classdef cThermoeconomicModel < cResultSet
                 res=getResultTable(obj,name);
                 if isValid(res)
                     tbl=getTable(res,name);
-                    return
                 else
                     tbl.addLogger(res);
                 end     
@@ -625,7 +660,7 @@ classdef cThermoeconomicModel < cResultSet
             if isValid(tbl)
                 showTable(tbl,varargin{:});
             else
-                tbl.printLogger;
+                printLogger(tbl);
             end
         end
 
@@ -641,11 +676,11 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             res=obj.getResultTable(graph);
-            if ~isValid(res)
+            if isValid(res)
+                showGraph(res,graph,varargin{:});
+            else
                 printLogger(res);
-                return
             end
-            showGraph(res,graph,varargin{:});
         end
 
         %%%
@@ -1077,7 +1112,7 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=getSummaryResults(obj)
         % Force to obtain summary results
-            res=[];
+            res=cStatusLogger(cType.ERROR);
             if ~obj.isSummaryEnable
                 return
             end

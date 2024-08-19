@@ -65,11 +65,6 @@ classdef cResultInfo < cResultSet
             obj.status=info.status;
         end
 
-        function res=getResultInfo(obj)
-        % getResultInfo - get cResultInfo object from cResultSet
-            res=obj;
-        end
-
         %%%
         % Result Set methods
         function printResults(obj)
@@ -112,7 +107,7 @@ classdef cResultInfo < cResultSet
         %   Output:
         %     res - cTable object
         %
-            res = cStatusLogger(cType.VALID);
+            res = cStatusLogger(cType.ERROR);
             if nargin<2
                 res.printError('Invalid number of parameters')
             end

@@ -1,5 +1,5 @@
-function res=ShowTablesDirectory(varargin)
-%ShowTablesDirectory - Displays the list of existing TaesLab result tables and their properties.
+function res=ListResultTables(varargin)
+%ListResultTables - Displays the list of existing TaesLab result tables and their properties.
 %   The 'Show' option allows to select how the table will be displayed. 
 %   The 'ExportAs' option allows you to export the table in different formats.
 %   The 'SaveAs' option allows you to save the table as an external file.

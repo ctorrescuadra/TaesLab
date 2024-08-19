@@ -78,7 +78,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.setColumnWidth;
         end
 
-        function res=getMatrix(obj)
+        function res=DataMatrix(obj)
         % Get the table data as Array
             res=cell2mat(obj.Data);
         end
