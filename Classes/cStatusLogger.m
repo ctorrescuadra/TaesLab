@@ -1,6 +1,6 @@
 classdef cStatusLogger < cStatus
-% cStatusLogger Base class used by ExIOLab classes.
-%	It include methods object comparison (eq, neq) and messages logger.
+% cStatusLogger - message logger class used by TaesLab
+%	
 % 	Methods:
 %   	obj=cStatusLogger(init_state)
 %   	obj.MessageLog(error,text)
@@ -87,14 +87,5 @@ classdef cStatusLogger < cStatus
 			obj.logger.clear;
 		end
 		
-        function res=eq(obj1,obj2)
-        % Check if two class object are equal. Overload eq operator
-            res=(obj1.objectId==obj2.objectId);
-        end
-        
-        function res=ne(obj1,obj2)
-        % Check if two class objects are different. Overload ne operator
-            res=(obj1.objectId~=obj2.objectId);
-		end
     end
 end

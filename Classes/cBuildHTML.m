@@ -19,7 +19,7 @@ classdef (Sealed) cBuildHTML < cStatusLogger
         %       tbl - cTable object to convert
         %    folder - Folder where the files will be save if tbl is a cTableIndex
         % 
-            obj=obj@cStatusLogger(cType.VALID);
+            obj=obj@cStatusLogger();
             if ~isValidTable(tbl)
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
@@ -31,7 +31,6 @@ classdef (Sealed) cBuildHTML < cStatusLogger
             else
                 obj.body=cBuildHTML.buildTableBody(tbl);
             end
-            obj.status=true;
         end
 
         function res=getMarkupHTML(obj)
@@ -50,7 +49,7 @@ classdef (Sealed) cBuildHTML < cStatusLogger
 
         function log=saveTable(obj,filename)
         % Save the table into a HTML file
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             html=[obj.head obj.body];
             try
                 fId=fopen(filename,'wt');

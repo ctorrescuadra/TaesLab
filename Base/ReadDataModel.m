@@ -30,7 +30,7 @@ function data=ReadDataModel(filename,varargin)
 %
 %   See also cReadModel, cDataModel
 %
-    data=cStatusLogger(cType.VALID);
+    data=cStatus();
     % Check parameters
     if nargin<1 
         data.printError('Usage: data=ReadDataModel(filename)');

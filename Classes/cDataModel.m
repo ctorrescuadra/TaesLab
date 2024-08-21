@@ -346,7 +346,7 @@ classdef cDataModel < cResultSet
         %   Input:
         %       filename - name of the file including extension.
         %    
-			log=cStatusLogger(cType.VALID);
+			log=cStatusLogger();
 			% Check inputs
             if (nargin<2) || ~isFilename(filename)
                 log.messageLog(cType.ERROR,'Invalid arguments');

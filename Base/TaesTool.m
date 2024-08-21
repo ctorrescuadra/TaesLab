@@ -69,7 +69,7 @@ classdef TaesTool < cTaesLab
         % TaesTool constructor
         function app=TaesTool()
             % Initialize application variabbles
-			app.model=cStatusLogger();
+			app.model=cStatus(cType.INVALID);
             % Create GUI components
             createComponents(app);
             initInputParameters(app);

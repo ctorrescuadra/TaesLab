@@ -24,7 +24,7 @@ classdef cTablesDefinition < cStatusLogger
     end
     methods
         function obj=cTablesDefinition()
-            obj=obj@cStatusLogger(cType.VALID);          
+            obj=obj@cStatusLogger();          
 			% load default configuration filename			
 			path=fileparts(mfilename('fullpath'));
 			cfgfile=fullfile(path,cType.CFGFILE);

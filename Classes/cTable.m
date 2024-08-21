@@ -167,7 +167,7 @@ classdef (Abstract) cTable < cStatusLogger
 
         function log=setColumnValues(obj,idx,value)
         % Set the values of a column table
-            log=cStatus(cType.VALID);
+            log=cStatus();
             if iscell(value) && size(value,1)==obj.NrOfRows
                 obj.Data(:,idx)=value;
             else
@@ -177,7 +177,7 @@ classdef (Abstract) cTable < cStatusLogger
 
         function log=setRowValues(obj,idx,value)
         % Set the values of a row table
-            log=cStatus(cType.VALID);
+            log=cStatus();
             if iscell(value) && (size(value,2)==obj.NrOfCols-1)
                 obj.Data(idx,:)=value;
             else
@@ -212,7 +212,7 @@ classdef (Abstract) cTable < cStatusLogger
         %   Output:
         %       log - cStatusLogger object with error messages
         %
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             if (nargin~=2) || ~isFilename(filename) || ~isValid(obj) 
                 log.messageLog(cType.ERROR,'Invalid input arguments');
                 return
@@ -246,7 +246,7 @@ classdef (Abstract) cTable < cStatusLogger
     
         function log=exportCSV(obj,filename)
         % exportCSV saves table values as CSV file
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             try
                 if isOctave
                     cell2csv(filename,obj.Values);
@@ -261,7 +261,7 @@ classdef (Abstract) cTable < cStatusLogger
     
         function log=exportXLS(obj,filename)
         % exportXLS saves table cell as XLS file
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             data=obj.Values;
             if isOctave
                 xls=xlsopen(filename,1);
@@ -282,7 +282,7 @@ classdef (Abstract) cTable < cStatusLogger
                
         function log=exportTXT(obj,filename)
         % Save a table as text file
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             try
                 fId = fopen (filename, 'wt');
                 printTable(obj,fId)
@@ -295,7 +295,7 @@ classdef (Abstract) cTable < cStatusLogger
                 
         function log=exportHTML(obj,filename)
         % Save a table as HTML file
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             html=cBuildHTML(obj);
             if isValid(html)
                 log=html.saveTable(filename);
@@ -306,7 +306,7 @@ classdef (Abstract) cTable < cStatusLogger
     
         function log=exportLaTeX(obj,filename)
         % exportLaTeX generates the LaTex table code file of cTable object
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             ltx=cBuildLaTeX(obj);
             if isValid(ltx)
                 log=ltx.saveTable(filename);
@@ -321,7 +321,7 @@ classdef (Abstract) cTable < cStatusLogger
         %   filename - name of the output file
         %  Output:
         %   log: cStatusLog class containing error messages and status
-            log=cStatusLogger(cType.VALID); 
+            log=cStatusLogger(); 
             data=obj.getStructTable;
             try
                 text=jsonencode(data,'PrettyPrint',true);
@@ -340,7 +340,7 @@ classdef (Abstract) cTable < cStatusLogger
         %   filename - name of the output file
         %  Output:
         %   log: cStatusLog class containing error messages ans status
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             data=obj.getStructTable;
             try
                 writestruct(data,filename,'StructNodeName','root','AttributeSuffix','Id');

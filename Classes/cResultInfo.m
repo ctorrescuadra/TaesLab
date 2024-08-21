@@ -62,6 +62,7 @@ classdef cResultInfo < cResultSet
             obj.tableIndex=cTableIndex(obj);
             obj.NrOfTables=obj.tableIndex.NrOfRows;
             obj.setProperties(info.ModelName,info.State);
+            obj.objectId=cType.sequence;
             obj.status=info.status;
         end
 
@@ -107,9 +108,9 @@ classdef cResultInfo < cResultSet
         %   Output:
         %     res - cTable object
         %
-            res = cStatusLogger(cType.ERROR);
+            res = cStatusLogger();
             if nargin<2
-                res.printError('Invalid number of parameters')
+                res.messageLog(cType.ERROR,'Invalid number of parameters')
             end
             if strcmp(name,cType.TABLE_INDEX)
                 res=obj.getTableIndex;
@@ -237,7 +238,7 @@ classdef cResultInfo < cResultSet
         %       filename - File name. Extensión is used to determine the save mode.
         %   Output:
         %       log - cStatusLogger object with error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             if (nargin < 2) || ~isFilename(filename)
                 log.messageLog(cType.ERROR,'Invalid input arguments');
                 return
@@ -281,7 +282,7 @@ classdef cResultInfo < cResultSet
         %       filename - Name of the file where the csv file information is stored
         %   Output:
         %       log - cStatusLog object with error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             % Check Input
             if obj.tableIndex.NrOfRows<1
                 log.messageLog(cType.ERROR,'No tables to save');
@@ -331,7 +332,7 @@ classdef cResultInfo < cResultSet
         %       filename - name of the worksheet file
         %  Output:
         %       log - cStatusLog object with error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             % Check Input
             if obj.tableIndex.NrOfRows<1
                 log.messageLog(cType.ERROR,'No tables to save');
@@ -400,7 +401,7 @@ classdef cResultInfo < cResultSet
         %       filename - Name of the index file
         %   Output:
         %       log - cStatusLog object with error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             % Check Input
             if obj.tableIndex.NrOfRows<1
                 log.messageLog(cType.ERROR,'No tables to save');
@@ -436,7 +437,7 @@ classdef cResultInfo < cResultSet
         %       filename - name of the worksheet file
         %   Output:
         %       log - cStatusLog object with save status and error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             % Open text file
             try
                 fId = fopen (filename, 'wt');
@@ -458,7 +459,7 @@ classdef cResultInfo < cResultSet
         %       filename - name of the file
         %   Output:
         %       log - cStatusLog object with save status and error messages
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
                 % Open text file
             try
                 fId = fopen (filename, 'wt');

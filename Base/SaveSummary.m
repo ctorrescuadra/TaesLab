@@ -16,7 +16,7 @@ function SaveSummary(model,filename)
 %
 %   See also cThermoeconomicModel, cModelSummary
 %
-    log=cStatusLogger(cType.VALID);
+    log=cStatus();
     % Check Input parameters
     if (nargin<2)
         log.printError('Usage: SaveSummary(model,filename)');

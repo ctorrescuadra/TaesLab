@@ -16,7 +16,7 @@ function SaveDataModel(arg,filename)
 %
 % See also cDataModel, cThermoecononicModel
 %
-    log=cStatusLogger(cType.VALID);
+    log=cStatus();
     % Check Input Parameters
     if (nargin~=2)
         log.printError('Usage: SaveDataModel(data,filename)');

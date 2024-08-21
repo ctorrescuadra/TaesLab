@@ -88,7 +88,7 @@ classdef cDataset < cStatusLogger
         %     arg - key or index of the values to retrive
         %
             % Validate arguments
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             idx=obj.validateArguments(arg);
             if idx
                 res=obj.Values{idx};
@@ -103,7 +103,7 @@ classdef cDataset < cStatusLogger
         %   Input:
         %     arg - key or index where value is assigned
         %     val - values to assing
-            log=cStatusLogger(cType.VALID);
+            log=cStatusLogger();
             idx=obj.validateArguments(arg);
             if idx
                 obj.Values{idx}=val;

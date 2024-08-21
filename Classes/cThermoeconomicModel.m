@@ -161,8 +161,9 @@ classdef cThermoeconomicModel < cResultSet
     methods
         function obj=cThermoeconomicModel(data,varargin)
         % Construct an instance of the thermoeconomic model
-        %   Input:
-        %     data - cReadModel object 
+        % Syntax:
+        %   model = cThermoeconomicModel(data)
+        %     data - cDataModel object 
         %     varargin - optional paramaters (see ThermoeconomicModel)
         %   
             obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
@@ -270,6 +271,8 @@ classdef cThermoeconomicModel < cResultSet
         % Set (assign) Methods
         function set.State(obj,state)
         % Set State object
+        % Syntax:
+        %   model.State = value
             if checkState(obj,state)
                 obj.State=state;
                 obj.triggerStateChange;
@@ -278,6 +281,8 @@ classdef cThermoeconomicModel < cResultSet
 
         function set.ReferenceState(obj,state)
         % Set Reference State
+        % Syntax:
+        %   model.ReferenceState = value
             if checkReferenceState(obj,state)
                 obj.ReferenceState=state;
                 obj.printDebugInfo('Set Reference State: %s',state);
@@ -287,6 +292,8 @@ classdef cThermoeconomicModel < cResultSet
 
         function set.CostTables(obj,value)
         % Set CostTables parameter
+        % Syntax:
+        %   model.ReferenceState = value
             if obj.checkCostTables(value)
                 obj.CostTables=value;
                 obj.triggerCostTablesChange;
@@ -295,6 +302,8 @@ classdef cThermoeconomicModel < cResultSet
 
         function set.ResourceSample(obj,sample)
         % Set Resources sample
+        % Syntax:
+        %   model.ResourceSample = value
             if obj.checkResourceSample(sample)
                 obj.ResourceSample=sample;
                 obj.triggerResourceSampleChange;
@@ -303,6 +312,8 @@ classdef cThermoeconomicModel < cResultSet
 
         function set.DiagnosisMethod(obj,value)
         % Set Diagnosis method
+        % Syntax:
+        %   model.DiagnosisMethod = value
             if obj.checkDiagnosisMethod(value)
                 obj.DiagnosisMethod=value;
                 obj.setThermoeconomicDiagnosis;
@@ -311,6 +322,8 @@ classdef cThermoeconomicModel < cResultSet
 
         function set.Summary(obj,value)
         % Set Summary parameter
+        % Syntax:
+        %   model.Summary = value
             if obj.checkSummary(value)
                 obj.Summary=value;
                 if obj.Summary
@@ -323,6 +336,9 @@ classdef cThermoeconomicModel < cResultSet
         end
 
         function set.Recycling(obj,value)
+        % Set Recycling parameter
+        % Syntax:
+        %   model.Recycling = value
             if obj.checkRecycling(value)
                 obj.Recycling=value;
                 if obj.Recycling
@@ -336,6 +352,8 @@ classdef cThermoeconomicModel < cResultSet
 
         function set.ActiveWaste(obj,value)
         % Set Active Waste
+        % Syntax:
+        %   model.Recycling = value
             if obj.checkActiveWaste(value)
                 obj.ActiveWaste=value;
                 obj.printDebugInfo('Set Active Waste to %s',value);
@@ -346,26 +364,62 @@ classdef cThermoeconomicModel < cResultSet
 
         % Set methods
         function setState(obj,state)
+        % Set a new valid state from StateNames
+        % Syntax:
+        %   obj.setState(state)
+        % Input Parameters
+        %   state - Valid state.
+        %     array of chars 
             obj.State=state;
         end
 
         function setReferenceState(obj,state)
+        % Set a new valid reference state from StateNames
+        % Syntax:
+        %   obj.setState(state)
+        % Input Parameters
+        %   state - Valid state.
+        %     array of chars
             obj.ReferenceState=state;
         end
 
-        function setCostTables(obj,type)
-            obj.CostTables=type;
-        end
-
         function setResourceSample(obj,sample)
+        % Set a new valid ResourceSample from SampleNames
+        % Syntax:
+        %   obj.setResourceSample(state)
+        % Input Parameters
+        %   state - Valid state.
+        %     array of chars
             obj.ResourceSample=sample;
         end
 
+        function setCostTables(obj,type)
+        % Set a new value of CostTables parameter
+        % Syntax:
+        %   obj.setCostTables(type)
+        % Input Parameters
+        %   type - Type of thermoeconomic tables
+        %     'DIRECT' | 'GENERALIZED' | 'ALL'
+            obj.CostTables=type;
+        end
+
         function setDiagnosisMethod(obj,method)
+        % Set a new value of DiagnosisMethod parameter
+        % Syntax:
+        %   obj.setDiagnosisMethod(method)
+        % Input Parameters
+        %   method - Method used to compute diagnosis
+        %     'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
             obj.DiagnosisMethod=method;
         end
 
         function setActiveWaste(obj,key)
+        % Set a new waste flow for recycling analysis
+        % Syntax:
+        %   setActiveWaste(obj,method)
+        % Input Parameters
+        %   method - Method used to compute diagnosis
+        %     'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
             obj.ActiveWaste=key;
         end
 
@@ -626,7 +680,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Input:
         %     name - name of the table
         %
-            tbl=cStatusLogger(cType.VALID);
+            tbl=cStatusLogger();
             if strcmp(name,cType.TABLE_INDEX)
                 res=obj.buildResultInfo;
                 tbl=res.getTableIndex;
@@ -813,7 +867,7 @@ classdef cThermoeconomicModel < cResultSet
         %  Input
         %   wtype - waste allocation type (see cType)
         %
-            log=cStatus(cType.VALID);
+            log=cStatus();
             if nargin~=2
                log.printError('Usage: obj.setWasteType(key,wtype)');
                return
@@ -838,7 +892,7 @@ classdef cThermoeconomicModel < cResultSet
         % Input
         %  id - Waste key
         %  val - vector containing the waste values
-            log=cStatus(cType.VALID);
+            log=cStatus();
             if nargin~=2
                log.printError('Usage: obj.setWasteValues(key,values)');
                return
@@ -863,7 +917,7 @@ classdef cThermoeconomicModel < cResultSet
         % Input
         %  id - Waste id
         %  val - vector containing the waste values
-            log=cStatus(cType.VALID);
+            log=cStatus();
             if nargin~=2
                log.printError('Usage: obj.setWasteRecycled(key,value)');
                return
@@ -892,7 +946,7 @@ classdef cThermoeconomicModel < cResultSet
         %       c0 - array containing the flows cost
         %   Output:
         %       res - cResourceCost object 
-            res=cStatus(cType.VALID);
+            res=cStatus();
             if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
 				return
@@ -915,7 +969,7 @@ classdef cThermoeconomicModel < cResultSet
         %       value - resource cost value
         %   Output:
         %       res - cResourceCost object
-            res=cStatus(cType.VALID);
+            res=cStatus();
             if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
@@ -937,7 +991,7 @@ classdef cThermoeconomicModel < cResultSet
         %       Z - array containing the processes cost
         %   Output:
         %       res - cResourceCost object
-            res=cStatus(cType.VALID);
+            res=cStatus();
             if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
@@ -960,7 +1014,7 @@ classdef cThermoeconomicModel < cResultSet
         %       value - cost value of the process
         %   Output:
         %       res - cResourceCost object
-            res=cStatus(cType.VALID);
+            res=cStatus();
             if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
@@ -1012,7 +1066,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Input:
         %     values - Array with the exergy values of the flows
         %
-            log=cStatusLogger(cType.VALID);
+            log=cStatus();
             % Check state is no reference 
             if strcmp(obj.ReferenceState,obj.State)
                 log.printError('Cannot change Reference State values');
@@ -1112,7 +1166,7 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=getSummaryResults(obj)
         % Force to obtain summary results
-            res=cStatusLogger(cType.ERROR);
+            res=cStatus(cType.INVALID);
             if ~obj.isSummaryEnable
                 return
             end
@@ -1366,18 +1420,15 @@ classdef cThermoeconomicModel < cResultSet
         % cModelResults methods
         function res=getResultId(obj,index)
         % Get the cResultInfo given the resultId
-            res=cStatusLogger(cType.ERROR);
-            tmp=getResults(obj.results,index);
-            if isempty(tmp)
-                res.messageLog(cType.ERROR,'Invalid ResultId');
-            else
-                res=tmp;
-            end
+            res=getResults(obj.results,index);
+%            if isempty(res)
+%                res=cStatus(cType.INVALID);
+%            end
         end
         
         function res=getResultTable(obj,table)
         % Get the cResultInfo object associated to a table
-            res=cStatusLogger(cType.VALID);
+            res=cStatusLogger();
             tinfo=obj.getTableInfo(table);
             if isempty(tinfo)
                 res.messageLog(cType.ERROR,'Table %s does not exists',table);

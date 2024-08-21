@@ -53,17 +53,18 @@ classdef cType
 %  	char=getPathDelimiter()                
 %                 
 	properties (Constant)
+		INVALID=false;            % Invalid status
+        VALID=true;               % Valid status
 		PRODUCTIVE=1;             % Productive Bit
 		ENVIRONMENT=2;            % Environment Bit
 		WASTE=3;                  % Waste Bit
         WARNING=-1;               % Warning message
-        EMPTY=-1;                 % Empty objectId
         ERROR=0;                  % Error message
-        VALID=1;                  % OK
 		INFO=1;                   % Info message
+		EMPTY=-1;                 % Empty objectId
         DIRECT=1                  % Direct Cost Tables Bit
         GENERALIZED=2             % Generalized Cost Tables Bit
-		CAPACITY=8	              % Initial capacity for cQueue and cStack
+		CAPACITY=2                % Initial capacity for cQueue and cStack
 		MAX_RESULT=5              % Number of Results in cModelResults
 		MAX_RESULT_INFO=10        % Maximun cResultInfo groups
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
@@ -424,6 +425,17 @@ classdef cType
 				return
 			end
 			disp(['cType.Tables.',codes{idx}]);
+		end
+
+		function res=sequence()
+		% Generate a sequence of numbers
+			persistent counter;
+			if isempty(counter)
+				counter=1;
+			else
+				counter=counter+1;
+			end
+			res=uint64(counter);
 		end
 
 		%%%%

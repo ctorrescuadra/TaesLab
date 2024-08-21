@@ -23,7 +23,7 @@ classdef cResourceData < cStatusLogger
 		%	ps - cProductiveStructure object
         %	data - cModelData object
 		%
-			obj=obj@cStatusLogger(cType.VALID);
+			obj=obj@cStatusLogger();
 		    % Check arguments and inititiliza class
 			if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
 				obj.messageLog(cType.ERROR,'No Productive Structure provided');

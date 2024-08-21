@@ -16,7 +16,7 @@ function SaveTable(tbl,filename)
 %
 %   See also cTable
 %
-    log=cStatusLogger(cType.VALID);
+    log=cStatus();
     % Check Input parameters
     if (nargin~=2) 
         log.printError('Usage: SaveTable(table,filename)');

@@ -18,7 +18,6 @@ classdef cTableIndex < cTable
         %       res - cResultInfo object
         %
             % Check input parameters
-            obj.status=true;
             if ~isa(res,'cResultInfo') || ~isValid(res)
                 obj.messageLog(cType.ERROR,'Invalid input argument')
                 return

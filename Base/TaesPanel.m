@@ -74,7 +74,7 @@ classdef TaesPanel < cTaesLab
     methods
         function app=TaesPanel()
         % Create an instance of the object
-			app.model=cStatusLogger();
+			app.model=cStatus();
             % Create GUI components
             createComponents(app);
             initInputParameters(app);

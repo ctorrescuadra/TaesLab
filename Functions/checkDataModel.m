@@ -15,7 +15,7 @@ function data = checkDataModel(filename)
 %
 %   See also cReadModel, cDataModel
 %
-    data=cStatusLogger(cType.ERROR);
+    data=cStatusLogger();
     rdm=readModel(filename);
     % Check if data model file is correct
     if ~isValid(rdm)

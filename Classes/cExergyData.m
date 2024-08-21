@@ -20,7 +20,7 @@ classdef cExergyData < cStatusLogger
         %  dm - cExergyState object
 		%  ps - cProductiveStructure object
 			% Check arguments
-			obj=obj@cStatusLogger(cType.VALID);
+			obj=obj@cStatusLogger();
             if ~isstruct(data)
 				obj.messageLog(cType.ERROR,'Invalid exergy data provided');
 				return

@@ -38,7 +38,7 @@ classdef  cSparseRow < cStatus
 			obj.NR=size(vals,1);
 			obj.M=size(vals,2);
 			if (obj.NR ~= length(rows))
-				obj.status=false;
+				obj.printError('Invalid cSparseRow Parameters')
 				return
 			end
 			obj.mRows=rows;
@@ -69,7 +69,7 @@ classdef  cSparseRow < cStatus
 
 		function nobj=scaleCol(obj,x)
 		% Scale Columns function
-			log=cStatus(cType.VALID);
+			log=cStatus();
 			if(obj.M~=length(x))
 				log.printError('Matrix dimensions must agree: %d %d',obj.NR,length(rows));
 				return
@@ -80,7 +80,7 @@ classdef  cSparseRow < cStatus
 
 		function nobj=divideCol(obj,x)
 		% Divide Columns function
-			nobj=cStatus(cType.VALID);
+			nobj=cStatus();
 			if nargin==1
 				x=obj.sumCols;
 			end
@@ -94,7 +94,7 @@ classdef  cSparseRow < cStatus
 
 		function nobj=scaleRow(obj,x)
 		% Scale Rows function
-			nobj=cStatus(cType.VALID);
+			nobj=cStatus();
 			if(obj.N~=length(x))
 				nobj.printError('Matrix dimensions must agree: %d %d',obj.NR,length(rows));
 				return
@@ -105,7 +105,7 @@ classdef  cSparseRow < cStatus
 
 		function nobj=divideRow(obj,x)
 		% Divide Rows
-			nobj=cStatus(cType.VALID);
+			nobj=cStatus();
 			if nargin==1
 				x(obj.mRows)=obj.sumRows;
 			end

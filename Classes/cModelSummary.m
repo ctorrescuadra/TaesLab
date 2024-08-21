@@ -70,7 +70,6 @@ classdef cModelSummary < cResultId
                 pI(:,j)=rstate.ProcessesExergy.vI';
                 rex(:,j)=rstate.FlowsExergy';
             end
-            obj.status=true;
             obj.ExergyData=rex;
             obj.UnitConsumption=pku;
             obj.Irreversibility=pI;

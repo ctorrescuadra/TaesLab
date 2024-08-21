@@ -11,7 +11,6 @@ classdef (Sealed) cReadModelJSON < cReadModelStruct
 		%	cfgfile - xml file containig the model of the plant
 		%
 			% Read configuration file
-            obj.status=true;
             try
 				text=fileread(cfgfile);
 				sd=jsondecode(text);

@@ -41,7 +41,7 @@ function res = WasteAnalysis(data,varargin)
 %
 %   See also cDataModel, cWasteAnalysis, cResultInfo
 %
-    res=cStatusLogger();
+    res=cStatus();
     checkModel=@(x) isa(x,'cDataModel');
     % Check and initialize parameters
     p = inputParser;

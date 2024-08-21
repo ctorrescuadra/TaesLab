@@ -7,7 +7,7 @@ function res=readModel(filename)
 %       res - cReadModel object
 %
     % Create the model depending de file extension
-    res=cStatusLogger(cType.VALID);
+    res=cStatusLogger();
     fileType=cType.getFileType(filename);
     switch fileType
         case cType.FileType.JSON

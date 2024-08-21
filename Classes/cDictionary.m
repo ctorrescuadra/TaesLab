@@ -15,7 +15,7 @@ classdef cDictionary < cStatusLogger
 
         function obj = cDictionary(data)
 		% Construct an instance of this class
-			obj=obj@cStatusLogger(cType.VALID);
+			obj=obj@cStatusLogger();
 			m=containers.Map('KeyType','char','ValueType','uint8');
 			for i=1:numel(data)
 				if m.isKey(data{i})

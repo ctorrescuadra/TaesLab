@@ -16,15 +16,13 @@ classdef cResultId < cStatusLogger
         % Class constructor
 		%  Input:
 		%	id - Result identifier. See cType.ResultId
-            if (nargin==1) &&isscalar(id) && isnumeric(id)
-				N=length(cType.Results);
-				if any (id==1:N)
-					obj.ResultId=id;
-                    obj.status=true;
-                    obj.ModelName='';
-                    obj.State='';
-                    obj.DefaultGraph='';
-				end
+            if isscalar(id) && isnumeric(id) && ismember(id,1:cType.MAX_RESULT_INFO)
+			    obj.ResultId=id;
+                obj.ModelName='';
+                obj.State='';
+                obj.DefaultGraph='';
+            else
+                obj.messageLog(cType.ERROR,'Invalid ResultId %d',id);
             end
         end
 		

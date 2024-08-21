@@ -16,7 +16,7 @@ classdef (Sealed) cModelResults < cStatusLogger
         %cModelResults Construct an instance of this class
         %  Initialize the results model from data model
         %   data - cDataModel object
-            obj=obj@cStatusLogger(cType.VALID);
+            obj=obj@cStatusLogger();
             if ~isDataModel(data)
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 return
@@ -83,8 +83,8 @@ classdef (Sealed) cModelResults < cStatusLogger
     methods(Static,Access=private)
         function res = checkAssign(obj1,obj2)
         % Check if the set function (obj1=obj2) should be execute
-            % Check if obj2 is not empty and is valid
-            if isempty(obj2) || ~isa(obj2,'cResultInfo') || ~isValid(obj2)
+            % Check if obj2 is valid
+            if ~isResultInfo(obj2)
                 res=false;
                 return
             end

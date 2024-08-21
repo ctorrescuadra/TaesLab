@@ -12,7 +12,6 @@ classdef (Sealed) cReadModelXML < cReadModelStruct
 		%	cfgfile - xml file containig the model of the plant
 		%
 			%check arguments
-            obj.status=true;
             if isOctave 
 		        obj.messageLog(cType.ERROR,'This function is not yet implemented');
                 return

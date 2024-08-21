@@ -21,7 +21,7 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
         %   Input:
         %       tbl - cTable object
 
-            obj=obj@cStatusLogger(cType.VALID);
+            obj=obj@cStatusLogger();
             if ~isValidTable(tbl)
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return

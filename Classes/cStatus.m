@@ -1,33 +1,17 @@
 classdef cStatus < cTaesLab
-    % cStatus - Define the object status for TaesLab objects
-    %   Include functions to validate the status of the objects
-    %   and print the error messgaes on the console
-    %
-    % cStatus Properties:
-    %    status - Status of the object. boolean
+    % cStatus - Create a status object
+	%   Provide methods to print messages on console
     %
     % cStatus Methods
-	%
-	%  Check Methods:
-    %   isValid - Check if a object is valid
-    %   isResultId - Check if a object is a valid cResultId
-    %   isDataModel - Check if a object is a valid cDataModel
-    %   isResultSet - Check if a object is a valid cResultSet
-    %   isValidTable - Check if a object is a valid cTable
-	%
-	%  Print Methods:
-    %   printError - Print a error message on the console
+	%   printError   - Print a error message on the console
     %   printWarning - Print a warning message on the console
-    %   printInfo - Print a info message on the console
+    %   printInfo    - Print a info message on the console
     %
-	% See also cStatusLogger
-	properties(GetAccess=public,SetAccess=protected)
-		status	% Status of the object
-	end
+	% See also cTaesLab, cStatusLogger
 	
 	methods
 		function obj=cStatus(val)
-		% Create an instace of the cStatus class 
+		% Create an instace of the cStatus object 
 		% Initialize cStatus object to manage errors
         % Syntax:
         %   obj = cStatus();
@@ -37,52 +21,12 @@ classdef cStatus < cTaesLab
         %     false | true (default).
 		%
             if nargin<1
-    	        obj.status=true;
+    	        obj.status=cType.VALID;
             else
-                obj.status=logical(val);
+                obj.status=val;
             end
 		end
 				
-		function test=isValid(obj)
-		% Check if object is Valid
-        % Syntax:
-		%	test = isValid(obj)
-        %
-			test=(obj.status>cType.ERROR);
-        end
-
-		function test=isResultId(obj)
-		% Check if object is a valid cResultId object
-		% Syntax:
-		%	test = isResultId(obj)
-		%
-			test=(isa(obj,'cResultId') || isa(obj,'cDataModel') || isa(obj,'cThermoeconomicModel'));
-			test=test && isValid(obj);
-		end
-
-		function test=isDataModel(obj)
-		% Check if object is a valid cDataModel
-		% Syntax:
-		%	test = isDataModel(obj)
-		%
-			test=isa(obj,'cDataModel') && isValid(obj);
-		end
-
-		function test=isResultSet(obj)
-		% Check if object is a valid cResultSet
-		% Syntax:
-		%	test = isResultSet(obj)
-		%
-			test=isa(obj,'cResultSet') && isValid(obj);
-		end
-
-		function test=isValidTable(obj)
-		% Check if object is a valid cTable
-		% Syntax:
-		%	test = isValidTable(obj)
-			test=isa(obj,'cTable') && isValid(obj);
-		end
-
 		function printError(obj,varargin)
 		% Print error message. Use fprintf syntax
 		% Syntax:
@@ -136,7 +80,7 @@ classdef cStatus < cTaesLab
 		end
 
 		function printMessage(obj,error,varargin)
-		% Print messages depending of type error
+		% Print messages depending of type error and update state
 		% Input Argument
 		%   error - error code
 		%   text - text message

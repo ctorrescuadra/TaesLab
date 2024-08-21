@@ -4,7 +4,7 @@ classdef cMessageLog < cTaesLab
 %       obj=cMessageLog(error,class,text)
 %       text=obj.getMessage;
 %
-    properties(GetAccess=public,SetAccess=private)
+    properties(GetAccess=protected,SetAccess=private)
         Error    % Error type
         Class    % Class cause error
         Text     % Error text

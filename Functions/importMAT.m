@@ -11,7 +11,7 @@ function obj = importMAT(filename)
 %  	Output Argument
 %   	obj - cStatusLogger object
 %
-    obj=cStatusLogger(cType.VALID);
+    obj=cStatusLogger();
 	% Check input arguments
     if isOctave
         obj.messageLog(cType.ERROR,'Read MAT files is not yet implemented for Octave');
@@ -27,7 +27,7 @@ function obj = importMAT(filename)
 		obj.messageLog(cType.ERROR,'Error reading file %s',filename);
 		return
 	end
-	if isa(var,'cStatusLogger') && isValid(var)
+	if isValid(var)
         obj=var;
 		obj.clearLogger;
 	else

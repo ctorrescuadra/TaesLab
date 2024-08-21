@@ -23,7 +23,7 @@ classdef cViewTable < cStatus
 		%	 tbl - cResultTable object
 		%
 			% Parameters depending of software platform
-			obj=obj@cStatus(cType.VALID);
+			obj=obj@cStatus();
 			if isOctave
 				param=struct('ColumnScale',8,'RowWidth',21,'xMin',160,...
 					'xScale',0.8,'yScale',0.8,'xoffset',4,'yoffset',2,...

@@ -18,7 +18,7 @@ classdef (Sealed) cGraphResults < cStatusLogger
     methods
         function obj = cGraphResults(tbl, varargin)
 		% Constructor. Create the object with the graph properties  
-            obj=obj@cStatusLogger(cType.VALID);
+            obj=obj@cStatusLogger();
 			if ~isa(tbl,'cTableResult')
 				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
 				return

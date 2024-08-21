@@ -29,7 +29,7 @@ function res = ExportResults(arg,varargin)
 %  
 %   See also cResultSet, cTable.
 %
-    res=cStatusLogger();
+    res=cStatus();
     % Check input
     p = inputParser;
     p.addRequired('arg',@isResultSet);

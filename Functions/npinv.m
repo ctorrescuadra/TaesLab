@@ -13,7 +13,7 @@ function [A,det]=npinv(A)
 %		det - determinant of the original matrix A
 %
 	det=1;
-	log=cStatus(cType.VALID);
+	log=cStatus();
   	% Check parameters
     sz=size(A);
   	if sz(1)~=sz(2)

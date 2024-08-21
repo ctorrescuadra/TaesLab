@@ -13,7 +13,7 @@ function log=exportMAT(obj,filename)
 %   Output Arguments
 %     log - cStatusLogger containing the status of the save and error messages
 %
-    log=cStatusLogger(cType.VALID);
+    log=cStatusLogger();
     if (nargin~=2) || (~isFilename(filename))
         log.messageLog(cType.ERROR,'Invalid input arguments');
         return
