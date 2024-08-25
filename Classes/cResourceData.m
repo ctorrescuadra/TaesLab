@@ -1,4 +1,4 @@
-classdef cResourceData < cStatusLogger
+classdef cResourceData < cMessageLogger
 % cResourceData gets and validates the external cost resources of a system
 % 	Methods:
 % 		obj=cResourceData(ps,data)
@@ -23,7 +23,6 @@ classdef cResourceData < cStatusLogger
 		%	ps - cProductiveStructure object
         %	data - cModelData object
 		%
-			obj=obj@cStatusLogger();
 		    % Check arguments and inititiliza class
 			if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
 				obj.messageLog(cType.ERROR,'No Productive Structure provided');
@@ -98,7 +97,7 @@ classdef cResourceData < cStatusLogger
 		% Set the Resources cost of processes
 		%  Input:
 		%   Z - Resources cost processes values
-			log=cStatusLogger();
+			log=cMessageLogger();
             if length(Z) == obj.ps.NrOfProcesses
 				obj.Z=Z;
 			else
@@ -115,7 +114,7 @@ classdef cResourceData < cStatusLogger
 		% Set the Resources unit cost of flows
 		%  Input:
 		%   c0 - Resources cost flows values
-			log=cStatusLogger();
+			log=cMessageLogger();
             if length(c0) == obj.ps.NrOfFlows
 				obj.c0=c0;
 			else
@@ -132,7 +131,7 @@ classdef cResourceData < cStatusLogger
 		% Set the value of a resource
 		%	key - key of the resource
 		%	value - cost of the resource
-			log=cStatusLogger();
+			log=cMessageLogger();
 			id=obj.getResourceIndex(key);
             if cType.isEmpty(id)
 				log.messageLog(cType.ERROR,'Invalid key: %s',key);
@@ -150,7 +149,7 @@ classdef cResourceData < cStatusLogger
 		% Set the value of a resource
 		%	key - key of the resource
 		%	value - cost of the resource
-			log=cStatusLogger();
+			log=cMessageLogger();
 			id=obj.ps.getProcessId(key);
             if cType.isEmpty(id)
 				log.messageLog(cType.ERROR,'Invalid key: %s',key);

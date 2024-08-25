@@ -1,4 +1,4 @@
-classdef  cSparseRow < cStatus
+classdef  cSparseRow < cMessageLogger
 	% cSparseRow Defines objects to store matrix which contains a few non-null rows.
 	%	This class is used to manage  waste allocation matrices, and provide a set of
 	%   algebraic operations. 
@@ -37,16 +37,18 @@ classdef  cSparseRow < cStatus
 			narginchk(2,3);
 			obj.NR=size(vals,1);
 			obj.M=size(vals,2);
-			if (obj.NR ~= length(rows))
-				obj.printError('Invalid cSparseRow Parameters')
+			if obj.NR ~= length(rows)
+				obj.printError('Invalid cSparseRow arguments. Rows and Values dimensions must agree');
 				return
 			end
 			obj.mRows=rows;
 			obj.mValues=vals;
 			if nargin==2
 				obj.N=obj.M;
-			else
+			elseif n>=obj.NR
 				obj.N=n;
+			else
+				obj.printError('Invalid cSparseRow arguments. Number of Rows must agree');
 			end
 		end
         
@@ -142,6 +144,11 @@ classdef  cSparseRow < cStatus
 
 		function nobj=plus(obj1,obj2)
 		% overload the plus operator
+			nobj=cStatus();
+			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
+				nobj.printError('Matrix dimensions must agree');
+				return
+			end
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
 			switch test
 				case 1
@@ -157,6 +164,11 @@ classdef  cSparseRow < cStatus
 
 		function nobj=minus(obj1,obj2)
 		% overload the minus operator
+			nobj=cStatus();
+			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
+				nobj.printError('Matrix dimensions must agree');
+				return
+			end
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
 			switch test
 				case 1
@@ -175,20 +187,25 @@ classdef  cSparseRow < cStatus
 			nobj=cSparseRow(obj.mRows,-obj.mValues);
 		end
 
-		function obj=mtimes(obj1,obj2)
+		function nobj=mtimes(obj1,obj2)
 		% overload the mtimes operator
+			nobj=cStatus();
+			if (size(obj1,2)~=size(obj2,1))
+				nobj.printError('Matrix dimensions must agree');
+				return
+			end
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
 			switch test
 				case 1
-					obj=cSparseRow(obj1.mRows,obj1.mValues*obj2);
+					nobj=cSparseRow(obj1.mRows,obj1.mValues*obj2);
 				case 2
                     if isscalar(obj1)
-                        obj=cSparseRow(obj2.mRows,obj1*obj2.mValues);
+                       nobj=cSparseRow(obj2.mRows,obj1*obj2.mValues);
                     else
-					    obj=obj1(:,obj2.mRows)*obj2.mValues;
+					    nobj=obj1(:,obj2.mRows)*obj2.mValues;
                     end
 				case 3
-					obj=cSparseRow(obj1.mRows,obj1.mValues(:,obj1.mRows)*obj2.mValues);
+					nobj=cSparseRow(obj1.mRows,obj1.mValues(:,obj1.mRows)*obj2.mValues);
 			end
 		end
 

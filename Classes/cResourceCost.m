@@ -1,4 +1,4 @@
-classdef cResourceCost < cStatusLogger
+classdef cResourceCost < cMessageLogger
 % cResourceCost computes 
 % 	Methods:
 % 		obj=cResourceCost(data,exm)
@@ -19,7 +19,6 @@ classdef cResourceCost < cStatusLogger
 		%	Input:
 		%	  rd - cResourceData object
 		%	 exm - cExergyModel object with state information
-			obj=obj@cStatusLogger();
 			if ~isa(rd,'cResourceData') || ~isValid(rd)
 				rd.messageLog(cType.ERROR,'Invalid resource cost data');
 				return

@@ -1,4 +1,4 @@
-classdef cTablesDefinition < cStatusLogger
+classdef cTablesDefinition < cMessageLogger
 % cTablesDefinition reads the tables format configuration file 
 %   This class is use for two purposes:
 %   - This class is defined as base class of cFormatData reading the printformat.json
@@ -23,8 +23,7 @@ classdef cTablesDefinition < cStatusLogger
         tDirectory=[]   % cTableData containig the tables directory info
     end
     methods
-        function obj=cTablesDefinition()
-            obj=obj@cStatusLogger();          
+        function obj=cTablesDefinition()      
 			% load default configuration filename			
 			path=fileparts(mfilename('fullpath'));
 			cfgfile=fullfile(path,cType.CFGFILE);
@@ -94,7 +93,7 @@ classdef cTablesDefinition < cStatusLogger
         %   Input:
         %       filename - File name. Extension is used to determine the save mode.
         %   Output:
-        %       log - cStatusLogger object with error messages
+        %       log - cMessageLogger object with error messages
             log=saveTable(obj.tDirectory,filename);
             log.printLogger;
         end
@@ -201,7 +200,7 @@ classdef cTablesDefinition < cStatusLogger
  
         function res=buildTablesDirectory(obj,cols)
         % Get the tables directory as cTableData
-            res=cStatusLogger;
+            res=cMessageLogger;
             if nargin==1
                 cols=cType.DIR_COLS_DEFAULT;
             end

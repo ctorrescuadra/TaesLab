@@ -73,6 +73,11 @@ classdef cTableData < cTable
             end
         end
 
+        function res=getDescriptionLabel(obj)
+        % Get the description of each table
+            res=obj.Description;
+        end
+
         function printTable(obj,fid)
         % Get table as text or print in conoloe
             if nargin==1
@@ -90,6 +95,8 @@ classdef cTableData < cTable
             lformat=[lfmt{:},'\n'];
             header=sprintf(lformat,obj.ColNames{:});
             lines=cType.getLine(length(header)+1);
+            fprintf(fid,'\n');
+            fprintf(fid,'%s\n',obj.getDescriptionLabel);
             fprintf(fid,'\n');
             fprintf(fid,'%s',header);
             fprintf(fid,'%s\n',lines);

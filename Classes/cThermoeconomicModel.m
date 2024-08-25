@@ -525,7 +525,7 @@ classdef cThermoeconomicModel < cResultSet
             elseif ischar(arg)
                 res=getResultTable(obj,arg);
             else
-                res=cStatusLogger;
+                res=cMessageLogger;
                 res.messageLog(cType.ERROR,'Invalid argument');
             end
         end
@@ -680,7 +680,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Input:
         %     name - name of the table
         %
-            tbl=cStatusLogger();
+            tbl=cMessageLogger();
             if strcmp(name,cType.TABLE_INDEX)
                 res=obj.buildResultInfo;
                 tbl=res.getTableIndex;
@@ -778,7 +778,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Input:
         %     filename - Name of the file
         %   Output:
-        %     log - cStatusLogger object containing the status and error messages
+        %     log - cMessageLogger object containing the status and error messages
         %
             log=cStatus();
             if nargin~=2
@@ -799,7 +799,7 @@ classdef cThermoeconomicModel < cResultSet
         %  Input:
         %   filename - Name of the file
         %  Output:
-        %   log - cStatusLogger object containing the status and error messages
+        %   log - cMessageLogger object containing the status and error messages
             log=cStatus();
             if nargin~=2
                 log.printError('Usage: saveDataModel(model,filename)');
@@ -814,7 +814,7 @@ classdef cThermoeconomicModel < cResultSet
         %  Input:
         %   filename - Name of the file
         %  Output:
-        %   log - cStatusLogger object containing the status and error messages
+        %   log - cMessageLogger object containing the status and error messages
             log=cStatus();
             if nargin~=2
                 log.printError('Usage: saveDiagramFP(model,filename)');
@@ -1074,20 +1074,23 @@ classdef cThermoeconomicModel < cResultSet
             end
             % Set exergy data for state
             data=obj.DataModel;
-            log=data.setExergyData(obj.State,values);
-            if ~isValid(log)
-                printLogger(log);
+            rex=data.setExergyData(obj.State,values);
+            if ~isValid(rex)
+                printLogger(rex);
                 return
             end
-            idx=data.ExergyData.getIndex(obj.State);
-            rex=data.getExergyData(idx);
             % Compute cExergyCost
             if obj.isWaste
                 cex=cExergyCost(rex,obj.wd);
             else
                 cex=cExergyCost(rex);
             end
-            obj.rstate.setValues(idx,cex);
+            if ~isValid(cex)
+                printLogger(cex);
+                return
+            else
+                obj.rstate.setValues(obj.State,cex);
+            end
             % Get results
             obj.triggerStateChange;
             obj.setSummaryResults;
@@ -1428,7 +1431,7 @@ classdef cThermoeconomicModel < cResultSet
         
         function res=getResultTable(obj,table)
         % Get the cResultInfo object associated to a table
-            res=cStatusLogger();
+            res=cMessageLogger();
             tinfo=obj.getTableInfo(table);
             if isempty(tinfo)
                 res.messageLog(cType.ERROR,'Table %s does not exists',table);

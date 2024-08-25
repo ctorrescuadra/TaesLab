@@ -21,7 +21,7 @@ classdef cProductiveStructureCheck < cResultId
 		cflw			% Internal flows cell array
 		cstr            % Internal streams cell array
 		cprc            % Internal processes cell array
-        parser          % cStreamParser object
+        parser          % cParseStream object
     end
 
     methods
@@ -238,7 +238,7 @@ classdef cProductiveStructureCheck < cResultId
             % set input flows of the stream          
             finp=zeros(1,fe.Count);
             for i=1:fe.Count
-			    in=fe.Content{i};
+			    in=fe.getContent(i);
 				idx=obj.fDict.getIndex(in);
                 if ~cType.isEmpty(idx)
 					if ~obj.cflw{idx}.to
@@ -254,7 +254,7 @@ classdef cProductiveStructureCheck < cResultId
             % set output flows of the stream
             fout=zeros(1,fs.Count);
             for i=1:fs.Count
-			    out=fs.Content{i};
+			    out=fs.getContent(i);
 				idx=obj.fDict.getIndex(out);
                 if ~cType.isEmpty(idx)
 					if ~obj.cflw{idx}.from

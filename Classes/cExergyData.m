@@ -1,4 +1,4 @@
-classdef cExergyData < cStatusLogger
+classdef cExergyData < cMessageLogger
 % cExergyData gets and validates the exergy data values for a state of the plant 
 %  	Check if these values are coherent with the productive
 %  	structure and get the exergy values for flows, streams and processes.
@@ -20,7 +20,6 @@ classdef cExergyData < cStatusLogger
         %  dm - cExergyState object
 		%  ps - cProductiveStructure object
 			% Check arguments
-			obj=obj@cStatusLogger();
             if ~isstruct(data)
 				obj.messageLog(cType.ERROR,'Invalid exergy data provided');
 				return

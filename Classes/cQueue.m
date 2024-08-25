@@ -1,4 +1,4 @@
-classdef cQueue < cStatus
+classdef cQueue < handle
 % cQueue Creates a FIFO queue data structure. It uses a cell array to store the data
 % 	Methods:
 %   	obj = cQueue(initial_capacity)

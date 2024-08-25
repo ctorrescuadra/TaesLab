@@ -143,7 +143,7 @@ classdef (Sealed) cTableMatrix < cTableResult
 
         function res=getDescriptionLabel(obj)
         % Get the description of the table
-            res=[obj.Description,' ',obj.Unit];
+            res=[obj.Description,' ',obj.Unit,' - ',obj.State];
         end
 
         function printTable(obj,fId)

@@ -1,4 +1,4 @@
-classdef cWasteData < cStatusLogger
+classdef cWasteData < cMessageLogger
 % cWasteData gets and validates the waste definition table.
 %
 % 	Methods:
@@ -33,7 +33,6 @@ classdef cWasteData < cStatusLogger
 		%	data - waste definition data from cReadModel
 		%
 			% Check input arguments
-			obj=obj@cStatusLogger();
 			if ~isstruct(data)
 				obj.messageLog(cType.ERROR,'Invalid waste data');
 				return

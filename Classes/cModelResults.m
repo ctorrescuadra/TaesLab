@@ -1,4 +1,4 @@
-classdef (Sealed) cModelResults < cStatusLogger
+classdef (Sealed) cModelResults < cMessageLogger
     %cModelResults is a class container of the model results
     %   This class store the results of cThermoeconomicModel according to its ResultId
     %   cModelResults methods:
@@ -16,7 +16,6 @@ classdef (Sealed) cModelResults < cStatusLogger
         %cModelResults Construct an instance of this class
         %  Initialize the results model from data model
         %   data - cDataModel object
-            obj=obj@cStatusLogger();
             if ~isDataModel(data)
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 return

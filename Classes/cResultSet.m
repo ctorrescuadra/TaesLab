@@ -1,4 +1,4 @@
-classdef cResultSet < cStatusLogger
+classdef cResultSet < cMessageLogger
 % cResultSet is the base class for result classes
 %   It implements the cResultInfo methods
 %   object of the class derived from it.
@@ -24,7 +24,6 @@ classdef cResultSet < cStatusLogger
         function obj = cResultSet(id)
         % cResultSet Construct an instance of this class
         %   Define the class identifier
-            obj=obj@cStatusLogger();
             obj.classId=id;
         end
 
@@ -54,7 +53,7 @@ classdef cResultSet < cStatusLogger
         %     tname - name of the table
         %     filename - name of the file with extension
         %
-            log=cStatusLogger();
+            log=cMessageLogger();
             if nargin < 3
                 log.messageLog(cType.ERROR,'Invalid input parameters');
                 return
@@ -81,7 +80,7 @@ classdef cResultSet < cStatusLogger
         %         cType.VarModel.TABLE: Matlab table
         %       fmt - Format values (false/true)
         %
-            res=cStatusLogger();
+            res=cMessageLogger();
             if nargin < 2
                 res.messageLog(cType.ERROR,'Invalid number of arguments')
                 return

@@ -1,4 +1,4 @@
-classdef (Sealed) cModelData < cStatusLogger
+classdef (Sealed) cModelData < cMessageLogger
     %cModelData container class of the Data Model structure
     %  cModelData methods:
     %    obj.isWaste
@@ -25,7 +25,6 @@ classdef (Sealed) cModelData < cStatusLogger
         function obj = cModelData(s)
         %cModelData Construct an instance of this class
         %   store the data structure and check it
-            obj=obj@cStatusLogger();
             obj.dm=struct();
             for i=cType.MandatoryData
                 fld=cType.DataElements{i};
@@ -119,7 +118,7 @@ classdef (Sealed) cModelData < cStatusLogger
         %   filename - name of the output file
         %  Output:
         %   log: cStatusLog class containing error messages ans status
-            log=cStatusLogger();
+            log=cMessageLogger();
             try
                 writestruct(obj.dm,filename,'StructNodeName','root','AttributeSuffix','Id');
             catch err
@@ -134,7 +133,7 @@ classdef (Sealed) cModelData < cStatusLogger
         %   filename - name of the output file
         %  Output:
         %   log: cStatusLog class containing error messages and status
-            log=cStatusLogger();
+            log=cMessageLogger();
             try
                 text=jsonencode(obj.dm,'PrettyPrint',true);
                 fid=fopen(filename,'wt');

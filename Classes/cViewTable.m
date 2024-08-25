@@ -1,4 +1,4 @@
-classdef cViewTable < cStatus
+classdef cViewTable < handle
 % cViewTable shows a table of results via GUI (uitable)
 % 	called by showTable/cTable method with GUI option
 % Methods:
@@ -23,7 +23,6 @@ classdef cViewTable < cStatus
 		%	 tbl - cResultTable object
 		%
 			% Parameters depending of software platform
-			obj=obj@cStatus();
 			if isOctave
 				param=struct('ColumnScale',8,'RowWidth',21,'xMin',160,...
 					'xScale',0.8,'yScale',0.8,'xoffset',4,'yoffset',2,...
@@ -50,7 +49,7 @@ classdef cViewTable < cStatus
 			xpos=(ss(3)-xsize)/2;
 			ypos=(ss(4)-ysize)/2;
 			obj.colWidth=num2cell(wcol(2:end));
-			obj.descr=[tbl.Description,' [',tbl.State,'] ']; 
+			obj.descr=tbl.getDescriptionLabel; 
             obj.data=tbl.formatData;
 			obj.hf=figure('visible','off','menubar','none','toolbar','none',...
 				'name',obj.descr,'numbertitle','off',...

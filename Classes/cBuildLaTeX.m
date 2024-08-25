@@ -1,4 +1,4 @@
-classdef (Sealed) cBuildLaTeX < cStatusLogger
+classdef (Sealed) cBuildLaTeX < cMessageLogger
 % cBuildHTML convert cTable object into HTML files
 %   If a cTableIndexobject is provided create a index table
 %   which indicate where are saved the HTML files of the cResultInfo tables. 
@@ -21,7 +21,6 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
         %   Input:
         %       tbl - cTable object
 
-            obj=obj@cStatusLogger();
             if ~isValidTable(tbl)
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
@@ -79,7 +78,7 @@ classdef (Sealed) cBuildLaTeX < cStatusLogger
         %       obj.saveTable(filename);
         %   Input:
         %       filename - Name of the file
-            log=cStatusLogger;
+            log=cMessageLogger;
             try
                 fId = fopen (filename, 'wt');
                 fprintf(fId,'%s',obj.getLaTeXcode);

@@ -61,6 +61,10 @@ classdef cTableIndex < cTable
             res=obj.Data;
         end
 
+        function res=getDescriptionLabel(obj)
+            res=[obj.Description, ' - Table Index'];
+        end
+
         function printTable(obj,fid)
         % Get table as text or show in console
             if nargin==1
@@ -71,6 +75,8 @@ classdef cTableIndex < cTable
             lformat=[lfmt{:},'\n'];
             header=sprintf(lformat,obj.ColNames{:});
             lines=cType.getLine(length(header)+1);
+            fprintf(fid,'\n');
+            fprintf(fid,'%s\n',obj.getDescriptionLabel);
             fprintf(fid,'\n');
             fprintf(fid,'%s',header);
             fprintf(fid,'%s\n',lines);

@@ -56,7 +56,6 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 			mAF=sparse(fstreams,fprocesses,true(size(fstreams)),NS,N1);
 			mAP=sparse(pprocesses,pstreams,true(size(pstreams)),N1,NS);
             obj.AdjacencyMatrix=struct('AE',mAE,'AS',mAS,'AF',mAF,'AP',mAP);
-			obj.objectId=cType.sequence;
         end
 
         function res=get.FlowKeys(obj)

@@ -1,4 +1,4 @@
-classdef cParseStream < cTaesLab
+classdef (Sealed) cParseStream < handle
 % cParseStream utility class to validate fuel-product stream definition
 %   Methods:
 %       obj=cParseStream(dict)
@@ -8,7 +8,7 @@ classdef cParseStream < cTaesLab
 %	    res=cParseStream.getFlowList(exp)
 %	    res=cParseStream.getStreams(exp)
 %
-	properties (Constant)
+	properties (Constant,Access=private)
 		template='+-()';
 		type_table=[2 3 4 5];
 		base_table=[1 2 4 8 16 32 64];
@@ -34,16 +34,16 @@ classdef cParseStream < cTaesLab
     methods
         function obj=cParseStream()
         % Object Constructor
-            obj.pQueue=cQueue();
-            obj.nQueue=cQueue();
+            obj.pQueue=cLogger();
+            obj.nQueue=cLogger();
         end
         
         function [p,n]=getFlows(obj,stream)
 		% return input/output flows lists
 		% input: string contains the stream definition
 		% output:
-		%  p - cQueue containing the positive flows keys
-        %  n - cQueue containing the negative flows keys
+		%  p - cLogger containing the positive flows keys
+        %  n - cLogger containing the negative flows keys
             obj.pQueue.clear; obj.nQueue.clear;
 			tmp=regexp(stream,cParseStream.flow_pattern,'match');
             for i=1:length(tmp)

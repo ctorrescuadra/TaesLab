@@ -14,7 +14,6 @@ classdef cFormatData < cTablesDefinition
 		function obj=cFormatData(data)
 		% Class Constructor
 		%	format - format configuration data
-			obj=obj@cTablesDefinition;
 			if ~isstruct(data) || ~isfield(data,'definitions') 
 				obj.messageLog(cType.ERROR,'Invalid format data ');
 				return

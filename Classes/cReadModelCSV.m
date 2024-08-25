@@ -70,7 +70,7 @@ classdef cReadModelCSV < cReadModelTable
     methods(Static, Access=private)
         function tbl=import(filename)
         % import a CSV file
-            tbl=cStatusLogger;
+            tbl=cMessageLogger;
             if isOctave
 		        try
 			        values=csv2cell(filename);

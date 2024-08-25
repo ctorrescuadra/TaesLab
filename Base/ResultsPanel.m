@@ -1,4 +1,4 @@
-classdef ResultsPanel < cStatus
+classdef ResultsPanel < handle
 %ResultsPanel - Graphical user interface to display the results interactively.
 %   The class creates a panel and displays the table index of the chosen cResultSet.
 %   A table or graph can be selected by clicking on the corresponding table.
@@ -38,12 +38,13 @@ classdef ResultsPanel < cStatus
         %       GUI: Show the table in a uitable widget
         %       HTML: Show the table in a web browser as a HTML table
         %
+            log=cStatus();
             app.createPanel;
             if nargin > 0
                 if isResultSet(res)
                     app.showResults(res)
                 else
-                    app.printError('Invalid Result');
+                    log.printError('Invalid result argument');
                 end
             end
         end
@@ -54,8 +55,9 @@ classdef ResultsPanel < cStatus
         %   res - cResultSet 
         %
             % Check Input parameter
+            log=cStatus();
             if ~isResultSet(res)
-                app.printWarning('Invalid result');
+                log.printError('Invalid result argument');
                 return
             end
             % Set table parameters
@@ -175,7 +177,6 @@ classdef ResultsPanel < cStatus
 
 		function saveResults(app,~,~)
 		% Save results callback
-            log=cStatus();
 			default_file=cType.RESULT_FILE;
 			[file,path,ext]=uiputfile(cType.SAVE_RESULTS,'Select File',default_file);
             if ext % File has been selected
@@ -184,27 +185,26 @@ classdef ResultsPanel < cStatus
                 descr=app.tableIndex.Description;
 				slog=saveResults(res,file);
                 if isValid(slog)
-				    log.printInfo('%s saved in file %s',descr, file);			    
+				    slog.printInfo('%s saved in file %s',descr, file);			    
                 else
-                    log.printError('Result file %s could NOT be saved', file);
+                    slog.printError('Result file %s could NOT be saved', file);
                 end
             end
         end
 
         function saveTable(app,~,~)
         % SaveTable callback
-            log=cStatus();
             if ~isempty(app.currentTable)
                 tbl=app.currentTable;
                 default_file=tbl.Name;
                 [file,path,ext]=uiputfile(cType.SAVE_TABLES,'Select File',default_file);
                 if ext % File has been selected
                     cd(path);
-                    log=saveTable(tbl,file);
-                    if isValid(log)
-                        log.printInfo('%s saved in file %s', tbl.Name,file);			    
+                    slog=saveTable(tbl,file);
+                    if isValid(slog)
+                        slog.printInfo('%s saved in file %s', tbl.Name,file);			    
                     else
-                        log.printError('Table %s could NOT be saved', tbl.Name);
+                        slog.printError('Table %s could NOT be saved', tbl.Name);
                     end
                 end
             else

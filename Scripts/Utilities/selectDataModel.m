@@ -3,7 +3,7 @@ function model=selectDataModel()
 %  OUTPUT:
 %	model - cReadModel object
 % 
-	model=cStatusLogger();
+	model=cMessageLogger();
 	[~,name]=fileparts(pwd);
 	default_file=strcat(name,'_model.xlsx');
 	data_file=fileChoice('Select data model file',default_file);

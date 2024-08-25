@@ -82,7 +82,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
     methods(Static,Access=private)
         function tbl=importSheet(xls,wsht)
         %Import a workbook/sheet 
-            tbl=cStatusLogger;
+            tbl=cMessageLogger;
             if isOctave
 		        if ~isstruct(xls)
 			        tbl.messageLog(cType.ERROR,'Invalid XLS pointer');

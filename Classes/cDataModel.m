@@ -240,13 +240,15 @@ classdef cDataModel < cResultSet
             end
         end
 
-        function log=setExergyData(obj,state,values)
-        % Set the exergy data of the state with values
-        % If state not exists a new one is creates
-        %   Input:
-        %       state - Name of the state
-        %       values - array with the exergy values of the flows
-            log=cStatus();
+        function res=setExergyData(obj,state,values)
+        % Set the exergy data values of a state
+        % Input:
+        %   state - Name of the state
+        %   values - array with the exergy values of the flows
+        % Output:
+        %   res - cExergyData object 
+        %
+            res=cStatus();
             M=size(values,2);
             % Validate the number of flows
             if obj.NrOfFlows~=M
@@ -267,12 +269,12 @@ classdef cDataModel < cResultSet
             exs.stateId=state;
             exs.exergy=cell2struct(tmp,fields,1);
             % Check and create a cExergyData object
-            rex=cExergyData(obj.ProductiveStructure,exs);
-            if isValid(rex)
-                obj.ExergyData.setValues(idx,rex);
+            res=cExergyData(obj.ProductiveStructure,exs);
+            if isValid(res)
+                obj.ExergyData.setValues(idx,res);
             else
                 log.printError('Invalid exergy data');
-                printLogger(rex);
+                printLogger(res);
             end 
         end
 
@@ -346,7 +348,7 @@ classdef cDataModel < cResultSet
         %   Input:
         %       filename - name of the file including extension.
         %    
-			log=cStatusLogger();
+			log=cMessageLogger();
 			% Check inputs
             if (nargin<2) || ~isFilename(filename)
                 log.messageLog(cType.ERROR,'Invalid arguments');

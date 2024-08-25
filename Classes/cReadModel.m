@@ -1,4 +1,4 @@
-classdef (Abstract) cReadModel < cStatusLogger
+classdef (Abstract) cReadModel < cMessageLogger
 % cReadModel abstract class to implemenent the model reader classes
 % See also cReadModelStruct, cReadModelTable
 %

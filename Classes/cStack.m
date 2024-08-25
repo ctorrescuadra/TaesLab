@@ -1,4 +1,4 @@
-classdef cStack < cStatus
+classdef cStack < handle
 % cStack define a LIFO stack data structure
 %   Methods:
 %       s = cStack(initial_capacity)

@@ -1,4 +1,4 @@
-classdef TaesPanel < cTaesLab
+classdef (Sealed) TaesPanel < handle
 %TaesPanel - Graphic user interface to select the thermoeconomic model parameters.
 %   Execute the basic functions of class cThermoeconomicModel:
 %    - productiveStructure
@@ -74,7 +74,7 @@ classdef TaesPanel < cTaesLab
     methods
         function app=TaesPanel()
         % Create an instance of the object
-			app.model=cStatus();
+            app.model=cStatus(cType.INVALID);
             % Create GUI components
             createComponents(app);
             initInputParameters(app);

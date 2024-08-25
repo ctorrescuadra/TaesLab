@@ -64,9 +64,6 @@ classdef (Abstract) cTaesLab < handle
             test=isa(obj,'cResultInfo') && isValid(obj);
         end
     
-
-
-    
         function test=isValidTable(obj)
         % Check if object is a valid cTable
         % Syntax:

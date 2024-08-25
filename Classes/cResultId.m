@@ -1,4 +1,4 @@
-classdef cResultId < cStatusLogger
+classdef cResultId < cMessageLogger
 % cResultId base class to define the ResultId of the classes which provide results
 % 	It is used in: cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
 %	cRecyclingAnalysis, cDiagramFP, cWasteData and cSummaryResults

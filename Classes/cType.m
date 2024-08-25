@@ -64,7 +64,7 @@ classdef cType
 		EMPTY=-1;                 % Empty objectId
         DIRECT=1                  % Direct Cost Tables Bit
         GENERALIZED=2             % Generalized Cost Tables Bit
-		CAPACITY=2                % Initial capacity for cQueue and cStack
+		CAPACITY=4                % Initial capacity for cQueue and cStack
 		MAX_RESULT=5              % Number of Results in cModelResults
 		MAX_RESULT_INFO=10        % Maximun cResultInfo groups
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
@@ -474,6 +474,8 @@ classdef cType
 					res='WARNING';
 				case cType.ERROR
 					res='ERROR';
+				otherwise
+					res='UNDEFINED';
 			end
 		end
 

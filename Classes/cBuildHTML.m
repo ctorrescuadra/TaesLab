@@ -1,4 +1,4 @@
-classdef (Sealed) cBuildHTML < cStatusLogger
+classdef (Sealed) cBuildHTML < cMessageLogger
 % cBuildHTML convert cTable object into HTML files
 %   If a cTableIndexobject is provided create a index table
 %   which indicate where are saved the HTML files of the cResultInfo tables. 
@@ -19,7 +19,6 @@ classdef (Sealed) cBuildHTML < cStatusLogger
         %       tbl - cTable object to convert
         %    folder - Folder where the files will be save if tbl is a cTableIndex
         % 
-            obj=obj@cStatusLogger();
             if ~isValidTable(tbl)
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
@@ -49,7 +48,7 @@ classdef (Sealed) cBuildHTML < cStatusLogger
 
         function log=saveTable(obj,filename)
         % Save the table into a HTML file
-            log=cStatusLogger();
+            log=cMessageLogger();
             html=[obj.head obj.body];
             try
                 fId=fopen(filename,'wt');
@@ -85,7 +84,7 @@ classdef (Sealed) cBuildHTML < cStatusLogger
             % Body and Table head
             res=sprintf('\t<body>\n');
             res=[res,sprintf('\t\t<h3>\n')];
-            res=[res,sprintf('\t\t\t%s [%s]\n',tbl.Description,tbl.State)];
+            res=[res,sprintf('\t\t\t%s\n',tbl.getDescriptionLabel)];
             res=[res,sprintf('\t\t</h3>\n')];
             res=[res,sprintf('\t\t<table>\n')];
             res=[res,sprintf('\t\t\t<thead>\n')];

@@ -1,29 +1,30 @@
 function log=exportMAT(obj,filename)
-%exportMAT - Save a TaesLab object as MAT file
-%   Internal usage in cDataModel, cResultInfo and cTable
+%exportMAT - Save a cTaesLab object as MAT file
 %
-%   Syntax
-%     log=exportMAT(obj, filename)
+%  Syntax
+%    log=exportMAT(obj, filename)
 %
-%   Input Arguments
-%     obj - cStatusLogger object to save
-%     filename - MAT file name
-%       char array | string
+%  Input Arguments
+%    obj - cTaesLab object to save
+%    filename - MAT file name
+%      char array | string
 %
-%   Output Arguments
-%     log - cStatusLogger containing the status of the save and error messages
+%  Output Arguments
+%    log - cMessageLogger containing the status of the save and error messages
 %
-    log=cStatusLogger();
+%  See also cDataModel, cResultInfo, cTable
+%
+    log=cMessageLogger();
     if (nargin~=2) || (~isFilename(filename))
         log.messageLog(cType.ERROR,'Invalid input arguments');
         return
     end
-    if ~isa(obj,'cStatusLogger') || ~isValid(obj)
-        log.messageLog(cType.ERROR,'Invalid object to save');
+    if ~cType.checkFileExt(filename,cType.FileExt.MAT)
+        log.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
         return
     end
-    if ~cType.checkFileExt(filename,cType.FileExt.MAT)
-        obj.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+    if ~isValid(obj)
+        log.messageLog(cType.ERROR,'Invalid object to save');
         return
     end
     try

@@ -1,4 +1,4 @@
-classdef cDataset < cStatusLogger
+classdef cDataset < cMessageLogger
 % cDataset creates a container to store data and to access it by key or index
 %   This class is used to store cExergyData, cExergyCost, and cResourceData objects
 %   and access by state name or sample name. It use a cell array to keep the access keys
@@ -13,7 +13,7 @@ classdef cDataset < cStatusLogger
 %
     properties (GetAccess=public,SetAccess=private)
         Entries      % Entries of the list - cell array of chars
-        Values       % Collection of cStatusLogger objects - cell array
+        Values       % Collection of cMessageLogger objects - cell array
         NrOfEntries  % Number of Entries
     end
   
@@ -88,13 +88,12 @@ classdef cDataset < cStatusLogger
         %     arg - key or index of the values to retrive
         %
             % Validate arguments
-            log=cStatusLogger();
+            res=cMessageLogger();
             idx=obj.validateArguments(arg);
             if idx
                 res=obj.Values{idx};
             else
-                log.messageLog(cType.ERROR,'cDataset.getValues invalid key');
-                res=log;
+                res.messageLog(cType.ERROR,'cDataset.getValues invalid key');
             end
         end
 
@@ -103,7 +102,7 @@ classdef cDataset < cStatusLogger
         %   Input:
         %     arg - key or index where value is assigned
         %     val - values to assing
-            log=cStatusLogger();
+            log=cMessageLogger();
             idx=obj.validateArguments(arg);
             if idx
                 obj.Values{idx}=val;

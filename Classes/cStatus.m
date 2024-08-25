@@ -1,17 +1,19 @@
 classdef cStatus < cTaesLab
-    % cStatus - Create a status object
-	%   Provide methods to print messages on console
+    % cStatus - Minimal TaesLab class
+	%   It contains the status the and identfier of the object
+	%   Provide methods to show the info and error messages 
+	%   on console
     %
     % cStatus Methods
 	%   printError   - Print a error message on the console
     %   printWarning - Print a warning message on the console
     %   printInfo    - Print a info message on the console
     %
-	% See also cTaesLab, cStatusLogger
+	% See also cTaesLab, cMessageLogger
 	
 	methods
 		function obj=cStatus(val)
-		% Create an instace of the cStatus object 
+		% Create an instance of the cStatus class
 		% Initialize cStatus object to manage errors
         % Syntax:
         %   obj = cStatus();
@@ -25,6 +27,7 @@ classdef cStatus < cTaesLab
             else
                 obj.status=val;
             end
+			obj.objectId=cType.sequence;
 		end
 				
 		function printError(obj,varargin)
@@ -76,7 +79,7 @@ classdef cStatus < cTaesLab
 			else
 				text=sprintf(varargin{:});
 			end
-			message=cMessageLog(error,class(obj),text);
+			message=cMessage(error,class(obj),text);
 		end
 
 		function printMessage(obj,error,varargin)
@@ -85,9 +88,9 @@ classdef cStatus < cTaesLab
 		%   error - error code
 		%   text - text message
         %     varargin 
-			message=obj.createMessage(error,varargin{:});
+			msg=obj.createMessage(error,varargin{:});
 			obj.status=logical(error);
-			disp(message);
+			disp(msg);
 		end
 	end
 end
