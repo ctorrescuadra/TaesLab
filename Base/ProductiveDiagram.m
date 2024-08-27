@@ -29,7 +29,7 @@ function res=ProductiveDiagram(data,varargin)
 %
 %   See also cDataModel, cProductiveDiagram, cResultInfo
 %
-	res=cStatus();
+	res=cMessageLogger();
 	checkModel=@(x) isa(x,'cDataModel');
     %Check input parameters
     p = inputParser;

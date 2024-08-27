@@ -1,4 +1,4 @@
-classdef cViewTable < handle
+classdef (Sealed) cViewTable < handle
 % cViewTable shows a table of results via GUI (uitable)
 % 	called by showTable/cTable method with GUI option
 % Methods:

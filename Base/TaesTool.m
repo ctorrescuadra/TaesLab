@@ -69,7 +69,7 @@ classdef (Sealed) TaesTool < handle
         % TaesTool constructor
         function app=TaesTool()
             % Initialize application variabbles
-			app.model=cStatus(cType.INVALID);
+			app.model=cMessageLogger(cType.INVALID);
             % Create GUI components
             createComponents(app);
             initInputParameters(app);
@@ -732,7 +732,7 @@ classdef (Sealed) TaesTool < handle
             app.tableIndex=[];
             app.currentNode=[];
             app.currentTable=[];
-            app.model=cStatus(false);
+            app.model=cMessageLogger(false);
             for i=1:cType.MAX_RESULT_INFO
                 app.disableResults(i);
             end

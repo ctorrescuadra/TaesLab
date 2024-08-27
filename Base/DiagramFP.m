@@ -31,7 +31,7 @@ function res=DiagramFP(data,varargin)
 %    
 %   See also cDataModel, cExergyCost, cResultInfo
 %
-	res=cStatus();
+	res=cMessageLogger();
 	checkModel=@(x) isa(x,'cDataModel');
 	% Check input parameters
 	p = inputParser;

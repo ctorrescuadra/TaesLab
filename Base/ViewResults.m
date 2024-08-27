@@ -299,7 +299,7 @@ classdef ViewResults < matlab.apps.AppBase
 
         % Code that executes after component creation
         function startupFcn(app, arg)
-            log=cStatus();
+            log=cMessageLogger();
             if nargin~=2
                 log.printError('Values to show are required');
                 log.printError('Usage: ViewModelResuls(res)');

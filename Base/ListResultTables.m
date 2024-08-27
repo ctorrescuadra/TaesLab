@@ -40,7 +40,7 @@ function res=ListResultTables(varargin)
 %
 %   See also cTablesDefinition, cThermoeconomicModel
 %
-    res=cStatus();
+    res=cMessageLogger();
     % Check if model is provided
     isModel=false;
     if nargin && isa(varargin{1},'cThermoeconomicModel')

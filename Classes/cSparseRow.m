@@ -71,7 +71,7 @@ classdef  cSparseRow < cMessageLogger
 
 		function nobj=scaleCol(obj,x)
 		% Scale Columns function
-			log=cStatus();
+			log=cMessageLogger();
 			if(obj.M~=length(x))
 				log.printError('Matrix dimensions must agree: %d %d',obj.NR,length(rows));
 				return
@@ -82,7 +82,7 @@ classdef  cSparseRow < cMessageLogger
 
 		function nobj=divideCol(obj,x)
 		% Divide Columns function
-			nobj=cStatus();
+			nobj=cMessageLogger();
 			if nargin==1
 				x=obj.sumCols;
 			end
@@ -96,7 +96,7 @@ classdef  cSparseRow < cMessageLogger
 
 		function nobj=scaleRow(obj,x)
 		% Scale Rows function
-			nobj=cStatus();
+			nobj=cMessageLogger();
 			if(obj.N~=length(x))
 				nobj.printError('Matrix dimensions must agree: %d %d',obj.NR,length(rows));
 				return
@@ -107,7 +107,7 @@ classdef  cSparseRow < cMessageLogger
 
 		function nobj=divideRow(obj,x)
 		% Divide Rows
-			nobj=cStatus();
+			nobj=cMessageLogger();
 			if nargin==1
 				x(obj.mRows)=obj.sumRows;
 			end
@@ -144,7 +144,7 @@ classdef  cSparseRow < cMessageLogger
 
 		function nobj=plus(obj1,obj2)
 		% overload the plus operator
-			nobj=cStatus();
+			nobj=cMessageLogger();
 			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
 				nobj.printError('Matrix dimensions must agree');
 				return
@@ -164,7 +164,7 @@ classdef  cSparseRow < cMessageLogger
 
 		function nobj=minus(obj1,obj2)
 		% overload the minus operator
-			nobj=cStatus();
+			nobj=cMessageLogger();
 			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
 				nobj.printError('Matrix dimensions must agree');
 				return
@@ -189,7 +189,7 @@ classdef  cSparseRow < cMessageLogger
 
 		function nobj=mtimes(obj1,obj2)
 		% overload the mtimes operator
-			nobj=cStatus();
+			nobj=cMessageLogger();
 			if (size(obj1,2)~=size(obj2,1))
 				nobj.printError('Matrix dimensions must agree');
 				return

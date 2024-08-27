@@ -17,7 +17,7 @@ function obj = ImportDataModel(filename)
 %
 % 	See also cReadModel
 %
-    obj=cStatus();
+    obj=cMessageLogger();
 	% Check input arguments
     if isOctave
         obj.printError('Read MAT files is not yet implemented for Octave');

@@ -16,7 +16,7 @@ function CopyDataModel(inputFile, outputFile)
 %
 % See also cDataModel, cReadModel
 %
-    log=cStatus();
+    log=cMessageLogger();
     if ~isFilename(inputFile) || ~isFilename(outputFile)
         log.printError('Usage: CopyDataModel(inputFile,outputFile)');
         return

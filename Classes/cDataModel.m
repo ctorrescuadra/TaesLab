@@ -248,7 +248,7 @@ classdef cDataModel < cResultSet
         % Output:
         %   res - cExergyData object 
         %
-            res=cStatus();
+            res=cMessageLogger();
             M=size(values,2);
             % Validate the number of flows
             if obj.NrOfFlows~=M

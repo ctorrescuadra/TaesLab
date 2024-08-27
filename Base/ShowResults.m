@@ -40,7 +40,7 @@ function res=ShowResults(arg,varargin)
 %
 %   See also cResultSet
 %
-    log=cStatus();
+    log=cMessageLogger();
     % Select View depending of nargout
     if nargout 
         defaultView='NONE';

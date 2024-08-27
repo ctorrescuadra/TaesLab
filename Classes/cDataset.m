@@ -48,7 +48,7 @@ classdef cDataset < cMessageLogger
         function res=existKey(obj,key)
         % Check if a value belong to the collection
         %   key - char array
-            res=0;
+            res=false;
             if ischar(key)
                 res=ismember(key,obj.Entries);
             end

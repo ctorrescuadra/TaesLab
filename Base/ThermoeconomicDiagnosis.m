@@ -39,7 +39,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %
 %   See also cDataModel, cDiagnosis, cResultInfo
 %
-    res=cStatus();
+    res=cMessageLogger();
     % Check input parameters
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;

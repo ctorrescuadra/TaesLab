@@ -49,7 +49,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %
 %   See also cDataModel, cExergyCost, cResultInfo
 %
-    res=cStatus();
+    res=cMessageLogger();
     % Check input parameters
 	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;

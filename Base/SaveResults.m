@@ -17,7 +17,7 @@ function SaveResults(arg,filename)
 %
 % See also cResultSet
 %
-    log=cStatus();
+    log=cMessageLogger();
     % Check Input parameters
     if (nargin~=2)
         log.printError('Usage: SaveResults(res,filename)');

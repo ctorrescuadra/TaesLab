@@ -780,7 +780,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Output:
         %     log - cMessageLogger object containing the status and error messages
         %
-            log=cStatus();
+            log=cMessageLogger();
             if nargin~=2
                 log.printError('Usage: saveDataModel(model,filename)');
                 return
@@ -800,7 +800,7 @@ classdef cThermoeconomicModel < cResultSet
         %   filename - Name of the file
         %  Output:
         %   log - cMessageLogger object containing the status and error messages
-            log=cStatus();
+            log=cMessageLogger();
             if nargin~=2
                 log.printError('Usage: saveDataModel(model,filename)');
                 return
@@ -815,7 +815,7 @@ classdef cThermoeconomicModel < cResultSet
         %   filename - Name of the file
         %  Output:
         %   log - cMessageLogger object containing the status and error messages
-            log=cStatus();
+            log=cMessageLogger();
             if nargin~=2
                 log.printError('Usage: saveDiagramFP(model,filename)');
                 return
@@ -836,8 +836,8 @@ classdef cThermoeconomicModel < cResultSet
         %  Input:
         %   filename - Name of the file
         %  Output:
-        %   log - cStatus object containing the status and error messages
-            log=cStatus();
+        %   log - cMessageLogger object containing the status and error messages
+            log=cMessageLogger();
             if nargin~=2
                 log.printError('Usage: saveProductiveDiagram(model,filename)');
                 return
@@ -867,7 +867,7 @@ classdef cThermoeconomicModel < cResultSet
         %  Input
         %   wtype - waste allocation type (see cType)
         %
-            log=cStatus();
+            log=cMessageLogger();
             if nargin~=2
                log.printError('Usage: obj.setWasteType(key,wtype)');
                return
@@ -892,7 +892,7 @@ classdef cThermoeconomicModel < cResultSet
         % Input
         %  id - Waste key
         %  val - vector containing the waste values
-            log=cStatus();
+            log=cMessageLogger();
             if nargin~=2
                log.printError('Usage: obj.setWasteValues(key,values)');
                return
@@ -917,7 +917,7 @@ classdef cThermoeconomicModel < cResultSet
         % Input
         %  id - Waste id
         %  val - vector containing the waste values
-            log=cStatus();
+            log=cMessageLogger();
             if nargin~=2
                log.printError('Usage: obj.setWasteRecycled(key,value)');
                return
@@ -946,7 +946,7 @@ classdef cThermoeconomicModel < cResultSet
         %       c0 - array containing the flows cost
         %   Output:
         %       res - cResourceCost object 
-            res=cStatus();
+            res=cMessageLogger();
             if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
 				return
@@ -969,7 +969,7 @@ classdef cThermoeconomicModel < cResultSet
         %       value - resource cost value
         %   Output:
         %       res - cResourceCost object
-            res=cStatus();
+            res=cMessageLogger();
             if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
@@ -991,7 +991,7 @@ classdef cThermoeconomicModel < cResultSet
         %       Z - array containing the processes cost
         %   Output:
         %       res - cResourceCost object
-            res=cStatus();
+            res=cMessageLogger();
             if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
@@ -1014,7 +1014,7 @@ classdef cThermoeconomicModel < cResultSet
         %       value - cost value of the process
         %   Output:
         %       res - cResourceCost object
-            res=cStatus();
+            res=cMessageLogger();
             if ~obj.isGeneralCost
                 res.printError('No Generalized Cost activated');
                 return
@@ -1066,7 +1066,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Input:
         %     values - Array with the exergy values of the flows
         %
-            log=cStatus();
+            log=cMessageLogger();
             % Check state is no reference 
             if strcmp(obj.ReferenceState,obj.State)
                 log.printError('Cannot change Reference State values');
@@ -1169,7 +1169,7 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=getSummaryResults(obj)
         % Force to obtain summary results
-            res=cStatus(cType.INVALID);
+            res=cMessageLogger(cType.INVALID);
             if ~obj.isSummaryEnable
                 return
             end
@@ -1425,7 +1425,7 @@ classdef cThermoeconomicModel < cResultSet
         % Get the cResultInfo given the resultId
             res=getResults(obj.results,index);
 %            if isempty(res)
-%                res=cStatus(cType.INVALID);
+%                res=cMessageLogger(cType.INVALID);
 %            end
         end
         

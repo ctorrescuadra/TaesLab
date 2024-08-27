@@ -162,7 +162,7 @@ classdef (Abstract) cTable < cMessageLogger
 
         function log=setColumnValues(obj,idx,value)
         % Set the values of a column table
-            log=cStatus();
+            log=cMessageLogger();
             if iscell(value) && size(value,1)==obj.NrOfRows
                 obj.Data(:,idx)=value;
             else
@@ -172,7 +172,7 @@ classdef (Abstract) cTable < cMessageLogger
 
         function log=setRowValues(obj,idx,value)
         % Set the values of a row table
-            log=cStatus();
+            log=cMessageLogger();
             if iscell(value) && (size(value,2)==obj.NrOfCols-1)
                 obj.Data(idx,:)=value;
             else

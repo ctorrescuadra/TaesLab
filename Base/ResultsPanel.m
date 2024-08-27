@@ -1,4 +1,4 @@
-classdef ResultsPanel < handle
+classdef (Sealed) ResultsPanel < cTaesLab
 %ResultsPanel - Graphical user interface to display the results interactively.
 %   The class creates a panel and displays the table index of the chosen cResultSet.
 %   A table or graph can be selected by clicking on the corresponding table.
@@ -38,7 +38,7 @@ classdef ResultsPanel < handle
         %       GUI: Show the table in a uitable widget
         %       HTML: Show the table in a web browser as a HTML table
         %
-            log=cStatus();
+            log=cMessageLogger();
             app.createPanel;
             if nargin > 0
                 if isResultSet(res)
@@ -55,7 +55,7 @@ classdef ResultsPanel < handle
         %   res - cResultSet 
         %
             % Check Input parameter
-            log=cStatus();
+            log=cMessageLogger();
             if ~isResultSet(res)
                 log.printError('Invalid result argument');
                 return

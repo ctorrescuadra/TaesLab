@@ -5,13 +5,14 @@ classdef cProductiveStructureCheck < cResultId
 % See also cProductiveStructure
 %
 	properties(GetAccess=public,SetAccess=private)	
-		NrOfProcesses	% Number of processes
-		NrOfFlows       % Number of flows
-		NrOfStreams	    % Number of streams
-		NrOfWastes      % Number of Wastes
-		Processes		% Processes info
-		Flows			% Flows info
-		Streams			% Streams info
+		NrOfProcesses	  % Number of processes
+		NrOfFlows         % Number of flows
+		NrOfStreams	      % Number of streams
+		NrOfWastes        % Number of Wastes
+		Processes		  % Processes info
+		Flows			  % Flows info
+		Streams			  % Streams info
+		ProductiveGraph   % Productive Graph
 	end
 	properties(Access=protected)
 		fDict           % Flows key dictionary
@@ -405,9 +406,10 @@ classdef cProductiveStructureCheck < cResultId
 				end
             end
             % Compute direct and reverse connectivity
-            sc=cProductiveStructureCheck.bfs(sparse(G),sNode); 
-            tc=cProductiveStructureCheck.bfs(sparse(G'),tNode);
+            sc=obj.bfs(sparse(G),sNode); 
+            tc=obj.bfs(sparse(G'),tNode);
 			res=all(sc) && all(tc);
+			obj.ProductiveGraph=G;
 		end
     end
 	methods(Static,Access=private)
@@ -422,8 +424,7 @@ classdef cProductiveStructureCheck < cResultId
 		%   Output:
 		%       res - logical vector indicating the visiting nodes starting in s
 		%
-			sz=size(G);
-			N=sz(1);
+			N=size(G,1);
 			res=false(1,N);
 			stack=cStack(N);
 			% make bfs starting on the s nodes
@@ -432,12 +433,12 @@ classdef cProductiveStructureCheck < cResultId
 			while ~stack.isempty
 				v=stack.pop;
 				[~,idx]=find(G(v,:));
-				for w=idx
-					if ~res(w) 
+                for w=idx
+                    if ~res(w) 
 						stack.push(w);
 						res(w)=true;
-					end
-				end
+                    end
+                end
 			end
 		end
 	end

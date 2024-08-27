@@ -1,4 +1,4 @@
-classdef (Abstract) cTaesLab < handle
+classdef  cTaesLab < handle
     % cTaesLab - Base Abstract class of the TaesLab toolbox
     %
     % cTaesLab properties
@@ -10,12 +10,17 @@ classdef (Abstract) cTaesLab < handle
     % cTaesLab methods:
     %  isValid - Check is the object is valid
     properties(Access=protected)
-        objectId = 0             % Unique object Id
+        objectId % Unique object Id
     end
     properties(GetAccess=public,SetAccess=protected)
-        status = cType.VALID     % Object status
+        status  % Object status
     end
     methods
+        function obj = cTaesLab()
+            obj.status=cType.VALID;   
+            obj.objectId=cType.sequence;
+        end
+
         function set.status(obj,val)
         % Set state value
             if isscalar(val) && islogical(val)

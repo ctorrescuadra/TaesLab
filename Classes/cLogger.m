@@ -1,4 +1,4 @@
-classdef cLogger < handle
+classdef cLogger < cTaesLab
 % cLogger - simple FIFO queue based on a dinamic cell array
 % 
 % cLogger Properties
@@ -9,17 +9,13 @@ classdef cLogger < handle
 %   add     - Add a new element at the end of the queue
 %   clear   - Clear (initialize) the logger
 %   addLogger - Add another queue at the end of this queue
-%   initIterator - Initialize the queue iterator
-%   hasNext - Indicate if trasverse queue is finish
-%   next - Get Next element of the queue
 %   getContent - Get the content of the queue
+%   printContent - Print the content of the queue in console
 %
     properties (GetAccess = public, SetAccess=private)
         Count  % logger size
     end
-
     properties(Access=private)
-        pos    % iterator position
         buffer % data cell array
     end
     
@@ -42,7 +38,6 @@ classdef cLogger < handle
         function obj = clear(obj)
         % Clear the queue
             obj.buffer = {};
-			obj.pos = 1;
         end
 
         function obj = addLogger(obj, logger)
@@ -59,10 +54,31 @@ classdef cLogger < handle
                 res=obj.buffer{idx};
             end
         end
+
+        function printContent(obj)
+            for i=1:obj.Count
+                disp(obj.buffer{i});
+            end
+        end
         
-        % Obtener el tamaño de la cola
-        function n = size(obj)
-            n = size(obj.buffer); % Devolver el número de elementos en la cola
+        function res=size(obj,dim)
+        % overload size function
+            tmp=[obj.Count 1];
+            if nargin==1
+                res=tmp;
+            else
+                res=tmp(dim);
+            end
+        end
+    
+        function res=length(obj)
+        % overload length function
+            res=size(obj,1);
+        end
+    
+        function res=numel(obj)
+        % overload numel function
+            res=size(obj,1);
         end
         
     end

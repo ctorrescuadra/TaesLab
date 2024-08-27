@@ -37,7 +37,7 @@ function res = SummaryResults(data,varargin)
 %
 %   See also cDataModel, cModelSummary, cResultInfo
 %
-    res=cStatus();
+    res=cMessageLogger();
     checkModel=@(x) isa(x,'cDataModel');
     %Check and initialize parameters
     p = inputParser;

@@ -23,7 +23,7 @@ function ShowGraph(arg,varargin)
 %
 % 	See also cGraphResults, cResultSet
 %
-    log=cStatus();
+    log=cMessageLogger();
 	if ~isResultSet(arg)
 		log.printError('Invalid result parameter');
 		return

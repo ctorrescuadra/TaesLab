@@ -74,7 +74,7 @@ classdef (Sealed) TaesPanel < handle
     methods
         function app=TaesPanel()
         % Create an instance of the object
-            app.model=cStatus(cType.INVALID);
+            app.model=cMessageLogger(cType.INVALID);
             % Create GUI components
             createComponents(app);
             initInputParameters(app);

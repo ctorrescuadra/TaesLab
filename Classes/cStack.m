@@ -1,14 +1,16 @@
-classdef cStack < handle
-% cStack define a LIFO stack data structure
-%   Methods:
-%       s = cStack(initial_capacity)
-%       s.clear() 
-%       s.isempty()
-%       s.push(el)
-%       s.pop() 
+classdef cStack < cTaesLab
+% cStack - Define a LIFO stack data structure based on cell array
+% 
+% cStack Methods:
+%   cStack  - Initialize the stack
+%   clear   - Clear the stack
+%   isempty - Check is the stack is empty
+%   push    - add an element to the stack
+%   pop     - Remove an element form the stack
+%   top     - Get the top of the stack
 %   
-% See also cQueue
-    properties (GetAccess=public,SetAccess=private)
+% See also cLogger
+    properties (GetAccess=protected,SetAccess=private)
 		Count   	% Number of elementes of the queue
 		Content     % Cell array containing the queue data
 	end
@@ -18,70 +20,87 @@ classdef cStack < handle
     end
     
     methods
-        function obj = cStack(arg)
+        function obj = cStack(N)
         % Create an instance of the class
-        % Input:
-        %   arg - indicates the initial capacity
-            if (nargin == 1) && isscalar(arg) && isnumeric(arg) && (arg > 1)
-			    obj.capacity = arg;
+        % Syntax:
+        %   obj = cStack(N)
+        % Input Arguments:
+        %   N - initial capacity
+            if (nargin == 1) && isscalar(N) && isnumeric(N) && (N > 1)
+			    obj.capacity = N;
             else
-                obj.capacity = cType.CAPACITY*2;
+                obj.capacity = cType.CAPACITY;
             end
 			obj.buffer = cell(obj.capacity,1);
             obj.Count=0;
         end
 
         function res = get.Content(obj)
-        % content - show the content of the stack as cell array
+        % Get the content of the stack as cell array
             if isValid(obj)
-                res=[];
+                res={};
             else
                 res = obj.buffer(obj.Count:-1:1);
             end
         end
         
         function clear(obj)
-        % clear - clear stack
+        % Clear stack
             obj.Count = 0;
         end
                
         function b = isempty(obj)
-        % isempty - check if the stack is empty            
+        % Check if the stack is empty            
             b = ~logical(obj.Count);
         end
 
-        function push(obj, el)
+        function push(obj, val)
         % push - add a new element into the stack
             if obj.Count >= obj.capacity
                 obj.buffer(obj.capacity+1:2*obj.capacity) = cell(obj.capacity, 1);
                 obj.capacity = 2*obj.capacity;
             end
             obj.Count = obj.Count + 1;
-            obj.buffer{obj.Count} = el;
+            obj.buffer{obj.Count} = val;
         end
         
-        function el = top(obj)
+        function res = top(obj)
         % top - get the top of the stack
             if obj.Count == 0
-                el = [];
+                res = [];
             else
-                el = obj.buffer{obj.Count};
+                res = obj.buffer{obj.Count};
             end        
         end
                
-        function el = pop(obj)
+        function res = pop(obj)
         % pop - get the top of the stack and remove it
             if obj.Count == 0
-                el = [];
+                res = [];
             else
-                el = obj.buffer{obj.Count};
+                res = obj.buffer{obj.Count};
                 obj.Count = obj.Count - 1;
             end
         end
 
-		function res=length(obj)
-		% length - get stack length. Overload length function
-			res=obj.Count;
-		end
+        function res=size(obj,dim)
+        % overload size function
+            tmp=[obj.Count 1];
+            if nargin==1
+                res=tmp;
+            else
+                res=tmp(dim);
+            end
+        end
+    
+        function res=length(obj)
+        % overload length function
+            res=size(obj,1);
+        end
+    
+        function res=numel(obj)
+        % overload numel function
+            res=size(obj,1);
+        end
     end
 end

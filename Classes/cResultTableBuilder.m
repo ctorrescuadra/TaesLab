@@ -444,7 +444,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 values=tmp(idx,:);
                 res=obj.createMatrixTable(tp,values,rowNames,colNames);
             else
-                res=cStatus(cType.ERROR);
+                res=cMessageLogger(cType.ERROR);
             end
         end
 

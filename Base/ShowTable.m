@@ -30,7 +30,7 @@ function res=ShowTable(tbl,varargin)
 % 
 % See also cTable
 %
-    log=cStatus();
+    log=cMessageLogger();
     % Check input
     p = inputParser;
     p.addRequired('tbl',@isValidTable);

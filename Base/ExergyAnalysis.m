@@ -30,7 +30,7 @@ function res=ExergyAnalysis(data,varargin)
 %
 %   See also cDataModel, cExergyModel, cResultInfo
 %
-	res=cStatus(); 
+	res=cMessageLogger(); 
 	checkModel=@(x) isa(x,'cDataModel');
 	% Check input parameters
 	p = inputParser;
