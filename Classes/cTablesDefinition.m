@@ -20,7 +20,7 @@ classdef cTablesDefinition < cMessageLogger
         cfgMatrices     % Matrix tables configuration
         cfgSummary      % Summary tables configuration
         cfgTypes        % Format types configuration
-        tDirectory=[]   % cTableData containig the tables directory info
+        tDirectory      % cTableData containig the tables directory info
     end
     methods
         function obj=cTablesDefinition()      
@@ -54,9 +54,9 @@ classdef cTablesDefinition < cMessageLogger
 
         function res=getTableProperties(obj,name)
         % Get the properties of a table
-            res=[];
+            res=cType.EMPTY;
             idx=getIndex(obj.tDictionary,name);
-            if cType.isEmpty(idx)
+            if isempty(idx)
                 return
             end
             tIndex=obj.tableIndex(idx);
@@ -104,9 +104,9 @@ classdef cTablesDefinition < cMessageLogger
         % Get the properties of a cell table
         %   Input:
         %     name - table key name 
-            res=[];
+            res=cType.EMPTY;
             idx=getIndex(obj.tDictionary,name);
-            if cType.isEmpty(idx)
+            if isempty(idx)
                 return
             end
             tId=obj.tableIndex(idx).tableId;
@@ -117,9 +117,9 @@ classdef cTablesDefinition < cMessageLogger
         % Get the properties of a matrix table
         %   Input:
         %     name - table key name 
-            res=[];
+            res=cType.EMPTY;
             idx=getIndex(obj.tDictionary,name);
-            if cType.isEmpty(idx)
+            if isempty(idx)
                 return
             end
             tId=obj.tableIndex(idx).tableId;
@@ -130,9 +130,9 @@ classdef cTablesDefinition < cMessageLogger
         % Get the properties of a summary table
         %   Input:
         %     name - table key name 
-            res=[];
+            res=cType.EMPTY;
             idx=getIndex(obj.tDictionary,name);
-            if cType.isEmpty(idx)
+            if isempty(idx)
                 return
             end
             tId=obj.tableIndex(idx).tableId;
@@ -214,7 +214,7 @@ classdef cTablesDefinition < cMessageLogger
             resultCode=fieldnames(cType.ResultId);
             for i=1:M
                 colId=cType.getDirColumns(cols{i});
-                if cType.isEmpty(colId)
+                if isempty(colId)
                     res.messageLog(cType.ERROR,'Invalid column name %s',col);
                     return
                 end

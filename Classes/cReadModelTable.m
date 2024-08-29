@@ -21,7 +21,7 @@ classdef (Abstract) cReadModelTable < cReadModel
         %   Input:
         %   tm - cResultInfo object (DATA_MODEL)
         %   res - DataModel structure
-            res=[];
+            res=cType.EMPTY;
             tmp.name=obj.ModelName;
             % Productive Structure Tables
             ftbl=tm.Flows;
@@ -198,7 +198,7 @@ classdef (Abstract) cReadModelTable < cReadModel
     methods(Access=private)
         function res=WasteData(obj,tm)
         % Get default waste data info
-            res=[];
+            res=cType.EMPTY;
             % Search Wastes in Flows Table
             ft=tm.Flows;
             fl=[ft.RowNames];

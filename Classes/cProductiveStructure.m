@@ -1,22 +1,40 @@
 classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
-% cProductiveStructure provides the information about the productive structure of the plant
-% 	Methods:
-%   	res=obj.WasteData
-%   	res=obj.isModelIO
-%   	res=obj.FlowProcessEdges
-%		res=obj.FlowStreamEdges
-%   	res=obj.IncidenceMatrix
-%       res=obj.StructuralMatrix
-%       res=obj.ProductiveMatrix;
-%		res=obj.FlowProcessMatrix;
-%		res=obj.getProcessId(key)
-%		res=obj.getFlowId(key)
-%		res=obj.getFlowTypes(type)
-%       res=obj.getProcessTypes(type)
-%		res=obj.getStreamTypes(type)
-%       res=obj.getProductStreams;
-%		res=obj.getFuelStreams;
-% See also cReadProductiveModel
+% cProductiveStructure - provides the information about the productive structure of the plant
+%
+% cProductiveStructureProperties
+%   NrOfResources	   - Number of resources
+%   NrOfFinalProducts  - Number of final products
+%   NrOfSystemOutput   - Number of system output
+%   AdjacencyMatrix    - Adjacency Matrix containing the productive structure
+%   Waste              - Waste array structure (flow, stream, process) index
+%   Resources          - Resources array structure (flow, stream, process)  index
+%   FinalProducts      - Final Products array structure (flow, stream, process) index
+%   SystemOutput           - System Output array structure (flow, stream, process) index
+%   FlowKeys                % Cell array of Flows Names (keys)
+%   ProcessKeys             % Cell array of Processes Names (keys)
+%   StreamKeys              % Cell array of Streams Names (keys)
+%
+% cProductiveStructure Methods:
+%   cProductiveStrudture - create an instance of the class
+%   getResultInfo - Get the cResultInfo object for ProductiveStructure
+%   WasteData - Get default waste data
+%   FlowProcessEdges - Get the processes edges of the flows
+%   FlowStreamEdges - Get the streams edges of the flows
+%   isModelIO - Check if model is Input-Output
+%   IncidenceMatrix - Get the incidence matrix
+%   StructuralMatrix - Get the structura matrix
+%   ProductiveMatrix - Get the productive matrix
+%   FlowProcessMatrix - Get the fuel-process matrix
+%   getWasteFlows - Get the waste flows names of the model
+%   getProcessId - Get the process Id of a process
+%   getFlowId - Get the the flow Id of a flow 
+%   getFlowTypes - Get the flows (Id) of a flow type
+%   getProcessTypes - Get the processes (Id) of a process type
+%   getStreamTypes - Get the streams (id) of a stream type
+%   getFuelStreams - Get the fuel Streams
+%   getProductStreams - Get the product Streams
+%
+% See also cProductiveStructureCheck
 %
 	properties (GetAccess=public, SetAccess=private)
 		NrOfResources			% Number of resources
@@ -35,7 +53,9 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 	methods
 		function obj=cProductiveStructure(data)
         % Constructor of productive structure
-		% cfg - readProductiveModel object class
+		% Input arguments:
+		%   data - cModelData object
+		%
 			obj=obj@cProductiveStructureCheck(data);
             if ~obj.isValid
 				return
@@ -60,7 +80,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
         function res=get.FlowKeys(obj)
 		% Get the Flows keys as cell array
-			res=[];
+			res=cType.EMPTY_CELL;
 			if obj.isValid
 				res={obj.Flows.key};
 			end
@@ -68,7 +88,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
 		function res=get.ProcessKeys(obj)
 		% Get the Processes keys as cell array
-			res=[];
+			res=cType.EMPTY_CELL;
 			if obj.isValid
 				res={obj.Processes.key};
 			end
@@ -76,7 +96,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
 		function res=get.StreamKeys(obj)
 		% Get the Streams keys as cell array
-			res=[];
+			res=cType.EMPTY_CELL;
 			if obj.isValid
 				res={obj.Streams.key};
 			end
@@ -84,7 +104,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 		
 		function res=get.Waste(obj)
 		% Get an array with flows defined as waste.
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res.flows=getFlowTypes(obj,cType.Flow.WASTE);
 				res.streams=[obj.Flows(res.flows).from];
@@ -94,7 +114,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 		
 		function res=get.Resources(obj)
 		% Get a structure with the flows,streams and processes defined as Resources
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res.flows=getFlowTypes(obj,cType.Flow.RESOURCE);
 				res.streams=[obj.Flows(res.flows).from];
@@ -114,7 +134,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
 		function res=get.FinalProducts(obj)
 	    % Get a structure with the flows,streams and processes defined as Final Products
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res.flows=getFlowTypes(obj,cType.Flow.OUTPUT);
 				res.streams=[obj.Flows(res.flows).to];
@@ -134,7 +154,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
 		function res=get.SystemOutput(obj)
 		% Get a structure with the flows, streams and processes defined as System Output
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
             	res.flows=[obj.FinalProducts.flows,obj.Waste.flows];
             	res.streams=[obj.FinalProducts.streams,obj.Waste.streams];
@@ -152,6 +172,8 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
 		function res=getResultInfo(obj,fmt)
 		% Get cResultInfo object
+		% Input argument:
+		%   fmt - cFormatData object
 			res=fmt.getProductiveStructureResults(obj);
         end
 		
@@ -167,13 +189,13 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 				end
 				res.wastes=cell2mat(wastes);
 			else
-				res.wastes=[];
+				res.wastes=cType.EMPTY;
             end			
         end
 
 		function res=getWasteFlows(obj)
 		% Get a cell array with the waste flow keys
-			res={};
+			res=cType.EMPTY_CELL;
 			if obj.NrOfWastes>0
 				id=obj.Waste.flows;
 				res=obj.FlowKeys(id);
@@ -182,7 +204,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
         function res=FlowStreamEdges(obj)
         % Get a structure array with the stream edges of the flows
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
             	res=struct('from',[obj.Flows.from],'to',[obj.Flows.to]);
 			end
@@ -190,7 +212,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
         function res=FlowProcessEdges(obj)
         % Get a structure array with the processes edges of the flows
-            res=[];
+            res=cType.EMPTY;
             if obj.isValid
 			    fse=obj.FlowStreamEdges;
 			    res.from=[obj.Streams(fse.from).process];
@@ -205,7 +227,14 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
         end
 
         function [res1,res2]=IncidenceMatrix(obj)
-        % Get a structure with the incidence matrices (AF,AP) of the plant
+        % Get a structure with the incidence matrices of the plant
+		% Output arguments:
+		%	if output arguments are 2
+		%    res1 - Fuel Incidence Matrix
+		%    res2 - Product Incidence matrix
+		%   if output argument is 1
+		%    res1 - Incidence Matrix 
+		%
 			if ~obj.isValid
 				return
 			end
@@ -218,7 +247,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 			if nargout<2
 				res1=iAF-iAP;
 			else
-				res1=iAF;res2=iAP;
+				res1=iAF; res2=iAP;
 			end
         end
 
@@ -230,7 +259,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 		end
 
 		function res=ProductiveMatrix(obj)
-		% Get the Productive Adjacency Matrix
+		% Get the Productive Adjacency Matrix (Streams, Flows, Processes)
 			x=obj.AdjacencyMatrix;
 			N=obj.NrOfProcesses;
 			M=obj.NrOfFlows;
@@ -241,7 +270,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 		end
 
 		function res=FlowProcessMatrix(obj)
-		% Get the Flow-Process Adjacency Matrix
+		% Get the Flow-Process Adjacency Matrix (Flows, Processes)
 			x=obj.AdjacencyMatrix;
 			N=obj.NrOfProcesses;
 			res=[x.AE*x.AS,x.AE*x.AF(:,1:end-1);...
@@ -250,8 +279,10 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 
 		function id=getProcessId(obj,key)
         % Get the Id of a process given its key 
-        %  Input:
+        % Input argument:
         %   key - process key
+		% Output argument
+		%   id - Process Id:
 			id=cType.EMPTY;
 			if ischar(key)
 				id=obj.pDict.getIndex(key);
@@ -266,8 +297,10 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 		
 		function id=getFlowId(obj,key)
         % Get the Id of a flow given its key
-        %  Input:
+        % Input argument:
         %   key - flow key
+		% Output argument
+		%   id - flow Id:
 			id=cType.EMPTY;
 			if ischar(key)
 				id=obj.fDict.getIndex(key);
@@ -281,31 +314,46 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
         end
 
 		function res=getFlowTypes(obj,typeId)
-		% Get the flow-id of type typeId
+		% Get the flowId of type typeId
+		% Input arguments:
+		%   typeId - Flow type id
+		% Output arguments:
+		%   res - Array with the ids of the flows of this type
+		%
 			flowtypes=[obj.Flows.typeId];
 			res=find(flowtypes==typeId);
 		end
 
 		function res=getProcessTypes(obj,typeId)
 		% Get the process-id of type typeId
+		% Input arguments:
+		%   typeId - Process type id
+		% Output arguments:
+		%   res - Array with the ids of the processes of this type
+		%
 			processtypes=[obj.Processes.typeId];
 			res=find(processtypes==typeId);
 		end
 
 		function res=getStreamTypes(obj,typeId)
 		% Get the stream-id of type typeId
+		% Input arguments:
+		%   typeId - stream type id
+		% Output arguments:
+		%   res - Array with the ids of the processes of this type
+		%
 			streamtypes=[obj.Streams.typeId];
 			res=find(streamtypes==typeId);
 		end
 
 		function res=getProductStreams(obj)
-		% Get the product streams id (include resources)
+		% Get the product streams id (including resources)
 			streamtypes=[obj.Streams.typeId];
 			res=find(bitget(streamtypes,cType.PRODUCTIVE));
 		end
 
 		function res=getFuelStreams(obj)
-		% Get the fuel streams id (include output and wastes)
+		% Get the fuel streams id (including output and wastes)
 			streamtypes=[obj.Streams.typeId];	
 			res=find(~bitget(streamtypes,cType.PRODUCTIVE));
 		end

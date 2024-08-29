@@ -69,7 +69,7 @@ function ShowGraph(arg,varargin)
 		return
 	end
 	% Get aditional parameters
-	option=[];
+	option=cType.EMPTY;
 	switch tbl.GraphType
 		case cType.GraphType.DIAGNOSIS
 			if res.Info.Method==cType.DiagnosisMethod.WASTE_INTERNAL

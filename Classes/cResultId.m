@@ -16,11 +16,11 @@ classdef cResultId < cMessageLogger
         % Class constructor
 		%  Input:
 		%	id - Result identifier. See cType.ResultId
-            if isscalar(id) && isnumeric(id) && ismember(id,1:cType.MAX_RESULT_INFO)
+            if cType.isInteger(id,1:cType.MAX_RESULT_INFO)
 			    obj.ResultId=id;
-                obj.ModelName='';
-                obj.State='';
-                obj.DefaultGraph='';
+                obj.ModelName=cType.EMPTY_CHAR;
+                obj.State=cType.EMPTY_CHAR;
+                obj.DefaultGraph=cType.EMPTY_CHAR;
             else
                 obj.messageLog(cType.ERROR,'Invalid ResultId %d',id);
             end
@@ -28,7 +28,7 @@ classdef cResultId < cMessageLogger
 		
         function res=get.ResultName(obj)
         % get the result name
-            res=[];
+            res=cType.EMPTY_CHAR;
             if obj.isValid
                 res=cType.Results{obj.ResultId};
             end

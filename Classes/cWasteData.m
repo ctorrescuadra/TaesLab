@@ -72,7 +72,7 @@ classdef cWasteData < cMessageLogger
                 end
                 % Check key
                 id=ps.getFlowId(wd(i).flow);
-                if cType.isEmpty(id)
+                if isempty(id)
 				    obj.messageLog(cType.ERROR,'Invalid waste flow %s',wd(i).flow);
 					continue
                 end 
@@ -99,7 +99,7 @@ classdef cWasteData < cMessageLogger
                         end
                         for j=1:length(wval)
 							jp=ps.getProcessId(wval(j).process);
-							if cType.isEmpty(jp)
+							if isempty(jp)
 								obj.messageLog(cType.ERROR,'Invalid process name %s',wval(j).process);
 								continue
 							end
@@ -137,7 +137,7 @@ classdef cWasteData < cMessageLogger
 		% Return the name of the corresponding index
 		% Input:
 		%  idx - state index to retrieve
-			res=[];
+			res=cType.EMPTY_CELL;
 			if nargin==1
 				res=obj.Names;
                 return
@@ -177,7 +177,7 @@ classdef cWasteData < cMessageLogger
 		%  key - waste id (key or id)
 		% Output:
 		%  res - vector with the allocation waste ratios of waste id
-			res=[];
+			res=cType.EMPTY;
 			if ischar(key)
 				id=obj.getWasteIndex(key);
 				if isempty(id)
@@ -214,7 +214,7 @@ classdef cWasteData < cMessageLogger
 		% get the waste type
 		% Input:
 		%  key - waste key
-			res=[];
+			res=cType.EMPTY_CHAR;
 			if ischar(key)
 				id=obj.getWasteIndex(key);
 				if ~isempty(id)
@@ -236,7 +236,7 @@ classdef cWasteData < cMessageLogger
 				end
 			end
 			tId=cType.getWasteId(type);
-			if ~cType.isEmpty(tId)
+			if ~isempty(tId)
 				obj.Type{id}=type;
 				obj.TypeId(id)=tId;
 				status=true;
@@ -247,7 +247,7 @@ classdef cWasteData < cMessageLogger
 		% get the recycle ratio value of a waste
 		% Input:
 		%  arg - key/id of the waste
-			res=[];
+			res=cType.EMPTY;
 			if ischar(key)
 				id=obj.getWasteIndex(key);
 				if ~isempty(id)

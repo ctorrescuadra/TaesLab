@@ -31,8 +31,8 @@ classdef (Sealed) cModelResults < cMessageLogger
         %       id - ResultId index
         %   Output:
         %       res - cResultInfo with ResultId equal to index
-            res=[];
-            if isscalar(id) && isnumeric(id) && ismember(id,1:cType.MAX_RESULT_INFO)
+            res=cType.EMPTY;
+            if cType.isInteger(id,1:cType.MAX_RESULT_INFO)
                 res=obj.results{id};
             end
         end
@@ -48,7 +48,7 @@ classdef (Sealed) cModelResults < cMessageLogger
             end
             res=obj.getResults(id);
             if ~isempty(obj.results{id})
-                obj.results{id}=[];
+                obj.results{id}=cType.EMPTY;
                 if id<=cType.MAX_RESULT
                     obj.clearResults(cType.ResultId.RESULT_MODEL);
                 end

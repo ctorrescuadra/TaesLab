@@ -1,27 +1,43 @@
 classdef cDataModel < cResultSet
-% cDataModel is the data dispatcher for the thermoeconomic analysis classes.
-% It receives the data from the cReadModel interface classes, then validates
-% and organizes the information to be used by the calculation algorithms
-%   Methods:
-%       res=obj.getExergyData(state)
-%       log=obj.setExergyData(state,values)
-%       res=obj.getResourceData(sample)
-%       res=obj.existState(state)
-%       res=obj.existSample(sample)
-%       res=obj.checkCostTables
-%       res=obj.getTablesDirectory(columns)
-%       res=obj.getTableInfo(name)
-%       log=obj.saveDataModel(filename)
-%   ResultSet methods
-%       res=obj.getResultInfo
-%       obj.printResults
-%       obj.showResults(name,options)
-%       res=obj.getTable(name,options)
-%       res=obj.getTableIndex(options)
-%       obj.showTableIndex(options)
-%       log=obj.saveTable(name,filename)
-%       res=obj.exportTable(name,options)
-%       
+% cDataModel - is the data dispatcher for the thermoeconomic analysis classes.
+%   It receives the data from the cReadModel interface classes, then validates
+%   and organizes the information to be used by the calculation algorithms.
+%
+% cDataModel properties:
+%   NrOfFlows           - Number of flows
+%   NrOfProcesses       - Number of processes
+%   NrOfWastes          - Number of waste flows
+%   NrOfStates          - Number of exergy data simulations
+%   NrOfSamples         - Number of resource cost samples
+%   isWaste             - Indicate is the model has waste defined
+%   isResourceCost      - Indicate is the model has resource cost data
+%   isDiagnosis         - Indicate is the model has information to make diagnosis
+%   StateNames          - State names
+%   SampleNames         - Resource sample names
+%   WasteFlows          - Waste Flow names
+%   ProductiveStructure - cProductiveStructure object
+%   FormatData          - cResultTableBuilder object
+%   WasteData           - cWasteData object
+%   ExergyData          - Dataset of cExergyData
+%   ResourceData        - Dataset of cResourceData
+%   ModelData           - cModelData object
+%   ModelInfo           - cResultInfo data model tables
+%   ModelFile           - Name of the model filename used by the cReadModel interface
+%   ModelName           - Name of the model
+%   ResultId            - ResultId (cType.ResultId.DATA_MODEL)
+%
+% cDataModel methods:
+%   existState         - Check if a state name exists 
+%   existSample        - Check if a sample name exists
+%   getExergyData      - Get the cExergyData of a state
+%   setExergyData      - Set the exergy values of a state
+%   getResourceData    - Get the cResourceData for a specific sample
+%   checkCostTables    - Check if the CostTables parameter is correct
+%   getTablesDirectory - Get the tables directory 
+%   getTableInfo       - Get information about a table object
+%   showDataModel      - Show the data model
+%   saveDataModel      - Save the data model
+%
 %   See also cResultSet, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
 %
     properties(GetAccess=public, SetAccess=private)
@@ -29,7 +45,7 @@ classdef cDataModel < cResultSet
         NrOfProcesses           % Number of processes
         NrOfWastes              % Number of waste flows
         NrOfStates              % Number of exergy data simulations
-        NrOfSamples     % Number of resource cost samples
+        NrOfSamples             % Number of resource cost samples
         isWaste                 % Indicate is the model has waste defined
         isResourceCost          % Indicate is the model has resource cost data
         isDiagnosis             % Indicate is the model has information to made diagnosis
@@ -38,9 +54,9 @@ classdef cDataModel < cResultSet
         WasteFlows              % Waste Flow names
         ProductiveStructure     % cProductiveStructure object
         FormatData              % cResultTableBuilder object
-        ExergyData              % cell array of cExergyData for each state
         WasteData               % cWasteData object
-        ResourceData            % call array of cResourceData for each sample
+        ExergyData              % Dataset of cExergyData
+        ResourceData            % Dataset of cResourceData
         ModelData               % Model data from cReadModel interface
         ModelInfo               % cResultInfo data model tables from cReadModel interface
         ModelFile               % Name of the model filename used by the cReadModel interface
@@ -163,7 +179,7 @@ classdef cDataModel < cResultSet
             obj.ResultName=cType.Results{obj.ResultId};
             obj.ModelName=rdm.ModelName;
             obj.State='DATA_MODEL';
-            obj.DefaultGraph='';
+            obj.DefaultGraph=cType.EMPTY_CHAR;
             % Check Data Model
             obj.status=status;
             % Get the Model Info
@@ -222,7 +238,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=get.WasteFlows(obj)
-            res={};
+            res=cType.EMPTY_CELL;
             if obj.isWaste && isValid(obj.WasteData)
                 res=obj.WasteData.Names;
             end
@@ -300,7 +316,7 @@ classdef cDataModel < cResultSet
         % Check if the CostTables parameter is valid
             res=false;
             pct=cType.getCostTables(value);
-            if cType.isEmpty(pct)
+            if isempty(pct)
                 return
             end
             if bitget(pct,cType.GENERALIZED) && ~obj.isResourceCost

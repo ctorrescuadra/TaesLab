@@ -298,7 +298,7 @@ classdef (Sealed) TaesTool < handle
             set(app.log,'string','');
             idx=get(src,'UserData');
             res=getResults(app.model,idx);
-            app.currentTable=[];
+            app.currentTable=cType.EMPTY;
             set(app.mn_tsave,'enable','off')
             if ~isempty(res) && res.isValid
                 app.ViewIndexTable(res);
@@ -729,9 +729,9 @@ classdef (Sealed) TaesTool < handle
             set(app.tv_popup,'value',cType.TableView.CONSOLE,'enable','on');
             set(app.open_button,'enable','on');
             app.tableView=cType.TableView.CONSOLE;
-            app.tableIndex=[];
-            app.currentNode=[];
-            app.currentTable=[];
+            app.tableIndex=cType.EMPTY;
+            app.currentNode=cType.EMPTYype.EMPTY;
+            app.currentTable=cType.EMPTY;
             app.model=cMessageLogger(false);
             for i=1:cType.MAX_RESULT_INFO
                 app.disableResults(i);

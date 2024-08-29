@@ -188,7 +188,7 @@ classdef (Sealed) cTableCell < cTableResult
 
         function res=getColumnValues(obj,key)
         % Get the values of a specfic column identified by 'FieldName'
-            res=[];
+            res=cType.EMPTY;
             [~,idx]=ismember(key,obj.FieldNames);
             if ~idx
                 return

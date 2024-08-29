@@ -51,7 +51,7 @@ classdef cResourceData < cMessageLogger
 			resources=ps.Resources.flows;
 			for i=1:length(se)
 				id=ps.getFlowId(se(i).key);
-				if ~cType.isEmpty(id)
+				if ~isempty(id)
 					if ~ismember(id,resources)
 						obj.messageLog(cType.ERROR,'Flow key %s is not a resource',se(i).key);
 					end
@@ -77,7 +77,7 @@ classdef cResourceData < cMessageLogger
 				% Check processes cost data
                 for i=1:length(sz)
 					id=ps.getProcessId(sz(i).key);
-                    if ~cType.isEmpty(id)
+                    if ~isempty(id)
 						if (sz(i).value >= 0)
 							obj.Z(id)=sz(i).value;
 						else
@@ -133,7 +133,7 @@ classdef cResourceData < cMessageLogger
 		%	value - cost of the resource
 			log=cMessageLogger();
 			id=obj.getResourceIndex(key);
-            if cType.isEmpty(id)
+            if isempty(id)
 				log.messageLog(cType.ERROR,'Invalid key: %s',key);
 				return
             end
@@ -151,7 +151,7 @@ classdef cResourceData < cMessageLogger
 		%	value - cost of the resource
 			log=cMessageLogger();
 			id=obj.ps.getProcessId(key);
-            if cType.isEmpty(id)
+            if isempty(id)
 				log.messageLog(cType.ERROR,'Invalid key: %s',key);
 				return
             end
@@ -167,7 +167,7 @@ classdef cResourceData < cMessageLogger
 		%  Get the index of resource key
 		%	key - key of the resource
 			id=obj.ps.getFlowId(key);
-			if ~cType.isEmpty(id)
+			if ~isempty(id)
 				rf=obj.ps.Resources.flows;
 				if isempty(find(rf==id,1))
 					id=cType.EMPTY;

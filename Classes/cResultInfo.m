@@ -187,7 +187,7 @@ classdef cResultInfo < cResultSet
 					        option=obj.Info.getDefaultProcessVariables;
                         end
                     otherwise
-                        option=[];
+                        option=cType.EMPTY_CELL;
                 end
             else
                 option=varargin{:};
@@ -481,7 +481,7 @@ classdef cResultInfo < cResultSet
         %%%
         function res=getDiagnosisSummary(obj)
         % get the Fuel Impact/Malfunction Cost as a string including format and unit
-            res=[];
+            res=cType.EMPTY;
             if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
                 format=obj.Tables.dit.Format;
                 unit=obj.Tables.dit.Unit;

@@ -37,7 +37,7 @@ classdef ViewResults < matlab.apps.AppBase
     properties (Access = private)
         State            % Results State
         Colorbar         % Colorbar
-        ExpandedNode=[]  % Current Node
+        ExpandedNode     % Current Node
         TableIndex       % Table Index
         CurrentTable     % Current Table
         ResultInfo       % Result Info
@@ -173,10 +173,10 @@ classdef ViewResults < matlab.apps.AppBase
             app.Colorbar=colorbar(app.UIAxes);
             app.Colorbar.Label.String=['Exergy ', tbl.Unit];
             app.UIAxes.Title.String=obj.Title;
-            app.UIAxes.XLabel.String='';
-            app.UIAxes.YLabel.String='';
-            app.UIAxes.XTick=[];
-            app.UIAxes.YTick=[];
+            app.UIAxes.XLabel.String=cType.EMPTY_CHAR;
+            app.UIAxes.YLabel.String=cType.EMPTY_CHAR;
+            app.UIAxes.XTick=cType.EMPTY;
+            app.UIAxes.YTick=cType.EMPTY;
             app.UIAxes.XGrid = 'off';
             app.UIAxes.YGrid = 'off';
             legend(app.UIAxes,'off');
@@ -194,10 +194,10 @@ classdef ViewResults < matlab.apps.AppBase
             nodenames=nodetable.Name;
             plot(app.UIAxes,obj.xValues,"Layout","auto","NodeLabel",nodenames,"NodeColor",nodecolors,"Interpreter","none");         
             app.UIAxes.Title.String=[tbl.Description, ' [',app.State,']'];
-            app.UIAxes.XLabel.String='';
-            app.UIAxes.YLabel.String='';
-            app.UIAxes.XTick=[];
-            app.UIAxes.YTick=[];
+            app.UIAxes.XLabel.String=cType.EMPTY_CHAR;
+            app.UIAxes.YLabel.String=cType.EMPTY_CHAR;
+            app.UIAxes.XTick=cType.EMPTY;
+            app.UIAxes.YTick=cType.EMPTY;
             app.UIAxes.XGrid = 'off';
             app.UIAxes.YGrid = 'off';
             legend(app.UIAxes,'off');
@@ -270,7 +270,7 @@ classdef ViewResults < matlab.apps.AppBase
         function ClearTabContent(app)
             app.Table.Visible=false;
             app.ClearGraphTab;
-            app.LogField.Text='';
+            app.LogField.Text=cType.EMPTY_CHAR;
         end
         % Clear Graph Tab
         function ClearGraphTab(app)
@@ -387,7 +387,7 @@ classdef ViewResults < matlab.apps.AppBase
         function TreeNodeCollapsed(app, ~)
             app.ClearTabContent;
             app.TabGroup.SelectedTab=app.IndexTab; 
-            app.ExpandedNode=[];
+            app.ExpandedNode=cType.EMPTY;
         end
 
         % Cell selection callback: UITable

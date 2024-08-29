@@ -94,7 +94,7 @@ classdef cExergyModel < cResultId
     
 		function res=get.FuelExergy(obj)
 		% get the fuel exergy of processes
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res=obj.ProcessesExergy.vF(1:end-1);
 			end
@@ -102,7 +102,7 @@ classdef cExergyModel < cResultId
 
 		function res=get.ProductExergy(obj)
 		% get the product exergy of processes
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res=obj.ProcessesExergy.vP(1:end-1);
 			end
@@ -110,7 +110,7 @@ classdef cExergyModel < cResultId
 
 		function res=get.Irreversibility(obj)
 		% get the irreversibility of prcesses
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res=obj.ProcessesExergy.vI(1:end-1);
 			end
@@ -118,14 +118,14 @@ classdef cExergyModel < cResultId
 
 		function res=get.UnitConsumption(obj)
 		% get the unit consumption of the processes
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res=obj.ProcessesExergy.vK(1:end-1);
 			end
         end
 
         function res=get.Efficiency(obj)
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
             	res=vDivide(obj.ProductExergy,obj.FuelExergy);
 			end
@@ -133,7 +133,7 @@ classdef cExergyModel < cResultId
 
 		function res=get.TotalResources(obj)
 		% Get total exergy of resources
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res=obj.ProcessesExergy.vF(end);
 			end
@@ -141,7 +141,7 @@ classdef cExergyModel < cResultId
 
 		function res=get.FinalProducts(obj)
 		% Get total exergy of final products
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res=obj.ProcessesExergy.vP(end);
 			end
@@ -149,7 +149,7 @@ classdef cExergyModel < cResultId
 
 		function res=get.TotalUnitConsumption(obj)
 		% Get total unit consumption
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res=obj.ProcessesExergy.vK(end);
 			end
@@ -157,7 +157,7 @@ classdef cExergyModel < cResultId
 
 		function res=get.TotalIrreversibility(obj)
 		% Get the total irreversibility of the system
-			res=[];
+			res=cType.EMPTY;
 			if obj.isValid
 				res=obj.ProcessesExergy.vI(end);
 			end

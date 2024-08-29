@@ -38,7 +38,7 @@ classdef cResultSet < cMessageLogger
         %%%
         function res=ListOfTables(obj)
         % Get the list of tables as cell array
-            res={};
+            res=cType.EMPTY_CELL;
             tmp=getResultInfo(obj);
             if isValid(tmp)
                 res=fieldnames(tmp.Tables);

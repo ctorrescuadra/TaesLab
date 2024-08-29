@@ -80,7 +80,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function res=get.SystemOutput(obj)
         % Get the system output exergy values vector
-            res=[];
+            res=cType.EMPTY;
             if obj.isValid
                 res=obj.TableFP(1:end-1,end);
             end
@@ -97,7 +97,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 
         function res=get.Resources(obj)
         % Get the exergy resources vector
-            res=[];
+            res=cType.EMPTY;
             if obj.isValid
                 res=obj.TableFP(end,1:end-1);
             end
@@ -105,7 +105,7 @@ classdef (Sealed) cExergyCost < cExergyModel
     
         function res=get.SystemUnitConsumption(obj)
         % Get the total unit consumtion of the sistem
-            res=[];
+            res=cType.EMPTY;
             if obj.isValid
                 res=sum(obj.Resources)/sum(obj.FinalDemand);
             end
@@ -113,7 +113,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                     
         function res=get.RecirculationFactor(obj)
         % Get the recirculation factor of the processes
-            res=[];
+            res=cType.EMPTY;
             if obj.isValid
                 res=zerotol(diag(obj.fpOperators.opCP)'-1);
             end
@@ -121,7 +121,7 @@ classdef (Sealed) cExergyCost < cExergyModel
     
         function res=get.WasteWeight(obj)
         % Get the waste weight.
-            res=[];
+            res=cType.EMPTY;
             if obj.isWaste
                 opR=obj.fpOperators.opR;
                 res=diag(opR.mValues(:,opR.mRows))';

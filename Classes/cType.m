@@ -55,13 +55,15 @@ classdef cType
 	properties (Constant)
 		INVALID=false;            % Invalid status
         VALID=true;               % Valid status
+		EMPTY=[];                 % Empty value
+		EMPTY_CELL={}             % Empty cell array
+        EMPTY_CHAR='';            % Empty char
 		PRODUCTIVE=1;             % Productive Bit
 		ENVIRONMENT=2;            % Environment Bit
 		WASTE=3;                  % Waste Bit
         WARNING=-1;               % Warning message
         ERROR=0;                  % Error message
 		INFO=1;                   % Info message
-		EMPTY=-1;                 % Empty objectId
         DIRECT=1                  % Direct Cost Tables Bit
         GENERALIZED=2             % Generalized Cost Tables Bit
 		CAPACITY=4                % Initial capacity for cQueue and cStack
@@ -215,9 +217,12 @@ classdef cType
     % Static Methods for types
     %----------------------------
 	methods (Static)
-		function res=isEmpty(arg)
+		function res=isInteger(val,range)
 		% check if the type check is valid
-			res=(arg==cType.EMPTY);
+			res=isscalar(val) && isnumeric(val) && (mod(val,1)==0);
+			if nargin >1
+				res = res && ismember(val,range);
+			end
 		end
 
 		function res=checkTypeKey(s,key)

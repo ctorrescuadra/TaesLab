@@ -44,7 +44,7 @@ classdef cDictionary < cMessageLogger
 
         function res = getKey(obj,idx)
 		% getKey return the corresponding key of a index
-			res='';
+			res=cType.EMPTY_CHAR;
 			if idx>0 && idx<=length(obj)
 				res=obj.map.keys{idx};
 			end

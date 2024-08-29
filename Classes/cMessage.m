@@ -15,7 +15,7 @@ classdef cMessage < cTaesLab
 %   getMessage - get the text of the message including type and class
 %   disp - show the message on console. Overload disp
 %
-    properties(GetAccess=protected,SetAccess=private)
+    properties(GetAccess=public,SetAccess=private)
         Error    % Error type
         Class    % Class cause error
         Text     % Error text

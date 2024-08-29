@@ -179,7 +179,7 @@ classdef cThermoeconomicModel < cResultSet
             obj.ResultId=cType.ResultId.RESULT_MODEL;
             obj.ResultName=cType.Results{obj.ResultId};
             obj.ModelName=data.ModelName;
-            obj.DefaultGraph='';
+            obj.DefaultGraph=cType.EMPTY_CHAR;
             % Check optional input parameters
             p = inputParser;
             refstate=data.StateNames{1};
@@ -520,7 +520,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Internal funcion of TaesLab
             if nargin==1
                 res=obj.buildResultInfo;
-            elseif isnumeric(arg) && isscalar(arg)
+            elseif cType.isInteger(arg,1:cType.MAX_RESULT_INFO)
                 res=getResultId(obj,arg);
             elseif ischar(arg)
                 res=getResultTable(obj,arg);
@@ -1322,7 +1322,7 @@ classdef cThermoeconomicModel < cResultSet
         % check CostTables parameter
             res=false;
             pct=cType.getCostTables(value);
-            if cType.isEmpty(pct)
+            if isempty(pct)
                 obj.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end

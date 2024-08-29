@@ -186,7 +186,7 @@ classdef (Sealed) cTableMatrix < cTableResult
                 fprintf(fId,'%s\n',lines);
                 tmp=obj.Data(end,:);
                 if obj.ColTotal
-                    tmp{end,end}='';
+                    tmp{end,end}=cType.EMPTY_CHAR;
                 end
                 fprintf(fId,sformat,obj.RowNames{end},tmp{:});       
             else

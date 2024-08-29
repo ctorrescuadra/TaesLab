@@ -68,7 +68,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
             set(app.mn_tsave,'enable','off');
             app.tableIndex=tbl;
             app.resultInfo=res;
-            app.currentTable=[];
+            app.currentTable=cType.EMPTY;
             % show panel
             app.viewPanel;
         end

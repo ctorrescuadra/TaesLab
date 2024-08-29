@@ -1,8 +1,20 @@
 classdef cProductiveStructureCheck < cResultId
-% cReadProductiveModel gets and validates the productive structure data model
-% 	Methods:
-% 	  obj=readProductiveStructure(data)
-% See also cProductiveStructure
+% cProductiveStructureCheck - Gets and validates the productive structure data model
+% 
+% cProductiveStructureCheck Properties:
+%   NrOfProcesses	  - Number of processes
+%   NrOfFlows         - Number of flows
+%   NrOfStreams	      - Number of streams
+%   NrOfWastes        - Number of Wastes
+%   Processes		  - Processes info
+%   Flows			  - Flows info
+%   Streams			  - Streams info
+%   ProductiveGraph   - Productive Graph
+% 
+% cProductiveStructureCheck	Methods:
+%   cProductiveStructureCheck - Class constructor
+%
+% See also cProductiveStructure, cResultId
 %
 	properties(GetAccess=public,SetAccess=private)	
 		NrOfProcesses	  % Number of processes
@@ -28,7 +40,8 @@ classdef cProductiveStructureCheck < cResultId
     methods
 		function obj = cProductiveStructureCheck(dm)
 		% Class constructor.
-        %   data - flow/process data structure from cReadDataModel
+		% Input argument:
+        %   dm - cModelData object
         	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
 			% Check/validate file content
             if ~isa(dm,'cModelData') || ~isValid(dm)
@@ -102,20 +115,24 @@ classdef cProductiveStructureCheck < cResultId
 				obj.messageLog(cType.ERROR,'Invalid productive structure graph');
 				return
             end
-            % Convert to structure and build typeId arrays
-            if isValid(obj)
+            % Convert properties to structures
+			if isValid(obj)
 			    obj.Flows=cell2mat(obj.cflw);
 			    obj.Streams=cell2mat(obj.cstr);
 			    obj.Processes=cell2mat(obj.cprc);            
 				obj.ModelName=data.name;
 				obj.State='SUMMARY';
-            end
+			end
         end
     end
 
     methods(Access=private)
         function createFlow(obj,id,data)
 		% Check and create flow data
+		% Input Arguments:
+		%   id - Flow Id
+		%   data - flows data
+		%
 			if ~ischar(data.key) % Check flow key
 				obj.messageLog(cType.ERROR,'Invalid flow keyId %d',id);
 				return
@@ -126,7 +143,7 @@ classdef cProductiveStructureCheck < cResultId
 			end
             % Check flow Type
 			typeId=cType.getFlowId(data.type);
-            if cType.isEmpty(typeId)
+            if isempty(typeId)
 				obj.messageLog(cType.ERROR,'Invalid type %s for flow %s',data.type,data.key);
                 return
             end
@@ -137,6 +154,10 @@ classdef cProductiveStructureCheck < cResultId
 
         function createProcess(obj,id,data)
 		% Check and create process data
+		% Input Arguments:
+		%   id - Process Id
+		%   data - Process data
+		%
 			if ~ischar(data.key) % Check Process Key
 				obj.messageLog(cType.ERROR,'Invalid process keyId %d',id);
 				return
@@ -146,7 +167,7 @@ classdef cProductiveStructureCheck < cResultId
 				return
 			end
 			ptype=cType.getProcessId(data.type); %Check Process Type
-			if cType.isEmpty(ptype)	        
+			if isempty(ptype)	        
 				obj.messageLog(cType.ERROR,'Invalid type %s in process %s',data.type,data.key);
 			end
 			if ~cParseStream.checkProcess(data.fuel) % Check Fuel stream
@@ -178,6 +199,7 @@ classdef cProductiveStructureCheck < cResultId
 
         function createProcessStreams(obj,id,fp)
 	    % Create the the streams of a process
+		% Input Arguments
         %   id - Process id
         %   fp - Indicates if stream is fuel or product
 			ns=obj.NrOfStreams;     
@@ -223,11 +245,11 @@ classdef cProductiveStructureCheck < cResultId
 
         function [finp,fout]=getStreamFlows(obj,sid,expr,fp)
         % Get the input and output flows of a stream
-		%	Input:
+		%	Input Arguments:
 		%		sid - Stream Id
 		%		expr - Stream definition
 		%		fp - Stream type
-		%	Output:
+		%	Output Arguments:
 		%		fin - Array containing the flow id of the stream input flows
 		%		fout - Array containing the flow id of the stream output flows
             switch fp
@@ -241,7 +263,7 @@ classdef cProductiveStructureCheck < cResultId
             for i=1:fe.Count
 			    in=fe.getContent(i);
 				idx=obj.fDict.getIndex(in);
-                if ~cType.isEmpty(idx)
+                if ~isempty(idx)
 					if ~obj.cflw{idx}.to
 					    obj.cflw{idx}.to=sid;
 				    else
@@ -257,7 +279,7 @@ classdef cProductiveStructureCheck < cResultId
             for i=1:fs.Count
 			    out=fs.getContent(i);
 				idx=obj.fDict.getIndex(out);
-                if ~cType.isEmpty(idx)
+                if ~isempty(idx)
 					if ~obj.cflw{idx}.from
 					    obj.cflw{idx}.from=sid;
 				    else
@@ -273,14 +295,15 @@ classdef cProductiveStructureCheck < cResultId
         function buildEnvironment(obj)
         % Create de environment entries for processes and streams
 			iout=0;ires=0;iwst=0; % Counters
-			fdesc='';pdesc='';    % Stream Definition
-			ns=obj.NrOfStreams;   % Number of streams global counter
+			fdesc=cType.EMPTY_CHAR;
+			pdesc=cType.EMPTY_CHAR;    % Stream Definition
+			ns=obj.NrOfStreams;        % Number of streams global counter
             ftypes=cellfun(@(x) x.typeId, obj.cflw');
-            env=find(ftypes);     % Environment flows (OUTPUT, WASTE, RESOURCES)
+            env=find(ftypes);          % Environment flows (OUTPUT, WASTE, RESOURCES)
             M=length(env);
-            fstr=zeros(1,M);      % Initialize Fuel streams of environment
-            pstr=zeros(1,M);      % Initialize Product streams of environment
-            N1=obj.NrOfProcesses+1; % Environment process Id
+            fstr=zeros(1,M);           % Initialize Fuel streams of environment
+            pstr=zeros(1,M);           % Initialize Product streams of environment
+            N1=obj.NrOfProcesses+1;    % Environment process Id
             % Loop over Environment flows
 			for i=env
 				ftype=obj.cflw{i}.typeId;
@@ -292,7 +315,7 @@ classdef cProductiveStructureCheck < cResultId
 				switch ftype
     				case cType.Flow.OUTPUT % System Output Flows
 					    iout=iout+1;
-					    fe=[]; fs=obj.cflw{i}.id;
+					    fe=cType.EMPTY; fs=obj.cflw{i}.id;
 					    scode=sprintf('ENV_O%d', iout);
 					    fdesc=strcat(fdesc,'+',descr);
                         if ~jt % Check if flow is OUTPUT
@@ -310,7 +333,7 @@ classdef cProductiveStructureCheck < cResultId
                     case cType.Flow.WASTE %Waste flows
                         iout=iout+1;
 					    iwst=iwst+1;
-					    fe=[]; fs=obj.cflw{i}.id;
+					    fe=cType.EMPTY; fs=obj.cflw{i}.id;
 					    scode=sprintf('ENV_W%d', iwst);
 					    fdesc=strcat(fdesc,'+',descr);
                         if ~jt % Check if flow is WASTE
@@ -327,7 +350,7 @@ classdef cProductiveStructureCheck < cResultId
                         fstr(iout)=ns;
 				    case cType.Flow.RESOURCE
 					    ires=ires+1;
-					    fs=[]; fe=obj.cflw{i}.id;
+					    fs=cType.EMPTY; fe=obj.cflw{i}.id;
 					    scode=sprintf('ENV_R%d', ires);
 					    pdesc=strcat(pdesc,'-',descr);
                         if ~jf % Check if flow is a resource
@@ -352,7 +375,7 @@ classdef cProductiveStructureCheck < cResultId
         function res=checkFlowConnectivity(obj,id)
         % Check the connectivity of flow id
 		%	Input:
-		%		id - Id of the flow
+		%		id - Flow Id
 			res=false;
 			if (obj.cflw{id}.from==obj.cflw{id}.to) %Check if there is a loop
 				if obj.cflw{id}.from==0
@@ -405,41 +428,29 @@ classdef cProductiveStructureCheck < cResultId
 					G(i,tNode)=true;
 				end
             end
-            % Compute direct and reverse connectivity
-            sc=obj.bfs(sparse(G),sNode); 
-            tc=obj.bfs(sparse(G'),tNode);
-			res=all(sc) && all(tc);
+            % Check the graph conectivity
 			obj.ProductiveGraph=G;
+			res=obj.transitiveClosure(G);
 		end
     end
 	methods(Static,Access=private)
-		function res=bfs(G,s)
-		% bfs - Bread First Search algorithm
-		%   Perform a BFS of the graph G starting in node s
-		%   Usage:
-		%       res = bfs(G, s)
-		%   Input:
-		%       G - Adjacency matrix of the graph
-		%       s - starting point
-		%   Output:
-		%       res - logical vector indicating the visiting nodes starting in s
+		function res=transitiveClosure(A)
+		% Check if the matrix is productive
+		%   Check if all nodes are reached from src node (N-1)
+		%   and each node reachs the target node (N).
+		% 	Compute the transitive closure of the graph, using the Warshall's Algorithm
+        % Input arguments
+		%   A - Productive matrix including source and target nodes
+		% Output arguments
+		%   res - Determine is the matrix is productive
+		%     true | false
 		%
-			N=size(G,1);
-			res=false(1,N);
-			stack=cStack(N);
-			% make bfs starting on the s nodes
-			res(s)=true;
-			stack.push(s);
-			while ~stack.isempty
-				v=stack.pop;
-				[~,idx]=find(G(v,:));
-                for w=idx
-                    if ~res(w) 
-						stack.push(w);
-						res(w)=true;
-                    end
-                end
+			N=size(A,1);
+			tcm=logical(eye(N)+A);
+			for k = 1:N-2
+					tcm = tcm | (tcm(:, k) * tcm(k, :));
 			end
+			res=all(tcm(N-1,:)) && all(tcm(:,N));
 		end
 	end
 end

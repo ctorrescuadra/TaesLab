@@ -3,17 +3,22 @@ classdef cDataset < cMessageLogger
 %   This class is used to store cExergyData, cExergyCost, and cResourceData objects
 %   and access by state name or sample name. It use a cell array to keep the access keys
 %   and a cell array of the same length to keep the objects.
-%   Methods
-%     obj=cDataset(list)
-%     res=obj.getValues(arg)
-%     log=obj.setValues(arg,val)
-%     res=obj.existKey(key)
-%     res=obj.getIndex(key)
-%     res.obj.getEntries(idx)
+%
+% cDataset Properties:
+%   Entries     - Entries of the data set - cell array of chars
+%   Values      - Cell array with the object entries
+%   NrOfEntries - Number of Entries
+%
+% cDataset Methods:
+%   getValues - get the object associated to an entry
+%   setValues - set an object to an entry
+%   existKey  - Check if the key entry exists
+%   getIndex  - Get the index of a key
+%   getEntries - Get the key/s of a given index(es)
 %
     properties (GetAccess=public,SetAccess=private)
         Entries      % Entries of the list - cell array of chars
-        Values       % Collection of cMessageLogger objects - cell array
+        Values       % Cell array with the object
         NrOfEntries  % Number of Entries
     end
   
@@ -64,7 +69,7 @@ classdef cDataset < cMessageLogger
         % Get the keys in the position id
         %   Input:
         %     id - position of the keys
-            res=[];
+            res=cType.EMPTY;
             % If no index is supplied resturn all values
             if nargin==1
                 res=obj.Entries;
@@ -141,7 +146,7 @@ classdef cDataset < cMessageLogger
 
         function res=isIndex(obj,idx)
         % Check if idx is a valid index
-            res=isnumeric(idx) && isscalar(idx) && ismember(idx,1:obj.NrOfEntries);
+            res=cType.isInteger(idx,1:obj.NrOfEntries);
         end
         
     end

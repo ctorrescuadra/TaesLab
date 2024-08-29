@@ -53,7 +53,7 @@ classdef cExergyData < cMessageLogger
             B=zeros(1,M);
             for i=1:M
 				id=ps.getFlowId(values(i).key);
-                if cType.isEmpty(id)
+                if isempty(id)
 					obj.messageLog(cType.ERROR,'Exergy index %s not found',values(i).key);
 					continue
                 end

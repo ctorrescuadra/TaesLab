@@ -680,8 +680,8 @@ classdef (Sealed) TaesPanel < handle
             set(app.rstate_popup,'string',{'Reference'},'value',1,'enable','off');
 			set(app.sample_popup,'string',{'Base'},'value',1,'enable','off');
             set(app.open_button,'enable','on');
-            app.tableIndex=[];
-            app.currentNode=[];
+            app.tableIndex=cType.EMPTY;
+            app.currentNode=cType.EMPTY;
             for i=1:cType.MAX_RESULT_INFO
                 app.disableResults(i);
             end

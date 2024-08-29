@@ -24,9 +24,9 @@ classdef (Abstract) cTable < cMessageLogger
         ColNames		% Column Names
         Data			% Data values
         Values          % Table values
-        Description=''  % Table Descripcion
-        Name=''         % Table Name
-        State=''        % State Name
+        Description     % Table Descripcion
+        Name            % Table Name
+        State           % State Name
         GraphType=0     % Graph Type associated to table
     end
     properties(Access=protected)
@@ -36,7 +36,7 @@ classdef (Abstract) cTable < cMessageLogger
     methods
         function res=get.Values(obj)
         % get the table Values
-            res={};
+            res=cType.EMPTY_CELL;
             if obj.isValid
                 res=[obj.ColNames;[obj.RowNames',obj.Data]];
             end

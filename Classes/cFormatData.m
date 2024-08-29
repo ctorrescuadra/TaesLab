@@ -28,7 +28,7 @@ classdef cFormatData < cTablesDefinition
             for i=1:numel(format)
                 fmt=format(i);
 			    id=cType.getFormatId(fmt.key);
-                if cType.isEmpty(id)
+                if isempty(id)
 			        obj.messageLog(cType.ERROR,'Invalid Format Key %s',fmt.key);
                     continue
                 end
@@ -46,9 +46,9 @@ classdef cFormatData < cTablesDefinition
 
 		function res=getTableInfo(obj,name)
 		% get the resultId of a table from tables dictionary
-			res=[];
+			res=cType.EMPTY;
 			idx=getIndex(obj.tDictionary,name);
-			if cType.isEmpty(idx)
+			if isempty(idx)
 				return
 			end
 			res=obj.tableIndex(idx);

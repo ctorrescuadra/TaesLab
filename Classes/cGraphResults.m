@@ -308,11 +308,11 @@ classdef (Sealed) cGraphResults < cMessageLogger
 				obj.Title=[tbl.Description ' [',tbl.State,'/',wf,']'];
 				obj.xValues=x(jdx);
 				obj.Legend=tbl.RowNames(jdx);
-				obj.yValues=[];
-				obj.xLabel='';
-				obj.yLabel='';
+				obj.yValues=cType.EMPTY;
+				obj.xLabel=cType.EMPTY_CHAR;
+				obj.yLabel=cType.EMPTY_CHAR;
 				obj.BaseLine=0.0;
-				obj.Categories={};
+				obj.Categories=cType.EMPTY_CELL;
 			else % Use bar to show all waste flows
 				obj.isPieChart=false;
 				obj.Title=[tbl.Description ' [',tbl.State,']'];
@@ -340,12 +340,12 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			values=cell2mat(data(:,3));
 			obj.xValues=digraph(source,target,values,'omitselfloops');
             obj.isColorbar=true;
-            obj.Legend={};
-			obj.yValues=[];
+            obj.Legend=cType.EMPTY_CELL;
+			obj.yValues=cType.EMPTY;
 			obj.xLabel=['Exergy ' tbl.Unit];
-			obj.yLabel='';
+			obj.yLabel=cType.EMPTY_CHAR;
 			obj.BaseLine=0.0;
-            obj.Categories={};
+            obj.Categories=cType.EMPTY_CELL;
         end
 
 		function setDigraphFpParameters(obj,tbl)
@@ -360,12 +360,12 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			values=cell2mat(tbl.Data(:,3));
 			obj.xValues=digraph(source,target,values,'omitselfloops');
 			obj.isColorbar=true;
-			obj.Legend={};
-			obj.yValues=[];
+			obj.Legend=cType.EMPTY_CELL;
+			obj.yValues=cType.EMPTY;
 			obj.xLabel=['Exergy ' tbl.Unit];
-			obj.yLabel='';
+			obj.yLabel=cType.EMPTY_CHAR;
 			obj.BaseLine=0.0;
-			obj.Categories={};
+			obj.Categories=cType.EMPTY_CELL;
 		end
 
 		function setProductiveDiagramParameters(obj,tbl,nodes)
@@ -383,12 +383,12 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			tnodes=struct2table(nodes);
 			edges=table(tbl.Data,'VariableNames',{'EndNodes'});
 			obj.xValues=digraph(edges,tnodes,"omitselfloops");
-            obj.Legend={};
-			obj.yValues=[];
-			obj.xLabel='';
-			obj.yLabel='';
+            obj.Legend=cType.EMPTY_CELL;
+			obj.yValues=cType.EMPTY;
+			obj.xLabel=cType.EMPTY_CHAR;
+			obj.yLabel=cType.EMPTY_CHAR;
 			obj.BaseLine=0.0;
-            obj.Categories={};
+            obj.Categories=cType.EMPTY_CELL;
 		end
 
 		function graphDiagnosis_OC(obj)

@@ -158,7 +158,7 @@ classdef  cSparseRow < cMessageLogger
 					nobj=obj1;
 					nobj(obj2.mRows,:)=nobj(obj2.mRows,:)+obj2.mValues;
 				case 3
-					nobj=cSparseRow(obj1.mRows,obj1.mValues+obj2.mValues);
+					nobj=cSparseRow(obj1.mRows,obj1.mValues+obj2.mValues,obj1.N);
 			end
         end
 
@@ -178,13 +178,13 @@ classdef  cSparseRow < cMessageLogger
 					nobj=obj1;
 					nobj(obj2.mRows,:)=nobj(obj2.mRows,:)-obj2.mValues;
 				case 3
-					nobj=cSparseRow(obj1.mRows,obj1.mValues-obj2.mValues);
+					nobj=cSparseRow(obj1.mRows,obj1.mValues-obj2.mValues,obj1.N);
 			end
 		end
 
 		function nobj=uminus(obj)
 		% overload the uminus operator
-			nobj=cSparseRow(obj.mRows,-obj.mValues);
+			nobj=cSparseRow(obj.mRows,-obj.mValues,obj.N);
 		end
 
 		function nobj=mtimes(obj1,obj2)
@@ -197,15 +197,15 @@ classdef  cSparseRow < cMessageLogger
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
 			switch test
 				case 1
-					nobj=cSparseRow(obj1.mRows,obj1.mValues*obj2);
+					nobj=cSparseRow(obj1.mRows,obj1.mValues*obj2,obj1.N);
 				case 2
                     if isscalar(obj1)
-                       nobj=cSparseRow(obj2.mRows,obj1*obj2.mValues);
+                       nobj=cSparseRow(obj2.mRows,obj1*obj2.mValues,obj2.N);
                     else
-					    nobj=obj1(:,obj2.mRows)*obj2.mValues;
+					   nobj=obj1(:,obj2.mRows)*obj2.mValues;
                     end
 				case 3
-					nobj=cSparseRow(obj1.mRows,obj1.mValues(:,obj1.mRows)*obj2.mValues);
+					nobj=cSparseRow(obj1.mRows,obj1.mValues(:,obj1.mRows)*obj2.mValues,obj1.N);
 			end
 		end
 
