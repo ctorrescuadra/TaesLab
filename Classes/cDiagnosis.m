@@ -237,7 +237,7 @@ classdef cDiagnosis < cResultId
         end
     end
 
-    methods(Access=protected)
+    methods(Access=private)
         function wasteOutputMethod(obj)
         % Compute internal variables with WASTE_EXTERNAL method
             N=obj.NrOfProcesses;
@@ -270,7 +270,6 @@ classdef cDiagnosis < cResultId
             tMCR=scaleRow(mr,cP)+scaleRow(dr,cPE);
             obj.vMCR=sum(tMCR);
             obj.MFC=obj.tDF+tMCR;
-            obj.DR=sum(fp1.TableR-fp0.TableR);
             % Compute waste variation
             mdwr=[mr,zeros(N,1)]+opR*mfr;
             % Compute Irreversibility table

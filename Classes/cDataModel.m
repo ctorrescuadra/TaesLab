@@ -189,7 +189,7 @@ classdef cDataModel < cResultSet
                 else
                     tables=obj.getTableModel;
                 end
-                obj.ModelInfo=createModelInfo(obj,tables);
+                obj.ModelInfo=cResultInfo(obj,tables);
             end
         end
 
@@ -508,12 +508,6 @@ classdef cDataModel < cResultSet
                 end
             end
             res=tables;
-        end
-
-        function res=createModelInfo(obj,tables)
-        % Create the cResultInfo object               
-            res=cResultInfo(obj,tables);
-            res.setProperties(obj.ModelName,'DATA_MODEL');
         end
     end
 end

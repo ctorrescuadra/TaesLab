@@ -1,21 +1,33 @@
 classdef (Abstract) cTable < cMessageLogger
-% cTable Abstract class implementation for tabular data
-%   The table definition include row and column names and description
-%   Methods:
-%       status=obj.checkTableSize;
-%       obj.setState
-%       obj.printTable(fId)
-%       obj.showTable(options)
-%       log=obj.saveTable(filename)
-%       res=obj.exportTable(varmode)
-%       res=obj.isNumericTable
-%       res=obj.isNumericColumn(idx)
-%       res=obj.getColumnFormat
-%       res=obj.getColumnWidth
-%       res=obj.formatData
-%       res=obj.isGraph
-%       obj.setColumnValues(idx,values)
-%       obj.setRowValues(idx,values)
+% cTable - Abstract class for tabular data. 
+%   The table definition includes the row and column names
+% cTable Properties:
+%   NrOfCols  	 - Number of Columns
+%   NrOfRows     - Number of Rows
+%   RowNames     - Row Names (key codes)
+%   ColNames     - Column Names
+%   Data	     - Data values
+%   Values       - Table values
+%   Name         - Table Name
+%   Description  - Table Descripcion
+%   State        - State Name of values
+%   GraphType    - Graph Type associated to table
+%
+% cTable Methods:
+%   showTable       - show the tables in diferent interfaces
+%   exportTable     - export table in diferent formats
+%   saveTable       - save a table into a file in diferent formats
+%   isNumericTable  - check if all data of the table are numeric
+%   isNumericColumn - check if a column data is numeric
+%   isGraph         - check if the table has a graph associated
+%   getColumnFormat - get the format of the columns
+%   getColumnWidth  - get the width of the columns
+%   getStructData   - get data as struct array
+%   getMatlabTable  - get data as MATLAB table
+%   getStructTable  - get a structure with the table info
+%   setColumnValues - set the values of a column
+%   setRowValues    - set the values of a row
+%
 % See also cTableData, cTableResult
     properties(GetAccess=public, SetAccess=protected)
         NrOfCols  	    % Number of Columns
@@ -24,8 +36,8 @@ classdef (Abstract) cTable < cMessageLogger
         ColNames		% Column Names
         Data			% Data values
         Values          % Table values
-        Description     % Table Descripcion
         Name            % Table Name
+        Description     % Table Descripcion
         State           % State Name
         GraphType=0     % Graph Type associated to table
     end
@@ -41,16 +53,6 @@ classdef (Abstract) cTable < cMessageLogger
                 res=[obj.ColNames;[obj.RowNames',obj.Data]];
             end
         end 
-         
-        function status = checkTableSize(obj)
-        % Check the size of the table
-            status = (size(obj.Data,1)==obj.NrOfRows) && (size(obj.Data,2)==obj.NrOfCols-1);
-        end
-
-        function setState(obj,state)
-        % Set state value
-            obj.State=state;
-        end
 
         function showTable(obj,option)
         % View Table in GUI or HTML
@@ -117,10 +119,9 @@ classdef (Abstract) cTable < cMessageLogger
             res=all(tmp(:));
         end
 
-        function setColumnFormat(obj)
-        % Define the format of each column (TEXT or NUMERIC)
-            tmp=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
-            obj.fcol=[cType.ColumnFormat.CHAR,tmp];
+        function res=isGraph(obj)
+        % Check if the table has a graph associated
+            res=(obj.GraphType ~= cType.GraphType.NONE);
         end
 
         function res=getColumnFormat(obj)
@@ -179,23 +180,7 @@ classdef (Abstract) cTable < cMessageLogger
                 log.printError('Invalid table %s values',obj.Name);
             end
         end
-        
-        function res=isGraph(obj)
-        % Check if the table has a graph associated
-            res=(obj.GraphType ~= cType.GraphType.NONE);
-        end
-
-        function res=size(obj,dim)
-        % Overload size function
-            if nargin==1
-                res=size(obj.Values);
-            else
-                res=size(obj.Values,dim);
-            end
-        end
-        %%%
-        % Save table Mathods
-        %%%
+ 
         function log = saveTable(obj,filename)
         % saveTable generate a file with the table values
         %   The file types depends on the extension
@@ -239,6 +224,22 @@ classdef (Abstract) cTable < cMessageLogger
             end
         end
     
+        function setState(obj,state)
+        % Set state value. Internal function 
+            obj.State=state;
+        end
+    
+        function res=size(obj,dim)
+        % Overload size function
+            if nargin==1
+                res=size(obj.Values);
+            else
+                res=size(obj.Values,dim);
+            end
+        end
+    end
+    
+    methods(Access=protected)
         function log=exportCSV(obj,filename)
         % exportCSV saves table values as CSV file
             log=cMessageLogger();
@@ -344,9 +345,7 @@ classdef (Abstract) cTable < cMessageLogger
                 log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
             end
         end
-    end
     
-    methods(Access=protected)
         function showTableGUI(obj)
         % View the values of the table (tbl) in a uitable graphic object
             vt=cViewTable(obj);
@@ -366,5 +365,10 @@ classdef (Abstract) cTable < cMessageLogger
                 printLogger(vh);
             end
         end
+
+        function status = checkTableSize(obj)
+        % Check the size of the table
+            status = (size(obj.Data,1)==obj.NrOfRows) && (size(obj.Data,2)==obj.NrOfCols-1);
+        end  
     end
 end

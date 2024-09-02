@@ -1,11 +1,28 @@
 classdef cTableIndex < cTable
 % cTableIndex create a cTable which contains the tables of a cResultInfo object
-%   Methods:
-%       obj=cTableIndex(res)
-%       obj.printTable(fId)
-%       obj.showTable(options)
-%       log=obj.saveTable(filename)
-%       res=obj.exportTable(varmode)
+%
+% cTableIndex Properties
+%   Content - Cell array with the cResultInfo tables
+%   Info    - cResultId Info object
+%
+% cTableIndex Methods:
+%   printTable           - Print a table on console
+%   formatData           - Get formatted data
+%   getDescriptionLabel  - Get the title label for GUI presentation
+%
+% cTable Methods
+%   showTable       - show the tables in diferent interfaces
+%   exportTable     - export table in diferent formats
+%   saveTable       - save a table into a file in diferent formats
+%   isNumericTable  - check if all data of the table are numeric
+%   isNumericColumn - check if a column data is numeric
+%   isGraph         - check if the table has a graph associated
+%   getColumnFormat - get the format of the columns
+%   getColumnWidth  - get the width of the columns
+%   getStructData   - get data as struct array
+%   getMatlabTable  - get data as MATLAB table
+%   getStructTable  - get a structure with the table info
+%
 % See also cTable
     properties (GetAccess=public,SetAccess=private)
         Content % Cell array with the cResultInfo tables
@@ -42,20 +59,6 @@ classdef cTableIndex < cTable
             obj.setColumnWidth;
         end
 
-        function setColumnFormat(obj)
-        % Get column format for cTableIndex
-            obj.fcol=repmat(cType.ColumnFormat.CHAR,1,obj.NrOfCols);
-        end
-
-        function res=setColumnWidth(obj)
-        % Get column width for cTableIndex
-            res=zeros(1,obj.NrOfCols);
-            for i=1:obj.NrOfCols
-                res(i)=max(cellfun(@length,obj.Values(:,i)))+2;
-            end
-            obj.wcol=res;
-        end
-
         function res=formatData(obj)
         % Format data. Only numeric fields
             res=obj.Data;
@@ -84,6 +87,22 @@ classdef cTableIndex < cTable
                 fprintf(fid,lformat,obj.RowNames{i},obj.Data{i,:});
             end
             fprintf(fid,'\n');
+        end
+    end
+
+    methods(Access=private)
+        function setColumnFormat(obj)
+        % Get column format for cTableIndex
+            obj.fcol=repmat(cType.ColumnFormat.CHAR,1,obj.NrOfCols);
+        end
+
+        function setColumnWidth(obj)
+        % Get column width for cTableIndex
+            res=zeros(1,obj.NrOfCols);
+            for i=1:obj.NrOfCols
+                res(i)=max(cellfun(@length,obj.Values(:,i)))+2;
+            end
+            obj.wcol=res;
         end
     end
 end

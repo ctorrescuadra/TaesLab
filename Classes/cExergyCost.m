@@ -1,17 +1,37 @@
 classdef (Sealed) cExergyCost < cExergyModel
-% cFlowExergyCost Calculates exergy cost of flows and processes, using Flow-Process approach
-% 	Methods:
-%		obj=cFlowExergyCost(rex,wd)
-%		obj.updateWasteOperators;
-%       res=obj.getProcessCost(rsc)
-%       res=obj.getUnitProcessCost(rsc)
-%   	res=obj.getFlowCost(rsc)
-%       res=obj.getStreamCost(rsc)
-%		res=obj.getProcessICT(rsc)               
-%	    res=obj.getFlowICT(rsc)
-%       res=obj.getCostTableFP(ucost)
-%       res=obj.getCostTableFPR(rsc,ucost)
+% cExergyCost - Calculates exergy cost of flows and processes.
+% 
+% cExergyCost Properties
+%   SystemOutput           - System Output of processes
+%   FinalDemand            - Final Demand of processes
+%   Resources              - External resources of processes
+%   SystemUnitConsumption  - Total unit consumption of the system
+%   RecirculationFactor    - Recirculation factor of each process
+%   fpOperators            - Structure containing FP Operators (mFP, mRP, opCP,opCR)
+%   pfOperators            - Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
+%   StreamOperators        - Stream operators structure (mG, opE, opI, opR)  
+%   FlowOperators          - Flow operators structure (mG, opB, opI, opR)
+%   isWaste                - Indicate if system have wastes
+%   WasteTable             - cWasteData object
+%   TableR                 - R-Table (waste allocation)
+%   RecycleRatio           - Recycle ratio of each waste
+%   WasteWeight            - Weight of each waste
+%
+% cExergyCost Methods:
+%   getResultInfo          - Get cResultInfo for thermoeconomic analysis
+%   getProcessCost         - Get cost of Processes
+%   getProcessUnitCost     - Get unit cost of Processes
+%   getFlowsCost           - Get cost of flows
+%   getStremasCost         - Get cost of streams
+%   getCostTableFP         - Get cost table FP
+%   getDirectCostTableFPR  - Get the direct cost FPR table
+%   getGeneralCostTableFPR - Get the generalized cost FPR table
+%   getProcessICT          - Get Irreversibility Cost Table for processes
+%   getFlowsICT            - Get Irreversibility Cost table for flows
+%   updateWasteOperator    - Update Waste Operator
+%  
 % See also cExergyModel
+%
 	properties(GetAccess=public,SetAccess=private)
         SystemOutput           % System Output of processes
         FinalDemand            % Final Demand of processes
@@ -36,8 +56,14 @@ classdef (Sealed) cExergyCost < cExergyModel
 	methods
 		function obj=cExergyCost(rex,wd)
 		% Creates the cFlowProcessModel object
+        % Usage:
+        %   obj=cExergyCost(rex,wd)
+        % Input:
 		%   rex - cExergyData object
-        %   wd - cWasteData object
+        %   wd - cWasteData object (optional)
+        % Output:
+        %  obj - cExergyCost object
+        %
 			obj=obj@cExergyModel(rex);
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
             M=obj.NrOfFlows;
@@ -129,20 +155,31 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
     
         function res=getResultInfo(obj,fmt,options)
-        % Get the cResultInfo object
+        % Get the cResultInfo object for thermoeconomic analysis
+        % Usage:
+        %   res=obj.getResultInfo(fmt,options)
+        % Input:
+        %   fmt - cResultTableBuilder object
+        %   options - structure indicating the table to obtain
+        %     DirectCost: get direct cost tables (true | false)
+        %     GeneralCost: get generalized cost tables (true | false)
             if nargin==2
                 options.DirectCost=true;
                 options.GeneralCost=false;
             end
-            res=fmt.getThermoeconomicAnalysisResults(obj,options);
+            res=fmt.getCostResults(obj,options);
         end
    
         function res=getProcessCost(obj,rsc)
-		% return processes cost values
+		% Get processes cost values
+        %   If resource cost is provided calculate the generalized cost
+        % Usage:
+        %   obj.getProcessCost(rsc)
 		% Input:
-		%   rsc - [optional] external costs
+		%   rsc - cResourceCost object [optional]
 		% Output:
 		%   res - structure containing cost values (CPE,CPZ,CPR,CP,CF,CR,Z)
+        %
 			czoption=(nargin==2);
             res=struct();
 			N=obj.NrOfProcesses;
@@ -171,11 +208,15 @@ classdef (Sealed) cExergyCost < cExergyModel
 		end
 
         function res = getProcessUnitCost(obj,rsc)
-        % Get Generalized Process Unit Cost
-        %  Inputs:
-        %   rsc - [optional] Resources cost
-        %  Outputs:
-        %   res - struct containing general process cost values (cP,cPE,cPZ,cPR,cF,cR)
+    	% Get Process Unit Cost
+        %   If resource cost is provided calculate the generalized cost
+        % Usage:
+        %   obj.getProcessUnitCost(rsc)
+		% Input:
+		%   rsc - cResourceCost object [optional]
+		% Output:
+		%   res - structure containing cost values (cP,cPE,cPZ,cPR,cF,cR)
+        %
             res=struct();
             czoption=(nargin==2);
             N=obj.NrOfProcesses;
@@ -205,9 +246,12 @@ classdef (Sealed) cExergyCost < cExergyModel
         end  
 
         function res=getFlowsCost(obj,rsc)
-        % Get the generalized exergy cost of flows
+        % Get the exergy cost of flows
+        %   If resource cost is provided calculate the generalized cost
+        %  Usage:
+        %    res=obj.getFlowsCost(rsc)
         %  Input:
-        %   rsc - cost of external resources
+		%   rsc - cResourceCost object [optional]
         %  Output
         %   res - cost of flows structure (B,CE,CZ,CR,C,cE,cZ,cR,c)
             czoption=(nargin==2);
@@ -272,6 +316,16 @@ classdef (Sealed) cExergyCost < cExergyModel
         end 
         
         function res=getStreamsCost(obj,fcost)
+        % Get the exergy cost of streams
+        %   Compute the direct or generalized cost
+        %   depending on the values of flows cost
+        % Usage:
+        %   res=obj.getStreamsCost(fcost)
+        % Input:
+		%   fcost - Exergy cost of flows structure
+        % Output
+        %   res - cost of flows structure (E,CE,CZ,CR,C,cE,cZ,cR,c)
+        %
             res=struct();
             zero=zeros(1,obj.NrOfStreams);
             res.E=obj.StreamsExergy.E;
@@ -297,9 +351,12 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function res = getCostTableFP(obj,ucost)
         % Get the FP Cost Table considering only internal irreversibilities
+        % Usage:
+        %   res=getCostTableFP(ucost)
         % Input:
-        %   ucost - [optional] unit cost of product. If omitted is calculated
-        %   res - Direct Cost FP table
+        %   ucost - Unit cost of product. If omitted is calculated
+        % Output:
+        %   res - Direct Cost FP table values
 
             if nargin==1
                 ucost=obj.getProcessUnitCost;
@@ -310,9 +367,13 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function res = getDirectCostTableFPR(obj,ucost)
         % Get FPR CostTable with direct costs
-        %  Inputs:
-        %   ucost - [optional] Unitary costs of processes. If ommited is calculated
-        %   res - Direct Cost FPR table
+        % Usage:
+        %   res = obj.getDirectCostTableFPR(ucost)
+        % Inputs:
+        %   ucost - Unitary costs of processes. If ommited is calculated
+        % Output: 
+        %   res - Direct Cost FPR table values
+        %
             if nargin==1
                 ucost=obj.getProcessUnitCost;
             end	
@@ -329,11 +390,14 @@ classdef (Sealed) cExergyCost < cExergyModel
     
         function res = getGeneralCostTableFPR(obj,rsc,ucost)
         % Get FPR CostTable with generalized costs
-        %  Inputs:
-        %   rsc - Resources cost
-        %   ucost - [optional] Unitary costs of processes. If ommited is calculated        
-        %  Output:
-        %   res - Generalized Cost FPR table
+        % Usage:
+        %   res = obj.getGeneralizedCostTableFPR(rsc,ucost)
+        % Inputs:
+        %   rsc - cResourceCost object
+        %   ucost - Unitary costs of processes. If ommited is calculated
+        % Output: 
+        %   res - Generalized Cost FPR table values
+        %
             if nargin<2
                 ucost=obj.getProcessUnitCost(rsc);
             end	
@@ -351,9 +415,12 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function res=getProcessICT(obj,rsc)
         % Get Process Irreversibility Cost Table
-        %  Inputs:
-        %   rsc - [optional] Resources cost
-        %  Outputs:
+        %   If resource cost is provided calculate the generalized table
+        % Usage:
+        %   res=obj.getProcessICT(rsc)
+        % Inputs:
+        %   rsc - cResourcesCost object [optional]
+        % Outputs:
         %   res - Process ICT table
         %
             narginchk(1,2);
@@ -375,8 +442,11 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function res=getFlowsICT(obj,rsc)
         % Get the irreversibility-cost table of flows
+        %   If resource cost is provided calculate the generalized table
+        % Usage:
+        %   res=obj.getFlowsICT(rsc)
         %  Input:
-        %   rsc [optional] - cost of external resources
+        %   rsc - cResourceCost object [optional]
         %  Output:
         %   res - irreversivility cost table for flows
             narginchk(1,2);

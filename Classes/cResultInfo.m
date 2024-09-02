@@ -7,19 +7,27 @@ classdef cResultInfo < cResultSet
 %   - Show the results in graphic user interfaces
 %   - Save the results in files: XLSX, CSV, TXT and HTML
 %   The diferent types (ResultId) of cResultInfo object are defined in cType.ResultId
-%   Methods:
-%       obj.printResults
-%       res=obj.getTable(name)
-%       res=obj.getTableIndex(varmode)
-%       obj.showResults(table,option)
-%       obj.showGraph(name,options)
-%       obj.showTableIndex(option);
-%       res=obj.exportResults(varmode,format)
-%       log=obj.saveResults(filename)
-%       obj.summaryDiagnosis
-%       res=obj.ListOfTables
-%       res=obj.exportTable(name,varmode,format)
-%       log=obj.saveTable(name,filename)
+%
+% cResultInfo Properties
+%   ResultId     - Result Id
+%   ResultName   - Result name
+%   NrOfTables   - Number of tables
+%   Tables       - Struct containing the tables
+%   Info         - cResultId object containing the results
+%   ModelName    - Model Name
+%   State        - State Name
+%
+% cResultInfo Methods:
+%   printResults    - Print the result tables  in console
+%   showResults         - Show the result tables in diferent interfaces
+%   getTable            - Get a table (by name)
+%   getTableIndex       - Get the table index of the result set
+%   showGraph           - Show the graph associated to a table
+%   showTableIndex      - Show the table index in diferent interfaces
+%   exportResults       - Export the result tables in diferent formats
+%   summaryDiagnosis    - Show the summary diagnosis 
+%   saveResults         - Save the results to a file in diferent formats
+%
 % See: cResultTableBuilder, cTable
 %
     properties (GetAccess=public, SetAccess=private)
@@ -61,7 +69,8 @@ classdef cResultInfo < cResultSet
             obj.Tables=tables;
             obj.tableIndex=cTableIndex(obj);
             obj.NrOfTables=obj.tableIndex.NrOfRows;
-            obj.setProperties(info.ModelName,info.State);
+            obj.ModelName=info.ModelName;
+            obj.setState(info.State);
             obj.status=info.status;
         end
 
@@ -100,12 +109,12 @@ classdef cResultInfo < cResultSet
 
         function res = getTable(obj,name)
         % Get the table called name
-        %   Usage:
-        %     res=obj.getTable(name)
-        %   Input:
-        %     name - Name of the table
-        %   Output:
-        %     res - cTable object
+        % Usage:
+        %   res=obj.getTable(name)
+        % Input:
+        %   name - Name of the table
+        % Output:
+        %   res - cTable object
         %
             res = cMessageLogger();
             if nargin<2
@@ -127,10 +136,10 @@ classdef cResultInfo < cResultSet
         %   res=getTableIndex(obj,options)
         %  Input:
         %   options - VarMode options
-        %       cType.VarMode.NONE: cTable object
-        %       cType.VarMode.CELL: cell array
-        %       cType.VarMode.STRUCT: structured array
-        %       cType.VarModel.TABLE: Matlab table
+        %     cType.VarMode.NONE: cTable object
+        %     cType.VarMode.CELL: cell array
+        %     cType.VarMode.STRUCT: structured array
+        %     cType.VarModel.TABLE: Matlab table
         %  Output:
         %   res - Table Index info in the format selected
             res=exportTable(obj.tableIndex,varargin{:});
@@ -138,14 +147,14 @@ classdef cResultInfo < cResultSet
 
         function showTableIndex(obj,varargin)
         % View the index tables
-        %   Usage:
-        %       obj.showTableIndex(table,option)
-        %   Input:
-        %       name - Name of the table
-        %       option - Table view option
-        %           cType.TableView.CONSOLE (default)
-        %           cType.TableView.GUI
-        %           cType.TableView.HTML
+        %  Usage:
+        %    obj.showTableIndex(table,option)
+        %  Input:
+        %    name - Name of the table
+        %    option - Table view option
+        %      cType.TableView.CONSOLE (default)
+        %      cType.TableView.GUI
+        %      cType.TableView.HTML
         %       
             tbl=obj.tableIndex;
             if isValid(tbl)
@@ -157,11 +166,11 @@ classdef cResultInfo < cResultSet
 
         function showGraph(obj,graph,varargin)
         % Show graph with options
-        %   Usage:
-        %       obj.showGraph(graph, options)
-        %   Input:
-        %       graph - [optional] graph table name
-        %       options - graph options
+        % Usage:
+        %   obj.showGraph(graph, options)
+        % Input:
+        %   graph - [optional] graph table name
+        %   options - graph options
         % See also cGraphResults, cTableResults
             if nargin==1
                 graph=obj.Info.DefaultGraph;
@@ -203,7 +212,9 @@ classdef cResultInfo < cResultSet
 
         function res=exportResults(obj,varmode,fmt)
         % Export result tables into a structure using diferent formats.
-        %  Input:
+        % Usage:
+        %   res=obj.exportResults(varmode,fmt)
+        % Input:
         %   varmode - result type (optional)
         %      cType.VarMode.NONE: cTable object
         %      cType.VarMode.CELL: cell array
@@ -226,17 +237,50 @@ classdef cResultInfo < cResultSet
         end
 
         %%%
+        % Thermoeconomic Diagnosis info methods
+        %%%
+        function res=getDiagnosisSummary(obj)
+        % Get the Fuel Impact/Malfunction Cost as a string including format and unit
+        % Usage:
+        %   obj.getDiagnosisSummary
+        % Output:
+        %   res - String with the diagnosis summary results
+        %  
+            res=cType.EMPTY;
+            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                format=obj.Tables.dit.Format;
+                unit=obj.Tables.dit.Unit;
+                tfmt=['Fuel Impact:     ',format,' ',unit];
+                res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
+                tfmt=['Malfunction Cost:',format,' ',unit];
+                res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
+            end
+        end
+        
+        function summaryDiagnosis(obj)
+        % Show diagnosis summary results
+        % Usage:
+        %   obj.summaryDiagnosis
+        %
+            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+                res=obj.getDiagnosisSummary;
+                fprintf('%s\n%s\n\n',res.FuelImpact,res.MalfunctionCost);
+            end
+         end
+    
+        %%%
         % Save result tables
         %%%
         function log=saveResults(obj,filename)
         % Save result tables in different file formats depending on file extension
         %   Accepted extensions: xlsx, csv, html, txt, tex
-        %   Usage:
-        %       log=obj.saveResults(filename)
-        %   Input:
-        %       filename - File name. Extensión is used to determine the save mode.
-        %   Output:
-        %       log - cMessageLogger object with error messages
+        % Usage:
+        %   log=obj.saveResults(filename)
+        % Input:
+        %   filename - File name. Extensión is used to determine the save mode.
+        % Output:
+        %   log - cMessageLogger object with error messages
+        %
             log=cMessageLogger();
             if (nargin < 2) || ~isFilename(filename)
                 log.messageLog(cType.ERROR,'Invalid input arguments');
@@ -275,12 +319,13 @@ classdef cResultInfo < cResultSet
         %%%%
         function log=saveAsCSV(obj,filename)
         % Save result tables as CSV files, each table in a file
-        %   Usage:
-        %       log=obj.saveAsCSV(filename)
-        %   Input:
-        %       filename - Name of the file where the csv file information is stored
-        %   Output:
-        %       log - cStatusLog object with error messages
+        % Usage:
+        %   log=obj.saveAsCSV(filename)
+        % Input:
+        %   filename - Name of the file where the csv file information is stored
+        % Output:
+        %   log - cStatusLog object with error messages
+        %
             log=cMessageLogger();
             % Check Input
             if obj.tableIndex.NrOfRows<1
@@ -325,12 +370,13 @@ classdef cResultInfo < cResultSet
     
         function log=saveAsXLS(obj,filename)
         % Save the result tables in a Excel file, each table in a worksheet.
-        %   Usage:
-        %       log=obj.saveASXLS(filename)
-        %  Input:
-        %       filename - name of the worksheet file
-        %  Output:
-        %       log - cStatusLog object with error messages
+        % Usage:
+        %   log=obj.saveASXLS(filename)
+        % Input:
+        %   filename - name of the worksheet file
+        % Output:
+        %   log - cStatusLog object with error messages
+        %
             log=cMessageLogger();
             % Check Input
             if obj.tableIndex.NrOfRows<1
@@ -394,12 +440,13 @@ classdef cResultInfo < cResultSet
         function log=saveAsHTML(obj,filename)
         % Save result tables as HTML files.
         %	Create a index file and a folder containing all the table files
-        %   Usage:
-        %       log=obj.saveAsHTML(filename)
-        %   Input:
-        %       filename - Name of the index file
-        %   Output:
-        %       log - cStatusLog object with error messages
+        % Usage:
+        %   log=obj.saveAsHTML(filename)
+        % Input:
+        %   filename - Name of the index file
+        % Output:
+        %   log - cStatusLog object with error messages
+        %
             log=cMessageLogger();
             % Check Input
             if obj.tableIndex.NrOfRows<1
@@ -430,12 +477,13 @@ classdef cResultInfo < cResultSet
     
         function log=saveAsTXT(obj,filename)
         % Save the result tables if a formatted text file
-        %   Usage:
-        %       log=saveAsTXT(filename)
-        %   Input:
-        %       filename - name of the worksheet file
-        %   Output:
-        %       log - cStatusLog object with save status and error messages
+        % Usage:
+        %  log=saveAsTXT(filename)
+        % Input:
+        %  filename - name of the worksheet file
+        % Output:
+        %  log - cStatusLog object with save status and error messages
+        %
             log=cMessageLogger();
             % Open text file
             try
@@ -452,12 +500,13 @@ classdef cResultInfo < cResultSet
     
         function log=saveAsLaTeX(obj,filename)
         % Save the tables into a file in LaTeX format
-        %   Usage:
-        %       log=saveAsLaTeX(filename)
-        %   Input:
-        %       filename - name of the file
-        %   Output:
-        %       log - cStatusLog object with save status and error messages
+        % Usage:
+        %   log=saveAsLaTeX(filename)
+        % Input:
+        %   filename - name of the file
+        % Output:
+        %   log - cStatusLog object with save status and error messages
+        %
             log=cMessageLogger();
                 % Open text file
             try
@@ -476,30 +525,6 @@ classdef cResultInfo < cResultSet
             fclose(fId);
         end
 
-        %%%
-        % Thermoeconomic Diagnosis info methods
-        %%%
-        function res=getDiagnosisSummary(obj)
-        % get the Fuel Impact/Malfunction Cost as a string including format and unit
-            res=cType.EMPTY;
-            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                format=obj.Tables.dit.Format;
-                unit=obj.Tables.dit.Unit;
-                tfmt=['Fuel Impact:     ',format,' ',unit];
-                res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
-                tfmt=['Malfunction Cost:',format,' ',unit];
-                res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
-            end
-        end
-    
-        function summaryDiagnosis(obj)
-        % Show diagnosis summary results
-            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                res=obj.getDiagnosisSummary;
-                fprintf('%s\n%s\n\n',res.FuelImpact,res.MalfunctionCost);
-            end
-        end
-
 		%%%
         % Internal functions
 		%%%
@@ -509,9 +534,8 @@ classdef cResultInfo < cResultSet
             obj.ResultName=cType.Results{id};
         end
 
-        function setProperties(obj,model,state)
+        function setState(obj,state)
          % Set model and state properties
-            obj.ModelName=model;
             cellfun(@(x) setState(x,state),obj.tableIndex.Content);
             obj.State=state;
         end

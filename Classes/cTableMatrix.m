@@ -1,28 +1,34 @@
 classdef (Sealed) cTableMatrix < cTableResult
-% cTableMatrix Implements cTable interface to store the matrix results of ExIOLab.
+% cTableMatrix Implements cTable interface to store the matrix results
 %   It store the row/col summary of the matrix
-%   Methods:
-%       obj=cTableMatrix(data,rowNames,colNames,RowTotal,ColTotal)
-%       status=obj.checkTableSize;
-%       obj.setState
-%       obj.setProperties(p)
-%       status=obj.checkTableSize;
-%       obj.setState
-%       obj.printTable(fId)
-%       obj.showTable(options)
-%       log=obj.saveTable(filename)
-%       res=obj.exportTable(varmode,fmt)
-%       res=obj.isNumericTable
-%       res=obj.isNumericColumn(idx)
-%       res=obj.getColumnFormat;
-%       res=obj.getColumnWidth;
-%       res=obj.formatData
-%       obj.setColumnValues(idx,values)
-%       obj.setRowValues(idx,values)
-%       status=obj.isGraph
-%       obj.showGraph(options)
-%       res=obj.getDescriptionLabel
-% See also cTableResult, cTable
+%
+% cTableCell Properties
+%   GraphOptions  - Options for graphs 
+% 
+% cTableCell Methods
+%   printTable             - Print a table on console
+%   formatData             - Get formatted data
+%   getDescriptionLabel    - Get the title label for GUI presentation
+%   getMatrixValues        - Get the matrix values
+%   isUnitCostTable        - Check if its a unit cost table (GraphOptions)
+%   isFlowsTable           - Check if its a flows table (GraphOptions)
+%   isGeneralCostTable     - Check if its a general cost table (GraphOptions)
+%   isTotalMalfunctionCost - Check if its Total Malfunction Cost Table (GraphOptions)
+%
+% cTable Methods
+%   showTable       - show the tables in diferent interfaces
+%   exportTable     - export table in diferent formats
+%   saveTable       - save a table into a file in diferent formats
+%   isNumericTable  - check if all data of the table are numeric
+%   isNumericColumn - check if a column data is numeric
+%   isGraph         - check if the table has a graph associated
+%   getColumnFormat - get the format of the columns
+%   getColumnWidth  - get the width of the columns
+%   getStructData   - get data as struct array
+%   getMatlabTable  - get data as MATLAB table
+%   getStructTable  - get a structure with the table info
+%
+% See also cTableResult, cTable, cGraphResults
 %
     properties (Access=private)
         RowTotal			% Row Total true/false
@@ -32,53 +38,48 @@ classdef (Sealed) cTableMatrix < cTableResult
         GraphOptions    % Graph Type
     end
     methods
-        function obj=cTableMatrix(data,rowNames,colNames,rowTotal,colTotal)
+        function obj=cTableMatrix(data,rowNames,colNames,props)
         % Table constructor
         %  Input:
         %   data - Matrix containing the data
         %   rowNames - Cell Array containing the row's names
         %   colNames - Cell Array containing the column's names
-        %   rowTotal - true/false row total sum
-        %   colTotal - true/false column total sum
-            if rowTotal
+        %   props - additional properties
+        %    rowTotal: true/false row total sum
+        %    colTotal: true/false column total sum
+        %    Name: Name of the table
+        %    Description: table description
+        %    Unit: unit name of the data
+        %    Format: format of the data
+        %    GraphType: type of graph asociated
+        %    GraphOptions: options of the graph            
+            if props.rowTotal
 				nrows=length(rowNames)+1;
 				rowNames{nrows}='Total';
                 data=[data;zerotol(sum(data))];
             end
-            if colTotal
+            if props.colTotal
 				ncols=length(colNames)+1;
                 colNames{ncols}='Total';
                 data=[data,zerotol(sum(data,2))];
             end
-            if colTotal && rowTotal
+            if props.colTotal && props.rowTotal
                 data(end,end)=0.0;
             end
             obj.Data=num2cell(zerotol(data));
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
-            obj.ColTotal=colTotal;
-            obj.RowTotal=rowTotal;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames); 
             obj.status=obj.checkTableSize;
-            if ~obj.isValid
-                obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
+            if obj.isValid
+                obj.setProperties(props);
+            else
+                obj.messageLog(cType.ERROR,'Invalid table size (%dx%d)',size(data));
             end
         end
         
-        function setProperties(obj,p)
-        % Set the table properties: Description, Unit, Format, GraphType
-            obj.Name=p.Name;
-            obj.Description=p.Description;
-            obj.Unit=p.Unit;
-            obj.Format=p.Format;
-            obj.GraphType=p.GraphType;
-            obj.GraphOptions=p.GraphOptions;
-            obj.setColumnFormat;
-            obj.setColumnWidth;
-        end
-
-        function res=DataMatrix(obj)
+        function res=getMatrixValues(obj)
         % Get the table data as Array
             res=cell2mat(obj.Data);
         end
@@ -125,20 +126,6 @@ classdef (Sealed) cTableMatrix < cTableResult
         function res = isNumericColumn(obj,idx)
         % Check if the column is numeric
             res=(idx>0) && (idx<obj.NrOfCols);
-        end
-
-        function setColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
-            tmp=repmat(cType.ColumnFormat.NUMERIC,1,obj.NrOfCols-1);
-            obj.fcol=[cType.ColumnFormat.CHAR,tmp];
-        end
-
-        function setColumnWidth(obj)
-        % Define the width of columns
-            lkey=max(cellfun(@length,obj.Values(:,1)))+2;
-            tmp=regexp(obj.Format,'[0-9]+','match','once');
-            lfmt=str2double(tmp);
-            obj.wcol=[lkey,repmat(lfmt,1,obj.NrOfCols-1)];
         end
 
         function res=getDescriptionLabel(obj)
@@ -218,27 +205,31 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
     end
 
-    methods(Static)
-        function tbl=create(data,rowNames,colNames,param)
-        % Create a cTableMatrix given the additional properties
-        %   Input:
-        %       data - Matrix containing the data
-        %       rowNames - Cell Array containing the row's names
-        %       colNames - Cell Array containing the column's names
-        %       param - additional properties:
-        %           rowTotal: true/false row total sum
-        %           colTotal: true/false column total sum
-        %           Name: Name of the table
-        %           Description: table description
-        %           Unit: unit name of the data
-        %           Format: format of the data
-        %           GraphType: type of graph asociated
-        %           GraphOptions: options of the graph
-        % See also cResultTableBuilder
-            tbl=cTableMatrix(data,rowNames,colNames,param.rowTotal,param.colTotal);
-            if tbl.isValid
-                tbl.setProperties(param);
-            end
+    methods(Access=private)
+        function setProperties(obj,p)
+         % Set the table properties: Description, Unit, Format, GraphType
+            obj.Name=p.Name;
+            obj.Description=p.Description;
+            obj.Unit=p.Unit;
+            obj.Format=p.Format;
+            obj.GraphType=p.GraphType;
+            obj.GraphOptions=p.GraphOptions;
+            obj.setColumnFormat;
+            obj.setColumnWidth;
+        end
+
+        function setColumnFormat(obj)
+        % Get the format of each column (TEXT or NUMERIC)
+            tmp=repmat(cType.ColumnFormat.NUMERIC,1,obj.NrOfCols-1);
+            obj.fcol=[cType.ColumnFormat.CHAR,tmp];
+        end
+    
+        function setColumnWidth(obj)
+        % Define the width of columns
+            lkey=max(cellfun(@length,obj.Values(:,1)))+2;
+            tmp=regexp(obj.Format,'[0-9]+','match','once');
+            lfmt=str2double(tmp);
+            obj.wcol=[lkey,repmat(lfmt,1,obj.NrOfCols-1)];
         end
     end
 end

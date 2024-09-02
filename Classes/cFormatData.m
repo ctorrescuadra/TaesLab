@@ -1,14 +1,13 @@
 classdef cFormatData < cTablesDefinition
 % cFormatData gets the format configuration data used to display tables of results.
-%	This class implements cResultTableBuilder
-% 	Methods:
-%		res=obj.getFormat(id)
-%		res=obj.getUnit(id)
-%		res=obj.getTableHeader(id)
-%		res=obj.getTableFormat(id)
-%		res=obj.getTableUnits(id)
+%	cResultTableBuilder derives from this class
+% 	
+% cFormatData Methods:
+%   getTableInfo - Get info about table properties
+%   getFormat - Get the format of a data type
+%   getUnit - Get the units of a data type
 %
-%   See also printformat.json, cTablesDefinition
+% See also printformat.json, cTablesDefinition
 %	
 	methods
 		function obj=cFormatData(data)

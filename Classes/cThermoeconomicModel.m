@@ -117,7 +117,7 @@ classdef cThermoeconomicModel < cResultSet
 %     getExergyData - Get the exergy data of a state
 %     setExergyData - Set the exergy values of a state
 %
-%  See also cResultSet, cResultId
+% See also cResultSet, cResultId
 %
     properties(GetAccess=public,SetAccess=private)
         DataModel           % Data Model
@@ -1461,7 +1461,6 @@ classdef cThermoeconomicModel < cResultSet
                 end
             end
             res=cResultInfo(obj,tables);
-            res.setProperties(obj.ModelName,obj.State);
             obj.setResults(res);
         end
 

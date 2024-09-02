@@ -9,10 +9,10 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 %   Waste              - Waste array structure (flow, stream, process) index
 %   Resources          - Resources array structure (flow, stream, process)  index
 %   FinalProducts      - Final Products array structure (flow, stream, process) index
-%   SystemOutput           - System Output array structure (flow, stream, process) index
-%   FlowKeys                % Cell array of Flows Names (keys)
-%   ProcessKeys             % Cell array of Processes Names (keys)
-%   StreamKeys              % Cell array of Streams Names (keys)
+%   SystemOutput       - System Output array structure (flow, stream, process) index
+%   FlowKeys           - Cell array of Flows Names (keys)
+%   ProcessKeys        - Cell array of Processes Names (keys)
+%   StreamKeys         - Cell array of Streams Names (keys)
 %
 % cProductiveStructure Methods:
 %   cProductiveStrudture - create an instance of the class
@@ -174,7 +174,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 		% Get cResultInfo object
 		% Input argument:
 		%   fmt - cFormatData object
-			res=fmt.getProductiveStructureResults(obj);
+			res=fmt.getProductiveStructure(obj);
         end
 		
 		function res=WasteData(obj)

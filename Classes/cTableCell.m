@@ -1,24 +1,29 @@
 classdef (Sealed) cTableCell < cTableResult
-% cTableCell Implements cTable interface to store the tabular results of ExIOLab as array cells.
-%   Methods:
-%       obj=cTableCell(data,rowNames,colNames)
-%       status=obj.checkTableSize;
-%       obj.setState
-%       obj.setProperties(p)
-%       obj.printTable(fId)
-%       obj.showTable(options)
-%       log=obj.saveTable(filename)
-%       res=obj.exportTable(varmode,fmt)
-%       res=obj.isNumericTable
-%       res=obj.isNumericColumn(idx)
-%       res=obj.getColumnFormat;
-%       res=obj.getColumnWidth;
-%       res=obj.formatData
-%       obj.setColumnValues(idx,values)
-%       obj.setRowValues(idx,values)
-%       res=obj.isGraph
-%       obj.showGraph(name)
-%       res=obj.getDescriptionLabel
+% cTableCell Implements cTable interface to store the tabular results as array cells.
+% 
+% cTableCell Properties
+%   FieldNames  - Cell array with field names 
+%   ShowNumber  - logical variable indicating if line number is printed
+%
+% cTableCell Methods
+%   printTable           - Print a table on console
+%   formatData           - Get formatted data
+%   getDescriptionLabel  - Get the title label for GUI presentation
+%   getColumnValues      - Get the values of a column (using FieldNames)
+%
+% cTable Methods
+%   showTable       - show the tables in diferent interfaces
+%   exportTable     - export table in diferent formats
+%   saveTable       - save a table into a file in diferent formats
+%   isNumericTable  - check if all data of the table are numeric
+%   isNumericColumn - check if a column data is numeric
+%   isGraph         - check if the table has a graph associated
+%   getColumnFormat - get the format of the columns
+%   getColumnWidth  - get the width of the columns
+%   getStructData   - get data as struct array
+%   getMatlabTable  - get data as MATLAB table
+%   getStructTable  - get a structure with the table info
+%
 % See also cTableResult, cTable
 %
     properties (GetAccess=public,SetAccess=private)
@@ -27,12 +32,20 @@ classdef (Sealed) cTableCell < cTableResult
     end
 	
     methods
-        function obj=cTableCell(data,rowNames,colNames)
+        function obj=cTableCell(data,rowNames,colNames,props)
         % Create table with mandatory info
         %  Input:
         %   data - data values as cell array
         %   rowNames - row's names as cell array 
         %   colNames - column's  names as cell array
+        %   props - additional properties:
+        %     Name: Name of the table
+        %     Description: table description
+        %     Unit: cell array with the unit name of the data columns
+        %     Format: cell array with the format of the data columns
+        %     GraphType: type of graph asociated
+        %     FieldNames: optional field name of the columns
+        %     ShowNumber: true/false show column number option
         %
             obj.Data=data;
             obj.RowNames=rowNames;
@@ -40,23 +53,11 @@ classdef (Sealed) cTableCell < cTableResult
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames);
             obj.status=obj.checkTableSize;
-            if ~obj.isValid
-                obj.messageLog(cType.ERROR,'Invalid table size (%d,%d)',size(data,1),size(data,2));
-                return
+            if obj.isValid
+                obj.setProperties(props)
+            else
+                obj.messageLog(cType.ERROR,'Invalid table size (%dx%d)',size(data));
             end
-        end
-		
-        function setProperties(obj,p)
-        % Set table properties: Description, Unit, Format, FieldNames, ...
-            obj.Name=p.Name;
-            obj.Description=p.Description;
-            obj.Unit=p.Unit;
-            obj.Format=p.Format;
-            obj.FieldNames=p.FieldNames;
-            obj.ShowNumber=p.ShowNumber;
-            obj.GraphType=p.GraphType;
-            obj.setColumnFormat;
-            obj.setColumnWidth;
         end
 
         function res=formatData(obj)
@@ -119,22 +120,6 @@ classdef (Sealed) cTableCell < cTableResult
         function res=isNumericColumn(obj,j)
         % determine if the column is numeric
             res=ismember('f',obj.Format{j+1});
-        end
-
-        function setColumnWidth(obj)
-        % define the width of the columns
-            M=obj.NrOfCols;
-            res=zeros(1,M);
-            res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
-            for j=2:M
-                if isNumericColumn(obj,j-1)
-                    tmp=regexp(obj.Format{j},'[0-9]+','match','once');
-                    res(j)=str2double(tmp);
-                else
-                    res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
-                end
-            end
-            obj.wcol=res;
         end
 
         function res=getDescriptionLabel(obj)
@@ -203,27 +188,40 @@ classdef (Sealed) cTableCell < cTableResult
             end
         end
     end
-    methods(Static)
-        function tbl=create(data,rowNames,colNames,param)
-        % Create a cTableCell given the additional properties
-        %   Input:
-        %       data - Cell Array containing the data
-        %       rowNames - Cell Array containing the row's names
-        %       colNames - Cell Array containing the column's names
-        %       param - additional properties:
-        %           Name: Name of the table
-        %           Description: table description
-        %           Unit: cell array with the unit name of the data columns
-        %           Format: cell array with the format of the data columns
-        %           GraphType: type of graph asociated
-        %           FieldNames: optional field name of the columns
-        %           ShowNumber: true/false show column number option
-        % See also cResultTableBuilder
-            tbl=cTableCell(data,rowNames,colNames);
-            if tbl.isValid
-                tbl.setProperties(param);
-            end
+    methods(Access=private)
+        function setProperties(obj,p)
+        % Set table properties: Description, Unit, Format, FieldNames, ...
+            obj.Name=p.Name;
+            obj.Description=p.Description;
+            obj.Unit=p.Unit;
+            obj.Format=p.Format;
+            obj.FieldNames=p.FieldNames;
+            obj.ShowNumber=p.ShowNumber;
+            obj.GraphType=p.GraphType;
+            obj.setColumnFormat;
+            obj.setColumnWidth;
         end
 
+        function setColumnWidth(obj)
+        % define the width of the columns
+            M=obj.NrOfCols;
+            res=zeros(1,M);
+            res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
+            for j=2:M
+                if isNumericColumn(obj,j-1)
+                    tmp=regexp(obj.Format{j},'[0-9]+','match','once');
+                    res(j)=str2double(tmp);
+                else
+                    res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
+                end
+            end
+            obj.wcol=res;
+        end
+
+        function setColumnFormat(obj)
+        % Define the format of each column (TEXT or NUMERIC)
+            tmp=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
+            obj.fcol=[cType.ColumnFormat.CHAR,tmp];
+        end
     end
 end
