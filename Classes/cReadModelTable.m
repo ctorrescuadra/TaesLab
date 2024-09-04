@@ -1,29 +1,34 @@
 classdef (Abstract) cReadModelTable < cReadModel
 % cReadModelTable Abstract class to read table data model
 %   This class derives cReadModelCSV and cReadmodelXLS
-%   Methods:
-%		res=obj.getTableModel
-%	See also cReadModel, cReadModelXLS, cReadModelCSV
+%   
+% cReadModelTable Methods:
+%   getTableModel - Get a cResultInfo object with the data model
+%	
+% See also cReadModel, cReadModelXLS, cReadModelCSV
 %
 	properties (Access=protected)
 		modelTables
 	end
     methods
         function res=getTableModel(obj)
-        % get the cResultInfo object with the data model tables
+        % Get the tables of the data model
             res=obj.modelTables;
         end
     end
 
 	methods (Access=protected)  
         function res=buildDataModel(obj,tm)
-        % Build cDataModel and cProductiveStructure from cModelTable object
-        %   Input:
-        %   tm - cResultInfo object (DATA_MODEL)
-        %   res - DataModel structure
-            res=cType.EMPTY;
-            tmp.name=obj.ModelName;
+        % Build the cModelData from data tables
+        % Input Parameters:
+        %   tm - Structure containing the tables
+        % Output Parameters
+        %   res - cModelData object
+        %
+            res=cMessageLogger();
+            sd=struct();
             % Productive Structure Tables
+            tmp.name=obj.ModelName;
             ftbl=tm.Flows;
             if isValid(ftbl)
                 tmp.flows=ftbl.getStructData;
@@ -38,14 +43,14 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.messageLog(cType.ERROR,'Table Processes NOT found');
                 return
             end
-            res.ProductiveStructure=tmp;
+            sd.ProductiveStructure=tmp;
             % Get Format definition
             tbl=tm.Format;
             if isValid(tbl)  
                 if ~tbl.isNumericColumn(1:2)
                     obj.messageLog(cType.ERROR,'Invalid format table');
                 end
-                res.Format.definitions=tbl.getStructData;
+                sd.Format.definitions=tbl.getStructData;
             else
                 obj.messageLog(cType.ERROR,'Table Format NOT found');
                 return
@@ -74,7 +79,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 st.exergy=cell2struct(values,fields,2);
                 tmp.States(i,1)=st;
             end
-            res.ExergyStates=tmp;
+            sd.ExergyStates=tmp;
             % Get Waste definition
             isWasteDefinition=isfield(tm,'WasteDefinition');
             isWasteAllocation=isfield(tm,'WasteAllocation');
@@ -152,7 +157,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                         end
                     end            
                 end
-                res.WasteDefinition=pswd;
+                sd.WasteDefinition=pswd;
             end                               
             % Get Resources cost definition
             isResourceCost=isfield(tm,'ResourcesCost');
@@ -190,9 +195,10 @@ classdef (Abstract) cReadModelTable < cReadModel
                             tmp.Samples(i,1).processes=pr;
                         end
                     end
-                    res.ResourcesCost=tmp;
+                    sd.ResourcesCost=tmp;
                 end
             end
+            res=cModelData(sd);
         end
     end
     methods(Access=private)
@@ -220,8 +226,9 @@ classdef (Abstract) cReadModelTable < cReadModel
                     wastes{i}.type='DEFAULT';
                     wastes{i}.recycle=0.0;
                 end
-                res.wastes=cell2mat(wastes);
+                sd.wastes=cell2mat(wastes);
             end
+            res=cModelData(sd);
         end
     end
 end

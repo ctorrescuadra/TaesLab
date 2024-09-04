@@ -994,7 +994,7 @@
 		{
 			"id": 1,
 			"key": "dpc",
-			"header": "Summary Processes Direct Exergy Cost",
+			"header": "Processes Direct Exergy Cost",
 			"node": 1,
 			"type": 4,
 			"graph": 0,
@@ -1003,7 +1003,7 @@
 		{
 			"id": 2,
 			"key": "dpuc",
-			"header": "Summary Processes Direct Unit Exergy Cost",
+			"header": "Processes Direct Unit Exergy Cost",
 			"node": 1,
 			"type": 5,
 			"graph": 5,
@@ -1012,7 +1012,7 @@
 		{
 			"id": 3,
 			"key": "dfc",
-			"header": "Summary Flows Direct Exergy Cost",
+			"header": "Flows Direct Exergy Cost",
 			"node": 3,
 			"type": 4,
 			"graph": 0,
@@ -1021,7 +1021,7 @@
 		{
 			"id": 4,
 			"key": "dfuc",
-			"header": "Summary Flows Direct Unit Exergy Cost",
+			"header": "Flows Direct Unit Exergy Cost",
 			"node": 3,
 			"type": 5,
 			"graph": 5,
@@ -1030,7 +1030,7 @@
 		{
 			"id": 5,
 			"key": "gpc",
-			"header": "Summary Processes Generalized Cost",
+			"header": "Processes Generalized Cost",
 			"node": 1,
 			"type": 6,
 			"graph": 0,
@@ -1039,7 +1039,7 @@
 		{
 			"id": 6,
 			"key": "gpuc",
-			"header": "Summary Processes Generalized Unit Cost",
+			"header": "Processes Generalized Unit Cost",
 			"node": 1,
 			"type": 7,
 			"graph": 5,
@@ -1048,7 +1048,7 @@
 		{
 			"id": 7,
 			"key": "gfc",
-			"header": "Summary Flows Generalized Cost",
+			"header": "Flows Generalized Cost",
 			"node": 3,
 			"type": 6,
 			"graph": 0,
@@ -1057,7 +1057,7 @@
 		{
 			"id": 8,
 			"key": "gfuc",
-			"header": "Summary Flows Generalized Unit Cost",
+			"header": "Flows Generalized Unit Cost",
 			"node": 3,
 			"type": 7,
 			"graph": 5,
@@ -1066,7 +1066,7 @@
 		{
 			"id": 9,
 			"key": "exergy",
-			"header": "Summary Flows Exergy",
+			"header": "Flows Exergy",
 			"node": 3,
 			"type": 3,
 			"graph": 0,
@@ -1075,7 +1075,7 @@
 		{
 			"id": 10,
 			"key": "pku",
-			"header": "Summary Process Unit Consumption",
+			"header": "Process Unit Consumption",
 			"node": 1,
 			"type": 5,
 			"graph": 5,
@@ -1084,7 +1084,7 @@
 		{
 			"id": 11,
 			"key": "pI",
-			"header": "Summary Process Irreversibility",
+			"header": "Process Irreversibility",
 			"node": 1,
 			"type": 3,
 			"graph": 0,

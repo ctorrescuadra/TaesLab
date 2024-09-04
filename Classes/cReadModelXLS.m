@@ -1,12 +1,9 @@
 classdef (Sealed) cReadModelXLS < cReadModelTable
 % cReadModelXLS implements the cReadModel to read XLSX data model files
 %   This class read a XLSX file containing the thermoeconomic model data
-%   and store it into a structure data
-%   Methods:
-%       obj=cReadModelXLS(cfgfile)
-%	Methods inhereted from cReadModelTable
-%		res=obj.getTableModel
-%   See also cReadModel, cReadModelTable
+%   and build the data model
+%
+% See also cReadModel, cReadModelTable
 %
     methods
         function obj = cReadModelXLS(cfgfile)
@@ -71,9 +68,9 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
             end
             % Set Model properties
             obj.setModelProperties(cfgfile);
-            sd=obj.buildDataModel(tables);
+            md=obj.buildDataModel(tables);
             if isValid(obj)
-                obj.ModelData=cModelData(sd);
+                obj.ModelData=md;
                 obj.modelTables=tables;
             end
         end 

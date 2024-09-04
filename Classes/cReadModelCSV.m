@@ -1,12 +1,9 @@
 classdef cReadModelCSV < cReadModelTable
 % cReadModelCSV implements the cReadModel to read XLSX data model files
 %   This class read a set of CSV files containing the thermoeconomic model data
-%   and store it into a structure data
-%   Methods:
-%       obj=cReadModelCSV(cfgfile)
-%	Methods inhereted from cReadModelTable
-%		res=obj.getTableModel
-%   See also cReadModel, cReadModelTable
+%   and build the data model
+%
+% See also cReadModel, cReadModelTable
 %
     methods
         function obj=cReadModelCSV(cfgfile)

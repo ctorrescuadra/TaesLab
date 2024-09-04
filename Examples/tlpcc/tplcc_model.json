@@ -1,0 +1,966 @@
+{
+  "ProductiveStructure": {
+    "name": "tplcc_model",
+    "flows": [
+      {
+        "key": "NG",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "G1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "G2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WGT",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V5a",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V5b",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V9a",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V9b",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V9c",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V14",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V15",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V16",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "V17",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WLPP",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WIPP",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WHPP",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WHPST",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WIPST",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WLPST",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WCWP",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WNST",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "WNGT",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QCND",
+        "type": "WASTE"
+      },
+      {
+        "key": "QG",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "CMP",
+        "fuel": "WC",
+        "product": "G2-G1",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "CC",
+        "fuel": "NG",
+        "product": "G3-G2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "GT",
+        "fuel": "G3-G4",
+        "product": "WGT+WC",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HPSH",
+        "fuel": "G4-G5",
+        "product": "(V1-V17)+(V4-V3-V2)",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HPEV",
+        "fuel": "G5-G6",
+        "product": "V17-V16",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HPEC",
+        "fuel": "G6-G7",
+        "product": "V16-V15",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "LPSH",
+        "fuel": "G7-G8",
+        "product": "V5a-V10",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "IPSH",
+        "fuel": "G8-G9",
+        "product": "V3-V13",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "IPEV",
+        "fuel": "G9-G10",
+        "product": "V13-V12",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HPPH",
+        "fuel": "G10-G11",
+        "product": "(V15-V14)+(V12-V11)",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "LPEV",
+        "fuel": "G11-G12",
+        "product": "V10-V9c",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "LPEC",
+        "fuel": "G12-G13",
+        "product": "V9a+V9b+V9c-V8",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HPST",
+        "fuel": "V1-V2",
+        "product": "WHPST",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "IPST",
+        "fuel": "V4-V5b",
+        "product": "WIPST",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "LPST",
+        "fuel": "V5a+V5b-V6",
+        "product": "WLPST",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "LPP",
+        "fuel": "WLPP",
+        "product": "V8-V7",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "IPP",
+        "fuel": "WIPP",
+        "product": "V11-V9a",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "HPP",
+        "fuel": "WHPP",
+        "product": "V14-V9b",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "EG1",
+        "fuel": "WGT",
+        "product": "WNGT",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "EG2",
+        "fuel": "WHPST+WIPST+WLPST",
+        "product": "WNST+WLPP+WIPP+WHPP+WCWP",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "STCK",
+        "fuel": "G13",
+        "product": "QG",
+        "type": "DISSIPATIVE"
+      },
+      {
+        "key": "CND",
+        "fuel": "(V6-V7)+WCWP",
+        "product": "QCND",
+        "type": "DISSIPATIVE"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Scenario1",
+        "exergy": [
+          {
+            "key": "NG",
+            "value": 664788.60887827
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "G2",
+            "value": 253544.63562822051
+          },
+          {
+            "key": "G3",
+            "value": 790522.224384336
+          },
+          {
+            "key": "G4",
+            "value": 217111.82803330439
+          },
+          {
+            "key": "G5",
+            "value": 152766.55154467479
+          },
+          {
+            "key": "G6",
+            "value": 100299.36785845553
+          },
+          {
+            "key": "G7",
+            "value": 70712.961004244979
+          },
+          {
+            "key": "G8",
+            "value": 68071.3310209702
+          },
+          {
+            "key": "G9",
+            "value": 67277.851706439047
+          },
+          {
+            "key": "G10",
+            "value": 57145.892756715781
+          },
+          {
+            "key": "G11",
+            "value": 46554.489701511666
+          },
+          {
+            "key": "G12",
+            "value": 26275.477627743665
+          },
+          {
+            "key": "G13",
+            "value": 10710.57579119776
+          },
+          {
+            "key": "WC",
+            "value": 279167.79597511666
+          },
+          {
+            "key": "WGT",
+            "value": 278400
+          },
+          {
+            "key": "V1",
+            "value": 112430.21746243168
+          },
+          {
+            "key": "V2",
+            "value": 83605.803590681622
+          },
+          {
+            "key": "V3",
+            "value": 11593.17480400722
+          },
+          {
+            "key": "V4",
+            "value": 118707.67177057276
+          },
+          {
+            "key": "V5a",
+            "value": 16481.368986169742
+          },
+          {
+            "key": "V5b",
+            "value": 65998.466987005551
+          },
+          {
+            "key": "V6",
+            "value": 12680.598286584333
+          },
+          {
+            "key": "V7",
+            "value": 181.07332605492897
+          },
+          {
+            "key": "V8",
+            "value": 213.11772155979065
+          },
+          {
+            "key": "V9a",
+            "value": 837.27249697242576
+          },
+          {
+            "key": "V9b",
+            "value": 5695.8590253467264
+          },
+          {
+            "key": "V9c",
+            "value": 1631.476550443497
+          },
+          {
+            "key": "V10",
+            "value": 14703.385874480218
+          },
+          {
+            "key": "V11",
+            "value": 873.18266241433776
+          },
+          {
+            "key": "V12",
+            "value": 2613.5180014596681
+          },
+          {
+            "key": "V13",
+            "value": 10962.310867158601
+          },
+          {
+            "key": "V14",
+            "value": 6767.173160448383
+          },
+          {
+            "key": "V15",
+            "value": 12189.518184294639
+          },
+          {
+            "key": "V16",
+            "value": 36001.74218645518
+          },
+          {
+            "key": "V17",
+            "value": 80523.008338751548
+          },
+          {
+            "key": "WLPP",
+            "value": 42.872547979019586
+          },
+          {
+            "key": "WIPP",
+            "value": 41.068582484193371
+          },
+          {
+            "key": "WHPP",
+            "value": 1203.7997744491465
+          },
+          {
+            "key": "WHPST",
+            "value": 26971.367872239549
+          },
+          {
+            "key": "WIPST",
+            "value": 48754.034494285755
+          },
+          {
+            "key": "WLPST",
+            "value": 61801.720094833785
+          },
+          {
+            "key": "WCWP",
+            "value": 1749.8731309485977
+          },
+          {
+            "key": "WNGT",
+            "value": 278400
+          },
+          {
+            "key": "WNST",
+            "value": 134489.50842549809
+          },
+          {
+            "key": "QCND",
+            "value": 12499.412058293898
+          },
+          {
+            "key": "QG",
+            "value": 10710.57579119776
+          }
+        ]
+      },
+      {
+        "stateId": "Scenario2",
+        "exergy": [
+          {
+            "key": "NG",
+            "value": 662703.88936754025
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "G2",
+            "value": 292389.70164082869
+          },
+          {
+            "key": "G3",
+            "value": 820271.56781897193
+          },
+          {
+            "key": "G4",
+            "value": 205746.57491323267
+          },
+          {
+            "key": "G5",
+            "value": 149992.72028448703
+          },
+          {
+            "key": "G6",
+            "value": 107709.50025534994
+          },
+          {
+            "key": "G7",
+            "value": 83407.543874780531
+          },
+          {
+            "key": "G8",
+            "value": 80311.242522847664
+          },
+          {
+            "key": "G9",
+            "value": 78837.506920379979
+          },
+          {
+            "key": "G10",
+            "value": 59905.072024933805
+          },
+          {
+            "key": "G11",
+            "value": 48948.608946827691
+          },
+          {
+            "key": "G12",
+            "value": 26366.428181618139
+          },
+          {
+            "key": "G13",
+            "value": 11640.918447778851
+          },
+          {
+            "key": "WC",
+            "value": 321938.53508532589
+          },
+          {
+            "key": "WGT",
+            "value": 278400
+          },
+          {
+            "key": "V1",
+            "value": 93623.578794984831
+          },
+          {
+            "key": "V2",
+            "value": 69620.736460869521
+          },
+          {
+            "key": "V3",
+            "value": 22133.21087284229
+          },
+          {
+            "key": "V4",
+            "value": 115227.10065782149
+          },
+          {
+            "key": "V5a",
+            "value": 19342.492659198932
+          },
+          {
+            "key": "V5b",
+            "value": 64063.357366417542
+          },
+          {
+            "key": "V6",
+            "value": 12822.96535203967
+          },
+          {
+            "key": "V7",
+            "value": 183.10626468133043
+          },
+          {
+            "key": "V8",
+            "value": 215.51042763952623
+          },
+          {
+            "key": "V9a",
+            "value": 1598.4860960706312
+          },
+          {
+            "key": "V9b",
+            "value": 4743.0905881051476
+          },
+          {
+            "key": "V9c",
+            "value": 1914.696723742383
+          },
+          {
+            "key": "V10",
+            "value": 17255.856208374182
+          },
+          {
+            "key": "V11",
+            "value": 1667.0443018806361
+          },
+          {
+            "key": "V12",
+            "value": 4989.6207056484363
+          },
+          {
+            "key": "V13",
+            "value": 20928.791481053635
+          },
+          {
+            "key": "V14",
+            "value": 5635.2018514795709
+          },
+          {
+            "key": "V15",
+            "value": 10150.530186260183
+          },
+          {
+            "key": "V16",
+            "value": 29979.591095931119
+          },
+          {
+            "key": "V17",
+            "value": 67053.612330968026
+          },
+          {
+            "key": "WLPP",
+            "value": 43.353884798184
+          },
+          {
+            "key": "WIPP",
+            "value": 78.40644273363128
+          },
+          {
+            "key": "WHPP",
+            "value": 1002.4355158272682
+          },
+          {
+            "key": "WHPST",
+            "value": 22459.762528155898
+          },
+          {
+            "key": "WIPST",
+            "value": 47324.540666634457
+          },
+          {
+            "key": "WLPST",
+            "value": 62495.577697696433
+          },
+          {
+            "key": "WCWP",
+            "value": 1769.5192309938818
+          },
+          {
+            "key": "WNGT",
+            "value": 278400
+          },
+          {
+            "key": "WNST",
+            "value": 129386.16581813381
+          },
+          {
+            "key": "QCND",
+            "value": 12639.744917551732
+          },
+          {
+            "key": "QG",
+            "value": 11640.918447778851
+          }
+        ]
+      },
+      {
+        "stateId": "Scenario3",
+        "exergy": [
+          {
+            "key": "NG",
+            "value": 668802.08055908233
+          },
+          {
+            "key": "G1",
+            "value": 0
+          },
+          {
+            "key": "G2",
+            "value": 223448.35985902481
+          },
+          {
+            "key": "G3",
+            "value": 770506.93809612328
+          },
+          {
+            "key": "G4",
+            "value": 228706.2595321729
+          },
+          {
+            "key": "G5",
+            "value": 156687.02953905094
+          },
+          {
+            "key": "G6",
+            "value": 95245.812377243914
+          },
+          {
+            "key": "G7",
+            "value": 61095.242576452678
+          },
+          {
+            "key": "G8",
+            "value": 58795.583673177665
+          },
+          {
+            "key": "G9",
+            "value": 58537.171986110377
+          },
+          {
+            "key": "G10",
+            "value": 55541.71901834858
+          },
+          {
+            "key": "G11",
+            "value": 45125.681353817854
+          },
+          {
+            "key": "G12",
+            "value": 26564.135242940498
+          },
+          {
+            "key": "G13",
+            "value": 9924.8667670639534
+          },
+          {
+            "key": "WC",
+            "value": 246029.99776168639
+          },
+          {
+            "key": "WGT",
+            "value": 278400
+          },
+          {
+            "key": "V1",
+            "value": 127485.11078894601
+          },
+          {
+            "key": "V2",
+            "value": 94800.9829912356
+          },
+          {
+            "key": "V3",
+            "value": 3311.9517170758818
+          },
+          {
+            "key": "V4",
+            "value": 121698.84671121366
+          },
+          {
+            "key": "V5a",
+            "value": 14261.307783177788
+          },
+          {
+            "key": "V5b",
+            "value": 67661.484697889377
+          },
+          {
+            "key": "V6",
+            "value": 12594.957418507476
+          },
+          {
+            "key": "V7",
+            "value": 179.85041239750998
+          },
+          {
+            "key": "V8",
+            "value": 211.67838989227369
+          },
+          {
+            "key": "V9a",
+            "value": 239.1929847421724
+          },
+          {
+            "key": "V9b",
+            "value": 6458.5592314377827
+          },
+          {
+            "key": "V9c",
+            "value": 1411.7146000697066
+          },
+          {
+            "key": "V10",
+            "value": 12722.821240562662
+          },
+          {
+            "key": "V11",
+            "value": 249.45184274323609
+          },
+          {
+            "key": "V12",
+            "value": 746.6328748490148
+          },
+          {
+            "key": "V13",
+            "value": 3131.7257708437223
+          },
+          {
+            "key": "V14",
+            "value": 7673.3269716926243
+          },
+          {
+            "key": "V15",
+            "value": 13821.747491575688
+          },
+          {
+            "key": "V16",
+            "value": 40822.531476192729
+          },
+          {
+            "key": "V17",
+            "value": 91305.388095999675
+          },
+          {
+            "key": "WLPP",
+            "value": 42.5829999511892
+          },
+          {
+            "key": "WIPP",
+            "value": 11.732520605950143
+          },
+          {
+            "key": "WHPP",
+            "value": 1364.9937808279897
+          },
+          {
+            "key": "WHPST",
+            "value": 30582.950908823317
+          },
+          {
+            "key": "WIPST",
+            "value": 49982.53004187176
+          },
+          {
+            "key": "WLPST",
+            "value": 61384.330249501014
+          },
+          {
+            "key": "WCWP",
+            "value": 1749.8731309485977
+          },
+          {
+            "key": "WNGT",
+            "value": 278400
+          },
+          {
+            "key": "WNST",
+            "value": 138780.62876786236
+          },
+          {
+            "key": "QCND",
+            "value": 12414.994866381501
+          },
+          {
+            "key": "QG",
+            "value": 9924.8667670639534
+          }
+        ]
+      }
+    ]
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 11,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "QCND",
+        "type": "DEFAULT",
+        "recycle": 0
+      },
+      {
+        "flow": "QG",
+        "type": "DEFAULT",
+        "recycle": 0
+      }
+    ]
+  }
+}

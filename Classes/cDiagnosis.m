@@ -1,27 +1,38 @@
 classdef cDiagnosis < cResultId
-% cDiagnosis make Thermoeconomic Diagnosis Analysis
+% cDiagnosis - Make a thermoeconomic diagnosis Analysis
 %   It compares two states of the plant given by two cExergyCost objects.
 %   Two method could be applied:
-%   WASTE_EXTERNAL considers waste as a system output
-%   WASTE_INTERNAL internalize the waste cost according waste table allocation
-%   Methods:
-%	    obj=cDiagnosis(fp0,fp1,method)
-%       obj.FuelImpact
-%       obj.TotalMalfunctionCost
-%       obj.getUnitConsumptionVariation
-%       obj.getIrreversibilityVariation
-%       obj.getIrreversibilityTable
-%       obj.getOutputVariation
-%       obj.getDemandVariationCost
-%       obj.getUnitProductCostVariation
-%       obj.getMalfunction
-%       obj.getMalfunctionTable
-%       obj.getMalfunctionCost
-%       obj.getWasteMalfunctionCost
-%       obj.getMalfunctionCostTable
-%       obj.getInternalDisfunction
-%       obj.getExternalDisfunction
-%       obj.getDemandVariationEffectiveCost
+%    WASTE_EXTERNAL considers waste as a system output
+%    WASTE_INTERNAL internalize the waste cost according waste table allocation
+%  
+% cDiagnosis Properties
+%   NrOfProcesses        - Number of processes
+%   NrOfWastes           - Number of Wastes
+%   FuelImpact           - Fuel Impact
+%   TotalMalfunctionCost - Total Malfunction Cost
+% 
+% cDiagnosis Methods
+%   getResultInfo - Get the cResultInfo associated to thermoeconomic diagnosis
+%   getUnitConsumptionVariation - Get the unit consumption variation of processes
+%   getProcessUnitCostVariation - Get the variation of the unit cost of processes
+%   getIrreversibilityVariation - Get the irreversibility variation of processes
+%   getIrreversibilityTable     - Get the Irreversity Variation table
+%   getOutputVariation          - Get the output variation of processes
+%   getDemandVariation          - Get the final production variation
+%   getDemandVariationCost      - Get the final production cost variation
+%   getWasteVariation           - Get the waste variation of processes
+%   getMalfunction              - Get the malfunction of processes
+%   getMalfunctionTable         - Get the malfunction table
+%   getMalfunctionCost          - Get the malfunction cost of processes
+%   getWasteMalfunctionCost     - Get the malfunction cost due to waste variation
+%   getMalfunctionCostTable     - Get the malfunction cost table
+%   getInternalDisfunction      - Get the internal disfunctions caused by malfunction
+%   getExternalDisfunction      - Get the disfunction caused by waste variation
+%   getDemandVariationEffectiveCost - Get the real demand variation cost
+%   getDemmandCorrectionCost    - Get the correction of real demand variation cost
+%
+% See also cExergyCost
+%
 	properties(GetAccess=public, SetAccess=private)
         NrOfProcesses        % Number of processes
         NrOfWastes           % Number of Wastes
@@ -57,12 +68,16 @@ classdef cDiagnosis < cResultId
 	
 	methods
 		function obj=cDiagnosis(fp0,fp1,method)
-        % Diagnosis Constructor
-        %  fp0: cExergyCost object for reference state
-        %  fp1: cExergyCost object for operation state
-        %  method: Diagnosis Method used. 
-        %   cType.DiagnosisMethod.WASTE_EXTERNAL
-        %   cType.DiagnosisMethod.WASTE_INTERNAL   
+        % Create an object of this class
+        % Syntax:
+        %   obj=cDiagnosis(fp0,fp1,method);
+        % Input Arguments:
+        %   fp0 - cExergyCost object for reference state
+        %   fp1 - cExergyCost object for operation state
+        %   method - Diagnosis Method used. 
+        %     cType.DiagnosisMethod.WASTE_EXTERNAL
+        %     cType.DiagnosisMethod.WASTE_INTERNAL
+        %
             obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
             % Check Arguments
             if ~isa(fp0,'cExergyCost') || ~isa(fp1,'cExergyCost')
@@ -146,7 +161,11 @@ classdef cDiagnosis < cResultId
         end
 
         function res=getResultInfo(obj,fmt)
-        % Get cResultInfo object
+        % Get cResultInfo object for thermoeconomic diagnosis
+        % Syntax:
+        %   res=obj.getResultInfo(fmt)
+        % Input Arguments:
+        %   fmt - cFormatData object
             res=fmt.getDiagnosisResults(obj);
         end
 

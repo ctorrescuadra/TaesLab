@@ -1,12 +1,23 @@
 classdef (Abstract) cReadModel < cMessageLogger
-% cReadModel abstract class to implemenent the model reader classes
-% See also cReadModelStruct, cReadModelTable
+% cReadModel - Abstract class to implemenent the model reader classes
+%   These classes generate the data model.
 %
+% cReadModel Properties:
+%   ModelFile    - File name of the model
+%   ModelName    - Name of the model
+%   ModelData    - cModelData object
+%   isTableModel - Indicates if is a table model 
+%
+% cReadModel Methods:
+%   getDataModel - Get the cDataModel object of the plant  
+%
+% See also cReadModelStruct, cReadModelTable
+%   
 	properties(GetAccess=public,SetAccess=protected)
         ModelFile            % File name of the model
         ModelName            % Name of the model
-		ModelData            % cModelData object
-		isTableModel         % Indicates if is a table model
+        ModelData            % cModelData object
+        isTableModel         % Indicates if is a table model
 	end
 
 	methods	

@@ -81,7 +81,6 @@ classdef cDataModel < cResultSet
             obj.isResourceCost=dm.isResourceCost;
             % Check and get Productive Structure
             ps=cProductiveStructure(dm);
- 
             status=ps.status;
             if isValid(ps)
                 obj.ProductiveStructure=ps;
