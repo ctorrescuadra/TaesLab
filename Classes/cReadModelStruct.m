@@ -4,15 +4,10 @@ classdef (Abstract) cReadModelStruct < cReadModel
 %   Methods:
 %	See also cReadModel, cReadModelJSON, cReadModelXML
     methods(Access=protected)
-		function res = checkDataStructure(obj, data)
-		% checkDataStructure
-			res=true;
-			for i=cType.MandatoryData
-				fld=cType.DataElements{i};
-				if ~isfield(data,fld)
-					obj.messageLog(cType.ERROR,'Invalid model. %s is missing',fld);
-					res=false;
-				end  
+		function res = buildModelData(obj, data)
+			res=cModelData(data);
+			if ~isValid(res)
+				obj.addLogger(res);
 			end
 		end
 	end
