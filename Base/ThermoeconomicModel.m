@@ -57,7 +57,7 @@ function model=ThermoeconomicModel(filename,varargin)
         filename=convertStringsToChars(filename);
     end
     % Check Data Model file
-        data=checkDataModel(filename);
+        data=readModel(filename);
     % Check optional parameters and create cThermoeconomicModel obeject
     if isValid(data)
         p = inputParser;

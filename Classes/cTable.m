@@ -238,23 +238,12 @@ classdef (Abstract) cTable < cMessageLogger
             end
         end
     end
-    
     methods(Access=protected)
         function log=exportCSV(obj,filename)
         % exportCSV saves table values as CSV file
-            log=cMessageLogger();
-            try
-                if isOctave
-                    cell2csv(filename,obj.Values);
-                else
-                    writecell(obj.Values,filename);
-                end
-            catch err
-                log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
-            end
+            log=exportCSV(obj.Values,filename);
         end
-    
+
         function log=exportXLS(obj,filename)
         % exportXLS saves table cell as XLS file
             log=cMessageLogger();

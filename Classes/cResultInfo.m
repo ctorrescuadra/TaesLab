@@ -351,7 +351,7 @@ classdef cResultInfo < cResultSet
             % Save Index file
             tidx=obj.tableIndex;
             fname=strcat(folder,filesep,'index',ext);
-            slog=exportCSV(tidx,fname);
+            slog=exportCSV(tidx.Values,fname);
             if ~slog.isValid
                 log.addLogger(slog);
                 log.messageLog(cType.ERROR,'Index file is NOT saved');
@@ -360,7 +360,7 @@ classdef cResultInfo < cResultSet
             for i=1:obj.NrOfTables
                 tbl=obj.tableIndex.Content{i};
                 fname=strcat(folder,filesep,tbl.Name,ext);
-                slog=exportCSV(tbl,fname);
+                slog=exportCSV(tbl.Values,fname);
                 if ~slog.isValid
                     log.addLogger(slog);
                     log.messageLog(cType.ERROR,'file %s is NOT saved',fname);

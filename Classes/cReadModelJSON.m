@@ -1,7 +1,7 @@
 classdef (Sealed) cReadModelJSON < cReadModelStruct
 % cReadModelXML implements the cReadModel to read JSON data model files
 %   This class read a JSON file containing the thermoeconomic model data
-%   and store it into a structure data
+%   and build the data model
 %
 % See also cReadModel, cReadModelStruct
 %
@@ -19,11 +19,9 @@ classdef (Sealed) cReadModelJSON < cReadModelStruct
                 obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
                 return
             end
-            % Check and build Data Model
-            if obj.checkDataStructure(sd)
-                obj.setModelProperties(cfgfile);
-                obj.ModelData=cModelData(sd);
-            end
+            % Build Data Model
+            obj.setModelProperties(cfgfile);
+            obj.ModelData=obj.buildModelData(sd);
         end
     end
 end

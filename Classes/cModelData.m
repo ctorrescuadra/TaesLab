@@ -2,6 +2,7 @@ classdef (Sealed) cModelData < cMessageLogger
     % cModelData - is a container class of the Data Model structure
     %
     % cModelData Properties:
+    %   ModelName           - Name of the model
     %   ProductiveStructure - Productive Structure data
     %   ExergyStates        - Exergy States data
     %   WasteDefinition     - Waste Definition data
@@ -15,6 +16,7 @@ classdef (Sealed) cModelData < cMessageLogger
     %   getResourceSample - Get the resource data by index
     %
     properties(GetAccess=public,SetAccess=private)
+        ModelName             % Model Name
         ProductiveStructure   % Productive Structure data
         ExergyStates          % Exergy States data
         WasteDefinition       % Waste Definition data
@@ -27,10 +29,11 @@ classdef (Sealed) cModelData < cMessageLogger
     end
 
     methods
-        function obj = cModelData(s)
+        function obj = cModelData(name,s)
         %cModelData Construct an instance of this class
         %   store the data structure and check it
             obj.dm=struct();
+            obj.ModelName=name;
             for i=cType.MandatoryData
                 fld=cType.DataElements{i};
                 if isfield(s,fld)

@@ -6,7 +6,6 @@ classdef (Abstract) cReadModel < cMessageLogger
 %   ModelFile    - File name of the model
 %   ModelName    - Name of the model
 %   ModelData    - cModelData object
-%   isTableModel - Indicates if is a table model 
 %
 % cReadModel Methods:
 %   getDataModel - Get the cDataModel object of the plant  
@@ -14,21 +13,15 @@ classdef (Abstract) cReadModel < cMessageLogger
 % See also cReadModelStruct, cReadModelTable
 %   
 	properties(GetAccess=public,SetAccess=protected)
-        ModelFile            % File name of the model
-        ModelName            % Name of the model
-        ModelData            % cModelData object
-        isTableModel         % Indicates if is a table model
+        ModelFile		% File name of the model
+        ModelName       % Name of the model
+        ModelData       % cModelData object
 	end
 
 	methods	
-		function res=get.isTableModel(obj)
-		% Check if is a cReadModelTable
-            res=isa(obj,'cReadModelTable');          
-		end
-
 		function res=getDataModel(obj)
 		% get the data model object
-			res=cDataModel(obj);
+			res=cDataModel(obj.ModelData);
 		end
 	end
     methods(Access=protected)

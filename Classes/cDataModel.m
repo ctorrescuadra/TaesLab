@@ -21,20 +21,19 @@ classdef cDataModel < cResultSet
 %   ExergyData          - Dataset of cExergyData
 %   ResourceData        - Dataset of cResourceData
 %   ModelData           - cModelData object
-%   ModelInfo           - cResultInfo data model tables
-%   ModelFile           - Name of the model filename used by the cReadModel interface
 %   ModelName           - Name of the model
 %   ResultId            - ResultId (cType.ResultId.DATA_MODEL)
 %
 % cDataModel methods:
-%   existState         - Check if a state name exists 
-%   existSample        - Check if a sample name exists
 %   getExergyData      - Get the cExergyData of a state
 %   setExergyData      - Set the exergy values of a state
 %   getResourceData    - Get the cResourceData for a specific sample
+%   existState         - Check if a state name exists 
+%   existSample        - Check if a sample name exists
 %   checkCostTables    - Check if the CostTables parameter is correct
 %   getTablesDirectory - Get the tables directory 
 %   getTableInfo       - Get information about a table object
+%   getResultInfo      - Get the cResultInfo associated to the data model
 %   showDataModel      - Show the data model
 %   saveDataModel      - Save the data model
 %
@@ -58,8 +57,6 @@ classdef cDataModel < cResultSet
         ExergyData              % Dataset of cExergyData
         ResourceData            % Dataset of cResourceData
         ModelData               % Model data from cReadModel interface
-        ModelInfo               % cResultInfo data model tables from cReadModel interface
-        ModelFile               % Name of the model filename used by the cReadModel interface
         ModelName               % Name of the model
         ResultId                % ResultId
         ResultName              % Result Name (cResultId)
@@ -67,17 +64,24 @@ classdef cDataModel < cResultSet
         DefaultGraph            % Default Graph (cResultId)
     end
 
+    properties(Access=private)
+        modelInfo               % cResultInfo data model
+    end
+
     methods
-        function obj = cDataModel(rdm)
+        function obj = cDataModel(dm)
         % Creates the cDataModel object
-        %   rdm - cReadModel object with the data model
+        % Syntax:
+        %   obj = cDataModel(dm)
+        % Input Argument:
+        %   dm - cModelData object with the data of the model
+        %
             % Check Data Structure
             obj=obj@cResultSet(cType.ClassId.DATA_MODEL);
-            if ~isa(rdm,'cReadModel') || ~isValid(rdm)
+            if ~isa(dm,'cModelData') || ~isValid(dm)
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 return
             end
-            dm=rdm.ModelData;
             obj.isResourceCost=dm.isResourceCost;
             % Check and get Productive Structure
             ps=cProductiveStructure(dm);
@@ -171,24 +175,19 @@ classdef cDataModel < cResultSet
                obj.messageLog(cType.INFO,'No Resources Cost Data available')
             end
             % Set object properties
-            obj.ModelData=dm;
-            obj.ModelFile=rdm.ModelFile;
+
             % Set ResultId properties
             obj.ResultId=cType.ResultId.DATA_MODEL;
             obj.ResultName=cType.Results{obj.ResultId};
-            obj.ModelName=rdm.ModelName;
+            obj.ModelName=dm.ModelName;
             obj.State='DATA_MODEL';
             obj.DefaultGraph=cType.EMPTY_CHAR;
             % Check Data Model
             obj.status=status;
             % Get the Model Info
             if obj.isValid
-                if rdm.isTableModel
-                    tables=rdm.getTableModel;
-                else
-                    tables=obj.getTableModel;
-                end
-                obj.ModelInfo=cResultInfo(obj,tables);
+                obj.ModelData=dm;
+                obj.modelInfo=getTableModel(obj);
             end
         end
 
@@ -341,7 +340,7 @@ classdef cDataModel < cResultSet
         %%%
         function res=getResultInfo(obj)
         % Get data model result info
-            res=obj.ModelInfo;
+            res=obj.modelInfo;
         end
 
         function showDataModel(obj,varargin)
@@ -381,15 +380,15 @@ classdef cDataModel < cResultSet
                 case cType.FileType.XML
                     log=saveAsXML(obj.ModelData,filename);
 				case cType.FileType.CSV
-                    log=saveAsCSV(obj.ModelInfo,filename);
+                    log=saveAsCSV(obj.modelInfo,filename);
 				case cType.FileType.XLSX
-                    log=saveAsXLS(obj.ModelInfo,filename);
+                    log=saveAsXLS(obj.modelInfo,filename);
                 case cType.FileType.TXT
-                    log=saveAsTXT(obj.ModelInfo,filename);
+                    log=saveAsTXT(obj.modelInfo,filename);
                 case cType.FileType.HTML
-                    log=saveAsHTML(obj.ModelInfo,filename);
+                    log=saveAsHTML(obj.modelInfo,filename);
                 case cType.FileType.LaTeX
-                    log=saveAsLaTeX(obj.ModelInfo,filename);
+                    log=saveAsLaTeX(obj.modelInfo,filename);
                 case cType.FileType.MAT
 					log=exportMAT(obj,filename);
 				otherwise
@@ -506,7 +505,7 @@ classdef cDataModel < cResultSet
 				    tables.(sheet)=tbl;
                 end
             end
-            res=tables;
+            res=cResultInfo(obj,tables);
         end
     end
 end

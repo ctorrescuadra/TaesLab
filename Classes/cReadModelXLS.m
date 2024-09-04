@@ -67,12 +67,9 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                 end  
             end
             % Set Model properties
+            obj.modelTables=tables;
             obj.setModelProperties(cfgfile);
-            md=obj.buildDataModel(tables);
-            if isValid(obj)
-                obj.ModelData=md;
-                obj.modelTables=tables;
-            end
+            obj.ModelData=obj.buildModelData(tables);
         end 
     end
 

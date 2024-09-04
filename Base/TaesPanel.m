@@ -101,7 +101,7 @@ classdef (Sealed) TaesPanel < handle
 				return
 			end
 			% Read and Check Data Model
-			data=checkDataModel(file);
+			data=readModel(file);
             if isValid(data) % Activate widgets
                 if app.debug
                     printLogger(data);

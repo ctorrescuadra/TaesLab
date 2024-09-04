@@ -3,7 +3,7 @@ classdef (Abstract) cReadModelTable < cReadModel
 %   This class derives cReadModelCSV and cReadmodelXLS
 %   
 % cReadModelTable Methods:
-%   getTableModel - Get a cResultInfo object with the data model
+%   getModelTable - Get the tables of the data model
 %	
 % See also cReadModel, cReadModelXLS, cReadModelCSV
 %
@@ -11,18 +11,17 @@ classdef (Abstract) cReadModelTable < cReadModel
 		modelTables
 	end
     methods
-        function res=getTableModel(obj)
+        function res=getModelTables(obj)
         % Get the tables of the data model
             res=obj.modelTables;
         end
     end
-
 	methods (Access=protected)  
-        function res=buildDataModel(obj,tm)
+        function res=buildModelData(obj,tm)
         % Build the cModelData from data tables
-        % Input Parameters:
+        % Input Arguments:
         %   tm - Structure containing the tables
-        % Output Parameters
+        % Output Arguments
         %   res - cModelData object
         %
             res=cMessageLogger();
@@ -198,7 +197,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     sd.ResourcesCost=tmp;
                 end
             end
-            res=cModelData(sd);
+            res=cModelData(obj.ModelName,sd);
         end
     end
     methods(Access=private)
@@ -226,9 +225,8 @@ classdef (Abstract) cReadModelTable < cReadModel
                     wastes{i}.type='DEFAULT';
                     wastes{i}.recycle=0.0;
                 end
-                sd.wastes=cell2mat(wastes);
+                res.wastes=cell2mat(wastes);
             end
-            res=cModelData(sd);
         end
     end
 end

@@ -193,15 +193,15 @@
     ],
     "processes": [
       {
-        "key": "CMP",
-        "fuel": "WC",
-        "product": "G2-G1",
-        "type": "PRODUCTIVE"
-      },
-      {
         "key": "CC",
         "fuel": "NG",
         "product": "G3-G2",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "CMP",
+        "fuel": "WC",
+        "product": "G2-G1",
         "type": "PRODUCTIVE"
       },
       {
@@ -229,12 +229,6 @@
         "type": "PRODUCTIVE"
       },
       {
-        "key": "LPSH",
-        "fuel": "G7-G8",
-        "product": "V5a-V10",
-        "type": "PRODUCTIVE"
-      },
-      {
         "key": "IPSH",
         "fuel": "G8-G9",
         "product": "V3-V13",
@@ -247,9 +241,15 @@
         "type": "PRODUCTIVE"
       },
       {
-        "key": "HPPH",
+        "key": "IPEC",
         "fuel": "G10-G11",
         "product": "(V15-V14)+(V12-V11)",
+        "type": "PRODUCTIVE"
+      },
+      {
+        "key": "LPSH",
+        "fuel": "G7-G8",
+        "product": "V5a-V10",
         "type": "PRODUCTIVE"
       },
       {

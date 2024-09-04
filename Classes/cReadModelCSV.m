@@ -55,12 +55,9 @@ classdef cReadModelCSV < cReadModelTable
                 end
             end
             % Set Model properties
+            obj.modelTables=tables;
             obj.setModelProperties(cfgfile);
-            sd=obj.buildDataModel(tables);
-            if isValid(obj)
-                obj.ModelData=cModelData(sd);
-                obj.modelTables=tables;
-            end
+            obj.ModelData=obj.buildModelData(tables);
         end
     end
 

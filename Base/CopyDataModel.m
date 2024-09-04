@@ -21,8 +21,10 @@ function CopyDataModel(inputFile, outputFile)
         log.printError('Usage: CopyDataModel(inputFile,outputFile)');
         return
     end
-    data=ReadDataModel(inputFile);
+    data=readModel(inputFile);
     if isValid(data)
         SaveDataModel(data,outputFile);
+    else
+        printLogger(data);
     end
 end

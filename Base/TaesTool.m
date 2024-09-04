@@ -96,7 +96,7 @@ classdef (Sealed) TaesTool < handle
 				return
 			end
 			% Read and Check Data Model
-			data=checkDataModel(file);
+			data=readModel(file);
             % Activate widgets
 			if isValid(data) 
                 if app.debug
@@ -730,7 +730,7 @@ classdef (Sealed) TaesTool < handle
             set(app.open_button,'enable','on');
             app.tableView=cType.TableView.CONSOLE;
             app.tableIndex=cType.EMPTY;
-            app.currentNode=cType.EMPTYype.EMPTY;
+            app.currentNode=cType.EMPTY;
             app.currentTable=cType.EMPTY;
             app.model=cMessageLogger(false);
             for i=1:cType.MAX_RESULT_INFO

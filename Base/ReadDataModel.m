@@ -58,7 +58,7 @@ function data=ReadDataModel(filename,varargin)
     end
     param=p.Results;
     % Read data Model
-    data=checkDataModel(filename);
+    data=readModel(filename);
     if param.Debug || ~isValid(data)
         printLogger(data);
     end
