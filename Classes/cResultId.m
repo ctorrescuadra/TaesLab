@@ -33,5 +33,10 @@ classdef cResultId < cMessageLogger
                 res=cType.Results{obj.ResultId};
             end
         end
+
+        function setResultId(obj,id)
+        % Set ResultId. Internal package use only
+            obj.ResultId=id;
+        end
 	end
 end

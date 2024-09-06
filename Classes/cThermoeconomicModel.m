@@ -10,7 +10,6 @@ classdef cThermoeconomicModel < cResultSet
 %   - Show the results tables in console, as GUI tables or graphs
 %
 % cThermoeconomicModel Properties:
-%   Public Properties
 %     State - Active thermoeconomic state
 %		char array
 %     ReferenceState - Active Reference state
@@ -27,8 +26,6 @@ classdef cThermoeconomicModel < cResultSet
 %	    true | false
 %     ActiveWaste - Active Waste for Recycling Analysis
 %		true | false
-%
-%   Public Get Access Properties
 %     DataModel - Data Model
 %       cDataModel object
 %     ModelName - Model Name
@@ -83,22 +80,21 @@ classdef cThermoeconomicModel < cResultSet
 %
 %   ResultSet Methods
 %     getResultInfo         - Get cResultInfo objects
-%     ListOfTables          - Get the current list of available tables
-%     getTable              - Get a cTable object by name
-%     getTableIndex         - Get the current Table Index object
-%     printResults          - Print on console the current results
-%     showResults           - Show the current results
-%     showSummary           - Show Summary results
-%     showTableIndex        - Show the Table Index
-%     showGraph             - Show a graph of the current model
-%     saveResults           - Save the curernt model in a file
-%     saveTable             - Save a table of the current model in a file
+%     ListOfTables          - Get the tables of the cResultInfo
+%     getTable              - Get a table by name
+%     getTableIndex         - Get the table index
+%     saveTable             - Save the results in a external file 
+%     exportTable           - Export a table to another format
+%     printResults          - Print results on console
+%     showResults           - Show results in different interfaces
+%     showGraph             - Show the graph associated to a table
+%     showTableIndex        - Show the table index in different interfaces
+%     exportResults         - Export all the result Tables to another format
+%     saveResults           - Save all the result tables in a external file
 %     saveDataModel         - Save the data model tables into a file
 %     saveDiagramFP         - Save the Diagram FP table into a file
 %     saveProductiveDiagram - Save the Productive Diagram tables into a file
 %     saveSummary           - Save Summary results into a file
-%     exportResults         - Export the model tables into a internal variable
-%     exportTable           - Export a table into a internal variable
 %
 %   Waste Methods
 %     wasteAllocation  - Show waste allocation info 
@@ -121,19 +117,11 @@ classdef cThermoeconomicModel < cResultSet
 %
     properties(GetAccess=public,SetAccess=private)
         DataModel           % Data Model
-        ModelName           % Model Name
         StateNames          % Names of the defined states
         SampleNames         % Names of the defined resource samples
         WasteFlows          % Names of the waste flows
         ResourceData        % Resource Data object
         ResourceCost        % Resource Cost object
-        ResultId            % ResultId (cResultId properties)
-        ResultName          % Result Name (cResultId properties)
-        DefaultGraph        % Default Graph (cResultId properties)
-    end
-
-    properties(Access=public)
-        State                  % Active thermoeconomic state
         ReferenceState         % Active Reference state
         ResourceSample         % Active resource cost sample
         CostTables             % Selected Cost Result Tables
@@ -155,7 +143,6 @@ classdef cThermoeconomicModel < cResultSet
         debug              % debug info control
         directCost=true    % Direct cost are obtained
         generalCost=false  % General cost are obtained
-        activeSet=false    % set variables control
     end
 
     methods
@@ -202,7 +189,6 @@ classdef cThermoeconomicModel < cResultSet
             param=p.Results;
             % Update Variables
             obj.debug=param.Debug;
-            obj.CostTables=param.CostTables;
             obj.DiagnosisMethod=param.DiagnosisMethod;
             if data.isWaste
                 obj.wd=data.WasteData;
@@ -230,20 +216,22 @@ classdef cThermoeconomicModel < cResultSet
                 obj.rstate.setValues(i,cex);
             end
             % Set Operation and Reference State
-            if data.existState(param.State)
-                obj.State=param.State;
-            else
-                obj.printError('Invalid state name %s',param.State);
-                return
-            end
-            if data.existState(param.ReferenceState)
+            if obj.checkReferenceState(param.ReferenceState)
                 obj.ReferenceState=param.ReferenceState;
             else
                 obj.printError('Invalid state name %s',param.ReferenceState);
                 return
             end
+            if obj.checkState(param.State)
+                obj.State=param.State;
+            else
+                obj.printError('Invalid state name %s',param.State);
+                return
+            end
             % Read ResourcesCost
-            if ~data.checkCostTables(param.CostTables)
+            if obj.checkCostTables(param.CostTables)
+                obj.CostTables=param.CostTables;
+            else
                 res.printError('Invalid CostTables parameter %s',param.CostTables);
                 return
             end
@@ -251,7 +239,7 @@ classdef cThermoeconomicModel < cResultSet
                 if isempty(param.ResourceSample)
                     param.ResourceSample=data.SampleNames{1};
                 end
-                if data.existSample(param.ResourceSample)
+                if obj.checkResourceSample(param.ResourceSample)
                     obj.ResourceSample=param.ResourceSample;
                 else 
                     obj.printError('Invalid ResourceSample %s',param.ResourceSample);
@@ -259,7 +247,6 @@ classdef cThermoeconomicModel < cResultSet
                 end
             end
             % Compute initial state results
-            obj.activeSet=true;
             obj.setProductiveStructure;
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
@@ -267,102 +254,10 @@ classdef cThermoeconomicModel < cResultSet
             obj.Recycling=param.Recycling;   
             obj.Summary=param.Summary;
         end
-        %%%
-        % Set (assign) Methods
-        function set.State(obj,state)
-        % Set State object
-        % Syntax:
-        %   model.State = value
-            if checkState(obj,state)
-                obj.State=state;
-                obj.triggerStateChange;
-            end
-        end
 
-        function set.ReferenceState(obj,state)
-        % Set Reference State
-        % Syntax:
-        %   model.ReferenceState = value
-            if checkReferenceState(obj,state)
-                obj.ReferenceState=state;
-                obj.printDebugInfo('Set Reference State: %s',state);
-                obj.setThermoeconomicDiagnosis;
-            end
-        end
-
-        function set.CostTables(obj,value)
-        % Set CostTables parameter
-        % Syntax:
-        %   model.ReferenceState = value
-            if obj.checkCostTables(value)
-                obj.CostTables=value;
-                obj.triggerCostTablesChange;
-            end
-        end
-
-        function set.ResourceSample(obj,sample)
-        % Set Resources sample
-        % Syntax:
-        %   model.ResourceSample = value
-            if obj.checkResourceSample(sample)
-                obj.ResourceSample=sample;
-                obj.triggerResourceSampleChange;
-            end
-        end
-
-        function set.DiagnosisMethod(obj,value)
-        % Set Diagnosis method
-        % Syntax:
-        %   model.DiagnosisMethod = value
-            if obj.checkDiagnosisMethod(value)
-                obj.DiagnosisMethod=value;
-                obj.setThermoeconomicDiagnosis;
-            end
-        end
-
-        function set.Summary(obj,value)
-        % Set Summary parameter
-        % Syntax:
-        %   model.Summary = value
-            if obj.checkSummary(value)
-                obj.Summary=value;
-                if obj.Summary
-                    obj.printDebugInfo('Summary is active');
-                else
-                    obj.printDebugInfo('Summary is not active')
-                end
-                obj.setSummaryResults;
-            end
-        end
-
-        function set.Recycling(obj,value)
-        % Set Recycling parameter
-        % Syntax:
-        %   model.Recycling = value
-            if obj.checkRecycling(value)
-                obj.Recycling=value;
-                if obj.Recycling
-                    obj.printDebugInfo('Recycling is active');
-                else
-                    obj.printDebugInfo('Recycling is not active')
-                end
-                obj.setRecyclingResults;
-            end
-        end
-
-        function set.ActiveWaste(obj,value)
-        % Set Active Waste
-        % Syntax:
-        %   model.Recycling = value
-            if obj.checkActiveWaste(value)
-                obj.ActiveWaste=value;
-                obj.printDebugInfo('Set Active Waste to %s',value);
-            end
-            obj.setRecyclingResults;
-        end
-
-
+        %%%%
         % Set methods
+        %%%%
         function setState(obj,state)
         % Set a new valid state from StateNames
         % Syntax:
@@ -370,7 +265,10 @@ classdef cThermoeconomicModel < cResultSet
         % Input Parameters
         %   state - Valid state.
         %     array of chars 
-            obj.State=state;
+            if checkState(obj,state)
+                obj.State=state;
+                obj.triggerStateChange;
+            end
         end
 
         function setReferenceState(obj,state)
@@ -380,7 +278,11 @@ classdef cThermoeconomicModel < cResultSet
         % Input Parameters
         %   state - Valid state.
         %     array of chars
-            obj.ReferenceState=state;
+            if checkReferenceState(obj,state)
+                obj.ReferenceState=state;
+                obj.printDebugInfo('Set Reference State: %s',state);
+                obj.setThermoeconomicDiagnosis;
+            end
         end
 
         function setResourceSample(obj,sample)
@@ -390,17 +292,23 @@ classdef cThermoeconomicModel < cResultSet
         % Input Parameters
         %   state - Valid state.
         %     array of chars
-            obj.ResourceSample=sample;
+            if obj.checkResourceSample(sample)
+                obj.ResourceSample=sample;
+                obj.triggerResourceSampleChange;
+            end
         end
 
-        function setCostTables(obj,type)
+        function setCostTables(obj,value)
         % Set a new value of CostTables parameter
         % Syntax:
         %   obj.setCostTables(type)
         % Input Parameters
-        %   type - Type of thermoeconomic tables
+        %   value - Type of thermoeconomic tables
         %     'DIRECT' | 'GENERALIZED' | 'ALL'
-            obj.CostTables=type;
+            if obj.checkCostTables(value)
+                obj.CostTables=value;
+                obj.triggerCostTablesChange;
+            end
         end
 
         function setDiagnosisMethod(obj,method)
@@ -410,25 +318,60 @@ classdef cThermoeconomicModel < cResultSet
         % Input Parameters
         %   method - Method used to compute diagnosis
         %     'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
-            obj.DiagnosisMethod=method;
+            if obj.checkDiagnosisMethod(method)
+                obj.DiagnosisMethod=method;
+                obj.setThermoeconomicDiagnosis;
+            end
         end
 
-        function setActiveWaste(obj,key)
+        function setActiveWaste(obj,value)
         % Set a new waste flow for recycling analysis
         % Syntax:
         %   setActiveWaste(obj,method)
         % Input Parameters
-        %   method - Method used to compute diagnosis
-        %     'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
-            obj.ActiveWaste=key;
+        %   value - waste flow key
+        %     char array
+            if obj.checkActiveWaste(value)
+                obj.ActiveWaste=value;
+                obj.printDebugInfo('Set Active Waste to %s',value);
+            end
+            obj.setRecyclingResults;
         end
 
         function setSummary(obj,value)
-            obj.Summary=value;
-        end
-
+        % Set Summary parameter
+        % Syntax:
+        %   model.setSummary(value)
+        % Input Arguments
+        %   value - Activate/Deactivate summary results
+        %     false | true
+        %
+                if obj.checkSummary(value)
+                    obj.Summary=value;
+                    if obj.Summary
+                        obj.printDebugInfo('Summary is active');
+                    else
+                        obj.printDebugInfo('Summary is not active')
+                    end
+                    obj.setSummaryResults;
+                end
+            end
+    
         function setRecycling(obj,value)
-            obj.Recycling=value;
+        % Set Recycling parameter
+        % Syntax:
+        %   model.setRecycling(value)
+        % Input Parameters:
+        %   value - Activat/Deactivate recycling analysis
+            if obj.checkRecycling(value)
+                obj.Recycling=value;
+                if obj.Recycling
+                    obj.printDebugInfo('Recycling is active');
+                else
+                    obj.printDebugInfo('Recycling is not active')
+                end
+                obj.setRecyclingResults;
+            end
         end
 
         function setDebug(obj,dbg)
@@ -441,12 +384,12 @@ classdef cThermoeconomicModel < cResultSet
 
         function toggleSummary(obj)
         % toggle summary status
-            obj.Summary = ~obj.Summary;
+            obj.setSummary(~obj.Summary);
         end
 
         function toggleRecycling(obj)
         % toggle recycling status
-            obj.Recycling = ~obj.Recycling;
+            obj.setRecycling(~obj.Recycling);
         end
 
         function toggleDebug(obj)
@@ -605,12 +548,16 @@ classdef cThermoeconomicModel < cResultSet
             if isempty(obj.ReferenceState) || isempty(obj.State)
                 return
             end
+            %Check if operation and reference states are diferent 
+            if strcmp(obj.ReferenceState,obj.State)
+                return
+            end
+            % Check configurations
             if ~all(obj.fp0.ActiveProcesses==obj.fp1.ActiveProcesses)
                 obj.printDebugInfo('Compare two diferent configurations is not available');
                 return
             end
-            %Check if operation and reference states are diferent 
-            res=~strcmp(obj.ReferenceState,obj.State);
+            res=true;
         end
 
         function res=isWaste(obj)
@@ -1108,10 +1055,6 @@ classdef cThermoeconomicModel < cResultSet
 
         function setStateInfo(obj)
         % Trigger exergy analysis
-            obj.fp1=obj.rstate.getValues(obj.State);
-            if ~obj.activeSet
-                return
-            end
             res=getExergyResults(obj.fmt,obj.fp1);
             obj.setResults(res);
             obj.printDebugInfo('Set State: %s',obj.State);
@@ -1120,9 +1063,6 @@ classdef cThermoeconomicModel < cResultSet
 
         function setThermoeconomicAnalysis(obj)
         % Trigger thermoeconomic analysis
-            if ~obj.activeSet
-                return
-            end
             % Read resources
             options=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);
             if obj.isGeneralCost
@@ -1144,9 +1084,6 @@ classdef cThermoeconomicModel < cResultSet
         function setThermoeconomicDiagnosis(obj)
         % Set thermoeconomic diagnosis computation
             id=cType.ResultId.THERMOECONOMIC_DIAGNOSIS;
-            if ~obj.activeSet
-                return
-            end
             if ~obj.isDiagnosis
                 obj.clearResults(id);
                 obj.printDebugInfo('Thermoeconomic Diagnosis is not active');
@@ -1181,7 +1118,7 @@ classdef cThermoeconomicModel < cResultSet
 
         function setSummaryResults(obj)
         % Obtain Summary Results
-            if ~obj.activeSet || ~obj.isSummaryEnable
+            if ~obj.isSummaryEnable
                 return
             end
             id=cType.ResultId.SUMMARY_RESULTS;
@@ -1202,7 +1139,7 @@ classdef cThermoeconomicModel < cResultSet
 
         function setRecyclingResults(obj)
         % Set Recycling Analysis Results
-            if ~obj.activeSet || ~obj.isWaste
+            if ~obj.isWaste
                 return
             end
             if obj.Recycling
@@ -1269,6 +1206,7 @@ classdef cThermoeconomicModel < cResultSet
                 obj.printDebugInfo('No state change. The new state is equal to the previous one');
                 return
             end
+            obj.fp1=obj.rstate.getValues(state);
             res=true;
         end
 
@@ -1330,7 +1268,9 @@ classdef cThermoeconomicModel < cResultSet
                 obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end
-            if bitget(pct,cType.GENERALIZED) && ~obj.isResourceCost
+            obj.directCost=bitget(pct,cType.DIRECT);
+            obj.generalCost=bitget(pct,cType.GENERALIZED);
+            if obj.generalCost && ~obj.isResourceCost
                 obj.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
                 return
             end
@@ -1339,12 +1279,6 @@ classdef cThermoeconomicModel < cResultSet
     
         function triggerCostTablesChange(obj)
         % Set cost tables method and trigger thermoeconomic analysis
-            pct=cType.getCostTables(obj.CostTables);
-            obj.directCost=bitget(pct,cType.DIRECT);
-            obj.generalCost=bitget(pct,cType.GENERALIZED);
-            if ~obj.activeSet
-                return
-            end
             obj.setThermoeconomicAnalysis;
         end
 
@@ -1379,9 +1313,6 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkSummary(obj,value)
         % Ckeck Summary parameter
             res=false;
-            if ~obj.activeSet
-                return
-            end
             if ~islogical(value)
                 obj.printDebugInfo('Invalid value. Must be true/false');
                 return
@@ -1400,9 +1331,6 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkRecycling(obj,value)
         % Ckeck Summary parameter
             res=false;
-            if ~obj.activeSet
-                return
-            end
             if ~islogical(value)
                 obj.printDebugInfo('Invalid value. Must be true/false');
                 return

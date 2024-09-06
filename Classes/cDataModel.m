@@ -57,11 +57,6 @@ classdef cDataModel < cResultSet
         ExergyData              % Dataset of cExergyData
         ResourceData            % Dataset of cResourceData
         ModelData               % Model data from cReadModel interface
-        ModelName               % Name of the model
-        ResultId                % ResultId
-        ResultName              % Result Name (cResultId)
-        State                   % State Name (cResultId)
-        DefaultGraph            % Default Graph (cResultId)
     end
 
     properties(Access=private)

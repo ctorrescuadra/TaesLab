@@ -148,7 +148,7 @@ classdef (Sealed) TaesTool < handle
         function activateSummary(app,~,~)
 		% Activate Summary callback
 			val=get(app.sr_checkbox,'value');
-            app.model.Summary=logical(val);
+            setSummary(app.model,logical(val));
 
 			if val
                 app.enableResults(cType.ResultId.SUMMARY_RESULTS);
@@ -162,7 +162,7 @@ classdef (Sealed) TaesTool < handle
         function activateRecycling(app,~,~)
 		% Activate Recycling callback
 			val=get(app.ra_checkbox,'value');
-            app.model.Recycling=logical(val);
+            setRecycling(app.model,logical(val));
             if val
                 app.ViewIndexTable(app.model.wasteAnalysis);
             else
@@ -174,7 +174,7 @@ classdef (Sealed) TaesTool < handle
 		% Select Cost Table callback
             values=get(app.tables_popup,'string');
             pos=get(app.tables_popup,'value');
-            app.model.CostTables=values{pos};
+            setCostTables(app.model,values{pos});
             app.ViewIndexTable(app.model.getResultInfo);
         end
 
@@ -187,7 +187,7 @@ classdef (Sealed) TaesTool < handle
 		function getState(app,~,~)
 		% Get state callback
 			ind=get(app.state_popup,'value');
-			app.model.State=app.stateNames{ind};
+			setState(app.model,app.stateNames{ind});
             if app.model.isDiagnosis
                 pdm=get(app.tdm_popup,'value');
 				if pdm ~= cType.DiagnosisMethod.NONE
@@ -203,7 +203,7 @@ classdef (Sealed) TaesTool < handle
         function getReferenceState(app,~,~)
 		% Get reference state callback
 			ind=get(app.state_popup,'value');
-			app.model.ReferenceState=app.stateNames{ind};
+			setReferenceState(app.model,app.stateNames{ind});
             if app.model.isDiagnosis
 
 				if pdm ~= cType.DiagnosisMethod.NONE
@@ -220,7 +220,7 @@ classdef (Sealed) TaesTool < handle
 		function getSample(app,~,~)
 		% Get Resources Sample callback
 			ind=get(app.sample_popup,'value');
-			app.model.ResourceSample=app.sampleNames{ind};
+			setResourceSample(app.model,app.sampleNames{ind});
             app.ViewIndexTable(app.model.thermoeconomicAnalysis);
         end
 
@@ -228,7 +228,7 @@ classdef (Sealed) TaesTool < handle
 		% Get Diagnosis Method callback
             values=get(app.tdm_popup,'string');
             pos=get(app.tdm_popup,'value');
-			app.model.DiagnosisMethod=values{pos};
+			setDiagnosisMethod(app.model,values{pos});
 			if pos==cType.DiagnosisMethod.NONE
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.getResultInfo);
@@ -242,7 +242,7 @@ classdef (Sealed) TaesTool < handle
         % Get ActiveWaste callback
             values=get(app.wf_popup,'string');
             pos=get(app.wf_popup,'value');
-            app.model.ActiveWaste=values{pos};
+            setActiveWaste(app.model,values{pos});
             app.ViewIndexTable(app.model.wasteAnalysis);
         end
 

@@ -10,10 +10,12 @@ classdef (Sealed) cModelData < cMessageLogger
     %   Format              - Format data
     %   
     % cModelData Methods:
-    %   isWaste - Check if the model has waste defined
-    %   isResourcesCost - Check if the model has resources defined
-    %   getExergyState - Get the exergy state data by index
+    %   isWaste           - Check if the model has waste defined
+    %   isResourcesCost   - Check if the model has resources defined
+    %   getExergyState    - Get the exergy state data by index
     %   getResourceSample - Get the resource data by index
+    %   saveAsXML         - Save data as XML file
+    %   saveAsJSON        - Save data as JSON file
     %
     properties(GetAccess=public,SetAccess=private)
         ModelName             % Model Name
