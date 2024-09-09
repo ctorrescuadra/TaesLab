@@ -55,8 +55,11 @@ classdef (Abstract) cTable < cMessageLogger
         end 
 
         function showTable(obj,option)
-        % View Table in GUI or HTML
-        %  Usage:
+        % View Table in console GUI or HTML
+        %   Usually is called from cResultSet.showResults
+        % Syntax:
+        %   obj.showTable(option)
+        % Input Arguments:
         %   option - select form to view a table
         %       cType.TableView.NONE
         %       cType.TableView.CONSOLE
@@ -82,6 +85,9 @@ classdef (Abstract) cTable < cMessageLogger
         
         function res=exportTable(obj,varmode,~)
         % Get table values in diferent formats
+        % Syntax:
+        %   res = obj.exportTable(varmode)
+        % Input Arguments:
         %   options - VarMode options
         %       cType.VarMode.NONE: Return a struct with the cTable objects
         %       cType.VarMode.CELL: Return a struct with cell values
@@ -109,12 +115,22 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function res = isNumericTable(obj)
-        % Check is the data of the table is numeric
+        % Check if the data of the table is numeric
+        % Syntax:
+        %   res = obj.isNumericTable
+        % Output arguments:
+        %   res - true | false
             res=all(cellfun(@isnumeric,obj.Data(:)));
         end
         
         function res = isNumericColumn(obj,idx)
         % Check if a column is numeric (base method)
+        % Syntax:
+        %   res = obj.isNumericColumn(idx)
+        % Input Arguments:
+        %   idx - data column number
+        % Output arguments:
+        %   res - true | false
             tmp=cellfun(@isnumeric,obj.Data(:,idx));
             res=all(tmp(:));
         end
@@ -125,23 +141,43 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function res=getColumnFormat(obj)
-        % Get the columns format
+        % Get the format of each column table
+        % Syntax:
+        %   res = obj.getColumnFormat
+        % Output Arguments:
+        %   res - Vector indicating the format of each column
+        % See also cType.ColumnFormat
             res=obj.fcol;
         end
 
         function res=getColumnWidth(obj)
-        % Get the columns width
+        % Get the maximun width of each column
+        % Syntax:
+        %   res = obj.getColumnWidth
+        % Output Arguments:
+        %   res - Vector indicating the width of each column
+        %
             res=obj.wcol;
         end
         
         function res = getStructData(obj)
-        % Get Table data as struct array
+        % Get table data as struct array
+        % Syntax:
+        %   res = obj.getStructData
+        % Output Arguments:
+        %   res - struct array containing the data of the table
+        %     Each column name is a field of the structure
+        %
             val = [obj.RowNames',obj.Data];
             res = cell2struct(val,obj.ColNames,2);
         end
     
         function res=getMatlabTable(obj)
         % Get Table as Matlab table
+        % Syntax:
+        %   res = obj.getMatlabTable
+        % Output Argument
+        %   res - Matlab table object with values of the cTable object
             if isOctave
                 res=obj;
             else
@@ -156,13 +192,24 @@ classdef (Abstract) cTable < cMessageLogger
 
         function res=getStructTable(obj)
         % Get a structure with the table info
-            data=cell2struct([obj.RowNames',obj.Data],obj.ColNames,2);
+        % Syntax:
+        %   res = obj.getStructTable
+        % Output Argument
+        %   res - struct with the data and info of the table
+            data=getStructData(obj);
             res=struct('Name',obj.Name,'Description',obj.Description,...
             'State',obj.State,'Data',data);
         end
 
         function log=setColumnValues(obj,idx,value)
         % Set the values of a column table
+        % Syntax:
+        %   log = obj.setColumnValues(idx,values)
+        % Input Arguments:
+        %   idx - vector with columns index to replace
+        %   value - cell array with the values to replace
+        % Output Arguments:
+        %   log - cMessageLogger with the status and messages of operation
             log=cMessageLogger();
             if iscell(value) && size(value,1)==obj.NrOfRows
                 obj.Data(:,idx)=value;
@@ -173,6 +220,14 @@ classdef (Abstract) cTable < cMessageLogger
 
         function log=setRowValues(obj,idx,value)
         % Set the values of a row table
+        % Syntax:
+        %   log = obj.setRowValues(idx,values)
+        % Input Arguments:
+        %   idx - vector with rows index to replace
+        %   value - cell array with the values to replace
+        % Output Arguments:
+        %   log - cMessageLogger with the status and messages of operation
+        %
             log=cMessageLogger();
             if iscell(value) && (size(value,2)==obj.NrOfCols-1)
                 obj.Data(idx,:)=value;
@@ -182,15 +237,15 @@ classdef (Abstract) cTable < cMessageLogger
         end
  
         function log = saveTable(obj,filename)
-        % saveTable generate a file with the table values
+        % Generate a file with the table values
         %   The file types depends on the extension
         %   Valid extensions are: CSV,XLSX,JSON,XML,TXT,HTML,LaTeX and MAT
-        %   Usage:
-        %       log = obj.saveTable(filename)
-        %   Input:
-        %       filename - Nane of the file
-        %   Output:
-        %       log - cMessageLogger object with error messages
+        % Syntax:
+        %   log = obj.saveTable(filename)
+        % Input Argument:
+        %   filename - Nane of the file
+        % Output Argument:
+        %   log - cMessageLogger object with status and error messages
         %
             log=cMessageLogger();
             if (nargin~=2) || ~isFilename(filename) || ~isValid(obj) 
@@ -341,7 +396,7 @@ classdef (Abstract) cTable < cMessageLogger
             if isValid(vt)
                 vt.showTable
             else
-                printLogger(vt);
+                vt.printError('Invalid uitable %s',obj.name);
             end
         end
     

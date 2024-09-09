@@ -1,9 +1,8 @@
-classdef (Sealed) cViewTable < handle
+classdef (Sealed) cViewTable < cMessageLogger
 % cViewTable shows a table of results via GUI (uitable)
 % 	called by showTable/cTable method with GUI option
-% Methods:
-% 	obj=cViewTable(tbl,state)
-%   obj.showTable
+% cViewTable Methods:
+%   showTable - show the table on a uitable
 	properties (Access=private)
 		hf			% uifigure object
 		colWidth 	% Width of columns
@@ -19,7 +18,9 @@ classdef (Sealed) cViewTable < handle
 	methods 
 		function obj=cViewTable(tbl)
 		% cViewTable - object constructor
-		% 	Input:
+		% Syntax:
+		%   obj = cViewTable(tbl)
+		% Input Argument:
 		%	 tbl - cResultTable object
 		%
 			% Parameters depending of software platform
@@ -57,7 +58,13 @@ classdef (Sealed) cViewTable < handle
 		end
 
 		function showTable(obj)
-		% showTable shows the table values in a uitable object
+		% Shows the table values in a uitable object
+		% Syntax:
+		%   obj.showTable
+		% Example:
+		%   vt = cViewTable(tbl)
+		%   vt.showTable;
+		%
 			uitable (obj.hf, 'Data', obj.data,...
 				'RowName', obj.rowNames, 'ColumnName', obj.colNames,...
 				'ColumnWidth',obj.colWidth,...

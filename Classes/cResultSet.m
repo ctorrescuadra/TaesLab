@@ -7,7 +7,7 @@ classdef cResultSet < cResultId
 %   - Save the results in files: XLSX, CSV, TXT LaTeX and HTML
 % 
 % cResultSet Properties:
-%   classId - Result class Id
+%   classId - Result Set Id
 %     cType.ClassId.RESULT_INFO
 %     cType.ClassId.DATA_MODEL
 %     cTtpe.ClassId.RESULT_MODEL
@@ -16,14 +16,14 @@ classdef cResultSet < cResultId
 %   ListOfTables   - Get the tables of the cResultInfo
 %   getTable       - Get a table by name
 %   getTableIndex  - Get the table index
-%   saveTable      - Save the results in a external file 
+%   saveTable      - Save the results in an external file 
 %   exportTable    - Export a table to another format
 %   printResults   - Print results on console
 %   showResults    - Show results in different interfaces
 %   showGraph      - Show the graph associated to a table
 %   showTableIndex - Show the table index in different interfaces
 %   exportResults  - Export all the result Tables to another format
-%   saveResults    - Save all the result tables in a external file
+%   saveResults    - Save all the result tables in an external file
 %
 % See also cResultInfo, cThermoeconomicModel, cDataModel
 %
