@@ -2,26 +2,26 @@ function ShowGraph(arg,varargin)
 %ShowGraph - Shows a result table as a graph.
 %	Depending on the graph, additional options could be used.
 %
-%	Syntax 
-%  	  ShowGraph(arg,Name,Value)
+% Syntax 
+%  	ShowGraph(arg,Name,Value)
 % 
-%   Input Argument
-% 	  arg - cResultSet object
+% Input Argument
+% 	arg - cResultSet object
 %
-%   Name-Value Arguments
-%     Graph: Name of the table
-%       char array
-%     ShowOutput: Use for diagnosis tables
-%       true | false (default)
-%     WasteFlow: Waste flow key for waste allocation and recycling
-%       char array 
-%	  Variables: Use for summary results. 
-%	    cell array
+% Name-Value Arguments
+%   Graph: Name of the table
+%     char array
+%   ShowOutput: Use for diagnosis tables
+%     true | false (default)
+%   WasteFlow: Waste flow key for waste allocation and recycling
+%     char array 
+%	Variables: Use for summary results. 
+%	  cell array
 %
-%   Example
-%     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
+% Example
+%   <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
 %
-% 	See also cGraphResults, cResultSet
+% See also cGraphResults, cResultSet
 %
     log=cMessageLogger();
 	if ~isResultSet(arg)
@@ -30,10 +30,10 @@ function ShowGraph(arg,varargin)
 	end
     % Check input parameters
     p = inputParser;
-    p.addParameter('Graph','',@ischar);
+    p.addParameter('Graph',cType.EMPTY_CHAR,@ischar);
 	p.addParameter('ShowOutput',true,@islogical);
-	p.addParameter('Variables',{},@iscell);
-	p.addParameter('WasteFlow','',@ischar);
+	p.addParameter('Variables',cType.EMPTY_CELL,@iscell);
+	p.addParameter('WasteFlow',cType.EMPTY_CHAR,@ischar);
     try
 		p.parse(varargin{:});
     catch err
@@ -54,18 +54,18 @@ function ShowGraph(arg,varargin)
                return
             end
             res=arg.getResultInfo(param.Graph);
+            if ~isValid(res)
+                res.printLogger;
+                return
+            end
         otherwise
-            log.printError('Invalid input argument');
+            log.printError('Invalid result parameter');
             return
-    end
-    if ~isValid(res)
-        log.printError('Invalid input argument');
-        return
     end
     % Get the table values
 	tbl=getTable(res,param.Graph);
 	if ~isValid(tbl) || ~tbl.isGraph
-		log.printError('Invalid graph table: %s',param.Graph);
+		log.printError('Table %s is NOT valid',param.Graph);
 		return
 	end
 	% Get aditional parameters

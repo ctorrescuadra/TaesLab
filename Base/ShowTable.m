@@ -4,29 +4,29 @@ function res=ShowTable(tbl,varargin)
 %   in the console, in a web browser or in a GUI table.
 %   Tables can be exported or saved to a file with the 'ExportAs' and 'SaveAs' options.
 %
-%   Syntax
-%     res=ShowTable(tbl,Name,Value)
+% Syntax
+%   res=ShowTable(tbl,Name,Value)
 %
-%   Input Argument
-%     tbl - cTable object
+% Input Argument
+%   tbl - cTable object
 %
-%   Name-Value Arguments
-%     View: Select the way to show the table
-%       'CONSOLE' - show in console (default)
-%       'GUI' - use uitable
-%       'HTML' - use web browser
-%     ExportAs: Select the VarMode to output the ResultSet/Table
-%       'NONE' - return the cTable object (default)
-%       'CELL' - return the table as cell array
-%       'STRUCT' - return the table as structured array
-%       'TABLE' - return a matlab table
-%     SaveAs: Save the table in an external file. 
+% Name-Value Arguments
+%   View: Select the way to show the table
+%     'CONSOLE' - show in console (default)
+%     'GUI' - use uitable
+%     'HTML' - use web browser
+%   ExportAs: Select the VarMode to output the ResultSet/Table
+%     'NONE' - return the cTable object (default)
+%     'CELL' - return the table as cell array
+%     'STRUCT' - return the table as structured array
+%     'TABLE' - return a matlab table
+%   SaveAs: Save the table in an external file. 
 %   
-%   Output Arguments
-%     res - table object in the format specified in ExportAs
+% Output Arguments
+%   res - table object in the format specified in ExportAs
 %
-%   Example
-%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
+% Example
+%   <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 % 
 % See also cTable
 %
@@ -36,7 +36,7 @@ function res=ShowTable(tbl,varargin)
     p.addRequired('tbl',@isValidTable);
     p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
-	p.addParameter('SaveAs','',@isFilename);
+	p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
 		p.parse(tbl,varargin{:});
     catch err

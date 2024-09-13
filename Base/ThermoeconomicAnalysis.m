@@ -6,48 +6,48 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %   With the option 'CostTables' we choose the type of costs we want to calculate. 
 %   With the option 'ResourceSample' we choose the resource cost sample data.
 %
-%   Syntax
-%     res=ThermoeconomicAnalysis(data,Name,Value)
+% Syntax
+%   res=ThermoeconomicAnalysis(data,Name,Value)
 %
-%   Input Arguments
-% 	  data - cDataModel object which contains the data model
+% Input Arguments
+% 	data - cDataModel object which contains the data model
 %
-%   Name-Value Arguments
-%     State - Thermoeconomic state id. If missing first sample is taken
-%       array char | string
-%     CostTables - Indicate which cost tables are calculated
-%       'DIRECT' calculates direct exergy cost tables
-%       'GENERALIZED' calculates generalized exergy cost tables
-%       'ALL' calculate both kind of tables
-%     ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
-%       char array | string
-%     Show - Show the results in the console
-%       true | false (default)
-%     SaveAs - Name of the file where the results will be saved. 
-%       char array | string
+% Name-Value Arguments
+%   State - Thermoeconomic state id. If missing first sample is taken
+%     array char | string
+%   CostTables - Indicate which cost tables are calculated
+%     'DIRECT' calculates direct exergy cost tables
+%     'GENERALIZED' calculates generalized exergy cost tables
+%     'ALL' calculate both kind of tables
+%   ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
+%     char array | string
+%   Show - Show the results in the console
+%     true | false (default)
+%   SaveAs - Name of the file where the results will be saved. 
+%     char array | string
 %
-%   Output Arguments
-%     res - cResultInfo object contains the results of thermoeconomic Analysis
-%       If DirectCost is selected (default) the following tables are obtained:
-%         dfcost: Direct Exergy Cost of flows
-%         dcost: Direct Exergy cost of processes
-%         udcost: Unit Direct Exergy Cost of processes table
-%         ict: Irreversibility Cost Table 
-%         fict: Flows Irreversibility Cost Table
-%         dcfp: Fuel-Product direct cost table
-%         dcfpr: Fuel-Product direct cost table (includes waste)
-%       If GeneralCost is selected, the following tables are obtained:
-%         gcost: Generalized cost of processes 
-%         ugcost: Unit Generalized Cost of processes
-%         gfcost: Generalized Cost of flows
-%         gcfp: Fuel-Product generalized cost table
-%         gict: Irreversibility generalized cost table 
-%         gfict: Flows Irreversibility generalized cost table
+% Output Arguments
+%   res - cResultInfo object contains the results of thermoeconomic Analysis
+%    If DirectCost is selected (default) the following tables are obtained:
+%      dfcost: Direct Exergy Cost of flows
+%      dcost: Direct Exergy cost of processes
+%      udcost: Unit Direct Exergy Cost of processes table
+%      dict: Irreversibility Cost Table 
+%      dfict: Flows Irreversibility Cost Table
+%      dcfp: Fuel-Product direct cost table
+%      dcfpr: Fuel-Product direct cost table (includes waste)
+%    If GeneralCost is selected, the following tables are obtained:
+%       gcost: Generalized cost of processes 
+%       ugcost: Unit Generalized Cost of processes
+%       gfcost: Generalized Cost of flows
+%       gcfp: Fuel-Product generalized cost table
+%       gict: Irreversibility generalized cost table 
+%       gfict: Flows Irreversibility generalized cost table
 %
-%   Example
-%     <a href="matlab:open ThermoeconomicAnalysisDemo.mlx">Thermoeconomic Analysis Demo</a>
+% Example
+%   <a href="matlab:open ThermoeconomicAnalysisDemo.mlx">Thermoeconomic Analysis Demo</a>
 %
-%   See also cDataModel, cExergyCost, cResultInfo
+% See also cDataModel, cExergyCost, cResultInfo
 %
     res=cMessageLogger();
     % Check input parameters
@@ -55,10 +55,10 @@ function res=ThermoeconomicAnalysis(data,varargin)
     p = inputParser;
     p.addRequired('data',checkModel);
 	p.addParameter('State',data.StateNames{1},@ischar);
-	p.addParameter('ResourceSample','',@ischar);
+	p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@isFilename);
+    p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
 		p.parse(data,varargin{:});
     catch err

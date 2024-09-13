@@ -171,12 +171,12 @@ classdef cThermoeconomicModel < cResultSet
             refstate=data.StateNames{1};
             p.addParameter('State',refstate,@ischar);
             p.addParameter('ReferenceState',refstate,@ischar);
-            p.addParameter('ResourceSample','',@ischar);
+            p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
             p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
             p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
             p.addParameter('Summary',false,@islogical);
             p.addParameter('Recycling',false,@islogical);
-            p.addParameter('ActiveWaste','',@ischar);
+            p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
             p.addParameter('Debug',false,@islogical);
             try
                 p.parse(varargin{:});
@@ -377,8 +377,8 @@ classdef cThermoeconomicModel < cResultSet
                 obj.Summary=value;
                 if obj.Summary
                     obj.printDebugInfo('Summary is active');
-                else
-                    obj.printDebugInfo('Summary is not active')
+                %else
+                %    obj.printDebugInfo('Summary is not active')
                 end
                 obj.setSummaryResults;
             end
@@ -549,15 +549,14 @@ classdef cThermoeconomicModel < cResultSet
         %     Return the result info which contains the table 'processes', 
         %     in this case the productive structure
         % 
-            if nargin==1
+            if (nargin==1)
                 res=buildResultInfo(obj);
             elseif cType.isInteger(arg,1:cType.MAX_RESULT_INFO)
                 res=getResults(obj,arg);
             elseif ischar(arg)
                 res=getResultTable(obj,arg);
             else
-                res=cMessageLogger;
-                res.messageLog(cType.ERROR,'Invalid argument');
+                res=cMessageLogger(cType.INVALID);
             end
         end
 
@@ -721,14 +720,13 @@ classdef cThermoeconomicModel < cResultSet
                 columns=cType.DIR_COLS_DEFAULT;
             end
             tbl=obj.fmt.getTablesDirectory(columns);
-            tDict=obj.fmt.tDictionary;
             atm=zeros(tbl.NrOfRows,1);
             % Get the initial state of the table
             for i=1:cType.ResultId.SUMMARY_RESULTS
                 rid=obj.getResults(i);
-                if isValid(rid)
+                if ~isempty(rid) && isValid(rid)
                     list=rid.ListOfTables;
-                    idx=cellfun(@(x) getIndex(tDict,x),list);
+                    idx=cellfun(@(x) getTableId(obj.fmt,x),list);
                     atm(idx)=true;
                 end
             end
@@ -810,7 +808,7 @@ classdef cThermoeconomicModel < cResultSet
         %   obj.showGraph(graph,options)
         % Input Arguments:
         %   graph - name of the table
-        %   options - graph options (see cResultInfo)
+        %   options - graph options
         % See also cResultSet.showGraph
         %
             if nargin < 2
@@ -1325,7 +1323,6 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             id=cType.ResultId.SUMMARY_RESULTS;
-            res=obj.getResults(id);
             if obj.Summary
                 sr=cModelSummary(obj);
                 if sr.isValid
@@ -1335,8 +1332,11 @@ classdef cThermoeconomicModel < cResultSet
                 else
                     sr.printLogger;
                 end
-            elseif ~isempty(res)
-                obj.clearResults(id);
+            else
+                res=obj.getResults(id);
+                if ~isempty(res)
+                    obj.clearResults(id);
+                end
             end
         end
 
@@ -1552,11 +1552,16 @@ classdef cThermoeconomicModel < cResultSet
 
         %%%
         % cModelResults methods
+        %%%
         function res=getResults(obj,index)
         % Get the cResultInfo given the resultId
-            res=getResults(obj.results,index);
+            if index<cType.MAX_RESULT_INFO
+                res=getResults(obj.results,index);
+            else
+                res=buildResultInfo(obj);
+            end
             if isempty(res)
-                obj.printDebugInfo('Result Info %s is NOT available',cType.Results{index});
+                obj.printDebugInfo('%s is not available',cType.Results{index});
             end
         end
         

@@ -216,7 +216,7 @@ classdef cResultSet < cResultId
                             option=obj.Info.getDefaultProcessVariables;
                         end
                     otherwise
-                        option=cType.EMPTY_CELL;
+                        option=cType.EMPTY;
                 end
             else
                 option=varargin{:};
@@ -521,7 +521,7 @@ classdef cResultSet < cResultId
                 log.messageLog(cType.ERROR,'Open file %s',filename);
                 return
             end
-                % Save the tables in the file
+            % Save the tables in the file
             for i=1:tidx.NrOfRows
                 tbl=tidx.Content{i};
                 ltx=cBuildLaTeX(tbl);

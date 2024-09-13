@@ -20,10 +20,10 @@ classdef (Sealed) TaesPanel < handle
 %   If the result is selected in the Result Menu, it is saved in the workspace
 %   to work with it interactively.
 %
-%   Syntax
-%     app=TaesPanel;
+% Syntax
+%   app=TaesPanel;
 %
-%   See also cThermoeconomicModel
+% See also cThermoeconomicModel
 %
     properties(Access=private)
         % Widgets definition
@@ -92,7 +92,7 @@ classdef (Sealed) TaesPanel < handle
             [file,path]=uigetfile({'*.json;*.csv;*.xlsx;*.xml;*.mat','Suported Data Models'});
 			if file
 				cd(path);
-				set(app.log,'string','');
+				set(app.log,'string',cType.EMPTY_CHAR);
 				set(app.mfile_text,'string',file);
 			else
 				logtext=' ERROR: No file selected';
@@ -216,7 +216,7 @@ classdef (Sealed) TaesPanel < handle
 		function getSample(app,~,~)
 		% Get Resources Sample callback
 			ind=get(app.sample_popup,'value');
-			app.model.ResourceSample=app.sampleNames{ind};
+			app.model.setResourceSample(app.sampleNames{ind});
             app.ViewIndexTable(app.model.thermoeconomicAnalysis);
         end
 
@@ -264,7 +264,7 @@ classdef (Sealed) TaesPanel < handle
 
         function showIndexTable(app,src,~)
         % Show Index Table callback
-            set(app.log,'string','');
+            set(app.log,'string',cType.EMPTY_CHAR);
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
             if res.isValid
@@ -278,7 +278,7 @@ classdef (Sealed) TaesPanel < handle
         function getResult(app,src,~)
         % Get Results callback
         % Store the selected result into workspace
-            set(app.log,'string','');
+            set(app.log,'string',cType.EMPTY_CHAR);
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
             if isValid(res)
@@ -373,7 +373,9 @@ classdef (Sealed) TaesPanel < handle
 
         function closeApp(app,~,~)
         % Close callback
-            app.resPanel.closeApp;
+            if isValid(app.resPanel)
+                app.resPanel.closeApp;
+            end
             delete(app.fig);
         end
 
@@ -489,7 +491,7 @@ classdef (Sealed) TaesPanel < handle
             app.log = uicontrol (hf,'style', 'text',...
                  'units', 'normalized',...
                  'fontname','Verdana','fontsize',9,...
-                 'string', '',...
+                 'string', cType.EMPTY_CHAR,...
                  'backgroundcolor',[0.75 0.75 0.75],...
                  'horizontalalignment', 'left',...
                  'position', [0.01 0.01 0.98 0.045]);

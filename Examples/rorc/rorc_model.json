@@ -264,6 +264,51 @@
         ]
       },
       {
+        "stateId": "PCND3",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 108
+          },
+          {
+            "key": "B2",
+            "value": 41.99
+          },
+          {
+            "key": "B3",
+            "value": 38.68
+          },
+          {
+            "key": "B4",
+            "value": 9.99
+          },
+          {
+            "key": "B5",
+            "value": 12.62
+          },
+          {
+            "key": "B6",
+            "value": 15.49
+          },
+          {
+            "key": "QBLR",
+            "value": 120.2
+          },
+          {
+            "key": "WP",
+            "value": 3.053
+          },
+          {
+            "key": "WN",
+            "value": 50
+          },
+          {
+            "key": "QCND",
+            "value": 28.689999999999998
+          }
+        ]
+      },
+      {
         "stateId": "noIHE",
         "exergy": [
           {
@@ -353,7 +398,7 @@
   "WasteDefinition": {
     "wastes": {
       "flow": "QCND",
-      "type": "IRREVERSIBILITY",
+      "type": "DEFAULT",
       "recycle": 0
     }
   },

@@ -1,11 +1,12 @@
 classdef (Sealed) cBuildHTML < cMessageLogger
 % cBuildHTML convert cTable object into HTML files
-%   If a cTableIndexobject is provided create a index table
-%   which indicate where are saved the HTML files of the cResultInfo tables. 
-%   Methods:
-%       obj=cBuildHTML(tbl,folder)
-%       obj.showTable
-%       log=obj.saveTable(filename)
+%   If a cTableIndex object is provided it create a HTML index page,
+%   which links HTML files of the cResultInfo tables. 
+%  
+% cBuildHTML Methods:
+%   getMarkupHTML - Get the text string with the HTML page
+%   showTable - Show the table in the default web browser
+%   saveTable - Save the HTML table created by the object
 %
     properties (Access=private)
         head    % HTML head
@@ -14,10 +15,13 @@ classdef (Sealed) cBuildHTML < cMessageLogger
     end
     methods
         function obj=cBuildHTML(tbl,folder)
-        % Build an instance ob the object
-        %   Input:
-        %       tbl - cTable object to convert
-        %    folder - Folder where the files will be save if tbl is a cTableIndex
+        % Build an instance of the object
+        % Syntax:
+        %   obj = cBuildHTML(tbl)
+        %   obj = cBuildHTML(index_table, folder)
+        % Input Arguments:
+        %   tbl - cTable object to convert
+        %   folder - Folder name where the files will be save if tbl is a cTableIndex
         % 
             if ~isValidTable(tbl)
                 obj.messageLog(cType.ERROR,'Invalid input argument');
@@ -34,11 +38,17 @@ classdef (Sealed) cBuildHTML < cMessageLogger
 
         function res=getMarkupHTML(obj)
         % Get the HTML text of the table
+        % Syntax:
+        %   res = obj.getMarkupHTML
+        %
             res=[obj.head,obj.body];
         end
 
         function showTable(obj)
         % Show a normal table in the web browser
+        % Syntax:
+        %   obj.showTable
+        %  
             if obj.isIndexTable
                 return
             end
@@ -48,11 +58,17 @@ classdef (Sealed) cBuildHTML < cMessageLogger
 
         function log=saveTable(obj,filename)
         % Save the table into a HTML file
+        % Syntax:
+        %   log = obj.saveTable(filename)
+        % Input Arguments:
+        %   filename - name of the file with html extension
+        % Output Arguments:
+        %   log - cMessageLogger object with status and messages
+        %
             log=cMessageLogger();
-            html=[obj.head obj.body];
             try
                 fId=fopen(filename,'wt');
-                fprintf(fId,'%s',html);
+                fprintf(fId,'%s',obj.getMarkupHTML);
                 fclose(fId);
             catch err
                 log.messageLog(cType.ERROR,err.message);

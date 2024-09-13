@@ -107,7 +107,7 @@ classdef (Sealed) cTableCell < cTableResult
         % Get table as a struct
             N=obj.NrOfCols-1;
             data=obj.getStructData;
-            fields(N)=struct('Name','','Format','','Unit','');
+            fields(N)=struct('Name',cType.EMPTY_CHAR,'Format',cType.EMPTY_CHAR,'Unit',cType.EMPTY_CHAR);
             for i=1:N
                 fields(i)=struct('Name',obj.FieldNames{i+1},...
                      'Format',obj.Format{i+1},...

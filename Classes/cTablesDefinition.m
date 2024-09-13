@@ -6,24 +6,29 @@ classdef cTablesDefinition < cMessageLogger
 %   Methods:
 %       obj=cTablesDirectory;
 %       res=obj.getTableProperties(name)
-%       res=obj.getTablesDirectory(varmode)
+%       res=obj.getTablesDirectory(varmode
 %       res=obj.showTablesDirectory(options)
 %       res=obj.saveTablesDirectory(filename)
 %   See also cFormatData
     properties(GetAccess=public,SetAccess=private)
         TablesDefinition  % Tables properties struct
-        tDictionary  % Tables dictionnary
-        tableIndex   % Tables index
+   
     end
     properties (Access=protected)
         cfgTables 	    % Cell tables configuration
         cfgMatrices     % Matrix tables configuration
         cfgSummary      % Summary tables configuration
         cfgTypes        % Format types configuration
+        tDictionary     % Tables dictionary
         tDirectory      % cTableData containig the tables directory info
+        tableIndex      % Tables index
     end
     methods
-        function obj=cTablesDefinition()      
+        function obj=cTablesDefinition()
+        % Create an instance of the object
+        % Syntax:
+        %   obj = cTablesDefinition();
+        %      
 			% load default configuration filename			
 			path=fileparts(mfilename('fullpath'));
 			cfgfile=fullfile(path,cType.CFGFILE);
@@ -48,14 +53,21 @@ classdef cTablesDefinition < cMessageLogger
             res=struct();
             if obj.isValid
                 res=struct('CellTables',obj.cfgTables,'MatrixTables',obj.cfgMatrices,...
-                    'SummaryTables',obj.cfgSummary);
+                    'SummaryTables',obj.cfgSummary,'Format',obj.cfgTypes);
             end
         end
 
         function res=getTableProperties(obj,name)
         % Get the properties of a table
+        % Syntax:
+        %   res = obj.getTableProperties(name)
+        % Input Argument:
+        %   name - Name of the table
+        % Output Argument:
+        %   res - structure containing table properties
+        %
             res=cType.EMPTY;
-            idx=getIndex(obj.tDictionary,name);
+            idx=obj.getTableId(name);
             if isempty(idx)
                 return
             end
@@ -71,13 +83,20 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getTablesDirectory(obj,varargin)
-        % Get the tables directory in diferent formats
-        %   Usage:
-        %       res=getTablesDirectory(cols)
-        %   Input:
-        %       cols - cell array with the columns to show
-        %   Output:
-        %       res - cTableData containing the tables directory
+        % Get the tables directory
+        % Syntax: 
+        %   res=getTablesDirectory(cols)
+        % Input Arguments
+        %   cols - cell array with the column names to show
+        %     'DESCRIPTION': Table Description
+        %     'RESULT_NAME': Result Info
+        %     'GRAPH': true | false
+        %     'TYPE':  type of table
+        %     'CODE':  table code name
+        %     'RESULT_CODE': Result Info code name
+        % Output Arguments:
+        %   res - cTableData containing the tables directory
+        %
             if nargin==1
                 res=obj.tDirectory;
             else
@@ -88,22 +107,34 @@ classdef cTablesDefinition < cMessageLogger
         function saveTablesDirectory(obj,filename)
         % Save result tables in different file formats depending on file extension
         %   Valid extension are: *.json, *.xml, *.csx, *.xlsx, *.txt, *.html, *.tex
-        %   Usage:
-        %       log=obj.saveTablesDirectory(filename)
-        %   Input:
-        %       filename - File name. Extension is used to determine the save mode.
-        %   Output:
-        %       log - cMessageLogger object with error messages
+        % Syntax:
+        %   log=obj.saveTablesDirectory(filename)
+        % Input Argument:
+        %   filename - File name with extension
+        % Output Arguments:
+        %   log - cMessageLogger object with error messages
             log=saveTable(obj.tDirectory,filename);
             log.printLogger;
+        end
+
+        function res=getTableId(obj,name)
+        % Get tableId from dictionary. Internal use
+        % Syntax:
+        %   res = obj.getTableId(name)
+        % Input Argument:
+        %   name - Table name
+        % Output Argument:
+        %   res - Internal table id
+        %
+            res=getIndex(obj.tDictionary,name);
         end
     end
 
     methods(Access=protected)
         function res=getCellTableProperties(obj,name)
         % Get the properties of a cell table
-        %   Input:
-        %     name - table key name 
+        % Input:
+        %   name - table key name 
             res=cType.EMPTY;
             idx=getIndex(obj.tDictionary,name);
             if isempty(idx)
@@ -115,8 +146,8 @@ classdef cTablesDefinition < cMessageLogger
     
         function res=getMatrixTableProperties(obj,name)
         % Get the properties of a matrix table
-        %   Input:
-        %     name - table key name 
+        % Input:
+        %   name - table key name 
             res=cType.EMPTY;
             idx=getIndex(obj.tDictionary,name);
             if isempty(idx)
@@ -128,8 +159,8 @@ classdef cTablesDefinition < cMessageLogger
     
         function res=getSummaryTableProperties(obj,name)
         % Get the properties of a summary table
-        %   Input:
-        %     name - table key name 
+        % Input:
+        %   name - table key name 
             res=cType.EMPTY;
             idx=getIndex(obj.tDictionary,name);
             if isempty(idx)
@@ -155,7 +186,7 @@ classdef cTablesDefinition < cMessageLogger
             NM=numel(obj.cfgMatrices);
             NS=numel(obj.cfgSummary);
             N=NT+NM+NS;
-            tIndex(N)=struct('name','','description','','code','',...
+            tIndex(N)=struct('name',cType.EMPTY_CHAR,'description',cType.EMPTY_CHAR,'code',cType.EMPTY_CHAR,...
                 'resultId',0,'graph',0,'type',0,'tableId',0);
             % Retrieve information for cell tables
             for i=1:NT
@@ -215,7 +246,7 @@ classdef cTablesDefinition < cMessageLogger
             for i=1:M
                 colId=cType.getDirColumns(cols{i});
                 if isempty(colId)
-                    res.messageLog(cType.ERROR,'Invalid column name %s',col);
+                    res.messageLog(cType.ERROR,'Invalid column name %s',cols{i});
                     return
                 end
                 colNames{i+1}=cType.DirColNames{colId};

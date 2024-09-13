@@ -6,39 +6,40 @@ function res=ListResultTables(varargin)
 %   The 'Columns' option allows you to select the columns of the table.
 %   If a thermoeconomic model is provided, the active tables of the model are listed.
 %    
-%   Syntax
-%     res=ListResultTables(Name,Values)
-%     res=ListResultTables(model,Name,Values)
+% Syntax
+%  res=ListResultTables(Name,Values)
+%  res=ListResultTables(model,Name,Values)
 %
-%   Input Arguments
-%       model - cThermoeconomicModel object (optional)
-%   Name-Values Arguments
-%     View: Selects how to show the table
-%       CONSOLE - display in the console (default)
-%       GUI - use a GUI table
-%       HTML - use a web browser
-%     ExportAs: Select the VarMode to get the table
-%       NONE - return the cTable object (default)
-%       CELL - return the table as array of cells
-%       STRUCT - returns the table as a structured array
-%       TABLE - returns a matlab table
-%     Columns: Array of cells with the names of the columns to be displayed.
-%              If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
-%       DESCRIPTION - Description of the table
-%       RESULT_NAME - cResultInfo name of the table
-%       GRAPH - Indicates if it has graphical representation
-%       TYPE - Type of cTable
-%       CODE - Text of the code for cType.Tables
-%       RESULT_CODE - Text of the code for cType.ResultId
-%     SaveAs: indicates the name of the file where the table will be saved.
+% Input Arguments
+%   model - cThermoeconomicModel object (optional)
 %
-%   Output Arguments
-%     res - table object in the format specified in ExportAs, with the selected columns
+% Name-Values Arguments
+%   View: Selects how to show the table
+%     CONSOLE - display in the console (default)
+%     GUI - use a GUI table
+%     HTML - use a web browser
+%   ExportAs: Select the VarMode to get the table
+%     NONE - return the cTable object (default)
+%     CELL - return the table as array of cells
+%     STRUCT - returns the table as a structured array
+%     TABLE - returns a matlab table
+%   Columns: Array of cells with the names of the columns to be displayed.
+%     DESCRIPTION - Description of the table
+%     RESULT_NAME - cResultInfo name of the table
+%     GRAPH - Indicates if it has graphical representation
+%     TYPE - Type of cTable
+%     CODE - Text of the code for cType.Tables
+%     RESULT_CODE - Text of the code for cType.ResultId
+%    If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
+% SaveAs: Indicates the name of the file where the table will be saved.
 %
-%   Example
-%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
+% Output Arguments
+%   res - table object in the format specified in ExportAs, with the selected columns
 %
-%   See also cTablesDefinition, cThermoeconomicModel
+% Example
+%   <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
+%
+% See also cTablesDefinition, cThermoeconomicModel
 %
     res=cMessageLogger();
     % Check if model is provided
@@ -58,7 +59,7 @@ function res=ListResultTables(varargin)
     p = inputParser;
     p.addParameter('View',defaultView,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
-	p.addParameter('SaveAs','',@isFilename);
+	p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     p.addParameter('Columns',cType.DIR_COLS_DEFAULT,@iscell)
     try
 		p.parse(varargin{:});

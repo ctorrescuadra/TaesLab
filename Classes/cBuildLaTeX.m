@@ -1,26 +1,33 @@
 classdef (Sealed) cBuildLaTeX < cMessageLogger
-% cBuildHTML convert cTable object into HTML files
-%   If a cTableIndexobject is provided create a index table
-%   which indicate where are saved the HTML files of the cResultInfo tables. 
-%   Methods:
-%       obj=cBuildLaTeX(tbl)
-%       obj.printTable(fId)
-%       log=obj.saveTable(filename)
+% cBuildLaTeX convert cTable object into a LaTeX code table
+%   The LaTeX code includes:
+%    - table environment
+%    - booktabs package
+%    - tabular column aligment
+%    - Column Names as header
+%    - Row Names and Data as body
+%    - Table Description as caption code
+%    - Table name as label code 
+% cBuildLatex methods:
+%   getLaTeXcode - Get a string with the LaTeX code
+%   saveTable    - Save the table into a tex file
 %
     properties(Access=private)
         tabular  % tablular code - column aligment  
         header   % header code - Colnames
-        body     % body code -data 
-        caption  % caption code -table description 
+        body     % body code - data 
+        caption  % caption code - table description 
         label    % label code - table name
     end
 
     methods
         function obj=cBuildLaTeX(tbl)
         % Create an instance of the class
-        %   Input:
-        %       tbl - cTable object
-
+        % Syntax:
+        %   obj = cBuildLaTeX(tbl)
+        % Input Argument:
+        %   tbl - cTable object
+        %
             if ~isValidTable(tbl)
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
@@ -58,7 +65,10 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         end
 
         function res=getLaTeXcode(obj)
-        % Get the latex code as string
+        % Get the LaTeV code as string
+        % Syntax:
+        %   obj.getLaTeXcode
+        %
             res=sprintf('%s\n','\begin{table}[H]');
             res=[res,sprintf('%s\n',obj.caption)];
             res=[res,sprintf('%s\n',obj.label)];
@@ -74,10 +84,12 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 
         function log=saveTable(obj,filename)
         % Save the table as LaTeX code into filename
-        %   Usage:
-        %       obj.saveTable(filename);
-        %   Input:
-        %       filename - Name of the file
+        % Syntax:
+        %   log=obj.saveTable(filename);
+        % Input Arguments:
+        %   filename - Name of the file
+        % Output Arguments:
+        %   log - cMessageLogger object with status and messages
             log=cMessageLogger;
             try
                 fId = fopen (filename, 'wt');

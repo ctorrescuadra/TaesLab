@@ -9,36 +9,35 @@ function res=ShowResults(arg,varargin)
 %   depending the 'View' option.
 %   Individual tables could be also exported or save into file with options 'ExportAs', 'SaveAs'
 %
-%   Syntax
-%     res=ShowResults(arg,Name,Value)
+% Syntax:
+%   res=ShowResults(arg,Name,Value)
 %   
-%   Input Arguments
-%     arg - cResultSet object
+% Input Arguments:
+%   arg - cResultSet object
 %
-%   Name-Value Arguments 
-%     Table: Name of the table to show. If empty, print on console all the results tables
-%       char array
-%     View: Select the way to show the table
-%       'CONSOLE' - show in console (default)
-%       'HTML' - use web browser
-%       'GUI' - use uitable
-%     Panel: Use ResultsPanel
-%       true | false (default)
-%     ExportAs: Select the VarMode to output the ResultSet/Table
-%       'NONE' - return the cTable object (default)
-%       'CELL' - return the table as cell array
-%       'STRUCT' - return the table as structured array
-%       'TABLE' - return a matlab table
-%     SaveAs: Save the ResultSet/Table in an external file. 
-%             See SaveResults/SaveTable function
+% Name-Value Arguments: 
+%   Table: Name of the table to show. If empty, print on console all the results tables
+%     char array
+%   View: Select the way to show the table
+%     'CONSOLE' - show in console (default)
+%     'HTML' - use web browser
+%     'GUI' - use uitable
+%   Panel: Use ResultsPanel
+%     true | false (default)
+%   ExportAs: Select the VarMode to output the ResultSet/Table
+%     'NONE' - return the cTable object (default)
+%     'CELL' - return the table as cell array
+%     'STRUCT' - return the table as structured array
+%     'TABLE' - return a matlab table
+%   SaveAs: Save the ResultSet/Table in an external file. 
 %
-%   Output Arguments
-%     res - table object in the format specified in ExportAs
+% Output Arguments:
+%   res - Table values in the format specified in ExportAs
 %
-%   Example
-%     <a href="matlab:open ShowResultsDemo.mlx">Thermoeconomic Model Demo</a>
+% Example:
+%   <a href="matlab:open ShowResultsDemo.mlx">Show Results Demo</a>
 %
-%   See also cResultSet
+% See also cResultSet
 %
     log=cMessageLogger();
     % Select View depending of nargout
@@ -50,11 +49,11 @@ function res=ShowResults(arg,varargin)
     % Check input
     p = inputParser;
     p.addRequired('arg',@isResultSet);
-    p.addParameter('Table','',@ischar);
+    p.addParameter('Table',cType.EMPTY_CHAR,@ischar);
     p.addParameter('View',defaultView,@cType.checkTableView);
     p.addParameter('Panel',false,@islogical);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
-	p.addParameter('SaveAs','',@isFilename);
+	p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
 		p.parse(arg,varargin{:});
     catch err

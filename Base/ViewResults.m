@@ -4,13 +4,13 @@ classdef ViewResults < matlab.apps.AppBase
 %   Tables can be selected using the tree widget in the left panel. 
 %   The index table, result tables and graphs are displayed in the right pane.
 %  
-%   Syntax
-%     ViewResults(res)
+% Syntax
+%   ViewResults(res)
 %
-%   Input Arguments
-%     res - cResultSet object
+% Input Arguments
+%   res - cResultSet object
 %
-%   See also cThermoeconomicTool
+% See also cThermoeconomicTool
 %
     % Properties that correspond to app components
     properties (Access = private)
@@ -513,7 +513,7 @@ classdef ViewResults < matlab.apps.AppBase
             % Create UITable
             app.UITable = uitable(app.IndexTab);
             app.UITable.ColumnName = {'Tables'; 'Description'; 'Graph'};
-            app.UITable.RowName = {};
+            app.UITable.RowName = cType.EMPTY_CELL;
             app.UITable.CellSelectionCallback = createCallbackFcn(app, @UITableCellSelection, true);
             app.UITable.Multiselect = 'off';
             app.UITable.Tooltip = {'Select a cell to display the results as table or graph'};
@@ -559,7 +559,7 @@ classdef ViewResults < matlab.apps.AppBase
             app.LogField.BackgroundColor = [0.8 0.8 0.8];
             app.LogField.Layout.Row = 2;
             app.LogField.Layout.Column = [1 2];
-            app.LogField.Text = '';
+            app.LogField.Text = cType.EMPTY_CHAR;
 
    	        % Create ContextMenu1
             app.ContextMenu1 = uicontextmenu(app.UIFigure);

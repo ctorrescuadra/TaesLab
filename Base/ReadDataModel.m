@@ -7,28 +7,28 @@ function data=ReadDataModel(filename,varargin)
 %   A copy of the data model (usually a MAT file) could be created 
 %   if the 'SaveAs' option is selected.
 %
-%   Syntax
-%     data = ReadDataModel(data,Name,Value);
+% Syntax
+%   data = ReadDataModel(data,Name,Value);
 %   
-%   Input Arguments
-%     filename - Name of the data model file.
-%       char array | string
+% Input Arguments
+%   filename - Name of the data model file.
+%     char array | string
 %
-%   Name-Value Arguments
-%     Debug - The validation of each element is shown in the console.
-%       true | false (default)
-%     Show - Show the data tables in the console
-%       true | false (default)
-%     SaveAs - Name of the file where the data model will be saved.
-%       char array | string
+% Name-Value Arguments
+%   Debug - The validation of each element is shown in the console.
+%     true | false (default)
+%   Show - Show the data tables in the console
+%     true | false (default)
+%   SaveAs - Name of the file where the data model will be saved.
+%     char array | string
 %
-%   Output Arguments
+% Output Arguments
 %	data - cDataModel object containing all the model information.
 %
-%   Example
-%     <a href="matlab:open ReadDataModelDemo.mlx">Read Model Demo</a>
+% Example
+%   <a href="matlab:open ReadDataModelDemo.mlx">Read Model Demo</a>
 %
-%   See also cReadModel, cDataModel
+% See also cReadModel, cDataModel
 %
     data=cMessageLogger();
     % Check parameters
@@ -48,7 +48,7 @@ function data=ReadDataModel(filename,varargin)
     p = inputParser;
     p.addParameter('Debug',false,@islogical);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@isFilename);
+    p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
 		p.parse(varargin{:});
     catch err

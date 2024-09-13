@@ -1,23 +1,23 @@
 classdef (Sealed) TaesTool < handle
 %TaesTool - Compatible user interface for Matlab/Octave
-%   Execute the basic functions of class cThermoeconomicModel:
-%     - productiveStructure
-%     - thermoeconomicState
-%     - thermoeconomicAnalysis
-%     - thermoeconomicDiagnosis
-%	  - wasteAnalysis
-%   and perform the following operations:
-%     - Save the results in several formats (xlsx, csv, html, txt,..)
-%     - Save variables in the base workspace
-%     - View Result in tables and graphs
-%   The application has two panels: the Taess panel, where the parameters
-%   of the Thermoeconomic Model are selected, and the results panel, 
-%   where the user selects the tables and graphs to show.
+%  Execute the basic functions of class cThermoeconomicModel:
+%   - productiveStructure
+%   - thermoeconomicState
+%   - thermoeconomicAnalysis
+%   - thermoeconomicDiagnosis
+%	- wasteAnalysis
+%  and perform the following operations:
+%   - Save the results in several formats (xlsx, csv, html, txt,..)
+%   - Save variables in the base workspace
+%   - View Result in tables and graphs
+%  The application has two panels: the Taess panel, where the parameters
+%  of the Thermoeconomic Model are selected, and the results panel, 
+%  where the user selects the tables and graphs to show.
 % 
-%   Syntax
-%     app=TaesTool;
+% Syntax
+%   app=TaesTool;
 %
-%   See also cThermoeconomicModel
+% See also cThermoeconomicModel
 %
     properties(Access=private)
         % Widgets definition
@@ -87,7 +87,7 @@ classdef (Sealed) TaesTool < handle
             [file,path]=uigetfile({'*.json;*.csv;*.xlsx;*.xml;*.mat','Suported Data Models'});
 			if file
 				cd(path);
-				set(app.log,'string','');
+				set(app.log,'string',cType.EMPTY_CHAR);
 				set(app.mfile_text,'string',file);
 			else
 				logtext=' ERROR: No file selected';
@@ -295,9 +295,9 @@ classdef (Sealed) TaesTool < handle
 
         function showIndexTable(app,src,~)
         % Show Index Table callback
-            set(app.log,'string','');
+            set(app.log,'string',cType.EMPTY_CHAR);
             idx=get(src,'UserData');
-            res=getResults(app.model,idx);
+            res=getResultInfo(app.model,idx);
             app.currentTable=cType.EMPTY;
             set(app.mn_tsave,'enable','off')
             if ~isempty(res) && res.isValid
@@ -308,10 +308,10 @@ classdef (Sealed) TaesTool < handle
             end
         end
 
-        function getResult(app,src,~)
+        function getResults(app,src,~)
         % Get Results callback
         % Store the selected result into workspace
-            set(app.log,'string','');
+            set(app.log,'string',cType.EMPTY_CHAR);
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
             if isValid(res)
@@ -468,7 +468,7 @@ classdef (Sealed) TaesTool < handle
                 app.menu{i}=uimenu(e,...
                     'Label',cType.Results{i},...
                     'UserData',i,'Enable','off',...
-                    'MenuSelectedFcn', @(src,evt) app.getResult(src,evt));
+                    'MenuSelectedFcn', @(src,evt) app.getResults(src,evt));
             end
             idm=cType.ResultId.DATA_MODEL;
             app.menu{idm}=uimenu(e,...
@@ -495,7 +495,7 @@ classdef (Sealed) TaesTool < handle
             app.log = uicontrol (hf,'style', 'text',...
                  'units', 'normalized',...
                  'fontname','Verdana','fontsize',9,...
-                 'string', '',...
+                 'string', cType.EMPTY_CHAR,...
                  'backgroundcolor',[0.75 0.75 0.75],...
                  'horizontalalignment', 'left',...
                  'position', [0.01 0.01 0.98 0.045]);
@@ -697,7 +697,7 @@ classdef (Sealed) TaesTool < handle
             app.table_control = uitable (app.ptindex,'Data',data,...
                 'ColumnName',{'Table','Description','Graph'},...
                 'units','normalized',...
-                'RowName',[],...
+                'RowName',cType.EMPTY,...
                 'ColumnWidth',cw,'ColumnFormat',format,...
                 'FontName','Verdana','FontSize',9,...
                 'CellSelectionCallback',@(src,evt) app.selectTable(src,evt),...

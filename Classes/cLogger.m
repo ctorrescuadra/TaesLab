@@ -37,7 +37,7 @@ classdef cLogger < cTaesLab
         
         function obj = clear(obj)
         % Clear the queue
-            obj.buffer = {};
+            obj.buffer = cType.EMPTY_CELL;
         end
 
         function obj = addLogger(obj, logger)

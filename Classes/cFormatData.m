@@ -46,7 +46,7 @@ classdef cFormatData < cTablesDefinition
 		function res=getTableInfo(obj,name)
 		% get the resultId of a table from tables dictionary
 			res=cType.EMPTY;
-			idx=getIndex(obj.tDictionary,name);
+			idx=obj.getTableId(name);
 			if isempty(idx)
 				return
 			end

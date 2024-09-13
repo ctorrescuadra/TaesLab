@@ -4,17 +4,17 @@ function SaveSummary(model,filename)
 %   Show a message about the status of the operation
 %   Used as the interface of cThermoeconomicModel/saveSummary
 %
-%   Syntax:
-%     SaveTable(tbl,filename)
+% Syntax:
+%   SaveTable(tbl,filename)
 %
-%   Input arguments
-%     model - cThermoeconomicModel object
-%     filename - Name of the file (with extension) to save the table data
+% Input Arguments
+%   model - cThermoeconomicModel object
+%   filename - Name of the file (with extension) to save the table data
 %
-%   Example
-%     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
+% Example
+%   <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
 %
-%   See also cThermoeconomicModel, cModelSummary
+% See also cThermoeconomicModel, cModelSummary
 %
     log=cMessageLogger();
     % Check Input parameters

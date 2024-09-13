@@ -1,35 +1,35 @@
 function res=DiagramFP(data,varargin)
 %DiagramFP - Gets the diagram FP tables for one plant State
-%	This function gets the adjacency tables of the diagram FP
+%   This function gets the adjacency tables of the diagram FP
 %   for one state of the plant. 
 %   These diagrams could be represented grafically using the function
 %   ShowGraph, or by external graph software as yEd saving the adjancency
 %   tables of the graph in xlsx format.
 %  	
-%   Syntax
-%	  res = DiagramFP(data,Name,Value);
+% Syntax
+%   res = DiagramFP(data,Name,Value);
 %
-%   Input Arguments
-%	  data - cReadModel Object containing the data model information.
+% Input Arguments
+%   data - cReadModel Object containing the data model information.
 %
-%   Name-Value Arguments
-%	  State - Indicate one valid state to get exergy values. 
-%  	    char array
-%     Show -  Show results on console
-%       true | false (default)
-%     SaveAs - Name of the file where the results are saved.
-%	    char array | string
+% Name-Value Arguments
+%   State - Indicate one valid state to get exergy values. 
+%     char array
+%   Show -  Show results on console
+%     true | false (default)
+%   SaveAs - Name of the file where the results are saved.
+%     char array | string
 %
-% 	Output Arguments
-%	  res - cResultInfo object contains the FP diagram tables
-%     The following tables are obtained:
-%		atfp - Diagram FP adjacency matrix                                     
-%       atcfp - Cost Diagram FP adjacency matrix
+% Output Arguments
+%   res - cResultInfo object contains the FP diagram tables
+%    The following tables are obtained:
+%     atfp - Diagram FP adjacency matrix                                     
+%     atcfp - Cost Diagram FP adjacency matrix
 %   
-%   Examples
-%     <a href="matlab:open DiagramFpDemo.mlx">Diagram FP Demo</a>
+% Examples
+%   <a href="matlab:open DiagramFpDemo.mlx">Diagram FP Demo</a>
 %    
-%   See also cDataModel, cExergyCost, cResultInfo
+% See also cDataModel, cExergyCost, cResultInfo
 %
 	res=cMessageLogger();
 	checkModel=@(x) isa(x,'cDataModel');
@@ -38,7 +38,7 @@ function res=DiagramFP(data,varargin)
 	p.addRequired('data',checkModel);
 	p.addParameter('State',data.StateNames{1},@ischar);
     p.addParameter('Show',false,@islogical);
-    p.addParameter('SaveAs','',@isFilename);
+    p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
 	try
 		p.parse(data,varargin{:});
 	catch err

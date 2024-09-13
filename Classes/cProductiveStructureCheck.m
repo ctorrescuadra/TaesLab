@@ -9,7 +9,6 @@ classdef cProductiveStructureCheck < cResultId
 %   Processes		  - Processes info
 %   Flows			  - Flows info
 %   Streams			  - Streams info
-%   ProductiveGraph   - Productive Graph
 % 
 % cProductiveStructureCheck	Methods:
 %   cProductiveStructureCheck - Class constructor
@@ -24,7 +23,6 @@ classdef cProductiveStructureCheck < cResultId
 		Processes		  % Processes info
 		Flows			  % Flows info
 		Streams			  % Streams info
-		ProductiveGraph   % Productive Graph
 	end
 	properties(Access=protected)
 		fDict           % Flows key dictionary
@@ -194,7 +192,7 @@ classdef cProductiveStructureCheck < cResultId
             % Create process struct
             obj.cprc{id}=struct('id',id,'key',data.key,'type',data.type,'typeId',ptype,...
 				'fuel',data.fuel,'product',data.product,...
-                'fuelStreams',[],'productStreams',[]);
+                'fuelStreams',cType.EMPTY,'productStreams',cType.EMPTY);
         end
 
         function createProcessStreams(obj,id,fp)
@@ -429,7 +427,6 @@ classdef cProductiveStructureCheck < cResultId
 				end
             end
             % Check the graph conectivity
-			obj.ProductiveGraph=G;
 			res=obj.transitiveClosure(G);
 		end
     end

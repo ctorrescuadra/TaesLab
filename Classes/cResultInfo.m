@@ -88,7 +88,7 @@ classdef cResultInfo < cResultSet
             elseif obj.existTable(name)
                 res=obj.Tables.(name);
             else
-                res.messageLog(cType.ERROR,'Table name %s does NOT exists',name);
+                res.messageLog(cType.ERROR,'Table %s is NOT available',name);
                 return
             end
         end
