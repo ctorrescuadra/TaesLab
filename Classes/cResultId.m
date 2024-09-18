@@ -16,7 +16,7 @@ classdef cResultId < cMessageLogger
         % Class constructor
 		%  Input:
 		%	id - Result identifier. See cType.ResultId
-            if cType.isInteger(id,1:cType.MAX_RESULT_INFO)
+            if cType.isIndex(id,1:cType.MAX_RESULT_INFO)
 			    obj.ResultId=id;
                 obj.ModelName=cType.EMPTY_CHAR;
                 obj.State=cType.EMPTY_CHAR;

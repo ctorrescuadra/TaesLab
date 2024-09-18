@@ -28,7 +28,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         % Input Argument:
         %   tbl - cTable object
         %
-            if ~isValidTable(tbl)
+            if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
             end

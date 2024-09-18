@@ -18,16 +18,14 @@ function SaveTable(tbl,filename)
 %
     log=cMessageLogger();
     % Check Input parameters
-    if (nargin~=2) 
+    if (nargin~=2) || ~isObject(tbl,'cTable')
+        log.printError('First argument must be a table object');
         log.printError('Usage: SaveTable(table,filename)');
         return
     end
-    if ~isValidTable(tbl)
-        log.printError('Invalid table object.');
-        return
-    end
     if ~isFilename(filename)
-        log.printError('Invalid filename.');
+        log.printError('Invalid filename');
+        log.printError('Usage: SaveTable(table,filename)');
         return
     end
     % Save table

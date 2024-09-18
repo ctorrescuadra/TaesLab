@@ -25,7 +25,7 @@ function obj = ImportDataModel(filename)
     end
     % Load and check the model
 	obj=importMAT(filename);
-	if ~isDataModel(obj)
+	if ~isObject(obj,'cDataModel')
 		printLogger(obj);
 	end
 end

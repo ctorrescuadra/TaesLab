@@ -20,15 +20,14 @@ classdef cExergyData < cMessageLogger
         %  dm - cExergyState object
 		%  ps - cProductiveStructure object
 			% Check arguments
+			if ~isObject(ps,'cProductiveStructure')
+				obj.messageLog(cType.ERROR,'No Productive Structure provided');
+                return
+			end
             if ~isstruct(data)
 				obj.messageLog(cType.ERROR,'Invalid exergy data provided');
 				return
             end
-            if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
-				obj.messageLog(cType.ERROR,'No Productive Structure provided');
-                return
-            end
- 
 			% Check data file content
 			if  ~any(isfield(data,{'stateId','exergy'}))
                 obj.messageLog(cType.ERROR,'Invalid data. Fields Missing');

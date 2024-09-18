@@ -9,9 +9,7 @@ classdef cProductiveStructureCheck < cResultId
 %   Processes		  - Processes info
 %   Flows			  - Flows info
 %   Streams			  - Streams info
-% 
-% cProductiveStructureCheck	Methods:
-%   cProductiveStructureCheck - Class constructor
+
 %
 % See also cProductiveStructure, cResultId
 %
@@ -42,7 +40,7 @@ classdef cProductiveStructureCheck < cResultId
         %   dm - cModelData object
         	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
 			% Check/validate file content
-            if ~isa(dm,'cModelData') || ~isValid(dm)
+            if ~checkObject(dm,'cModelData')
 				obj.messageLog(cType.ERROR,'Invalid data model');
 				return
             end

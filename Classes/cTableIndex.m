@@ -35,7 +35,7 @@ classdef cTableIndex < cTable
         %       res - cResultInfo object
         %
             % Check input parameters
-            if ~isa(res,'cResultInfo') || ~isValid(res)
+            if ~isObject(res,'cResultInfo')
                 obj.messageLog(cType.ERROR,'Invalid input argument')
                 return
             end

@@ -24,7 +24,7 @@ classdef cResourceData < cMessageLogger
         %	data - cModelData object
 		%
 		    % Check arguments and inititiliza class
-			if ~isa(ps,'cProductiveStructure') || ~isValid(ps)
+			if ~isObject(ps,'cProductiveStructure')
 				obj.messageLog(cType.ERROR,'No Productive Structure provided');
                 return
 			end
@@ -32,21 +32,20 @@ classdef cResourceData < cMessageLogger
 				obj.messageLog(cType.ERROR,'Invalid resource data.');
 				return
 			end
-			obj.Z=zeros(1,ps.NrOfProcesses);
-			obj.c0=zeros(1,ps.NrOfFlows);
 		    % Read resources flows costs
 			if ~isfield(data,{'sampleId','flows'})
 				obj.messageLog(cType.ERROR,'Invalid data model. Fields missing');
 				return
 			end
-			obj.sample=data.sampleId;
-
 			if all(isfield(data.flows,{'key','value'}))
 					se=data.flows;
 			else
 				obj.messageLog(cType.ERROR,'Wrong resource cost file. Flows fields missing.');
 				return	
 			end
+			obj.Z=zeros(1,ps.NrOfProcesses);
+			obj.c0=zeros(1,ps.NrOfFlows);
+			obj.sample=data.sampleId;
 			% Check Resource Flows data
 			resources=ps.Resources.flows;
 			for i=1:length(se)

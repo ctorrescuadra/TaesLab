@@ -153,7 +153,7 @@ classdef cThermoeconomicModel < cResultSet
         %     varargin - optional paramaters (see ThermoeconomicModel)
         %   
             obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
-            if ~isDataModel(data)
+            if ~isObject(data,'cDataModel')
                 obj.printError(cType.ERROR,'Invalid data model');
                 return
             end
@@ -551,7 +551,7 @@ classdef cThermoeconomicModel < cResultSet
         % 
             if (nargin==1)
                 res=buildResultInfo(obj);
-            elseif cType.isInteger(arg,1:cType.MAX_RESULT_INFO)
+            elseif cType.isIndex(arg,1:cType.MAX_RESULT_INFO)
                 res=getResults(obj,arg);
             elseif ischar(arg)
                 res=getResultTable(obj,arg);

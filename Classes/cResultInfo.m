@@ -41,7 +41,7 @@ classdef cResultInfo < cResultSet
         %
             % Check parameters
             obj=obj@cResultSet(info.ResultId);
-            if ~isResultId(info)
+            if ~isObject(info,'cResultId')
                 obj.messageLog(cType.ERROR,'Invalid ResultId object');
                 return
             end

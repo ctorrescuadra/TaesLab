@@ -24,8 +24,9 @@ function ShowGraph(arg,varargin)
 % See also cGraphResults, cResultSet
 %
     log=cMessageLogger();
-	if ~isResultSet(arg)
-		log.printError('Invalid result parameter');
+	if nargin < 1 || ~isObject(arg,'cResultSet')
+		log.printError('First Argument must be a Result Set');
+		log.printError('Usage: ShowGraph(res,options)');
 		return
 	end
     % Check input parameters

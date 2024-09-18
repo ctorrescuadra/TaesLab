@@ -19,16 +19,14 @@ function SaveResults(arg,filename)
 %
     log=cMessageLogger();
     % Check Input parameters
-    if (nargin~=2)
+    if (nargin~=2) || ~isObject(arg,'cResultSet')
+        log.printError('First argument must be a Result Set.');
         log.printError('Usage: SaveResults(res,filename)');
         return
     end
-    if ~isResultSet(arg)
-        log.printError('File NOT saved. Invalid Result Set.');
-        return
-    end
     if ~isFilename(filename)
-        log.printError('File NOT saved. Invalid filename.');
+        log.printError('Invalid filename.');
+        log.printError('Usage: SaveResults(res,filename)');
         return
     end
     log=saveResults(arg,filename);

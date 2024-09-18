@@ -30,28 +30,25 @@ function res=ExergyAnalysis(data,varargin)
 %
 % See also cDataModel, cExergyModel, cResultInfo
 %
-	res=cMessageLogger(); 
-	checkModel=@(x) isa(x,'cDataModel');
+	res=cMessageLogger();
+	if nargin<1 || ~isObject(data,'cDataModel')
+		res.printError('First argument must be a Data Model');
+		res.printError('Usage: DiagramFP(data,options)');
+		return
+	end
 	% Check input parameters
 	p = inputParser;
-	p.addRequired('data',checkModel);
 	p.addParameter('State',data.StateNames{1},@ischar);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
 	try
-		p.parse(data,varargin{:});
+		p.parse(varargin{:});
 	catch err
 		res.printError(err.message);
         res.printError('Usage: ExergyAnalysis(data,options)');
 		return
 	end
 	param=p.Results;
-	% Check data model
-	if ~data.isValid
-		data.printLogger;
-		res.printError('Invalid data model. See error log');
-		return
-	end	
 	% Read and check exergy values
 	ex=data.getExergyData(param.State);
 	if ~isValid(ex)

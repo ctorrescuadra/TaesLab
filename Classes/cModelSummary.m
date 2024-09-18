@@ -18,7 +18,7 @@ classdef cModelSummary < cResultId
         %       model - cThermoeconomicModel object  
         %
             obj=obj@cResultId(cType.ResultId.SUMMARY_RESULTS);
-            if ~isa(model,'cThermoeconomicModel') || ~model.isValid
+            if ~isObject(model,'cThermoeconomicModel')
                 obj.addLogger(model);
                 obj.messageLog(cType.ERROR,'Invalid thermoeconomic model');
                 return

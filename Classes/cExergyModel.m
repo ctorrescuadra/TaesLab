@@ -1,8 +1,33 @@
 classdef cExergyModel < cResultId
-% cExergyModel Container class of the exergy flows, streams and processes values
-%  	It contains the Adjacency Table of the productive structure of a state of the plant
-%   and the FlowProcess and StreamProcess matrices models
-% See also cExergyCost
+% cExergyModel contains the information about the exergy values
+%   It provides the exergy analysis and the FP table of the system
+% 
+% cExergyModel Properties:
+%  NrOfFlows        	- Number of Flows
+%  NrOfProcesses    	- Number of Processes
+%  NrOfStreams          - Number of Streams
+%  NrOfWastes       	- Number of Wastes
+%  FlowsExergy      	- Exergy values of flows
+%  ProcessesExergy  	- Process exergy properties
+%  StreamsExergy        - Stream exergy properties
+%  FlowProcessTable     - Flow Process Table
+%  StreamProcessTable   - Stream Process Table
+%  TableFP              - Table FP
+%  FuelExergy           - Fuel Exergy
+%  ProductExergy        - Product Exergy
+%  Irreversibility      - Process Irreversibility
+%  UnitConsumption      - Process Unit Consumption
+%  Efficiency           - Process Efficiency
+%  TotalResources	    - Total Resources
+%  FinalProducts        - Final Products
+%  TotalIrreversibility - Total Irreversibility
+%  TotalUnitConsumption - Total Unit Consumption
+%  ActiveProcesses      - Active Processes (not bypass)
+%
+% cExergyModel Methods:
+%  getResultInfo - Get the result info associated to EXERGY_ANALYSIS
+%
+% See also cExergyCost, cResultId
 %
 	properties (GetAccess=public, SetAccess=protected)
 		NrOfFlows        	  % Number of Flows
@@ -30,10 +55,13 @@ classdef cExergyModel < cResultId
     
 	methods
 		function obj=cExergyModel(rex)
-		% Constructor of the exergy container.	
-		% rex - cExergyData object
+		% Build an instance of the object	
+		% Syntax:
+		%   obj = cExergyModel(rex)
+		% Input Arguments:
+		%   rex - cExergyData object
 			obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_STATE);
-            if ~isa(rex,'cExergyData') || ~isValid(rex)
+            if ~isObject(rex,'cExergyData')
 				obj.messageLog(cType.ERROR,'Input parameter is not a valid cExergyData object');
 				return
             end
@@ -165,6 +193,13 @@ classdef cExergyModel < cResultId
 
         function res=getResultInfo(obj,fmt)
         % Get the cResultInfo object
+		% Syntax:
+		%   res = obj.getResultInfo(fmt)
+		% Input Arguments:
+		%   fmt - cResultTableBuilder object
+		% Output Arguments:
+		%   res - cResultInfo associated to EXERGY_ANALYSIS
+		%
             res=fmt.getExergyResults(obj);
         end
 	end		

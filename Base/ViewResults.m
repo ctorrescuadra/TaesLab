@@ -300,14 +300,9 @@ classdef ViewResults < matlab.apps.AppBase
         % Code that executes after component creation
         function startupFcn(app, arg)
             log=cMessageLogger();
-            if nargin~=2
-                log.printError('Values to show are required');
+            if nargin~=2 || ~isObject(arg,'cResultSet')
+                log.printError('First Argument must be a cResultSet object');
                 log.printError('Usage: ViewModelResuls(res)');
-                delete(app);
-                return
-            end
-            if ~isa(arg,'cResultSet')
-                log.printError('Results must be a cResultSet object');
                 delete(app);
                 return
             end
@@ -351,7 +346,7 @@ classdef ViewResults < matlab.apps.AppBase
             if isempty(tbl)
                 return
             end
-            if isa(tbl,'cTable')
+            if isObject(tbl,'cTable')
                 resultNode=selectedNodes.Parent;
                 logtext=sprintf(' INFO: %s for State %s. %s ',...
                 resultNode.Text,tbl.State,resultNode.UserData);
@@ -365,7 +360,7 @@ classdef ViewResults < matlab.apps.AppBase
                 else
                     app.ClearGraphTab;
                 end
-            elseif isa(tbl,'cResultInfo')
+            elseif isResultInfo(tbl)
                 app.ViewIndexTable(tbl);
                 app.TabGroup.SelectedTab=app.IndexTab;
                 app.LogField.Text=sprintf(' INFO: %s selected',tbl.ResultName);            
