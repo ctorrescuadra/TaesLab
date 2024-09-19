@@ -30,14 +30,17 @@ function res=ProductiveDiagram(data,varargin)
 %   See also cDataModel, cProductiveDiagram, cResultInfo
 %
 	res=cMessageLogger();
-	checkModel=@(x) isa(x,'cDataModel');
+	if nargin <1 || ~isObject(data,'cDataModel')
+		res.printError('First argument must be a Data Model');
+        res.printError('Usage: ProductiveDiagram(data,options)');
+		return
+	end
     %Check input parameters
     p = inputParser;
-    p.addRequired('data',checkModel);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
-		p.parse(data,varargin{:});
+		p.parse(varargin{:});
     catch err
 		res.printError(err.message);
         res.printError('Usage: ProductiveDiagram(data,options)');

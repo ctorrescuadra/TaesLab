@@ -62,10 +62,12 @@ classdef (Sealed) cProductiveDiagram < cResultId
 
     methods(Static,Access=private)
         function res=adjacencyTable(A,nodes)
+            fields={'source','target'};
             [idx,jdx,~]=find(A);
             source=nodes(idx);
             target=nodes(jdx);
-            res=[source', target'];
+            tmp=[source', target'];
+            res=cell2struct(tmp,fields,2);
         end
 
         function res=nodesTable(nodenames,nodetypes)

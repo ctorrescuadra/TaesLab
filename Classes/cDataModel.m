@@ -72,7 +72,7 @@ classdef cDataModel < cResultSet
         %
             % Check Data Structure
             obj=obj@cResultSet(cType.ClassId.DATA_MODEL);
-            if ~isa(dm,'cModelData') || ~isValid(dm)
+            if ~isObject(dm,'cModelData')
                 obj.messageLog(cType.ERROR,'Invalid data model');
                 return
             end
@@ -119,7 +119,7 @@ classdef cDataModel < cResultSet
 					obj.addLogger(rex)
 					obj.messageLog(cType.ERROR,'Exergy values [%s] are NOT valid. See Error Log',obj.StateNames{i});
                 end
-                obj.ExergyData.setValues(i,rex);
+                setValues(obj.ExergyData,i,rex);
             end
             % Check Waste
             if ps.NrOfWastes > 0

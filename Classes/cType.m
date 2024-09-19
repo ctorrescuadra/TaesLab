@@ -217,11 +217,20 @@ classdef cType
     % Static Methods for types
     %----------------------------
 	methods (Static)
-		function res=isInteger(val,range)
+		function res=isInteger(val)
 		% check if the type check is valid
 			res=isscalar(val) && isnumeric(val) && (mod(val,1)==0);
-			if nargin >1
-				res = res && ismember(val,range);
+		end
+
+		function res=isIndex(index,range)
+			res=false;
+			if ~isnumeric(index)
+				return
+			end
+			if isscalar(index)
+				res = cType.isInteger(index) && (index>=range(1)) && (index<=range(end));
+			else
+				res = all(ismember(index,range));
 			end
 		end
 

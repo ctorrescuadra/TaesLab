@@ -31,29 +31,33 @@ function res=ShowTable(tbl,varargin)
 % See also cTable
 %
     log=cMessageLogger();
+    if nargin<1 || ~isObject(tbl,'cTable')
+        log.printError('First Argument must be a Table')
+        log.printError('Usage: ShowTable(arg,options)');
+        return
+    end
+    if nargout 
+        defaultView='NONE';
+    else
+        defaultView='CONSOLE';
+    end
     % Check input
     p = inputParser;
-    p.addRequired('tbl',@isValidTable);
-    p.addParameter('View',cType.DEFAULT_TABLEVIEW,@cType.checkTableView);
+    p.addParameter('View',defaultView,@cType.checkTableView);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
-		p.parse(tbl,varargin{:});
+		p.parse(varargin{:});
     catch err
         log.printError(err.message);
         log.printError('Usage: ShowTable(tbl,options)');
         return
     end
     param=p.Results;
-    if ~isValid(tbl)
-        tbl.printLogger;
-        return
-    end
     % Export the table
     if nargout>0
         option=cType.getVarMode(param.ExportAs);
         res=exportTable(tbl,option);
-        return
     end
     % View the table
     option=cType.getTableView(param.View);

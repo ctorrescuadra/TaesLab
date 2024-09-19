@@ -30,14 +30,18 @@ function res = ExportResults(arg,varargin)
 % See also cResultSet, cTable.
 %
     res=cMessageLogger();
+    if nargin<1 || ~isObject(arg,'cResultSet')
+		res.printError('First argument must be a Result Set');
+		res.printError('Usage: ExportResults(arg,options)');
+		return
+    end
     % Check input
     p = inputParser;
-    p.addRequired('arg',@isResultSet);
     p.addParameter('Table',cType.EMPTY_CHAR,@ischar);
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('Format',false,@islogical);
     try
-		p.parse(arg,varargin{:});
+		p.parse(varargin{:});
     catch err
         res.printError(err.message);
         res.printError('Usage: ExportResults(arg,options)');

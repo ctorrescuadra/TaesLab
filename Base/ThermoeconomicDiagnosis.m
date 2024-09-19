@@ -41,17 +41,20 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 % See also cDataModel, cDiagnosis, cResultInfo
 %
     res=cMessageLogger();
+	if nargin<1 || ~isObject(data,'cDataModel')
+		res.printError('First argument must be a Data Model');
+        res.printError('Usage: ThermoeconomicDiagnosis(data,options)');
+		return
+	end
     % Check input parameters
-	checkModel=@(x) isa(x,'cDataModel');
     p = inputParser;
-    p.addRequired('data',checkModel);
     p.addParameter('ReferenceState',data.StateNames{1},@ischar)
 	p.addParameter('State',cType.EMPTY_CHAR,@ischar);
     p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
-        p.parse(data,varargin{:});
+        p.parse(varargin{:});
     catch err
         res.printError(err.message);
         res.printError('Usage: ThermoeconomicDiagnosis(data,options)');
@@ -62,13 +65,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         res.printError('Diagnosis Method is NOT Activated')
         return
     end
-    % Check data model
-    if ~data.isValid
-        data.printLogger;
-        res.printError('Invalid data model. See Error log');
-        return
-    end
-     % Check if there are two states is defined
+    % Check if there are two states is defined
     if ~data.isDiagnosis
         data.printLogger;
         res.printError('There is NOT two states defined');

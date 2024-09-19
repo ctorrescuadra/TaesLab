@@ -56,12 +56,12 @@ classdef (Sealed) cExergyCost < cExergyModel
 	methods
 		function obj=cExergyCost(rex,wd)
 		% Creates the cFlowProcessModel object
-        % Usage:
+        % Syntax:
         %   obj=cExergyCost(rex,wd)
-        % Input:
+        % Input Arguments:
 		%   rex - cExergyData object
         %   wd - cWasteData object (optional)
-        % Output:
+        % Output Arguments Arguments:
         %  obj - cExergyCost object
         %
 			obj=obj@cExergyModel(rex);
@@ -156,9 +156,9 @@ classdef (Sealed) cExergyCost < cExergyModel
     
         function res=getResultInfo(obj,fmt,options)
         % Get the cResultInfo object for thermoeconomic analysis
-        % Usage:
+        % Syntax:
         %   res=obj.getResultInfo(fmt,options)
-        % Input:
+        % Input Arguments:
         %   fmt - cResultTableBuilder object
         %   options - structure indicating the table to obtain
         %     DirectCost: get direct cost tables (true | false)
@@ -173,11 +173,11 @@ classdef (Sealed) cExergyCost < cExergyModel
         function res=getProcessCost(obj,rsc)
 		% Get processes cost values
         %   If resource cost is provided calculate the generalized cost
-        % Usage:
+        % Syntax:
         %   obj.getProcessCost(rsc)
-		% Input:
+		% Input Arguments:
 		%   rsc - cResourceCost object [optional]
-		% Output:
+		% Output Arguments:
 		%   res - structure containing cost values (CPE,CPZ,CPR,CP,CF,CR,Z)
         %
 			czoption=(nargin==2);
@@ -210,9 +210,9 @@ classdef (Sealed) cExergyCost < cExergyModel
         function res = getProcessUnitCost(obj,rsc)
     	% Get Process Unit Cost
         %   If resource cost is provided calculate the generalized cost
-        % Usage:
+        % Syntax:
         %   obj.getProcessUnitCost(rsc)
-		% Input:
+		% Input Arguments:
 		%   rsc - cResourceCost object [optional]
 		% Output:
 		%   res - structure containing cost values (cP,cPE,cPZ,cPR,cF,cR)
@@ -248,11 +248,11 @@ classdef (Sealed) cExergyCost < cExergyModel
         function res=getFlowsCost(obj,rsc)
         % Get the exergy cost of flows
         %   If resource cost is provided calculate the generalized cost
-        %  Usage:
-        %    res=obj.getFlowsCost(rsc)
-        %  Input:
+        % Syntax:
+        %   res=obj.getFlowsCost(rsc)
+        % Input Arguments:
 		%   rsc - cResourceCost object [optional]
-        %  Output
+        % Output
         %   res - cost of flows structure (B,CE,CZ,CR,C,cE,cZ,cR,c)
             czoption=(nargin==2);
             res=struct();
@@ -319,9 +319,9 @@ classdef (Sealed) cExergyCost < cExergyModel
         % Get the exergy cost of streams
         %   Compute the direct or generalized cost
         %   depending on the values of flows cost
-        % Usage:
+        % Syntax:
         %   res=obj.getStreamsCost(fcost)
-        % Input:
+        % Input Arguments:
 		%   fcost - Exergy cost of flows structure
         % Output
         %   res - cost of flows structure (E,CE,CZ,CR,C,cE,cZ,cR,c)
@@ -351,9 +351,9 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function res = getCostTableFP(obj,ucost)
         % Get the FP Cost Table considering only internal irreversibilities
-        % Usage:
+        % Syntax:
         %   res=getCostTableFP(ucost)
-        % Input:
+        % Input Arguments:
         %   ucost - Unit cost of product. If omitted is calculated
         % Output:
         %   res - Direct Cost FP table values
@@ -367,9 +367,9 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function res = getDirectCostTableFPR(obj,ucost)
         % Get FPR CostTable with direct costs
-        % Usage:
+        % Syntax:
         %   res = obj.getDirectCostTableFPR(ucost)
-        % Inputs:
+        % Input Arguments:
         %   ucost - Unitary costs of processes. If ommited is calculated
         % Output: 
         %   res - Direct Cost FPR table values
@@ -390,9 +390,9 @@ classdef (Sealed) cExergyCost < cExergyModel
     
         function res = getGeneralCostTableFPR(obj,rsc,ucost)
         % Get FPR CostTable with generalized costs
-        % Usage:
+        % Syntax:
         %   res = obj.getGeneralizedCostTableFPR(rsc,ucost)
-        % Inputs:
+        % Input Arguments:
         %   rsc - cResourceCost object
         %   ucost - Unitary costs of processes. If ommited is calculated
         % Output: 
@@ -416,11 +416,11 @@ classdef (Sealed) cExergyCost < cExergyModel
         function res=getProcessICT(obj,rsc)
         % Get Process Irreversibility Cost Table
         %   If resource cost is provided calculate the generalized table
-        % Usage:
+        % Syntax:
         %   res=obj.getProcessICT(rsc)
-        % Inputs:
+        % Input Arguments:
         %   rsc - cResourcesCost object [optional]
-        % Outputs:
+        % Output Arguments:
         %   res - Process ICT table
         %
             narginchk(1,2);
@@ -443,11 +443,11 @@ classdef (Sealed) cExergyCost < cExergyModel
         function res=getFlowsICT(obj,rsc)
         % Get the irreversibility-cost table of flows
         %   If resource cost is provided calculate the generalized table
-        % Usage:
+        % Syntax:
         %   res=obj.getFlowsICT(rsc)
-        %  Input:
+        % Input Arguments:
         %   rsc - cResourceCost object [optional]
-        %  Output:
+        % Output Arguments:
         %   res - irreversivility cost table for flows
             narginchk(1,2);
             N=obj.NrOfProcesses;
@@ -549,15 +549,18 @@ classdef (Sealed) cExergyCost < cExergyModel
     methods(Static)
         function res=similarMatrix(A,x)
         % Calculate the similar matrix B=inv(x)*A*x
-        %   Input:
-        %       A: Matrix
-        %       x: vector
+        % Input:
+        %   A: Matrix
+        %   x: vector
             tmp=scaleCol(A,x);
             res=divideRow(tmp,x);
         end
 
         function res=updateOperator(op,opR)
         % Update an operator with the corresponding waste operator
+        % Input:
+        %   op - Operator
+        %   opR - Waste Operator
             res=op+op*opR;
         end
     end
@@ -570,7 +573,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 obj.messageLog(cType.ERROR,'Model must define waste flows');
                 return
             end
-            if ~isa(wd,'cWasteData') || ~isValid(wd)
+            if ~isObject(wd,'cWasteData')
                 obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
                 return
             end

@@ -44,7 +44,7 @@ function res=ListResultTables(varargin)
     res=cMessageLogger();
     % Check if model is provided
     isModel=false;
-    if nargin && isa(varargin{1},'cThermoeconomicModel')
+    if nargin>0 && isObject(varargin{1},'cThermoeconomicModel')
         isModel=true;
         model=varargin{1};
         varargin=varargin(2:end);

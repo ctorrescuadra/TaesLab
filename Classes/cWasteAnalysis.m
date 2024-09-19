@@ -1,11 +1,19 @@
 classdef (Sealed) cWasteAnalysis < cResultId
-% cRecyclingAnalysis analyze the potential cost saving of waste recycling
-%   This class calculates the direct unit cost of output flows of the plant as function
+% cWasteAnalysis analyze the potential cost saving of waste recycling
+%   This class calculates the unit cost of output flows of the plant as function
 %   of the recycling ratio of a waste.
-%   Methods:
-%       obj=cRecyclingAnalysis()
-%       res=obj.getResultInfo(fmt,param)
-%   See also cResultId
+%
+% cWasteAnalysis Properties:
+%   Recycling    - Indicate if recycling is available (true | false)
+%   OutputFlows - Output flows cell array
+%   wasteFlow   - Current waste flow key for recycling
+%   wasteTable  - cWasteData object
+%   dValues     - Recycling Analysis Direct Cost values
+%   gValues     - Recycling Analysis Generalized Cost values
+%
+% cWasteAnalysis Methods:
+%   getResultInfo - Get the cResultInfo for Waste Analysis
+% 
     properties(GetAccess=public,SetAccess=private)
         Recycling    % Indicate if recycling is available
         OutputFlows  % Output flows
@@ -24,19 +32,22 @@ classdef (Sealed) cWasteAnalysis < cResultId
 
     methods
         function obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
-        % Create an instance of cRecyclingAnalysis
-        %   Input:
-        %       fpm - cExergyCost object
-        %       recycling - (true/false)
-        %       wkey - Active waste flow key 
-        %       rsd - Resources data
+        % Create an instance of cWasteAnalysis
+        % Syntax:
+        %   obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
+        % Input Arguments:
+        %   fpm - cExergyCost object
+        %   recycling - Indicating if recycling analysis is required
+        %   wkey - Current waste flow key 
+        %   rsd - cResourcesData object (optional)
+        %
             obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
             % Check mandatory parameters
             if nargin < 3
                 obj.messageLog(cType.ERROR,'Invalid number of parameters');
                 return
             end
-            if ~isa(fpm,'cExergyCost') || ~fpm.isValid
+            if ~checkObject(fpm,'cExergyCost')
                 obj.addLogger(fpm);
                 obj.messageLog(cType.ERROR,'Invalid FPR model');
                 return
@@ -60,7 +71,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 return
             end
             if nargin==4
-                if isa(rsd,'cResourceData') && rsd.isValid
+                if isObject(rsd,'cResourceData')
                     obj.isResourceCost=true;
                     obj.generalCost=true;
                     obj.resourceCost=getResourceCost(rsd,fpm);
@@ -86,6 +97,14 @@ classdef (Sealed) cWasteAnalysis < cResultId
 
         function res=getResultInfo(obj,fmt,param)
         % Get the cResultInfo object
+        % Syntax:
+        %   res = obj.getResultInfo(fmt,options)
+        % Input Arguments:
+        %   fmt - cResultsTableBuilder object
+        %   options - structure containing the fields:
+        %     DirectCost - Direct Cost Tables will be obtained
+        %     GeneralCost - General Cost Tables will be obtained
+        %     ResourceCost - cResourceData object if generalized cost is required
             res=fmt.getWasteAnalysisResults(obj,param);
         end
     end

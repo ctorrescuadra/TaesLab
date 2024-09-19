@@ -40,6 +40,12 @@ function res=ShowResults(arg,varargin)
 % See also cResultSet
 %
     log=cMessageLogger();
+
+    if nargin<1 || ~isObject(arg,'cResultSet')
+        log.printError('First Argument must be a Result Set')
+        log.printError('Usage: ShowResults(arg,options)');
+        return
+    end
     % Select View depending of nargout
     if nargout 
         defaultView='NONE';
@@ -48,7 +54,6 @@ function res=ShowResults(arg,varargin)
     end
     % Check input
     p = inputParser;
-    p.addRequired('arg',@isResultSet);
     p.addParameter('Table',cType.EMPTY_CHAR,@ischar);
     p.addParameter('View',defaultView,@cType.checkTableView);
     p.addParameter('Panel',false,@islogical);

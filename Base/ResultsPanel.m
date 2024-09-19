@@ -41,10 +41,10 @@ classdef (Sealed) ResultsPanel < cTaesLab
             log=cMessageLogger();
             app.createPanel;
             if nargin > 0
-                if isResultSet(res)
+                if isObject(res,'cResultSet')
                     app.showResults(res)
                 else
-                    log.printError('Invalid result argument');
+                    log.printWarning('Argument must be a ResultSet');
                 end
             end
         end
@@ -56,7 +56,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
         %
             % Check Input parameter
             log=cMessageLogger();
-            if ~isResultSet(res)
+            if ~isObject(res,'cResultSet')
                 log.printError('Invalid result argument');
                 return
             end

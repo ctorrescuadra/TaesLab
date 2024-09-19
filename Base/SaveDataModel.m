@@ -22,19 +22,18 @@ function SaveDataModel(arg,filename)
         log.printError('Usage: SaveDataModel(data,filename)');
         return
     end
-    if isa(arg,'cDataModel')
+    if isObject(arg,'cDataModel')
         data=arg;
-    elseif isa(arg,'cThermoeconomicModel')
+    elseif isObject(arg,'cThermoeconomicModel')
         data=arg.DataModel;
     else
-        log.printError('File NOT saved. First input must be a cDataModel or cThermoeconomicModel object');
+        log.printError('First argument input must be a cDataModel or cThermoeconomicModel object');
+        log.printError('Usage: SaveDataModel(data,filename)');
         return
-    end
-    if ~isValid(arg)
-        log.printError('File NOT saved. Invalid data model');
     end
     if ~isFilename(filename)
         log.printError('File NOT saved. Invalid filename.');
+        log.printError('Usage: SaveDataModel(data,filename)');
         return
     end
     % Save the data model

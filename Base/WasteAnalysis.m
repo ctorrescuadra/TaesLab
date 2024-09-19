@@ -42,10 +42,13 @@ function res = WasteAnalysis(data,varargin)
 % See also cDataModel, cWasteAnalysis, cResultInfo
 %
     res=cMessageLogger();
-    checkModel=@(x) isa(x,'cDataModel');
+	if nargin<1 || ~isObject(data,'cDataModel')
+		res.printError('First argument must be a Data Model');
+        res.printError('Usage: WasteAnalysis(data,options)');
+		return
+	end
     % Check and initialize parameters
     p = inputParser;
-    p.addRequired('data',checkModel);
     p.addParameter('State',data.StateNames{1},@ischar);
     p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
@@ -54,7 +57,7 @@ function res = WasteAnalysis(data,varargin)
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
-        p.parse(data,varargin{:});
+        p.parse(varargin{:});
     catch err
         res.printError(err.message);
         res.printError('Usage: cRecyclingAnalysis(data,options)')
@@ -62,12 +65,6 @@ function res = WasteAnalysis(data,varargin)
     end
     % 
     param=p.Results;
-    % Check data model
-    if ~data.isValid
-	    data.printLogger;
-	    res.printError('Invalid data model. See error log');
-	    return
-    end  
     % Read waste info
     if data.NrOfWastes<1
 	    res.printError(cType.ERROR,'Data model must have waste')

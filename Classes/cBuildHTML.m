@@ -23,7 +23,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %   tbl - cTable object to convert
         %   folder - Folder name where the files will be save if tbl is a cTableIndex
         % 
-            if ~isValidTable(tbl)
+            if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,'Invalid input argument');
                 return
             end

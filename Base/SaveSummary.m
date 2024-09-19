@@ -18,16 +18,14 @@ function SaveSummary(model,filename)
 %
     log=cMessageLogger();
     % Check Input parameters
-    if (nargin<2)
+    if (nargin~=2) || ~isObject(model,'cThermoeconomicModel')
+        log.printError('First Argument must be a Thermoeconomic Model');
         log.printError('Usage: SaveSummary(model,filename)');
         return
     end
-    if ~isa(model,'cThermoeconomicModel') || ~isValid(model)
-        log.printError('Invalid model object. File % NOT saved',filename);
-        return
-    end
     if ~isFilename(filename)
-        log.printError('File NOT saved. Invalid filename.');
+        log.printError('Invalid filename');
+        log.printError('Usage: SaveSummary(model,filename)');
         return
     end
     % Save summary results

@@ -10,8 +10,8 @@ classdef cMessage < cTaesLab
 %   Error - Type of message error code
 %   Class - Name of the class which generate the error
 %   Text  - Text of the message
+%
 % cMessage Methods:
-%   cMessage - create the message
 %   getMessage - get the text of the message including type and class
 %   disp - show the message on console. Overload disp
 %

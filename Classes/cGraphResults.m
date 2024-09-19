@@ -18,11 +18,11 @@ classdef (Sealed) cGraphResults < cMessageLogger
     methods
         function obj = cGraphResults(tbl, varargin)
 		% Constructor. Create the object with the graph properties  
-			if ~isa(tbl,'cTableResult')
+			if ~isObject(tbl,'cTableResult')
 				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
 				return
 			end
-			if ~isValid(tbl) || ~isGraph(tbl)
+			if ~isGraph(tbl)
 				obj.messageLog(cType.ERROR,'Invalid graph table %s',tbl.Name);
 				return
 			end

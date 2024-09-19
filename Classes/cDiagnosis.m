@@ -80,7 +80,7 @@ classdef cDiagnosis < cResultId
         %
             obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
             % Check Arguments
-            if ~isa(fp0,'cExergyCost') || ~isa(fp1,'cExergyCost')
+            if ~isObject(fp0,'cExergyCost') || ~isObject(fp1,'cExergyCost')
                 obj.messageLog(cType.ERROR,'Input parameters are not cExergyCost objects');
                 return
             end

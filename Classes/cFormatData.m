@@ -11,8 +11,12 @@ classdef cFormatData < cTablesDefinition
 %	
 	methods
 		function obj=cFormatData(data)
-		% Class Constructor
-		%	format - format configuration data
+		% Create an instance of the object
+		% Syntax:
+		%   obj = cFormatData(data)
+		% Input Argument:
+		%	data - Format struct from cModelData
+		%
 			if ~isstruct(data) || ~isfield(data,'definitions') 
 				obj.messageLog(cType.ERROR,'Invalid format data ');
 				return
@@ -44,7 +48,14 @@ classdef cFormatData < cTablesDefinition
 		end
 
 		function res=getTableInfo(obj,name)
-		% get the resultId of a table from tables dictionary
+		% Get the properties of a table
+		% Syntax:
+		%   res = obj.getTableInfo(name)
+		% Input Arguments:
+		%   name - Name of the table
+		% Output Arguments:
+		%   res - Struct with the properties of the table
+		%
 			res=cType.EMPTY;
 			idx=obj.getTableId(name);
 			if isempty(idx)
@@ -53,18 +64,26 @@ classdef cFormatData < cTablesDefinition
 			res=obj.tableIndex(idx);
 		end
 
-		function format=getFormat(obj,id)
-		% get the format of a type of variable
-		%  Input:
-		%   id - Variable type
-			format=obj.cfgTypes(id).format;
+		function res=getFormat(obj,id)
+		% Get the format of a type of variable
+		% Syntax:
+		%  format = obj.getFormat(id)
+		% Input Argument:
+		%   id - Variable type, see cType.Format
+		% Output Argument:
+		%   res - char array with the C-like format of the variable
+			res=obj.cfgTypes(id).format;
 		end
 				
-		function unit=getUnit(obj,id)
-		% get the variable unit of a type
-		%  Input:
-		%   id - Variable type
-			unit=obj.cfgTypes(id).unit;
+		function res=getUnit(obj,id)
+		% Get the format of a type of variable
+		% Syntax:
+		%  format = obj.getUnit(id)
+		% Input Argument:
+		%   id - Variable type, see cType.Format
+		% Output Argument:
+		%   res - char array with unit of the variable
+			res=obj.cfgTypes(id).unit;
 		end		
     end
 
@@ -93,6 +112,5 @@ classdef cFormatData < cTablesDefinition
 			idx=[props.fields.type];
 			units={obj.cfgTypes(idx).unit};
 		end
-
 	end
 end
