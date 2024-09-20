@@ -22,7 +22,7 @@ function CopyDataModel(inputFile, outputFile)
         return
     end
     data=readModel(inputFile);
-    if isValid(data)
+    if data.status
         SaveDataModel(data,outputFile);
     else
         printLogger(data);

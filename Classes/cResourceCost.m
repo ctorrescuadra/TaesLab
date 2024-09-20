@@ -19,11 +19,11 @@ classdef cResourceCost < cMessageLogger
 		%	Input:
 		%	  rd - cResourceData object
 		%	 exm - cExergyModel object with state information
-			if ~checkObject(rd,'cResourceData')
+			if ~isObject(rd,'cResourceData')
 				rd.messageLog(cType.ERROR,'Invalid resource cost data');
 				return
 			end
-			if ~checkObject(exm,'cExergyModel')
+			if ~isObject(exm,'cExergyModel')
 				obj.messageLog(cType.ERROR,'No exergy data model');
 				return
 			end

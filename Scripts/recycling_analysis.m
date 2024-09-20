@@ -9,7 +9,7 @@
 options=struct('Console','Y','Save','N');
 param=struct();
 data=selectDataModel();
-if ~data.isValid
+if ~data.status
     data.printLogger;
 	data.printError('Invalid data model. See error log');
 	return
@@ -33,7 +33,7 @@ if data.NrOfWastes>1
 end
 % Get Results
 wa=WasteAnalysis(data,param);
-if wa.isValid
+if wa.status
 	outputResults(wa,options);
 	wa.printInfo('Results (wa) available in Workspace');
 else

@@ -71,7 +71,7 @@ function res = WasteAnalysis(data,varargin)
         return
     end
     wd=data.WasteData;
-    if ~wd.isValid
+    if ~wd.status
         wd.printLogger;
         res.printError('Invalid waste data');
         return
@@ -88,14 +88,14 @@ function res = WasteAnalysis(data,varargin)
 
     % Read exergy values
 	ex=data.getExergyData(param.State);
-	if ~ex.isValid
+	if ~ex.status
         ex.printLogger;
         res.printError('Invalid exergy values. See error log');
         return
 	end
 	% Compute the Model FPR
     mfp=cExergyCost(ex,wd);
-    if ~isValid(mfp)
+    if ~mfp.status
         mfp.printLogger;
         res.printError('Invalid model FPR. See error log');
     end
@@ -110,7 +110,7 @@ function res = WasteAnalysis(data,varargin)
 			    param.ResourceSample=data.SampleNames{1};
             end
 		    rsd=data.getResourceData(param.ResourceSample);
-            if ~rsd.isValid
+            if ~rsd
 			    rsd.printLogger;
 			    res.printError('Invalid resource data. See Error Log');
 			    return
@@ -123,13 +123,13 @@ function res = WasteAnalysis(data,varargin)
         ra=cWasteAnalysis(mfp,false,param.ActiveWaste); 
     end
     % Execute recycling analysis
-    if isValid(ra)
+    if ra.status
         res=ra.getResultInfo(data.FormatData,param);
     else
         ra.printLogger;
         res.printError('Invalid Recycling Analysis. See Error Log');
     end
-    if ~isValid(res)
+    if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');
 		return

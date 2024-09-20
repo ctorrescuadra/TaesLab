@@ -126,7 +126,7 @@ classdef cWasteData < cMessageLogger
 				end
 			end
 			% Create the object
-			if obj.isValid
+			if obj.status
 				obj.NrOfWastes=ps.NrOfWastes;
 				obj.Names={wd.flow};
 				obj.Flows=ps.Waste.flows;
@@ -153,7 +153,7 @@ classdef cWasteData < cMessageLogger
 				res=obj.Names;
                 return
 			end
-			if ~cType.isIndex(idx,1:obj.NrOfWastes)
+			if ~isIndex(idx,1:obj.NrOfWastes)
 				return
 			end
 			if isscalar(idx)
@@ -322,7 +322,7 @@ classdef cWasteData < cMessageLogger
 			res=cType.EMPTY;
 			if ischar(arg)
 				res=obj.getWasteIndex(arg);
-			elseif cType.isIndex(arg,1:obj.NrOfObjects)
+			elseif isIndex(arg,1:obj.NrOfObjects)
 				res=arg;
 			end
 		end

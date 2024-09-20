@@ -72,7 +72,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
     param=p.Results;
     % Read exergy
 	ex=data.getExergyData(param.State);
-	if ~isValid(ex)
+	if ~ex.status
         ex.printLogger;
 		res.printError('Invalid exergy values. See error log');
         return
@@ -83,7 +83,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
     else
         fpm=cExergyCost(ex);
     end
-    if ~fpm.isValid
+    if ~fpm.status
         fpm.printLogger;
 		res.printError('Invalid Thermoeconomic Analysis. See error log')
         return
@@ -98,7 +98,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
         end
 		rd=data.getResourceData(param.ResourceSample);
 		rsc=getResourceCost(rd,fpm);
-        if ~rsc.isValid
+        if ~rsc.staus
 			rsc.printLogger;
 			res.printError('Invalid resource cost values. See Error Log');
 			return
@@ -106,7 +106,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
         param.ResourcesCost=rsc;
     end
     res=fpm.getResultInfo(data.FormatData,param);
-    if ~isValid(res)
+    if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');
 		return

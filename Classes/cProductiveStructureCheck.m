@@ -40,7 +40,7 @@ classdef cProductiveStructureCheck < cResultId
         %   dm - cModelData object
         	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
 			% Check/validate file content
-            if ~checkObject(dm,'cModelData')
+            if ~isObject(dm,'cModelData')
 				obj.messageLog(cType.ERROR,'Invalid data model');
 				return
             end
@@ -72,7 +72,7 @@ classdef cProductiveStructureCheck < cResultId
             for i=1:obj.NrOfFlows
                 obj.createFlow(i,fdata(i));
             end
-            if ~isValid(obj)
+            if ~obj.status
                 return
             end
             obj.fDict=cDictionary({fdata.key});
@@ -86,7 +86,7 @@ classdef cProductiveStructureCheck < cResultId
             for i=1:obj.NrOfProcesses
                 obj.createProcess(i,pdata(i));
             end
-            if ~isValid(obj)
+            if ~obj.status
                 return
             end
 			obj.pDict=cDictionary({pdata.key});
@@ -101,7 +101,7 @@ classdef cProductiveStructureCheck < cResultId
   				obj.createProcessStreams(i,cType.Stream.FUEL);
 				obj.createProcessStreams(i,cType.Stream.PRODUCT);
             end
-            if ~isValid(obj)
+            if ~obj.status
                 return
             end
             % Create enviroment elements
@@ -112,7 +112,7 @@ classdef cProductiveStructureCheck < cResultId
 				return
             end
             % Convert properties to structures
-			if isValid(obj)
+			if obj.status
 			    obj.Flows=cell2mat(obj.cflw);
 			    obj.Streams=cell2mat(obj.cstr);
 			    obj.Processes=cell2mat(obj.cprc);            
@@ -222,7 +222,7 @@ classdef cProductiveStructureCheck < cResultId
                 tmp(i)=ns;
 				key=sprintf('%s%d',scode,order);
                 [finp,fout]=obj.getStreamFlows(ns,expr,fp);
-                if isValid(obj)
+                if obj.status
 				    obj.cstr{ns}=struct('id',ns,'key',key,'definition',expr,...
 				    'type',stype,'typeId',fp,'process',id,'InputFlows',finp,'OutputFlows',fout);
                 else
@@ -405,7 +405,7 @@ classdef cProductiveStructureCheck < cResultId
 					G(idx,jdx)=true;
 				end
 			end
-			if ~obj.isValid
+			if ~obj.status
 				return
 			end
             % Stream Process connections

@@ -49,7 +49,7 @@ classdef (Abstract) cTable < cMessageLogger
         function res=get.Values(obj)
         % get the table Values
             res=cType.EMPTY_CELL;
-            if obj.isValid
+            if obj.status
                 res=[obj.ColNames;[obj.RowNames',obj.Data]];
             end
         end 
@@ -248,7 +248,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   log - cMessageLogger object with status and error messages
         %
             log=cMessageLogger();
-            if (nargin~=2) || ~isFilename(filename) || ~isValid(obj) 
+            if (nargin~=2) || ~obj.status || ~isFilename(filename)
                 log.messageLog(cType.ERROR,'Invalid input arguments');
                 return
             end
@@ -274,7 +274,7 @@ classdef (Abstract) cTable < cMessageLogger
                 otherwise
                         log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
             end
-            if isValid(log)
+            if log.status
                 log.messageLog(cType.INFO,'Table %s has been saved in file %s',obj.Name, filename);
             end
         end
@@ -337,7 +337,7 @@ classdef (Abstract) cTable < cMessageLogger
         % Save a table as HTML file
             log=cMessageLogger();
             html=cBuildHTML(obj);
-            if isValid(html)
+            if html.status
                 log=html.saveTable(filename);
             else
                 log.addLogger(html);
@@ -348,7 +348,7 @@ classdef (Abstract) cTable < cMessageLogger
         % exportLaTeX generates the LaTex table code file of cTable object
             log=cMessageLogger();
             ltx=cBuildLaTeX(obj);
-            if isValid(ltx)
+            if ltx.status
                 log=ltx.saveTable(filename);
             else
                 log.addLogger(ltx);
@@ -393,7 +393,7 @@ classdef (Abstract) cTable < cMessageLogger
         function showTableGUI(obj)
         % View the values of the table (tbl) in a uitable graphic object
             vt=cViewTable(obj);
-            if isValid(vt)
+            if vt.status
                 vt.showTable
             else
                 vt.printError('Invalid uitable %s',obj.name);
@@ -403,7 +403,7 @@ classdef (Abstract) cTable < cMessageLogger
         function showTableHTML(obj)
         % View a table in the web browser
             vh=cBuildHTML(obj);
-            if isValid(vh)
+            if vh.status
                 vh.showTable
             else
                 printLogger(vh);

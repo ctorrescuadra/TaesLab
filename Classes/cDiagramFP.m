@@ -41,7 +41,8 @@ classdef (Sealed) cDiagramFP < cResultId
             res=fmt.getDiagramFP(obj);
         end
     end
-    methods (Static,Access=private)
+
+    methods(Static)
         function res=adjacencyTable(mFP,nodes)
         % Get a struct with the Adjacency Table FP
         % Syntax:

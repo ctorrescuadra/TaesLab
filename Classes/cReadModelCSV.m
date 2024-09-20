@@ -25,7 +25,7 @@ classdef cReadModelCSV < cReadModelTable
                 filename=strcat(folder,cType.getPathDelimiter,fname);
                 if exist(filename,'file')
                     tbl=cReadModelCSV.import(filename);
-                    if tbl.isValid
+                    if tbl.status
                         tbl.setProperties(sname,cType.TableDataDescription{i})
                         tables.(sname)=tbl;
                     else
@@ -45,7 +45,7 @@ classdef cReadModelCSV < cReadModelTable
                 filename=strcat(folder,filesep,fname);
                 if exist(filename,'file')
                     tbl=cReadModelCSV.import(filename);
-                    if tbl.isValid
+                    if tbl.status
                         tbl.setProperties(sname,cType.TableDataDescription{i})
                         tables.(sname)=tbl;
                     else

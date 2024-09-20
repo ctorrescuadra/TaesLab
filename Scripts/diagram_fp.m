@@ -10,7 +10,7 @@
 % Select data model
 options=struct('Console','N','Save','Y');
 data=selectDataModel();
-if ~data.isValid
+if ~data.status
     data.printLogger;
 	data.printError('Invalid data model. See error log');
 	return
@@ -22,7 +22,7 @@ if data.NrOfStates>1
 end
 % Get TableFP
 dfp=DiagramFP(data,param);
-if dfp.isValid
+if dfp.status
 	outputResults(dfp,options);
 	dfp.printInfo('Results (dfp) available in Workspace');
 else

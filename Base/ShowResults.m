@@ -88,7 +88,7 @@ function res=ShowResults(arg,varargin)
     else
     % If table is select work at table level
         tbl=getTable(arg,param.Table);
-        if ~isValid(tbl)
+        if ~tbl.status
             printLogger(tbl);
             return
         end

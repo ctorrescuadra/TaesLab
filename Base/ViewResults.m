@@ -236,7 +236,7 @@ classdef ViewResults < matlab.apps.AppBase
         % Show table in table panel
         function ViewTable(app,tbl)
             vh=cBuildHTML(tbl);
-            if isValid(vh)
+            if vh.status
                 app.Table.HTMLSource=vh.getMarkupHTML;
             else
                 printLogger(vh);

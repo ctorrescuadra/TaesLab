@@ -8,7 +8,6 @@ classdef  cTaesLab < handle
     %     true | false
     %
     % cTaesLab methods:
-    %  isValid      - Check is the object is valid
     %  getObjectId  - Get the object id
     % 
     properties(Access=protected)
@@ -31,30 +30,18 @@ classdef  cTaesLab < handle
             end
         end
 
-        function test=isValid(obj)
-        % Check if a cTaesLab object is Valid
-        % Syntax:
-        %	test = isValid(obj)
-        %
-            try
-                test = isa(obj,'cTaesLab') && obj.status;
-            catch
-                test=false;
-            end
-        end
-
         function res = getObjectId(obj)
         % Get the object identifier
             res=obj.objectId;
         end
 
         function res=eq(obj1,obj2)
-        % Check if two class object are equal. Overload eq operator
+        % Overload eq operator. Check if two class object are equal. 
             res=(obj1.objectId==obj2.objectId);
         end
         
         function res=ne(obj1,obj2)
-        % Check if two class objects are different. Overload ne operator
+        % Overload ne operator. Check if two class objects are different. 
             res=(obj1.objectId~=obj2.objectId);
 		end
     end

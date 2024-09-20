@@ -38,7 +38,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                 wsht=Sheets{i};
                 if check(i)
                     tbl=cReadModelXLS.importSheet(xls,wsht);
-                    if tbl.isValid
+                    if tbl.status
                         tbl.setProperties(wsht,cType.TableDataDescription{i})
                         tables.(wsht)=tbl;
                     else
@@ -56,7 +56,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                 wsht=Sheets{i};
                 if check(i)
                     tbl=cReadModelXLS.importSheet(xls,wsht);
-                    if tbl.isValid
+                    if tbl.status
                         tbl.setProperties(wsht,cType.TableDataDescription{i})
                         tables.(wsht)=tbl;
                     else

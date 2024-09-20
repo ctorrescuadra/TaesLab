@@ -335,7 +335,8 @@ classdef (Sealed) cGraphResults < cMessageLogger
             mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
             obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
-            data=cDiagramFP.adjacencyTable(mFP,tbl.RowNames);
+            val=cDiagramFP.adjacencyTable(mFP,tbl.RowNames);
+            data=struct2cell(val)';
 			source=data(:,1); target=data(:,2);
 			values=cell2mat(data(:,3));
 			obj.xValues=digraph(source,target,values,'omitselfloops');

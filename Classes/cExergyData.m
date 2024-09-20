@@ -62,7 +62,7 @@ classdef cExergyData < cMessageLogger
 					B(id)=values(i).value;
                 end
             end
-			if ~obj.isValid
+			if ~obj.status
 				return
 			end
 			% Check exergy values and compute exergy of processes and streams

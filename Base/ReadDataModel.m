@@ -59,14 +59,14 @@ function data=ReadDataModel(filename,varargin)
     param=p.Results;
     % Read data Model
     data=readModel(filename);
-    if param.Debug || ~isValid(data)
+    if param.Debug || ~data.status
         printLogger(data);
     end
-    if param.Show && isValid(data)
+    if param.Show && data.status
         printResults(data);
     end
     % Optional copy
-    if ~isempty(param.SaveAs) && isValid(data)
+    if ~isempty(param.SaveAs) && data.status
         SaveDataModel(data,param.SaveAs);
     end
 

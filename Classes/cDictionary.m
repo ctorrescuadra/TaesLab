@@ -109,7 +109,7 @@ classdef cDictionary < cMessageLogger
 		%   idx - Index to check
 		% Output Argument:
 		%   res - true | false
-			res=cType.isIndex(idx,1:length(obj));
+			res=isIndex(idx,1:length(obj));
 		end
 
         function res=size(obj)

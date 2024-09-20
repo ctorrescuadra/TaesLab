@@ -62,7 +62,7 @@ classdef cResourceData < cMessageLogger
 					obj.messageLog(cType.ERROR,'Resource flow key %s is missing',se(i).key);
 				end
 			end
-            if ~obj.isValid
+            if ~obj.status
                 return
             end
 		    % Read processes costs	

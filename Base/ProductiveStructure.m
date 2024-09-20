@@ -48,14 +48,14 @@ function res=ProductiveStructure(data,varargin)
     param=p.Results;
 	% Check data model
     ps=data.ProductiveStructure;
-    if ps.isValid
+    if ps.status
         res=getResultInfo(ps,data.FormatData);
     else
         data.printLogger;
         res.printError('Invalid productive structure. See error log');
     end     
 	% Get Productive Structure info
-    if ~isValid(res)
+    if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');
 		return

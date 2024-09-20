@@ -49,13 +49,13 @@ function res=ProductiveDiagram(data,varargin)
     param=p.Results;
 	% Get Productive Diagram info
 	pd=cProductiveDiagram(data.ProductiveStructure);
-    if isValid(pd)
+    if pd.status
         res=pd.getResultInfo(data.FormatData);
     else
         data.printLogger;
         res.printError('Invalid productive structure. See error log');
     end 
-    if ~isValid(res)
+    if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');
 		return

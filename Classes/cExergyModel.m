@@ -123,7 +123,7 @@ classdef cExergyModel < cResultId
 		function res=get.FuelExergy(obj)
 		% get the fuel exergy of processes
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
 				res=obj.ProcessesExergy.vF(1:end-1);
 			end
 		end
@@ -131,7 +131,7 @@ classdef cExergyModel < cResultId
 		function res=get.ProductExergy(obj)
 		% get the product exergy of processes
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
 				res=obj.ProcessesExergy.vP(1:end-1);
 			end
 		end
@@ -139,7 +139,7 @@ classdef cExergyModel < cResultId
 		function res=get.Irreversibility(obj)
 		% get the irreversibility of prcesses
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
 				res=obj.ProcessesExergy.vI(1:end-1);
 			end
 		end
@@ -147,14 +147,14 @@ classdef cExergyModel < cResultId
 		function res=get.UnitConsumption(obj)
 		% get the unit consumption of the processes
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
 				res=obj.ProcessesExergy.vK(1:end-1);
 			end
         end
 
         function res=get.Efficiency(obj)
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
             	res=vDivide(obj.ProductExergy,obj.FuelExergy);
 			end
         end
@@ -162,7 +162,7 @@ classdef cExergyModel < cResultId
 		function res=get.TotalResources(obj)
 		% Get total exergy of resources
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
 				res=obj.ProcessesExergy.vF(end);
 			end
 		end
@@ -170,7 +170,7 @@ classdef cExergyModel < cResultId
 		function res=get.FinalProducts(obj)
 		% Get total exergy of final products
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
 				res=obj.ProcessesExergy.vP(end);
 			end
 		end
@@ -178,7 +178,7 @@ classdef cExergyModel < cResultId
 		function res=get.TotalUnitConsumption(obj)
 		% Get total unit consumption
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
 				res=obj.ProcessesExergy.vK(end);
 			end
 		end
@@ -186,7 +186,7 @@ classdef cExergyModel < cResultId
 		function res=get.TotalIrreversibility(obj)
 		% Get the total irreversibility of the system
 			res=cType.EMPTY;
-			if obj.isValid
+			if obj.status
 				res=obj.ProcessesExergy.vI(end);
 			end
         end

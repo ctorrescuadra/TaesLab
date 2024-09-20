@@ -80,12 +80,12 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     end
     % Read reference and operation  exergy values
     rex0=data.getExergyData(param.ReferenceState);
-    if ~isValid(rex0)
+    if ~rex0.status
         res.printError('Invalid exergy values. See error log');
         return
     end
     rex1=data.getExergyData(param.State);
-    if ~isValid(rex1)
+    if ~rex1.status
         res.printError('Invalid exergy values. See error log');
         return
     end
@@ -102,13 +102,13 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     method=cType.getDiagnosisMethod(param.DiagnosisMethod);
     dgn=cDiagnosis(fp0,fp1,method);
     % Get diagnosis results
-    if dgn.isValid
+    if dgn.status
         res=dgn.getResultInfo(data.FormatData);
     else
         dgn.printLogger;
         res.printError('Invalid Thermoeconomic Diagnosis. See error log');
     end
-    if ~isValid(res)
+    if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');
 		return

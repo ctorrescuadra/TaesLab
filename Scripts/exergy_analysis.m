@@ -10,7 +10,7 @@
 param=struct();
 options=struct('Console','Y','Save','N');
 data=selectDataModel();
-if ~data.isValid
+if ~data.status
   data.printLogger;
   data.printError('Invalid data model. See error log');
 	return
@@ -21,7 +21,7 @@ if data.NrOfStates>1
 end
 % Show results
 ea=ExergyAnalysis(data,param);
-if ea.isValid
+if ea.status
 	outputResults(ea,options);
 	ea.printInfo('Results (ea) available in Workspace');
 else

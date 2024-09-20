@@ -33,8 +33,8 @@ classdef cTableData < cTable
             obj.Data=data;
             obj.NrOfCols=length(obj.ColNames);
             obj.NrOfRows=length(obj.RowNames);
-            obj.status=obj.checkTableSize;
-            if ~obj.isValid
+ 
+            if ~obj.checkTableSize
                 obj.messageLog(cType.ERROR,'Invalid table size (%dx%d)',size(data));
             end
             obj.setColumnFormat;

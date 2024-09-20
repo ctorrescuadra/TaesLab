@@ -10,7 +10,7 @@
 options=struct('Console','Y','Save','N');
 param=struct();
 data=selectDataModel();
-if ~data.isValid
+if ~data.status
     data.printLogger;
 	data.printError('Invalid data model. See error log');
 	return
@@ -28,7 +28,7 @@ doptions=cType.DiagnosisOptions;
 [~,param.DiagnosisMethod]=optionChoice('Select Diagnosis Method:',doptions(2:end));
 % Solve and show results
 dgn=ThermoeconomicDiagnosis(data,param);
-if dgn.isValid
+if dgn.status
 	outputResults(dgn,options);
 	dgn.printInfo('Results (dgn) available in Workspace');
 else

@@ -70,9 +70,8 @@ classdef (Sealed) cTableMatrix < cTableResult
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
             obj.NrOfRows=length(rowNames);
-            obj.NrOfCols=length(colNames); 
-            obj.status=obj.checkTableSize;
-            if obj.isValid
+            obj.NrOfCols=length(colNames);
+            if obj.checkTableSize
                 obj.setProperties(props);
             else
                 obj.messageLog(cType.ERROR,'Invalid table size (%dx%d)',size(data));

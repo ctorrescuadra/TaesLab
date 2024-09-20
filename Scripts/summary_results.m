@@ -10,7 +10,7 @@
 options=struct('Console','Y','Save','N');
 param=struct();
 data=selectDataModel();
-if ~data.isValid
+if ~data.status
 	data.printLogger;
 	data.printError('Invalid data model. See error log');
 	return
@@ -22,7 +22,7 @@ else
 end
 % Show results
 sr=SummaryResults(data,param);
-if sr.isValid
+if sr.status
 	outputResults(sr,options);
 	sr.printInfo('Results (sr) available in Workspace');
 else

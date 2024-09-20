@@ -8,7 +8,7 @@
 % Select data model file
 options=struct('Console','Y','Save','N');
 data=selectDataModel();
-if ~data.isValid
+if ~data.status
 	data.printLogger;
 	data.printError('Invalid data model. See error log');
 	return
@@ -29,7 +29,7 @@ if data.isResourceCost
 end
 % Solve and show results
 ta=ThermoeconomicAnalysis(data,param);
-if ta.isValid
+if ta.status
 	outputResults(ta,options);
 	ta.printInfo('Results (ta) available in Workspace');
 else

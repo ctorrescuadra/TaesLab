@@ -55,7 +55,7 @@ function ShowGraph(arg,varargin)
                return
             end
             res=arg.getResultInfo(param.Graph);
-            if ~isValid(res)
+            if ~res.status
                 res.printLogger;
                 return
             end
@@ -65,7 +65,7 @@ function ShowGraph(arg,varargin)
     end
     % Get the table values
 	tbl=getTable(res,param.Graph);
-	if ~isValid(tbl) || ~tbl.isGraph
+	if ~tbl.status || ~tbl.isGraph
 		log.printError('Table %s is NOT valid',param.Graph);
 		return
 	end

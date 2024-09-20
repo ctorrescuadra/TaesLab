@@ -47,7 +47,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 obj.messageLog(cType.ERROR,'Invalid number of parameters');
                 return
             end
-            if ~checkObject(fpm,'cExergyCost')
+            if ~isObject(fpm,'cExergyCost')
                 obj.addLogger(fpm);
                 obj.messageLog(cType.ERROR,'Invalid FPR model');
                 return

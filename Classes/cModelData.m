@@ -56,7 +56,7 @@ classdef (Sealed) cModelData < cMessageLogger
         function res=get.ProductiveStructure(obj)
         % get ProductiveStructure data
             res=cType.EMPTY;
-            if obj.isValid
+            if obj.status
                 res=obj.dm.ProductiveStructure;
             end
         end
@@ -64,7 +64,7 @@ classdef (Sealed) cModelData < cMessageLogger
         function res=get.ExergyStates(obj)
         % get ExergyStates data
             res=cType.EMPTY;
-            if obj.isValid
+            if obj.status
                 res=obj.dm.ExergyStates;
             end
         end
@@ -76,7 +76,7 @@ classdef (Sealed) cModelData < cMessageLogger
         function res=get.WasteDefinition(obj)
         % get WasteDefinition data
             res=cType.EMPTY;
-            if obj.isValid && obj.isWaste
+            if obj.status && obj.isWaste
                 res=obj.dm.WasteDefinition;
             end
         end
@@ -84,7 +84,7 @@ classdef (Sealed) cModelData < cMessageLogger
         function res=get.ResourcesCost(obj)
         % get ResourcesCost data
             res=cType.EMPTY;
-            if obj.isValid && obj.isResourceCost
+            if obj.status && obj.isResourceCost
                 res=obj.dm.ResourcesCost;
             end
         end    
@@ -97,7 +97,7 @@ classdef (Sealed) cModelData < cMessageLogger
         function res=get.Format(obj)
         % get Format data
             res=cType.EMPTY;
-            if obj.isValid
+            if obj.status
                 res=obj.dm.Format;
             end
         end

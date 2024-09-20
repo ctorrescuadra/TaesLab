@@ -60,7 +60,7 @@ classdef cResultSet < cResultId
         %   res - cell array with the table names
             res=cType.EMPTY_CELL;
             tmp=getResultInfo(obj);
-            if isValid(tmp)
+            if tmp.status
                 res=fieldnames(tmp.Tables);
             end
         end
@@ -113,7 +113,7 @@ classdef cResultSet < cResultId
                 return
             end
             tbl=obj.getTable(tname);
-            if isValid(tbl)
+            if tbl.status
                 log=saveTable(tbl,filename);
             else
                 log.messageLog(cType.ERROR,'Table %s does NOT exists',tname);
@@ -142,7 +142,7 @@ classdef cResultSet < cResultId
                 return
             end
             tbl=obj.getTable(tname);
-            if isValid(tbl)
+            if tbl.status
                 res=exportTable(tbl,varargin{:});
             else
                 res.messageLog(cType.ERROR,'Table %s does NOT exists',tname);
@@ -175,7 +175,7 @@ classdef cResultSet < cResultId
                 return
             end
             tbl=obj.getTable(name);
-            if isValid(tbl)
+            if tbl.status
                 showTable(tbl,varargin{:});
             else
                     tbl.printLogger;
@@ -196,7 +196,7 @@ classdef cResultSet < cResultId
                 graph=res.Info.DefaultGraph;
             end
             tbl=getTable(res,graph);
-            if ~isValid(tbl)
+            if ~tbl.status
                 obj.printError('Invalid graph table: %s',graph);
                 return
             end
@@ -223,7 +223,7 @@ classdef cResultSet < cResultId
             end
             % Show Graph
             gr=cGraphResults(tbl,option);
-            if isValid(gr)
+            if gr.status
                 gr.showGraph;
             else
                 printLogger(gr);
@@ -241,7 +241,7 @@ classdef cResultSet < cResultId
         %      cType.TableView.HTML
         %   
             tbl=getTableIndex(obj);
-            if isValid(tbl)
+            if tbl.status
                 tbl.showTable(varargin{:});
             else
                 obj.printWarning('Invalid Table index');
@@ -290,7 +290,7 @@ classdef cResultSet < cResultId
                 log.messageLog(cType.ERROR,'Invalid input arguments');
                 return
             end
-            if ~isValid(obj)
+            if ~obj.status
                 log.messageLog(cType.ERROR,'Invalid cResultInfo object')
                 return
             end
@@ -312,7 +312,7 @@ classdef cResultSet < cResultId
                     log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
                     return
             end
-            if isValid(log)
+            if log.status
                 log.messageLog(cType.INFO,'File %s has been saved',filename);
             end
         end
@@ -354,7 +354,7 @@ classdef cResultSet < cResultId
             % Save Index file
             fname=strcat(folder,filesep,'index',ext);
             slog=exportCSV(tidx.Values,fname);
-            if ~slog.isValid
+            if ~slog.status
                 log.addLogger(slog);
                 log.messageLog(cType.ERROR,'Index file is NOT saved');
             end
@@ -363,7 +363,7 @@ classdef cResultSet < cResultId
                 tbl=tidx.Content{i};
                 fname=strcat(folder,filesep,tbl.Name,ext);
                 slog=exportCSV(tbl.Values,fname);
-                if ~slog.isValid
+                if ~slog.status
                     log.addLogger(slog);
                     log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
                 end
@@ -471,7 +471,7 @@ classdef cResultSet < cResultId
                 fname=strcat(folder,filesep,tbl.Name,ext);
                 html=cBuildHTML(tbl);
                 slog=html.saveTable(fname);
-                if ~slog.isValid
+                if ~slog.status
                     log.addLogger(slog);
                     log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
                 end

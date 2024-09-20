@@ -29,7 +29,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   data - cModelData object
         %  
             obj=obj@cFormatData(data);
-            if ~isValid(obj)
+            if ~obj.status
                 obj.messageLog(cType.ERROR,'Invalid Format Data');
                 return
             end

@@ -29,14 +29,14 @@ classdef (Abstract) cReadModelTable < cReadModel
             % Productive Structure Tables
             tmp.name=obj.ModelName;
             ftbl=tm.Flows;
-            if isValid(ftbl)
+            if ftbl.status
                 tmp.flows=ftbl.getStructData;
             else
                 obj.messageLog(cType.ERROR,'Table Flows NOT found');
                 return
             end
             ptbl=tm.Processes;
-            if isValid(ptbl)
+            if ptbl.status
                 tmp.processes=ptbl.getStructData;
             else
                 obj.messageLog(cType.ERROR,'Table Processes NOT found');
@@ -45,7 +45,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             sd.ProductiveStructure=tmp;
             % Get Format definition
             tbl=tm.Format;
-            if isValid(tbl)  
+            if tbl.status  
                 if ~tbl.isNumericColumn(1:2)
                     obj.messageLog(cType.ERROR,'Invalid format table');
                 end
@@ -56,7 +56,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             end
             % Get Exergy states data
             tbl=tm.Exergy;
-            if ~isValid(tbl)
+            if ~tbl.status
                 obj.messageLog(cType.ERROR,'Table Exergy NOT found');
                 return
             end
@@ -162,7 +162,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             isResourceCost=isfield(tm,'ResourcesCost');
             if isResourceCost
                 tbl=tm.ResourcesCost;
-                if isValid(tbl)
+                if tbl.status
                     NrOfSamples=tbl.NrOfCols-2;
                     % Check ResourcesCost Table
                     if (NrOfSamples<1) || ~tbl.isNumericColumn(2:tbl.NrOfCols-1)

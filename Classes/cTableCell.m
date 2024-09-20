@@ -52,8 +52,7 @@ classdef (Sealed) cTableCell < cTableResult
             obj.ColNames=colNames;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames);
-            obj.status=obj.checkTableSize;
-            if obj.isValid
+            if obj.checkTableSize
                 obj.setProperties(props)
             else
                 obj.messageLog(cType.ERROR,'Invalid table size (%dx%d)',size(data));

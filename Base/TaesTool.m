@@ -98,7 +98,7 @@ classdef (Sealed) TaesTool < handle
 			% Read and Check Data Model
 			data=readModel(file);
             % Activate widgets
-			if isValid(data) 
+			if data.status 
                 if app.debug
                     printLogger(data);
                 end
@@ -255,7 +255,7 @@ classdef (Sealed) TaesTool < handle
                 res=app.currentNode;
 				slog=saveResults(res,file);
                 printLogger(slog);
-                if isValid(slog)
+                if slog.status
 				    app.resultFile=file;
 				    set(app.ofile_text,'string',file);
 				    logtext=sprintf(' INFO: %s saved in file %s',res.ResultName, file); 
@@ -278,7 +278,7 @@ classdef (Sealed) TaesTool < handle
                     cd(path);
                     slog=saveTable(tbl,file);
                     printLogger(slog);
-                    if isValid(slog)
+                    if slog.status
                         logtext=sprintf(' INFO: Table %s saved in file %s',tbl.Name, file); 
                     else
                         logtext=sprintf(' ERROR: File %s could NOT be saved', file);     
@@ -300,7 +300,7 @@ classdef (Sealed) TaesTool < handle
             res=getResultInfo(app.model,idx);
             app.currentTable=cType.EMPTY;
             set(app.mn_tsave,'enable','off')
-            if ~isempty(res) && res.isValid
+            if res.status
                 app.ViewIndexTable(res);
 			else
 				logtext=sprintf('ERROR: Result %s is not available',cType.ResultVar{idx});
@@ -314,7 +314,7 @@ classdef (Sealed) TaesTool < handle
             set(app.log,'string',cType.EMPTY_CHAR);
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
-            if isValid(res)
+            if res.status
                 varname=cType.ResultVar{idx};
                 assignin('base', varname, res);
                 logtext=sprintf(' INFO: Results store in %s',varname);

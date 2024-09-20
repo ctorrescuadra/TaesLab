@@ -70,7 +70,7 @@ function res = SummaryResults(data,varargin)
     else
         res.printError('Summary Results requires more than one state');
     end
-    if ~isValid(res)
+    if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');
 		return

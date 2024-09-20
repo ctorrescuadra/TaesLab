@@ -80,7 +80,7 @@ classdef cDataModel < cResultSet
             % Check and get Productive Structure
             ps=cProductiveStructure(dm);
             status=ps.status;
-            if isValid(ps)
+            if status
                 obj.ProductiveStructure=ps;
 				obj.messageLog(cType.INFO,'Productive Structure is valid');
             else
@@ -92,7 +92,7 @@ classdef cDataModel < cResultSet
             rfmt=cResultTableBuilder(ps,dm.Format);
             obj.FormatData=rfmt;
             status = rfmt.status & status;
-            if isValid(rfmt)
+            if rfmt.status
 				obj.messageLog(cType.INFO,'Format Definition is valid');
             else
                 obj.addLogger(rfmt);
@@ -102,7 +102,7 @@ classdef cDataModel < cResultSet
             % Check Exergy
             list=dm.getStateNames;
             tmp=cDataset(list);
-            if isValid(tmp)
+            if tmp.status
                 obj.StateNames=list;
                 obj.ExergyData=tmp;
             else
@@ -113,7 +113,7 @@ classdef cDataModel < cResultSet
                 exs=dm.getExergyState(i);
                 rex=cExergyData(ps,exs);
                 status = rex.status & status;
-                if isValid(rex)
+                if rex.status
 					obj.messageLog(cType.INFO,'Exergy values [%s] are valid',obj.StateNames{i});
 				else
 					obj.addLogger(rex)
@@ -132,7 +132,7 @@ classdef cDataModel < cResultSet
                 wd=cWasteData(ps,data);
                 status=wd.status & status;
                 obj.addLogger(wd);
-                if ~isValid(wd)
+                if ~wd.status
 					obj.messageLog(cType.ERROR,'Waste Definition is NOT valid. See error log');
                 else
 					obj.messageLog(cType.INFO,'Waste Definition is valid');	
@@ -146,7 +146,7 @@ classdef cDataModel < cResultSet
             if obj.isResourceCost
                 list=dm.getSampleNames;
                 tmp=cDataset(list);
-                if isValid(tmp)
+                if tmp.status
                     obj.SampleNames=list;
                     obj.ResourceData=tmp;
                 else
@@ -157,7 +157,7 @@ classdef cDataModel < cResultSet
                     dmr=dm.getResourceSample(i);
                     rsc=cResourceData(ps,dmr);
                     status=rsc.status & status;
-                    if isValid(rsc)
+                    if rsc.status
 						obj.messageLog(cType.INFO,'Resources Cost sample [%s] is valid',obj.SampleNames{i});
                         obj.ResourceData.setValues(i,rsc);
                     else
@@ -176,19 +176,18 @@ classdef cDataModel < cResultSet
             obj.ModelName=dm.ModelName;
             obj.State='DATA_MODEL';
             obj.DefaultGraph=cType.EMPTY_CHAR;
-            % Check Data Model
-            obj.status=status;
             % Get the Model Info
-            if obj.isValid
+            if status
                 obj.ModelData=dm;
                 obj.modelInfo=getTableModel(obj);
             end
+            obj.status=status;
         end
 
     	function res=get.NrOfFlows(obj)
         % Get the number of flows of the system
             res=0;
-            if obj.isValid
+            if obj.status
                 res=obj.ProductiveStructure.NrOfFlows;
             end
         end
@@ -196,7 +195,7 @@ classdef cDataModel < cResultSet
         function res=get.NrOfProcesses(obj)
         % Get the number of processes of the system
             res=0;
-            if obj.isValid
+            if obj.status
                     res=obj.ProductiveStructure.NrOfProcesses;
             end
         end
@@ -204,14 +203,14 @@ classdef cDataModel < cResultSet
         function res=get.NrOfWastes(obj)
         % Get the number of wastes of the system
             res=0;
-            if obj.isValid
+            if obj.status
                 res=obj.ProductiveStructure.NrOfWastes;
             end
         end
         function res=get.NrOfStates(obj)
         % get the number of states
             res=0;
-            if obj.isValid
+            if obj.status
                 res=numel(obj.StateNames);
             end
         end
@@ -219,7 +218,7 @@ classdef cDataModel < cResultSet
         function res=get.NrOfSamples(obj)
         % Get the number of resources samples
             res=0;
-            if obj.isValid
+            if obj.status
                 res=numel(obj.SampleNames);
             end
         end
@@ -249,7 +248,7 @@ classdef cDataModel < cResultSet
         %   res = cExergyData object
         %
             res=obj.ExergyData.getValues(state);
-            if ~isValid(res)
+            if ~res.status
                 res.printError('Invalid state %s',state);
             end
         end
@@ -287,7 +286,7 @@ classdef cDataModel < cResultSet
             exs.exergy=cell2struct(tmp,fields,1);
             % Check and create a cExergyData object
             res=cExergyData(obj.ProductiveStructure,exs);
-            if isValid(res)
+            if res.status
                 obj.ExergyData.setValues(idx,res);
             else
                 log.printError('Invalid exergy data');
@@ -306,7 +305,7 @@ classdef cDataModel < cResultSet
         %   res - cResourceData object
         %
             res=obj.ResourceData.getValues(sample);
-            if ~isValid(res)
+            if ~res.status
                 res.printError('Invalid state %s',sample);
             end
         end
@@ -401,7 +400,7 @@ classdef cDataModel < cResultSet
             if (nargin<2) || ~isFilename(filename)
                 log.messageLog(cType.ERROR,'Invalid arguments');
             end
-			if ~isValid(obj)
+			if ~obj.status
 				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
                 return
 			end
@@ -428,7 +427,7 @@ classdef cDataModel < cResultSet
 				otherwise
 					log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
             end
-            if isValid(log)
+            if log.status
 				log.messageLog(cType.INFO,'File %s has been saved',filename);
             end
         end

@@ -202,7 +202,7 @@ classdef cThermoeconomicModel < cResultSet
             obj.rstate=cDataset(data.StateNames);
             for i=1:data.NrOfStates
                 rex=data.getExergyData(i);
-                if ~rex.isValid
+                if ~rex.status
                     obj.addLogger(rex);
                     obj.messageLog(cType.ERROR,'Invalid exergy values. See error log');
                     return
@@ -212,7 +212,7 @@ classdef cThermoeconomicModel < cResultSet
                 else
                     cex=cExergyCost(rex);
                 end
-                obj.rstate.setValues(i,cex);
+                setValues(obj.rstate,i,cex);
             end
             % Set Operation and Reference State
             if obj.checkReferenceState(param.ReferenceState)
@@ -551,7 +551,7 @@ classdef cThermoeconomicModel < cResultSet
         % 
             if (nargin==1)
                 res=buildResultInfo(obj);
-            elseif cType.isIndex(arg,1:cType.MAX_RESULT_INFO)
+            elseif isIndex(arg,1:cType.MAX_RESULT_INFO)
                 res=getResults(obj,arg);
             elseif ischar(arg)
                 res=getResultTable(obj,arg);
@@ -724,7 +724,7 @@ classdef cThermoeconomicModel < cResultSet
             % Get the initial state of the table
             for i=1:cType.ResultId.SUMMARY_RESULTS
                 rid=obj.getResults(i);
-                if ~isempty(rid) && isValid(rid)
+                if isValid(rid)
                     list=rid.ListOfTables;
                     idx=cellfun(@(x) getTableId(obj.fmt,x),list);
                     atm(idx)=true;
@@ -768,7 +768,7 @@ classdef cThermoeconomicModel < cResultSet
                 tbl=res.getTableIndex;
             else
                 res=getResultTable(obj,name);
-                if isValid(res)
+                if res.status
                     tbl=getTable(res,name);
                 else
                     tbl.addLogger(res);
@@ -793,7 +793,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             tbl=getTable(obj,name);
-            if isValid(tbl)
+            if tbl.status
                 showTable(tbl,varargin{:});
             else
                 printLogger(tbl);
@@ -816,7 +816,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             res=obj.getResultTable(graph);
-            if isValid(res)
+            if res.status
                 showGraph(res,graph,varargin{:});
             else
                 printLogger(res);
@@ -897,7 +897,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end       
             msr=obj.getSummaryResults;
-            if isempty(msr) || ~isValid(msr)
+            if ~isValid(msr)
                 obj.printDebugInfo('Summary Results not available');
                 return
             end
@@ -1088,7 +1088,7 @@ classdef cThermoeconomicModel < cResultSet
 				return
             end
             log=setFlowResource(obj.rsd,c0);
-            if isValid(log)
+            if log.status
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryResults;
                 res=obj.rsc;
@@ -1113,7 +1113,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             log=setFlowResourceValue(obj.rsd,key,value);
-            if isValid(log)
+            if log.status
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryResults;
                 res=obj.rsc;
@@ -1138,7 +1138,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end          
             log=setProcessResource(obj.rsd,Z);
-            if isValid(log)
+            if log.status
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryResults;
                 res=obj.rsc;
@@ -1162,7 +1162,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             log=setProcessResourceValue(obj.rsd,key,value);
-            if isValid(log)
+            if log.status
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryResults;
                 res=obj.rsc;
@@ -1223,7 +1223,7 @@ classdef cThermoeconomicModel < cResultSet
             % Set exergy data for state
             data=obj.DataModel;
             rex=data.setExergyData(obj.State,values);
-            if ~isValid(rex)
+            if ~rex.status
                 printLogger(rex);
                 return
             end
@@ -1233,7 +1233,7 @@ classdef cThermoeconomicModel < cResultSet
             else
                 cex=cExergyCost(rex);
             end
-            if ~isValid(cex)
+            if ~cex.status
                 printLogger(cex);
                 return
             else
@@ -1271,7 +1271,7 @@ classdef cThermoeconomicModel < cResultSet
                 options.ResourcesCost=obj.rsc;
             end
             % Get cModelResults info
-            if obj.fp1.isValid
+            if isValid(obj.fp1)
                 res=getResultInfo(obj.fp1,obj.fmt,options);
                 obj.setResults(res);
                 obj.printDebugInfo('Compute Thermoeconomic Analysis for State: %s',obj.State);
@@ -1294,7 +1294,7 @@ classdef cThermoeconomicModel < cResultSet
             method=cType.getDiagnosisMethod(obj.DiagnosisMethod);
             sol=cDiagnosis(obj.fp0,obj.fp1,method);
             % get cModelResult object
-            if sol.isValid
+            if sol.status
                 res=sol.getResultInfo(obj.fmt);
                 obj.setResults(res);
                 obj.printDebugInfo('Compute Thermoeconomic Diagnosis for State: %s',obj.State);
@@ -1307,7 +1307,7 @@ classdef cThermoeconomicModel < cResultSet
 
         function res=getSummaryResults(obj)
         % Force to obtain summary results
-            res=cMessageLogger(cType.INVALID);
+            res=cType.EMPTY;
             if ~obj.isSummaryEnable
                 return
             end
@@ -1325,7 +1325,7 @@ classdef cThermoeconomicModel < cResultSet
             id=cType.ResultId.SUMMARY_RESULTS;
             if obj.Summary
                 sr=cModelSummary(obj);
-                if sr.isValid
+                if sr.status
                     res=sr.getResultInfo(obj.fmt);
                     obj.setResults(res);
                     obj.printDebugInfo('Compute Summary Results');
@@ -1355,7 +1355,7 @@ classdef cThermoeconomicModel < cResultSet
             else
                 ra=cWasteAnalysis(obj.fp1,false,obj.ActiveWaste);
             end
-            if isValid(ra)
+            if ra.status
                 param=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);
                 res=ra.getResultInfo(obj.fmt,param);
                 obj.setResults(res);
@@ -1373,7 +1373,7 @@ classdef cThermoeconomicModel < cResultSet
         %   Output:
         %       res - cResultInfo (DIAGRAM_FP)
             dfp=cDiagramFP(obj.fp1);
-            if isValid(dfp)
+            if dfp.status
                 res=dfp.getResultInfo(obj.fmt);
                 obj.setResults(res);
                 obj.printDebugInfo('DiagramFP active')
@@ -1388,7 +1388,7 @@ classdef cThermoeconomicModel < cResultSet
             res=ps.getResultInfo(obj.fmt);
             obj.setResults(res)
             pd=cProductiveDiagram(ps);
-            if isValid(pd)
+            if pd.status
                 res=pd.getResultInfo(obj.fmt);
                 obj.setResults(res);
                 obj.printDebugInfo('Productive Diagram active')
@@ -1574,7 +1574,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             tmp=obj.getResults(tinfo.resultId);
-            if isempty(tmp) || ~isValid(tmp)
+            if ~isValid(tmp)
                 res.messageLog(cType.ERROR,'Table %s is not available',table);
                 return
             end

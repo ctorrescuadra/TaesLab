@@ -51,20 +51,20 @@ function res=ExergyAnalysis(data,varargin)
 	param=p.Results;
 	% Read and check exergy values
 	ex=data.getExergyData(param.State);
-	if ~isValid(ex)
+	if ~ex.status
 		ex.printLogger;
 		res.printError('Exergy values are NOT correct. See error log');
 		return
 	end
 	pm=cExergyModel(ex);
 	% Set Results
-	if isValid(pm)
+	if pm.status
 		res=pm.getResultInfo(data.FormatData);
 	else
 		pm.printLogger;
 		res.printError('Invalid Process Model. See error log');
 	end
-	if ~isValid(res)
+	if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');
 		return

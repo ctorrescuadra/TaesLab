@@ -118,7 +118,7 @@ classdef cResultInfo < cResultSet
         % Syntax:
         %   obj.summaryDiagnosis
         %
-            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+            if obj.status && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
                 res=obj.getSummaryDiagnosis;
                 fprintf('%s\n%s\n\n',res.FuelImpact,res.MalfunctionCost);
             end
@@ -132,7 +132,7 @@ classdef cResultInfo < cResultSet
         %   res - Struct with diagnosis summary results
         %  
             res=cType.EMPTY;
-            if isValid(obj) && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
+            if obj.status && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
                 format=obj.Tables.dit.Format;
                 unit=obj.Tables.dit.Unit;
                 tfmt=['Fuel Impact:     ',format,' ',unit];

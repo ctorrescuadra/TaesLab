@@ -51,7 +51,7 @@ classdef cTablesDefinition < cMessageLogger
         function res=get.TablesDefinition(obj)
         % Get a struct with the tables properties
             res=struct();
-            if obj.isValid
+            if obj.status
                 res=struct('CellTables',obj.cfgTables,'MatrixTables',obj.cfgMatrices,...
                     'SummaryTables',obj.cfgSummary,'Format',obj.cfgTypes);
             end
@@ -178,7 +178,7 @@ classdef cTablesDefinition < cMessageLogger
             tCodes=fieldnames(cType.Tables);
             tNames=struct2cell(cType.Tables);
             td=cDictionary(tNames);
-            if ~isValid(td)
+            if ~td.status
                 obj.printError('Invalid tables dictionary');
                 return
             end

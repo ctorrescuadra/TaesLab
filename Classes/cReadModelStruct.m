@@ -11,7 +11,7 @@ classdef (Abstract) cReadModelStruct < cReadModel
         %   res - cModelData object
         %
 			res=cModelData(obj.ModelName,data);
-			if ~isValid(res)
+			if ~res.status
 				obj.addLogger(res);
 			end
 		end

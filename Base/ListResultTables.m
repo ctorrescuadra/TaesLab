@@ -76,7 +76,7 @@ function res=ListResultTables(varargin)
         ctd=cTablesDefinition;
         tbl=ctd.getTablesDirectory(param.Columns);
     end
-    if ~isValid(tbl)
+    if ~tbl.status
         printLogger(tbl);
         return
     end

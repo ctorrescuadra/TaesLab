@@ -185,7 +185,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
                 res=app.resultInfo;
                 descr=app.tableIndex.Description;
 				slog=saveResults(res,file);
-                if isValid(slog)
+                if log.status
 				    slog.printInfo('%s saved in file %s',descr, file);			    
                 else
                     slog.printError('Result file %s could NOT be saved', file);
@@ -202,7 +202,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
                 if ext % File has been selected
                     cd(path);
                     slog=saveTable(tbl,file);
-                    if isValid(slog)
+                    if log.status
                         slog.printInfo('%s saved in file %s', tbl.Name,file);			    
                     else
                         slog.printError('Table %s could NOT be saved', tbl.Name);

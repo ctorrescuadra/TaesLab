@@ -30,7 +30,7 @@ function res=readModel(filename)
             return
     end
     % Check if the model read is correct
-    if ~isValid(rdm)
+    if ~rdm.status
         res.addLogger(rdm);
         res.messageLog(cType.ERROR,'Data model file %s is NOT valid',filename);
         return
@@ -42,7 +42,7 @@ function res=readModel(filename)
         res=rdm;
     end
     % Check if data model is valid
-    if isValid(res)
+    if res.status
         res.messageLog(cType.INFO,'Data model %s is valid',res.ModelName);
     else
         res.messageLog(cType.ERROR,'Data model file %s is NOT valid',filename);

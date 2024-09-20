@@ -40,7 +40,7 @@ classdef (Sealed) cModelResults < cMessageLogger
         % Output:
         %   res - cResultInfo with ResultId equals to index
             res=cType.EMPTY;
-            if cType.isIndex(id,1:cType.MAX_RESULT_INFO)
+            if isIndex(id,1:cType.MAX_RESULT_INFO)
                 res=obj.results{id};
             end
         end
@@ -53,7 +53,7 @@ classdef (Sealed) cModelResults < cMessageLogger
         %   id - ResultId index to remove from the container
         % Output Arguments:
         %   res - previous cResultInfo stored
-            if ~cType.isIndex(id,1:cType.MAX_RESULT_INFO)
+            if ~isIndex(id,1:cType.MAX_RESULT_INFO)
                 return
             end
             res=obj.getResults(id);
@@ -72,7 +72,7 @@ classdef (Sealed) cModelResults < cMessageLogger
         % Input Arguments:
         %   res - cResultInfo to store
         %
-            if ~isResultInfo(res)
+            if ~isObject(res,'cResultInfo')
                 return
             end
             id=res.ResultId;
@@ -101,7 +101,7 @@ classdef (Sealed) cModelResults < cMessageLogger
         function res = checkAssign(obj1,obj2)
         % Check if the set function (obj1=obj2) should be execute
             % Check if obj2 is valid
-            if ~isResultInfo(obj2)
+            if ~isObject(obj2,'cResultInfo')
                 res=false;
                 return
             end

@@ -217,23 +217,6 @@ classdef cType
     % Static Methods for types
     %----------------------------
 	methods (Static)
-		function res=isInteger(val)
-		% check if the type check is valid
-			res=isscalar(val) && isnumeric(val) && (mod(val,1)==0);
-		end
-
-		function res=isIndex(index,range)
-			res=false;
-			if ~isnumeric(index)
-				return
-			end
-			if isscalar(index)
-				res = cType.isInteger(index) && (index>=range(1)) && (index<=range(end));
-			else
-				res = all(ismember(index,range));
-			end
-		end
-
 		function res=checkTypeKey(s,key)
 		% Check if key is a field of type structure s
 		% Input:
@@ -445,11 +428,11 @@ classdef cType
 		% Generate a sequence of numbers
 			persistent counter;
 			if isempty(counter)
-				counter=1;
+				counter=uint64(1);
 			else
 				counter=counter+1;
 			end
-			res=uint64(counter);
+			res=counter;
 		end
 
 		%%%%

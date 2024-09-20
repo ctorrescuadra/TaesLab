@@ -59,7 +59,7 @@ function model=ThermoeconomicModel(filename,varargin)
     % Check Data Model file
         data=readModel(filename);
     % Check optional parameters and create cThermoeconomicModel obeject
-    if isValid(data)
+    if data.status
         p = inputParser;
         refstate=data.StateNames{1};
         p.addParameter('State',refstate,@ischar);
