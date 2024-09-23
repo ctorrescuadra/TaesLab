@@ -268,13 +268,13 @@ classdef cDataModel < cResultSet
             M=size(values,2);
             % Validate the number of flows
             if obj.NrOfFlows~=M
-                log.printError('Invalid number of exergy values',length(values));
+                res.printError('Invalid number of exergy values',length(values));
                 return
             end
             % Validate state
             idx=obj.ExergyData.getIndex(state);
             if ~idx
-                log.printError('State %s does not exists',state);
+                res.printError('State %s does not exists',state);
                 return
             end
             % Build exergy data structure
@@ -289,7 +289,7 @@ classdef cDataModel < cResultSet
             if res.status
                 obj.ExergyData.setValues(idx,res);
             else
-                log.printError('Invalid exergy data');
+                res.printError('Invalid exergy data');
                 printLogger(res);
             end 
         end

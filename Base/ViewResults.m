@@ -420,7 +420,7 @@ classdef ViewResults < matlab.apps.AppBase
             if ext % File has been selected
                 cd(path)
                 log=saveResults(app.ResultInfo,file);
-                if isvalid(log)
+                if log.status
                     logtext=sprintf(' INFO: Results Available in file %s',file);
                 else
                     logtext=sprintf(' WARNING: Results have NOT saved. See Log');
@@ -443,7 +443,7 @@ classdef ViewResults < matlab.apps.AppBase
                 if ext % File has been selected
                     cd(path)
                     log=saveTable(app.CurrentTable,file);
-                    if isvalid(log)
+                    if log.status
                         logtext=sprintf(' INFO: Table saved in file %s',file);
                     else
                         logtext=sprintf(' WARNING: Table is NOT saved. See Log');

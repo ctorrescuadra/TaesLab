@@ -41,7 +41,7 @@ classdef cResultInfo < cResultSet
         %
             % Check parameters
             obj=obj@cResultSet(info.ResultId);
-            if ~isObject(info,'cResultId')
+            if ~info.status
                 obj.messageLog(cType.ERROR,'Invalid ResultId object');
                 return
             end
@@ -55,7 +55,7 @@ classdef cResultInfo < cResultSet
             obj.tableIndex=cTableIndex(obj);
             obj.NrOfTables=obj.tableIndex.NrOfRows;
             obj.ModelName=info.ModelName;
-            obj.DefaultGraph=info.DefaultGraph;
+            obj.setDefaultGraph(info.DefaultGraph);
             obj.setState(info.State);
             obj.status=info.status;
         end

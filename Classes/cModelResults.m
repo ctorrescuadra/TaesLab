@@ -57,7 +57,7 @@ classdef (Sealed) cModelResults < cMessageLogger
                 return
             end
             res=obj.getResults(id);
-            if ~isempty(obj.results{id})
+            if ~isempty(res)
                 obj.results{id}=cType.EMPTY;
                 if id<=cType.MAX_RESULT
                     obj.clearResults(cType.ResultId.RESULT_MODEL);

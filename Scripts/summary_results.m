@@ -16,7 +16,7 @@ if ~data.status
 	return
 end
 if data.isResourceCost
-	[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.getSampleNames);
+	[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.SampleNames);
 else
 	param.ResourceSample=data.SampleNames{1};
 end

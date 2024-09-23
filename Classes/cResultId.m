@@ -38,5 +38,10 @@ classdef cResultId < cMessageLogger
         % Set ResultId. Internal package use only
             obj.ResultId=id;
         end
+
+        function setDefaultGraph(obj,graph)
+        % Set DefaultGraph. Internal package use only
+            obj.DefaultGraph=graph;
+        end
 	end
 end

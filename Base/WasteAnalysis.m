@@ -110,7 +110,7 @@ function res = WasteAnalysis(data,varargin)
 			    param.ResourceSample=data.SampleNames{1};
             end
 		    rsd=data.getResourceData(param.ResourceSample);
-            if ~rsd
+            if ~rsd.status
 			    rsd.printLogger;
 			    res.printError('Invalid resource data. See Error Log');
 			    return

@@ -80,6 +80,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,pm.TableFP);
             res=cResultInfo(pm,tbl);
             res.setResultId(cType.ResultId.THERMOECONOMIC_STATE);
+            res.setDefaultGraph(cType.Tables.TABLE_FP);
         end
                   
         function res=getCostResults(obj,mfp,options)

@@ -98,7 +98,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
         end
 		rd=data.getResourceData(param.ResourceSample);
 		rsc=getResourceCost(rd,fpm);
-        if ~rsc.staus
+        if ~rsc.status
 			rsc.printLogger;
 			res.printError('Invalid resource cost values. See Error Log');
 			return

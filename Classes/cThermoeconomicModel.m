@@ -197,7 +197,6 @@ classdef cThermoeconomicModel < cResultSet
                 end
                 obj.ActiveWaste=param.ActiveWaste;
             end
-
             % Load Exergy values (all states)
             obj.rstate=cDataset(data.StateNames);
             for i=1:data.NrOfStates
@@ -377,8 +376,6 @@ classdef cThermoeconomicModel < cResultSet
                 obj.Summary=value;
                 if obj.Summary
                     obj.printDebugInfo('Summary is active');
-                %else
-                %    obj.printDebugInfo('Summary is not active')
                 end
                 obj.setSummaryResults;
             end
@@ -1205,7 +1202,7 @@ classdef cThermoeconomicModel < cResultSet
             res=getExergyData(obj.DataModel,state);
         end
 
-        function log=setExergyData(obj,values)
+        function res=setExergyData(obj,values)
         % Set exergy data values to actual state
         % Syntax:
         %   log=obj.setExergyData(values)
@@ -1214,10 +1211,10 @@ classdef cThermoeconomicModel < cResultSet
         % Output Arguments:
         %   log - cMessageLogger object with the status and messages of operation
         %
-            log=cMessageLogger();
+            res=cMessageLogger();
             % Check state is no reference 
             if strcmp(obj.ReferenceState,obj.State)
-                log.printError('Cannot change Reference State values');
+                res.printError('Cannot change Reference State values');
                 return
             end
             % Set exergy data for state
@@ -1229,15 +1226,16 @@ classdef cThermoeconomicModel < cResultSet
             end
             % Compute cExergyCost
             if obj.isWaste
-                cex=cExergyCost(rex,obj.wd);
+                res=cExergyCost(rex,obj.wd);
             else
-                cex=cExergyCost(rex);
+                res=cExergyCost(rex);
             end
-            if ~cex.status
-                printLogger(cex);
-                return
+            if res.status
+                obj.rstate.setValues(obj.State,res);
+                obj.fp1=res;
             else
-                obj.rstate.setValues(obj.State,cex);
+                printLogger(res);
+                return
             end
             % Get results
             obj.triggerStateChange;

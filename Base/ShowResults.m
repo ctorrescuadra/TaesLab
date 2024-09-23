@@ -60,7 +60,7 @@ function res=ShowResults(arg,varargin)
 	p.addParameter('ExportAs',cType.DEFAULT_VARMODE,@cType.checkVarMode);
 	p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
-		p.parse(arg,varargin{:});
+		p.parse(varargin{:});
     catch err
         log.printError(err.message);
         log.printError('Usage: ShowResults(arg,options)');
