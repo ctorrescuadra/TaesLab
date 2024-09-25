@@ -152,7 +152,7 @@ classdef (Sealed) cTableCell < cTableResult
                 data=[num2cell(1:obj.NrOfRows)' obj.Values(2:end,:)];
            else
                 hformat=[hfmt{:}];
-                sformat=[sfmt{:}];
+                sformat=[sfmt{:},'\n'];
                 header=sprintf(hformat,obj.ColNames{:});
                 data=obj.Values(2:end,:);
             end
@@ -163,10 +163,7 @@ classdef (Sealed) cTableCell < cTableResult
             fprintf(fId,'%s\n',header);
             lines=cType.getLine(length(header)+1);
             fprintf(fId,'%s\n',lines);
-            for i=1:obj.NrOfRows
-                fprintf(fId,sformat,data{i,:});
-                fprintf(fId,'\n');
-            end	
+            arrayfun(@(i) fprintf(fId,sformat,data{i,:}),1:obj.NrOfRows);
             fprintf(fId,'\n');
         end
 

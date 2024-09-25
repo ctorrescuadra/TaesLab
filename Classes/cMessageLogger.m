@@ -61,7 +61,7 @@ classdef cMessageLogger < cTaesLab
 		function printInfo(obj,varargin)
 		% Print info message. Use fprintf syntax
 		% Syntax:
-		%  obj.printWarning(textn)
+		%  obj.printInfo(text)
 		% Input Argument:
 		%   text - text message, using fprintf syntax
 		%     varargin

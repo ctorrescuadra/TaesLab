@@ -733,9 +733,7 @@ classdef (Sealed) TaesTool < handle
             app.currentNode=cType.EMPTY;
             app.currentTable=cType.EMPTY;
             app.model=cMessageLogger(false);
-            for i=1:cType.MAX_RESULT_INFO
-                app.disableResults(i);
-            end
-		end
+            arrayfun(@(i) app.disableResults(i), 1:cType.MAX_RESULT_INFO);
+        end
 	end
 end

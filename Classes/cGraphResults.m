@@ -1,6 +1,11 @@
 classdef (Sealed) cGraphResults < cMessageLogger
-% cGraphSummary plot as bar summary tables
-    properties(GetAccess=public,SetAccess=private)
+% cGraphResults is used as interface for result tables graphs.
+%	For internal use only
+% cGraphResults Methods:
+%   showGraph - Show the graph associated to a table
+% See also ShowGraph
+%
+	properties(GetAccess=public,SetAccess=private)
         Type        % Graph Type
         Name        % Name of the graph (window name)
         Title       % Title of the graph
@@ -17,7 +22,24 @@ classdef (Sealed) cGraphResults < cMessageLogger
 
     methods
         function obj = cGraphResults(tbl, varargin)
-		% Constructor. Create the object with the graph properties  
+		% Create an instance of the object
+		%   Define the internal properties of the graph
+		% Syntax:
+		%   obj = cGraphResults(tbl, options)
+		% Input Arguments:
+		%   tbl - cTable object
+		%   options - Additional parameters depending of graph types
+		%    shout: cType.GraphType.DIAGNOSIS 
+		%      Show the final output variation
+		%    var: cType.GraphType.SUMMARY
+		%      List of flows/processes to show
+		%    waste: cType.GraphType.WASTE_ALLOCATION
+		%      Waste flow to analize 
+		%    waste: cType.GraphType.RECYCLING
+		%      Waste flow to analyze
+		%    nodes: cType.GraphType.DIGRAPH
+		%      Nodes structure of productive grapphs
+		% 
 			if ~isObject(tbl,'cTableResult')
 				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
 				return
@@ -43,9 +65,9 @@ classdef (Sealed) cGraphResults < cMessageLogger
             case cType.GraphType.DIGRAPH
 				    obj.setProductiveDiagramParameters(tbl,varargin{:});
 			case cType.GraphType.DIGRAPH_FP
-					obj.setDigraphFpParameters(tbl);
+					obj.setDigraphFpParameters(tbl,varargin{:});
             case cType.GraphType.DIAGRAM_FP
-                    obj.setDiagramFpParameters(tbl);
+                    obj.setDiagramFpParameters(tbl,varargin{:});
 			otherwise
 				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
 				return
@@ -53,6 +75,10 @@ classdef (Sealed) cGraphResults < cMessageLogger
         end
 
         function showGraph(obj)
+		% Show the graph of the current object
+		% Syntax:
+		%   obj.showGraph
+		%
             switch obj.Type
 			case cType.GraphType.COST
 				obj.graphCost;
@@ -79,9 +105,11 @@ classdef (Sealed) cGraphResults < cMessageLogger
 				return
             end   
         end
-
+    end
+	
+	methods(Access=private)
 		function graphCost(obj)
-		% Plot the ICT graph cost
+		% Plot the ICT bar graph. Internal use.
 			M=numel(obj.Legend);
 			cm=turbo(M);
 			f=figure('name',obj.Name, 'numbertitle','off','colormap',turbo,...
@@ -89,15 +117,13 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			ax=axes(f);
 			b=bar(obj.yValues,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
 
-			for i=1:M
-				set(b(i),'facecolor',cm(i,:));
-			end
+			for i=1:M, set(b(i),'facecolor',cm(i,:)); end
 			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
 		end
 
 		function graphDiagnosis(obj)
-		% Plot diagnosis graphs
+		% Plot diagnosis bar graphs
             if isOctave
                 graphDiagnosis_OC(obj)
             else
@@ -106,7 +132,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
         end
 
 		function graphSummary(obj)
-		% Plot the summary graph
+		% Plot the summary bar graph
 			f=figure('name',obj.Name, 'numbertitle','off', 'colormap',turbo,...
 			'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
@@ -141,6 +167,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		end
 
 		function graphWasteAllocation(obj)
+		% Plot the waste allocation bar graph
 			f=figure('name',obj.Name, 'numbertitle','off', 'colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
@@ -157,8 +184,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		end
 
 		function showDigraph(obj)
-		% Plot Productive Diagrams (digraph)
-            
+		% Plot Productive Diagrams (digraph)           
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
 			ax=axes(f);    
@@ -172,7 +198,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		end
 
 		function showDiagramFP(obj)
-		% Show the Diagram FP
+		% Plot the Diagram FP
 			f=figure('name',obj.Name, 'numbertitle','off', ...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
 			ax=axes(f);
@@ -180,17 +206,19 @@ classdef (Sealed) cGraphResults < cMessageLogger
 				r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 				colormap(red2blue);
 				plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
-				title(ax,obj.Title,'fontsize',14);
 				c=colorbar(ax);
 				c.Label.String=obj.xLabel;
 				c.Label.FontSize=12;
+			else
+				plot(ax,obj.xValues,"Layout","auto");
 			end
+			title(ax,obj.Title,'fontsize',14);
 		end
-	end
-   
-	methods(Access=private)
+
 		function setGraphCostParameters(obj,tbl)
-        % Set the properties of GraphCost   
+        % Set the properties of GraphCost
+		% Input:
+		%   tbl - cTable object
             obj.Name=tbl.Description;
             obj.Title=[tbl.Description,' [',tbl.State,']'];
             obj.Categories=tbl.ColNames(2:end);
@@ -213,7 +241,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		function setGraphDiagnosisParameters(obj,tbl,shout)
 		% Set the properties of diagnosis graph
 		% Input:
-		%	tbl - Name of the table
+		%	tbl - cTable object
 		%	shout - Remove ENV info in graph
         % 
             if nargin==2
@@ -244,6 +272,10 @@ classdef (Sealed) cGraphResults < cMessageLogger
 
 		function setGraphSummaryParameters(obj,tbl,var)
 		% Set the properties of graph Summary
+		% Input:
+		%   tbl - cTable object
+		%   var - cell array with the variables to show
+		% 
             if nargin<3
                 obj.messageLog(cType.ERROR,'Parameters missing');
                 return
@@ -274,6 +306,9 @@ classdef (Sealed) cGraphResults < cMessageLogger
 
 		function setGraphRecyclingParameters(obj,tbl,label)
 		% Set the properties of graph recycling
+		% Input:
+		%   tbl - cTable object
+		%   label - text label of the graph
             if nargin==2
                 label=tbl.ColNames{end};
             end
@@ -294,6 +329,9 @@ classdef (Sealed) cGraphResults < cMessageLogger
 
         function setGraphWasteAllocationParameters(obj,tbl,wf)
 		% Set the parameters of Waste Allocation pie chart
+		% Input:
+		%   tbl - cTable object
+		%   wf  - waste flow name
 			obj.Name='Waste Allocation';
 			if (nargin==3) && (~isempty(wf))  % Use pie chart for the waste flow
 				cols=tbl.ColNames(2:end);
@@ -326,12 +364,17 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			end
 		end
 
-        function setDiagramFpParameters(obj,tbl)
+        function setDiagramFpParameters(obj,tbl,cbar)
         % Set the Diagram FP paramaters (tfp, dcfp)
+		% Input:
+		%   tbl - cTable object
             if isOctave
 				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
 				return
             end
+			if nargin==2
+				cbar=true;
+			end
             mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
             obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
@@ -340,7 +383,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			source=data(:,1); target=data(:,2);
 			values=cell2mat(data(:,3));
 			obj.xValues=digraph(source,target,values,'omitselfloops');
-            obj.isColorbar=true;
+            obj.isColorbar=cbar;
             obj.Legend=cType.EMPTY_CELL;
 			obj.yValues=cType.EMPTY;
 			obj.xLabel=['Exergy ' tbl.Unit];
@@ -349,18 +392,23 @@ classdef (Sealed) cGraphResults < cMessageLogger
             obj.Categories=cType.EMPTY_CELL;
         end
 
-		function setDigraphFpParameters(obj,tbl)
+		function setDigraphFpParameters(obj,tbl,cbar)
 		% Set the Diagram FP parameters (atfp, atcfp)
+		% Input:
+		%   tbl - cTable object   
 			if isOctave
 				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
 				return
+			end
+			if nargin==2
+				cbar=true;
 			end
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description ' [',tbl.State,']'];
 			source=tbl.Data(:,1); target=tbl.Data(:,2);
 			values=cell2mat(tbl.Data(:,3));
 			obj.xValues=digraph(source,target,values,'omitselfloops');
-			obj.isColorbar=true;
+			obj.isColorbar=cbar;
 			obj.Legend=cType.EMPTY_CELL;
 			obj.yValues=cType.EMPTY;
 			obj.xLabel=['Exergy ' tbl.Unit];
@@ -371,6 +419,9 @@ classdef (Sealed) cGraphResults < cMessageLogger
 
 		function setProductiveDiagramParameters(obj,tbl,nodes)
 		% Set the parameters of a digraph
+		% Input:
+		%   tbl - cTable object
+		%   nodes - nodes structure of the graph
 			if isOctave
 				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
 				return
@@ -404,15 +455,11 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			zt=obj.yValues;
 			zt(zt>0)=0; % Plot negative values
 			b1=bar(zt,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
-			for i=1:M
-				set(b1(i),'facecolor',cm(i,:));
-			end
+			for i=1:M, set(b1(i),'facecolor',cm(i,:)); end
 			zt=obj.yValues;
 			zt(zt<0)=0; % Plot positive values
 			b2=bar(zt,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
-			for i=1:M
-				set(b2(i),'facecolor',cm(i,:));
-			end
+			for i=1:M, set(b2(i),'facecolor',cm(i,:)); end
 			obj.setGraphParameters(ax);
 		end
 	
@@ -430,9 +477,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 				'BarLayout','stacked',...
 				'BaseValue',obj.BaseLine,...
 				'Parent',ax);			
-			for i=1:M
-				b(i).FaceColor=cm(i,:);
-			end
+			for i=1:M, b(i).FaceColor=cm(i,:); end
 			bs=b.BaseLine;
 			bs.BaseValue=obj.BaseLine;
 			bs.LineStyle='-';
@@ -441,6 +486,9 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		end
 
 		function setGraphParameters(obj,ax)
+		% Set axis graph parameters
+		% Input:
+		%   ax - axis graphic object
 			hold(ax,'off');
 			title(ax,obj.Title,'fontsize',14);
 			set(ax,'xtick',obj.xValues,'xticklabel',obj.Categories);

@@ -207,8 +207,12 @@ classdef cResultSet < cResultId
                         option=true;
                     case cType.GraphType.WASTE_ALLOCATION
                         option=res.Info.wasteFlow;
+                    case cType.GraphType.DIAGRAM_FP
+                        option=true;
                     case cType.GraphType.DIGRAPH                     
                         option=res.Info.getNodeTable(graph);
+                    case cType.GraphType.DIGRAPH_FP                    
+                        option=true;   
                     case cType.GraphType.SUMMARY
                         if tbl.isFlowsTable
                             option=res.Info.getDefaultFlowVariables;
@@ -244,7 +248,7 @@ classdef cResultSet < cResultId
             if tbl.status
                 tbl.showTable(varargin{:});
             else
-                obj.printWarning('Invalid Table index');
+                obj.printWarning('Invalid Table Index');
             end
         end
 

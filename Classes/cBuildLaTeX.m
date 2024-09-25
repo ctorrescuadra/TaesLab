@@ -57,15 +57,11 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
             obj.header=[strjoin(fcols,' & '),'\\'];
             obj.caption=['\caption{',tbl.getDescriptionLabel,'}'];
             obj.label=['\label{tab:',tbl.Name,'}'];
-            val=cell(N,1);
-            for i=1:tbl.NrOfRows
-                val{i}=sprintf('\t\t%s\n',[strjoin(fdata(i,:),' & '),'\\']);
-            end
-            obj.body=val;
+            obj.body=arrayfun(@(i) sprintf('\t\t%s\n',[strjoin(fdata(i,:),' & '),'\\']),1:N,'UniformOutput',false);
         end
 
         function res=getLaTeXcode(obj)
-        % Get the LaTeV code as string
+        % Get the LaTeX code as string
         % Syntax:
         %   obj.getLaTeXcode
         %

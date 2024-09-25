@@ -89,9 +89,7 @@ classdef cTableData < cTable
             fprintf(fid,'\n');
             fprintf(fid,'%s',header);
             fprintf(fid,'%s\n',lines);
-            for i=1:obj.NrOfRows
-                fprintf(fid,lformat,obj.RowNames{i},fdata{i,:});
-            end
+            arrayfun(@(i) fprintf(fid,lformat,obj.RowNames{i},fdata{i,:}),obj.NrOfRows);
             fprintf(fid,'\n');
         end
     end

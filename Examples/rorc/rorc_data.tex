@@ -1,0 +1,104 @@
+\begin{table}[H]
+\caption{Flows Data}
+\label{tab:Flows}
+	\begin{tabular}{ll}
+		\toprule
+		key    & type      \\
+		\midrule
+		B1     & INTERNAL  \\
+		B2     & INTERNAL  \\
+		B3     & INTERNAL  \\
+		B4     & INTERNAL  \\
+		B5     & INTERNAL  \\
+		B6     & INTERNAL  \\
+		QBLR   & RESOURCE  \\
+		WP     & INTERNAL  \\
+		WN     & OUTPUT    \\
+		QCND   & WASTE     \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Processes Data}
+\label{tab:Processes}
+	\begin{tabular}{llll}
+		\toprule
+		key   & fuel    & product   & type         \\
+		\midrule
+		BLR   & QBLR    & B1-B6     & PRODUCTIVE   \\
+		TRB   & B1-B2   & WN+WP     & PRODUCTIVE   \\
+		IHE   & B2-B3   & B6-B5     & PRODUCTIVE   \\
+		PMP   & WP      & B5-B4     & PRODUCTIVE   \\
+		CND   & B3-B4   & QCND      & DISSIPATIVE  \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Exergy Data}
+\label{tab:Exergy}
+	\begin{tabular}{lrrrrrr}
+		\toprule
+		key    &         REF &       TRB75 &      PBLR18 &       PCND2 &       PCND3 &       noIHE\\
+		\midrule
+		B1     &       83.57 &       89.43 &       83.93 &       87.64 &         108 &       83.57\\
+		B2     &        17.9 &       19.54 &       18.46 &       21.92 &       41.99 &        17.9\\
+		B3     &       15.79 &       16.94 &       16.39 &       19.59 &       38.68 &        17.9\\
+		B4     &       5.784 &        6.19 &       6.011 &        6.34 &        9.99 &       5.784\\
+		B5     &       7.877 &        8.43 &       7.948 &       8.528 &       12.62 &       7.877\\
+		B6     &        9.42 &       10.31 &       9.471 &       10.33 &       15.49 &       7.877\\
+		QBLR   &         100 &       106.3 &       100.8 &       103.5 &       120.2 &       106.9\\
+		WP     &       2.447 &       2.619 &       2.264 &       2.554 &       3.053 &       2.447\\
+		WN     &          50 &          50 &          50 &          50 &          50 &          50\\
+		QCND   &      10.006 &       10.75 &      10.379 &       13.25 &       28.69 &      12.116\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Format Data}
+\label{tab:Format}
+	\begin{tabular}{lrrl}
+		\toprule
+		key                     &       width &   precision & unit      \\
+		\midrule
+		EXERGY                  &          11 &           3 & (kW)      \\
+		EXERGY_COST             &          11 &           3 & (kW)      \\
+		EXERGY_UNIT_COST        &          11 &           4 & (J/J)     \\
+		GENERALIZED_COST        &          11 &           3 & (c$/h)    \\
+		GENERALIZED_UNIT_COST   &          11 &           4 & (c$/kWh)  \\
+		DIAGNOSIS               &          11 &           4 & (kW)      \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Resources Cost}
+\label{tab:ResourcesCost}
+	\begin{tabular}{llrr}
+		\toprule
+		Key    & Type      &    External &    Internal\\
+		\midrule
+		QBLR   & FLOW      &         0.5 &           0\\
+		BLR    & PROCESS   &        6.51 &        6.51\\
+		TRB    & PROCESS   &      151.75 &      151.75\\
+		IHE    & PROCESS   &        2.56 &        2.56\\
+		PMP    & PROCESS   &        2.11 &        2.11\\
+		CND    & PROCESS   &       10.75 &       10.75\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\caption{Waste Definition}
+\label{tab:WasteDefinition}
+	\begin{tabular}{llr}
+		\toprule
+		key    & type      &     recycle\\
+		\midrule
+		QCND   & DEFAULT   &           0\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+

@@ -599,11 +599,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 		    aP=setdiff(1:N,aR);
 		    tmp(:,aP)=obj.pfOperators.mKP(1:N,aP);
 		    ke=obj.pfOperators.mKP(end,:);
-		    for j=aR
-			    for i=aP
-				    tmp(i,i)=tmp(i,i)+obj.fpOperators.mFP(i,j);
-			    end
-		    end
+            tmp(aP, aP) = tmp(aP, aP) + diag(sum(obj.fpOperators.mFP(aP,aR),2));
 		    cp=ke/(eye(N)-tmp);
         end
 

@@ -154,7 +154,7 @@ classdef cThermoeconomicModel < cResultSet
         %   
             obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
             if ~isObject(data,'cDataModel')
-                obj.printError(cType.ERROR,'Invalid data model');
+                obj.printError('Invalid data model');
                 return
             end
             obj.addLogger(data);

@@ -588,7 +588,7 @@
     "wastes": [
       {
         "flow": "QEXP",
-        "type": "MANUAL",
+        "type": "COST",
         "recycle": 0,
         "values": {
           "process": "CMP",
@@ -597,7 +597,7 @@
       },
       {
         "flow": "QCND",
-        "type": "IRREVERSIBILITY",
+        "type": "COST",
         "recycle": 0,
         "values": []
       }

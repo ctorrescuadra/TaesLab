@@ -684,9 +684,7 @@ classdef (Sealed) TaesPanel < handle
             set(app.open_button,'enable','on');
             app.tableIndex=cType.EMPTY;
             app.currentNode=cType.EMPTY;
-            for i=1:cType.MAX_RESULT_INFO
-                app.disableResults(i);
-            end
+            arrayfun(@(i) app.disableResults(i), 1:cType.MAX_RESULT_INFO);
 		end
 	end
 end

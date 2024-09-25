@@ -20,9 +20,7 @@ function [iopt,otext] = optionChoice(text, options,default_value)
     end
     N=length(options);
     disp(text);
-    for i=1:N
-        display([num2str(i),'. ',options{i}]);
-    end
+    arrayfun(@(i) fprintf('%d. %s\n', i, options{i}), 1:N);
     text_choice=['Choose option [',num2str(default_value),']: '];
     iopt=input(text_choice);
     if isempty(iopt) || ~ismember(iopt,1:N) 

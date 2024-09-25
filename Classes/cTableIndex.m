@@ -83,9 +83,7 @@ classdef cTableIndex < cTable
             fprintf(fid,'\n');
             fprintf(fid,'%s',header);
             fprintf(fid,'%s\n',lines);
-            for i=1:obj.NrOfRows
-                fprintf(fid,lformat,obj.RowNames{i},obj.Data{i,:});
-            end
+            arrayfun(@(i) fprintf(fid,lformat,obj.RowNames{i},obj.Data{i,:}),1:obj.NrOfRows)
             fprintf(fid,'\n');
         end
     end
@@ -98,11 +96,7 @@ classdef cTableIndex < cTable
 
         function setColumnWidth(obj)
         % Get column width for cTableIndex
-            res=zeros(1,obj.NrOfCols);
-            for i=1:obj.NrOfCols
-                res(i)=max(cellfun(@length,obj.Values(:,i)))+2;
-            end
-            obj.wcol=res;
+            obj.wcol=arrayfun(@(i) max(cellfun(@length,obj.Values(:,i)))+2,1:obj.NrOfCols);
         end
     end
 end

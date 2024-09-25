@@ -44,7 +44,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
                 if isObject(res,'cResultSet')
                     app.showResults(res)
                 else
-                    log.printWarning('Argument must be a ResultSet');
+                    log.printError('Argument must be a ResultSet');
                 end
             end
         end

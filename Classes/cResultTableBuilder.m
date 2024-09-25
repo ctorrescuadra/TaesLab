@@ -535,9 +535,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             values=zeros(nrows,ncols);
-            for j=2:length(fieldNames)
-                values(:,j-1)=fcost.(fieldNames{j});
-            end           
+            for j=2:tp.columns, values(:,j-1)=fcost.(fieldNames{j}); end       
             res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
         end
             
@@ -555,9 +553,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             values=zeros(nrows,ncols);
-            for j=2:length(fieldNames)
-                values(:,j-1)=cost.(fieldNames{j});
-            end
+            for j=2:tp.columns,values(:,j-1)=cost.(fieldNames{j}); end
             res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
         end
 
@@ -575,9 +571,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             values=zeros(nrows,ncols);
-            for j=2:length(fieldNames)
-                values(:,j-1)=scost.(fieldNames{j});
-            end           
+            for j=2:tp.columns, values(:,j-1)=scost.(fieldNames{j});end           
             res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
         end
    

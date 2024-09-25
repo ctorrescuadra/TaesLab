@@ -60,7 +60,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
         end
     end
 
-    methods(Static,Access=private)
+    methods(Static,Access=public)
         function res=adjacencyTable(A,nodes)
             fields={'source','target'};
             [idx,jdx,~]=find(A);

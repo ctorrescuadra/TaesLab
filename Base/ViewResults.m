@@ -60,23 +60,20 @@ classdef ViewResults < matlab.apps.AppBase
                 'BaseValue',obj.BaseLine,...
                 'FaceColor','flat',...
                 'Parent',app.UIAxes);
-            for i=1:M
-                b(i).CData=cm(i,:);
-            end
+            for i=1:M, b(i).CData=cm(i,:); end
             app.SetGraphParameters(obj);
             app.UIAxes.Visible='on';
         end
         
         % View the graph of a diagnosis table
         function GraphDiagnosis(app,tbl)
-            % get the graph parameters
+            % Get the graph parameters
             obj=cGraphResults(tbl);
             M=numel(obj.Legend);
             cm=turbo(M);
             if app.isColorbar
                 delete(app.Colorbar);
             end
-
             % Plot the bar graph
             b=bar(obj.yValues,...
                     'EdgeColor','none','BarWidth',0.5,...
@@ -84,9 +81,7 @@ classdef ViewResults < matlab.apps.AppBase
                     'BaseValue',obj.BaseLine,...
                     'FaceColor','flat',...
                     'Parent',app.UIAxes);
-            for i=1:M
-                b(i).CData=cm(i,:);
-            end
+            for i=1:M, b(i).CData=cm(i,:); end
             bs=b.BaseLine;
             bs.BaseValue=0.0;
             bs.LineStyle='-';
@@ -360,7 +355,7 @@ classdef ViewResults < matlab.apps.AppBase
                 else
                     app.ClearGraphTab;
                 end
-            elseif isResultInfo(tbl)
+            elseif isObject(tbl,'cResultInfo')
                 app.ViewIndexTable(tbl);
                 app.TabGroup.SelectedTab=app.IndexTab;
                 app.LogField.Text=sprintf(' INFO: %s selected',tbl.ResultName);            

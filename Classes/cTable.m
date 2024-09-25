@@ -283,6 +283,11 @@ classdef (Abstract) cTable < cMessageLogger
         % Set state value. Internal function 
             obj.State=state;
         end
+
+        function setGraphType(obj,type)
+        % Set the GraphType property. Internal function
+            obj.GraphType=type;
+        end
     
         function res=size(obj,dim)
         % Overload size function

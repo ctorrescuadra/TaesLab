@@ -164,9 +164,7 @@ classdef (Sealed) cTableMatrix < cTableResult
             fprintf(fId,'\n');       
 			fprintf(fId,'%s\n',header);
             fprintf(fId,'%s\n',lines);
-            for i=1:nrows-1
-				fprintf(fId,sformat,obj.RowNames{i},obj.Data{i,:});
-            end	
+            arrayfun(@(i) fprintf(fId,sformat,obj.RowNames{i},obj.Data{i,:}),1:nrows-1);
             % Total summary by rows
             if obj.RowTotal
                 fprintf(fId,'%s\n',lines);

@@ -56,9 +56,8 @@ classdef cLogger < cTaesLab
         end
 
         function printContent(obj)
-            for i=1:obj.Count
-                disp(obj.buffer{i});
-            end
+        % Print the content of the buffer
+            arrayfun(@(i) disp(obj.buffer{i}), 1:obj.Count);
         end
         
         function res=size(obj,dim)

@@ -12,11 +12,13 @@ function ShowGraph(arg,varargin)
 %   Graph: Name of the table
 %     char array
 %   ShowOutput: Use for diagnosis tables
-%     true | false (default)
+%     false | true (default)
 %   WasteFlow: Waste flow key for waste allocation and recycling
 %     char array 
 %	Variables: Use for summary results. 
 %	  cell array
+%   Colorbar: Use Colorbar in Diagram FP
+%     false | true (default)
 %
 % Example
 %   <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
@@ -35,6 +37,7 @@ function ShowGraph(arg,varargin)
 	p.addParameter('ShowOutput',true,@islogical);
 	p.addParameter('Variables',cType.EMPTY_CELL,@iscell);
 	p.addParameter('WasteFlow',cType.EMPTY_CHAR,@ischar);
+	p.addParameter('Colorbar',true,@islogical);
     try
 		p.parse(varargin{:});
     catch err
@@ -91,6 +94,10 @@ function ShowGraph(arg,varargin)
 				end
 			end
 			option=param.Variables;
+        case cType.GraphType.DIAGRAM_FP
+            option=param.Colorbar;
+        case cType.GraphType.DIGRAPH_FP
+            option=param.Colorbar;
 	end
 	% Show Graph
 	gr=cGraphResults(tbl,option);

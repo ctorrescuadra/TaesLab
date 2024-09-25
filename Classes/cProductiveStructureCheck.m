@@ -69,9 +69,7 @@ classdef cProductiveStructureCheck < cResultId
 			obj.cstr=cell(2*N1,1);
             % Create flows structure
             fdata=data.flows;
-            for i=1:obj.NrOfFlows
-                obj.createFlow(i,fdata(i));
-            end
+			arrayfun(@(i) obj.createFlow(i,fdata(i)), 1:obj.NrOfFlows);
             if ~obj.status
                 return
             end
@@ -83,9 +81,7 @@ classdef cProductiveStructureCheck < cResultId
 			end
             % Create products structure
             pdata=data.processes;
-            for i=1:obj.NrOfProcesses
-                obj.createProcess(i,pdata(i));
-            end
+			arrayfun(@(i) obj.createProcess(i,pdata(i)), 1:obj.NrOfProcesses);
             if ~obj.status
                 return
             end
@@ -396,7 +392,7 @@ classdef cProductiveStructureCheck < cResultId
             NL=NS+N+2;
             sNode=NL-1;
             tNode=NL;
-			G=false(NL,NL);
+			G=eye(NL,'logical');
             % Flows connections
 			for i=1:obj.NrOfFlows
 				if obj.checkFlowConnectivity(i)
@@ -420,32 +416,14 @@ classdef cProductiveStructureCheck < cResultId
 					G(idx,i)=true;
 				case cType.Stream.RESOURCE
 					G(sNode,i)=true;
-    				otherwise
+    			otherwise
 					G(i,tNode)=true;
 				end
             end
             % Check the graph conectivity
-			res=obj.transitiveClosure(G);
+			tcm=transitiveClosure(G);
+			res=all(tcm(sNode,:)) && all(tcm(:,tNode));
 		end
     end
-	methods(Static,Access=private)
-		function res=transitiveClosure(A)
-		% Check if the matrix is productive
-		%   Check if all nodes are reached from src node (N-1)
-		%   and each node reachs the target node (N).
-		% 	Compute the transitive closure of the graph, using the Warshall's Algorithm
-        % Input arguments
-		%   A - Productive matrix including source and target nodes
-		% Output arguments
-		%   res - Determine is the matrix is productive
-		%     true | false
-		%
-			N=size(A,1);
-			tcm=logical(eye(N)+A);
-			for k = 1:N-2
-					tcm = tcm | (tcm(:, k) * tcm(k, :));
-			end
-			res=all(tcm(N-1,:)) && all(tcm(:,N));
-		end
-	end
+
 end
