@@ -33,7 +33,7 @@ function ShowGraph(arg,varargin)
 	end
     % Check input parameters
     p = inputParser;
-    p.addParameter('Graph',cType.EMPTY_CHAR,@ischar);
+    p.addParameter('Graph',arg.DefaultGraph);
 	p.addParameter('ShowOutput',true,@islogical);
 	p.addParameter('Variables',cType.EMPTY_CELL,@iscell);
 	p.addParameter('WasteFlow',cType.EMPTY_CHAR,@ischar);
@@ -46,27 +46,16 @@ function ShowGraph(arg,varargin)
         return
     end
 	param=p.Results;
-    switch arg.classId
-        case cType.ClassId.RESULT_INFO
-            if isempty(param.Graph)
-			    param.Graph=arg.Info.DefaultGraph;
-            end
-            res=arg;
-        case cType.ClassId.RESULT_MODEL
-            if isempty(param.Graph)
-			   log.printError('Not enough input arguments');
-               return
-            end
-            res=arg.getResultInfo(param.Graph);
-            if ~res.status
-                res.printLogger;
-                return
-            end
-        otherwise
-            log.printError('Invalid result parameter');
-            return
+    % Get the resultId and table value
+    if arg.ResultId==cType.ResultId.RESULT_MODEL
+		res=arg.getResultInfo(param.Graph);
+	else
+		res=arg;
     end
-    % Get the table values
+    if ~res.status
+        log.printError('Result is NOT available');
+		return
+    end
 	tbl=getTable(res,param.Graph);
 	if ~tbl.status || ~tbl.isGraph
 		log.printError('Table %s is NOT valid',param.Graph);
@@ -84,7 +73,11 @@ function ShowGraph(arg,varargin)
 		case cType.GraphType.DIGRAPH
 			option=res.Info.getNodeTable(param.Graph);
 		case cType.GraphType.WASTE_ALLOCATION
-            option=res.Info.wasteFlow;
+            if isempty(param.WasteFlow)
+                option=res.Info.wasteFlow;
+            else
+                option=param.WasteFlow;
+            end
 		case cType.GraphType.SUMMARY
 			if isempty(param.Variables)
 				if tbl.isFlowsTable

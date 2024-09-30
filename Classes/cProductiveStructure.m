@@ -277,6 +277,14 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 			x.AP(1:end-1,:)*x.AS,zeros(N,N)];
 		end
 
+		function res=ProcessMatrix(obj)
+		% Get tthe Process Adjacency Matrix (Logical FP table)
+			x=obj.AdjacencyMatrix;
+			tmp=x.AS*x.AE;
+			tc=transitiveClosure(tmp);
+			res=x.AP*tc*x.AF;
+		end
+
 		function id=getProcessId(obj,key)
         % Get the Id of a process given its key 
         % Input argument:

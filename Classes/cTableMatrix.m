@@ -80,18 +80,33 @@ classdef (Sealed) cTableMatrix < cTableResult
         
         function res=getMatrixValues(obj)
         % Get the table data as Array
+        % Syntax: 
+        %   res = obj.getMatrixValues
+        % Output Arguments:
+        %   res - Numeric array containing the data
+        % 
             res=cell2mat(obj.Data);
         end
 
         function res=formatData(obj)
-        % Format the data values as characters
+        % Apply Format to the data values
+        % Syntax: 
+        %   res = obj.formatData
+        % Output Arguments:
+        %   res - formatted data cell array
+        % 
             res=cellfun(@(x) sprintf(obj.Format,x),obj.Data,'UniformOutput',false);
         end
 
         function res=getStructData(obj,fmt)
         % Get table as formatted structure
-        %  Input:
-        %   fmt - (true/false) use table format
+        % Syntax:
+        %   res = obj.getStructData(fmt)
+        % Input Arguments:
+        %   fmt - Use data format. true | false (default)
+        % Output Arguments:
+        %   res - struct with table data information
+        %
             if nargin==1
                 fmt=false;
             end
@@ -104,7 +119,12 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res=getMatlabTable(obj)
-        % Return as matlab table if apply
+        % Get the table as Matlab table
+        % Syntax:
+        %   res = obj.getMatlabTable
+        % Output Arguments:
+        %   res - Matlab table with data information and properties
+        %
             res=getMatlabTable@cTable(obj);
             if isMatlab
                 res=addprop(res,["GraphOptions","Format","Units"],...
@@ -117,23 +137,47 @@ classdef (Sealed) cTableMatrix < cTableResult
 
         function res=getStructTable(obj)
         % Get table info as structure
+        % Syntax:
+        %   res = obj.getStructTable
+        % Output Arguments:
+        %   res - struct with table data information and properties
+        %
             data=getStructData(obj);
             res=struct('Name',obj.Name,'Description',obj.Description,...
                     'State',obj.State,'Unit',obj.Unit,'Format',obj.Format,'Data',data);
         end
 
         function res = isNumericColumn(obj,idx)
-        % Check if the column is numeric
+        % Check if the column is numeric.  
+        % Syntax:
+        %   res = obj.isNumericColumn(idx)
+        % Input Arguments:
+        %   idx - Column index
+        % Output Arguments:
+        %   res - true | false
+        %
             res=(idx>0) && (idx<obj.NrOfCols);
         end
 
         function res=getDescriptionLabel(obj)
-        % Get the description of the table
+        % Get the description of the table plus Unit and State
+        % Syntax:
+        %   res = obj.getDescriptionLabel
+        % Output Arguments:
+        %   res - char array with table description, units and state data
+        %
             res=[obj.Description,' ',obj.Unit,' - ',obj.State];
         end
 
         function printTable(obj,fId)
-        % Print table on console in a pretty formatted way
+        % Print table on console or in a file in a pretty formatted way
+        % Syntax:
+        %   obj.printTable(fid)
+        % Input Argument:
+        %   fId - optional parameter 
+        %     If not provided, table is show in console
+        %     If provided, table is writen to a file identified by fId
+        % See also fopen
             if nargin==1
                 fId=1;
             end
@@ -205,14 +249,19 @@ classdef (Sealed) cTableMatrix < cTableResult
     methods(Access=private)
         function setProperties(obj,p)
          % Set the table properties: Description, Unit, Format, GraphType
-            obj.Name=p.Name;
-            obj.Description=p.Description;
-            obj.Unit=p.Unit;
-            obj.Format=p.Format;
-            obj.GraphType=p.GraphType;
-            obj.GraphOptions=p.GraphOptions;
-            obj.setColumnFormat;
-            obj.setColumnWidth;
+            try
+                obj.Name=p.Name;
+                obj.Description=p.Description;
+                obj.Unit=p.Unit;
+                obj.Format=p.Format;
+                obj.GraphType=p.GraphType;
+                obj.GraphOptions=p.GraphOptions;
+                obj.setColumnFormat;
+                obj.setColumnWidth;
+            catch err
+                obj.messageLog(cType.ERROR,err.message);
+                obj.messageLog(cType.ERROR,'Invalid Properties');
+            end
         end
 
         function setColumnFormat(obj)

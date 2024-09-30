@@ -18,15 +18,17 @@ classdef cReadModelCSV < cReadModelTable
             end
             tables=struct();
             Sheets=cType.TableDataName;
+            p=struct('Name','','Description','');
             % Read Mandatory Tables
             for i=cType.MandatoryTables
                 sname=Sheets{i};
+                p.Name=sname;
+                p.Description=cType.TableDataDescription{i};
                 fname=strcat(sname,cType.FileExt.CSV);
                 filename=strcat(folder,cType.getPathDelimiter,fname);
                 if exist(filename,'file')
-                    tbl=cReadModelCSV.import(filename);
+                    tbl=cReadModelCSV.import(filename,p);
                     if tbl.status
-                        tbl.setProperties(sname,cType.TableDataDescription{i})
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
@@ -41,12 +43,13 @@ classdef cReadModelCSV < cReadModelTable
             % Read Optional Tables
             for i=cType.OptionalTables
                 sname=Sheets{i};
+                p.Name=sname;
+                p.Description=cType.TableDataDescription{i};
                 fname=strcat(sname,cType.FileExt.CSV);
                 filename=strcat(folder,filesep,fname);
                 if exist(filename,'file')
-                    tbl=cReadModelCSV.import(filename);
+                    tbl=cReadModelCSV.import(filename,p);
                     if tbl.status
-                        tbl.setProperties(sname,cType.TableDataDescription{i})
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
@@ -62,7 +65,7 @@ classdef cReadModelCSV < cReadModelTable
     end
 
     methods(Static, Access=private)
-        function tbl=import(filename)
+        function tbl=import(filename,props)
         % import a CSV file
             tbl=cMessageLogger;
             if isOctave
@@ -80,7 +83,7 @@ classdef cReadModelCSV < cReadModelTable
                     return
 		        end
             end
-            tbl=cTableData.create(values);
+            tbl=cTableData.create(values,props);
         end
     end
 end

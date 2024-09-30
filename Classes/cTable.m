@@ -47,7 +47,7 @@ classdef (Abstract) cTable < cMessageLogger
     end
     methods
         function res=get.Values(obj)
-        % get the table Values
+        % Get the table Values
             res=cType.EMPTY_CELL;
             if obj.status
                 res=[obj.ColNames;[obj.RowNames',obj.Data]];
@@ -252,7 +252,6 @@ classdef (Abstract) cTable < cMessageLogger
                 log.messageLog(cType.ERROR,'Invalid input arguments');
                 return
             end
- 
             [fileType,ext]=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.CSV
@@ -284,9 +283,9 @@ classdef (Abstract) cTable < cMessageLogger
             obj.State=state;
         end
 
-        function setGraphType(obj,type)
-        % Set the GraphType property. Internal function
-            obj.GraphType=type;
+        function res=formatData(obj)
+        % Format data. Only numeric fields
+            res=obj.Data;
         end
     
         function res=size(obj,dim)

@@ -7,7 +7,6 @@ classdef cTableIndex < cTable
 %
 % cTableIndex Methods:
 %   printTable           - Print a table on console
-%   formatData           - Get formatted data
 %   getDescriptionLabel  - Get the title label for GUI presentation
 %
 % cTable Methods
@@ -59,17 +58,26 @@ classdef cTableIndex < cTable
             obj.setColumnWidth;
         end
 
-        function res=formatData(obj)
-        % Format data. Only numeric fields
-            res=obj.Data;
-        end
-
         function res=getDescriptionLabel(obj)
+        % Get table description
+        % Syntax:
+        %   res = obj.getDescriptionLabel
+        % Output Argument:
+        %   res - char array with the table description
+        %
             res=[obj.Description, ' - Table Index'];
         end
 
         function printTable(obj,fid)
-        % Get table as text or show in console
+        % Print table on console or in a file in a pretty formatted way
+        % Syntax:
+        %   obj.printTable(fid)
+        % Input Argument:
+        %   fId - optional parameter 
+        %     If not provided, table is show in console
+        %     If provided, table is writen to a file identified by fId
+        % See also fopen
+        %
             if nargin==1
                 fid=1;
             end

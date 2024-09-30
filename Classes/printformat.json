@@ -787,9 +787,35 @@
 		},
 		{
 			"id": 21,
-			"key": "pat",
+			"key": "sfpat",
 			"number": false,
 			"description": "Productive Diagram",
+			"resultId": 6,
+			"graph": 7,
+			"columns": 3,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				}
+			]
+		},
+		{
+			"id": 22,
+			"key": "pat",
+			"number": false,
+			"description": "Process Diagram",
 			"resultId": 6,
 			"graph": 7,
 			"columns": 3,

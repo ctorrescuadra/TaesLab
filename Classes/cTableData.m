@@ -3,7 +3,6 @@ classdef cTableData < cTable
 % 
 % cTableData Methods:
 %   cTableData.create    - Create table from cell array
-%   setProperties        - Set table name and description
 %   printTable           - Print a table on console
 %   formatData           - Get formatted data
 %   getDescriptionLabel  - Get the title label for GUI presentation
@@ -25,32 +24,54 @@ classdef cTableData < cTable
 %
 % See also cTable
     methods
-        function obj = cTableData(data,rowNames,colNames)
-        %cTableData Construct an instance of this class
-        %  data could be cell data or struct data
+        function obj = cTableData(data,rowNames,colNames,props)
+        % cTableData Construct an instance of this class
+        % Syntax:
+        %   obj = cTableData(data,rowNames,colNames,properties)
+        % Input Arguments:
+        %   data - cell array containg data table
+        %   rowNames - cell array with the row names
+        %   colNames - cell array with the column names
+        %   properties - struct with additional table properties
+        %     Name - name of the table
+        %     Description - table description
+        %
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
             obj.Data=data;
             obj.NrOfCols=length(obj.ColNames);
             obj.NrOfRows=length(obj.RowNames);
- 
-            if ~obj.checkTableSize
+            obj.State='DATA';
+            if obj.checkTableSize
+                obj.setProperties(props)
+            else
                 obj.messageLog(cType.ERROR,'Invalid table size (%dx%d)',size(data));
             end
-            obj.setColumnFormat;
-            obj.setColumnWidth;
         end
 
-        function setProperties(obj,name,descr)
-        % Set Table Description and Name from cType
-        %   Input:
-        %       idx - Table index
-            obj.Name=name;
-            obj.Description=descr;
+        function res=getStructTable(obj)
+        % Get table as a struct
+        % Syntax:
+        %   res=obj.getStructTable
+        % Output Arguments
+        %   res - struct with table information
+        %    Name - Name of the table
+        %    Description - table Description
+        %    State - State of the data
+        %    Data - Data of the table as struct
+        %
+            data=obj.getStructData;
+            res=struct('Name',obj.Name,'Description',obj.Description,...
+                'State',obj.State,'Data',data);
         end
 
         function res=formatData(obj)
-        % Get the format of each column (TEXT or NUMERIC)
+        % Format the values of the table
+        %   If values are numeric are converted to numeric strings
+        % Syntax:
+        %   res = obj.formatData
+        % Output arguments
+        %   
             res=obj.Data;
             cw=obj.getColumnWidth;
             for j=1:obj.NrOfCols-1
@@ -63,12 +84,25 @@ classdef cTableData < cTable
         end
 
         function res=getDescriptionLabel(obj)
-        % Get the description of each table
+        % Get the description of each table for graph or printing
+        % Syntax:
+        %   res = obj.getDescriptionLabel
+        % Output Arguments:
+        %   res - char array with table description 
+        %
             res=obj.Description;
         end
 
         function printTable(obj,fid)
-        % Get table as text or print in conoloe
+        % Get table as text file or printing in console
+        % Syntax:
+        %   obj.printTable(fid)
+        % Input Arguments
+        %   fid - optional parameter. 
+        %         If not provided table, is show in console
+        %         If provided, table is writen into a file defined by fid.
+        % See also fopen
+        %   
             if nargin==1
                 fid=1;
             end
@@ -89,12 +123,29 @@ classdef cTableData < cTable
             fprintf(fid,'\n');
             fprintf(fid,'%s',header);
             fprintf(fid,'%s\n',lines);
-            arrayfun(@(i) fprintf(fid,lformat,obj.RowNames{i},fdata{i,:}),obj.NrOfRows);
+            arrayfun(@(i) fprintf(fid,lformat,obj.RowNames{i},fdata{i,:}),1:obj.NrOfRows);
             fprintf(fid,'\n');
         end
     end
 
     methods(Access=private)
+        function setProperties(obj,props)
+        % Set Table properties
+        % Input Arguments:
+        %   props - Table Properties
+        %     Name: Name of the table
+        %     Description: Description of the table
+            try
+                obj.Name=props.Name;
+                obj.Description=props.Description;
+                obj.setColumnFormat;
+                obj.setColumnWidth;
+            catch err
+                obj.messageLog(cType.ERROR,err.message);
+                obj.messageLog(cType.ERROR,'Invalid Properties');
+            end
+        end
+
         function setColumnWidth(obj)
         % Define the width of the columns
             res=zeros(1,obj.NrOfCols);
@@ -121,12 +172,12 @@ classdef cTableData < cTable
     end
     
     methods (Static,Access=public)
-        function tbl=create(values)
-            % Create a cTableData from values
+        function tbl=create(values,props)
+        % Create a cTableData from values
             rowNames=values(2:end,1);
             colNames=values(1,:);
             data=values(2:end,2:end);
-            tbl=cTableData(data,rowNames',colNames);
+            tbl=cTableData(data,rowNames',colNames,props);
         end
     end
 end

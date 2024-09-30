@@ -58,10 +58,9 @@ classdef cFormatData < cTablesDefinition
 		%
 			res=cType.EMPTY;
 			idx=obj.getTableId(name);
-			if isempty(idx)
-				return
-			end
-			res=obj.tableIndex(idx);
+            if idx
+			    res=obj.tableIndex(idx);
+            end
 		end
 
 		function res=getFormat(obj,id)

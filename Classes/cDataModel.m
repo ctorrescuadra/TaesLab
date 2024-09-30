@@ -168,20 +168,24 @@ classdef cDataModel < cResultSet
             else
                obj.messageLog(cType.INFO,'No Resources Cost Data available')
             end
-            % Set object properties
-
             % Set ResultId properties
+            obj.status=status;
+            if ~obj.status
+                return
+            end
             obj.ResultId=cType.ResultId.DATA_MODEL;
             obj.ResultName=cType.Results{obj.ResultId};
             obj.ModelName=dm.ModelName;
             obj.State='DATA_MODEL';
             obj.DefaultGraph=cType.EMPTY_CHAR;
+            obj.ModelData=dm;
             % Get the Model Info
-            if status
-                obj.ModelData=dm;
-                obj.modelInfo=getTableModel(obj);
-            end
-            obj.status=status;
+            res=getTableModel(obj);
+            if ~res.status
+                obj.addLogger(res);
+            else
+                obj.modelInfo=res;
+            end          
         end
 
     	function res=get.NrOfFlows(obj)
@@ -436,16 +440,25 @@ classdef cDataModel < cResultSet
     methods(Access=private)
         function res=getTableModel(obj)
         % Get the cResultInfo with the data model tables
+            res=cMessageLogger(cType.INVALID);
             ps=obj.ProductiveStructure;
+            p=struct('Name','','Description','');
 			% Flows Table
             index=cType.TableDataIndex.FLOWS;
             sheet=cType.TableDataName{index};
+            p.Name=sheet;
+            p.Description=cType.TableDataDescription{index};
             fNames={ps.Flows.key};
             colNames={'key','type'};
             values={ps.Flows.type}';
-            tbl=cTableData(values,fNames,colNames);
-            tbl.setProperties(sheet,cType.TableDataDescription{index})
-			tables.(sheet)=tbl;
+            tbl=cTableData(values,fNames,colNames,p);
+            if tbl.status
+                tables.(sheet)=tbl;
+            else
+                res.addLogger(tbl);
+                res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                return
+            end
 			% Process Table
             index=cType.TableDataIndex.PROCESSES;
             sheet=cType.TableDataName{index};
@@ -456,33 +469,54 @@ classdef cDataModel < cResultSet
             values(:,1)={prc.fuel}';
             values(:,2)={prc.product}';
             values(:,3)={prc.type}';
-            tbl=cTableData(values,pNames,colNames);
-            tbl.setProperties(sheet,cType.TableDataDescription{index})
-			tables.(sheet)=tbl;
+            tbl=cTableData(values,pNames,colNames,p);
+            if tbl.status
+                tables.(sheet)=tbl;
+            else
+                res.addLogger(tbl);
+                res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                return
+            end
             % Exergy Table
             index=cType.TableDataIndex.EXERGY;
             sheet=cType.TableDataName{index};
+            p.Name=sheet;
+            p.Description=cType.TableDataDescription{index};
 			colNames=['key',obj.StateNames];			
 			values=zeros(obj.NrOfFlows,obj.NrOfStates);
             for i=1:obj.NrOfStates
                 rex=obj.getExergyData(i);
 				values(:,i)=rex.FlowsExergy';
             end
-            tbl=cTableData(num2cell(values),fNames,colNames);
-            tbl.setProperties(sheet,cType.TableDataDescription{index})
-			tables.(sheet)=tbl;
+            tbl=cTableData(num2cell(values),fNames,colNames,p);
+            if tbl.status
+                tables.(sheet)=tbl;
+            else
+                res.addLogger(tbl);
+                res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                return
+            end
             % Format Table
             index=cType.TableDataIndex.FORMAT;
             sheet=cType.TableDataName{index};
+            p.Name=sheet;
+            p.Description=cType.TableDataDescription{index};
 			fmt=obj.ModelData.Format.definitions;
             rowNames={fmt(:).key};
             val=struct2cell(fmt)';
-			tbl=cTableData(val(:,2:end),rowNames,fieldnames(fmt)');
-            tbl.setProperties(sheet,cType.TableDataDescription{index})
-			tables.(sheet)=tbl;
+			tbl=cTableData(val(:,2:end),rowNames,fieldnames(fmt)',p);
+            if tbl.status
+                tables.(sheet)=tbl;
+            else
+                res.addLogger(tbl);
+                res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                return
+            end
             % Resources Cost tables
             index=cType.TableDataIndex.RESOURCES;
             sheet=cType.TableDataName{index};
+            p.Name=sheet;
+            p.Description=cType.TableDataDescription{index};
             if obj.isResourceCost
 				colNames=[{'Key','Type'},obj.SampleNames];
 				%Flows
@@ -505,8 +539,14 @@ classdef cDataModel < cResultSet
 				cprocess=[pTypes,num2cell(pval)];
                 rowNames=[rNames,pNames];
                 values=[cflow;cprocess];
-				tbl=cTableData(values,rowNames,colNames);
-                tbl.setProperties(sheet,cType.TableDataDescription{index})
+				tbl=cTableData(values,rowNames,colNames,p);
+                if tbl.status
+                    tables.(sheet)=tbl;
+                else
+                    res.addLogger(tbl);
+                    res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                    return
+                end
 				tables.(sheet)=tbl;
             end
             % Waste Table
@@ -516,26 +556,40 @@ classdef cDataModel < cResultSet
 				% Waste Definition
 				index=cType.TableDataIndex.WASTEDEF;
                 sheet=cType.TableDataName{index};
+                p.Name=sheet;
+                p.Description=cType.TableDataDescription{index};
                 rowNames=wnames;
                 colNames={'key','type','recycle'};
                 values=cell(obj.NrOfWastes,2);
                 values(:,1)=wd.Type';
                 values(:,2)=num2cell(wd.RecycleRatio)';
-				tbl=cTableData(values,rowNames,colNames);
-                tbl.setProperties(sheet,cType.TableDataDescription{index})
-				tables.(sheet)=tbl;
+				tbl=cTableData(values,rowNames,colNames,p);
+                if tbl.status
+                    tables.(sheet)=tbl;
+                else
+                    res.addLogger(tbl);
+                    res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                    return
+                end
 				% Waste Allocation
                 jdx=find(wd.TypeId==0);
                 if ~isempty(jdx)
                     index=cType.TableDataIndex.WASTEALLOC;
 				    sheet=cType.TableDataName{index};
+                    p.Name=sheet;
+                    p.Description=cType.TableDataDescription{index};
                     [~,idx]=find(wd.Values);idx=unique(idx);
                     colNames=['key',wnames(jdx)];
                     rowNames=pNames(idx);
                     values=wd.Values(jdx,idx)';
-				    tbl=cTableData(num2cell(values),rowNames,colNames);
-                    tbl.setProperties(sheet,cType.TableDataDescription{index})
-				    tables.(sheet)=tbl;
+				    tbl=cTableData(num2cell(values),rowNames,colNames,p);
+                    if tbl.status
+                        tables.(sheet)=tbl;
+                    else
+                        res.addLogger(tbl);
+                        res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                        return
+                    end
                 end
             end
             res=cResultInfo(obj,tables);

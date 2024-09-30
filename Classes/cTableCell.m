@@ -61,6 +61,11 @@ classdef (Sealed) cTableCell < cTableResult
 
         function res=formatData(obj)
         % Apply format to data
+        % Syntax:
+        %   res=obj.formatData
+        % Output Results:
+        %   res - formatted data (numeric)
+        %
             N=obj.NrOfRows;
             M=obj.NrOfCols-1;
             res=cell(N,M);
@@ -75,7 +80,13 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getMatlabTable(obj)
-        % Return as matlab table if apply
+        % Get table as Matlab table object
+        %   Include properties
+        % Syntax:
+        %   res=obj.getMatlabTable
+        % Output Results:
+        %   res - matlab table object
+        %
             res=getMatlabTable@cTable(obj);
             if isMatlab
                 res.Properties.VariableNames=obj.FieldNames(2:end);
@@ -88,9 +99,13 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getStructData(obj,fmt)
-        % Return table as structure
-        %  Input:
-        %   fmt - (true/false) use table format
+        % Get the table data as struct
+        % Syntax:
+        %   res = obj.getStructData(fmt)
+        % Input Argument:
+        %   fmt - Use data table format true | false (default)
+        % Output Argument:
+        %   res - struct with data information
             if nargin==1
                 fmt=false;
             end
@@ -103,7 +118,11 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getStructTable(obj)
-        % Get table as a struct
+        % Get the table as a struct. Include properties
+        % Syntax:
+        %   res = obj.getStructTable
+        % Output Argument:
+        %   res - struct with data information and properties
             N=obj.NrOfCols-1;
             data=obj.getStructData;
             fields(N)=struct('Name',cType.EMPTY_CHAR,'Format',cType.EMPTY_CHAR,'Unit',cType.EMPTY_CHAR);
@@ -116,18 +135,40 @@ classdef (Sealed) cTableCell < cTableResult
             'State',obj.State,'Fields',fields,'Data',data);
         end
 		
-        function res=isNumericColumn(obj,j)
-        % determine if the column is numeric
-            res=ismember('f',obj.Format{j+1});
+        function res=isNumericColumn(obj,idx)
+        % Determine if the column 'idx' is numeric. Internal use
+        % Syntax:
+        %   res=obj.isNumerisColumn(idx)
+        % Input Argument:
+        %   idx - Column number
+        % Output Argument:
+        %   res - true | false
+            res=(idx>0) && (idx<obj.NrOfCols);
+            res= res && ismember('f',obj.Format{idx+1});
         end
 
         function res=getDescriptionLabel(obj)
         % Get the description of the table
+        %   It is used in printTable and graphs
+        %   Include table 'Description' and 'State'
+        % Syntax:
+        %   res = obj.getDescriptionLabel
+        % Output Argument:
+        %   res - char array containg the table description 
+        %     and the state of the table values
+        %   
             res=[obj.Description,' - ',obj.State];
         end
 
         function printTable(obj,fId)
-        % Print table on console in a pretty formatted way
+        % Print table on console or in a file in a pretty formatted way
+        % Syntax:
+        %   obj.printTable(fid)
+        % Input Argument:
+        %   fId - optional parameter 
+        %     If not provided, table is show in console
+        %     If provided, table is writen to a file identified by fId
+        % See also fopen
             if nargin==1
                 fId=1;
             end
@@ -147,7 +188,7 @@ classdef (Sealed) cTableCell < cTableResult
                 tmp=regexp(sfmt0,'[0-9]+','match');
                 hfmt0=[' %',tmp{1},'s '];
                 hformat=[hfmt0, hfmt{:}];
-                sformat=[sfmt0, sfmt{:}];
+                sformat=[sfmt0, sfmt{:}, '\n'];
                 header=sprintf(hformat,'Id',obj.ColNames{:});
                 data=[num2cell(1:obj.NrOfRows)' obj.Values(2:end,:)];
            else
@@ -168,7 +209,16 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getColumnValues(obj,key)
-        % Get the values of a specfic column identified by 'FieldName'
+        % Get the values of a specfic column
+        % Syntax:
+        %   res=obj.getColumnValues(key)
+        % Input Argument:
+        %   key - Name of the column identified by property 'FieldName'
+        % Output Argument
+        %   res - Values of the column
+        %     If column is a string then res is a cell array
+        %     If column is numeric then res is a numeric array
+        %
             res=cType.EMPTY;
             [~,idx]=ismember(key,obj.FieldNames);
             if ~idx
@@ -187,15 +237,20 @@ classdef (Sealed) cTableCell < cTableResult
     methods(Access=private)
         function setProperties(obj,p)
         % Set table properties: Description, Unit, Format, FieldNames, ...
-            obj.Name=p.Name;
-            obj.Description=p.Description;
-            obj.Unit=p.Unit;
-            obj.Format=p.Format;
-            obj.FieldNames=p.FieldNames;
-            obj.ShowNumber=p.ShowNumber;
-            obj.GraphType=p.GraphType;
-            obj.setColumnFormat;
-            obj.setColumnWidth;
+            try
+                obj.Name=p.Name;
+                obj.Description=p.Description;
+                obj.Unit=p.Unit;
+                obj.Format=p.Format;
+                obj.FieldNames=p.FieldNames;
+                obj.ShowNumber=p.ShowNumber;
+                obj.GraphType=p.GraphType;
+                obj.setColumnFormat;
+                obj.setColumnWidth;
+            catch err
+                obj.messageLog(cType.ERROR,err.message);
+                obj.messageLog(cType.ERROR,'Invalid Properties');
+            end
         end
 
         function setColumnWidth(obj)

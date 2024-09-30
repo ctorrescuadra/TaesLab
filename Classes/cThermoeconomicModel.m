@@ -165,7 +165,7 @@ classdef cThermoeconomicModel < cResultSet
             obj.ResultId=cType.ResultId.RESULT_MODEL;
             obj.ResultName=cType.Results{obj.ResultId};
             obj.ModelName=data.ModelName;
-            obj.DefaultGraph=cType.EMPTY_CHAR;
+            obj.DefaultGraph=cType.Tables.PROCESS_ICT;
             % Check optional input parameters
             p = inputParser;
             refstate=data.StateNames{1};
@@ -808,9 +808,8 @@ classdef cThermoeconomicModel < cResultSet
         %   options - graph options
         % See also cResultSet.showGraph
         %
-            if nargin < 2
-                obj.printDebugInfo('Not enough input arguments');
-                return
+            if nargin == 1
+                graph=obj.DefaultGraph;
             end
             res=obj.getResultTable(graph);
             if res.status

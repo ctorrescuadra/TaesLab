@@ -6,13 +6,13 @@ classdef cTablesDefinition < cMessageLogger
 %   Methods:
 %       obj=cTablesDirectory;
 %       res=obj.getTableProperties(name)
-%       res=obj.getTablesDirectory(varmode
+%       res=obj.getTablesDirectory(varmode)
 %       res=obj.showTablesDirectory(options)
 %       res=obj.saveTablesDirectory(filename)
+%       res=obj.getResultIdTables(id)
 %   See also cFormatData
     properties(GetAccess=public,SetAccess=private)
         TablesDefinition  % Tables properties struct
-   
     end
     properties (Access=protected)
         cfgTables 	    % Cell tables configuration
@@ -127,6 +127,20 @@ classdef cTablesDefinition < cMessageLogger
         %   res - Internal table id
         %
             res=getIndex(obj.tDictionary,name);
+        end
+
+        function res=getResultIdTables(obj,id)
+        % Get the tables of an specific resultId
+        % Syntax:
+        %   res = obj.getResultIdTables(id)
+        % Input Argument:
+        %   id - ResultId
+        % Output Argument
+        %   res - cell array with id tables
+        %
+            rid=[obj.tableIndex.resultId];
+            idx=find(rid==id);
+            res={obj.tableIndex(idx).name};
         end
     end
 
@@ -265,8 +279,8 @@ classdef cTablesDefinition < cMessageLogger
                         data(:,i)=[resultCode([tI.resultId])];
                 end
             end
-            res=cTableData(data,rowNames,colNames);
-            res.setProperties('tdir','Tables Directory');
+            props.Name='tdir';props.Description='Tables Directory';
+            res=cTableData(data,rowNames,colNames,props);
             res.setState('SUMMARY');
             if isempty(obj.tDirectory)
                 obj.tDirectory=res;

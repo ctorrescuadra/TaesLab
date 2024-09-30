@@ -246,15 +246,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %     fpat - Flow-Process diagram adjacency table
         %     pat  - Productive diagram adjacency table
         %
-            % Flows Diagram
-            id=cType.Tables.FLOWS_DIAGRAM;                 
-            tbl.fat=obj.getProductiveTable(id,pd.EdgesFAT);
-            % Flow-Process Diagram
-            id=cType.Tables.FLOW_PROCESS_DIAGRAM;
-            tbl.fpat=obj.getProductiveTable(id,pd.EdgesFPAT);
-            % Productive (SPF) Diagram
-            id=cType.Tables.PRODUCTIVE_DIAGRAM;
-            tbl.pat=obj.getProductiveTable(id,pd.EdgesPAT);
+            tbl=struct();
+            tnames=obj.getResultIdTables(cType.ResultId.PRODUCTIVE_DIAGRAM);
+            for i=1:length(tnames)
+                name=tnames{i};             
+                tbl.(name)=obj.getProductiveTable(pd,name);
+            end
             res=cResultInfo(pd,tbl);
         end
 
@@ -464,15 +461,16 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 			res=obj.createCellTable(tp,data,rowNames,colNames);
 		end
 
-        function res=getProductiveTable(obj,name,val)
+        function res=getProductiveTable(obj,pd,name)
         % Get the productive tables
         %  Input:
-        %   name - table name
-        %   val - adjacency table
+        %   pd   - cProductiveDiagram object
+        %   name - name of the table
         %  Output:
         %   res - cTableCell object
         %
             tp=obj.getCellTableProperties(name);
+            val=pd.getEdgeTable(name);
             M=size(val,1);
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
             colNames=obj.getTableHeader(tp);

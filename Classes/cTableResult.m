@@ -13,7 +13,10 @@ classdef (Abstract) cTableResult < cTable
     end
     methods      
         function res=exportTable(obj,varmode,fmt)
-        % get cTable info in diferent types of variables
+        % Get cTable info in diferent types of variables
+        % Input:
+        %   varmode - type of variable
+        %   fmt - use formatted data true | false (default)
             switch nargin
                 case 1
                     varmode=cType.VarMode.NONE;

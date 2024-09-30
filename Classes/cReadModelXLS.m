@@ -34,10 +34,13 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
             check=ismember(Sheets,sht);
             % Read mandatory tables
             tables=struct();
+            p=struct('Name','','Description','');
             for i=cType.MandatoryTables
                 wsht=Sheets{i};
+                p.Name=wsht;
+                p.Description=cType.TableDataDescription{i};
                 if check(i)
-                    tbl=cReadModelXLS.importSheet(xls,wsht);
+                    tbl=cReadModelXLS.importSheet(xls,wsht,p);
                     if tbl.status
                         tbl.setProperties(wsht,cType.TableDataDescription{i})
                         tables.(wsht)=tbl;
@@ -54,10 +57,11 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
             % Read optional tables 
             for i=cType.OptionalTables
                 wsht=Sheets{i};
+                p.Name=wsht;
+                p.Description=cType.TableDataDescription{i};
                 if check(i)
-                    tbl=cReadModelXLS.importSheet(xls,wsht);
+                    tbl=cReadModelXLS.importSheet(xls,wsht,p);
                     if tbl.status
-                        tbl.setProperties(wsht,cType.TableDataDescription{i})
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
@@ -74,7 +78,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
     end
 
     methods(Static,Access=private)
-        function tbl=importSheet(xls,wsht)
+        function tbl=importSheet(xls,wsht,props)
         %Import a workbook/sheet 
             tbl=cMessageLogger;
             if isOctave
@@ -102,7 +106,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                     return
 		        end
             end
-            tbl=cTableData.create(values);
+            tbl=cTableData.create(values,props);
         end
     end
 end

@@ -80,8 +80,9 @@ classdef cResultInfo < cResultSet
         %   res - cTable object
         %
             res = cMessageLogger();
-            if nargin<2
-                res.messageLog(cType.ERROR,'Invalid number of parameters')
+            if nargin<2 || ~ischar(name) || isempty(name)
+                res.messageLog(cType.ERROR,'Invalid Table name');
+                return
             end
             if strcmp(name,cType.TABLE_INDEX)
                 res=obj.getTableIndex;
