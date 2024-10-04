@@ -2,23 +2,32 @@ classdef  cSparseRow < cMessageLogger
 	% cSparseRow Defines objects to store matrix which contains a few non-null rows.
 	%	This class is used to manage  waste allocation matrices, and provide a set of
 	%   algebraic operations. 
-	%	Methods:
-	% 		obj=cSparseRow(rows,vals,n)
-	%		mat=obj.full
-	%		mat=obj.sparse
-	%		res=obj.scaleCol(x)
-	%		res=obj.scaleRow(x)
-	%		res=obj.divideCol(x)
-	%		res=obj.divideRow(x)
-	%		res=obj.sumRows
-	%		res=obj.sumCols
-	% 	Overloaded operators:
-	%		res=a+b (plus)
-	%		res=a-b (minus)	
-	%		res=-a (uminus) 
-	%		res=a*b (mtimes)
-	%		res=size(a)
-	%		disp(a)
+	%
+	% cSparseRow Properties
+	%   N 		- Number of rows
+	%   NR  	- Number of active rows
+	%   M		- Number of Columns
+	%   mRows   - list containing the non-null rows
+	%   mValues - Matrix (NR x M) containing the active value
+	%
+	% cSparseRow Methods:
+	%   scaleCol  - Scale the columns of the matrix by a vector
+	%   scaleRow  - Scale the rows of the matrix by a vector
+	%   divideCol - Divide the columns of the matrix by a vector
+	%   divideRow - Divide the rows of the matrix by a vector
+	%   sumRows   - Sum the matrix by rows
+	%   sumCols   - sum the matrix by cols
+	%
+	% Overloaded operators:
+	%   res=a+b (plus)
+	%	res=a-b (minus)	
+	%	res=-a (uminus) 
+	%	res=a*b (mtimes)
+	%	res=size(a)
+	%   res=sum(a,dim)
+	%   full(a)
+	%   sparse(a)
+	%	disp(a)
     %
 	properties (GetAccess=public, SetAccess=private)
 		N 		% Number of rows
@@ -30,10 +39,14 @@ classdef  cSparseRow < cMessageLogger
 
 	methods
 		function obj=cSparseRow(rows,vals,n)
-		% matrix constructor
-		% rows: list containing the active rows
-		% vals: Matrix containing the values
-		% n [optional]: Number of rows. if it is not provided N=M.
+		% Matrix constructor
+		% Syntax:
+		%   obj = cSparseRow(rows,vals,n)
+		% Input Argument
+		%   rows - array containing index of the active rows
+		%   vals - Matrix containing the values of active rows
+		%   n    - Number of rows
+		%
 			narginchk(2,3);
 			obj.NR=size(vals,1);
 			obj.M=size(vals,2);
@@ -50,23 +63,6 @@ classdef  cSparseRow < cMessageLogger
 			else
 				obj.printError('Invalid cSparseRow arguments. Number of Rows must agree');
 			end
-		end
-        
-		function disp(obj)
-		%print object
-	        disp(full(obj));
-		end
-
-		function mat=full(obj)
-		% return the full matriz form
-			mat=zeros(obj.N,obj.M);
-			mat(obj.mRows,:)=obj.mValues;
-		end
-
-		function mat=sparse(obj)
-		% return the sparse matrix form
-		    [ix,iy,val]=find(obj.mValues);
-			mat=sparse(obj.mRows(ix),iy,val,obj.N,obj.M);
 		end
 
 		function nobj=scaleCol(obj,x)
@@ -106,7 +102,7 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=divideRow(obj,x)
-		% Divide Rows
+		% Divide Rows function
 			nobj=cMessageLogger();
 			if nargin==1
 				x(obj.mRows)=obj.sumRows;
@@ -120,16 +116,17 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function x = sumCols(obj)
-		% sum the cols of the matrices
+		% Sum the cols of the matrices
 			x=sum(obj.mValues,1);
 		end
 
 		function x = sumRows(obj)
-		% sum the rows of the matrices
+		% Sum the rows of the matrices
 			x=sum(obj.mValues,2);
 		end
 
         function res=sum(obj,dim)
+		% Overload sum function
             narginchk(1,2);
             if nargin==1
              dim=1;
@@ -210,7 +207,7 @@ classdef  cSparseRow < cMessageLogger
 		end
 
         function res=size(obj,dim)
-		% overload size function
+		% Overload size function
             narginchk(1,2);
 			val = [obj.N obj.M];
 			if nargin==1
@@ -219,5 +216,22 @@ classdef  cSparseRow < cMessageLogger
 				res=val(dim);
 			end
         end
+
+		function mat=full(obj)
+		% return the full matriz form
+			mat=zeros(obj.N,obj.M);
+			mat(obj.mRows,:)=obj.mValues;
+		end
+	
+		function mat=sparse(obj)
+		% return the sparse matrix form
+			[ix,iy,val]=find(obj.mValues);
+			mat=sparse(obj.mRows(ix),iy,val,obj.N,obj.M);
+		end		
+
+		function disp(obj)
+		% overload display object
+			disp(full(obj));
+		end
 	end
 end

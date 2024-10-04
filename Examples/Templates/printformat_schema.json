@@ -145,7 +145,7 @@
                 "node": {
                     "type": "integer",
                     "minumum" : 1,
-                    "maximum" : 3
+                    "maximum" : 4
                 },
                 "type": {
                     "$ref": "#/definitions/typeFormat"
@@ -156,7 +156,15 @@
                 "options": {
                     "type": "integer",
                     "minimum": 0
-                }  
+                },
+                "resultId": {
+                   "$ref": "#/definitions/typeResult"
+                },
+                "table": {
+                    "type": "integer",
+                    "minumum" : 1,
+                    "maximum" : 2
+                }
             },
             "required": [
                 "id",
@@ -165,7 +173,9 @@
                 "node", 
                 "type",
                 "graph",
-                "options"
+                "options",
+                "resultId",
+                "table"
             ],
             "title": "Summary"
         },

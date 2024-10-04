@@ -1,27 +1,35 @@
 classdef cResourceData < cMessageLogger
 % cResourceData gets and validates the external cost resources of a system
-% 	Methods:
-% 		obj=cResourceData(ps,data)
-%		obj.setFlowResource(c0)
-%   	obj.setProcessResource(Z)
-%		obj.setFlowResourceValue(key,value)
-%		obj.setProcessResourceValue(key,value)
-%		obj.getResourceIndex(key)
-%		obj.getResourceCost(exm)
+%
+% cResourceData Properties
+% sample  - Resource sample name
+% c0      - Unit cost of external resources
+% Z       - Cost associated to processes
+%
+% cResourceData	Methods:
+%	setFlowResource         - Set the unit cost of resource flows
+%   setProcessResource      - Set the values of external cost of processes
+%   setFlowResourceValue    - Set an individual resource flow value
+%   setProcessResourceValue - Set an individual value of process resources
+%	getResourceCost(exm)    - Get the corresponding cResourceCost object
+%
 	properties (GetAccess=public, SetAccess=private) 
 		sample  % Resource sample name
 		c0      % Unit cost of external resources
 		Z       % Cost associated to processes
 	end
 	properties(Access=private)
-		ps
+		ps      % Productive Structure
 	end
 	
     methods
 		function obj=cResourceData(ps,data)
 		% Class constructor
+		% Syntax:
+		%   obj = cResourceData(ps,data)
+		% Input Arguments:
 		%	ps - cProductiveStructure object
-        %	data - cModelData object
+        %	data - resource data sample
 		%
 		    % Check arguments and inititiliza class
 			if ~isObject(ps,'cProductiveStructure')
@@ -94,8 +102,13 @@ classdef cResourceData < cMessageLogger
 
 		function log=setProcessResource(obj,Z)
 		% Set the Resources cost of processes
-		%  Input:
-		%   Z - Resources cost processes values
+		% Syntax:
+		%   log=setProcessResource(obj,Z)
+		% Input Arguments:
+		%   Z - Resources cost processes values array
+		% Output Argument:
+		%   log - cMessageLog object with messages and errors
+		%
 			log=cMessageLogger();
             if length(Z) == obj.ps.NrOfProcesses
 				obj.Z=Z;
@@ -110,9 +123,14 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setFlowResource(obj,c0)
-		% Set the Resources unit cost of flows
-		%  Input:
-		%   c0 - Resources cost flows values
+		% Set the unit cost of resources flows
+		% Syntax:
+		%   log=setFlowResource(obj,Z)
+		% Input Arguments:
+		%   c0 - Resources flows unit cost values array
+		% Output Argument:
+		%   log - cMessageLog object with messages and errors
+		%
 			log=cMessageLogger();
             if length(c0) == obj.ps.NrOfFlows
 				obj.c0=c0;
@@ -127,9 +145,15 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setFlowResourceValue(obj,key,value)
-		% Set the value of a resource
-		%	key - key of the resource
-		%	value - cost of the resource
+		% Set the value of a resource flow
+		% Syntax:
+		%   log=setFlowResourceValue(obj,key,value)
+		% Input Arguments:
+		%   key - Resource flow name
+		%   value - unit cost of the resource
+		% Output Argument:
+		%   log - cMessageLog object with messages and errors
+		%
 			log=cMessageLogger();
 			id=obj.getResourceIndex(key);
             if isempty(id)
@@ -145,9 +169,15 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setProcessResourceValue(obj,key,value)
-		% Set the value of a resource
-		%	key - key of the resource
-		%	value - cost of the resource
+		% Set the value of a process external resource
+		% Syntax:
+		%   log=setProcessResourceValue(obj,key,value)
+		% Input Arguments:
+		%   key - Process name
+		%   value - Cost of the resource
+		% Output Argument:
+		%   log - cMessageLog object with messages and errors
+		%
 			log=cMessageLogger();
 			id=obj.ps.getProcessId(key);
             if isempty(id)
@@ -161,9 +191,23 @@ classdef cResourceData < cMessageLogger
 				return
             end	
 		end
-	
+
+		function res=getResourceCost(obj,exm)
+		% Get cResourceCost object
+		% Syntax:
+		%   log=getResourceCost(obj,exm)
+		% Input Arguments:
+		%   exm - cExergyModel object
+		% Output Argument:
+		%   res - cResourceCost object
+		%
+			res=cResourceCost(obj,exm);
+		end
+	end
+
+	methods(Access=private)
 		function id=getResourceIndex(obj,key)
-		%  Get the index of resource key
+		% Get the index of resource key
 		%	key - key of the resource
 			id=obj.ps.getFlowId(key);
 			if ~isempty(id)
@@ -172,11 +216,6 @@ classdef cResourceData < cMessageLogger
 					id=cType.EMPTY;
 				end
 			end
-		end
-
-		function res=getResourceCost(obj,exm)
-		% Get cResourceCost object
-			res=cResourceCost(obj,exm);
 		end
 	end	
 end	

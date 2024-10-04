@@ -142,6 +142,20 @@ classdef cTablesDefinition < cMessageLogger
             idx=find(rid==id);
             res={obj.tableIndex(idx).name};
         end
+
+        function res=getSummaryTables(obj,id,rsc)
+            res={};
+            rid=[obj.cfgSummary.resultId];
+            tbl=[obj.cfgSummary.table];
+            if rsc
+                idx=find(rid==id);
+            else
+                idx=find(rid==id & tbl==cType.CostTables.DIRECT);
+            end
+            if ~isempty(idx)
+                res={obj.cfgSummary(idx).key};
+            end
+        end
     end
 
     methods(Access=protected)

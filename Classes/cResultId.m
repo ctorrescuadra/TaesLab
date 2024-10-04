@@ -3,6 +3,13 @@ classdef cResultId < cMessageLogger
 % 	It is used in: cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
 %	cRecyclingAnalysis, cDiagramFP, cWasteData and cSummaryResults
 %
+% cResultId Properties
+%   ResultId     - Result Id
+%   ResultName   - Result Name
+%   ModelName    - Model Name
+%   State        - State Name
+%   DefaultGraph - Default Graph
+
 	properties(GetAccess=public,SetAccess=protected)
 		ResultId     % Result Id
 		ResultName   % Result Name
@@ -14,8 +21,12 @@ classdef cResultId < cMessageLogger
 	methods
 		function obj = cResultId(id)
         % Class constructor
-		%  Input:
-		%	id - Result identifier. See cType.ResultId
+        % Syntax:
+        %   obj = cResultId(id)
+		% Input Arguments:
+		%	id - Result identifier. 
+        % See also cType.ResultId
+        %
             if isIndex(id,1:cType.MAX_RESULT_INFO)
 			    obj.ResultId=id;
                 obj.ModelName=cType.EMPTY_CHAR;

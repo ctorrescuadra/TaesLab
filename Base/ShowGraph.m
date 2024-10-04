@@ -15,13 +15,13 @@ function ShowGraph(arg,varargin)
 %     false | true (default)
 %   WasteFlow: Waste flow key for waste allocation and recycling
 %     char array 
-%	Variables: Use for summary results. 
+%   Variables: Use for summary results. 
 %	  cell array
 %   Colorbar: Use Colorbar in Diagram FP
 %     false | true (default)
 %
 % Example
-%   <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
+%   <a href="matlab:open ShowGraphDemo.mlx">Show Graph Demo</a>
 %
 % See also cGraphResults, cResultSet
 %
@@ -57,8 +57,12 @@ function ShowGraph(arg,varargin)
 		return
     end
 	tbl=getTable(res,param.Graph);
-	if ~tbl.status || ~tbl.isGraph
+	if ~tbl.status
 		log.printError('Table %s is NOT valid',param.Graph);
+		return
+	end
+	if ~tbl.isGraph
+		log.printError('Table % has NOT graph',param.Graph);
 		return
 	end
 	% Get aditional parameters

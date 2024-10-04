@@ -302,7 +302,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                     case cType.NodeType.PROCESS
                         rowNames=obj.processKeys(1:end-1);
                 end
-                data=ms.CostValues{id};
+                data=ms.getCostValues(id);
                 tbl.(name)=createSummaryTable(obj,tp,data,rowNames,colNames);
             end
             % Create cResultInfo object

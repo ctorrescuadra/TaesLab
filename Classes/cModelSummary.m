@@ -1,5 +1,15 @@
 classdef cModelSummary < cResultId
-%   cModelSummary obtain the summary cost tables
+% cModelSummary obtain the summary cost tables
+% 
+% cModelSummary Properties:
+%   NrOfStates      - Number of States
+%   StateNames      - States Names
+%   ExergyData      - Exergy Data
+%   UnitConsumption - Process Unit Consumption Values
+%   Irreversibility - Process Irreversibility Values
+%   CostValues      - Cost Values cell array
+%
+% cModelSummary Methods
     properties(GetAccess=public,SetAccess=private)
         NrOfStates      % Number of States
         StateNames      % States Names
@@ -92,16 +102,21 @@ classdef cModelSummary < cResultId
         end
 
         function res=getDefaultProcessVariables(obj)
-        % get the output flows keys
+        % Get the output flows keys
             id=obj.ps.SystemOutput.processes;
             res=obj.ps.ProcessKeys(id);
+        end
+
+        function res=getCostValues(obj,tableId)
+        % Get the cost values
+            res=obj.CostValues{tableId};
         end
     end
 
     methods(Access=private)
-        function setValues(obj,TableId,StateId,val)
+        function setValues(obj,tableId,stateId,val)
         % Set the cost values
-            obj.CostValues{TableId}(:,StateId)=val;
+            obj.CostValues{tableId}(:,stateId)=val;
         end
     end
 end

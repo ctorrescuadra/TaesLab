@@ -33,8 +33,10 @@ classdef (Sealed) cProductiveDiagram < cResultId
     methods
         function obj = cProductiveDiagram(ps)
         % Construct an instance of this class
-        %  Input:
-        %   ps - cProductiveStructure
+        % Syntax:
+        %   obj = cProductiveDiagram(ps)
+        % Input Argument:
+        %   ps - cProductiveStructure object
         %
             obj=obj@cResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
             % Get Flows (FAT) info  
@@ -70,9 +72,16 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.State=ps.State;
         end
 
-        function res = getNodeTable(obj,tbl)
-        % Get the nodes info of a table
-            switch tbl
+        function res = getNodeTable(obj,name)
+        % Get the nodes table of a productive diagram
+        % Syntax:
+        %   res = obj.getNodeTable(name)
+        % Input Parameter:
+        %   name - Name of the diagram
+        % Output Parameter:
+        %   res - Nodes table of the diagram
+        %
+            switch name
                 case cType.Tables.FLOWS_DIAGRAM
                     res=obj.NodesFAT;
                 case cType.Tables.FLOW_PROCESS_DIAGRAM
@@ -84,8 +93,16 @@ classdef (Sealed) cProductiveDiagram < cResultId
             end 
         end
 
-        function res = getEdgeTable(obj,tbl)
-            switch tbl
+        function res = getEdgeTable(obj,name)
+        % Get the edges table of a productive diagram
+        % Syntax:
+        %   res = obj.getEdgeTable(name)
+        % Input Parameter:
+        %   name - Name of the diagram
+        % Output Parameter:
+        %   res - Edges table of the diagram
+        %
+            switch name
                 case cType.Tables.FLOWS_DIAGRAM
                     res=obj.EdgesFAT;
                 case cType.Tables.PROCESS_DIAGRAM
@@ -99,12 +116,20 @@ classdef (Sealed) cProductiveDiagram < cResultId
 
         function res = getResultInfo(obj,fmt)
         % Get cResultInfo object
+        % Syntax:
+        %   res = obj.getResultInfo(fmt)
+        % Input Arguments:
+        %   fmt - cResultTableBuilder object
+        % Output Arguments:
+        %   res - cResultInfo for ProductiveDiagram
+        %
             res=fmt.getProductiveDiagram(obj);
         end
     end
 
     methods(Static,Access=private)
         function res=edgesTable(A,nodes)
+        % Get the edges table of a matrix
             fields={'source','target'};
             [idx,jdx,~]=find(A);
             source=nodes(idx);
@@ -114,6 +139,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
         end
 
         function [edges,nodes]=edgesTableFP(A,inodes)
+        % Get the edges tables of a matrix including environment
             fields={'source','target'};
             % Build Internal Edges
             [idx,jdx,~]=find(A(1:end-1,1:end-1));

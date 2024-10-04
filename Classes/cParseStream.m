@@ -1,12 +1,12 @@
 classdef (Sealed) cParseStream < cTaesLab
 % cParseStream utility class to validate fuel-product stream definition
-%   Methods:
-%       obj=cParseStream(dict)
-%       [p,n]=obj.getFlows(stream)
-%	    res=cParseStream.checkStream(exp)
-%	    res=cParseStream.checkProcess(exp)
-%	    res=cParseStream.getFlowList(exp)
-%	    res=cParseStream.getStreams(exp)
+%
+% cParseStream Methods
+%   getFlows     - Get the I/O flows of a stream
+%   checkStream  - Check a stream string definition
+%	checkProcess - Check the F/P string definition
+%	getFlowList  - Get the list of flow of a Stream
+%	getStream    - Get the streams of the F/P string definition
 %
 	properties (Constant,Access=private)
 		template='+-()';

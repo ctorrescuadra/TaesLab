@@ -732,8 +732,8 @@ classdef cThermoeconomicModel < cResultSet
             data=tbl.Data(rows,:);
             rowNames=tbl.RowNames(rows);
             colNames=tbl.ColNames;
-            res=cTableData(data,rowNames,colNames);
-            res.setProperties('tdir','Tables Directory');
+            props.Name='tdir'; props.Description='Tables Directory';
+            res=cTableData(data,rowNames,colNames,props);
         end
 
         function res=getTableInfo(obj,name)

@@ -1,8 +1,17 @@
 classdef cResourceCost < cMessageLogger
-% cResourceCost computes 
-% 	Methods:
-% 		obj=cResourceCost(data,exm)
-
+% cResourceCost computes the resources cost values properties
+% for a state of the system
+%
+% cResourceCost Properties:
+% sample  - Resource sample name
+% c0      - Unit cost of external resources
+% cs0     - Unit cost of external stream
+% ce      - Process Resource Unit Costs
+% Ce      - Process Resource Cost
+% Z       - Cost associated to processes
+% zP      - Cost associated to process per unit of Product
+% zF      - Cost associated to process per unit of Fuel
+%
 	properties (GetAccess=public, SetAccess=private)
 		sample  % Resource sample name
 		c0      % Unit cost of external resources
@@ -15,10 +24,13 @@ classdef cResourceCost < cMessageLogger
 	end
 	methods		
 		function obj=cResourceCost(rd,exm)
-		% Set the resources cost values for a given state exm
-		%	Input:
-		%	  rd - cResourceData object
-		%	 exm - cExergyModel object with state information
+		% Create an instance of the class
+		% Syntax:
+		%   obj = cResourceCost(rd, exm)
+		% Input Argument:
+		%	rd - cResourceData object
+		%	exm - cExergyModel object with state information
+		%
 			if ~isObject(rd,'cResourceData')
 				rd.messageLog(cType.ERROR,'Invalid resource cost data');
 				return
