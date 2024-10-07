@@ -13,13 +13,13 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 %   FlowKeys           - Cell array of Flows Names (keys)
 %   ProcessKeys        - Cell array of Processes Names (keys)
 %   StreamKeys         - Cell array of Streams Names (keys)
+%   FlowEdges          - Struct (from,to) of flow edges
 %
 % cProductiveStructure Methods:
 %   cProductiveStrudture - create an instance of the class
 %   getResultInfo - Get the cResultInfo object for ProductiveStructure
 %   WasteData - Get default waste data
-%   FlowProcessEdges - Get the processes edges of the flows
-%   FlowStreamEdges - Get the streams edges of the flows
+
 %   isModelIO - Check if model is Input-Output
 %   IncidenceMatrix - Get the incidence matrix
 %   StructuralMatrix - Get the structura matrix
@@ -48,6 +48,7 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
         FlowKeys                % Cell array of Flows Names (keys)
         ProcessKeys             % Cell array of Processes Names (keys)
         StreamKeys              % Cell array of Streams Names (keys)
+		FlowEdges               % Struct (from, to) with edge names (keys)
 	end
 		
 	methods
@@ -170,6 +171,17 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 			end
 		end
 
+		function res=get.FlowEdges(obj)
+		% Get a structure array with the stream edges of the flows
+			res=cType.EMPTY;
+			if ~obj.status
+				return
+			end
+			from=[obj.Flows.from];
+			to=[obj.Flows.to];
+			res=struct('from',obj.StreamKeys(from),'to',obj.StreamKeys(to));
+			end
+
 		function res=getResultInfo(obj,fmt)
 		% Get cResultInfo object
 		% Input argument:
@@ -202,28 +214,11 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 			end
 		end
 
-        function res=FlowStreamEdges(obj)
-        % Get a structure array with the stream edges of the flows
-			res=cType.EMPTY;
-			if obj.status
-            	res=struct('from',[obj.Flows.from],'to',[obj.Flows.to]);
-			end
-        end
-
-        function res=FlowProcessEdges(obj)
-        % Get a structure array with the processes edges of the flows
-            res=cType.EMPTY;
-            if obj.status
-			    fse=obj.FlowStreamEdges;
-			    res.from=[obj.Streams(fse.from).process];
-                res.to=[obj.Streams(fse.to).process];
-            end
-        end
-
         function res=isModelIO(obj)
         % Check if the model is Input-Output
-			fse=obj.FlowStreamEdges;
-            res=isempty(intersect(fse.from,fse.to));
+			from=[obj.Flows.from];
+			to=[obj.Flows.to];
+            res=isempty(intersect(from,to));
         end
 
         function [res1,res2]=IncidenceMatrix(obj)

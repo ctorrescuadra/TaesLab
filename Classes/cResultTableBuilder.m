@@ -17,6 +17,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         flowKeys     % Flow Key names
         streamKeys   % Stream Key names
         processKeys  % Process Key names
+        flowEdges    % Flow edges
     end
     
     methods
@@ -41,6 +42,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             obj.flowKeys=ps.FlowKeys;
             obj.streamKeys=ps.StreamKeys;
             obj.processKeys=ps.ProcessKeys;
+            obj.flowEdges=ps.FlowEdges;
         end
         
         function res=getProductiveStructure(obj,ps)
@@ -74,9 +76,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %     eprocesses: Exergy values of the processes
         %     tfp: Exergy table FP
             tbl=struct();
-            tbl.eflows=obj.getFlowExergy(pm);
-            tbl.estreams=obj.getStreamExergy(pm);
-            tbl.eprocesses=obj.getProcessExergy(pm);
+            tbl.eflows=obj.getFlowExergy(pm.FlowsExergy);
+            tbl.estreams=obj.getStreamExergy(pm.StreamsExergy);
+            tbl.eprocesses=obj.getTableCell(cType.Tables.PROCESS_EXERGY,pm.ProcessesExergy);
             tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,pm.TableFP);
             res=cResultInfo(pm,tbl);
             res.setResultId(cType.ResultId.THERMOECONOMIC_STATE);
@@ -121,10 +123,10 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 dcfpr=mfp.getDirectCostTableFPR(ducost);
                 dict=mfp.getProcessICT;
                 dfict=mfp.getFlowsICT;               
-                tbl.dcost=obj.getProcessCostTable(cType.Tables.PROCESS_COST,dcost);
-                tbl.ducost=obj.getProcessCostTable(cType.Tables.PROCESS_UNIT_COST,ducost);
-                tbl.dfcost=obj.getFlowCostTable(cType.Tables.FLOW_EXERGY_COST,dfcost);
-                tbl.dscost=obj.getStreamCostTable(cType.Tables.STREAM_EXERGY_COST,dscost);
+                tbl.dcost=obj.getTableCell(cType.Tables.PROCESS_COST,dcost);
+                tbl.ducost=obj.getTableCell(cType.Tables.PROCESS_UNIT_COST,ducost);
+                tbl.dfcost=obj.getTableCell(cType.Tables.FLOW_EXERGY_COST,dfcost);
+                tbl.dscost=obj.getTableCell(cType.Tables.STREAM_EXERGY_COST,dscost);
                 tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dcfp);
                 tbl.dict=obj.getProcessICTable(cType.Tables.PROCESS_ICT,dict);
                 tbl.dfict=obj.getFlowICTable(cType.Tables.FLOW_ICT,dfict);
@@ -141,10 +143,10 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 gcfp=mfp.getGeneralCostTableFPR(cz,gucost);
                 gict=mfp.getProcessICT(cz);
                 gfict=mfp.getFlowsICT(cz);   
-                tbl.gcost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_COST,gcost);
-                tbl.gucost=obj.getProcessCostTable(cType.Tables.PROCESS_GENERAL_UNIT_COST,gucost);
-                tbl.gfcost=obj.getFlowCostTable(cType.Tables.FLOW_GENERAL_COST,gfcost);
-                tbl.gscost=obj.getStreamCostTable(cType.Tables.STREAM_GENERAL_COST,gscost);
+                tbl.gcost=obj.getTableCell(cType.Tables.PROCESS_GENERAL_COST,gcost);
+                tbl.gucost=obj.getTableCell(cType.Tables.PROCESS_GENERAL_UNIT_COST,gucost);
+                tbl.gfcost=obj.getTableCell(cType.Tables.FLOW_GENERAL_COST,gfcost);
+                tbl.gscost=obj.getTableCell(cType.Tables.STREAM_GENERAL_COST,gscost);
                 tbl.gict=obj.getProcessICTable(cType.Tables.PROCESS_GENERAL_ICT,gict);
                 tbl.gfict=obj.getFlowICTable(cType.Tables.FLOW_GENERAL_ICT,gfict);
                 tbl.gcfp=obj.getTableFP(cType.Tables.GENERAL_COST_TABLE,gcfp);
@@ -166,7 +168,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %     dit: Irreversibiliy Variation table
         %     dft: Total Fuel Impact
         %     tmfc: Total Malfunction Cost
-            tbl.dgn=obj.getDiagnosisSummary(dgn);
+            tbl.dgn=obj.getTableCell(cType.Tables.DIAGNOSIS,dgn.DiagnosisTable);
             tbl.mf=obj.getMalfunctionTable(dgn);
             tbl.mfc=obj.getMalfunctionCostTable(dgn);
             tbl.dit=obj.getIrreversibilityTable(dgn);
@@ -325,10 +327,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
             % Fill columns
-            sf=[ps.Flows.from];
-            st=[ps.Flows.to];
-            data(:,1)=obj.streamKeys(sf);
-            data(:,2)=obj.streamKeys(st);
+            data(:,1)={ps.FlowEdges.from};
+            data(:,2)={ps.FlowEdges.to};
             data(:,3)={ps.Flows.type};
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end     
@@ -370,7 +370,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
                
         %-- Exergy Analysis tables
-        function res=getFlowExergy(obj,pm)
+        function res=getFlowExergy(obj,values)
         % Generates a cTableCell with the exergy flows values
         % Input:
         %   pm - cExergyModel object
@@ -381,17 +381,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             colNames=obj.getTableHeader(tp);
             nrows=length(rowNames);
             ncols=tp.columns-1;
-            values=pm.FlowsExergy;
-            sf=[pm.ps.Flows.from];
-            st=[pm.ps.Flows.to];
             data=cell(nrows,ncols);
-            data(:,1)=obj.streamKeys(sf);
-			data(:,2)=obj.streamKeys(st);
+            data(:,1)={obj.flowEdges.from};
+            data(:,2)={obj.flowEdges.to};
             data(:,3)=num2cell(values);		
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end	    		
             
-        function res=getStreamExergy(obj,pm)
+        function res=getStreamExergy(obj,values)
         % Generates a cTableCell with stream exergy values
         % Input:
         %   pm - cExergyModel object
@@ -403,31 +400,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
-            values=pm.StreamsExergy;
             data(:,1)=num2cell(values.E);
             data(:,2)=num2cell(values.ET);
-            res=obj.createCellTable(tp,data,rowNames,colNames);
-        end
-            
-        function res=getProcessExergy(obj,pm)
-        % Generates a cTableCell with the process exergy values
-        % Input:
-        %   pm - cExergyModel object
-        % Output:
-        %   res - eProcesses cTableCell
-            tp=obj.getCellTableProperties(cType.Tables.PROCESS_EXERGY);
-            rowNames=obj.processKeys;
-            colNames=obj.getTableHeader(tp);
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
-            data=cell(nrows,ncols);
-            % Processes Values
-            values=pm.ProcessesExergy;
-            data(:,1)=num2cell(values.vF);
-            data(:,2)=num2cell(values.vP);
-            data(:,3)=num2cell(values.vI);
-            data(:,4)=num2cell(values.vK);
-            data(:,5)=num2cell(100*values.vEf);
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
 
@@ -519,60 +493,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         %-- Thermoeconomic Analysis Tables    
-        function res=getFlowCostTable(obj,name,fcost)
-        % get a cTableCell with the exergy cost of flows
-        %  Input:
-        %	name  - Table name
-        %   fcost - Flows cost structure values
-        %  Output:
-        %   res - cTableCell object
-            tp=obj.getCellTableProperties(name);
-            rowNames=obj.flowKeys;        
-            colNames=obj.getTableHeader(tp);
-            fieldNames={tp.fields.name};
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
-            values=zeros(nrows,ncols);
-            for j=2:tp.columns, values(:,j-1)=fcost.(fieldNames{j}); end       
-            res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
-        end
-            
-        function res=getProcessCostTable(obj,name,cost)
-        % get a cTableCell with the exergy cost of processes
-        %  Input:
-        %   name - table name
-        %   cost - process cost structure values
-        %  Output:
-        %   res - cTableCell object
-            tp=obj.getCellTableProperties(name);
-            rowNames=obj.processKeys(1:end-1);
-            colNames=obj.getTableHeader(tp);
-            fieldNames={tp.fields.name};
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
-            values=zeros(nrows,ncols);
-            for j=2:tp.columns,values(:,j-1)=cost.(fieldNames{j}); end
-            res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
-        end
-
-        function res=getStreamCostTable(obj,name,scost)
-        % Get a cTableCell with the exergy cost of streams
-        %  Input:
-        %	name  - Table name
-        %   scost - stream cost structure values
-        %  Output:
-        %   res - cTableCell object
-            tp=obj.getCellTableProperties(name);
-            rowNames=obj.streamKeys;        
-            colNames=obj.getTableHeader(tp);
-            fieldNames={tp.fields.name};
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
-            values=zeros(nrows,ncols);
-            for j=2:tp.columns, values(:,j-1)=scost.(fieldNames{j});end           
-            res=obj.createCellTable(tp,num2cell(zerotol(values)),rowNames,colNames);
-        end
-   
         function res=getFlowICTable(obj,name,values)
         % Get a cTableMatrix with the flows ICT (Irrreversibility Cost Tables)
         % Input:
@@ -600,27 +520,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
             
         %-- Diagnosis Tables
-        function res=getDiagnosisSummary(obj,dgn)
-        % Get a cTableCell with the diagnosis summary
-        % Input:
-        %  dgn - cDiagnosis object
-        % Output:
-        %  res - cTableCell object 
-            tp=obj.getCellTableProperties(cType.Tables.DIAGNOSIS);
-            rowNames=obj.processKeys;
-            colNames=obj.getTableHeader(tp);
-            nrows=length(rowNames);
-            data=cell(nrows,7);     
-            data(:,1)=num2cell(zerotol(dgn.getMalfunction));
-            data(:,2)=num2cell(zerotol(dgn.getIrreversibilityVariation));
-            data(:,3)=num2cell(zerotol(dgn.getWasteVariation));
-            data(:,4)=num2cell(zerotol(dgn.getDemandVariation));
-            data(:,5)=num2cell(zerotol(dgn.getMalfunctionCost));
-            data(:,6)=num2cell(zerotol(dgn.getWasteMalfunctionCost));
-            data(:,7)=num2cell(zerotol(dgn.getDemandVariationCost));
-            res=obj.createCellTable(tp,data,rowNames,colNames);
-        end
-         
         function res=getMalfunctionTable(obj,dgn)
         % Get a cTableMatrix with the mafunction table values
         % Input:
@@ -706,6 +605,40 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
 
+        function res=getNodeNames(obj,type)
+        % Get the row names of the table
+        % Input:
+        %   type - type of node
+        % Output:
+        %   res - Cell array with the names of row names
+            switch type
+            case cType.NodeType.FLOW
+                res=obj.flowKeys;
+            case cType.NodeType.STREAM
+                res=obj.streamKeys;
+            case cType.NodeType.PROCESS
+                res=obj.processKeys(1:end-1);
+            case cType.NodeType.ENV
+                res=obj.processKeys;
+            end
+        end
+
+        function res=getTableCell(obj,name,data)
+        % Get the corresponding cTableCell object
+        % Input:
+        %   name - name of the table
+        %   data - table data structure
+            tp=obj.getCellTableProperties(name);
+            rowNames=obj.getNodeNames(tp.node);
+            colNames=obj.getTableHeader(tp);
+            fieldNames={tp.fields.name};
+            nrows=length(rowNames);
+            ncols=tp.columns-1;
+            values=zeros(nrows,ncols);
+            for j=2:tp.columns,values(:,j-1)=data.(fieldNames{j}); end
+            res=obj.createCellTable(tp,num2cell(values),rowNames,colNames);
+        end
+
         function res=createCellTable(obj,props,data,rowNames,colNames)
         % Set parameters from cPrintConfig and create cTableCell
         % Input:
@@ -722,6 +655,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             p.FieldNames={props.fields.name};
             p.ShowNumber=props.number;
             p.GraphType=props.graph;
+            p.NodeType=props.node;
             res=cTableCell(data,rowNames,colNames,p);
         end
             

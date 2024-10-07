@@ -160,6 +160,17 @@ classdef cDiagnosis < cResultId
             end
         end
 
+        function res=DiagnosisTable(obj)
+        % Get Diagnosis Table
+            res.MF=zerotol(obj.getMalfunction);
+            res.DI=zerotol(obj.getIrreversibilityVariation);
+            res.DR=zerotol(obj.getWasteVariation);
+            res.DPs=zerotol(obj.getDemandVariation);
+            res.MFC=zerotol(obj.getMalfunctionCost);
+            res.MRC=zerotol(obj.getWasteMalfunctionCost);
+            res.DCPs=zerotol(obj.getDemandVariationCost);
+        end
+
         function res=getResultInfo(obj,fmt)
         % Get cResultInfo object for thermoeconomic diagnosis
         % Syntax:

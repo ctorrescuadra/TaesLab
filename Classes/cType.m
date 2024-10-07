@@ -79,7 +79,7 @@ classdef cType
 		PRODUCT='PRODUCT'         % Product type option text
 		FORMAT_ID='%3d'           % Line number format
 		% Node types
-		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3);
+		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3,'ENV',4);
 		% Types of processes
 		Process=struct('PRODUCTIVE',0,'ENVIRONMENT',2,'DISSIPATIVE',4);
         % Types of Streams 

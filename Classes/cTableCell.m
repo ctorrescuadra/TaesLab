@@ -4,6 +4,7 @@ classdef (Sealed) cTableCell < cTableResult
 % cTableCell Properties
 %   FieldNames  - Cell array with field names 
 %   ShowNumber  - logical variable indicating if line number is printed
+%   NodeType    - RowNames type indicator 
 %
 % cTableCell Methods
 %   printTable           - Print a table on console
@@ -29,6 +30,7 @@ classdef (Sealed) cTableCell < cTableResult
     properties (GetAccess=public,SetAccess=private)
         FieldNames  % Cell array with field names (optional)
         ShowNumber  % logical variable indicating if line number is printed
+        NodeType    % Row Names type indicator
     end
 	
     methods
@@ -245,6 +247,7 @@ classdef (Sealed) cTableCell < cTableResult
                 obj.FieldNames=p.FieldNames;
                 obj.ShowNumber=p.ShowNumber;
                 obj.GraphType=p.GraphType;
+                obj.NodeType=p.NodeType;
                 obj.setColumnFormat;
                 obj.setColumnWidth;
             catch err

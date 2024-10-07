@@ -112,9 +112,9 @@ classdef cExergyData < cMessageLogger
 				end
             end
 			vK=vDivide(vF,vP);
-			vEf=vDivide(vP,vF);
+			vEf=100*vDivide(vP,vF);
 			vK(bypass)=1;
-			vEf(bypass)=1;
+			vEf(bypass)=100;
             % Assign values object class
 			obj.ps=ps;
 			obj.FlowsExergy=B;
