@@ -690,7 +690,11 @@ classdef cThermoeconomicModel < cResultSet
         function res=getResultState(obj,idx)
         % Get the cExergyCost object of each state 
         %   Internal application use: cModelSummary
-            res=obj.rstate.getValues(idx);
+            if nargin==1
+                res=obj.fp1;
+            else
+                res=obj.rstate.getValues(idx);
+            end
         end
 
         function res=getModelResults(obj)
@@ -1321,7 +1325,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             id=cType.ResultId.SUMMARY_RESULTS;
             if obj.Summary
-                sr=cModelSummary(obj);
+                sr=cSummaryStates(obj);
                 if sr.status
                     res=sr.getResultInfo(obj.fmt);
                     obj.setResults(res);

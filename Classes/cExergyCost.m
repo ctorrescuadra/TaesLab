@@ -43,14 +43,15 @@ classdef (Sealed) cExergyCost < cExergyModel
         pfOperators            % Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
         StreamOperators        % Stream operators structure (mG, opE, opI, opR)  
         FlowOperators          % Flow operators structure (mG, opB, opI, opR)
-        isWaste                % Indicate if system have wastes
+        isWaste=false          % Indicate if system have wastes
         WasteTable             % cWasteData object
         TableR                 % Table R (waste allocation)
         RecycleRatio           % Recycle ratio of each waste
 	end
 
 	properties (Access=private)
-        opEP, opBP
+        opEP
+        opBP
 	end
 
 	methods

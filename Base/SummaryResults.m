@@ -35,7 +35,7 @@ function res = SummaryResults(data,varargin)
 % Example
 %   <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
 %
-% See also cDataModel, cModelSummary, cResultInfo
+% See also cDataModel, cSummaryResults, cResultInfo
 %
     res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')

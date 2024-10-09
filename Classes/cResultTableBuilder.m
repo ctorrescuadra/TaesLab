@@ -257,12 +257,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=cResultInfo(pd,tbl);
         end
 
-        function res=getSummaryResults(obj,ms)
+        function res=getSummaryResults(obj,sr)
         % Get the cResultInfo for Summary Results
         % Syntax
         %   res = getSummayResults(ms)
         % Input Arguments:
-        %   ms - cModelSummary object
+        %   ms - cSummaryResults object
         % Output Arguments:
         %   res - cResultInfo object (SUMMARY_RESULTS) with the tables
         %     exergy - Exergy values of the model state
@@ -277,38 +277,17 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %     gfc - Generalized cost of flows
         %     gfuc - Generalized unit cost of flows
         %
-            colNames=horzcat('Key',ms.StateNames);
-            % Exergy Tables
-            data=ms.ExergyData;
-            rowNames=obj.flowKeys;
-            tp=obj.getSummaryTableProperties(cType.Tables.SUMMARY_EXERGY);
-            tbl.exergy=obj.createSummaryTable(tp,data,rowNames,colNames);
-            % Unit consumption Table
-            tp=obj.getSummaryTableProperties(cType.Tables.SUMMARY_UNIT_CONSUMPTION);
-            data=ms.UnitConsumption;
-            rowNames=obj.processKeys;
-            tbl.pku=createSummaryTable(obj,tp,data,rowNames,colNames);
-            % Irreversibility Table
-            tp=obj.getSummaryTableProperties(cType.Tables.SUMMARY_IRREVERSIBILITY);
-            data=ms.Irreversibility;
-            rowNames=obj.processKeys;
-            tbl.pI=obj.createSummaryTable(tp,data,rowNames,colNames);
-            % Cost Tables
-            N=length(ms.CostValues);
-            for id=1:N
-                name=cType.SummaryTableIndex{id};
-                tp=obj.getSummaryTableProperties(name);
-                switch tp.node
-                    case cType.NodeType.FLOW
-                        rowNames=obj.flowKeys;
-                    case cType.NodeType.PROCESS
-                        rowNames=obj.processKeys(1:end-1);
-                end
-                data=ms.getCostValues(id);
-                tbl.(name)=createSummaryTable(obj,tp,data,rowNames,colNames);
+            tables=struct();
+            for i=1:sr.NrOfTables
+                tmp=sr.getValues(i);
+                tbl=tmp.Name;
+                rowNames=obj.getNodeNames(tmp.Type);
+                colNames=horzcat('Key',sr.ColNames);
+                data=tmp.Values;
+                tp=obj.getTableProperties(tbl);
+                tables.(tbl)=createSummaryTable(obj,tp,data,rowNames,colNames);
             end
-            % Create cResultInfo object
-            res=cResultInfo(ms,tbl);
+            res=cResultInfo(sr,tables);
         end
     end
 

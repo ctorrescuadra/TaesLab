@@ -42,7 +42,6 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                 if check(i)
                     tbl=cReadModelXLS.importSheet(xls,wsht,p);
                     if tbl.status
-                        tbl.setProperties(wsht,cType.TableDataDescription{i})
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);

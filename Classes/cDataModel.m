@@ -140,6 +140,7 @@ classdef cDataModel < cResultSet
                 obj.WasteData=wd;
                 obj.isWaste=true;	
             else
+                obj.isWaste=false;
 				obj.messageLog(cType.INFO,'The plant has NOT waste');
             end
             % Check ResourceCost

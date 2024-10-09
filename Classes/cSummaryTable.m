@@ -1,4 +1,4 @@
-classdef cSummaryTable < cMessagesLogger
+classdef cSummaryTable < cMessageLogger
     properties(GetAccess=public,SetAccess=private)
         Name
         Type
