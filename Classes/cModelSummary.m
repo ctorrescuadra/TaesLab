@@ -1,93 +1,106 @@
 classdef cModelSummary < cResultId
-% cModelSummary obtain the summary cost tables
-% 
-% cModelSummary Properties:
-%   NrOfStates      - Number of States
-%   StateNames      - States Names
-%   ExergyData      - Exergy Data
-%   UnitConsumption - Process Unit Consumption Values
-%   Irreversibility - Process Irreversibility Values
-%   CostValues      - Cost Values cell array
-%
-% cModelSummary Methods
     properties(GetAccess=public,SetAccess=private)
-        NrOfStates      % Number of States
-        StateNames      % States Names
-        ExergyData      % Exergy Data
-        UnitConsumption % Process Unit Consumption Values
-        Irreversibility % Process Irreversibility Values
-        CostValues      % Cost Values cell array
+        ColNames     % Column Names
+        NrOfTables   % Number of Tables
     end
+
     properties(Access=private)
-        ps
+        ps     % cProductiveStructure
+        ds     % cDataset containing the table values
+        M      % Number of Flows
+        N      % Number of Processes
+        NC     % Number of States/Colums
     end
+
     methods
-        function obj=cModelSummary(model)
-        % Create an instance of cRecyclingAnalysis
-        %   Input:
-        %       model - cThermoeconomicModel object  
-        %
+        function obj = cModelSummary(model)
             obj=obj@cResultId(cType.ResultId.SUMMARY_RESULTS);
+            % Check Input Arguments
             if ~isObject(model,'cThermoeconomicModel')
                 obj.addLogger(model);
                 obj.messageLog(cType.ERROR,'Invalid thermoeconomic model');
                 return
             end
-            if model.DataModel.NrOfStates<2
-                  obj.messageLog(cType.ERROR,'Summary requires more than one State');
-                  return
+            obj.NC=length(model.StateNames);
+            obj.ColNames=model.StateNames;
+            if obj.NC<2
+                obj.messageLog(cType.ERROR,'Summary requires more than one State');
+                return
             end
-            NrOfFlows=model.DataModel.NrOfFlows;
-            NrOfProcesses=model.DataModel.NrOfProcesses;
-            obj.NrOfStates=model.DataModel.NrOfStates;
-            if model.isResourceCost
-                NrOfTables=cType.GENERAL_SUMMARY_TABLES;
-            else
-                NrOfTables=cType.DIRECT_SUMMARY_TABLES;
+            % Get Property values
+            obj.M=model.DataModel.NrOfFlows;
+            obj.N=model.DataModel.NrOfProcesses;
+            obj.ps=model.productiveStructure.Info;
+            % Build Dataset
+            fmt=model.DataModel.FormatData;
+            list=fmt.getSummaryTables(model.isResourceCost);
+            obj.ds=cDataset(list);
+            for i=1:length(list)
+                tbl=list{i};
+                tp=fmt.getTableProperties(tbl);
+                size=obj.getTableSize(tp.node);
+                tmp=cSummaryTable(tp.key,tp.node,size);
+                setValues(obj.ds,tbl,tmp);
             end
-            values=cell(1,NrOfTables);
-            for i=1:NrOfTables
-                if bitget(i-1,2)
-                    NrOfRows=NrOfFlows;
-                else
-                    NrOfRows=NrOfProcesses;
-                end
-                values{i}=zeros(NrOfRows,obj.NrOfStates);
-            end
-            pku=zeros(NrOfProcesses+1,obj.NrOfStates);
-            pI=zeros(NrOfProcesses+1,obj.NrOfStates);
-            rex=zeros(NrOfFlows,obj.NrOfStates);
-            for j=1:obj.NrOfStates
+            % Fill Summary States Dataset
+            for j=1:obj.NC
                 rstate=model.getResultState(j);
+                % SUMMARY EXERGY
+                id=cType.Tables.SUMMARY_EXERGY;
+                val=rstate.FlowsExergy';
+                obj.setValues(id,j,val);
+                % SUMMARY UNIT CONSUMPTION
+                id=cType.Tables.SUMMARY_UNIT_CONSUMPTION;
+                val=rstate.ProcessesExergy.vK';
+                obj.setValues(id,j,val);
+                %SUMMARY IRREVERSIBILITY
+                id=cType.Tables.SUMMARY_IRREVERSIBILITY;
+                val=rstate.ProcessesExergy.vI';           
+                obj.setValues(id,j,val);
+                % SUMMARY PROCESS COST
+                id=cType.Tables.SUMMARY_PROCESS_COST;
                 cost=rstate.getProcessCost;
-                obj.setValues(cType.SummaryId.PROCESS_DIRECT_COST,j,cost.CP');
+                obj.setValues(id,j,cost.CP');
+                % SUMMARY PROCESS UNIT COST
+                id=cType.Tables.SUMMARY_PROCESS_UNIT_COST;
                 ucost=rstate.getProcessUnitCost;
-                obj.setValues(cType.SummaryId.PROCESS_DIRECT_UNIT_COST,j,ucost.cP');
+                obj.setValues(id,j,ucost.cP');
+                % SUMMARY FLOW COST
                 fcost=rstate.getFlowsCost;
-                obj.setValues(cType.SummaryId.FLOW_DIRECT_COST,j,fcost.C');
-                obj.setValues(cType.SummaryId.FLOW_DIRECT_UNIT_COST,j,fcost.c');
+                id=cType.Tables.SUMMARY_FLOW_COST;
+                obj.setValues(id,j,fcost.C');
+                id=cType.Tables.SUMMARY_FLOW_UNIT_COST;
+                obj.setValues(id,j,fcost.c');
+                % General Cost
                 if model.isResourceCost
                     rsc=getResourceCost(model.ResourceData,rstate);
+                    % SUMMARY PROCESS COST
+                    id=cType.Tables.SUMMARY_PROCESS_GENERAL_COST;
                     cost=rstate.getProcessCost(rsc);
-                    obj.setValues(cType.SummaryId.PROCESS_GENERALIZED_COST,j,cost.CP');
+                    obj.setValues(id,j,cost.CP');
+                    % SUMMARY PROCESS UNIT COST
+                    id=cType.Tables.SUMMARY_PROCESS_GENERAL_UNIT_COST;
                     ucost=rstate.getProcessUnitCost(rsc);
-                    obj.setValues(cType.SummaryId.PROCESS_GENERALIZED_UNIT_COST,j,ucost.cP');
+                    obj.setValues(id,j,ucost.cP');
+                    % SUMMARY FLOW COST
                     fcost=rstate.getFlowsCost(rsc);
-                    obj.setValues(cType.SummaryId.FLOW_GENERALIZED_COST,j,fcost.C');
-                    obj.setValues(cType.SummaryId.FLOW_GENERALIZED_UNIT_COST,j,fcost.c');
+                    id=cType.Tables.SUMMARY_FLOW_GENERAL_COST;
+                    obj.setValues(id,j,fcost.C');
+                    id=cType.Tables.SUMMARY_FLOW_GENERAL_UNIT_COST;
+                    obj.setValues(id,j,fcost.c');
                 end
-                pku(:,j)=rstate.ProcessesExergy.vK';
-                pI(:,j)=rstate.ProcessesExergy.vI';
-                rex(:,j)=rstate.FlowsExergy';
             end
-            obj.ExergyData=rex;
-            obj.UnitConsumption=pku;
-            obj.Irreversibility=pI;
-            obj.StateNames=model.StateNames;
-            obj.ps=model.productiveStructure.Info;
+            % cResultId properties
             obj.DefaultGraph=cType.Tables.SUMMARY_FLOW_UNIT_COST;
             obj.ModelName=model.ModelName;
             obj.State='SUMMARY';
+        end
+
+        function res=get.NrOfTables(obj)
+            res=0;
+            if obj.status
+                res=length(obj.ds);
+            end
         end
 
         function res=getResultInfo(obj,fmt)
@@ -95,8 +108,13 @@ classdef cModelSummary < cResultId
             res=fmt.getSummaryResults(obj);
         end
 
+        function res=getValues(obj,id)
+        % Get the tables
+            res=getValues(obj.ds,id);
+        end
+
         function res=getDefaultFlowVariables(obj)
-        % get the output flows keys
+        % Get the output flows keys
             id=obj.ps.SystemOutput.flows;
             res=obj.ps.FlowKeys(id);
         end
@@ -106,17 +124,26 @@ classdef cModelSummary < cResultId
             id=obj.ps.SystemOutput.processes;
             res=obj.ps.ProcessKeys(id);
         end
-
-        function res=getCostValues(obj,tableId)
-        % Get the cost values
-            res=obj.CostValues{tableId};
-        end
     end
 
     methods(Access=private)
-        function setValues(obj,tableId,stateId,val)
-        % Set the cost values
-            obj.CostValues{tableId}(:,stateId)=val;
+        function setValues(obj,id,jdx,val)
+        % Set the table values
+            tmp=getValues(obj.ds,id);
+            setValues(tmp,jdx,val);
+        end
+        
+        function res=getTableSize(obj,node)
+        % Get the table size.
+            res=[];
+            switch node
+                case cType.NodeType.FLOW
+                    res=[obj.M,obj.NC];
+                case cType.NodeType.PROCESS
+                    res=[obj.N,obj.NC];
+                case cType.NodeType.ENV
+                    res=[obj.N+1,obj.NC];
+            end
         end
     end
 end

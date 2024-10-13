@@ -1124,7 +1124,7 @@
 			"type": 6,
 			"graph": 0,
 			"options": 0,
-			"resultId": 9,
+			"resultId": 8,
 			"table": 2
 		},
 		{
@@ -1135,7 +1135,7 @@
 			"type": 7,
 			"graph": 5,
 			"options": 5,
-			"resultId": 9,
+			"resultId": 8,
 			"table": 2
 		},
 		{
@@ -1146,7 +1146,7 @@
 			"type": 6,
 			"graph": 0,
 			"options": 0,
-			"resultId": 9,
+			"resultId": 8,
 			"table": 2
 		},
 		{
@@ -1157,7 +1157,7 @@
 			"type": 7,
 			"graph": 5,
 			"options": 7,
-			"resultId": 9,
+			"resultId": 8,
 			"table": 2
 		}
 	],

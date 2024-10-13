@@ -1325,7 +1325,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             id=cType.ResultId.SUMMARY_RESULTS;
             if obj.Summary
-                sr=cSummaryStates(obj);
+                sr=cModelSummary(obj);
                 if sr.status
                     res=sr.getResultInfo(obj.fmt);
                     obj.setResults(res);
