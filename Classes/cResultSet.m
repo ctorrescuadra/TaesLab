@@ -36,17 +36,15 @@ classdef cResultSet < cResultId
         % cResultSet Construct an instance of this class
         %   Define the class identifier
             obj=obj@cResultId(id);
-        end
-
-        function res=get.classId(obj)
             switch obj.ResultId
-            case cType.ResultId.RESULT_MODEL
-                res=cType.ClassId.RESULT_MODEL;
-            case cType.ResultId.DATA_MODEL
-                res=cType.ClassId.DATA_MODEL;
-            otherwise
-                res=cType.ClassId.RESULT_INFO;
+                case cType.ResultId.RESULT_MODEL
+                    res=cType.ClassId.RESULT_MODEL;
+                case cType.ResultId.DATA_MODEL
+                    res=cType.ClassId.DATA_MODEL;
+                otherwise
+                    res=cType.ClassId.RESULT_INFO;
             end
+            obj.classId=res;
         end
         
         %%%

@@ -66,6 +66,8 @@ classdef cType
 		INFO=1;                   % Info message
         DIRECT=1                  % Direct Cost Tables Bit
         GENERALIZED=2             % Generalized Cost Tables Bit
+		STATES=1                  % States Tables Bit
+		RESOURCES=2               % Resources Tables Bit
 		CAPACITY=4                % Initial capacity for cQueue and cStack
 		MAX_RESULT=5              % Number of Results in cModelResults
 		MAX_RESULT_INFO=10        % Maximun cResultInfo groups
@@ -96,8 +98,10 @@ classdef cType
         % Cost Table options
         CostTables=struct('DIRECT',1,'GENERALIZED',2,'ALL',3);
 		DEFAULT_COST_TABLES='DIRECT';
+		SummaryId=struct('NONE',0,'STATES',1,'RESOURCES',2,'ALL',3);
+		DEFAULT_SUMMARY='NONE';
         % Options for diagnosis calculation
-		DiagnosisMethod=struct('NONE',1,'WASTE_EXTERNAL',2,'WASTE_INTERNAL',3);
+		DiagnosisMethod=struct('NONE',0,'WASTE_EXTERNAL',1,'WASTE_INTERNAL',2);
 		DEFAULT_DIAGNOSIS='WASTE_EXTERNAL';
 		% Options for Table View
 		TableView=struct('NONE',0,'CONSOLE',1,'HTML',2,'GUI',3);
@@ -141,10 +145,9 @@ classdef cType
 			'SUMMARY_PROCESS_COST','dpc','SUMMARY_PROCESS_UNIT_COST','dpuc',...
 			'SUMMARY_FLOW_COST','dfc','SUMMARY_FLOW_UNIT_COST','dfuc',...
 			'SUMMARY_PROCESS_GENERAL_COST','gpc','SUMMARY_PROCESS_GENERAL_UNIT_COST','gpuc',...
-			'SUMMARY_FLOW_GENERAL_COST','gfc','SUMMARY_FLOW_GENERAL_UNIT_COST','gfuc');
-		SummaryId=struct('PROCESS_DIRECT_COST',1,'PROCESS_DIRECT_UNIT_COST',2,'FLOW_DIRECT_COST',3,'FLOW_DIRECT_UNIT_COST',4,...
-			'PROCESS_GENERALIZED_COST',5,'PROCESS_GENERALIZED_UNIT_COST',6,'FLOW_GENERALIZED_COST',7,'FLOW_GENERALIZED_UNIT_COST',8);
-		SummaryTableIndex={'dpc','dpuc','dfc','dfuc','gpc','gpuc','gfc','gfuc'};
+			'SUMMARY_FLOW_GENERAL_COST','gfc','SUMMARY_FLOW_GENERAL_UNIT_COST','gfuc',...
+			'RSUMMARY_PROCESS_GENERAL_COST','rgpc','RSUMMARY_PROCESS_GENERAL_UNIT_COST','rgpuc',...
+			'RSUMMARY_FLOW_GENERAL_COST','rgfc','RSUMMARY_FLOW_GENERAL_UNIT_COST','rgfuc');
 		% Tables Types 
 		TableType=struct('TABLE',1,'MATRIX',2,'SUMMARY',3');
 		TypeTables={'TABLE','MATRIX','SUMMARY'};
@@ -287,6 +290,10 @@ classdef cType
 			res=cType.getTypeId(cType.CostTables,text);
 		end
 
+		function res=getSummaryId(text)
+			res=cType.getTypeId(cType.SummaryId,text);
+		end
+
 		function res=getDiagnosisMethod(text)
 		% Get id for Diagnosis Method option
 			res=cType.getTypeId(cType.DiagnosisMethod,text);
@@ -332,6 +339,10 @@ classdef cType
 			res=cType.checkTypeKey(cType.CostTables,text);
 		end
 
+		function res=checkSummaryOption(text)
+			res=cType.checkTypeKey(cType.SummaryId,text);
+		end
+
 		function res=checkDiagnosisMethod(text)
 		% Check DiagnosisMethod value
 			res=cType.checkTypeKey(cType.DiagnosisMethod,text);
@@ -375,6 +386,10 @@ classdef cType
 		function res=CostTablesOptions()
 		% Get a cell array with the Cost Tables Type options
 			res=fieldnames(cType.CostTables);
+		end
+
+		function res=SummaryOptions()
+			res=fieldnames(cType.SummaryId);
 		end
 
 		function res=TableViewOptions()

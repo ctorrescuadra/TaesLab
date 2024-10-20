@@ -125,9 +125,10 @@ classdef cThermoeconomicModel < cResultSet
         ResourceSample      % Active resource cost sample
         CostTables          % Selected Cost Result Tables
         DiagnosisMethod     % Method to calculate fuel impact of wastes
-        Summary             % Calculate Summary Results
+        Summary             % Summary Result Selected 
         Recycling           % Activate Recycling Analysis
         ActiveWaste         % Active Waste Flow for Recycling Analysis and Waste Allocation
+        sopt
     end
 
     properties(Access=private)
@@ -169,12 +170,13 @@ classdef cThermoeconomicModel < cResultSet
             % Check optional input parameters
             p = inputParser;
             refstate=data.StateNames{1};
+            sopt=cSummaryOptions(data);
             p.addParameter('State',refstate,@ischar);
             p.addParameter('ReferenceState',refstate,@ischar);
             p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
             p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
             p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
-            p.addParameter('Summary',false,@islogical);
+            p.addParameter('Summary',cType.DEFAULT_SUMMARY,@sopt.checkNames);
             p.addParameter('Recycling',false,@islogical);
             p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
             p.addParameter('Debug',false,@islogical);
@@ -186,10 +188,12 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             param=p.Results;
+            obj.sopt=sopt;
             % Set Variables
             obj.fmt=data.FormatData;
             obj.debug=param.Debug;
             obj.DiagnosisMethod=param.DiagnosisMethod;
+            obj.Summary=cType.EMPTY_CHAR;
             if data.isWaste
                 obj.wd=data.WasteData;
                 if isempty(param.ActiveWaste)
@@ -374,9 +378,7 @@ classdef cThermoeconomicModel < cResultSet
         %
             if obj.checkSummary(value)
                 obj.Summary=value;
-                if obj.Summary
-                    obj.printDebugInfo('Summary is active');
-                end
+                obj.printDebugInfo('Summary Mode is %s',value);
                 obj.setSummaryResults;
             end
         end
@@ -494,7 +496,7 @@ classdef cThermoeconomicModel < cResultSet
         %   res = obj.summaryResults 
         % Output Argument:
         %   res - cResultInfo with summary info            
-            res=obj.getSummaryResults;
+            res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
         end
 
         function res=productiveDiagram(obj)
@@ -649,7 +651,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             %Check if diagnosis method is activated
-            if cType.getDiagnosisMethod(obj.DiagnosisMethod)==cType.DiagnosisMethod.NONE 
+            if ~cType.getDiagnosisMethod(obj.DiagnosisMethod) 
                 return
             end
             %Check is operation and reference state are defined
@@ -683,13 +685,28 @@ classdef cThermoeconomicModel < cResultSet
         % Syntax:
         %   res = obj.isSummaryEnable
         % Output Arguments:
-        %   res - true | false if summary is available
-            res=obj.DataModel.NrOfStates>1;
+        %   res - true | false
+            res=(obj.DataModel.NrOfStates>1) || (obj.DataModel.NrOfSamples>1);
+        end
+
+        function res=isSummaryActive(obj)
+        % Check if Summary has been activated
+        % Syntax:
+        %   res = obj.isSummaryEnable
+        % Output Arguments:
+        %   res - true | false   
+            res=logical(cType.getSummaryId(obj.Summary));
         end
 
         function res=getResultState(obj,idx)
         % Get the cExergyCost object of each state 
-        %   Internal application use: cModelSummary
+        %   Internal application use: cSummaryResults
+        % Syntax:
+        %   res = obj.getResultState(idx)
+        % Input Argument:
+        %   idx - State Name index/key
+        % Output Result
+        %   res - cExergyCost object
             if nargin==1
                 res=obj.fp1;
             else
@@ -1008,7 +1025,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             obj.fp1.updateWasteOperators;
             obj.setThermoeconomicAnalysis;
-            obj.setSummaryResults;
+            obj.setSummaryTables;
             if obj.isDiagnosis
                 obj.setThermoeconomicDiagnosis;
             end
@@ -1036,7 +1053,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             obj.fp1.updateWasteOperators;
             obj.setThermoeconomicAnalysis;
-            obj.setSummaryResults;
+            obj.setSummaryTables;
             if obj.isDiagnosis
                 obj.setThermoeconomicDiagnosis;
             end
@@ -1065,7 +1082,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             obj.fp1.updateWasteOperators;
             obj.setThermoeconomicAnalysis;
-            obj.setSummaryResults;
+            obj.setSummaryTables;
             if obj.isDiagnosis
                 obj.setThermoeconomicDiagnosis;
             end
@@ -1090,7 +1107,7 @@ classdef cThermoeconomicModel < cResultSet
             log=setFlowResource(obj.rsd,c0);
             if log.status
                 obj.setThermoeconomicAnalysis;
-                obj.setSummaryResults;
+                obj.setSummaryTables;
                 res=obj.rsc;
             else
                 printLogger(log);
@@ -1115,7 +1132,7 @@ classdef cThermoeconomicModel < cResultSet
             log=setFlowResourceValue(obj.rsd,key,value);
             if log.status
                 obj.setThermoeconomicAnalysis;
-                obj.setSummaryResults;
+                obj.setSummaryTables;
                 res=obj.rsc;
             else
                 printLogger(log);
@@ -1140,7 +1157,7 @@ classdef cThermoeconomicModel < cResultSet
             log=setProcessResource(obj.rsd,Z);
             if log.status
                 obj.setThermoeconomicAnalysis;
-                obj.setSummaryResults;
+                obj.setSummaryTables;
                 res=obj.rsc;
             else
                 printLogger(log);
@@ -1164,7 +1181,7 @@ classdef cThermoeconomicModel < cResultSet
             log=setProcessResourceValue(obj.rsd,key,value);
             if log.status
                 obj.setThermoeconomicAnalysis;
-                obj.setSummaryResults;
+                obj.setSummaryTables;
                 res=obj.rsc;
             else
                 printLogger(log);
@@ -1242,7 +1259,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             % Get results
             obj.triggerStateChange;
-            obj.setSummaryResults;
+            obj.setSummaryResults(cType.RESOURCES);
         end
     end
     %%%%%%
@@ -1306,38 +1323,39 @@ classdef cThermoeconomicModel < cResultSet
             end
         end
 
-        function res=getSummaryResults(obj)
-        % Force to obtain summary results
-            res=cType.EMPTY;
-            if ~obj.isSummaryEnable
-                return
-            end
-            if ~obj.Summary
-                obj.setSummary(true);
-            end
-            res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
-        end
-
         function setSummaryResults(obj)
         % Obtain Summary Results
-            if ~obj.isSummaryEnable
+            id=cType.ResultId.SUMMARY_RESULTS;
+            if ~obj.isSummaryActive
+                obj.clearResults(id)
                 return
             end
-            id=cType.ResultId.SUMMARY_RESULTS;
-            if obj.Summary
-                sr=cModelSummary(obj);
-                if sr.status
-                    res=sr.getResultInfo(obj.fmt);
-                    obj.setResults(res);
-                    obj.printDebugInfo('Compute Summary Results');
-                else
-                    sr.printLogger;
-                end
+            option=cType.getSummaryId(obj.Summary);
+            sr=cSummaryResults(obj,option);
+            if sr.status
+                res=sr.getResultInfo(obj.fmt);
+                obj.setResults(res);
+                obj.printDebugInfo('Compute Summary Results');
             else
-                res=obj.getResults(id);
-                if ~isempty(res)
-                    obj.clearResults(id);
-                end
+                sr.printLogger;
+            end
+        end
+
+        function setSummaryTables(obj,option)
+            if ~obj.isSummaryActive
+                return
+            end
+            if nargin==1
+                option=cType.getSummaryId(obj.Summary);
+            end
+            sr=obj.summaryResults.Info;
+            sr.setSummaryTables(obj,option);
+            if sr.status
+                res=sr.getResultInfo(obj.fmt);
+                obj.setResults(res);
+                obj.printDebugInfo('Compute Summary Results');
+            else
+                 sr.printLogger;
             end
         end
 
@@ -1419,6 +1437,7 @@ classdef cThermoeconomicModel < cResultSet
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
+            obj.setSummaryTables(cType.RESOURCES);
         end
 
         function res=checkReferenceState(obj,state)
@@ -1457,7 +1476,7 @@ classdef cThermoeconomicModel < cResultSet
             if obj.isGeneralCost
                 obj.setThermoeconomicAnalysis;
             end
-            obj.setSummaryResults;
+            obj.setSummaryTables(cType.STATES);
         end
         
         function res=checkCostTables(obj,value)
@@ -1517,15 +1536,11 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkSummary(obj,value)
         % Ckeck Summary parameter
             res=false;
-            if ~islogical(value)
-                obj.printDebugInfo('Invalid value. Must be true/false');
+            if ~checkNames(obj.sopt,value)
+                obj.printDebugInfo('Invalid Summary option %s',value);
                 return
             end
-            if ~obj.isSummaryEnable
-                obj.printDebugInfo('Summary Results requires more than one state');
-                return
-            end
-            if obj.Summary==value
+           if strcmp(obj.Summary,value)
                 obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end

@@ -143,15 +143,25 @@ classdef cTablesDefinition < cMessageLogger
             res={obj.tableIndex(idx).name};
         end
 
-        function res=getSummaryTables(obj,rsc)
+        function res=getSummaryTables(obj,option,rsc)
         % Get Summary Tables
-            res={};
+            res=cType.EMPTY_CELL;
+            tsummary={obj.cfgSummary.key};
             tbl=[obj.cfgSummary.table];
-            if rsc
-                res={obj.cfgSummary.key};
-            else
-                idx=find(tbl==cType.CostTables.DIRECT);
-                res={obj.cfgSummary(idx).key};
+            drt=~[obj.cfgSummary.rsc];
+            switch option
+                case cType.SummaryId.ALL
+                    res=tsummary;
+                case cType.SummaryId.RESOURCES
+                    idx=find(tbl==cType.RESOURCES);
+                    res={obj.cfgSummary(idx).key};
+                case cType.SummaryId.STATES
+                    if rsc
+                        idx=find(tbl==cType.STATES);
+                    else
+                        idx=find(drt);
+                    end
+                    res={obj.cfgSummary(idx).key};
             end
         end
     end

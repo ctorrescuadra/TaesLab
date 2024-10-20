@@ -39,8 +39,8 @@ classdef (Sealed) TaesPanel < handle
         wf_popup        % Select Waste Flows widget
         tables_popup    % Select CostTables widget
 		tdm_popup       % Diagnosis method widget
+        sr_popup        % Summary Results widget
         ra_checkbox     % Recycling Analysis widget
-        sr_checkbox     % Summary Results widget
         mn_save         % Save Result menu
         mn_debug        % Menu Debug
         mn_console      % Console activation menu
@@ -118,9 +118,6 @@ classdef (Sealed) TaesPanel < handle
                 app.enableResults(cType.ResultId.RESULT_MODEL);
                 set(app.mn_save,'enable','on');
                 set(app.mn_sync,'enable','on');
-                if data.NrOfStates>1
-                	set(app.sr_checkbox,'enable','on');
-                end
 				set(app.save_buttom,'enable','on');
 				app.stateNames=tm.StateNames;
 				set(app.state_popup,'enable','on','string',app.stateNames);
@@ -131,15 +128,19 @@ classdef (Sealed) TaesPanel < handle
                     set(app.tables_popup,'enable','on');
 				end
 				dnames=cType.DiagnosisOptions;
+                tdm_pos=cType.DiagnosisMethod.WASTE_EXTERNAL+1;
                 set(app.tdm_popup,'enable','on');
                 if tm.isWaste
                     app.wasteFlows=data.WasteFlows;
                     set(app.wf_popup,'enable','on','string',app.wasteFlows);
                     set(app.ra_checkbox,'enable','on');
-					set(app.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
+					set(app.tdm_popup,'string',dnames,'value',tdm_pos);
 				else
-					set(app.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
+					set(app.tdm_popup,'string',dnames(1:2),'value',tdm_pos);
                 end
+                sopt=cSummaryOptions(data);
+                set(app.sr_popup,'string',sopt.Names,'enable','on');
+
                 app.ViewIndexTable(tm.getResultInfo)
                 app.model=tm;
             else
@@ -150,22 +151,9 @@ classdef (Sealed) TaesPanel < handle
             end	
         end
 
-        function activateSummary(app,~,~)
-		% Get activate Summary callback
-			val=get(app.sr_checkbox,'value');
-            setSummary(app.model,logical(val));
-			if val
-                app.enableResults(cType.ResultId.SUMMARY_RESULTS);
-                app.ViewIndexTable(app.model.summaryResults);
-			else
-                app.disableResults(cType.ResultId.SUMMARY_RESULTS);
-                app.ViewIndexTable(app.model.getResultInfo);
-			end
-        end
-
         function activateRecycling(app,~,~)
-		% Get activate Summary callback
-			val=get(app.ra_checkbox,'value');
+        % Get activate Summary callback
+            val=get(app.ra_checkbox,'value');
             setRecycling(app.model,logical(val));
             if val
                 app.ViewIndexTable(app.model.wasteAnalysis);
@@ -174,23 +162,32 @@ classdef (Sealed) TaesPanel < handle
             end
         end
 
+        function getSummary(app,~,~)
+		% Get activate Summary callback
+            value=TaesPanel.getPopupValue(app.sr_popup);
+            setSummary(app.model,value);
+			if isSummaryActive(app.model)
+                app.enableResults(cType.ResultId.SUMMARY_RESULTS);
+                app.ViewIndexTable(app.model.summaryResults);
+			else
+                app.disableResults(cType.ResultId.SUMMARY_RESULTS);
+                app.ViewIndexTable(app.model.getResultInfo);
+			end
+        end
+
         function getCostTables(app,~,~)
 		% Select Cost Table callback
-            values=get(app.tables_popup,'string');
-            pos=get(app.tables_popup,'value');
-            setCostTables(app.model,values{pos});
+            value=TaesPanel.getPopupValue(app.tables_popup);
+            setCostTables(app.model,value);
             app.ViewIndexTable(app.model.thermoeconomicAnalysis);
         end
 
 		function getState(app,~,~)
 		% Get state callback
-			ind=get(app.state_popup,'value');
-			setState(app.model,app.stateNames{ind});
+            value=TaesPanel.getPopupValue(app.state_popup);
+			setState(app.model,value);
             if app.model.isDiagnosis
-                pdm=get(app.tdm_popup,'value');
-				if pdm ~= cType.DiagnosisMethod.NONE
-                    app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-				end
+                app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
 			else
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
             end
@@ -199,14 +196,11 @@ classdef (Sealed) TaesPanel < handle
 
         function getReferenceState(app,~,~)
 		% Get state callback
-			ind=get(app.state_popup,'value');
-			setReferenceState(app.model,app.stateNames{ind});
+            value=TaesPanel.getPopupValue(app.state_popup);
+			setReferenceState(app.model,value);
             if app.model.isDiagnosis
-                pdm=get(app.tdm_popup,'value');
-				if pdm ~= cType.DiagnosisMethod.NONE
-                    app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-                    app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
-				end
+                app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
+                app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
 			else
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.getResultInfo);
@@ -215,17 +209,16 @@ classdef (Sealed) TaesPanel < handle
 
 		function getSample(app,~,~)
 		% Get Resources Sample callback
-			ind=get(app.sample_popup,'value');
-			app.model.setResourceSample(app.sampleNames{ind});
+            value=TaesPanel.getPopupValue(app.sample_popup);
+			app.model.setResourceSample(value);
             app.ViewIndexTable(app.model.thermoeconomicAnalysis);
         end
 
 		function getDiagnosisMethod(app,~,~)
 		% Get WasteDiagnosis callback
-            values=get(app.tdm_popup,'string');
-            pos=get(app.tdm_popup,'value');
-			setDiagnosisMethod(app.model,values{pos});
-			if pos==cType.DiagnosisMethod.NONE
+            value=TaesPanel.getPopupValue(app.tdm_popup);
+			setDiagnosisMethod(app.model,value);
+			if isDiagnosis(app.model)
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.getResultInfo);
             elseif app.model.isDiagnosis
@@ -236,9 +229,8 @@ classdef (Sealed) TaesPanel < handle
 
         function getActiveWaste(app,~,~)
         % Get WasteDiagnosis callback
-            values=get(app.wf_popup,'string');
-            pos=get(app.wf_popup,'value');
-            setActiveWaste(app.model,values{pos});
+            value=TaesPanel.getPopupValue(app.wf_popup);
+            setActiveWaste(app.model,value);
             app.ViewIndexTable(app.model.wasteAnalysis);
         end
 
@@ -345,10 +337,11 @@ classdef (Sealed) TaesPanel < handle
         % Menu Synchronize callback. 
         %   Synchronize the widgets with thermoeconomic model parameters 
             tm=app.model;
-            set(app.sr_checkbox,'value',tm.Summary);
+            tdm_pos=cType.getDiagnosisMethod(tm.DiagnosisMethod)+1;
+            set(app.sr_popup,'value',tm.Summary);
             set(app.ra_checkbox,'value',tm.Recycling);
             set(app.tables_popup,'value',cType.getCostTables(tm.CostTables));
-            set(app.tdm_popup,'value',cType.getDiagnosisMethod(tm.DiagnosisMethod));
+            set(app.tdm_popup,'value',tdm_pos);
             set(app.state_popup,'value',app.model.getStateId(tm.State));
             set(app.rstate_popup,'value',app.model.getStateId(tm.ReferenceState));
             set(app.sample_popup,'value',app.model.getSampleId(tm.ResourceSample));
@@ -555,18 +548,18 @@ classdef (Sealed) TaesPanel < handle
 
             uicontrol (p1,'style', 'text',...
                    'units', 'normalized',...
-                   'string', 'Recycling Analysis:',...
+                   'string', 'Summary Results:',...
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
-                   'tooltipstring','Activate Recycling',...
+                   'tooltipstring','SummaryResults',...
                    'position', [0.06 0.41 0.36 0.045]);
 
             uicontrol (p1,'style', 'text',...
                    'units', 'normalized',...
-                   'string', 'Summary Results:',...
+                   'string', 'Recycling Analysis:',...
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
-                   'tooltipstring','Summary Results',...
+                   'tooltipstring','Activate Recycling',...
                    'position', [0.06 0.34 0.36 0.045]);
 
             uicontrol (p1,'style', 'text',...
@@ -623,17 +616,17 @@ classdef (Sealed) TaesPanel < handle
 					'callback', @(src,evt) app.getActiveWaste(src,evt),...
 					'position', [0.44 0.48 0.47 0.045]);
 
+            app.sr_popup = uicontrol (p1,'style', 'popupmenu',...
+                    'units', 'normalized',...
+                    'fontname','Verdana','fontsize',9,...
+                    'callback', @(src,evt) app.getSummary(src,evt),...
+                    'position', [0.44 0.41 0.47 0.045]);
+
             app.ra_checkbox = uicontrol (p1,'style', 'checkbox',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) app.activateRecycling(src,evt),...
-					'position', [0.44 0.405 0.47 0.045]);
-
-            app.sr_checkbox = uicontrol (p1,'style', 'checkbox',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) app.activateSummary(src,evt),...
-					'position', [0.44 0.335 0.47 0.045]);
+                    'position', [0.44 0.345 0.47 0.045]);
 
             app.outputFileName=[cType.RESULT_FILE,'.xlsx'];
             app.resultFile=[pwd,filesep,app.outputFileName];
@@ -670,13 +663,10 @@ classdef (Sealed) TaesPanel < handle
 			set(app.mfile_text,'backgroundcolor',[1 0.5 0.5]);
             set(app.mn_save,'enable','off');
 			set(app.save_buttom,'enable','off');
-            set(app.sr_checkbox,'enable','off');
-            set(app.ra_checkbox,'enable','off');
-            set(app.sr_checkbox,'value',0);
-            set(app.ra_checkbox,'value',0);
-            set(app.save_buttom,'enable','off');
+            set(app.ra_checkbox,'value',0,'enable','off');
 			set(app.tables_popup,'value',cType.CostTables.DIRECT,'enable','off');
-			set(app.tdm_popup,'string',{'NONE'},'value',cType.DiagnosisMethod.NONE,'enable','off');
+            set(app.sr_popup,'string',{'NONE'},'value',1,'enable','off');
+			set(app.tdm_popup,'string',{'NONE'},'value',1,'enable','off');
             set(app.wf_popup,'string',{'NONE'},'value',1,'enable','off');
 			set(app.state_popup,'string',{'Reference'},'value',1,'enable','off');
             set(app.rstate_popup,'string',{'Reference'},'value',1,'enable','off');
@@ -686,6 +676,14 @@ classdef (Sealed) TaesPanel < handle
             app.currentNode=cType.EMPTY;
             arrayfun(@(i) app.disableResults(i), 1:cType.MAX_RESULT_INFO);
 		end
+    end
+    methods(Static,Access=private)
+    % Get the selected value in the popup downdrop widget
+        function res=getPopupValue(popup)
+            list=get(popup,'string');
+			idx=get(popup,'value');
+            res=list{idx};
+        end
 	end
 end
 

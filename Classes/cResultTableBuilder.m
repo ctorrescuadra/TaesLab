@@ -265,6 +265,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   ms - cSummaryResults object
         % Output Arguments:
         %   res - cResultInfo object (SUMMARY_RESULTS) with the tables
+        %    STATES
         %     exergy - Exergy values of the model state
         %     puk - Unit consumptions of processes
         %     pI - Process irreversibility
@@ -276,13 +277,17 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %     gpuc - Generalized unit cost of processes
         %     gfc - Generalized cost of flows
         %     gfuc - Generalized unit cost of flows
-        %
+        %    RESOURCES
+        %     rgpc - Generalized cost of processes
+        %     rgpuc - Generalized unit cost of processes
+        %     rgfc - Generalized cost of flows
+        %     rgfuc - Generalized unit cost of flows     
             tables=struct();
             for i=1:sr.NrOfTables
                 tmp=sr.getValues(i);
                 tbl=tmp.Name;
-                rowNames=obj.getNodeNames(tmp.Type);
-                colNames=horzcat('Key',sr.ColNames);
+                rowNames=sr.getRowNames(tbl);
+                colNames=['key',sr.getColNames(tbl)];
                 data=tmp.Values;
                 tp=obj.getTableProperties(tbl);
                 tables.(tbl)=createSummaryTable(obj,tp,data,rowNames,colNames);

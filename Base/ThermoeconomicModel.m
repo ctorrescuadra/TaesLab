@@ -27,10 +27,13 @@ function model=ThermoeconomicModel(filename,varargin)
 %     'WASTE_INTERNAL' Allocate waste increase to productive processes 
 %   ActiveWaste - Name of the active waste flow for analysis. If it is not defined, first state is taken.
 %     char array | string
+%   Summary - Get the Summary Results if available
+%     'NONE' No summary are required
+%     'STATES' Get States summary
+%     'RESOURCES' Get Resources Results
+%     'ALL' Get both kind of summaries
 %   Recycling - Activate Recycling Analysis
 %     true | false (default)    
-%   Summary - Activate Summary Results
-%     true | false (default)
 %   Debug - Print Debug information during execution
 %     true | false (default)
 %
@@ -58,6 +61,7 @@ function model=ThermoeconomicModel(filename,varargin)
     end
     % Check Data Model file
         data=readModel(filename);
+        sopt=cSummaryOptions(data);
     % Check optional parameters and create cThermoeconomicModel obeject
     if data.status
         p = inputParser;
@@ -69,7 +73,7 @@ function model=ThermoeconomicModel(filename,varargin)
         p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
         p.addParameter('Recycling',false,@islogical);
         p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
-        p.addParameter('Summary',false,@islogical);
+        p.addParameter('Summary',cType.DEFAULT_SUMMARY,@sopt.checkNames);
         p.addParameter('Debug',true,@islogical);
         try
             p.parse(varargin{:});

@@ -33,11 +33,11 @@ classdef (Sealed) TaesTool < handle
         wf_popup        % Select Waste Flows widget
         tables_popup    % Select CostTables widget
 		tdm_popup       % Diagnosis method widget
-        tv_popup        % Table View  widget
+        sr_popup       % Summary Results widget
+        tv_popup        % Table View widget
         ra_checkbox     % Recycling Analysis widget
 		sh_checkbox     % Show in console widget
 		gr_checkbox     % Select graphic widget
-        sr_checkbox     % Summary Results widget
         mn_rsave        % Save Result menu
         mn_tsave        % Save Table menu
         mn_debug        % Debug menu
@@ -113,9 +113,6 @@ classdef (Sealed) TaesTool < handle
                 app.enableResults(cType.ResultId.DATA_MODEL);
                 app.enableResults(cType.ResultId.RESULT_MODEL);
                 set(app.mn_rsave,'enable','on');
-                if data.NrOfStates>1
-                	set(app.sr_checkbox,'enable','on');
-                end
 				set(app.save_buttom,'enable','on');
 				app.stateNames=tm.StateNames;
 				set(app.state_popup,'enable','on','string',app.stateNames);
@@ -126,15 +123,18 @@ classdef (Sealed) TaesTool < handle
                     set(app.tables_popup,'enable','on');
 				end
 				dnames=cType.DiagnosisOptions;
+                tdm_pos=cType.DiagnosisMethod.WASTE_EXTERNAL+1;
                 set(app.tdm_popup,'enable','on');
 				if tm.isWaste
                     app.wasteFlows=data.WasteFlows;
                     set(app.wf_popup,'enable','on','string',app.wasteFlows);
                     set(app.ra_checkbox,'enable','on');
-                    set(app.tdm_popup,'string',dnames,'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
+                    set(app.tdm_popup,'string',dnames,'value',tdm_pos);
 				else
-                    set(app.tdm_popup,'string',dnames(1:2),'value',cType.DiagnosisMethod.WASTE_EXTERNAL);
+                    set(app.tdm_popup,'string',dnames(1:2),'value',tdm_pos);
 				end
+                sopt=cSummaryOptions(data);
+                set(app.sr_popup,'string',sopt.Names,'enable','on');
                 app.ViewIndexTable(tm.getResultInfo)
                 app.model=tm;
             else
@@ -142,20 +142,6 @@ classdef (Sealed) TaesTool < handle
 				logtext=' ERROR: Invalid Data Model. See Console Log';
                 printLogger(data);
                 set(app.log,'string',logtext);
-			end
-        end
-
-        function activateSummary(app,~,~)
-		% Activate Summary callback
-			val=get(app.sr_checkbox,'value');
-            setSummary(app.model,logical(val));
-
-			if val
-                app.enableResults(cType.ResultId.SUMMARY_RESULTS);
-                app.ViewIndexTable(app.model.summaryResults);
-			else
-                app.disableResults(cType.ResultId.SUMMARY_RESULTS);
-                app.ViewIndexTable(app.model.getResultInfo);
 			end
         end
 
@@ -170,66 +156,63 @@ classdef (Sealed) TaesTool < handle
             end
         end
 
-        function getCostTables(app,~,~)
-		% Select Cost Table callback
-            values=get(app.tables_popup,'string');
-            pos=get(app.tables_popup,'value');
-            setCostTables(app.model,values{pos});
-            app.ViewIndexTable(app.model.getResultInfo);
+        function getSummary(app,~,~)
+		% Get activate Summary callback
+            value=TaesTool.getPopupValue(app.sr_popup);
+            setSummary(app.model,value);
+			if isSummaryActive(app.model)
+                app.enableResults(cType.ResultId.SUMMARY_RESULTS);
+                app.ViewIndexTable(app.model.summaryResults);
+			else
+                app.disableResults(cType.ResultId.SUMMARY_RESULTS);
+                app.ViewIndexTable(app.model.getResultInfo);
+			end
         end
 
-        function getTableView(app,~,~)
-        % Select Table View callback
-            pos=get(app.tv_popup,'value');
-            app.tableView=pos;
+        function getCostTables(app,~,~)
+		% Select Cost Table callback
+            value=TaesTool.getPopupValue(app.tables_popup);
+            setCostTables(app.model,value);
+            app.ViewIndexTable(app.model.thermoeconomicAnalysis);
         end
 
 		function getState(app,~,~)
 		% Get state callback
-			ind=get(app.state_popup,'value');
-			setState(app.model,app.stateNames{ind});
+            value=TaesTool.getPopupValue(app.state_popup);
+			setState(app.model,value);
             if app.model.isDiagnosis
-                pdm=get(app.tdm_popup,'value');
-				if pdm ~= cType.DiagnosisMethod.NONE
-                    app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-				end
+                app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
 			else
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-
             end
             app.ViewIndexTable(app.model.getResultInfo);
         end
 
         function getReferenceState(app,~,~)
-		% Get reference state callback
-			ind=get(app.state_popup,'value');
-			setReferenceState(app.model,app.stateNames{ind});
+		% Get state callback
+            value=TaesTool.getPopupValue(app.state_popup);
+			setReferenceState(app.model,value);
             if app.model.isDiagnosis
-
-				if pdm ~= cType.DiagnosisMethod.NONE
-                    app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-                    app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
-				end
+                app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
+                app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
 			else
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-
                 app.ViewIndexTable(app.model.getResultInfo);
             end
 		end
 
 		function getSample(app,~,~)
 		% Get Resources Sample callback
-			ind=get(app.sample_popup,'value');
-			setResourceSample(app.model,app.sampleNames{ind});
+            value=TaesTool.getPopupValue(app.sample_popup);
+			app.model.setResourceSample(value);
             app.ViewIndexTable(app.model.thermoeconomicAnalysis);
         end
 
 		function getDiagnosisMethod(app,~,~)
-		% Get Diagnosis Method callback
-            values=get(app.tdm_popup,'string');
-            pos=get(app.tdm_popup,'value');
-			setDiagnosisMethod(app.model,values{pos});
-			if pos==cType.DiagnosisMethod.NONE
+		% Get WasteDiagnosis callback
+            value=TaesTool.getPopupValue(app.tdm_popup);
+			setDiagnosisMethod(app.model,value);
+			if isDiagnosis(app.model)
                 app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.getResultInfo);
             elseif app.model.isDiagnosis
@@ -239,11 +222,16 @@ classdef (Sealed) TaesTool < handle
         end
 
         function getActiveWaste(app,~,~)
-        % Get ActiveWaste callback
-            values=get(app.wf_popup,'string');
-            pos=get(app.wf_popup,'value');
-            setActiveWaste(app.model,values{pos});
+        % Get WasteDiagnosis callback
+            value=TaesTool.getPopupValue(app.wf_popup);
+            setActiveWaste(app.model,value);
             app.ViewIndexTable(app.model.wasteAnalysis);
+        end
+
+        function getTableView(app,~,~)
+        % Select Table View callback
+            pos=get(app.tv_popup,'value');
+            app.tableView=pos;
         end
 
 		function saveResult(app,~,~)
@@ -559,26 +547,26 @@ classdef (Sealed) TaesTool < handle
 
             uicontrol (p1,'style', 'text',...
                    'units', 'normalized',...
+                   'string', 'Summary Results:',...
+                   'fontname','Verdana','fontsize',9,...
+                   'horizontalalignment', 'left',...
+                   'tooltipstring','Select Summary Results',...
+                   'position', [0.06 0.41 0.36 0.045]);
+
+            uicontrol (p1,'style', 'text',...
+                   'units', 'normalized',...
                    'string', 'Table View:',...
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
-                   'tooltipstring','Table View Mode',...
-                   'position', [0.06 0.41 0.36 0.045]);
+                   'tooltipstring','Select Table View',...
+                   'position', [0.06 0.34 0.36 0.045]);
 
             uicontrol (p1,'style', 'text',...
                    'units', 'normalized',...
                    'string', 'Recycling Analysis:',...
                    'fontname','Verdana','fontsize',9,...
                    'horizontalalignment', 'left',...
-                   'tooltipstring','Activate Recycling',...
-                   'position', [0.06 0.34 0.36 0.045]);
-
-            uicontrol (p1,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Summary Results:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Summary Results',...
+                   'tooltipstring','Activate Recycling Analysis',...
                    'position', [0.06 0.27 0.36 0.045]);
 
             uicontrol (p1,'style', 'text',...
@@ -588,14 +576,6 @@ classdef (Sealed) TaesTool < handle
                    'horizontalalignment', 'left',...
                    'tooltipstring','Select Result File',...
                    'position', [0.06 0.20 0.36 0.045]);
-
-            uicontrol (p1,'style', 'text',...
-                   'units', 'normalized',...
-                   'string', 'Table View:',...
-                   'fontname','Verdana','fontsize',9,...
-                   'horizontalalignment', 'left',...
-                   'tooltipstring','Table View Mode',...
-                   'position', [0.06 0.41 0.36 0.045]);
 
 			% object widget
 			app.mfile_text = uicontrol (p1,'style', 'text',...
@@ -643,26 +623,26 @@ classdef (Sealed) TaesTool < handle
 					'callback', @(src,evt) app.getActiveWaste(src,evt),...
 					'position', [0.44 0.48 0.47 0.045]);
 
+            app.sr_popup = uicontrol (p1,'style', 'popupmenu',...
+                    'units', 'normalized',...
+                    'fontname','Verdana','fontsize',9,...
+                    'callback', @(src,evt) app.getSummary(src,evt),...
+                    'position', [0.44 0.41 0.47 0.045]);
+
             tvopc=cType.TableViewOptions;
             app.tv_popup = uicontrol (p1,'style', 'popupmenu',...
                     'units', 'normalized',...
                     'string', tvopc(2:end),...
                     'fontname','Verdana','fontsize',9,...
                     'callback', @(src,evt) app.getTableView(src,evt),...
-                    'position', [0.44 0.41 0.47 0.045]);
-
+                    'position', [0.44 0.34 0.47 0.045]);
+                    
             app.ra_checkbox = uicontrol (p1,'style', 'checkbox',...
 					'units', 'normalized',...
 					'fontname','Verdana','fontsize',9,...
 					'callback', @(src,evt) app.activateRecycling(src,evt),...
-					'position', [0.44 0.335 0.47 0.045]);
-
-            app.sr_checkbox = uicontrol (p1,'style', 'checkbox',...
-					'units', 'normalized',...
-					'fontname','Verdana','fontsize',9,...
-					'callback', @(src,evt) app.activateSummary(src,evt),...
-					'position', [0.44 0.265 0.47 0.045]);
-
+                    'position', [0.44 0.275 0.47 0.045]);
+	
             app.outputFileName=[cType.RESULT_FILE,'.xlsx'];
             app.resultFile=[pwd,filesep,app.outputFileName];
 			app.ofile_text = uicontrol (p1,'style', 'text',...
@@ -715,13 +695,10 @@ classdef (Sealed) TaesTool < handle
             set(app.mn_rsave,'enable','off');
             set(app.mn_tsave,'enable','off');
 			set(app.save_buttom,'enable','off');
-            set(app.sr_checkbox,'enable','off');
-            set(app.ra_checkbox,'enable','off');
-            set(app.sr_checkbox,'value',0);
-            set(app.ra_checkbox,'value',0);
-            set(app.save_buttom,'enable','off');
+            set(app.ra_checkbox,'value',0,'enable','off');
 			set(app.tables_popup,'value',cType.CostTables.DIRECT,'enable','off');
-			set(app.tdm_popup,'string',{'NONE'},'value',cType.DiagnosisMethod.NONE,'enable','off');
+            set(app.sr_popup,'string',{'NONE'},'value',1,'enable','off');
+			set(app.tdm_popup,'string',{'NONE'},'value',1,'enable','off');
             set(app.wf_popup,'string',{'NONE'},'value',1,'enable','off');
 			set(app.state_popup,'string',{'Reference'},'value',1,'enable','off');
             set(app.rstate_popup,'string',{'Reference'},'value',1,'enable','off');
@@ -734,6 +711,14 @@ classdef (Sealed) TaesTool < handle
             app.currentTable=cType.EMPTY;
             app.model=cMessageLogger(false);
             arrayfun(@(i) app.disableResults(i), 1:cType.MAX_RESULT_INFO);
+        end
+    end
+    methods(Static,Access=private)
+        function res=getPopupValue(popup)
+        % Get the selected value in the popup downdrop widget
+            list=get(popup,'string');
+			idx=get(popup,'value');
+            res=list{idx};
         end
 	end
 end
