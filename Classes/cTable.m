@@ -11,6 +11,8 @@ classdef (Abstract) cTable < cMessageLogger
 %   Name         - Table Name
 %   Description  - Table Descripcion
 %   State        - State Name of values
+%   Sample       - Resource sample name
+%   Resources    - Contains reources info
 %   GraphType    - Graph Type associated to table
 %
 % cTable Methods:
@@ -39,6 +41,8 @@ classdef (Abstract) cTable < cMessageLogger
         Name            % Table Name
         Description     % Table Descripcion
         State           % State Name
+        Sample          % Sample Name
+        Resources=false % Contains resources info
         GraphType=0     % Graph Type associated to table
     end
     properties(Access=protected)
@@ -278,9 +282,14 @@ classdef (Abstract) cTable < cMessageLogger
             end
         end
     
-        function setState(obj,state)
-        % Set state value. Internal function 
-            obj.State=state;
+        function setStudyCase(obj,info)
+        % Set state value. Internal function
+            obj.State=info.State;
+            if obj.Resources
+                obj.Sample=info.Sample;
+            else
+                obj.Sample=cType.EMPTY_CHAR;
+            end
         end
 
         function res=formatData(obj)

@@ -344,7 +344,7 @@ classdef (Sealed) TaesPanel < handle
             set(app.tdm_popup,'value',tdm_pos);
             set(app.state_popup,'value',app.model.getStateId(tm.State));
             set(app.rstate_popup,'value',app.model.getStateId(tm.ReferenceState));
-            set(app.sample_popup,'value',app.model.getSampleId(tm.ResourceSample));
+            set(app.sample_popup,'value',app.model.getSampleId(tm.Sample));
             set(app.wf_popup,'value',app.model.getWasteId(tm.ActiveWaste));
             if tm.isDiagnosis
                 app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);

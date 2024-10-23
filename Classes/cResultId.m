@@ -8,14 +8,16 @@ classdef cResultId < cMessageLogger
 %   ResultName   - Result Name
 %   ModelName    - Model Name
 %   State        - State Name
+%   Sample       - Resource Sample Name
 %   DefaultGraph - Default Graph
 
 	properties(GetAccess=public,SetAccess=protected)
-		ResultId     % Result Id
-		ResultName   % Result Name
-        ModelName    % Model Name
-        State        % State Name
-		DefaultGraph % Default Graph
+		ResultId       % Result Id
+		ResultName     % Result Name
+        ModelName      % Model Name
+        State          % State Name
+        Sample         % Sample Name
+		DefaultGraph   % Default Graph
     end
 
 	methods
@@ -31,6 +33,7 @@ classdef cResultId < cMessageLogger
 			    obj.ResultId=id;
                 obj.ModelName=cType.EMPTY_CHAR;
                 obj.State=cType.EMPTY_CHAR;
+                obj.Sample=cType.EMPTY_CHAR;
                 obj.DefaultGraph=cType.EMPTY_CHAR;
             else
                 obj.messageLog(cType.ERROR,'Invalid ResultId %d',id);
@@ -48,6 +51,10 @@ classdef cResultId < cMessageLogger
         function setResultId(obj,id)
         % Set ResultId. Internal package use only
             obj.ResultId=id;
+        end
+
+        function setSample(obj,sample)
+            obj.Sample=sample;
         end
 
         function setDefaultGraph(obj,graph)

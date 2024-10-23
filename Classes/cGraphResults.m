@@ -290,11 +290,22 @@ classdef (Sealed) cGraphResults < cMessageLogger
 				return
 			end
 			obj.Name='Cost Summary';
-			obj.Title=tbl.Description;
 			obj.Categories=tbl.ColNames(2:end);
 			obj.xValues=(1:tbl.NrOfCols-1)';
 			obj.yValues=cell2mat(tbl.Data(idx,:))';
-			obj.xLabel='States';
+			obj.Title=tbl.Description;
+			switch tbl.SummaryType
+				case cType.STATES
+					obj.xLabel='States';
+					if tbl.Resources
+						obj.Title=horzcat(obj.Title,' - [',tbl.Sample,']');
+					end
+				case cType.RESOURCES
+					obj.xLabel='Samples';
+					obj.Title=horzcat(obj.Title,' - [',tbl.State,']');
+				otherwise
+					obj.xLabel='';
+			end
 			obj.yLabel=['Unit Cost ',tbl.Unit];
 			obj.Legend=tbl.RowNames(idx);
 			if tbl.isGeneralCostTable || tbl.isFlowsTable

@@ -158,8 +158,12 @@ classdef (Sealed) cTableCell < cTableResult
         % Output Argument:
         %   res - char array containg the table description 
         %     and the state of the table values
-        %   
-            res=[obj.Description,' - ',obj.State];
+        % 
+            if obj.Resources
+                res=horzcat(obj.Description,' - [',obj.State,'/',obj.Sample,']');
+            else
+                res=horzcat(obj.Description,' - ',obj.State);
+            end
         end
 
         function printTable(obj,fId)
@@ -248,6 +252,7 @@ classdef (Sealed) cTableCell < cTableResult
                 obj.ShowNumber=p.ShowNumber;
                 obj.GraphType=p.GraphType;
                 obj.NodeType=p.NodeType;
+                obj.Resources=p.Resources;
                 obj.setColumnFormat;
                 obj.setColumnWidth;
             catch err

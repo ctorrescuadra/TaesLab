@@ -136,6 +136,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             end
             if options.GeneralCost
                 cz=options.ResourcesCost;
+                mfp.setSample(cz.sample);
                 gcost=mfp.getProcessCost(cz);
                 gucost=mfp.getProcessUnitCost(cz);
                 gfcost=mfp.getFlowsCost(cz);
@@ -640,6 +641,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             p.ShowNumber=props.number;
             p.GraphType=props.graph;
             p.NodeType=props.node;
+            p.Resources=props.rsc;
             res=cTableCell(data,rowNames,colNames,p);
         end
             
@@ -659,6 +661,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             p.Format=obj.getFormat(props.type);
             p.GraphType=props.graph;
             p.GraphOptions=props.options;
+            p.Resources=props.rsc;
+            p.SummaryType=cType.SummaryId.NONE;
             p.rowTotal=props.rowTotal;
             p.colTotal=props.colTotal;
             res=cTableMatrix(data,rowNames,colNames,p);
@@ -677,6 +681,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             p.Format=obj.getFormat(props.type);
             p.GraphType=props.graph;
             p.GraphOptions=props.options;
+            p.Resources=props.rsc;
+            p.SummaryType=props.table;
             p.rowTotal=false;
             p.colTotal=false;
             res=cTableMatrix(data,rowNames,colNames,p);

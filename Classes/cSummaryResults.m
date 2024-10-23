@@ -90,7 +90,8 @@ classdef cSummaryResults < cResultId
             % cResultId properties
             obj.DefaultGraph=obj.setDefaultSummaryGraph;
             obj.ModelName=model.ModelName;
-            obj.State='SUMMARY';
+            obj.State=model.State;
+            obj.Sample=model.Sample;
         end
 
         function res=get.NrOfTables(obj)
@@ -228,6 +229,9 @@ classdef cSummaryResults < cResultId
         % Fill State Tables
         % Input Argument:
         %   model - cThermoeconomicModel
+            if model.isResourceCost
+                rd=model.ResourceData;
+            end
             for j=1:model.DataModel.NrOfStates
                 rstate=model.getResultState(j);
                 % SUMMARY EXERGY
@@ -258,7 +262,7 @@ classdef cSummaryResults < cResultId
                 obj.setValues(id,j,fcost.c');
                 % General Cost
                 if model.isResourceCost
-                    rsc=getResourceCost(model.ResourceData,rstate);
+                    rsc=getResourceCost(rd,rstate);
                     % SUMMARY PROCESS COST
                     id=cType.Tables.SUMMARY_PROCESS_GENERAL_COST;
                     cost=rstate.getProcessCost(rsc);

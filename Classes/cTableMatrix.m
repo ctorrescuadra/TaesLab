@@ -3,7 +3,8 @@ classdef (Sealed) cTableMatrix < cTableResult
 %   It store the row/col summary of the matrix
 %
 % cTableCell Properties
-%   GraphOptions  - Options for graphs 
+%   GraphOptions  - Options for graphs
+%   SummaryType   - Type of summary type tables
 % 
 % cTableCell Methods
 %   printTable             - Print a table on console
@@ -35,6 +36,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         ColTotal			% Column Total true/false
     end
     properties (GetAccess=public,SetAccess=private)
+        SummaryType     % Type of Summary Table
         GraphOptions    % Graph Type
     end
     methods
@@ -166,7 +168,18 @@ classdef (Sealed) cTableMatrix < cTableResult
         % Output Arguments:
         %   res - char array with table description, units and state data
         %
-            res=[obj.Description,' ',obj.Unit,' - ',obj.State];
+            switch obj.SummaryType
+                case cType.STATES
+                    obj.State='SUMMARY';
+                case cType.RESOURCES
+                    obj.Sample='SUMMARY';
+            end
+            if obj.Resources
+                stc=horzcat('[',obj.State,'/',obj.Sample,']');
+            else
+                stc=obj.State;
+            end
+            res=horzcat(obj.Description,' ',obj.Unit,' - ',stc );
         end
 
         function printTable(obj,fId)
@@ -255,7 +268,9 @@ classdef (Sealed) cTableMatrix < cTableResult
                 obj.Unit=p.Unit;
                 obj.Format=p.Format;
                 obj.GraphType=p.GraphType;
+                obj.Resources=p.Resources;
                 obj.GraphOptions=p.GraphOptions;
+                obj.SummaryType=p.SummaryType;
                 obj.setColumnFormat;
                 obj.setColumnWidth;
             catch err

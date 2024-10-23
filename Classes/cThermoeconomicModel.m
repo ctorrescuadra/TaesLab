@@ -122,13 +122,12 @@ classdef cThermoeconomicModel < cResultSet
         ResourceData        % Resource Data object
         ResourceCost        % Resource Cost object
         ReferenceState      % Active Reference state
-        ResourceSample      % Active resource cost sample
         CostTables          % Selected Cost Result Tables
         DiagnosisMethod     % Method to calculate fuel impact of wastes
         Summary             % Summary Result Selected 
         Recycling           % Activate Recycling Analysis
         ActiveWaste         % Active Waste Flow for Recycling Analysis and Waste Allocation
-        sopt
+        sopt                % cSummary Option class
     end
 
     properties(Access=private)
@@ -242,7 +241,7 @@ classdef cThermoeconomicModel < cResultSet
                     param.ResourceSample=data.SampleNames{1};
                 end
                 if obj.checkResourceSample(param.ResourceSample)
-                    obj.ResourceSample=param.ResourceSample;
+                    obj.Sample=param.ResourceSample;
                 else 
                     obj.printError('Invalid ResourceSample %s',param.ResourceSample);
                     return
@@ -323,7 +322,7 @@ classdef cThermoeconomicModel < cResultSet
         %   state - Valid state.
         %     array of chars
             if obj.checkResourceSample(sample)
-                obj.ResourceSample=sample;
+                obj.Sample=sample;
                 obj.triggerResourceSampleChange;
             end
         end
@@ -568,7 +567,7 @@ classdef cThermoeconomicModel < cResultSet
         %   obj.showProperties
             s=struct('State',obj.State,...
                 'ReferenceState',obj.ReferenceState,...
-                'ResourceSample',obj.ResourceSample,...
+                'ResourceSample',obj.Sample,...
                 'CostTables',obj.CostTables,...
                 'DiagnosisMethod',obj.DiagnosisMethod,...
                 'ActiveWaste',obj.ActiveWaste,...
@@ -1199,7 +1198,7 @@ classdef cThermoeconomicModel < cResultSet
         %   res - cResourceData object 
         %
             if nargin==1
-                sample=obj.ResourceSample;
+                sample=obj.Sample;
             end
             res=obj.DataModel.getResourceData(sample);
         end
@@ -1462,7 +1461,7 @@ classdef cThermoeconomicModel < cResultSet
                 obj.printWarning('Invalid resource sample %s',sample);
                 return       
             end
-            if isempty(sample) || strcmp(obj.ResourceSample,sample)
+            if isempty(sample) || strcmp(obj.Sample,sample)
                 obj.printDebugInfo('No sample change. The new sample is equal to the previous one');
                 return
             end

@@ -302,8 +302,9 @@ classdef cTablesDefinition < cMessageLogger
                 end
             end
             props.Name='tdir';props.Description='Tables Directory';
+            props.State='SUMMARY';props.Sample=cType.EMPTY_CHAR;
             res=cTableData(data,rowNames,colNames,props);
-            res.setState('SUMMARY');
+            res.setStudyCase(props);
             if isempty(obj.tDirectory)
                 obj.tDirectory=res;
             end

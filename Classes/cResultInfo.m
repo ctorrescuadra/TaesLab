@@ -56,7 +56,7 @@ classdef cResultInfo < cResultSet
             obj.NrOfTables=obj.tableIndex.NrOfRows;
             obj.ModelName=info.ModelName;
             obj.setDefaultGraph(info.DefaultGraph);
-            obj.setState(info.State);
+            obj.setStudyCase(info);
             obj.status=info.status;
         end
 
@@ -145,10 +145,11 @@ classdef cResultInfo < cResultSet
     end
 
     methods(Access=private)
-        function setState(obj,state)
+        function setStudyCase(obj,info)
         % Set model and state properties
-            cellfun(@(x) setState(x,state),obj.tableIndex.Content);
-            obj.State=state;
+            cellfun(@(x) setStudyCase(x,info),obj.tableIndex.Content);
+            obj.State=info.State;
+            obj.Sample=info.Sample;
         end
 
         function status=existTable(obj,name)
