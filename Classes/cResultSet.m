@@ -14,6 +14,7 @@ classdef cResultSet < cResultId
 % 
 % cResultSet Methods:
 %   ListOfTables   - Get the tables of the cResultInfo
+%   StudyCase      - Get the study case value names
 %   getTable       - Get a table by name
 %   getTableIndex  - Get the table index
 %   saveTable      - Save the results in an external file 
@@ -63,7 +64,22 @@ classdef cResultSet < cResultId
             end
         end
 
-        function res = getTable(obj,name)
+        function res=StudyCase(obj)
+        % Get/Display the study case name values
+        %   If output argument is not provided values are shown on console
+        % Syntax:
+        %   obj.StudyCase;
+        %   res=obj.StudyCase
+        % Output Argument
+        %   res - struct with the current state and sample names
+        %
+            res=struct('State',obj.State,'Sample',obj.Sample);
+            if nargout==0
+                disp(res);
+            end
+        end
+
+        function res=getTable(obj,name)
         % Get the table called name
         % Syntax:
         %   res=obj.getTable(name)

@@ -7,7 +7,7 @@ classdef cSummaryOptions < cMessageLogger
 %
 % cSummaryOptions Methods
 %  checkId       - Check if the summary id is available
-%  checkNames    - Check if the option name is available
+%  checkName     - Check if the option name is available
 %  defaultOption - Get the default summary option
 %  isEnabled     - Check if summary is enabled
 %  isStates      - Check if there are summary States
@@ -16,6 +16,7 @@ classdef cSummaryOptions < cMessageLogger
 % See also cSummaryResults
 %
     properties(Constant,Access=private)
+        %Transition matrix
         tM=[1 0 0 0; 1 1 0 0; 1 0 1 0; 1 1 1 1];
     end
 
@@ -57,10 +58,10 @@ classdef cSummaryOptions < cMessageLogger
             res=eq(tmp,option) && option;
         end
 
-        function res=checkNames(obj,option)
+        function res=checkName(obj,option)
         % Check the summary name option
         % Syntax:
-        %   res = obj.checkNames(option)
+        %   res = obj.checkName(option)
         % Input Argument:
         %   option - Summary name option to check
         % Output Argument:

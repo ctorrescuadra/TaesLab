@@ -50,18 +50,23 @@ function res = SummaryResults(data,varargin)
 % See also cDataModel, cSummaryResults, cResultInfo
 %
     res=cMessageLogger();
+    % Check data model
 	if nargin <1 || ~isObject(data,'cDataModel')
 		res.printError('First argument must be a Data Model');
         res.printError('Usage: SummaryResults(data,options)');
 		return
 	end
     sopt=cSummaryOptions(data);
-    doption=sopt.defaultOption;
+    if sopt.isEnable
+        doption=sopt.defaultOption;
+    else
+        res.printError('Summary Results are not available');
+    end
     %Check and initialize parameters
     p = inputParser;
     p.addParameter('State',data.StateNames{1},@ischar);
     p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
-    p.addParameter('Summary',doption,@sopt.checkNames);
+    p.addParameter('Summary',doption,@sopt.checkName);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try

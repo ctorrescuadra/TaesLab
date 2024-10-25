@@ -10,6 +10,7 @@ classdef cSummaryResults < cResultId
 % 
 % cSummaryResults Methods
 %   getResultInfo - get the cResultInfo object with the summary tables
+%   defaultSummaryTables - get the default summary tables option name
 %   setSummaryTables - set the values of the summary tables
 %   getValues - get the summary tables info
 %   getRowNames - get the row names of the summary tables
@@ -29,6 +30,7 @@ classdef cSummaryResults < cResultId
         ds     % cDataset containing the table values
         option % Summary Results option
         rsd    % Resource Data available
+        sopt   % cSummaryOption object 
     end
 
     methods
@@ -50,15 +52,15 @@ classdef cSummaryResults < cResultId
             end
             obj.dm=model.DataModel;
             obj.rsd=obj.dm.isResourceCost;
-            sopt=cSummaryOptions(obj.dm);
-            if ~sopt.Id
+            obj.sopt=cSummaryOptions(obj.dm);
+            if ~obj.sopt.isEnable
                 obj.messageLog(cType.ERROR,'No Summary Result Available for this model');
                 return
             end
             % Check Option
             if nargin==1
                 obj.option=sopt.Id;
-            elseif sopt.checkId(option)
+            elseif obj.sopt.checkId(option)
                 obj.option=option;
             else
                 obj.messageLog(cType.ERROR,'Invalid summary option');
@@ -101,7 +103,22 @@ classdef cSummaryResults < cResultId
 
         function res=getResultInfo(obj,fmt)
         % Get cResultInfo object
+        % Syntax:
+        %   res=obj.getResultInfo(fmt)
+        % Input Argument
+        %   fmt - cResultTableBuilder object
+        % Output Argument
+        %   res - cResultInfo object with the summary results
             res=fmt.getSummaryResults(obj);
+        end
+
+        function res=defaultSummaryTables(obj)
+        % Get the default summary tables option name
+        % Syntax:
+        %   res=obj.defaultSummaryTable
+        % Output Argument:
+        %   res - Get the default summary option name
+            res=obj.sopt.defaultOption;
         end
         
         function setSummaryTables(obj,model,option)

@@ -73,7 +73,7 @@ function model=ThermoeconomicModel(filename,varargin)
         p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
         p.addParameter('Recycling',false,@islogical);
         p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
-        p.addParameter('Summary',cType.DEFAULT_SUMMARY,@sopt.checkNames);
+        p.addParameter('Summary',cType.DEFAULT_SUMMARY,@sopt.checkName);
         p.addParameter('Debug',true,@islogical);
         try
             p.parse(varargin{:});

@@ -175,7 +175,7 @@ classdef cThermoeconomicModel < cResultSet
             p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
             p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
             p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
-            p.addParameter('Summary',cType.DEFAULT_SUMMARY,@sopt.checkNames);
+            p.addParameter('Summary',cType.DEFAULT_SUMMARY,@sopt.checkName);
             p.addParameter('Recycling',false,@islogical);
             p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
             p.addParameter('Debug',false,@islogical);
@@ -561,23 +561,26 @@ classdef cThermoeconomicModel < cResultSet
         %%%
         % Utility methods
         %%%%
-        function showProperties(obj)
+        function res=showProperties(obj)
         % Show the values of the actual parameters of the model
         % Syntax:
         %   obj.showProperties
-            s=struct('State',obj.State,...
+            res=struct('State',obj.State,...
                 'ReferenceState',obj.ReferenceState,...
                 'ResourceSample',obj.Sample,...
                 'CostTables',obj.CostTables,...
                 'DiagnosisMethod',obj.DiagnosisMethod,...
                 'ActiveWaste',obj.ActiveWaste,...
-                'Summary',log2str(obj.Summary),...
+                'Summary',obj.Summary,...
                 'Recycling',log2str(obj.Recycling),...
                 'Debug',log2str(obj.debug),...
                 'IsResourceCost',log2str(obj.isResourceCost),...
                 'IsDiagnosis',log2str(obj.isDiagnosis),...
+                'IsSummary',log2str(obj.isSummaryEnable),...
                 'IsWaste',log2str(obj.isWaste));
-            disp(s);
+            if nargout==0
+                disp(res)
+            end
         end
 
         function res=getStateId(obj,key)
@@ -685,7 +688,7 @@ classdef cThermoeconomicModel < cResultSet
         %   res = obj.isSummaryEnable
         % Output Arguments:
         %   res - true | false
-            res=(obj.DataModel.NrOfStates>1) || (obj.DataModel.NrOfSamples>1);
+            res=obj.sopt.isEnable;
         end
 
         function res=isSummaryActive(obj)
@@ -1535,7 +1538,7 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkSummary(obj,value)
         % Ckeck Summary parameter
             res=false;
-            if ~checkNames(obj.sopt,value)
+            if ~checkName(obj.sopt,value)
                 obj.printDebugInfo('Invalid Summary option %s',value);
                 return
             end

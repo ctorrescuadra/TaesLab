@@ -17,6 +17,7 @@ classdef cResultInfo < cResultSet
 %   getTable         - Get a table of the result info
 %   getTableIndex    - Get the summary table of th results
 %   summaryDiagnosis - Get the summary diagnosis info
+%   summaryTables    - Get the available summary tables
 %
 % See also cResultSet, cResultTableBuilder, cTable
 %
@@ -70,7 +71,7 @@ classdef cResultInfo < cResultSet
             res=obj;
         end
 
-        function res = getTable(obj,name)
+        function res=getTable(obj,name)
         % Get the table called name
         % Syntax:
         %   res=obj.getTable(name)
@@ -113,22 +114,13 @@ classdef cResultInfo < cResultSet
                 res=exportTable(obj.tableIndex,varargin{:});
             end
         end
-        
-        function summaryDiagnosis(obj)
-        % Show diagnosis summary on console
+
+        function res=summaryDiagnosis(obj)
+        % Get the Fuel Impact/Malfunction Cost as a string including format and unit
+        %   If no output argument values are displayed on console
         % Syntax:
         %   obj.summaryDiagnosis
-        %
-            if obj.status && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
-                res=obj.getSummaryDiagnosis;
-                fprintf('%s\n%s\n\n',res.FuelImpact,res.MalfunctionCost);
-            end
-        end
-
-        function res=getSummaryDiagnosis(obj)
-        % Get the Fuel Impact/Malfunction Cost as a string including format and unit
-        % Syntax:
-        %   obj.getSummaryDiagnosis
+        %   res=obj.summaryDiagnosis
         % Output Arguments:
         %   res - Struct with diagnosis summary results
         %  
@@ -140,6 +132,26 @@ classdef cResultInfo < cResultSet
                 res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
                 tfmt=['Malfunction Cost:',format,' ',unit];
                 res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
+                if nargout==0
+                    fprintf('%s\n%s\n\n',res.FuelImpact,res.MalfunctionCost);
+                end
+            end
+        end
+
+        function res=summaryTables(obj)
+        % Get/Display available summary tables
+        %   If no output argument, the value is displayed in console 
+        % Syntax:
+        %   obj.summaryTables
+        %   res=obj.summaryTables;
+        % Output Argument
+        %   res - Default Summary Option
+            res=cType.EMPTY;
+            if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
+                res=obj.Info.defaultSummaryTables;
+                if nargout==0
+                    fprintf('Summary Tables: %s\n\n',res);
+                end
             end
         end
     end

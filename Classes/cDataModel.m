@@ -9,9 +9,10 @@ classdef cDataModel < cResultSet
 %   NrOfWastes          - Number of waste flows
 %   NrOfStates          - Number of exergy data simulations
 %   NrOfSamples         - Number of resource cost samples
-%   isWaste             - Indicate is the model has waste defined
-%   isResourceCost      - Indicate is the model has resource cost data
-%   isDiagnosis         - Indicate is the model has information to make diagnosis
+%   isWaste             - Indicate if the model has waste defined
+%   isResourceCost      - Indicate if the model has resource cost data
+%   isDiagnosis         - Indicate if the model has information to make diagnosis
+%   isSummary           - Indicate if the model has information to make summary reports
 %   StateNames          - State names
 %   SampleNames         - Resource sample names
 %   WasteFlows          - Waste Flow names
@@ -44,9 +45,10 @@ classdef cDataModel < cResultSet
         NrOfWastes              % Number of waste flows
         NrOfStates              % Number of exergy data simulations
         NrOfSamples             % Number of resource cost samples
-        isWaste                 % Indicate is the model has waste defined
-        isResourceCost          % Indicate is the model has resource cost data
-        isDiagnosis             % Indicate is the model has information to made diagnosis
+        isWaste                 % Indicate if the model has waste defined
+        isResourceCost          % Indicate if the model has resource cost data
+        isDiagnosis             % Indicate if the model has information to make diagnosis
+        isSummary               % Indicate if the model has information to make summary report
         StateNames              % State names
         SampleNames             % Resource sample names
         WasteFlows              % Waste Flow names
@@ -233,7 +235,13 @@ classdef cDataModel < cResultSet
 			res=(obj.NrOfStates>1);
         end
 
+        function res=get.isSummary(obj)
+        % Check if summary data is available
+            res= (obj.NrOfStates>1) || (obj.NrOfSamples>1);
+        end
+
         function res=get.WasteFlows(obj)
+        % Get Waste flows names
             res=cType.EMPTY_CELL;
             if obj.isWaste && isValid(obj.WasteData)
                 res=obj.WasteData.Names;

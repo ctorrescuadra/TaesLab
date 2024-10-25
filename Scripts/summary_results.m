@@ -15,10 +15,25 @@ if ~data.status
 	data.printError('Invalid data model. See error log');
 	return
 end
-if data.isResourceCost
+% Select parameters
+sopt=cSummaryOptions(data);
+if ~sopt.isEnable
+	data.printError('No Summary Results Available');
+	return
+else 
+	soptions=sopt.Names(2:end);
+	if length(soptions)>1
+		[~,param.Summary]=optionChoice('Select Summary Report',soptions);
+	else
+		param.Summary=soptions{1};
+	end
+end
+sId=cType.getSummaryId(param.Summary);
+if bitget(sId,cType.STATES)
 	[~,param.ResourceSample]=optionChoice('Select Resource Sample:',data.SampleNames);
-else
-	param.ResourceSample=data.SampleNames{1};
+end
+if bitget(sId,cType.RESOURCES)
+	[~,param.State]=optionChoice('Select State:',data.StateNames);
 end
 % Show results
 sr=SummaryResults(data,param);
