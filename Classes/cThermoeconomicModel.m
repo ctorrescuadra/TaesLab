@@ -139,9 +139,9 @@ classdef cThermoeconomicModel < cResultSet
         rsc                % cResourceCost object
         fp0                % cExergyCost actual reference state
         fp1                % cExergyCost actual operation state
-        debug              % debug info control
-        directCost         % Direct cost are obtained
-        generalCost        % General cost are obtained
+        debug              % Debug info control
+        costTableId        % Cost Table option Id
+        summaryId          % Summary Option Id
     end
 
     methods
@@ -284,6 +284,16 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.rsc;
         end
 
+        function res=get.costTableId(obj)
+        % Get the current cost table Id
+            res=cType.getCostTables(obj.CostTables);
+        end
+
+        function res=get.summaryId(obj)
+        % Get the current summary Id
+            res=cType.getSummaryId(obj.Summary);
+        end
+
         %%%%
         % Set methods
         %%%%
@@ -323,6 +333,7 @@ classdef cThermoeconomicModel < cResultSet
         %     array of chars
             if obj.checkResourceSample(sample)
                 obj.Sample=sample;
+                obj.printDebugInfo('Set Resource Sample: %s',sample);
                 obj.triggerResourceSampleChange;
             end
         end
@@ -625,6 +636,10 @@ classdef cThermoeconomicModel < cResultSet
             res=obj.DataModel.isResourceCost;
         end
 
+        function res=isDirectCost(obj)
+            res=bitget(obj.costTableId,cType.DIRECT);
+        end
+
         function res=isGeneralCost(obj)
         % Check if Generalized cost calculation are activated
         %   It is activated if it has resource samples defined in the data model
@@ -633,7 +648,7 @@ classdef cThermoeconomicModel < cResultSet
         %   obj.isResourceCost
         % Output Argument
         %   true | false
-            res=obj.isResourceCost && obj.generalCost;
+            res=obj.isResourceCost && bitget(obj.costTableId,cType.GENERALIZED);
         end
 
         function res=isDiagnosis(obj)
@@ -697,7 +712,24 @@ classdef cThermoeconomicModel < cResultSet
         %   res = obj.isSummaryEnable
         % Output Arguments:
         %   res - true | false   
-            res=logical(cType.getSummaryId(obj.Summary));
+            res=logical(obj.summaryId);
+        end
+
+        function res=isStateSummary(obj)
+            res=bitget(obj.summaryId,cType.STATES);
+        end
+
+        function res=isSampleSummary(obj)
+            res=bitget(obj.summaryId,cType.RESOURCEX);
+        end
+
+        function res=summaryOptions(obj)
+        % Get the available summary options
+        % Syntax:
+        %   res = obj.summaryOptions
+        % Output Arguments:
+        %   res - cell array with the available summary options   
+            res=obj.sopt.Names;
         end
 
         function res=getResultState(obj,idx)
@@ -1285,7 +1317,7 @@ classdef cThermoeconomicModel < cResultSet
         function setThermoeconomicAnalysis(obj)
         % Trigger thermoeconomic analysis
             % Read resources
-            options=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);
+            options=struct('DirectCost',obj.isDirectCost,'GeneralCost',obj.isGeneralCost);
             if obj.isGeneralCost
                 obj.rsc=getResourceCost(obj.rsd,obj.fp1);
                 options.ResourcesCost=obj.rsc;
@@ -1294,7 +1326,7 @@ classdef cThermoeconomicModel < cResultSet
             if isValid(obj.fp1)
                 res=getResultInfo(obj.fp1,obj.fmt,options);
                 obj.setResults(res);
-                obj.printDebugInfo('Compute Thermoeconomic Analysis for State: %s',obj.State);
+                obj.printDebugInfo('Compute Thermoeconomic Analysis for State %s',obj.State);
             else
                 obj.fp1.printLogger;
                 obj.fp1.printError('Thermoeconomic Analysis cannot be calculated')
@@ -1332,7 +1364,7 @@ classdef cThermoeconomicModel < cResultSet
                 obj.clearResults(id)
                 return
             end
-            option=cType.getSummaryId(obj.Summary);
+            option=obj.summaryId;
             sr=cSummaryResults(obj,option);
             if sr.status
                 res=sr.getResultInfo(obj.fmt);
@@ -1348,7 +1380,7 @@ classdef cThermoeconomicModel < cResultSet
                 return
             end
             if nargin==1
-                option=cType.getSummaryId(obj.Summary);
+                option=obj.summaryId;
             end
             sr=obj.summaryResults.Info;
             sr.setSummaryTables(obj,option);
@@ -1377,8 +1409,8 @@ classdef cThermoeconomicModel < cResultSet
                 ra=cWasteAnalysis(obj.fp1,false,obj.ActiveWaste);
             end
             if ra.status
-                param=struct('DirectCost',obj.directCost,'GeneralCost',obj.generalCost);
-                res=ra.getResultInfo(obj.fmt,param);
+                options=struct('DirectCost',obj.isDirectCost,'GeneralCost',obj.isGeneralCost);
+                res=ra.getResultInfo(obj.fmt,options);
                 obj.setResults(res);
             else
                 ra.printLogger;
@@ -1439,7 +1471,9 @@ classdef cThermoeconomicModel < cResultSet
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
-            obj.setSummaryTables(cType.RESOURCES);
+            if isSampleSummary(obj)
+                obj.setSummaryTables(cType.RESOURCES);
+            end
         end
 
         function res=checkReferenceState(obj,state)
@@ -1478,14 +1512,15 @@ classdef cThermoeconomicModel < cResultSet
             if obj.isGeneralCost
                 obj.setThermoeconomicAnalysis;
             end
-            obj.setSummaryTables(cType.STATES);
+            if isStateSummary(obj)
+                obj.setSummaryTables(cType.STATES);
+            end
         end
         
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
-            pct=cType.getCostTables(value);
-            if isempty(pct)
+            if cType.checkCostTable(value)
                 obj.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end
@@ -1493,9 +1528,7 @@ classdef cThermoeconomicModel < cResultSet
                 obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end
-            obj.directCost=bitget(pct,cType.DIRECT);
-            obj.generalCost=bitget(pct,cType.GENERALIZED);
-            if obj.generalCost && ~obj.isResourceCost
+            if obj.isGeneralCost && ~obj.isResourceCost
                 obj.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
                 return
             end
