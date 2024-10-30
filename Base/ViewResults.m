@@ -302,7 +302,7 @@ classdef ViewResults < matlab.apps.AppBase
                 return
             end
             mt=arg.getResultInfo;
-            switch arg.classId
+            switch arg.ClassId
             case cType.ClassId.RESULT_INFO
                 val={mt};
                 state=arg.State;

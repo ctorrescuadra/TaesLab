@@ -26,7 +26,7 @@ classdef cSummaryOptions < cMessageLogger
     end
     
     methods
-        function obj=cSummaryOptions(data)
+        function obj=cSummaryOptions(NrOfStates,NrOfSamples)
         % Build an instance of the class
         % Syntax:
         %   obj = cSummaryOptions(data)
@@ -35,7 +35,7 @@ classdef cSummaryOptions < cMessageLogger
         %
             fields=cType.SummaryOptions';
             N=length(fields);
-            id=(data.NrOfStates>1) + 2*(data.NrOfSamples>1);
+            id=(NrOfStates>1) + 2*(NrOfSamples>1);
             index=cSummaryOptions.tM(id+1,:);
             obj.Names=fields(find(index,N));
             obj.Id=id;
@@ -85,16 +85,28 @@ classdef cSummaryOptions < cMessageLogger
 
         function res=isEnable(obj)
         % Check if model has summary enabled
+        % Syntax:
+        %   res = obj.isEnable
+        % Output Arguments:
+        %   res - true | false
             res=logical(obj.Id);
         end
 
         function res=isStates(obj)
         % Check if the model has states summary available
+        % Syntax:
+        %   res = obj.isStates
+        % Output Arguments:
+        %   res - true | false
             res=bitget(obj.Id,cType.STATES);
         end
 
         function res=isResources(obj)
-        % Check if the model has resources summary available    
+        % Check if the model has resources summary available
+        % Syntax:
+        %   res = obj.isResources
+        % Output Arguments:
+        %   res - true | false   
             res=bitget(obj.Id,cType.RESOURCES);
         end
     end

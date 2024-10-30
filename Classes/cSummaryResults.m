@@ -52,15 +52,15 @@ classdef cSummaryResults < cResultId
             end
             obj.dm=model.DataModel;
             obj.rsd=obj.dm.isResourceCost;
-            obj.sopt=cSummaryOptions(obj.dm);
-            if ~obj.sopt.isEnable
+            sopt=obj.dm.SummaryOptions;
+            if ~sopt.isEnable
                 obj.messageLog(cType.ERROR,'No Summary Result Available for this model');
                 return
             end
             % Check Option
             if nargin==1
                 obj.option=sopt.Id;
-            elseif obj.sopt.checkId(option)
+            elseif checkId(sopt,option)
                 obj.option=option;
             else
                 obj.messageLog(cType.ERROR,'Invalid summary option');
@@ -90,6 +90,7 @@ classdef cSummaryResults < cResultId
             % Fill Dataset Tables
             obj.setSummaryTables(model);
             % cResultId properties
+            obj.sopt=sopt;
             obj.DefaultGraph=obj.setDefaultSummaryGraph;
             obj.ModelName=model.ModelName;
             obj.State=model.State;
@@ -189,17 +190,44 @@ classdef cSummaryResults < cResultId
     
         function res=getDefaultFlowVariables(obj)
         % Get the output flows keys
+        % Syntax:
+        %   res = obj.getDefaultFlowVariables
+        % Output Argument
+        %   res - cell array with system output flows names
             ps=obj.dm.ProductiveStructure;
             id=ps.SystemOutput.flows;
             res=ps.FlowKeys(id);
         end
     
         function res=getDefaultProcessVariables(obj)
-        % Get the output flows keys
+        % Get the output processes keys
+        % Syntax:
+        %   res = obj.getDefaultFlowVariables
+        % Output Argument
+        %   res - cell array with system output processes names
             ps=obj.dm.ProductiveStructure;
             id=ps.SystemOutput.processes;
             res=ps.ProcessKeys(id);
         end
+
+        function res=isStateSummary(obj)
+        % Check if States Summary results are available
+        % Syntax:
+        %   res = obj.isStateSummary
+        % Output Argument
+        %   res - true | false
+            res=logical(bitget(obj.option,cType.STATES));
+        end
+
+        function res=isSampleSummary(obj)
+        % Check if Samples Summary results are available
+        % Syntax:
+        %   res = obj.isStateSummary
+        % Output Argument
+        %   res - true | false
+            res=logical(bitget(obj.option,cType.RESOURCES));
+        end
+            
     end
     
     methods(Access=private)

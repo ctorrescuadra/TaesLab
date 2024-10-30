@@ -57,6 +57,7 @@ classdef cDataModel < cResultSet
         WasteData               % cWasteData object
         ExergyData              % Dataset of cExergyData
         ResourceData            % Dataset of cResourceData
+        SummaryOptions          % cSummaryOptions object
         ModelData               % Model data from cReadModel interface
     end
 
@@ -176,6 +177,7 @@ classdef cDataModel < cResultSet
             if ~obj.status
                 return
             end
+            obj.SummaryOptions=cSummaryOptions(obj.NrOfStates,obj.NrOfSamples);
             obj.ResultId=cType.ResultId.DATA_MODEL;
             obj.ResultName=cType.Results{obj.ResultId};
             obj.ModelName=dm.ModelName;

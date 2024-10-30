@@ -16,7 +16,7 @@ if ~data.status
 	return
 end
 % Select parameters
-sopt=cSummaryOptions(data);
+sopt=data.SummaryOptions;
 if ~sopt.isEnable
 	data.printError('No Summary Results Available');
 	return

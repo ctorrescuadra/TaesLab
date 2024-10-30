@@ -10,6 +10,11 @@ classdef cResultId < cMessageLogger
 %   State        - State Name
 %   Sample       - Resource Sample Name
 %   DefaultGraph - Default Graph
+% 
+% cResultId Methods
+%   setResultId     - Set the resultId
+%   setSample       - Set the resource sample name
+%   setDefaultGraph - Set the default graph
 
 	properties(GetAccess=public,SetAccess=protected)
 		ResultId       % Result Id
@@ -41,7 +46,7 @@ classdef cResultId < cMessageLogger
         end
 		
         function res=get.ResultName(obj)
-        % get the result name
+        % Get the result name
             res=cType.EMPTY_CHAR;
             if obj.status
                 res=cType.Results{obj.ResultId};
@@ -54,6 +59,7 @@ classdef cResultId < cMessageLogger
         end
 
         function setSample(obj,sample)
+        % Set Resource Sample Name. Internal package use only
             obj.Sample=sample;
         end
 

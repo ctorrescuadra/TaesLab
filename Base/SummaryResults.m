@@ -56,7 +56,7 @@ function res = SummaryResults(data,varargin)
         res.printError('Usage: SummaryResults(data,options)');
 		return
 	end
-    sopt=cSummaryOptions(data);
+    sopt=data.SummaryOptions;
     if sopt.isEnable
         doption=sopt.defaultOption;
     else

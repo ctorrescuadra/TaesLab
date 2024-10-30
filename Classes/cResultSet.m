@@ -29,7 +29,7 @@ classdef cResultSet < cResultId
 % See also cResultInfo, cThermoeconomicModel, cDataModel
 %
     properties(GetAccess=public,SetAccess=protected)
-        classId  % Class Id (see cType.ClassId)
+        ClassId  % Class Id (see cType.ClassId)
     end
 
     methods
@@ -45,7 +45,7 @@ classdef cResultSet < cResultId
                 otherwise
                     res=cType.ClassId.RESULT_INFO;
             end
-            obj.classId=res;
+            obj.ClassId=res;
         end
         
         %%%

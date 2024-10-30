@@ -133,7 +133,7 @@ classdef (Sealed) TaesTool < handle
 				else
                     set(app.tdm_popup,'string',dnames(1:2),'value',tdm_pos);
 				end
-                sopt=cSummaryOptions(data);
+                sopt=data.SummaryOptions;
                 set(app.sr_popup,'string',sopt.Names,'enable','on');
                 app.ViewIndexTable(tm.getResultInfo)
                 app.model=tm;
@@ -213,11 +213,11 @@ classdef (Sealed) TaesTool < handle
             value=TaesTool.getPopupValue(app.tdm_popup);
 			setDiagnosisMethod(app.model,value);
 			if isDiagnosis(app.model)
-                app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-                app.ViewIndexTable(app.model.getResultInfo);
-            elseif app.model.isDiagnosis
                 app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
+            else 
+                app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
+                app.ViewIndexTable(app.model.getResultInfo);
 			end
         end
 
