@@ -61,7 +61,7 @@ function model=ThermoeconomicModel(filename,varargin)
     end
     % Check Data Model file
         data=readModel(filename);
-        sopt=cSummaryOptions(data);
+        sopt=data.SummaryOptions;
     % Check optional parameters and create cThermoeconomicModel obeject
     if data.status
         p = inputParser;

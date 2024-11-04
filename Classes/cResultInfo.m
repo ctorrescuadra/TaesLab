@@ -4,13 +4,11 @@ classdef cResultInfo < cResultSet
 %   The diferent types (ResultId) of cResultInfo objects are defined in cType.ResultId
 %
 % cResultInfo Properties
-%   ResultId     - Result Id
-%   ResultName   - Result name
+
 %   NrOfTables   - Number of tables
 %   Tables       - Struct containing the tables
 %   Info         - cResultId object containing the results
-%   ModelName    - Model Name
-%   State        - State Name
+
 %
 % cResultInfo Methods:
 %   getResultInfo    - Get the result set info
@@ -18,6 +16,8 @@ classdef cResultInfo < cResultSet
 %   getTableIndex    - Get the summary table of th results
 %   summaryDiagnosis - Get the summary diagnosis info
 %   summaryTables    - Get the available summary tables
+%   isStateSummary   - Check if States Summary is available
+%   isSampleSummary  - Check if Samples Summary is available
 %
 % See also cResultSet, cResultTableBuilder, cTable
 %
@@ -152,6 +152,30 @@ classdef cResultInfo < cResultSet
                 if nargout==0
                     fprintf('Summary Tables: %s\n\n',res);
                 end
+            end
+        end
+
+        function res=isStateSummary(obj)
+        % Check if the States Summary results are available
+        % Syntax:
+        %   res = obj.isStateSummary
+        % Output Arguments:
+        %   res - true | false
+            res=cType.EMPTY;
+            if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
+                res=obj.Info.isStateSummary;
+            end
+        end
+
+        function res=isSampleSummary(obj)
+        % Check if the Samples Summary results are available
+        % Syntax:
+        %   res = obj.isStateSummary
+        % Output Arguments:
+        %   res - true | false
+            res=cType.EMPTY;
+            if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
+                res=obj.Info.isSampleSummary;
             end
         end
     end

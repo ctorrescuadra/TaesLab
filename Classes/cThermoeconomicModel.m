@@ -68,6 +68,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %   Model Info Methods
 %     showProperties  - Show model properties
 %     isResourceCost  - Check if model has Resource Cost Data
+%     isDirectCost    - Check if model has Direct Cost Tables
 %     isGeneralCost   - Check if model compute Generalized Costs
 %     isDiagnosis     - Check if model compute Diagnosis
 %     isWaste         - Check if model has waste
@@ -75,9 +76,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %   Summary Info Methods
 %     summaryOptions  - List of available summary Options
 %     isSummaryEnable - Check if Summary Results are enabled
-%     isSummaryActive - Check if Summary Results are active
+%     isSummaryActive - Check if Summary is activated
 %     isStateSummary  - Check if States Summary is available
-%     isSampleSummary - Check if Resource Samples Summary is available
+%     isSampleSummary - Check if Samples Summary is available
+%     summaryOptions  - Get the list of Summary Options available
 %
 %   Tables Info Methods
 %     getTablesDirectory  - Get the tables directory 
@@ -133,7 +135,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         Summary             % Summary Result Selected 
         Recycling           % Activate Recycling Analysis
         ActiveWaste         % Active Waste Flow for Recycling Analysis and Waste Allocation
-        sopt                % cSummary Option class
     end
 
     properties(Access=private)
@@ -175,13 +176,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             % Check optional input parameters
             p = inputParser;
             refstate=data.StateNames{1};
-            sopt=cSummaryOptions(data);
             p.addParameter('State',refstate,@ischar);
             p.addParameter('ReferenceState',refstate,@ischar);
             p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
             p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
             p.addParameter('DiagnosisMethod',cType.DEFAULT_DIAGNOSIS,@cType.checkDiagnosisMethod);
-            p.addParameter('Summary',cType.DEFAULT_SUMMARY,@sopt.checkName);
+            p.addParameter('Summary',cType.DEFAULT_SUMMARY,@obj.checkSummaryOption);
             p.addParameter('Recycling',false,@islogical);
             p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
             p.addParameter('Debug',false,@islogical);
@@ -193,7 +193,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 return
             end
             param=p.Results;
-            obj.sopt=sopt;
             % Set Variables
             obj.fmt=data.FormatData;
             obj.debug=param.Debug;
@@ -235,13 +234,14 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 obj.printError('Invalid state name %s',param.State);
                 return
             end
-            % Read ResourcesCost
+            % Check Cost Tables
             if obj.checkCostTables(param.CostTables)
                 obj.CostTables=param.CostTables;
             else
                 obj.printError('Invalid CostTables parameter %s',param.CostTables);
                 return
             end
+            % Read Resource Data
             if data.isResourceCost
                 if isempty(param.ResourceSample)
                     param.ResourceSample=data.SampleNames{1};
@@ -643,6 +643,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isDirectCost(obj)
+        % Check if Direct cost tables are selected
+        % Syntax:
+        %   obj.isResourceCost
+        % Output Argument
+        %   true | false
             res=logical(bitget(obj.costTableId,cType.DIRECT));
         end
 
@@ -709,7 +714,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   res = obj.isSummaryEnable
         % Output Arguments:
         %   res - true | false
-            res=obj.sopt.isEnable;
+            res=obj.DataModel.SummaryOptions.isEnable;
         end
 
         function res=isSummaryActive(obj)
@@ -722,11 +727,16 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isStateSummary(obj)
+        % Check if States Summary results has been activated
+        % Syntax:
+        %   res = obj.isStateSummary
+        % Output Arguments:
+        %   res - true | false
             res=logical(bitget(obj.summaryId,cType.STATES));
         end
 
         function res=isSampleSummary(obj)
-            res=logical(bitget(obj.summaryId,cType.RESOURCES));
+            res=bitget(obj.summaryId,cType.RESOURCEX);
         end
 
         function res=summaryOptions(obj)
@@ -735,7 +745,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   res = obj.summaryOptions
         % Output Arguments:
         %   res - cell array with the available summary options   
-            res=obj.sopt.Names;
+            res=obj.DataModel.SummaryOptions.Names;
         end
 
         function res=getResultState(obj,idx)
@@ -1299,7 +1309,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
             % Get results
             obj.triggerStateChange;
-            obj.setSummaryResults(cType.RESOURCES);
+            obj.setSummaryTables(cType.RESOURCES);
         end
     end
     %%%%%%
@@ -1526,7 +1536,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
-            if ~cType.checkCostTables(value)
+            if cType.checkCostTable(value)
                 obj.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end
@@ -1577,7 +1587,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         function res=checkSummary(obj,value)
         % Ckeck Summary parameter
             res=false;
-            if ~checkName(obj.sopt,value)
+            if ~checkSummaryOption(obj,value)
                 obj.printDebugInfo('Invalid Summary option %s',value);
                 return
             end
@@ -1586,6 +1596,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 return
             end
             res=true;
+        end
+
+        function res=checkSummaryOption(obj,value)
+        % Check if if the summary option is valid
+            res=obj.DataModel.SummaryOptions.checkName(value);
         end
 
         function res=checkRecycling(obj,value)

@@ -138,7 +138,7 @@ classdef (Sealed) TaesPanel < handle
 				else
 					set(app.tdm_popup,'string',dnames(1:2),'value',tdm_pos);
                 end
-                sopt=cSummaryOptions(data);
+                sopt=data.SummaryOptions;
                 set(app.sr_popup,'string',sopt.Names,'enable','on');
 
                 app.ViewIndexTable(tm.getResultInfo)
@@ -217,14 +217,14 @@ classdef (Sealed) TaesPanel < handle
 		function getDiagnosisMethod(app,~,~)
 		% Get WasteDiagnosis callback
             value=TaesPanel.getPopupValue(app.tdm_popup);
-			setDiagnosisMethod(app.model,value);
-			if isDiagnosis(app.model)
-                app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
-                app.ViewIndexTable(app.model.getResultInfo);
-            elseif app.model.isDiagnosis
+            setDiagnosisMethod(app.model,value);
+            if isDiagnosis(app.model)
                 app.enableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
                 app.ViewIndexTable(app.model.thermoeconomicDiagnosis);
-			end
+            else 
+                app.disableResults(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
+                app.ViewIndexTable(app.model.getResultInfo);
+            end
         end
 
         function getActiveWaste(app,~,~)
