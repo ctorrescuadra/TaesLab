@@ -736,7 +736,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isSampleSummary(obj)
-            res=bitget(obj.summaryId,cType.RESOURCEX);
+        % Check if Samples Summary results has been activated
+        % Syntax:
+        %   res = obj.isSampleSummary
+        % Output Arguments:
+        %   res - true | false
+            res=logical(bitget(obj.summaryId,cType.RESOURCES));
         end
 
         function res=summaryOptions(obj)
@@ -1536,7 +1541,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
-            if cType.checkCostTable(value)
+            if ~cType.checkCostTable(value)
                 obj.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end
