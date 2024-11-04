@@ -1,4 +1,4 @@
-classdef cDiagnosis < cResultId
+classdef(Sealed) cDiagnosis < cResultId
 % cDiagnosis - Make a thermoeconomic diagnosis Analysis
 %   It compares two states of the plant given by two cExergyCost objects.
 %   Two method could be applied:
@@ -12,7 +12,7 @@ classdef cDiagnosis < cResultId
 %   TotalMalfunctionCost - Total Malfunction Cost
 % 
 % cDiagnosis Methods
-%   getResultInfo - Get the cResultInfo associated to thermoeconomic diagnosis
+%   buildResultInfo             - Build the cResultInfo associated to thermoeconomic diagnosis
 %   getUnitConsumptionVariation - Get the unit consumption variation of processes
 %   getProcessUnitCostVariation - Get the variation of the unit cost of processes
 %   getIrreversibilityVariation - Get the irreversibility variation of processes
@@ -171,10 +171,10 @@ classdef cDiagnosis < cResultId
             res.DCPs=zerotol(obj.getDemandVariationCost);
         end
 
-        function res=getResultInfo(obj,fmt)
+        function res=buildResultInfo(obj,fmt)
         % Get cResultInfo object for thermoeconomic diagnosis
         % Syntax:
-        %   res=obj.getResultInfo(fmt)
+        %   res=obj.buildResultInfo(fmt)
         % Input Arguments:
         %   fmt - cFormatData object
             res=fmt.getDiagnosisResults(obj);

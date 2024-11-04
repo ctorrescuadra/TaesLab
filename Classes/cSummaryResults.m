@@ -1,4 +1,4 @@
-classdef cSummaryResults < cResultId
+classdef (Sealed) cSummaryResults < cResultId
 % cSummaryResults gets the summary results tables of the model
 %   There is two types of summary tables
 %    STATES - Summarize the results for each state
@@ -9,14 +9,14 @@ classdef cSummaryResults < cResultId
 %   NrOfTables - Number of Tables
 % 
 % cSummaryResults Methods
-%   getResultInfo - get the cResultInfo object with the summary tables
-%   defaultSummaryTables - get the default summary tables option name
-%   setSummaryTables - set the values of the summary tables
-%   getValues - get the summary tables info
-%   getRowNames - get the row names of the summary tables
-%   getColNames - get the column names of the summary tables
-%   getDefaultFlowVariables - get the names of the output flows for summary graphs
-%   getDefaultProcessVariables - get the names of the output processes for summary graphs
+%   buildResultInfo            - Build the cResultInfo object with the summary tables
+%   defaultSummaryTables       - Get the default summary tables option name
+%   setSummaryTables           - Set the values of the summary tables
+%   getValues                  - Get the summary tables info
+%   getRowNames                - Get the row names of the summary tables
+%   getColNames                - Get the column names of the summary tables
+%   getDefaultFlowVariables    - Get the names of the output flows for summary graphs
+%   getDefaultProcessVariables - Get the names of the output processes for summary graphs
 %
 % See also cThermoeconomicModel
 %
@@ -101,10 +101,10 @@ classdef cSummaryResults < cResultId
             res=length(obj.ds);
         end
 
-        function res=getResultInfo(obj,fmt)
+        function res=buildResultInfo(obj,fmt)
         % Get cResultInfo object
         % Syntax:
-        %   res=obj.getResultInfo(fmt)
+        %   res=obj.buildResultInfo(fmt)
         % Input Argument
         %   fmt - cResultTableBuilder object
         % Output Argument

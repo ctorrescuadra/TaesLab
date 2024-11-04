@@ -15,9 +15,9 @@ classdef (Sealed) cProductiveDiagram < cResultId
 %   NodesSFPAT - Productive table nodes
 %   EdgesSFAT  - Productive table edges
 % cProductiveDiagram Methods
-%   getResultInfo - Get the cResultInfo for Productive Diagrams
-%   getNodeTable  - Get the nodes of the diagram
-%   getEdgeTable  - Get the edges of the diagram
+%   buildResultInfo - Build the cResultInfo for Productive Diagrams
+%   getNodeTable    - Get the nodes of the diagram
+%   getEdgeTable    - Get the edges of the diagram
 %
     properties(Access=private)
         EdgesFAT          % Flow edges table
@@ -114,10 +114,10 @@ classdef (Sealed) cProductiveDiagram < cResultId
             end
         end 
 
-        function res = getResultInfo(obj,fmt)
+        function res = buildResultInfo(obj,fmt)
         % Get cResultInfo object
         % Syntax:
-        %   res = obj.getResultInfo(fmt)
+        %   res = obj.buildResultInfo(fmt)
         % Input Arguments:
         %   fmt - cResultTableBuilder object
         % Output Arguments:

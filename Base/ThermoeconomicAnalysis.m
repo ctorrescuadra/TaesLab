@@ -105,7 +105,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
         end
         param.ResourcesCost=rsc;
     end
-    res=fpm.getResultInfo(data.FormatData,param);
+    res=fpm.buildResultInfo(data.FormatData,param);
     if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');

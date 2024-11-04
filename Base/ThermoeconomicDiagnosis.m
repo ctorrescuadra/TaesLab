@@ -103,7 +103,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     dgn=cDiagnosis(fp0,fp1,method);
     % Get diagnosis results
     if dgn.status
-        res=dgn.getResultInfo(data.FormatData);
+        res=dgn.buildResultInfo(data.FormatData);
     else
         dgn.printLogger;
         res.printError('Invalid Thermoeconomic Diagnosis. See error log');

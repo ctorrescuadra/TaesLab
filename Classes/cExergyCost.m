@@ -18,7 +18,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %   WasteWeight            - Weight of each waste
 %
 % cExergyCost Methods:
-%   getResultInfo          - Get cResultInfo for thermoeconomic analysis
+%   buildResultInfo        - Build the cResultInfo object for thermoeconomic analysis
 %   getProcessCost         - Get cost of Processes
 %   getProcessUnitCost     - Get unit cost of Processes
 %   getFlowsCost           - Get cost of flows
@@ -155,10 +155,10 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
         end
     
-        function res=getResultInfo(obj,fmt,options)
+        function res=buildResultInfo(obj,fmt,options)
         % Get the cResultInfo object for thermoeconomic analysis
         % Syntax:
-        %   res=obj.getResultInfo(fmt,options)
+        %   res=obj.buildResultInfo(fmt,options)
         % Input Arguments:
         %   fmt - cResultTableBuilder object
         %   options - structure indicating the table to obtain

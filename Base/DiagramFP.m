@@ -65,7 +65,7 @@ function res=DiagramFP(data,varargin)
         res.printError('Invalid Diagram FP. See error log');
 		return
     end
-	res=dfp.getResultInfo(data.FormatData);
+	res=dfp.buildResultInfo(data.FormatData);
 	if ~res.status
 		res.printLogger;
         res.printError('Invalid cResultInfo. See error log');

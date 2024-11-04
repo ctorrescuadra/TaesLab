@@ -48,7 +48,7 @@ function ShowGraph(arg,varargin)
 	param=p.Results;
     % Get the resultId and table value
     if arg.ResultId==cType.ResultId.RESULT_MODEL
-		res=arg.getResultInfo(param.Graph);
+		res=arg.buildResultInfo(param.Graph);
 	else
 		res=arg;
     end

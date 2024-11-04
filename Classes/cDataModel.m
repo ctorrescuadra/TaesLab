@@ -22,8 +22,6 @@ classdef cDataModel < cResultSet
 %   ExergyData          - Dataset of cExergyData
 %   ResourceData        - Dataset of cResourceData
 %   ModelData           - cModelData object
-%   ModelName           - Name of the model
-%   ResultId            - ResultId (cType.ResultId.DATA_MODEL)
 %
 % cDataModel methods:
 %   getExergyData      - Get the cExergyData of a state
@@ -33,7 +31,7 @@ classdef cDataModel < cResultSet
 %   existSample        - Check if a sample name exists
 %   getTablesDirectory - Get the tables directory 
 %   getTableInfo       - Get information about a table object
-%   getResultInfo      - Get the cResultInfo associated to the data model
+%   buildResultInfo    - Build the cResultInfo associated to the data model
 %   showDataModel      - Show the data model
 %   saveDataModel      - Save the data model
 %
@@ -183,7 +181,7 @@ classdef cDataModel < cResultSet
             obj.DefaultGraph=cType.EMPTY_CHAR;
             obj.ModelData=dm;
             % Get the Model Info
-            res=getTableModel(obj);
+            res=buildResultInfo(obj);
             if ~res.status
                 obj.addLogger(res);
             else
@@ -447,7 +445,7 @@ classdef cDataModel < cResultSet
     end
 
     methods(Access=private)
-        function res=getTableModel(obj)
+        function res=buildResultInfo(obj)
         % Get the cResultInfo with the data model tables
             res=cMessageLogger(cType.INVALID);
             ps=obj.ProductiveStructure;

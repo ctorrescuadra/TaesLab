@@ -25,7 +25,7 @@ classdef cExergyModel < cResultId
 %  ActiveProcesses      - Active Processes (not bypass)
 %
 % cExergyModel Methods:
-%  getResultInfo - Get the result info associated to EXERGY_ANALYSIS
+%  buildResultInfo - Build the cResultInfo object associated to EXERGY_ANALYSIS
 %
 % See also cExergyCost, cResultId
 %
@@ -191,10 +191,10 @@ classdef cExergyModel < cResultId
 			end
         end
 
-        function res=getResultInfo(obj,fmt)
+        function res=buildResultInfo(obj,fmt)
         % Get the cResultInfo object
 		% Syntax:
-		%   res = obj.getResultInfo(fmt)
+		%   res = obj.buildResultInfo(fmt)
 		% Input Arguments:
 		%   fmt - cResultTableBuilder object
 		% Output Arguments:

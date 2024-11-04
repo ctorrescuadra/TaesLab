@@ -65,19 +65,23 @@ classdef (Sealed) cModelResults < cMessageLogger
             end
         end
 
-        function setResults(obj,res)
+        function setResults(obj,res,force)
         % Store the cResultInfo in the results container using ResultId as index
         % Syntax:
         %   obj.setResults(id)
         % Input Arguments:
-        %   res - cResultInfo to store
+        %   res   - cResultInfo to store
+        %   force - store without comparison
         %
             if ~isObject(res,'cResultInfo')
                 return
             end
+            if nargin==2
+                force=false;
+            end
             id=res.ResultId;
             res0=obj.results{id};
-            if cModelResults.checkAssign(res0,res)
+            if force || cModelResults.checkAssign(res0,res)
                 obj.results{id}=res;
                 if id<=cType.MAX_RESULT
                     obj.clearResults(cType.ResultId.RESULT_MODEL);

@@ -124,7 +124,7 @@ function res = WasteAnalysis(data,varargin)
     end
     % Execute recycling analysis
     if ra.status
-        res=ra.getResultInfo(data.FormatData,param);
+        res=ra.buildResultInfo(data.FormatData,param);
     else
         ra.printLogger;
         res.printError('Invalid Recycling Analysis. See Error Log');

@@ -12,7 +12,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
 %   gValues     - Recycling Analysis Generalized Cost values
 %
 % cWasteAnalysis Methods:
-%   getResultInfo - Get the cResultInfo for Waste Analysis
+%   buildResultInfo - Build the cResultInfo for Waste Analysis
 % 
     properties(GetAccess=public,SetAccess=private)
         Recycling    % Indicate if recycling is available
@@ -93,12 +93,13 @@ classdef (Sealed) cWasteAnalysis < cResultId
             obj.DefaultGraph=cType.Tables.WASTE_ALLOCATION;
             obj.ModelName=fpm.ModelName;
             obj.State=fpm.State;
+            obj.Sample=fpm.Sample;
         end
 
-        function res=getResultInfo(obj,fmt,param)
+        function res=buildResultInfo(obj,fmt,param)
         % Get the cResultInfo object
         % Syntax:
-        %   res = obj.getResultInfo(fmt,options)
+        %   res = obj.buildResultInfo(fmt,options)
         % Input Arguments:
         %   fmt - cResultsTableBuilder object
         %   options - structure containing the fields:

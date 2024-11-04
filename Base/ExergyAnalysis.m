@@ -59,7 +59,7 @@ function res=ExergyAnalysis(data,varargin)
 	pm=cExergyModel(ex);
 	% Set Results
 	if pm.status
-		res=pm.getResultInfo(data.FormatData);
+		res=pm.buildResultInfo(data.FormatData);
 	else
 		pm.printLogger;
 		res.printError('Invalid Process Model. See error log');

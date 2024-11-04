@@ -1,4 +1,4 @@
-classdef cThermoeconomicModel < cResultSet
+classdef (Sealed) cThermoeconomicModel < cResultSet
 % cThermoeconomicModel - Interactive tool for thermoeconomic analysis
 %   It is the main class of TaesLab package, and provide the following functionality:
 %   - Read and check a thermoeconomic data model
@@ -71,7 +71,13 @@ classdef cThermoeconomicModel < cResultSet
 %     isGeneralCost   - Check if model compute Generalized Costs
 %     isDiagnosis     - Check if model compute Diagnosis
 %     isWaste         - Check if model has waste
+%
+%   Summary Info Methods
+%     summaryOptions  - List of available summary Options
 %     isSummaryEnable - Check if Summary Results are enabled
+%     isSummaryActive - Check if Summary Results are active
+%     isStateSummary  - Check if States Summary is available
+%     isSampleSummary - Check if Resource Samples Summary is available
 %
 %   Tables Info Methods
 %     getTablesDirectory  - Get the tables directory 
@@ -233,7 +239,7 @@ classdef cThermoeconomicModel < cResultSet
             if obj.checkCostTables(param.CostTables)
                 obj.CostTables=param.CostTables;
             else
-                res.printError('Invalid CostTables parameter %s',param.CostTables);
+                obj.printError('Invalid CostTables parameter %s',param.CostTables);
                 return
             end
             if data.isResourceCost
@@ -633,11 +639,11 @@ classdef cThermoeconomicModel < cResultSet
         %   obj.isResourceCost
         % Output Argument
         %   true | false
-            res=obj.DataModel.isResourceCost;
+            res=logical(obj.DataModel.isResourceCost);
         end
 
         function res=isDirectCost(obj)
-            res=bitget(obj.costTableId,cType.DIRECT);
+            res=logical(bitget(obj.costTableId,cType.DIRECT));
         end
 
         function res=isGeneralCost(obj)
@@ -648,7 +654,7 @@ classdef cThermoeconomicModel < cResultSet
         %   obj.isResourceCost
         % Output Argument
         %   true | false
-            res=obj.isResourceCost && bitget(obj.costTableId,cType.GENERALIZED);
+            res=obj.isResourceCost & logical(bitget(obj.costTableId,cType.GENERALIZED));
         end
 
         function res=isDiagnosis(obj)
@@ -681,7 +687,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             % Check configurations
             if ~all(obj.fp0.ActiveProcesses==obj.fp1.ActiveProcesses)
-                obj.printDebugInfo('Compare two diferent configurations is not available');
+                obj.printDebugInfo('Compare two diferent configurations is not available for diagnosis');
                 return
             end
             res=true;
@@ -716,11 +722,11 @@ classdef cThermoeconomicModel < cResultSet
         end
 
         function res=isStateSummary(obj)
-            res=bitget(obj.summaryId,cType.STATES);
+            res=logical(bitget(obj.summaryId,cType.STATES));
         end
 
         function res=isSampleSummary(obj)
-            res=bitget(obj.summaryId,cType.RESOURCEX);
+            res=logical(bitget(obj.summaryId,cType.RESOURCES));
         end
 
         function res=summaryOptions(obj)
@@ -1324,7 +1330,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             % Get cModelResults info
             if isValid(obj.fp1)
-                res=getResultInfo(obj.fp1,obj.fmt,options);
+                res=getCostResults(obj.fmt,obj.fp1,options);
                 obj.setResults(res);
                 obj.printDebugInfo('Compute Thermoeconomic Analysis for State %s',obj.State);
             else
@@ -1347,7 +1353,7 @@ classdef cThermoeconomicModel < cResultSet
             sol=cDiagnosis(obj.fp0,obj.fp1,method);
             % get cModelResult object
             if sol.status
-                res=sol.getResultInfo(obj.fmt);
+                res=getDiagnosisResults(obj.fmt,sol);
                 obj.setResults(res);
                 obj.printDebugInfo('Compute Thermoeconomic Diagnosis for State: %s',obj.State);
             else
@@ -1367,7 +1373,7 @@ classdef cThermoeconomicModel < cResultSet
             option=obj.summaryId;
             sr=cSummaryResults(obj,option);
             if sr.status
-                res=sr.getResultInfo(obj.fmt);
+                res=getSummaryResults(obj.fmt,sr);
                 obj.setResults(res);
                 obj.printDebugInfo('Compute Summary Results');
             else
@@ -1385,8 +1391,8 @@ classdef cThermoeconomicModel < cResultSet
             sr=obj.summaryResults.Info;
             sr.setSummaryTables(obj,option);
             if sr.status
-                res=sr.getResultInfo(obj.fmt);
-                obj.setResults(res);
+                res=getSummaryResults(obj.fmt,sr);
+                obj.setResults(res,true);
                 obj.printDebugInfo('Compute Summary Results');
             else
                  sr.printLogger;
@@ -1410,7 +1416,7 @@ classdef cThermoeconomicModel < cResultSet
             end
             if ra.status
                 options=struct('DirectCost',obj.isDirectCost,'GeneralCost',obj.isGeneralCost);
-                res=ra.getResultInfo(obj.fmt,options);
+                res=getWasteAnalysisResults(obj.fmt,ra,options);
                 obj.setResults(res);
             else
                 ra.printLogger;
@@ -1427,7 +1433,7 @@ classdef cThermoeconomicModel < cResultSet
         %       res - cResultInfo (DIAGRAM_FP)
             dfp=cDiagramFP(obj.fp1);
             if dfp.status
-                res=dfp.getResultInfo(obj.fmt);
+                res=getDiagramFP(obj.fmt,dfp);
                 obj.setResults(res);
                 obj.printDebugInfo('DiagramFP active')
             else
@@ -1438,11 +1444,11 @@ classdef cThermoeconomicModel < cResultSet
         function setProductiveStructure(obj)
         % Set the productive structure cResultInfo objects
             ps=obj.DataModel.ProductiveStructure;
-            res=ps.getResultInfo(obj.fmt);
+            res=getProductiveStructure(obj.fmt,ps);
             obj.setResults(res)
             pd=cProductiveDiagram(ps);
             if pd.status
-                res=pd.getResultInfo(obj.fmt);
+                res=getProductiveDiagram(obj.fmt,pd);
                 obj.setResults(res);
                 obj.printDebugInfo('Productive Diagram active')
             else
@@ -1520,7 +1526,7 @@ classdef cThermoeconomicModel < cResultSet
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
-            if cType.checkCostTable(value)
+            if ~cType.checkCostTables(value)
                 obj.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end
@@ -1528,7 +1534,7 @@ classdef cThermoeconomicModel < cResultSet
                 obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
             end
-            if obj.isGeneralCost && ~obj.isResourceCost
+            if obj.isGeneralCost & ~obj.isResourceCost
                 obj.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
                 return
             end
@@ -1656,9 +1662,9 @@ classdef cThermoeconomicModel < cResultSet
             clearResults(obj.results,index);
         end
 
-        function setResults(obj,res)
+        function setResults(obj,res,varargin)
         % Set the result info
-            setResults(obj.results,res);
+            setResults(obj.results,res,varargin{:});
         end
     end
 end

@@ -9,7 +9,6 @@ classdef cProductiveStructureCheck < cResultId
 %   Processes		  - Processes info
 %   Flows			  - Flows info
 %   Streams			  - Streams info
-
 %
 % See also cProductiveStructure, cResultId
 %
@@ -237,13 +236,14 @@ classdef cProductiveStructureCheck < cResultId
 
         function [finp,fout]=getStreamFlows(obj,sid,expr,fp)
         % Get the input and output flows of a stream
-		%	Input Arguments:
-		%		sid - Stream Id
-		%		expr - Stream definition
-		%		fp - Stream type
-		%	Output Arguments:
-		%		fin - Array containing the flow id of the stream input flows
-		%		fout - Array containing the flow id of the stream output flows
+		% Input Arguments:
+		%	sid - Stream Id
+		%	expr - Stream definition
+		%	fp - Stream type
+		% Output Arguments:
+		%	fin - Array containing the flow id of the stream input flows
+		%	fout - Array containing the flow id of the stream output flows
+		%
             switch fp
                 case cType.Stream.FUEL
 				    [fe,fs]=obj.parser.getFlows(expr);
@@ -366,8 +366,8 @@ classdef cProductiveStructureCheck < cResultId
 
         function res=checkFlowConnectivity(obj,id)
         % Check the connectivity of flow id
-		%	Input:
-		%		id - Flow Id
+		% Input:
+		%	id - Flow Id
 			res=false;
 			if (obj.cflw{id}.from==obj.cflw{id}.to) %Check if there is a loop
 				if obj.cflw{id}.from==0

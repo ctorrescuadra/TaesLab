@@ -4,7 +4,7 @@ classdef (Sealed) cDiagramFP < cResultId
 %   EdgesFP  - Edges struct of the exergy adjacency table FP
 %   EdgesCFP - Edges struct of the exergy cost adjacency table FP
 % cDiagramFP Methods:
-%   getResultInfo - Get the result info object of the diagram FP
+%   buildResultInfo - Build the cResultInfo object of the diagram FP
 %
     properties (GetAccess=public,SetAccess=private)
         EdgesFP     % Edges struct of the exergy FP adjacency table
@@ -30,10 +30,10 @@ classdef (Sealed) cDiagramFP < cResultId
             obj.State=mfp.State;
         end
 
-        function res=getResultInfo(obj,fmt)
+        function res=buildResultInfo(obj,fmt)
         % Get cResultInfo object of the DiagramFP
         % Syntax:
-        %   res = obj.getResultInfo(fmt)
+        %   res = obj.buildResultInfo(fmt)
         % Input Argument:
         %   fmt - cFormatData object
         % Output Argument:

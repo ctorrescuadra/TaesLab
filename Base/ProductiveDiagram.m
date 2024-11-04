@@ -50,7 +50,7 @@ function res=ProductiveDiagram(data,varargin)
 	% Get Productive Diagram info
 	pd=cProductiveDiagram(data.ProductiveStructure);
     if pd.status
-        res=pd.getResultInfo(data.FormatData);
+        res=pd.buildResultInfo(data.FormatData);
     else
         data.printLogger;
         res.printError('Invalid productive structure. See error log');

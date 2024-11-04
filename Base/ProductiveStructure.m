@@ -49,7 +49,7 @@ function res=ProductiveStructure(data,varargin)
 	% Check data model
     ps=data.ProductiveStructure;
     if ps.status
-        res=getResultInfo(ps,data.FormatData);
+        res=buildResultInfo(ps,data.FormatData);
     else
         data.printLogger;
         res.printError('Invalid productive structure. See error log');
