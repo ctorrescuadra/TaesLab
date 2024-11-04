@@ -1541,7 +1541,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
-            if ~cType.checkCostTable(value)
+            if ~cType.checkCostTables(value)
                 obj.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end
