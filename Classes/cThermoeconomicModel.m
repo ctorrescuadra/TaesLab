@@ -79,7 +79,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     isSummaryActive - Check if Summary is activated
 %     isStateSummary  - Check if States Summary is available
 %     isSampleSummary - Check if Samples Summary is available
-%     summaryOptions  - Get the list of Summary Options available
 %
 %   Tables Info Methods
 %     getTablesDirectory  - Get the tables directory 
@@ -94,7 +93,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     exportTable           - Export a table to another format
 %     printResults          - Print results on console
 %     showResults           - Show results in different interfaces
-%     showGraph             - Show the graph associated to a table
+%     showGraph             - Show the graph associated to a t able
+%     showDataModel         - Show the data model tables
+%     showSummary           - Show the summary tables
 %     showTableIndex        - Show the table index in different interfaces
 %     exportResults         - Export all the result Tables to another format
 %     saveResults           - Save all the result tables in a external file
@@ -645,7 +646,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         function res=isDirectCost(obj)
         % Check if Direct cost tables are selected
         % Syntax:
-        %   obj.isResourceCost
+        %   obj.isDirectCost
         % Output Argument
         %   true | false
             res=logical(bitget(obj.costTableId,cType.DIRECT));
@@ -656,7 +657,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   It is activated if it has resource samples defined in the data model
         %   and 'CostTables' parameter is defined as 'GENERALIZED' | 'ALL'
         % Syntax:
-        %   obj.isResourceCost
+        %   obj.isGeneralCost
         % Output Argument
         %   true | false
             res=obj.isResourceCost & logical(bitget(obj.costTableId,cType.GENERALIZED));
@@ -707,6 +708,15 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             res=logical(obj.DataModel.isWaste);
         end
 
+        function res=summaryOptions(obj)
+        % Get the available summary options
+        % Syntax:
+        %   res = obj.summaryOptions
+        % Output Arguments:
+        %   res - cell array with the available summary options   
+            res=obj.DataModel.SummaryOptions.Names;
+        end
+
         function res=isSummaryEnable(obj)
         % Check if Summary is enable
         %   The summary result is enabled if the model has more than one state
@@ -742,15 +752,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Output Arguments:
         %   res - true | false
             res=logical(bitget(obj.summaryId,cType.RESOURCES));
-        end
-
-        function res=summaryOptions(obj)
-        % Get the available summary options
-        % Syntax:
-        %   res = obj.summaryOptions
-        % Output Arguments:
-        %   res - cell array with the available summary options   
-            res=obj.DataModel.SummaryOptions.Names;
         end
 
         function res=getResultState(obj,idx)
@@ -1541,15 +1542,16 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         function res=checkCostTables(obj,value)
         % check CostTables parameter
             res=false;
-            if ~cType.checkCostTables(value)
+            pct=cType.getCostTables(value);
+            if isempty(pct)
                 obj.printWarning('Invalid Cost Tables parameter value: %s',value);
                 return
             end
             if strcmp(obj.CostTables,value)
                 obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
                 return
-            end
-            if obj.isGeneralCost & ~obj.isResourceCost
+            end       
+            if bitget(pct,cType.RESOURCES) && ~obj.isResourceCost
                 obj.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
                 return
             end
