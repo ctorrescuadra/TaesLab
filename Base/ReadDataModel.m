@@ -33,15 +33,15 @@ function data=ReadDataModel(filename,varargin)
     data=cMessageLogger();
     % Check parameters
     if nargin<1 
-        data.printError('Usage: data=ReadDataModel(filename)');
+        data.printError(cMessages.UseReadDataModel);
         return
     end
     if ~isFilename(filename)
-        data.printError('Invalid Filename %s', filename);
+        data.printError(cMessages.InvalidInputFile);
         return
     end
     if ~exist(filename,'file')
-        data.printError('File %s does NOT exists',filename);
+        data.printError(cMessages.FileNotExist,filename);
         return
     end
     % Optional parameters

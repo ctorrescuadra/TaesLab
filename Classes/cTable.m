@@ -253,7 +253,7 @@ classdef (Abstract) cTable < cMessageLogger
         %
             log=cMessageLogger();
             if (nargin~=2) || ~obj.status || ~isFilename(filename)
-                log.messageLog(cType.ERROR,'Invalid input arguments');
+                log.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
                 return
             end
             [fileType,ext]=cType.getFileType(filename);

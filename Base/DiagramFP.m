@@ -33,20 +33,20 @@ function res=DiagramFP(data,varargin)
 %
 	res=cMessageLogger();
 	if nargin<1 || ~isObject(data,'cDataModel')
-		res.printError('First argument must be a Data Model');
-		res.printError('Usage: DiagramFP(data,options)');
+		res.printError(cMessages.DataModelRequired);
+		res.printError(cMessages.UseDiagramFP);
 		return
 	end
 	% Check input parameters
 	p = inputParser;
-	p.addParameter('State',data.StateNames{1},@ischar);
+	p.addParameter('State',data.StateNames{1},@data.existState);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
 	try
 		p.parse(varargin{:});
 	catch err
 		res.printError(err.message);
-        res.printError('Usage: DiagramFP(data,options)');
+		res.printError(cMessages.UseDiagramFP);
 		return
 	end
 	param=p.Results;
@@ -54,7 +54,7 @@ function res=DiagramFP(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~ex.status
         ex.printLogger;
-		res.printError('Invalid exergy values. See error log');
+		res.printError(cMessages.InvalidExergyData);
         return
 	end	
 	% Get FP Diagram model and set results
@@ -62,13 +62,13 @@ function res=DiagramFP(data,varargin)
     dfp=cDiagramFP(pm);
     if ~dfp.status
         dfp.printLogger;
-        res.printError('Invalid Diagram FP. See error log');
+        res.printError(cMessages.InvalidDiagramFP);
 		return
     end
 	res=dfp.buildResultInfo(data.FormatData);
 	if ~res.status
 		res.printLogger;
-        res.printError('Invalid cResultInfo. See error log');
+        res.printError(cMessages.InvalidResultSet);
 		return
 	end
     % Show and Save results if required

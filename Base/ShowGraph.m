@@ -27,8 +27,8 @@ function ShowGraph(arg,varargin)
 %
     log=cMessageLogger();
 	if nargin < 1 || ~isObject(arg,'cResultSet')
-		log.printError('First Argument must be a Result Set');
-		log.printError('Usage: ShowGraph(res,options)');
+		log.printError(cMessages.InvalidResultSet);
+		log.printError(cMessages.UseShowGraph);
 		return
 	end
     % Check input parameters
@@ -42,7 +42,7 @@ function ShowGraph(arg,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: ShowGraph(res,options)');
+        log.printError(cMessages.UseShowGraph);
         return
     end
 	param=p.Results;
@@ -53,16 +53,18 @@ function ShowGraph(arg,varargin)
 		res=arg;
     end
     if ~res.status
-        log.printError('Result is NOT available');
+		printLogger(res)
+        log.printError(cMessages.InvalidResultSet);
 		return
     end
 	tbl=getTable(res,param.Graph);
 	if ~tbl.status
-		log.printError('Table %s is NOT valid',param.Graph);
+		printLogger(tbl);
+		log.printError(cMessages.InvalidTable,param.Graph);
 		return
 	end
 	if ~tbl.isGraph
-		log.printError('Table % has NOT graph',param.Graph);
+		log.printError(cMessages.NoGraphTable,param.Graph);
 		return
 	end
 	% Get aditional parameters

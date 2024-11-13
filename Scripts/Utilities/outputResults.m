@@ -6,6 +6,9 @@ function outputResults(res,options)
 %  OUTPUT:
 %	sol - struct tables in the selected format
 %
+	id=res.ResultId;
+	VarName=cType.ResultVar{id};
+	assignin('base',VarName,res);
 	ShowConsole=askQuestion('Show in Console',options.Console);
 	if ShowConsole
 		res.printResults;
@@ -18,4 +21,5 @@ function outputResults(res,options)
 		log=res.saveResults(resFileName);
 		printLogger(log);
     end
+	res.printInfo(cMessages.ResultVarInfo,VarName);
 end

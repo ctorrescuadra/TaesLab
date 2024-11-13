@@ -159,7 +159,7 @@ classdef cMessageLogger < cTaesLab
 			else
 				text=sprintf(varargin{:});
 			end
-			message=cMessage(error,class(obj),text);
+			message=cMessageBuilder(error,class(obj),text);
 			obj.status=logical(error);
 		end
 

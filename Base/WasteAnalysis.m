@@ -42,14 +42,18 @@ function res = WasteAnalysis(data,varargin)
 % See also cDataModel, cWasteAnalysis, cResultInfo
 %
     res=cMessageLogger();
-	if nargin<1 || ~isObject(data,'cDataModel')
-		res.printError('First argument must be a Data Model');
-        res.printError('Usage: WasteAnalysis(data,options)');
+    if nargin<1 || ~isObject(data,'cDataModel')
+		res.printError(cMessages.DataModelRequired);
+        res.printError(cMessages.UseWasteAnalysis);
 		return
-	end
+    end
+    if data.NrOfWastes<1
+	    res.printError(cMessages.NoWasteDefined)
+        return
+    end
     % Check and initialize parameters
     p = inputParser;
-    p.addParameter('State',data.StateNames{1},@ischar);
+    p.addParameter('State',data.StateNames{1},@data.existState);
     p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
@@ -60,44 +64,39 @@ function res = WasteAnalysis(data,varargin)
         p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: cRecyclingAnalysis(data,options)')
+        res.printError(cMessages.UseWasteAnalysis)
         return
     end
     % 
     param=p.Results;
     % Read waste info
-    if data.NrOfWastes<1
-	    res.printError(cType.ERROR,'Data model must have waste')
-        return
-    end
     wd=data.WasteData;
     if ~wd.status
         wd.printLogger;
-        res.printError('Invalid waste data');
+        res.printError(cMessages.InvalidWasteData);
         return
     end
-     % Check Waste Key
-     if isempty(param.ActiveWaste)
-         param.ActiveWaste=data.WasteFlows{1};
-     end
-     wid=wd.getWasteIndex(param.ActiveWaste);
-     if isempty(wid)
-         res.printError('Invalid waste key %s',param.ActiveWaste);
-         return
-     end
-
+    % Check Waste Key
+    if isempty(param.ActiveWaste)
+        param.ActiveWaste=data.WasteFlows{1};
+    end
+    wid=wd.getWasteIndex(param.ActiveWaste);
+    if ~wid
+        res.printError(cMessages.InvalidWasteFlow,param.ActiveWaste);
+        return
+    end
     % Read exergy values
 	ex=data.getExergyData(param.State);
 	if ~ex.status
         ex.printLogger;
-        res.printError('Invalid exergy values. See error log');
+        res.printError(cMessages.InvalidExergyData);
         return
 	end
 	% Compute the Model FPR
     mfp=cExergyCost(ex,wd);
     if ~mfp.status
         mfp.printLogger;
-        res.printError('Invalid model FPR. See error log');
+        res.printError(cMessages.InvalidCostAnalysis);
     end
  
     % Read external resources and get results
@@ -112,7 +111,7 @@ function res = WasteAnalysis(data,varargin)
 		    rsd=data.getResourceData(param.ResourceSample);
             if ~rsd.status
 			    rsd.printLogger;
-			    res.printError('Invalid resource data. See Error Log');
+			    res.printError(cMessages.InvalidResourceCost);
 			    return
             end
             ra=cWasteAnalysis(mfp,true,param.ActiveWaste,rsd);
@@ -127,11 +126,11 @@ function res = WasteAnalysis(data,varargin)
         res=ra.buildResultInfo(data.FormatData,param);
     else
         ra.printLogger;
-        res.printError('Invalid Recycling Analysis. See Error Log');
+        res.printError(cMessages.InvalidWasteAnalysis);
     end
     if ~res.status
 		res.printLogger;
-        res.printError('Invalid cResultInfo. See error log');
+        res.printError(cMessages.InvalidResultSet);
 		return
     end
     % Show and Save results if required

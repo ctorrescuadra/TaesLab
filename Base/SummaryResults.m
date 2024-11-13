@@ -52,19 +52,20 @@ function res = SummaryResults(data,varargin)
     res=cMessageLogger();
     % Check data model
 	if nargin <1 || ~isObject(data,'cDataModel')
-		res.printError('First argument must be a Data Model');
-        res.printError('Usage: SummaryResults(data,options)');
+		res.printError(cMessages.DataModelRequired);
+        res.printError(cMessages.UseSummary);
 		return
 	end
     sopt=data.SummaryOptions;
     if sopt.isEnable
         doption=sopt.defaultOption;
     else
-        res.printError('Summary Results are not available');
+        res.printError(cMessages.SummaryNotAvailable);
+        return
     end
     %Check and initialize parameters
     p = inputParser;
-    p.addParameter('State',data.StateNames{1},@ischar);
+    p.addParameter('State',data.StateNames{1},@data.existState);
     p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
     p.addParameter('Summary',doption,@sopt.checkName);
     p.addParameter('Show',false,@islogical);
@@ -73,25 +74,20 @@ function res = SummaryResults(data,varargin)
         p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: SummaryResults(data,options)')
+        res.printError(cMessages.UseSummary);
         return
     end
     % Preparing parameters
     param=p.Results;
-    option=cType.getSummaryId(param.Summary);
-    if ~option
-        res.printError('No Summary Results Available');
+    if ~cType.getSummaryId(param.Summary)
+        res.printError(cMessages.SummaryNotAvailable);
         return
     end
-    if ~data.existState(param.State)
-        res.printError('Invalid State %s',param.State);
-        return
-    end   
     if data.isResourceCost
         if isempty(param.ResourceSample)
             param.ResourceSample=data.SampleNames{1};
         elseif ~data.existSample(param.ResourceSample)
-            res.printError('Invalid Resource Sample %s',param.ResourceSample);
+            res.printError(cMessages.InvalidSample,param.ResourceSample);
         end
     end
     % Get the summary results from the thermoeconomic model
@@ -101,7 +97,7 @@ function res = SummaryResults(data,varargin)
             'Summary',param.Summary);
     res=model.summaryResults;
     if isempty(res)
-        model.printError('Invalid Summary Results. See error log');
+        model.printError(cMessages.InvalidSummary);
     end
     % Show and Save results if required
     if param.Show

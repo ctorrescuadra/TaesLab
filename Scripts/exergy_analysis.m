@@ -4,7 +4,7 @@
 %   Select the data file model as <folder>_model.<ext>
 %   Prompt parameters interactively
 %  Output:
-%	ea - cResultInfo containing the exergy analysis info
+%	res - cResultInfo containing the exergy analysis info
 %
 % Select data file model
 param=struct();
@@ -12,7 +12,7 @@ options=struct('Console','Y','Save','N');
 data=selectDataModel();
 if ~data.status
   data.printLogger;
-  data.printError('Invalid data model. See error log');
+  data.printError(cMessages.InvalidDataModel);
 	return
 end
 % Assign function paramater
@@ -20,10 +20,9 @@ if data.NrOfStates>1
 	[~,param.State]=optionChoice('Select State:',data.StateNames);
 end
 % Show results
-ea=ExergyAnalysis(data,param);
-if ea.status
-	outputResults(ea,options);
-	ea.printInfo('Results (ea) available in Workspace');
+res=ExergyAnalysis(data,param);
+if res.status
+	outputResults(res,options);
 else
-	printLogger(ea);
+	printLogger(res);
 end

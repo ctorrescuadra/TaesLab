@@ -32,8 +32,8 @@ function res=ShowTable(tbl,varargin)
 %
     log=cMessageLogger();
     if nargin<1 || ~isObject(tbl,'cTable')
-        log.printError('First Argument must be a Table')
-        log.printError('Usage: ShowTable(arg,options)');
+        log.printError(cMessages.InvalidTable,'object');
+        log.printError(cMessages.UseShowTable);
         return
     end
     if nargout 
@@ -50,7 +50,7 @@ function res=ShowTable(tbl,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: ShowTable(tbl,options)');
+        log.printError(cMessages.UseShowTable);
         return
     end
     param=p.Results;

@@ -65,7 +65,7 @@ function res=ListResultTables(varargin)
 		p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: res=ListResultTables(options)');
+        res.printError(cMessages.UseListResultTables);
         return
     end
     param=p.Results;

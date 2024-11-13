@@ -23,6 +23,6 @@ function log=exportCSV(values,filename)
         end
     catch err
         log.messageLog(cType.ERROR,err.message);
-        log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+        log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
     end
 end

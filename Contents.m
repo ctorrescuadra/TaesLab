@@ -7,7 +7,7 @@
 %
 % Read Data Models
 %   ReadDataModel           - Reads a data model file.
-%   ImportDataModel         - Reads a previously saved MAT data model file.
+%   CopyDataModel           - Copies a data model file to another format.
 %
 % Get Thermoeconomic Results
 %   ThermoeconomicModel     - Gets the complete thermoeconomic model of a plant.
@@ -25,7 +25,6 @@
 %   SaveSummary             - Saves the result summary tables to a file.
 %   SaveDataModel           - Saves the data model tables to a file.
 %   SaveTable               - Saves a table to a file
-%   CopyDataModel           - Copies a data model file to another format.
 %
 % Display Results 
 %   ListResultTables        - Lists the results tables and their properties.

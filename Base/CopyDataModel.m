@@ -18,7 +18,7 @@ function CopyDataModel(inputFile, outputFile)
 %
     log=cMessageLogger();
     if ~isFilename(inputFile) || ~isFilename(outputFile)
-        log.printError('Usage: CopyDataModel(inputFile,outputFile)');
+        log.printError(cMessages.UseCopyDataModel);
         return
     end
     data=readModel(inputFile);

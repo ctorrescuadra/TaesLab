@@ -42,8 +42,8 @@ function res=ShowResults(arg,varargin)
     log=cMessageLogger();
 
     if nargin<1 || ~isObject(arg,'cResultSet')
-        log.printError('First Argument must be a Result Set')
-        log.printError('Usage: ShowResults(arg,options)');
+        log.printError(cMessages.InvalidResultSet)
+        log.printError(cMessages.UseShowResults);
         return
     end
     % Select View depending of nargout
@@ -63,7 +63,7 @@ function res=ShowResults(arg,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError('Usage: ShowResults(arg,options)');
+        log.printError(cMessages.UseShowResults);
         return
     end
     param=p.Results;

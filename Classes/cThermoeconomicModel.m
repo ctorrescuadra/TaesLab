@@ -10,36 +10,23 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %   - Show the results tables in console, as GUI tables or graphs
 %
 % cThermoeconomicModel Properties:
-%     State - Active thermoeconomic state
-%		char array
-%     ReferenceState - Active Reference state
-%	    char array
-%     ResourceSample - Active resource cost sample
-%	    char array
-%     CostTables - Type of selected Cost Result Tables
-%	    'DIRECT' | 'GENERALIZED' | 'ALL'
-%     DiagnosisMethod - Method to calculate diagnosis
-%	    'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
-%     Summary - Calculate Summary Results
-%	    true | false
-%     Recycling - Activate Recycling Analysis
-%	    true | false
-%     ActiveWaste - Active Waste for Recycling Analysis
-%		true | false
-%     DataModel - Data Model
-%       cDataModel object
-%     ModelName - Model Name
-%       char array
-%     StateNames - Names of the defined states
-%       cell array of chars
-%     SampleNames - Names of the defined resource samples
-%       cell array of chars
-%     WasteFlows - Names of the waste flows
-%       cell array of chars
-%     ResourceData - Current Resource Data values
-%       cResourceData object
-%     ResourceCost - Current Resource Cost values
-%       cResourceCost object
+%   DataModel       - cDataModel object
+%   StateNames      - cell array with the names of the defined states
+%   SampleNames     - cell array with the names of the defined resource samples
+%   WasteFlows      - cell array with the names of the waste flows
+%   ResourceData    - cResourceData object
+%   ResourceCost    - cResource Cost object
+%   State           - Current State name
+%   Sample          - Current Resource sample name
+%   ReferenceState  - Active Reference state name
+%   CostTables      - Selected Cost Result Tables
+%     'DIRECT' | 'GENERALIZED' | 'ALL'
+%   DiagnosisMethod - Method to calculate fuel impact of wastes
+%	  'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
+%   Summary         - Summary Results Selected
+%     'NONE' | 'STATES' | 'RESOURCES'
+%   Recycling       - Recycling Analysis active (true | false)
+%   ActiveWaste     - Active waste flow name for Waste Analysis
 %
 % cThermoeconomicModel methods
 %   Set Methods
@@ -52,16 +39,17 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     setRecycling        - Activate Recycling Analysis
 %     setSummary          - Activate Summary Results
 %     setDebug            - Set Debug mode
+%     toggleDebug         - Toggle Debug mode
 %
 %   Results Info Methods
 %     productiveStructure     - Get Productive Structure cResultInfo
 %     exergyAnalysis          - Get ExergyAnalysis cResultInfo
 %     thermoeconomicAnalysis  - Get Thermoeconomic Analysis cResultInfo
+%     wasteAnalysis           - Get Waste Analysis cResultInfo  
 %     thermoeconomicDiagnosis - Get Thermoeconomic Diagnosis cResultInfo
 %     summaryDiagnosis        - Get Diagnosis Summary
-%     wasteAnalysis           - Get Waste Analysis cResultInfo
-%     diagramFP               - Get Diagram FP cResultInfo
 %     productiveDiagram       - Get Productive Diagrams cResultInfo
+%     diagramFP               - Get Diagram FP cResultInfo
 %     summaryResults          - Get Summary cResultInfo
 %     dataInfo                - Get Data Model cResultInfo
 %
@@ -81,12 +69,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     isSampleSummary - Check if Samples Summary is available
 %
 %   Tables Info Methods
-%     getTablesDirectory  - Get the tables directory 
-%     showTablesDirectory - Show the tables directory
+%     getTablesDirectory  - Get the tables directory
+%     getTableInfo        - Get Information of a table
 %
 %   ResultSet Methods
 %     getResultInfo         - Get cResultInfo objects
-%     ListOfTables          - Get the tables of the cResultInfo
+%     ListOfTables          - Get the list of available tables
 %     getTable              - Get a table by name
 %     getTableIndex         - Get the table index
 %     saveTable             - Save the results in a external file 
@@ -96,6 +84,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     showGraph             - Show the graph associated to a t able
 %     showDataModel         - Show the data model tables
 %     showSummary           - Show the summary tables
+%     showTablesDirectory   - Show the tables directory
 %     showTableIndex        - Show the table index in different interfaces
 %     exportResults         - Export all the result Tables to another format
 %     saveResults           - Save all the result tables in a external file
@@ -421,23 +410,8 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Set debug control variable
             if islogical(dbg) && (obj.debug~=dbg)
                 obj.debug=dbg;
-                obj.printInfo('Debug is set to %s',upper(log2str(dbg)));
+                obj.printInfo(cMessages.InfoDebug,upper(log2str(dbg)));
             end
-        end
-
-        function toggleSummary(obj)
-        % Toggle summary results property
-        % Syntax:
-        %   obj.toggleSummary
-            obj.setSummary(~obj.Summary);
-        end
-
-        function toggleRecycling(obj)
-        % toggle recycling analysis property
-        % Syntax:
-        %   obj.toggleRecycling
-
-            obj.setRecycling(~obj.Recycling);
         end
 
         function toggleDebug(obj)
@@ -649,7 +623,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   obj.isDirectCost
         % Output Argument
         %   true | false
-            res=logical(bitget(obj.costTableId,cType.DIRECT));
+            pct=obj.costTableId;
+            if isempty(pct)
+                res=false;
+            else
+               res=logical(bitget(pct,cType.DIRECT));
+            end
         end
 
         function res=isGeneralCost(obj)
@@ -660,7 +639,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   obj.isGeneralCost
         % Output Argument
         %   true | false
-            res=obj.isResourceCost & logical(bitget(obj.costTableId,cType.GENERALIZED));
+            pct=obj.costTableId;
+            if isempty(pct)
+                res=false;
+            else
+                res=obj.isResourceCost & logical(bitget(pct,cType.GENERALIZED));
+            end    
         end
 
         function res=isDiagnosis(obj)
@@ -732,8 +716,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Syntax:
         %   res = obj.isSummaryEnable
         % Output Arguments:
-        %   res - true | false   
-            res=logical(obj.summaryId);
+        %   res - true | false
+            if isempty(obj.summaryId)
+                res=false;
+            else
+                res=logical(obj.summaryId);
+            end
         end
 
         function res=isStateSummary(obj)
@@ -742,7 +730,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   res = obj.isStateSummary
         % Output Arguments:
         %   res - true | false
-            res=logical(bitget(obj.summaryId,cType.STATES));
+            if isempty(obj.summaryId)
+                res=false;
+            else
+                res=logical(bitget(obj.summaryId,cType.STATES));
+            end           
         end
 
         function res=isSampleSummary(obj)
@@ -751,7 +743,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   res = obj.isSampleSummary
         % Output Arguments:
         %   res - true | false
-            res=logical(bitget(obj.summaryId,cType.RESOURCES));
+            if isempty(obj.summaryId)
+                res=false;
+            else
+                res=logical(bitget(obj.summaryId,cType.RESOURCES));
+            end  
         end
 
         function res=getResultState(obj,idx)
@@ -910,7 +906,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   options - options to show results
         % See also cResultSet.showResults
         %
-            res=obj.getSummaryResults;
+            res=obj.summaryResults;
             if isempty(res)
                 obj.printDebugInfo('Summary Results not available')
                 return
@@ -1595,7 +1591,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Ckeck Summary parameter
             res=false;
             if ~checkSummaryOption(obj,value)
-                obj.printDebugInfo('Invalid Summary option %s',value);
+                obj.printDebugInfo('Summary %s option is not available',value);
                 return
             end
            if strcmp(obj.Summary,value)

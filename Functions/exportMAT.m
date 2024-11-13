@@ -16,21 +16,21 @@ function log=exportMAT(obj,filename)
 %
     log=cMessageLogger();
     if (nargin~=2) || (~isFilename(filename))
-        log.messageLog(cType.ERROR,'Invalid input arguments');
+        log.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.MAT)
-        log.messageLog(cType.ERROR,'Invalid file name extension: %s',filename)
+        log.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename)
         return
     end
     if ~isValid(obj)
-        log.messageLog(cType.ERROR,'Invalid object to save');
+        log.messageLog(cType.ERROR,cMessages.InvalidObject);
         return
     end
     try
 	    save(filename,'obj');
     catch err
         log.messageLog(cType.ERROR,err.message);
-        log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+        log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
     end
 end

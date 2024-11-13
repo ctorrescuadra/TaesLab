@@ -12,7 +12,7 @@ function res=readModel(filename)
 %     res - cDataModel object
 %
     % Read the data model depending de file extension
-    res=cMessageLogger();
+    res=cMessageLogger(cType.INVALID);
     fileType=cType.getFileType(filename);
     switch fileType
         case cType.FileType.JSON
@@ -32,19 +32,19 @@ function res=readModel(filename)
     % Check if the model read is correct
     if ~rdm.status
         res.addLogger(rdm);
-        res.messageLog(cType.ERROR,'Data model file %s is NOT valid',filename);
+        res.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
         return
     end
     % If filename is a MAT file then is already done 
-    if isa(rdm,'cReadModel') 
+    if isa(rdm,'cDataModel') 
+        res=rdm;   
+    elseif isa(rdm,'cReadModel') % Import MAT data model
         res=rdm.getDataModel;
-    elseif isa(rdm,'cDataModel') % Import MAT data model
-        res=rdm;
     end
     % Check if data model is valid
     if res.status
-        res.messageLog(cType.INFO,'Data model %s is valid',res.ModelName);
+        res.messageLog(cType.INFO,cMessages.ValidDataModel,res.ModelName);
     else
-        res.messageLog(cType.ERROR,'Data model file %s is NOT valid',filename);
+        res.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
     end
 end

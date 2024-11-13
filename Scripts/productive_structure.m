@@ -3,21 +3,20 @@
 % 	Select the data file model as <folder>_model.<ext>
 % 	Prompt input parameters interactively
 % Output:
-%	ps - cResultInfo containing Productive Structure info
+%	productiveStructure - cResultInfo containing Productive Structure info
 %
 % Select data file model
 options=struct('Console','Y','Save','N');
 data=selectDataModel();
 if ~data.status
 	data.printLogger;
-	data.printError('Invalid data model. See error log');
+	data.printError(cMessages.InvalidDataModel);
 	return
 end
 % Show results
-ps=ProductiveStructure(data);
-if ps.status
-	outputResults(ps,options);
-	ps.printInfo('Results (ps) available in Workspace');
+res=ProductiveStructure(data);
+if res.status
+	outputResults(res,options);
 else
-	printLogger(ps);
+	printLogger(res);
 end

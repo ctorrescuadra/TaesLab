@@ -247,6 +247,7 @@ classdef cDataModel < cResultSet
                 res=obj.WasteData.Names;
             end
         end
+
         %%%
         % Get Data model information
         %%%
@@ -319,7 +320,7 @@ classdef cDataModel < cResultSet
         %
             res=obj.ResourceData.getValues(sample);
             if ~res.status
-                res.printError('Invalid state %s',sample);
+                res.printError('Invalid sample %s',sample);
             end
         end
 		
@@ -411,10 +412,10 @@ classdef cDataModel < cResultSet
 			log=cMessageLogger();
 			% Check inputs
             if (nargin<2) || ~isFilename(filename)
-                log.messageLog(cType.ERROR,'Invalid arguments');
+                log.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
             end
 			if ~obj.status
-				log.messageLog(cType.ERROR,'Invalid data model %s',obj.ModelName);
+				log.messageLog(cType.ERROR,cMessages.InvalidDataModel);
                 return
 			end
 

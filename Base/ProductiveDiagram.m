@@ -31,8 +31,8 @@ function res=ProductiveDiagram(data,varargin)
 %
 	res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')
-		res.printError('First argument must be a Data Model');
-        res.printError('Usage: ProductiveDiagram(data,options)');
+		res.printError(cMessages.DataModelRequired);
+        res.printError(cMessages.UseProductiveDiagram);
 		return
 	end
     %Check input parameters
@@ -43,7 +43,7 @@ function res=ProductiveDiagram(data,varargin)
 		p.parse(varargin{:});
     catch err
 		res.printError(err.message);
-        res.printError('Usage: ProductiveDiagram(data,options)');
+        res.printError(cMessages.UseProductiveDiagram);
         return
     end
     param=p.Results;
@@ -52,12 +52,12 @@ function res=ProductiveDiagram(data,varargin)
     if pd.status
         res=pd.buildResultInfo(data.FormatData);
     else
-        data.printLogger;
-        res.printError('Invalid productive structure. See error log');
+        pd.printLogger;
+        res.printError(cMessages.InvalidDiagramFPS);
     end 
     if ~res.status
 		res.printLogger;
-        res.printError('Invalid cResultInfo. See error log');
+        res.printError(cMessages.InvalidResultSet);
 		return
     end
     % Show and Save results if required

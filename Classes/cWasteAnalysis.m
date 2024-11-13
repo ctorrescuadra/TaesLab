@@ -58,7 +58,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 return
             end
             if ~islogical(recycling)
-                res.messageLog(cType.ERROR,'Invalid recycling parameter');
+                obj.messageLog(cType.ERROR,'Invalid recycling parameter');
                 return
             end
             if ~ischar(wkey)
@@ -66,8 +66,8 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 return
             end
             wid=fpm.WasteTable.getWasteIndex(wkey);
-            if isempty(wid)
-                res.messageLog(cType.ERROR,'Invalid waste flow key %s',wkey);
+            if ~wid
+                obj.messageLog(cType.ERROR,'Invalid waste flow key %s',wkey);
                 return
             end
             if nargin==4

@@ -296,8 +296,8 @@ classdef ViewResults < matlab.apps.AppBase
         function startupFcn(app, arg)
             log=cMessageLogger();
             if nargin~=2 || ~isObject(arg,'cResultSet')
-                log.printError('First Argument must be a cResultSet object');
-                log.printError('Usage: ViewModelResuls(res)');
+                log.printError(cMessages.ResultSetRequired);
+                log.printError(cMessages.UseViewResults);
                 delete(app);
                 return
             end

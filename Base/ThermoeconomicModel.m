@@ -48,12 +48,12 @@ function model=ThermoeconomicModel(filename,varargin)
     model=cMessageLogger();
     % Check input parameters
     if (nargin<1) || ~isFilename(filename)
-        model.printError('Invalid data model file name');
-        model.printError('Usage: model=ThermoeconomicModel(filename,options)');
+        model.printError(cMessages.InvalidInputFile,filename);
+        model.printError(cMessages.UseThermoeconomicModel);
         return
     end
     if ~exist(filename,'file')
-        model.printError('File %s does NOT exists',filename);
+        model.printError(cMessages.FileNotExist,filename);
         return
     end
     if isstring(filename)
@@ -61,10 +61,10 @@ function model=ThermoeconomicModel(filename,varargin)
     end
     % Check Data Model file
         data=readModel(filename);
-        sopt=data.SummaryOptions;
     % Check optional parameters and create cThermoeconomicModel obeject
     if data.status
         p = inputParser;
+        sopt=data.SummaryOptions;
         refstate=data.StateNames{1};
         p.addParameter('State',refstate,@ischar);
         p.addParameter('ReferenceState',refstate,@ischar);
@@ -79,7 +79,7 @@ function model=ThermoeconomicModel(filename,varargin)
             p.parse(varargin{:});
         catch err
             model.printError(err.message);
-            model.printError('Usage: ThermoeconomicModel(filename, params)');
+            model.printError(cMessages.UseThermoeconomicModel);
             return
         end
         if p.Results.Debug

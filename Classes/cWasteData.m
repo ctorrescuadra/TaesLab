@@ -172,7 +172,7 @@ classdef cWasteData < cMessageLogger
 		% Output Argument:
 		%  res - waste flow id
 		%
-			res=false;
+			res=0;
 			if ischar(key)
 				[~,res]=ismember(key,obj.Names);
 			end

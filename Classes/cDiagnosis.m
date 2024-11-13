@@ -81,23 +81,23 @@ classdef(Sealed) cDiagnosis < cResultId
             obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
             % Check Arguments
             if ~isObject(fp0,'cExergyCost') || ~isObject(fp1,'cExergyCost')
-                obj.messageLog(cType.ERROR,'Input parameters are not cExergyCost objects');
+                obj.messageLog(cType.ERROR,cMessages.ExergyCostRequired);
                 return
             end
             if (fp0.ps~=fp1.ps)
-                obj.messageLog(cType.ERROR,'Compare two different productive structures');
+                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisStruct);
                 return
             end
             if ~all(fp0.ActiveProcesses==fp1.ActiveProcesses)
-                obj.messageLog(cType.ERROR,'Compare two diferent plant configurations is not possible');
+                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisConf);
                 return
             end
             if ~ismember(method,[cType.DiagnosisMethod.WASTE_EXTERNAL,cType.DiagnosisMethod.WASTE_INTERNAL])
-                obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
+                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisMethod);
                 return
             end
             if (method==cType.DiagnosisMethod.WASTE_INTERNAL) && ~fp1.isWaste
-                obj.messageLog(cType.ERROR,'Diagnosis Method requires waste information');
+                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisMethod);
                 return
             end
             % Check if the states are equal
@@ -105,7 +105,7 @@ classdef(Sealed) cDiagnosis < cResultId
 		    obj.NrOfWastes=fp0.NrOfWastes;    
             obj.DKP=zerotol(fp1.pfOperators.mKP-fp0.pfOperators.mKP);
             if all(obj.DKP==0)
-                obj.messageLog(cType.ERROR,'Reference and Operation states are the same');
+                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisStruct);
                 return
             end
             % Product Variation
@@ -129,9 +129,6 @@ classdef(Sealed) cDiagnosis < cResultId
                     obj.wasteOutputMethod;
                 case cType.DiagnosisMethod.WASTE_INTERNAL
                     obj.wasteInternalMethod(fp0,fp1);
-                otherwise
-                    obj.messageLog(cType.ERROR,'Invalid Diagnosis method');
-                    return
             end
             % Fuel Impact and Malfunction Cost
             obj.DWTEC=obj.computeDWTEC(dpuk0.cP,obj.dpuk.cP);
@@ -312,8 +309,8 @@ classdef(Sealed) cDiagnosis < cResultId
         % Compute the cost of the final product variation (alternate version)
         % If the variation is positive takes the reference cost
         % If the variation is negative takes the actual cost
-            cpt=c0 .* (obj.DWt>0)' + c1 .* (obj.DWt<0)';
-            res= cpt .* obj.DWt';
+            cpt = c0 .* (obj.DWt>0)' + c1 .* (obj.DWt<0)';
+            res = cpt .* obj.DWt';
         end
 	end
 end

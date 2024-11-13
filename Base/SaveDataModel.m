@@ -19,7 +19,7 @@ function SaveDataModel(arg,filename)
     log=cMessageLogger();
     % Check Input Parameters
     if (nargin~=2)
-        log.printError('Usage: SaveDataModel(data,filename)');
+        log.printError(cMessages.DataModelRequired);
         return
     end
     if isObject(arg,'cDataModel')
@@ -27,13 +27,13 @@ function SaveDataModel(arg,filename)
     elseif isObject(arg,'cThermoeconomicModel')
         data=arg.DataModel;
     else
-        log.printError('First argument input must be a cDataModel or cThermoeconomicModel object');
-        log.printError('Usage: SaveDataModel(data,filename)');
+        log.printError(cMessages.DataModelRequired);
+        log.printError(cMessages.UseSaveDataModel);
         return
     end
     if ~isFilename(filename)
-        log.printError('File NOT saved. Invalid filename.');
-        log.printError('Usage: SaveDataModel(data,filename)');
+        log.printError(cMessages.InvalidOutputFile,filename);
+        log.printError(cMessages.UseSaveDataModel);
         return
     end
     % Save the data model

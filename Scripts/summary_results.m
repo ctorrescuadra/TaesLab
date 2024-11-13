@@ -12,13 +12,13 @@ param=struct();
 data=selectDataModel();
 if ~data.status
 	data.printLogger;
-	data.printError('Invalid data model. See error log');
+	data.printError(cMessages.InvalidDataModel);
 	return
 end
 % Select parameters
 sopt=data.SummaryOptions;
 if ~sopt.isEnable
-	data.printError('No Summary Results Available');
+	data.printError(cMessages.SummaryNotAvailable);
 	return
 else 
 	soptions=sopt.Names(2:end);
@@ -36,10 +36,9 @@ if bitget(sId,cType.RESOURCES)
 	[~,param.State]=optionChoice('Select State:',data.StateNames);
 end
 % Show results
-sr=SummaryResults(data,param);
-if sr.status
-	outputResults(sr,options);
-	sr.printInfo('Results (sr) available in Workspace');
+res=SummaryResults(data,param);
+if res.status
+	outputResults(res,options);
 else
-	printLogger(sr);
+	printLogger(res);
 end

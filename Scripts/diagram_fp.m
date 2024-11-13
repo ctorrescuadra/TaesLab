@@ -12,7 +12,7 @@ options=struct('Console','N','Save','Y');
 data=selectDataModel();
 if ~data.status
     data.printLogger;
-	data.printError('Invalid data model. See error log');
+	data.printError(cMessages.InvalidDataModel);
 	return
 end
 % Define parameters
@@ -21,10 +21,9 @@ if data.NrOfStates>1
 	[~,param.State]=optionChoice('Select State:',data.StateNames);
 end
 % Get TableFP
-dfp=DiagramFP(data,param);
-if dfp.status
-	outputResults(dfp,options);
-	dfp.printInfo('Results (dfp) available in Workspace');
+res=DiagramFP(data,param);
+if res.status
+	outputResults(res,options);
 else
-	printLogger(dfp);
+	printLogger(res);
 end

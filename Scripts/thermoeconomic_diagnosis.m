@@ -12,7 +12,7 @@ param=struct();
 data=selectDataModel();
 if ~data.status
     data.printLogger;
-	data.printError('Invalid data model. See error log');
+	data.printError(cMessages.InvalidDataModel);
 	return
 end
 % Define paramaters
@@ -21,16 +21,15 @@ if data.isDiagnosis
 	states=data.StateNames;
 	[~,param.State]=optionChoice('Select State:',states(2:end));
 else
-	data.printError('An Operation State is required');
+	data.printError(cMessages.DiagnosisNotAvailable);
 	return
 end
 doptions=cType.DiagnosisOptions;
 [~,param.DiagnosisMethod]=optionChoice('Select Diagnosis Method:',doptions(2:end));
 % Solve and show results
-dgn=ThermoeconomicDiagnosis(data,param);
-if dgn.status
-	outputResults(dgn,options);
-	dgn.printInfo('Results (dgn) available in Workspace');
+res=ThermoeconomicDiagnosis(data,param);
+if res.status
+	outputResults(res,options);
 else
-	printLogger(dgn);
+	printLogger(res);
 end

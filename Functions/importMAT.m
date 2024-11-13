@@ -14,7 +14,7 @@ function obj = importMAT(filename)
     obj=cMessageLogger();
 	% Check input arguments
     if isOctave
-        obj.messageLog(cType.ERROR,'Read MAT files is not yet implemented for Octave');
+        obj.messageLog(cType.ERROR,cMessages.NoReadMatFiles);
 		return
     end
     % Load and check the model
@@ -24,13 +24,13 @@ function obj = importMAT(filename)
 		var=S.(f{1});
 	catch err
 		obj.messageLog(cType.ERROR,err.message)
-		obj.messageLog(cType.ERROR,'Error reading file %s',filename);
+		obj.messageLog(cType.ERROR,cMessages.FileReadError,filename);
 		return
 	end
 	if isValid(var)
         obj=var;
 		obj.clearLogger;
 	else
-		obj.messageLog(cType.ERROR,'Invalid MAT model data file %s',filename);
+		obj.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
 	end
 end

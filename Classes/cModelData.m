@@ -133,7 +133,7 @@ classdef (Sealed) cModelData < cMessageLogger
                 writestruct(obj.dm,filename,'StructNodeName','root','AttributeSuffix','Id');
             catch err
                 log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
             end
 		end
 
@@ -151,7 +151,7 @@ classdef (Sealed) cModelData < cMessageLogger
                 fclose(fid);
             catch err
                 log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
             end
         end
     end

@@ -10,7 +10,7 @@ options=struct('Console','Y','Save','N');
 data=selectDataModel();
 if ~data.status
 	data.printLogger;
-	data.printError('Invalid data model. See error log');
+	data.printError(cMessages.InvalidDataModel);
 	return
 end
 % Define paramaters
@@ -28,10 +28,9 @@ if data.isResourceCost
     end
 end
 % Solve and show results
-ta=ThermoeconomicAnalysis(data,param);
-if ta.status
-	outputResults(ta,options);
-	ta.printInfo('Results (ta) available in Workspace');
+res=ThermoeconomicAnalysis(data,param);
+if res.status
+	outputResults(res,options);
 else
-	printLogger(ta);
+	printLogger(res);
 end

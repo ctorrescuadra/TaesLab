@@ -44,7 +44,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
                 if isObject(res,'cResultSet')
                     app.showResults(res)
                 else
-                    log.printError('Argument must be a ResultSet');
+                    log.printError(cMessages.ResultSetRequired);
                 end
             end
         end
@@ -57,7 +57,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
             % Check Input parameter
             log=cMessageLogger();
             if ~isObject(res,'cResultSet')
-                log.printError('Invalid result argument');
+                log.printError(cMessages.InvalidResultSet);
                 return
             end
             % Set table parameters
@@ -186,9 +186,9 @@ classdef (Sealed) ResultsPanel < cTaesLab
                 descr=app.tableIndex.Description;
 				slog=saveResults(res,file);
                 if log.status
-				    slog.printInfo('%s saved in file %s',descr, file);			    
+				    slog.printInfo(cMessages.InfoFileSave,descr, file);			    
                 else
-                    slog.printError('Result file %s could NOT be saved', file);
+                    slog.printError(cMessages.FileNotSaved, file);
                 end
             end
         end
@@ -203,13 +203,13 @@ classdef (Sealed) ResultsPanel < cTaesLab
                     cd(path);
                     slog=saveTable(tbl,file);
                     if log.status
-                        slog.printInfo('%s saved in file %s', tbl.Name,file);			    
+                        slog.printInfo(cMessages.InfoFileSaved, tbl.Name,file);			    
                     else
-                        slog.printError('Table %s could NOT be saved', tbl.Name);
+                        slog.printError(cMessages.FileNotSaved, tbl.Name);
                     end
                 end
             else
-                log.printError('Table NOT available');
+                log.printError(cMessages.TableNotAvailable);
             end
         end
     end

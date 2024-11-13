@@ -1,17 +1,17 @@
-classdef cMessage < cTaesLab
-% cMessage -  create a message
+classdef cMessageBuilder < cTaesLab
+% cMessageBuilder -  create a message
 %   The message include the type of error, the class which cause the message and the text message
 %   There is three types of messages registered
 %     cType.ERROR - Error which cause the object be invalid
 %     cType.WARNING - Non critical error
 %     cType.INFO - Informs that an operation finished correctly
 %
-% cMessage Properties
+% cMessageBuilder Properties
 %   Error - Type of message error code
 %   Class - Name of the class which generate the error
 %   Text  - Text of the message
 %
-% cMessage Methods:
+% cMessageBuilder Methods:
 %   getMessage - get the text of the message including type and class
 %   disp - show the message on console. Overload disp
 %
@@ -22,7 +22,7 @@ classdef cMessage < cTaesLab
     end
 
     methods
-        function obj = cMessage(type,class,text)
+        function obj = cMessageBuilder(type,class,text)
         %Construct an instance of this class
             obj.Error=type;
             obj.Class=class;

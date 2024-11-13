@@ -3,21 +3,20 @@
 %   Select the data file model as <folder>_model.<ext>
 %   Prompt parameters interactively
 % Output:
-%	pd - cResultInfo containing Productive Diagram info
+%	res - cResultInfo containing Productive Diagram info
 %
 % Select data file model
 options=struct('Console','N','Save','Y');
 data=selectDataModel();
 if ~data.status
 	data.printLogger;
-	data.printError('Invalid data model. See error log');
+	data.printError(cMessages.InvalidDataModel);
 	return
 end
 % Show results
-pd=ProductiveDiagram(data);
-if pd.status
-	outputResults(pd,options);
-	pd.printInfo('Results (pd) available in Workspace');
+res=ProductiveDiagram(data);
+if res.status
+	outputResults(res,options);
 else
-	printLogger(pd);
+	printLogger(res);
 end

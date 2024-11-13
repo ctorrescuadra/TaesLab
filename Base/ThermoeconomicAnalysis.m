@@ -51,13 +51,13 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %
     res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')
-		res.printError('First argument must be a Data Model');
-        res.printError('Usage: ThermoeconomicAnalysis(data,options)');
+		res.printError(cMessages.DataModelRequired);
+        res.printError(cMessages.UseCostAnalysis);
 		return
 	end
     % Check input parameters
     p = inputParser;
-	p.addParameter('State',data.StateNames{1},@ischar);
+    p.addParameter('State',data.StateNames{1},@data.existState);
 	p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
     p.addParameter('Show',false,@islogical);
@@ -66,7 +66,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 		p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: ThermoeconomicAnalysis(data,options)');
+        res.printError(cMessages.UseCostAnalysis);
         return
     end
     param=p.Results;
@@ -74,7 +74,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~ex.status
         ex.printLogger;
-		res.printError('Invalid exergy values. See error log');
+		res.printError(cMessages.InvalidExergyData);
         return
 	end
     % Read Waste and compute Model FP
@@ -85,7 +85,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
     end
     if ~fpm.status
         fpm.printLogger;
-		res.printError('Invalid Thermoeconomic Analysis. See error log')
+		res.printError(cMessages.InvalidCostAnalysis)
         return
     end
     % Read external resources and get results
@@ -100,7 +100,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 		rsc=getResourceCost(rd,fpm);
         if ~rsc.status
 			rsc.printLogger;
-			res.printError('Invalid resource cost values. See Error Log');
+			res.printError(cMessages.InvalidResourceCost);
 			return
         end
         param.ResourcesCost=rsc;
@@ -108,7 +108,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
     res=fpm.buildResultInfo(data.FormatData,param);
     if ~res.status
 		res.printLogger;
-        res.printError('Invalid cResultInfo. See error log');
+        res.printError(cMessages.InvalidResultSet);
 		return
     end
     % Show and Save results if required

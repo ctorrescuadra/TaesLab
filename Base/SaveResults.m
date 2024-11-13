@@ -20,13 +20,13 @@ function SaveResults(arg,filename)
     log=cMessageLogger();
     % Check Input parameters
     if (nargin~=2) || ~isObject(arg,'cResultSet')
-        log.printError('First argument must be a Result Set.');
-        log.printError('Usage: SaveResults(res,filename)');
+        log.printError(cMessages.ResultSetRequired);
+        log.printError(cMessages.UseSaveResults);
         return
     end
     if ~isFilename(filename)
-        log.printError('Invalid filename.');
-        log.printError('Usage: SaveResults(res,filename)');
+        log.printError(cMessages.InvalidOutputFile,filename);
+        log.printError(cMessages.UseSaveResults);
         return
     end
     log=saveResults(arg,filename);

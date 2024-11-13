@@ -305,11 +305,11 @@ classdef cResultSet < cResultId
         %
             log=cMessageLogger();
             if (nargin < 2) || ~isFilename(filename)
-                log.messageLog(cType.ERROR,'Invalid input arguments');
+                log.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
                 return
             end
             if ~obj.status
-                log.messageLog(cType.ERROR,'Invalid cResultInfo object')
+                log.messageLog(cType.ERROR,cMessages.InvalidResultInfo)
                 return
             end
             [fileType,ext]=cType.getFileType(filename);
@@ -383,7 +383,7 @@ classdef cResultSet < cResultId
                 slog=exportCSV(tbl.Values,fname);
                 if ~slog.status
                     log.addLogger(slog);
-                    log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
+                    log.messageLog(cType.ERROR,cMessages.FileNotSaved,fname);
                 end
             end
         end
@@ -491,7 +491,7 @@ classdef cResultSet < cResultId
                 slog=html.saveTable(fname);
                 if ~slog.status
                     log.addLogger(slog);
-                    log.messageLog(cType.ERROR,'file %s is NOT saved',fname);
+                    log.messageLog(cType.ERROR,cMessages.FileNotSaved,fname);
                 end
             end
         end
@@ -512,7 +512,7 @@ classdef cResultSet < cResultId
                 fId = fopen (filename, 'wt');
             catch err
                 log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'Open file %s',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved',filename);
                 return
             end
             % Print tables into file
@@ -536,7 +536,7 @@ classdef cResultSet < cResultId
                 fId = fopen (filename, 'wt');
             catch err
                 log.messageLog(cType.ERROR,err.message)
-                log.messageLog(cType.ERROR,'Open file %s',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
                 return
             end
             % Save the tables in the file

@@ -31,8 +31,8 @@ function res = ExportResults(arg,varargin)
 %
     res=cMessageLogger();
     if nargin<1 || ~isObject(arg,'cResultSet')
-		res.printError('First argument must be a Result Set');
-		res.printError('Usage: ExportResults(arg,options)');
+		res.printError(cMessages.InvalidResultSet);
+		res.printError(cMessages.UseExportResults);
 		return
     end
     % Check input
@@ -44,7 +44,7 @@ function res = ExportResults(arg,varargin)
 		p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError('Usage: ExportResults(arg,options)');
+        res.printError(cMessages.UseExportResults);
         return
     end
     param=p.Results;
