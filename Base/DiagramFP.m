@@ -54,7 +54,7 @@ function res=DiagramFP(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~ex.status
         ex.printLogger;
-		res.printError(cMessages.InvalidExergyData);
+		res.printError(cMessages.InvalidExergyData,param.State);
         return
 	end	
 	% Get FP Diagram model and set results

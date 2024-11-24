@@ -34,12 +34,18 @@ classdef cMessageBuilder < cTaesLab
             text=[cType.getTextErrorCode(obj.Error),': ',obj.Class,'. ',obj.Text];              
         end
 
-        function disp(obj)
+        function disp(obj,debug)
         % Overload disp function
         %   fid=1 is the standard output file id
         %   fid=2 is the error output file id
-            fid=2*(obj.Error<=0)+(obj.Error>0);
+            if nargin==1
+                debug=false;
+            end
+            fid=2*(obj.Error==0)+(obj.Error~=0);
             fprintf(fid,'%s\n',obj.getMessage);
+            if debug
+                dbstack;
+            end
         end
     end
 end

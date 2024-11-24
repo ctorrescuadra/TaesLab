@@ -40,7 +40,9 @@ classdef (Sealed) cModelResults < cMessageLogger
         % Output:
         %   res - cResultInfo with ResultId equals to index
             res=cType.EMPTY;
-            if isIndex(id,1:cType.MAX_RESULT_INFO)
+            if nargin==1
+                res=obj.results;
+            elseif isIndex(id,1:cType.MAX_RESULT_INFO)
                 res=obj.results{id};
             end
         end

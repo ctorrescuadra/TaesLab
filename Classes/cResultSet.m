@@ -211,7 +211,7 @@ classdef cResultSet < cResultId
             end
             tbl=getTable(res,graph);
             if ~tbl.status
-                obj.printError('Invalid graph table: %s',graph);
+                obj.printError(cMessages.NoGraphTable,graph);
                 return
             end
             % Get default optional parameters
@@ -331,7 +331,7 @@ classdef cResultSet < cResultId
                     return
             end
             if log.status
-                log.messageLog(cType.INFO,'File %s has been saved',filename);
+                log.messageLog(cType.INFO,cMessages.InfoFileSaved,obj.ResultName,filename);
             end
         end
     end

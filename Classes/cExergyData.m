@@ -52,7 +52,7 @@ classdef cExergyData < cMessageLogger
             B=zeros(1,M);
             for i=1:M
 				id=ps.getFlowId(values(i).key);
-                if isempty(id)
+                if ~id
 					obj.messageLog(cType.ERROR,'Exergy index %s not found',values(i).key);
 					continue
                 end
@@ -107,7 +107,7 @@ classdef cExergyData < cMessageLogger
 						obj.messageLog(cType.ERROR,'Product of process %s is zero',ps.ProcessKeys{i});
 					else
 						bypass(i)=true;
-						obj.messageLog(cType.INFO,'Process %s is not Active',ps.ProcessKeys{i});
+						obj.messageLog(cType.INFO,cMessages.ProcessNotActive,ps.ProcessKeys{i});
 					end
 				end
             end

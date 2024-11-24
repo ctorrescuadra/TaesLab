@@ -53,7 +53,7 @@ function data=ReadDataModel(filename,varargin)
 		p.parse(varargin{:});
     catch err
 		data.printError(err.message);
-        data.printError('Usage: ReadDataModel(data,options)');
+        data.printError(cMessages.UseReadDataModel);
         return
     end
     param=p.Results;

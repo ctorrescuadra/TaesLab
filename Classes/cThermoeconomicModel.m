@@ -52,6 +52,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     diagramFP               - Get Diagram FP cResultInfo
 %     summaryResults          - Get Summary cResultInfo
 %     dataInfo                - Get Data Model cResultInfo
+%     showResultInfo          - Get a strcuture with all cResultInfo
 %
 %   Model Info Methods
 %     showProperties  - Show model properties
@@ -250,6 +251,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             obj.setThermoeconomicDiagnosis;
             obj.setRecycling(param.Recycling);   
             obj.setSummary(param.Summary);
+            obj.buildResultInfo;
         end
 
         %%%
@@ -547,6 +549,22 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=getResultTable(obj,arg);
             else
                 res=cMessageLogger(cType.INVALID);
+            end
+        end
+
+        function res=showResultInfo(obj)
+        % Show or get a structure containig the results of the model
+        % Syntax:
+        %   obj.showResultInfo;
+        %   res = obj.showResultInfo;
+        % Output Argument:
+        %   Struct containing the results of the model
+        %
+            obj.buildResultInfo;
+            val=getResults(obj.results);
+            res=cell2struct(val,cType.ResultVar,2);
+            if nargout==0
+                disp(res);
             end
         end
 

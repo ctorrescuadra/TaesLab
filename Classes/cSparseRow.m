@@ -51,7 +51,7 @@ classdef  cSparseRow < cMessageLogger
 			obj.NR=size(vals,1);
 			obj.M=size(vals,2);
 			if obj.NR ~= length(rows)
-				obj.printError('Invalid cSparseRow arguments. Rows and Values dimensions must agree');
+				obj.printError(cMessages.InvalidRowValues);
 				return
 			end
 			obj.mRows=rows;
@@ -61,7 +61,7 @@ classdef  cSparseRow < cMessageLogger
 			elseif n>=obj.NR
 				obj.N=n;
 			else
-				obj.printError('Invalid cSparseRow arguments. Number of Rows must agree');
+				obj.printError(cMessages.InvalidRowSize);
 			end
 		end
 
@@ -69,7 +69,7 @@ classdef  cSparseRow < cMessageLogger
 		% Scale Columns function
 			log=cMessageLogger();
 			if(obj.M~=length(x))
-				log.printError('Matrix dimensions must agree: %d %d',obj.NR,length(rows));
+				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
 				return
 			end
 			B=scaleCol(obj.mValues,x);
@@ -83,7 +83,7 @@ classdef  cSparseRow < cMessageLogger
 				x=obj.sumCols;
 			end
 			if(obj.M~=length(x))
-				nobj.printError('Matrix dimensions must agree: %d %d',obj.NR,length(rows));
+				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
 				return
 			end
 			B=divideCol(obj.mValues,x);
@@ -94,7 +94,7 @@ classdef  cSparseRow < cMessageLogger
 		% Scale Rows function
 			nobj=cMessageLogger();
 			if(obj.N~=length(x))
-				nobj.printError('Matrix dimensions must agree: %d %d',obj.NR,length(rows));
+				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
 				return
 			end
 			B=scaleRow(obj.mValues,x(obj.mRows));
@@ -108,7 +108,7 @@ classdef  cSparseRow < cMessageLogger
 				x(obj.mRows)=obj.sumRows;
 			end
 			if(obj.N~=length(x))
-				nobj.printError('Matrix dimensions must agree: %d %d',obj.NR,length(rows));
+				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
 				return
 			end
 			B=divideRow(obj.mValues,x(obj.mRows));
@@ -143,7 +143,7 @@ classdef  cSparseRow < cMessageLogger
 		% overload the plus operator
 			nobj=cMessageLogger();
 			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
-				nobj.printError('Matrix dimensions must agree');
+				nobj.printError(cMessages.InvalidSparseRow);
 				return
 			end
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
@@ -163,7 +163,7 @@ classdef  cSparseRow < cMessageLogger
 		% overload the minus operator
 			nobj=cMessageLogger();
 			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
-				nobj.printError('Matrix dimensions must agree');
+				nobj.printError(cMessages.InvalidSparseRow);
 				return
 			end
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
@@ -188,7 +188,7 @@ classdef  cSparseRow < cMessageLogger
 		% overload the mtimes operator
 			nobj=cMessageLogger();
 			if (size(obj1,2)~=size(obj2,1))
-				nobj.printError('Matrix dimensions must agree');
+				nobj.printError(cMessages.InvalidSparseRow);
 				return
 			end
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');

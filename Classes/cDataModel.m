@@ -31,7 +31,7 @@ classdef cDataModel < cResultSet
 %   existSample        - Check if a sample name exists
 %   getTablesDirectory - Get the tables directory 
 %   getTableInfo       - Get information about a table object
-%   buildResultInfo    - Build the cResultInfo associated to the data model
+%   getResultInfo      - Get the cResultInfo associated to the data model
 %   showDataModel      - Show the data model
 %   saveDataModel      - Save the data model
 %
@@ -83,7 +83,7 @@ classdef cDataModel < cResultSet
             status=ps.status;
             if status
                 obj.ProductiveStructure=ps;
-				obj.messageLog(cType.INFO,'Productive Structure is valid');
+				obj.messageLog(cType.INFO,cMessages.ValidProductiveStructure');
             else
                 obj.addLogger(ps);
 				obj.messageLog(cType.ERROR,'Productive Structure is NOT valid. See error log');
@@ -115,7 +115,7 @@ classdef cDataModel < cResultSet
                 rex=cExergyData(ps,exs);
                 status = rex.status & status;
                 if rex.status
-					obj.messageLog(cType.INFO,'Exergy values [%s] are valid',obj.StateNames{i});
+					obj.messageLog(cType.INFO,cMessages.ValidExergyData,obj.StateNames{i});
 				else
 					obj.addLogger(rex)
 					obj.messageLog(cType.ERROR,'Exergy values [%s] are NOT valid. See Error Log',obj.StateNames{i});
@@ -128,7 +128,7 @@ classdef cDataModel < cResultSet
                     data=dm.WasteDefinition;
                 else
                     data=ps.wasteDefinition;
-                    obj.messageLog(cType.INFO,'Waste Definition is not available. Default is used');
+                    obj.messageLog(cType.INFO,cMessages.WasteNotAvailable);
                 end
                 wd=cWasteData(ps,data);
                 status=wd.status & status;
@@ -142,7 +142,7 @@ classdef cDataModel < cResultSet
                 obj.isWaste=true;	
             else
                 obj.isWaste=false;
-				obj.messageLog(cType.INFO,'The plant has NOT waste');
+				obj.messageLog(cType.INFO,cMessages.NoWasteModel);
             end
             % Check ResourceCost
             if obj.isResourceCost
@@ -160,7 +160,7 @@ classdef cDataModel < cResultSet
                     rsc=cResourceData(ps,dmr);
                     status=rsc.status & status;
                     if rsc.status
-						obj.messageLog(cType.INFO,'Resources Cost sample [%s] is valid',obj.SampleNames{i});
+						obj.messageLog(cType.INFO,cMessages.ValidResourceCost,obj.SampleNames{i});
                         obj.ResourceData.setValues(i,rsc);
                     else
 						obj.addLogger(rsc);
@@ -168,7 +168,7 @@ classdef cDataModel < cResultSet
                     end
                 end
             else
-               obj.messageLog(cType.INFO,'No Resources Cost Data available')
+               obj.messageLog(cType.INFO,cMessages.ResourceNotAvailable')
             end
             % Set ResultId properties
             obj.status=status;
@@ -262,9 +262,6 @@ classdef cDataModel < cResultSet
         %   res = cExergyData object
         %
             res=obj.ExergyData.getValues(state);
-            if ~res.status
-                res.printError('Invalid state %s',state);
-            end
         end
 
         function res=setExergyData(obj,state,values)
@@ -282,13 +279,13 @@ classdef cDataModel < cResultSet
             M=size(values,2);
             % Validate the number of flows
             if obj.NrOfFlows~=M
-                res.printError('Invalid number of exergy values',length(values));
+                res.printError(cMessages.InvalidDataSetSize,M);
                 return
             end
             % Validate state
             idx=obj.ExergyData.getIndex(state);
             if ~idx
-                res.printError('State %s does not exists',state);
+                res.printError(cMessages.InvalidExergyData,state);
                 return
             end
             % Build exergy data structure
@@ -303,8 +300,8 @@ classdef cDataModel < cResultSet
             if res.status
                 obj.ExergyData.setValues(idx,res);
             else
-                res.printError('Invalid exergy data');
                 printLogger(res);
+                res.printError(cMessages.InvalidExergyData,state);
             end 
         end
 
@@ -319,9 +316,6 @@ classdef cDataModel < cResultSet
         %   res - cResourceData object
         %
             res=obj.ResourceData.getValues(sample);
-            if ~res.status
-                res.printError('Invalid sample %s',sample);
-            end
         end
 		
 		function res=existState(obj,state)
@@ -442,7 +436,7 @@ classdef cDataModel < cResultSet
 					log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
             end
             if log.status
-				log.messageLog(cType.INFO,'File %s has been saved',filename);
+				log.messageLog(cType.INFO,cMessages.InfoFileSaved,obj.ResultName,filename);
             end
         end
     end

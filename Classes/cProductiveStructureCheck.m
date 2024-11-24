@@ -255,7 +255,7 @@ classdef cProductiveStructureCheck < cResultId
             for i=1:fe.Count
 			    in=fe.getContent(i);
 				idx=obj.fDict.getIndex(in);
-                if ~isempty(idx)
+                if idx
 					if ~obj.cflw{idx}.to
 					    obj.cflw{idx}.to=sid;
 				    else
@@ -271,7 +271,7 @@ classdef cProductiveStructureCheck < cResultId
             for i=1:fs.Count
 			    out=fs.getContent(i);
 				idx=obj.fDict.getIndex(out);
-                if ~isempty(idx)
+                if idx
 					if ~obj.cflw{idx}.from
 					    obj.cflw{idx}.from=sid;
 				    else

@@ -218,7 +218,7 @@ classdef (Abstract) cTable < cMessageLogger
             if iscell(value) && size(value,1)==obj.NrOfRows
                 obj.Data(:,idx)=value;
             else
-                log.printError('Invalid table %s values',obj.Name);
+                log.printError(cMessages.InvalidTableValues,obj.Name);
             end
         end
 
@@ -236,7 +236,7 @@ classdef (Abstract) cTable < cMessageLogger
             if iscell(value) && (size(value,2)==obj.NrOfCols-1)
                 obj.Data(idx,:)=value;
             else
-                log.printError('Invalid table %s values',obj.Name);
+                log.printError(cMessages.InvalidTableValues,obj.Name);
             end
         end
  
@@ -278,7 +278,7 @@ classdef (Abstract) cTable < cMessageLogger
                         log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
             end
             if log.status
-                log.messageLog(cType.INFO,'Table %s has been saved in file %s',obj.Name, filename);
+                log.messageLog(cType.INFO,cMessages.TableFileSave,obj.Name, filename);
             end
         end
     
@@ -409,7 +409,7 @@ classdef (Abstract) cTable < cMessageLogger
             if vt.status
                 vt.showTable
             else
-                vt.printError('Invalid uitable %s',obj.name);
+                vt.printError(cMessages.InvalidTableGUI,obj.Name);
             end
         end
     

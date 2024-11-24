@@ -89,7 +89,7 @@ function res = WasteAnalysis(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~ex.status
         ex.printLogger;
-        res.printError(cMessages.InvalidExergyData);
+        res.printError(cMessages.InvalidExergyData,param.State);
         return
 	end
 	% Compute the Model FPR

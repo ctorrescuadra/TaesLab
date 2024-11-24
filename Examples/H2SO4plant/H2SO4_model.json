@@ -1,0 +1,289 @@
+{
+  "ProductiveStructure": {
+    "name": "H2SO4_model",
+    "flows": [
+      {
+        "key": "SLPH",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "CH2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH14",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH15",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH18",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "A5",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "SW16",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "SW12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "SW8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "SW9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "SW13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "Q34",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH19",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "SW20",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QH",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "MLT",
+        "fuel": "SLPH+Q34",
+        "product": "CH2",
+        "type": "PRODUCTIVE",
+        "description": "Melting Tank"
+      },
+      {
+        "key": "BRN",
+        "fuel": "A5+CH2",
+        "product": "CH6",
+        "type": "PRODUCTIVE",
+        "description": "Sulphur Burner"
+      },
+      {
+        "key": "WBA",
+        "fuel": "CH6-CH7",
+        "product": "(SW9-SW8)+Q34",
+        "type": "PRODUCTIVE",
+        "description": "Waste Boiler A"
+      },
+      {
+        "key": "CNVA",
+        "fuel": "CH7",
+        "product": "CH10",
+        "type": "PRODUCTIVE",
+        "description": "Converter A"
+      },
+      {
+        "key": "WBB",
+        "fuel": "CH10-CH11",
+        "product": "SW13-SW12",
+        "type": "PRODUCTIVE",
+        "description": "Waste Boiler B"
+      },
+      {
+        "key": "CNVB",
+        "fuel": "CH11",
+        "product": "CH14",
+        "type": "PRODUCTIVE",
+        "description": "Converter B"
+      },
+      {
+        "key": "ECON",
+        "fuel": "CH14",
+        "product": "CH15+(SW12+SW8-SW16)",
+        "type": "PRODUCTIVE",
+        "description": "Economiser"
+      },
+      {
+        "key": "ABS",
+        "fuel": "CH18",
+        "product": "CH19",
+        "type": "PRODUCTIVE",
+        "description": "Absorber"
+      },
+      {
+        "key": "SMIX",
+        "fuel": "SW9+SW13",
+        "product": "SW20",
+        "type": "PRODUCTIVE",
+        "description": "Steam Mixer"
+      },
+      {
+        "key": "COOL",
+        "fuel": "CH15-CH18",
+        "product": "QH",
+        "type": "DISSIPATIVE",
+        "description": "Gas Cooler"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Reference",
+      "exergy": [
+        {
+          "key": "SLPH",
+          "value": 598.85
+        },
+        {
+          "key": "CH2",
+          "value": 603.108
+        },
+        {
+          "key": "CH6",
+          "value": 454.502
+        },
+        {
+          "key": "CH7",
+          "value": 332.939
+        },
+        {
+          "key": "CH10",
+          "value": 316.357
+        },
+        {
+          "key": "CH11",
+          "value": 278.922
+        },
+        {
+          "key": "CH14",
+          "value": 277.168
+        },
+        {
+          "key": "CH15",
+          "value": 225.206
+        },
+        {
+          "key": "CH18",
+          "value": 221.502
+        },
+        {
+          "key": "A5",
+          "value": 0
+        },
+        {
+          "key": "SW16",
+          "value": 0
+        },
+        {
+          "key": "SW12",
+          "value": 4.717
+        },
+        {
+          "key": "SW8",
+          "value": 10.98
+        },
+        {
+          "key": "SW9",
+          "value": 90.402
+        },
+        {
+          "key": "SW13",
+          "value": 35.822
+        },
+        {
+          "key": "Q34",
+          "value": 9.04
+        },
+        {
+          "key": "CH19",
+          "value": 156.502
+        },
+        {
+          "key": "SW20",
+          "value": 126.203
+        },
+        {
+          "key": "QH",
+          "value": 3.7039999999999793
+        }
+      ]
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 4,
+        "unit": "(MW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "QH",
+      "type": "MANUAL",
+      "recycle": 0,
+      "values": {
+        "process": "BRN",
+        "value": 1
+      }
+    }
+  }
+}

@@ -78,7 +78,7 @@ classdef cWasteData < cMessageLogger
                 end
                 % Check key
                 id=ps.getFlowId(wd(i).flow);
-                if isempty(id)
+                if ~id
 				    obj.messageLog(cType.ERROR,'Invalid waste flow %s',wd(i).flow);
 					continue
                 end 

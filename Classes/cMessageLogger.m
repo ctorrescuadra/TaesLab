@@ -13,7 +13,7 @@ classdef cMessageLogger < cTaesLab
 %   addLogger - concatenate two loggers
 %   clearLogger - clear the messages of the logger
 %
-% See also cLogger, cType
+% See also cLogger, cType, cMessages
 %
 	properties(Access=protected)
 		logger      % cLogger containinig object messages
@@ -42,7 +42,7 @@ classdef cMessageLogger < cTaesLab
 		%   text - text message, use fprintf syntax
 		%     varargin
 		% Example:
-		%	obj.printError('File %s not found',filename)
+		%	obj.printError(cMessages.FileNotFound,filename)
 		%
 			printMessage(obj,cType.ERROR,varargin{:});
 		end
@@ -74,7 +74,7 @@ classdef cMessageLogger < cTaesLab
         % Syntax:
 		%    obj.messageLog(type,text)	
 		%  Input:
-		%   type - error type code
+		%   error - error type code
 		%     cType.ERROR | cType.WARNING | cType.INFO
 		%   text - message text, use fprintf format
 		%     varargin
@@ -82,7 +82,10 @@ classdef cMessageLogger < cTaesLab
 		%   obj.messageLog(cType.ERROR,'Invalid file name %s',filename)
 		%
 			message=obj.createMessage(error,varargin{:});
-			obj.logger.add(message);
+            obj.logger.add(message);
+			if cType.DEBUG_MODE && (error==cType.ERROR)
+				disp(message,true);
+			end
 		end
 		
 		function printLogger(obj)
@@ -166,7 +169,8 @@ classdef cMessageLogger < cTaesLab
 		function printMessage(obj,error,varargin)
 		% Print messages depending of type error and update state
 			msg=obj.createMessage(error,varargin{:});
-			disp(msg);
+            debug=cType.DEBUG_MODE && (error==cType.ERROR);
+			disp(msg,debug);
 		end
 	end
 end

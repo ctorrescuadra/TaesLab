@@ -80,6 +80,7 @@ classdef cType
 		FUEL='FUEL'               % Fuel type option text
 		PRODUCT='PRODUCT'         % Product type option text
 		FORMAT_ID='%3d'           % Line number format
+		DEBUG_MODE=true
 		% Node types
 		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3,'ENV',4);
 		% Types of processes

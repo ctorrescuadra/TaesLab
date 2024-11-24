@@ -383,6 +383,9 @@ classdef (Sealed) TaesTool < handle
 		%%%%%%%%%%%%%%%%%%%%%%%
         function ViewIndexTable(app,res)
         % View the index table into the table panel
+            if isempty(res)
+                return
+            end
             set(app.ptindex,'Title',res.ResultName);
             tbl=res.getTableIndex;
             data=[tbl.RowNames',tbl.Data];

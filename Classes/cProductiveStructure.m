@@ -307,12 +307,12 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
         %   key - process key
 		% Output Argument
 		%   id - Process Id:
-			id=cType.EMPTY;
+			id=0;
 			if ischar(key)
 				id=obj.pDict.getIndex(key);
 			elseif iscell(key)
 				try
-					id=cellfun(@(x) obj.getProcessId(x),key);
+					id=cellfun(@(x) obj.pDict.getIndex(x),key);
 				catch
 					return
 				end
@@ -327,12 +327,12 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
         %   key - flow key
 		% Output Argument
 		%   id - flow Id:
-			id=cType.EMPTY;
+			id=0;
 			if ischar(key)
 				id=obj.fDict.getIndex(key);
 			elseif iscell(key)
 				try
-					id=cellfun(@(x) obj.getFlowId(x),key);
+					id=cellfun(@(x) obj.fDict.getIndex(x),key);
 				catch
 					return
 				end

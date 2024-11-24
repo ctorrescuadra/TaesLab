@@ -74,7 +74,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~ex.status
         ex.printLogger;
-		res.printError(cMessages.InvalidExergyData);
+		res.printError(cMessages.InvalidExergyData,param.State);
         return
 	end
     % Read Waste and compute Model FP
@@ -97,10 +97,14 @@ function res=ThermoeconomicAnalysis(data,varargin)
 			param.ResourceSample=data.SampleNames{1};
         end
 		rd=data.getResourceData(param.ResourceSample);
+        if ~rd.status
+            rd.printLogger;
+            rd.printError(cMessages.InvalidResourceData,param.ResourceSample);
+        end
 		rsc=getResourceCost(rd,fpm);
         if ~rsc.status
 			rsc.printLogger;
-			res.printError(cMessages.InvalidResourceCost);
+			res.printError(cMessages.InvalidResourceCost,param.ResourceSample);
 			return
         end
         param.ResourcesCost=rsc;

@@ -53,7 +53,7 @@ function res=ExergyAnalysis(data,varargin)
 	ex=data.getExergyData(param.State);
 	if ~ex.status
 		ex.printLogger;
-		res.printError(cMessages.InvalidExergyData);
+		res.printError(cMessages.InvalidExergyData,param.State);
 		return
 	end
 	pm=cExergyModel(ex);

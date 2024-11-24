@@ -84,12 +84,12 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     % Read reference and operation  exergy values
     rex0=data.getExergyData(param.ReferenceState);
     if ~rex0.status
-        res.printError(cMessages.InvalidExergyData);
+        res.printError(cMessages.InvalidExergyData,param.ReferenceState);
         return
     end
     rex1=data.getExergyData(param.State);
     if ~rex1.status
-        res.printError(cMessages.InvalidExergyData);
+        res.printError(cMessages.InvalidExergyData,param.State);
         return
     end
     % Read Waste, compute Model FP

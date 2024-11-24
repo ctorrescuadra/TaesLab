@@ -377,6 +377,9 @@ classdef (Sealed) TaesPanel < handle
 		%%%%%%%%%%%%%%%%%%%%%%%
         function ViewIndexTable(app,res)
         % View the index table into the table panel
+            if isempty(res)
+                return
+            end
             if app.panel
                 app.resPanel.showResults(res);
             elseif app.console

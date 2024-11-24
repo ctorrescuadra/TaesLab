@@ -58,7 +58,7 @@ classdef cResourceData < cMessageLogger
 			resources=ps.Resources.flows;
 			for i=1:length(se)
 				id=ps.getFlowId(se(i).key);
-				if ~isempty(id)
+				if id
 					if ~ismember(id,resources)
 						obj.messageLog(cType.ERROR,'Flow key %s is not a resource',se(i).key);
 					end
@@ -84,7 +84,7 @@ classdef cResourceData < cMessageLogger
 				% Check processes cost data
                 for i=1:length(sz)
 					id=ps.getProcessId(sz(i).key);
-                    if ~isempty(id)
+                    if id
 						if (sz(i).value >= 0)
 							obj.Z(id)=sz(i).value;
 						else
@@ -95,7 +95,7 @@ classdef cResourceData < cMessageLogger
                     end
                 end
 			else
-				obj.messageLog(cType.INFO,'Processes cost data is missing. Default values are assumed.');
+				obj.messageLog(cType.INFO,cMessages.NoResourceData);
 			end
 			obj.ps=ps;
 		end

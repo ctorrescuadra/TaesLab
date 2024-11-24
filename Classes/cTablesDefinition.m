@@ -215,7 +215,8 @@ classdef cTablesDefinition < cMessageLogger
             tNames=struct2cell(cType.Tables);
             td=cDictionary(tNames);
             if ~td.status
-                obj.printError('Invalid tables dictionary');
+                td.printLogger;
+                obj.printError(cMessages.InvalidTableDict);
                 return
             end
             NT=numel(obj.cfgTables);
