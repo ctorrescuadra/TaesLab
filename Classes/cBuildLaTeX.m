@@ -29,7 +29,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         %   tbl - cTable object
         %
             if ~isObject(tbl,'cTable')
-                obj.messageLog(cType.ERROR,'Invalid input argument');
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             N=tbl.NrOfRows;
@@ -93,7 +93,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
                 fclose(fId);
             catch err
                 log.message(err.message);
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
             end
         end
     end

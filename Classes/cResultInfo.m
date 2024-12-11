@@ -43,11 +43,11 @@ classdef cResultInfo < cResultSet
             % Check parameters
             obj=obj@cResultSet(info.ResultId);
             if ~info.status
-                obj.messageLog(cType.ERROR,'Invalid ResultId object');
+                obj.messageLog(cType.ERROR,cMessages.InvalidResultSet);
                 return
             end
             if ~isstruct(tables)
-                obj.messageLog(cType.ERROR,'Invalid tables parameter');
+                obj.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
                 return
             end
             % Fill the class values
@@ -82,7 +82,7 @@ classdef cResultInfo < cResultSet
         %
             res = cMessageLogger();
             if nargin<2 || ~ischar(name) || isempty(name)
-                res.messageLog(cType.ERROR,'Invalid Table name');
+                res.messageLog(cType.ERROR,cMessages.InvalidTableName);
                 return
             end
             if strcmp(name,cType.TABLE_INDEX)
@@ -90,7 +90,7 @@ classdef cResultInfo < cResultSet
             elseif obj.existTable(name)
                 res=obj.Tables.(name);
             else
-                res.messageLog(cType.ERROR,'Table %s is NOT available',name);
+                res.messageLog(cType.ERROR,cMessages.TableNotFound,name);
                 return
             end
         end

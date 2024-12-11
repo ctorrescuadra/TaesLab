@@ -41,7 +41,7 @@ classdef (Sealed) cModelData < cMessageLogger
                 if isfield(s,fld)
                     obj.dm.(fld)=s.(fld);
                 else
-                    obj.messageLog(cType.ERROR,'Invalid model. Field %s is missing',fld);
+                    obj.messageLog(cType.ERROR,cMessages.ModelDataMissing,fld);
                     return
                 end
             end

@@ -22,7 +22,7 @@ classdef (Sealed) cModelResults < cMessageLogger
         %
             % Check inputs
             if ~isObject(data,'cDataModel')
-                obj.messageLog(cType.ERROR,'Invalid data model');
+                obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
                 return
             end
             % Create results array

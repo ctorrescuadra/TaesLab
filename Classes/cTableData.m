@@ -45,7 +45,7 @@ classdef cTableData < cTable
             if obj.checkTableSize
                 obj.setProperties(props)
             else
-                obj.messageLog(cType.ERROR,'Invalid table size (%dx%d)',size(data));
+                obj.messageLog(cType.ERROR,cMessages.InvalidTableSize,size(data));
             end
         end
 
@@ -62,7 +62,7 @@ classdef cTableData < cTable
                 obj.setColumnWidth;
             catch err
                 obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,'Invalid Properties');
+                obj.messageLog(cType.ERROR,cMessages.InvalidTableProp);
             end
         end
 

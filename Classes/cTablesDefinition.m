@@ -36,7 +36,7 @@ classdef cTablesDefinition < cMessageLogger
 				config=jsondecode(fileread(cfgfile));
 			catch err
 				obj.messageLog(cType.ERROR,err.message);
-				obj.messageLog(cType.ERROR,'Invalid %s config file',cfgfile);
+				obj.messageLog(cType.ERROR,cMessages.InvalidConfigFile,cfgfile);
 				return
 			end
             % set the object properties
@@ -283,7 +283,7 @@ classdef cTablesDefinition < cMessageLogger
             for i=1:M
                 colId=cType.getDirColumns(cols{i});
                 if isempty(colId)
-                    res.messageLog(cType.ERROR,'Invalid column name %s',cols{i});
+                    res.messageLog(cType.ERROR,cMessages.InvalidDirProp,cols{i});
                     return
                 end
                 colNames{i+1}=cType.DirColNames{colId};

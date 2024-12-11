@@ -45,23 +45,23 @@ classdef cWasteData < cMessageLogger
 		%
 			% Check input arguments
             if ~isObject(ps,'cProductiveStructure')
-				obj.messageLog(cType.ERROR,'Invalid productive structure');
+				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
 				return
             end
 			% Check data structure
 			if  ~isstruct(data) || ~isfield(data,'wastes')
-                obj.messageLog(cType.ERROR,'Invalid waste date. Fields Missing');
+                obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
 				return
 			end
 			% Check waste info
             wd=data.wastes;
 			NR=length(wd);
 			if NR ~= ps.NrOfWastes
-				obj.messageLog(cType.ERROR,'Invalid number of wastes %d',NR);
+				obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
 				return
 			end
 			if ~all(isfield(data.wastes,{'flow','type'}))
-				obj.messageLog(cType.ERROR,'Invalid waste date. Fields Missing');
+				obj.messageLog(cType.ERROR,InvalidWasteData);
 				return
 			end
 			% Initialize arrays
@@ -70,25 +70,25 @@ classdef cWasteData < cMessageLogger
 			recycleRatio=zeros(1,NR);
 			% Check each waste 
 			for i=1:NR
-				% Check waste type			
+				% Check key
+				id=ps.getFlowId(wd(i).flow);
+				if ~id
+					obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,wd(i).flow);
+					continue
+				end 
+				% Check waste type		
                 if cType.checkWasteKey(wd(i).type)
 					wasteType(i)=cType.getWasteId(wd(i).type);
                 else
-                    obj.messageLog(cType.ERROR,'Invalid waste allocation method %s',wd(i).type);
-                end
-                % Check key
-                id=ps.getFlowId(wd(i).flow);
-                if ~id
-				    obj.messageLog(cType.ERROR,'Invalid waste flow %s',wd(i).flow);
-					continue
+                    obj.messageLog(cType.ERROR,cMessages.InvalidWasteAllocation,wd(i).type,wd(i).flow);
                 end 
 				if ~ps.Flows(id).type == cType.Flow.WASTE
-					obj.messageLog(cType.ERROR,'Flow %s must be waste',wd(i).flow);
+					obj.messageLog(cType.ERROR,cMessages.NoWasteFlow,wd(i).flow);
 				end
 				% Check Recycle Ratio
 				if isfield(wd(i),'recycle')
 					if (wd(i).recycle>1) || (wd(i).recycle<0) 
-						obj.messageLog(cType.ERROR,'Invalid recycle ratio %f for waste %s',wd(i).recycle,wd(i).flow);
+						obj.messageLog(cType.ERROR,cMessages.InvalidRecycling,wd(i).recycle,wd(i).flow);
 					end
 				else
 					wd(i).recycle=0.0;
@@ -100,28 +100,28 @@ classdef cWasteData < cMessageLogger
 					if isfield(wd(i),'values')
                         wval=wd(i).values;
                         if ~all(isfield(wval,{'process','value'})) 
-							obj.messageLog(cType.ERROR,'Value fields missing for waste %s',wd(i).flow);
+							obj.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,wd(i).flow);
 							return
                         end
                         for j=1:length(wval)
 							jp=ps.getProcessId(wval(j).process);
 							if isempty(jp)
-								obj.messageLog(cType.ERROR,'Invalid process name %s',wval(j).process);
+								obj.messageLog(cType.ERROR,cMessages.InvalidProcessKey,wval(j).process);
 								continue
 							end
 							if(ps.Processes(jp).type==cType.Process.DISSIPATIVE)
-								obj.messageLog(cType.ERROR,'Waste %s cannot be asssigned to dissipative units',wval(j).process);
+								obj.messageLog(cType.ERROR,cMessages.InvalidAllocationProcess,wval(j).process);
 								continue
 							end
 							if (wval(j).value <= 0)
-								obj.messageLog(cType.ERROR,'Waste distribution value %s: %f cannot be NEGATIVE',wval(j).process,wval(j).value);
+								obj.messageLog(cType.ERROR,cMessages.NegativeWasteAllocation,wval(j).process,wval(j).value);
 								continue
 							end
 							values(i,jp)=wval(j).value;
                         end
 					    else %if no values provided set type to DEFAULT
 						    wasteType(i)=cType.WasteAllocation.DEFAULT;
-						    obj.messageLog(cType.ERROR,'Waste allocation of flow %s is defined as MANUAL and does not have values defined ',wd(i).flow);
+						    obj.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,wd(i).flow);
 					end             
 				end
 			end

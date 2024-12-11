@@ -12,7 +12,7 @@ classdef (Sealed) cReadModelXML < cReadModelStruct
 		%
 			%check arguments
             if isOctave 
-		        obj.messageLog(cType.ERROR,'This function is not yet implemented');
+		        obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'XML');
                 return
             end
 			% Read configuration file
@@ -22,7 +22,7 @@ classdef (Sealed) cReadModelXML < cReadModelStruct
 				sd=jsondecode(f);
 		    catch err
                 obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
+                obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
                 return
             end
             % Build Data Model

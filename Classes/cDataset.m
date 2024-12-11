@@ -39,7 +39,7 @@ classdef cDataset < cDictionary
             if idx
                 res=obj.Values{idx};
             else
-                res.messageLog(cType.ERROR,'cDataset.getValues invalid key');
+                res.messageLog(cType.ERROR,cMessages.InvalidDataSetKey);
             end
         end
 
@@ -58,7 +58,7 @@ classdef cDataset < cDictionary
             if idx
                 obj.Values{idx}=val;
             else
-                log.messageLog(cType.ERROR,'cDataset.setValues invalid key');
+                log.messageLog(cType.ERROR,cMessages.InvalidDataSetKey);
             end
         end
     end

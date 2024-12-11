@@ -83,7 +83,7 @@ classdef (Abstract) cTable < cMessageLogger
             case cType.TableView.HTML
                 showTableHTML(obj)
             otherwise
-                obj.printWarning('Invalid Table View option');
+                obj.printWarning(cMessages.InvalidTableView);
             end
         end
         
@@ -275,7 +275,7 @@ classdef (Abstract) cTable < cMessageLogger
                 case cType.FileType.MAT
                     log=exportMAT(obj,filename);
                 otherwise
-                        log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
+                        log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
             end
             if log.status
                 log.messageLog(cType.INFO,cMessages.TableFileSave,obj.Name, filename);
@@ -321,14 +321,14 @@ classdef (Abstract) cTable < cMessageLogger
                 [xls,status]=oct2xls(data,xls,obj.Name);
                 xls=xlsclose(xls);
                 if ~status || isempty(xls)
-                    log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                    log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
                 end
             else 
                 try
                     writecell(data,filename,'Sheet',obj.Name);      
                 catch err
                     log.messageLog(cType.ERROR,err.message);
-                    log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                    log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
                 end
             end
         end  
@@ -342,7 +342,7 @@ classdef (Abstract) cTable < cMessageLogger
                 fclose(fId);
             catch err
                 log.messageLog(cType.ERROR,err.message)
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
             end
         end
                 
@@ -383,7 +383,7 @@ classdef (Abstract) cTable < cMessageLogger
                 fclose(fid);
             catch err
                 log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
             end
         end
 
@@ -399,7 +399,7 @@ classdef (Abstract) cTable < cMessageLogger
                 writestruct(data,filename,'StructNodeName','root','AttributeSuffix','Id');
             catch err
                 log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
             end
         end
     

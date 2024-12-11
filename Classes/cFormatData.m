@@ -18,13 +18,13 @@ classdef cFormatData < cTablesDefinition
 		%	data - Format struct from cModelData
 		%
 			if ~isstruct(data) || ~isfield(data,'definitions') 
-				obj.messageLog(cType.ERROR,'Invalid format data ');
+				obj.messageLog(cType.ERROR,cMessages.InvalidFormatDefinition);
 				return
 			end
 			
             format=data.definitions;
             if ~all(isfield(format,{'key','width','precision','unit'}))
-                obj.messageLog(cType.ERROR,'Invalid data. Fields missing');
+                obj.messageLog(cType.ERROR,cMessages.InvalidFormatDefinition);
                 return
             end
             % Check and save each format definition
@@ -32,7 +32,7 @@ classdef cFormatData < cTablesDefinition
                 fmt=format(i);
 			    id=cType.getFormatId(fmt.key);
                 if isempty(id)
-			        obj.messageLog(cType.ERROR,'Invalid Format Key %s',fmt.key);
+			        obj.messageLog(cType.ERROR,cMessages.InvalidFormatKey,fmt.key);
                     continue
                 end
                 val1=isfloat(fmt.width) && isfloat(fmt.precision);
@@ -42,7 +42,7 @@ classdef cFormatData < cTablesDefinition
                     obj.cfgTypes(id).unit=fmt.unit;
                     obj.cfgTypes(id).format=cfmt;
                 else
-                    obj.messageLog(cType.ERROR,'Bad format defined in %s',fmt.key);
+                    obj.messageLog(cType.ERROR,cMessages.BadFormatDefinition,fmt.key);
                 end
             end
 		end

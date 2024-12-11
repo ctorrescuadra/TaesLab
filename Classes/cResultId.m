@@ -41,7 +41,7 @@ classdef cResultId < cMessageLogger
                 obj.Sample=cType.EMPTY_CHAR;
                 obj.DefaultGraph=cType.EMPTY_CHAR;
             else
-                obj.messageLog(cType.ERROR,'Invalid ResultId %d',id);
+                obj.messageLog(cType.ERROR,cMessages.InvalidResultId,id);
             end
         end
 		

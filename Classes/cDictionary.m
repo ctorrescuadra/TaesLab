@@ -25,19 +25,19 @@ classdef cDictionary < cMessageLogger
 			if iscell(data) && ~isempty(data)
                 N=length(data);
             else
-                obj.messageLog(cType.ERROR,'List must be a cell array');
+                obj.messageLog(cType.ERROR,cMessages.ListNotCell);
                 return
 			end
             if any(cellfun(@isempty,strtrim(data)))
-                obj.messageLog(cType.ERROR,'List values cannot be empty');
+                obj.messageLog(cType.ERROR,cMessages.ListEmpty);
                 return
             end
 			if length(unique(data))~=N
-                obj.messageLog(cType.ERROR,'List values must be unique');
+                obj.messageLog(cType.ERROR,cMessages.ListNotUnique);
                 return
 			end
             if any(cellfun(@isempty,regexp(data,cType.NAME_PATTERN)))
-                obj.messageLog(cType.ERROR,'List values are no valid');
+                obj.messageLog(cType.ERROR,cMessages.ListNotValid);
                 return
             end
 			% Create map container

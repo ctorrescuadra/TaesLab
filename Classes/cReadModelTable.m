@@ -32,14 +32,14 @@ classdef (Abstract) cReadModelTable < cReadModel
             if ftbl.status
                 tmp.flows=ftbl.getStructData;
             else
-                obj.messageLog(cType.ERROR,'Table Flows NOT found');
+                obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Flows');
                 return
             end
             ptbl=tm.Processes;
             if ptbl.status
                 tmp.processes=ptbl.getStructData;
             else
-                obj.messageLog(cType.ERROR,'Table Processes NOT found');
+                obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Processes');
                 return
             end
             sd.ProductiveStructure=tmp;
@@ -47,26 +47,26 @@ classdef (Abstract) cReadModelTable < cReadModel
             tbl=tm.Format;
             if tbl.status  
                 if ~tbl.isNumericColumn(1:2)
-                    obj.messageLog(cType.ERROR,'Invalid format table');
+                    obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Format');
                 end
                 sd.Format.definitions=tbl.getStructData;
             else
-                obj.messageLog(cType.ERROR,'Table Format NOT found');
+                obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Format');
                 return
             end
             % Get Exergy states data
             tbl=tm.Exergy;
             if ~tbl.status
-                obj.messageLog(cType.ERROR,'Table Exergy NOT found');
+                obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Exergy');
                 return
             end
             NrOfStates=tbl.NrOfCols-1;
             if NrOfStates<1
-                obj.messageLog(cType.ERROR,'Invalid number of states')
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Exergy');
                 return
             end
             if ~tbl.isNumericTable
-                obj.messageLog(cType.ERROR,'Invalid exergy table');
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Exergy');
                 return
             end
             tmp=struct();
@@ -93,21 +93,21 @@ classdef (Abstract) cReadModelTable < cReadModel
                 if isWasteDefinition
                     tbl=tm.WasteDefinition;
                     if (tbl.NrOfCols<2)
-                        obj.messageLog(cType.ERROR,'Waste table. Invalid number of columns');
+                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteDefinition');
                         return
                     end
                     wdef=bitset(wdef,1);
                     keys=tbl.RowNames;
                     tmp=tbl.getStructData;
                     if ~isfield(tmp,'type')
-                        obj.messageLog(cType.ERROR,'Waste table. Type column missing');
+                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteDefinition');
                         return
                     end
                     % Build waste definition data 
                     for i=1:numel(keys)
                         idx=find(strcmp(keys{i},wf),1);
                         if isempty(idx)
-                            obj.messageLog(cType.ERROR,'Waste table. Invalid waste flow %s',keys{i});
+                            obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
                             continue
                         end
                         pswd.wastes(idx).type=tmp(i).type;
@@ -122,7 +122,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     NR=tbl.NrOfCols-1;
                     % Check Waste Allocation Table
                     if (NR<1) || ~tbl.isNumericTable
-                        obj.messageLog(cType.ERROR,'Invalid waste allocation table');
+                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteAllocation');
                         return
                     end
                     keys=tbl.ColNames(2:end);
@@ -132,7 +132,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     for i=1:numel(keys)
                         idx=find(strcmp(keys{i},wf),1);
                         if isempty(idx)
-                            obj.messageLog(cType.ERROR,'Waste table. Invalid waste flow %s',keys{i});
+                            obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
                             continue
                         end
                         try
@@ -151,7 +151,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                                 pswd.wastes(idx).values=cell2mat(tmp');
                             end
                         catch
-                            obj.messageLog(cType.ERROR,'Invalid waste allocation values for %s',keys{i});
+                            obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
                             return
                         end
                     end            
@@ -166,7 +166,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     NrOfSamples=tbl.NrOfCols-2;
                     % Check ResourcesCost Table
                     if (NrOfSamples<1) || ~tbl.isNumericColumn(2:tbl.NrOfCols-1)
-                        obj.messageLog(cType.ERROR,'Invalid resource cost definition');
+                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
                         return
                     end
             
@@ -175,7 +175,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                     idx=cellfun(@(x) cType.getResourcesId(x),tbl.Data(:,1));
                     fidx=find(idx==cType.Resources.FLOW);
                     if isempty(fidx)
-                        obj.messageLog(cType.ERROR,'No resource flows defined');
+                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
                         return
                     end
                     % Buil Resources Cost data
@@ -210,7 +210,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             fields=[ft.ColNames(2:end)];
             cid=find(strcmp(fields,'type'),1);
             if isempty(cid)
-                obj.messageLog(cType.ERROR,'Invalid flows table. Type column NOT defined');
+            obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Flows');
                 return
             end
             types=[ft.Data(:,cid)];

@@ -31,12 +31,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  
             obj=obj@cFormatData(data);
             if ~obj.status
-                obj.messageLog(cType.ERROR,'Invalid Format Data');
+                obj.messageLog(cType.ERROR,cMessages.InvalidFormatData);
                 return
             end
 
             if ~isObject(ps,'cProductiveStructure')
-				obj.messageLog(cType.ERROR,'Invalid Productive Structure');
+				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
                 return
             end
             obj.flowKeys=ps.FlowKeys;

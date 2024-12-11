@@ -14,7 +14,7 @@ function obj = importMAT(filename)
     obj=cMessageLogger();
 	% Check input arguments
     if isOctave
-        obj.messageLog(cType.ERROR,cMessages.NoReadMatFiles);
+        obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'MAT');
 		return
     end
     % Load and check the model
@@ -24,7 +24,7 @@ function obj = importMAT(filename)
 		var=S.(f{1});
 	catch err
 		obj.messageLog(cType.ERROR,err.message)
-		obj.messageLog(cType.ERROR,cMessages.FileReadError,filename);
+		obj.messageLog(cType.ERROR,cMessages.FileNotRead,filename);
 		return
 	end
 	if isValid(var)

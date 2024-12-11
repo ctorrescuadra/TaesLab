@@ -13,7 +13,7 @@ classdef cReadModelCSV < cReadModelTable
             % Read configuration file
 			folder=fileread(cfgfile);
             if ~exist(folder,'dir')
-                obj.messageLog(cType.ERROR,'CSV folder data: %s not exists',folder);
+                obj.messageLog(cType.ERROR,cMessages.CSVFolderNotExist,folder);
 				return
             end
             tables=struct();
@@ -32,11 +32,11 @@ classdef cReadModelCSV < cReadModelTable
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,'Error reading CSV file: %s',fname);
+					    obj.messageLog(cType.ERROR,cMessages.FileNotRead,fname);
                         return
                     end
                 else
-				    obj.messageLog(cType.ERROR,'File %s not found',fname);
+				    obj.messageLog(cType.ERROR,cMessages.FileNotFound,fname);
                     return
                 end
             end
@@ -53,7 +53,7 @@ classdef cReadModelCSV < cReadModelTable
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,'Error reading CSV file: %s',fname);
+					    obj.messageLog(cType.ERROR,cMessages.FileNotRead,fname);
                     end
                 end
             end

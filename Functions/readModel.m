@@ -26,7 +26,7 @@ function res=readModel(filename)
         case cType.FileType.MAT
             rdm=importMAT(filename);  
         otherwise
-            res.messageLog(cType.ERROR,'File extension %s is not supported',filename);
+            res.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
             return
     end
     % Check if the model read is correct

@@ -123,14 +123,14 @@ classdef cResultSet < cResultId
         %
             log=cMessageLogger();
             if nargin < 3
-                log.messageLog(cType.ERROR,'Invalid input parameters');
+                log.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             tbl=obj.getTable(tname);
             if tbl.status
                 log=saveTable(tbl,filename);
             else
-                log.messageLog(cType.ERROR,'Table %s does NOT exists',tname);
+                log.messageLog(cType.ERROR,cMessages.TableNotFound,tname);
             end
         end
 
@@ -152,14 +152,14 @@ classdef cResultSet < cResultId
         %
             res=cMessageLogger();
             if nargin < 2
-                res.messageLog(cType.ERROR,'Invalid number of arguments')
+                res.messageLog(cType.ERROR,cMessages.InvalidArgument)
                 return
             end
             tbl=obj.getTable(tname);
             if tbl.status
                 res=exportTable(tbl,varargin{:});
             else
-                res.messageLog(cType.ERROR,'Table %s does NOT exists',tname);
+                res.messageLog(cType.ERROR,cMessages.TableNotFound,tname);
             end
         end
 
@@ -262,7 +262,7 @@ classdef cResultSet < cResultId
             if tbl.status
                 tbl.showTable(varargin{:});
             else
-                obj.printWarning('Invalid Table Index');
+                obj.printWarning(cMessages.InvalidTableIndex);
             end
         end
 
@@ -327,7 +327,7 @@ classdef cResultSet < cResultId
                 case cType.FileType.MAT
                     log=exportMAT(obj,filename);
                 otherwise
-                    log.messageLog(cType.ERROR,'File extension %s is not supported',ext);
+                    log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
                     return
             end
             if log.status
@@ -350,7 +350,7 @@ classdef cResultSet < cResultId
             tidx=getTableIndex(obj);
             % Check Input
             if tidx.NrOfRows<1
-                log.messageLog(cType.ERROR,'No tables to save');
+                log.messageLog(cType.ERROR,cMessages.NoTableToSave);
                 return
             end
             % Check Folder and print info file
@@ -363,7 +363,7 @@ classdef cResultSet < cResultId
                 fclose (fid);
             catch err
                 log.messageLog(cType.ERROR,err.message)
-                log.messageLog(cType.ERROR,'Writting file info %s',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
                 return
             end
             if ~exist(folder,'dir')
@@ -374,7 +374,7 @@ classdef cResultSet < cResultId
             slog=exportCSV(tidx.Values,fname);
             if ~slog.status
                 log.addLogger(slog);
-                log.messageLog(cType.ERROR,'Index file is NOT saved');
+                log.messageLog(cType.ERROR,cMessages.IndexTableNotSave);
             end
             % Save each table in a file
             for i=1:tidx.NrOfRows
@@ -401,7 +401,7 @@ classdef cResultSet < cResultId
             tidx=getTableIndex(obj);
             % Check Input
             if tidx.NrOfRows<1
-                log.messageLog(cType.ERROR,'No tables to save');
+                log.messageLog(cType.ERROR,cMessages.NoTableToSave);
                 return
             end
             % Open file
@@ -410,7 +410,7 @@ classdef cResultSet < cResultId
                     fId=xlsopen(filename,1);
                 catch err
                     log.messageLog(cType.ERROR,err.message);
-                    log.messageLog(cType.ERROR,'Error open file %s',filename);
+                    log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
                     return
                 end
             else
@@ -420,7 +420,7 @@ classdef cResultSet < cResultId
             if isOctave
                 [fId,status]=oct2xls(tidx.Values,fId,'Index');
                 if ~status || isempty(fId)
-                    log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
+                    log.messageLog(cType.ERROR,cMessages.IndexTableNotSave);
                     return
                 end
             else
@@ -428,7 +428,7 @@ classdef cResultSet < cResultId
                     writecell(tidx.Values,fId,'Sheet','Index');
                 catch err
                     log.messageLog(cType.ERROR,err.message);
-                    log.messageLog(cType.ERROR,'Index Sheet is NOT saved');
+                    log.messageLog(cType.ERROR,cMessages.IndexTableNotSave);
                     return
                 end
             end
@@ -438,21 +438,21 @@ classdef cResultSet < cResultId
                 if isOctave
                     [fId,status]=oct2xls(tbl.Values,fId,tbl.Name);
                     if ~status || isempty(fId)
-                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
+                        log.messageLog(cType.ERROR,cMessages.TableNotSaved,tbl.Name);
                     end
                 else
                     try
                         writecell(tbl.Values,fId,'Sheet',tbl.Name);
                     catch err
                         log.messageLog(cType.ERROR,err.message);
-                        log.messageLog(cType.ERROR,'Sheet %s is NOT saved',tbl.Name);
+                        log.messageLog(cType.ERROR,cMessages.TableNotSaved,tbl.Name);
                     end
                 end
             end
             if isOctave
                 fId=xlsclose(fId);
                 if ~isempty(fId)
-                    log.messageLog(cType.ERROR,'Result file %s is NOT saved',filename);
+                    log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
                 end
             end
         end
@@ -471,7 +471,7 @@ classdef cResultSet < cResultId
             tidx=getTableIndex(obj);
                 % Check Input
             if tidx.NrOfRows<1
-                log.messageLog(cType.ERROR,'No tables to save');
+                log.messageLog(cType.ERROR,cMessages.NoTableToSave);
                 return
             end
             % Get folder name and create it.
@@ -512,7 +512,7 @@ classdef cResultSet < cResultId
                 fId = fopen (filename, 'wt');
             catch err
                 log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,cMessages.FileNotSaved',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
                 return
             end
             % Print tables into file

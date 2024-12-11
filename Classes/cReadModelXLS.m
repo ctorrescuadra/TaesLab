@@ -18,7 +18,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                 	sht=xls.sheets.sh_names;
 				catch err
                     obj.messageLog(cType.ERROR,err.message);
-					obj.messageLog(cType.ERROR,'File %s cannot be opened',cfgfile);
+					obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
 					return
 				end
             else %is Matlab interface
@@ -27,7 +27,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 				    xls=cfgfile;
                 catch err
                     obj.messageLog(cType.ERROR,err.message);
-					obj.messageLog(cType.ERROR,'File %s cannot be opened',cfgfile);
+					obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile,cfgfile);
 					return
                 end
             end
@@ -45,11 +45,11 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,'Error reading sheet %s',wsht);
+					    obj.messageLog(cType.ERROR,cMessages.SheetNotRead,wsht);
                         return
                     end
                 else
-					obj.messageLog(cType.ERROR,'Sheet %s does not exists',wsht);
+					obj.messageLog(cType.ERROR,cMessages.SheetNotExist,wsht);
                     return
                 end
             end
@@ -64,7 +64,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                         tables.(wsht)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,'Error reading sheet %s',wsht);
+					    obj.messageLog(cType.ERROR,cMessages.SheetNotRead,wsht);
                         return
                     end
                 end  
@@ -82,7 +82,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
             tbl=cMessageLogger;
             if isOctave
 		        if ~isstruct(xls)
-			        tbl.messageLog(cType.ERROR,'Invalid XLS pointer');
+			        tbl.messageLog(cType.ERROR,cMessages.InvalidXLS);
 			        return
 		        end
 		        % Read file and store into a cell
@@ -94,7 +94,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 		        end
             else %Matlab
                 if ~exist(xls,'file')
-                    tbl.messageLog(cType.ERROR,'File %s not found',xls);
+                    tbl.messageLog(cType.ERROR,cMessages.FileNotExist,xls);
                     return
                 end
                 % Read file and store into a cell

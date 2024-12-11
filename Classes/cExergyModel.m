@@ -62,7 +62,7 @@ classdef cExergyModel < cResultId
 		%   rex - cExergyData object
 			obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_STATE);
             if ~isObject(rex,'cExergyData')
-				obj.messageLog(cType.ERROR,'Input parameter is not a valid cExergyData object');
+				obj.messageLog(cType.ERROR,cMessages.InvalidExergyModel);
 				return
             end
 			M=rex.ps.NrOfFlows;

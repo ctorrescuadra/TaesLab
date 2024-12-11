@@ -44,30 +44,30 @@ classdef (Sealed) cWasteAnalysis < cResultId
             obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
             % Check mandatory parameters
             if nargin < 3
-                obj.messageLog(cType.ERROR,'Invalid number of parameters');
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             if ~isObject(fpm,'cExergyCost')
                 obj.addLogger(fpm);
-                obj.messageLog(cType.ERROR,'Invalid FPR model');
+                obj.messageLog(cType.ERROR,cMessages.InvalidExergyModel);
                 return
             end
             if ~fpm.isWaste
                 obj.addLogger(fpm);
-                obj.messageLog(cType.ERROR,'Model has NOT waste');
+                obj.messageLog(cType.ERROR,cMessages.NoWasteModel);
                 return
             end
             if ~islogical(recycling)
-                obj.messageLog(cType.ERROR,'Invalid recycling parameter');
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             if ~ischar(wkey)
-                obj.messageLog(cType.ERROR,'Invalid wkey parameters');
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             wid=fpm.WasteTable.getWasteIndex(wkey);
             if ~wid
-                obj.messageLog(cType.ERROR,'Invalid waste flow key %s',wkey);
+                obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,wkey);
                 return
             end
             if nargin==4
@@ -78,7 +78,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 else
                     rsd.printLogger;
                     obj.addLogger(rsd);
-                    obj.messageLog(cType.ERROR,'Invalid resource cost data');
+                    obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
                     return
                 end
             end

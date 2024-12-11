@@ -40,21 +40,21 @@ classdef cProductiveStructureCheck < cResultId
         	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
 			% Check/validate file content
             if ~isObject(dm,'cModelData')
-				obj.messageLog(cType.ERROR,'Invalid data model');
+				obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
 				return
             end
             data=dm.ProductiveStructure;
 			% Check data structure
             if ~all(isfield(data,{'flows','processes'}))
-				obj.messageLog(cType.ERROR,'Invalid data model. Fields Missing');
+				obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
 				return
             end
             if ~all(isfield(data.flows,{'key','type'}))
-                obj.messageLog(cType.ERROR,'Invalid flows data. Fields Missing');
+                obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
 				return
             end
             if ~all(isfield(data.processes,{'key','fuel','product','type'}))
-				obj.messageLog(cType.ERROR,'Invalid processes data. Fields Missing');
+				obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
 				return
             end
             % Initialize productive structure info
@@ -75,7 +75,7 @@ classdef cProductiveStructureCheck < cResultId
             obj.fDict=cDictionary({fdata.key});
 			if ~isValid(obj.fDict)
 				obj.addLogger(obj.fDict);
-				obj.messageLog(cType.ERROR,'Name of flows are duplicated');
+				obj.messageLog(cType.ERROR,cMessages.DuplicatedFlow);
 				return
 			end
             % Create products structure
@@ -87,7 +87,7 @@ classdef cProductiveStructureCheck < cResultId
 			obj.pDict=cDictionary({pdata.key});
 			if ~isValid(obj.pDict)
 				obj.addLogger(obj.pDict);
-				obj.messageLog(cType.ERROR,'Name of processes are duplicated');
+				obj.messageLog(cType.ERROR,cMessages.DuplicatedProcess);
 				return
 			end
             % Create productive groups (streams)
@@ -103,7 +103,7 @@ classdef cProductiveStructureCheck < cResultId
             obj.buildEnvironment;
 			% Check Graph Connectivity
             if ~obj.checkGraphConnectivity
-				obj.messageLog(cType.ERROR,'Invalid productive structure graph');
+				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveGraph);
 				return
             end
             % Convert properties to structures
@@ -125,17 +125,17 @@ classdef cProductiveStructureCheck < cResultId
 		%   data - flows data
 		%
 			if ~ischar(data.key) % Check flow key
-				obj.messageLog(cType.ERROR,'Invalid flow keyId %d',id);
+				obj.messageLog(cType.ERROR,cMessages.InvalidFlowId,id);
 				return
 			end
 			if ~cType.checkTextKey(data.key)
-				obj.messageLog(cType.ERROR,'Invalid flow key %s',data.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,data.key);
 				return
 			end
             % Check flow Type
 			typeId=cType.getFlowId(data.type);
             if isempty(typeId)
-				obj.messageLog(cType.ERROR,'Invalid type %s for flow %s',data.type,data.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidFlowType,data.type,data.key);
                 return
             end
             % Create flow structure
@@ -150,35 +150,35 @@ classdef cProductiveStructureCheck < cResultId
 		%   data - Process data
 		%
 			if ~ischar(data.key) % Check Process Key
-				obj.messageLog(cType.ERROR,'Invalid process keyId %d',id);
+				obj.messageLog(cType.ERROR,cMessages.InvalidProcessId,id);
 				return
 			end
 			if ~cType.checkTextKey(data.key)
-				obj.messageLog(cType.ERROR,'Invalid process key %s',data.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,data.key);
 				return
 			end
 			ptype=cType.getProcessId(data.type); %Check Process Type
 			if isempty(ptype)	        
-				obj.messageLog(cType.ERROR,'Invalid type %s in process %s',data.type,data.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,data.type,data.key);
 			end
 			if ~cParseStream.checkProcess(data.fuel) % Check Fuel stream
-				obj.messageLog(cType.ERROR,'Invalid fuel stream %s in process %s',data.fuel,data.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
 			end
 			fl=cParseStream.getFlowsList(data.fuel);
 			if ~obj.fDict.existsKey(fl)
-				obj.messageLog(cType.ERROR,'Invalid fuel flow %s in process %s',data.fuel,data.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
 			end  
 			if ~cParseStream.checkProcess(data.product) % Check Product stream
-				obj.messageLog(cType.ERROR,'Invalid product stream %s in process %s',data.product,data.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,data.product,data.key);
 			end
 			fl=cParseStream.getFlowsList(data.product);
 			if ~obj.fDict.existsKey(fl)
-				obj.messageLog(cType.ERROR,'Invalid product flow %s in process %s',data.product,data.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,data.product,data.key);
 			elseif ptype==cType.Process.DISSIPATIVE % Check disipative processes and waste flows
                 for j=1:numel(fl)
 					jkey=obj.fDict.getIndex(fl{j});
                     if obj.cflw{jkey}.typeId ~= cType.Flow.WASTE
-				        obj.messageLog(cType.ERROR,'Product %s of dissipative process %s must be a waste',obj.cflw{jkey}.key,data.key);
+				        obj.messageLog(cType.ERROR,cMessages.InvalidDissipative,obj.cflw{jkey}.key,data.key);
                     end
                 end
 			end             
@@ -259,10 +259,10 @@ classdef cProductiveStructureCheck < cResultId
 					if ~obj.cflw{idx}.to
 					    obj.cflw{idx}.to=sid;
 				    else
-						obj.messageLog(cType.ERROR,'Flow %s has not correct (TO) definition',obj.cflw{idx}.key);
+						obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.cflw{idx}.key);
 					end
 			    else
-					obj.messageLog(cType.ERROR,'Flow %s is not defined',in);
+					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,in);
                 end
                 finp(i)=idx;
             end
@@ -275,10 +275,10 @@ classdef cProductiveStructureCheck < cResultId
 					if ~obj.cflw{idx}.from
 					    obj.cflw{idx}.from=sid;
 				    else
-						obj.messageLog(cType.ERROR,'Flow %s has not correct (FROM) definition',obj.cflw{idx}.key);
+						obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.cflw{idx}.key);
 					end
 			    else
-					obj.messageLog(cType.ERROR,'Flow %s is not defined',out);
+					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,out);
                 end
                 fout(i)=idx;
             end
@@ -313,12 +313,12 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jt % Check if flow is OUTPUT
 						    obj.cflw{i}.to=ns;
 				        else
-					        obj.messageLog(cType.ERROR,'Output flow %s has not correct (TO) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,cMessages.InvalidOutputFlow,obj.cflw{i}.key);
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
                             if (obj.cprc{k}.typeId == cType.Process.DISSIPATIVE)
-					    	    obj.messageLog(cType.ERROR,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
+					    	    obj.messageLog(cType.ERROR,cMessages.InvalidOutputFlow,obj.cflw{i}.key);
                             end
                         end		
                 	    fstr(iout)=ns;
@@ -331,12 +331,12 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jt % Check if flow is WASTE
 						    obj.cflw{i}.to=ns;	
 					    else
-					        obj.messageLog(cType.ERROR,'Waste flow %s has not correct (TO) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,cMessages.InvalidWasteFlow,obj.cflw{i}.key);
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
                             if (obj.cprc{k}.typeId == cType.Process.PRODUCTIVE)
-					    	    obj.messageLog(cType.ERROR,'Flow %s should be defined as OUTPUT',obj.cflw{i}.key);
+					    	    obj.messageLog(cType.ERROR,cMessages.InvalidWasteFlow,obj.cflw{i}.key);
                             end
                         end
                         fstr(iout)=ns;
@@ -348,7 +348,7 @@ classdef cProductiveStructureCheck < cResultId
                         if ~jf % Check if flow is a resource
 						    obj.cflw{i}.from=ns;				
 					    else
-					        obj.messageLog(cType.ERROR,'Resource flow %s has not correct (FROM) definition',obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,cMessages.InvalidResourceFlow,obj.cflw{i}.key);
                         end
                 	    pstr(ires)=ns;
 				end
@@ -371,14 +371,14 @@ classdef cProductiveStructureCheck < cResultId
 			res=false;
 			if (obj.cflw{id}.from==obj.cflw{id}.to) %Check if there is a loop
 				if obj.cflw{id}.from==0
-					obj.messageLog(cType.ERROR,'Flow %s do not exist',obj.cflw{id}.key);
+					obj.messageLog(cType.ERROR,cMessages.InvalidFlowDefiniton,obj.cflw{id}.key);
 				else
-					obj.messageLog(cType.ERROR,'Flow %s is defined as a LOOP',obj.cflw{id}.key);
+					obj.messageLog(cType.ERROR,cMessages.InvalidFlowLoop,obj.cflw{id}.key);
 				end
 			elseif (obj.cflw{id}.from==0) && (obj.cflw{id}.to~=0) % Check invalid FROM definition
-				obj.messageLog(cType.ERROR,'Flow %s has not correct (FROM) definition',obj.cflw{id}.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.cflw{id}.key);
 			elseif (obj.cflw{id}.to==0) && (obj.cflw{id}.from~=0) % Check invalid TO definition
-				obj.messageLog(cType.ERROR,'Flow %s has not correct (TO) definition',obj.cflw{id}.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream',obj.cflw{id}.key);
 			else
 				res=true;
 			end

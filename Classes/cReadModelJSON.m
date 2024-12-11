@@ -16,7 +16,7 @@ classdef (Sealed) cReadModelJSON < cReadModelStruct
 				sd=jsondecode(text);
 		    catch err
                 obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,'File %s cannot be read',cfgfile);
+                obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
                 return
             end
             % Build Data Model

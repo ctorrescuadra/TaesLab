@@ -413,9 +413,9 @@ classdef cType
 		%	- Its lenght must be bigger than 1 and less than 8
 		%   - Satisfy the regular expression cType.KEY_PATTERN
 		%	INPUT:
-		%		text: key string
+		%		text - key string
 		%   OUTPUT:
-		%		res: true/false
+		%		res - true/false
 		%
 			res=false;
 			if ~ismember(length(text),cType.KEY_LENGTH)

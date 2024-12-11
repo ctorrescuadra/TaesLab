@@ -518,11 +518,11 @@ classdef (Sealed) cExergyCost < cExergyModel
                         tmp=tmp/sum(tmp);  
                         tmp(aP)=tmp(aP)+opI(aP,j)';
                     otherwise
-                        obj.messageLog(cType.ERROR,'Invalid Waste type allocation %s',wt.Type{i});
+                        obj.messageLog(cType.ERROR,cMessages.InvalidWasteType,wt.Type{i},key);
                         return
                 end
                 if isempty(find(tmp,1))				
-                    obj.messageLog(cType.ERROR,'Invalid Allocation for waste flow %s', key);
+                    obj.messageLog(cType.ERROR,cMessages.WasteAllocation,key);
                     return
                 end
                 sol(i,:)=tmp/sum(tmp);
@@ -571,11 +571,11 @@ classdef (Sealed) cExergyCost < cExergyModel
         %  Input:
         %   wd - cWasteData object
             if ~obj.isWaste
-                obj.messageLog(cType.ERROR,'Model must define waste flows');
+                obj.messageLog(cType.ERROR,cMessages.NoWasteDefined);
                 return
             end
             if ~isObject(wd,'cWasteData')
-                obj.messageLog(cType.ERROR,'Wrong input parameters. Argument must be a valid cWasteData object');
+                obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
                 return
             end
             obj.WasteTable=wd;

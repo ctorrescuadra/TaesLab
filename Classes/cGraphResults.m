@@ -41,11 +41,11 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		%      Nodes structure of productive grapphs
 		% 
 			if ~isObject(tbl,'cTableResult')
-				obj.messageLog(cType.ERROR,'Invalid graph table. It must be cTableResult');
+				obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
 				return
 			end
 			if ~isGraph(tbl)
-				obj.messageLog(cType.ERROR,'Invalid graph table %s',tbl.Name);
+				obj.messageLog(cType.ERROR,cMessages.InvalidGraph,tbl.Name);
 				return
 			end
 			obj.Type=tbl.GraphType;
@@ -69,7 +69,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
             case cType.GraphType.DIAGRAM_FP
                     obj.setDiagramFpParameters(tbl,varargin{:});
 			otherwise
-				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
+				obj.messageLog(cType.ERROR,cMessages.InvalidGraphType,obj.Type);
 				return
             end
         end
@@ -101,7 +101,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			case cType.GraphType.DIGRAPH_FP
 					obj.showDiagramFP;
 			otherwise
-				obj.messageLog(cType.ERROR,'Invalid graph type %d',obj.Type);
+				obj.messageLog(cType.ERROR,cMessages.InvalidGraphType,obj.Type);
 				return
             end   
         end
@@ -277,16 +277,16 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		%   var - cell array with the variables to show
 		% 
             if nargin<3
-                obj.messageLog(cType.ERROR,'Parameters missing');
+                obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
                 return
             end
             if ~iscell(var)
-                obj.messageLog(cType.ERROR,'Invalid parameter');
+                obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
                 return
             end
             idx=find(ismember(tbl.RowNames,var));
 			if isempty(idx)
-				obj.messageLog(cType.ERROR,'Invalid variable names');
+				obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
 				return
 			end
 			obj.Name='Cost Summary';
@@ -348,7 +348,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 				cols=tbl.ColNames(2:end);
 				idx=find(strcmp(cols,wf),1);
 				if isempty(idx)
-					obj.messageLog(cType.ERROR,'Parameters missing');
+					obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
 					return
 				end
 				x=cell2mat(tbl.Data(:,idx));
@@ -380,7 +380,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		% Input:
 		%   tbl - cTable object
             if isOctave
-				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
+				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
 				return
             end
 			if nargin==2
@@ -408,7 +408,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		% Input:
 		%   tbl - cTable object   
 			if isOctave
-				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
+				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
 				return
 			end
 			if nargin==2
@@ -434,11 +434,11 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		%   tbl - cTable object
 		%   nodes - nodes structure of the graph
 			if isOctave
-				obj.messageLog(cType.ERROR,'Graph function not implemented in Octave');
+				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
 				return
 			end
 			if (nargin<3) || ~isstruct(nodes)
-				obj.messageLog(cType.ERROR,'Node information is missing');
+				obj.messageLog(cType.ERROR,cMessages.ParameterMissing);
 				return
 			end
 			obj.Name=tbl.Description;

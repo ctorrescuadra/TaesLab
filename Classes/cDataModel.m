@@ -74,7 +74,7 @@ classdef cDataModel < cResultSet
             % Check Data Structure
             obj=obj@cResultSet(cType.ClassId.DATA_MODEL);
             if ~isObject(dm,'cModelData')
-                obj.messageLog(cType.ERROR,'Invalid data model');
+                obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
                 return
             end
             obj.isResourceCost=dm.isResourceCost;
@@ -86,7 +86,7 @@ classdef cDataModel < cResultSet
 				obj.messageLog(cType.INFO,cMessages.ValidProductiveStructure');
             else
                 obj.addLogger(ps);
-				obj.messageLog(cType.ERROR,'Productive Structure is NOT valid. See error log');
+				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
                 return
             end
             % Check and get Format	
@@ -94,10 +94,10 @@ classdef cDataModel < cResultSet
             obj.FormatData=rfmt;
             status = rfmt.status & status;
             if rfmt.status
-				obj.messageLog(cType.INFO,'Format Definition is valid');
+				obj.messageLog(cType.INFO,cMessages.ValidFormatDefinition);
             else
                 obj.addLogger(rfmt);
-				obj.messageLog(cType.ERROR,'Format Definition is NOT valid. See error log');
+				obj.messageLog(cType.ERROR,cMessages.InvalidFormatData);
                 return
             end
             % Check Exergy
@@ -107,7 +107,8 @@ classdef cDataModel < cResultSet
                 obj.StateNames=list;
                 obj.ExergyData=tmp;
             else
-                obj.messageLog(cType.ERROR,'Invalid states list');
+                obj.addLogger(tmp);
+                obj.messageLog(cType.ERROR,cMessages.InvalidStateList);
                 return
             end
             for i=1:obj.NrOfStates
@@ -118,7 +119,7 @@ classdef cDataModel < cResultSet
 					obj.messageLog(cType.INFO,cMessages.ValidExergyData,obj.StateNames{i});
 				else
 					obj.addLogger(rex)
-					obj.messageLog(cType.ERROR,'Exergy values [%s] are NOT valid. See Error Log',obj.StateNames{i});
+					obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,obj.StateNames{i});
                 end
                 setValues(obj.ExergyData,i,rex);
             end
@@ -134,9 +135,9 @@ classdef cDataModel < cResultSet
                 status=wd.status & status;
                 obj.addLogger(wd);
                 if ~wd.status
-					obj.messageLog(cType.ERROR,'Waste Definition is NOT valid. See error log');
+					obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
                 else
-					obj.messageLog(cType.INFO,'Waste Definition is valid');	
+					obj.messageLog(cType.INFO,cMessages.ValidWasteDefinition);	
                 end
                 obj.WasteData=wd;
                 obj.isWaste=true;	
@@ -152,7 +153,8 @@ classdef cDataModel < cResultSet
                     obj.SampleNames=list;
                     obj.ResourceData=tmp;
                 else
-                    obj.messageLog(cType.ERROR,'Invalid resource samples list');
+                    obj.addLogger(tmp)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidSampleList);
                     return
                 end
                 for i=1:obj.NrOfSamples
@@ -164,7 +166,7 @@ classdef cDataModel < cResultSet
                         obj.ResourceData.setValues(i,rsc);
                     else
 						obj.addLogger(rsc);
-						obj.messageLog(cType.ERROR,'Resources Cost sample [%s] is NOT valid. See error log',obj.SampleNames{i});
+						obj.messageLog(cType.ERROR,InvalidResourceData,obj.SampleNames{i});
                     end
                 end
             else
@@ -279,7 +281,7 @@ classdef cDataModel < cResultSet
             M=size(values,2);
             % Validate the number of flows
             if obj.NrOfFlows~=M
-                res.printError(cMessages.InvalidDataSetSize,M);
+                res.printError(cMessages.InvalidExergyDataSize,M);
                 return
             end
             % Validate state
@@ -433,7 +435,7 @@ classdef cDataModel < cResultSet
                 case cType.FileType.MAT
 					log=exportMAT(obj,filename);
 				otherwise
-					log.messageLog(cType.ERROR,'File extension %s is not supported',filename);
+					log.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
             end
             if log.status
 				log.messageLog(cType.INFO,cMessages.InfoFileSaved,obj.ResultName,filename);
@@ -460,7 +462,7 @@ classdef cDataModel < cResultSet
                 tables.(sheet)=tbl;
             else
                 res.addLogger(tbl);
-                res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                 return
             end
 			% Process Table
@@ -478,7 +480,7 @@ classdef cDataModel < cResultSet
                 tables.(sheet)=tbl;
             else
                 res.addLogger(tbl);
-                res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                 return
             end
             % Exergy Table
@@ -497,7 +499,7 @@ classdef cDataModel < cResultSet
                 tables.(sheet)=tbl;
             else
                 res.addLogger(tbl);
-                res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                 return
             end
             % Format Table
@@ -513,7 +515,7 @@ classdef cDataModel < cResultSet
                 tables.(sheet)=tbl;
             else
                 res.addLogger(tbl);
-                res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                 return
             end
             % Resources Cost tables
@@ -548,7 +550,7 @@ classdef cDataModel < cResultSet
                     tables.(sheet)=tbl;
                 else
                     res.addLogger(tbl);
-                    res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                    res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                     return
                 end
 				tables.(sheet)=tbl;
@@ -572,7 +574,7 @@ classdef cDataModel < cResultSet
                     tables.(sheet)=tbl;
                 else
                     res.addLogger(tbl);
-                    res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                    res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                     return
                 end
 				% Waste Allocation
@@ -591,7 +593,7 @@ classdef cDataModel < cResultSet
                         tables.(sheet)=tbl;
                     else
                         res.addLogger(tbl);
-                        res.messageLog(cType.ERROR,'Error creating table: %s',sheet);
+                        res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                         return
                     end
                 end

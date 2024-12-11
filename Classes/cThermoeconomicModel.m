@@ -152,7 +152,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   
             obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
             if ~isObject(data,'cDataModel')
-                obj.printError('Invalid data model');
+                obj.printError(cMessages.InvalidDataModel);
                 return
             end
             obj.addLogger(data);
@@ -180,7 +180,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 p.parse(varargin{:});
             catch err
                 obj.printError(err.message);
-                obj.printError('Usage: cThermoeconomicModel(data,options)');
+                obj.UsprintError(cMessage.UseThermoeconomicModel);
                 return
             end
             param=p.Results;
@@ -202,7 +202,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 rex=data.getExergyData(i);
                 if ~rex.status
                     obj.addLogger(rex);
-                    obj.messageLog(cType.ERROR,'Invalid exergy values. See error log');
+                    obj.messageLog(cType.ERROR,cMessages.InvalidExergyData);
                     return
                 end
                 if obj.isWaste
@@ -216,20 +216,20 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if obj.checkReferenceState(param.ReferenceState)
                 obj.ReferenceState=param.ReferenceState;
             else
-                obj.printError('Invalid state name %s',param.ReferenceState);
+                obj.printError(cMessages.InvalidStateName,param.ReferenceState);
                 return
             end
             if obj.checkState(param.State)
                 obj.State=param.State;
             else
-                obj.printError('Invalid state name %s',param.State);
+                obj.printError(InvalidStateName,param.State);
                 return
             end
             % Check Cost Tables
             if obj.checkCostTables(param.CostTables)
                 obj.CostTables=param.CostTables;
             else
-                obj.printError('Invalid CostTables parameter %s',param.CostTables);
+                obj.printError(cMessages.InvalidCostTable,param.CostTables);
                 return
             end
             % Read Resource Data
@@ -240,7 +240,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 if obj.checkResourceSample(param.ResourceSample)
                     obj.Sample=param.ResourceSample;
                 else 
-                    obj.printError('Invalid ResourceSample %s',param.ResourceSample);
+                    obj.printError(InvalidSampleName,param.ResourceSample);
                     return
                 end
             end
@@ -317,7 +317,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     array of chars
             if checkReferenceState(obj,state)
                 obj.ReferenceState=state;
-                obj.printDebugInfo('Set Reference State: %s',state);
+                obj.printDebugInfo(cMessages.SetReferenceState,state);
                 obj.setThermoeconomicDiagnosis;
             end
         end
@@ -331,7 +331,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     array of chars
             if obj.checkResourceSample(sample)
                 obj.Sample=sample;
-                obj.printDebugInfo('Set Resource Sample: %s',sample);
+                obj.printDebugInfo(cMessages.SetResourceSample,sample);
                 obj.triggerResourceSampleChange;
             end
         end
@@ -371,7 +371,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     char array
             if obj.checkActiveWaste(value)
                 obj.ActiveWaste=value;
-                obj.printDebugInfo('Set Active Waste to %s',value);
+                obj.printDebugInfo(cMessages.SetActiveWaste,value);
             end
             obj.setRecyclingResults;
         end
@@ -386,7 +386,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             if obj.checkSummary(value)
                 obj.Summary=value;
-                obj.printDebugInfo('Summary Mode is %s',value);
+                obj.printDebugInfo(cMessages.SetSummaryMode,value);
                 obj.setSummaryResults;
             end
         end
@@ -400,9 +400,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if obj.checkRecycling(value)
                 obj.Recycling=value;
                 if obj.Recycling
-                    obj.printDebugInfo('Recycling is active');
+                    obj.printDebugInfo(cMessages.RecycleActive);
                 else
-                    obj.printDebugInfo('Recycling is not active')
+                    obj.printDebugInfo(cMessages.RecycleNotActive);
                 end
                 obj.setRecyclingResults;
             end
@@ -695,7 +695,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
             % Check configurations
             if ~all(obj.fp0.ActiveProcesses==obj.fp1.ActiveProcesses)
-                obj.printDebugInfo('Compare two diferent configurations is not available for diagnosis');
+                obj.printDebugInfo(cMessages.InvalidDiagnosisStruct);
                 return
             end
             res=true;
@@ -926,7 +926,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             res=obj.summaryResults;
             if isempty(res)
-                obj.printDebugInfo('Summary Results not available')
+                obj.printDebugInfo(cMessages.SummaryNotAvailable)
                 return
             end
             if nargin==1
@@ -980,12 +980,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError('Usage: saveDataModel(model,filename)');
+                log.printError(cMessages.InvalidInputArgument);
                 return
             end       
             msr=obj.getSummaryResults;
             if ~isValid(msr)
-                obj.printDebugInfo('Summary Results not available');
+                obj.printDebugInfo(cMessages.SummaryNotAvailable);
                 return
             end
             log=saveResults(msr,filename);
@@ -1003,7 +1003,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError('Usage: saveDataModel(model,filename)');
+                log.printError(cMessages.InvalidInputArgument);
                 return
             end
             log=saveDataModel(obj.DataModel,filename);
@@ -1020,14 +1020,13 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError('Usage: saveDiagramFP(model,filename)');
+                log.printError(cMessages.InvalidInputArgument);
                 return
             end
             % Save tables atfp, atcfp
             res=obj.diagramFP;
             if ~isValid(res)
                 printLogger(res)
-                log.printError('DiagramFP object not available');
                 return
             end
             log=saveResults(res,filename);
@@ -1045,14 +1044,13 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError('Usage: saveProductiveDiagram(model,filename)');
+                log.printError(cMessages.InvalidInputArgument);
                 return
             end
             % Save fat,pat and fpat tables
             res=obj.productiveDiagram;
             if ~isValid(res)
                 res.printLogger;
-                log.printError('Productive Diagram object not available');
                 return
             end
             log=saveResults(res,filename);
@@ -1083,14 +1081,14 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-               log.printError('Usage: obj.setWasteType(key,wtype)');
+               log.printError(cMessages.InvalidInputArgument);
                return
             end  
             wt=obj.fp1.WasteTable;
             if wt.setType(obj.ActiveWaste,wtype)
-                obj.printDebugInfo('Change allocation type for waste %s',obj.ActiveWaste);
+                obj.printDebugInfo(cMessages.SetAllocationType,obj.ActiveWaste,wtype);
             else
-                log.printError('Invalid waste type %s / %s',obj.ActiveWaste,wtype);
+                log.printError(cMessages.InvalidWasteType,wtype,obj.ActiveWaste);
                 return
             end
             obj.fp1.updateWasteOperators;
@@ -1111,14 +1109,14 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   log - cMessageLogger with the status and messages of operation
             log=cMessageLogger();
             if nargin~=2
-               log.printError('Usage: obj.setWasteValues(key,values)');
+               log.printError(cMessages.InvalidInputArgument);
                return
             end  
             wt=obj.fp1.WasteTable;
             if wt.setValues(obj.ActiveWaste,val)
-                obj.printDebugInfo('Change allocation values for waste %s',obj.ActiveWaste);
+                obj.printDebugInfo(cMessages.SetWasteValues,obj.ActiveWaste);
             else
-                log.printError('Invalid waste %s allocation values',obj.ActiveWaste);
+                log.printError(cMessages.NegativeWasteAllocation,obj.ActiveWaste);
                 return
             end
             obj.fp1.updateWasteOperators;
@@ -1140,14 +1138,14 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-               log.printError('Usage: obj.setWasteRecycled(key,value)');
+               log.printError(cMessages.InvalidInputArgument);
                return
             end 
             wt=obj.fp1.WasteTable;
             if wt.setRecycleRatio(obj.ActiveWaste,val)
-                obj.printDebugInfo('Change recycling ratio for waste %s',obj.ActiveWaste)
+                obj.printDebugInfo(cMessages.SetRecycleRatio,obj.ActiveWaste)
             else
-                log.printError('Invalid waste %s recycling values',obj.ActiveWaste);
+                log.printError(cMessages.InvalidRecycling,val,obj.ActiveWaste);
                 return 
             end
             obj.fp1.updateWasteOperators;
@@ -1171,7 +1169,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   res - cResourceCost object with the new values
             res=cMessageLogger();
             if ~obj.isGeneralCost
-                res.printError('No Generalized Cost activated');
+                res.printError(cMessages.NoGeneralizedCost);
 				return
             end
             log=setFlowResource(obj.rsd,c0);
@@ -1181,7 +1179,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=obj.rsc;
             else
                 printLogger(log);
-                res.printError('Invalid Resources Values');
+                res.printError(cMessages.InvalidResourceValues);
             end
         end
 
@@ -1196,7 +1194,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   res - cResourceCost object with the new values
             res=cMessageLogger();
             if ~obj.isGeneralCost
-                res.printError('No Generalized Cost activated');
+                res.printError(cMessages.NoGeneralizedCost);
                 return
             end
             log=setFlowResourceValue(obj.rsd,key,value);
@@ -1206,7 +1204,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=obj.rsc;
             else
                 printLogger(log);
-                res.printError('Invalid Resources Value %s',key);
+                res.printError(cMessages.InvalidResourceValue,key,value);
             end
         end
 
@@ -1221,7 +1219,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             res=cMessageLogger();
             if ~obj.isGeneralCost
-                res.printError('No Generalized Cost activated');
+                res.printError(cMessages.NoGeneralizedCost);
                 return
             end          
             log=setProcessResource(obj.rsd,Z);
@@ -1231,7 +1229,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=obj.rsc;
             else
                 printLogger(log);
-                res.printError('Invalid Resources Values');
+                res.printError(cMessages.InvalidProcessValues);
             end
         end
 
@@ -1245,7 +1243,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             res=cMessageLogger();
             if ~obj.isGeneralCost
-                res.printError('No Generalized Cost activated');
+                res.printError(cMessages.NoGeneralizedCost);
                 return
             end
             log=setProcessResourceValue(obj.rsd,key,value);
@@ -1255,7 +1253,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=obj.rsc;
             else
                 printLogger(log);
-                res.printError('Invalid Resources Values');
+                res.printError(cMessages.InvalidResourceValue,key,value);
             end
         end
 
@@ -1304,7 +1302,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             res=cMessageLogger();
             % Check state is no reference 
             if strcmp(obj.ReferenceState,obj.State)
-                res.printError('Cannot change Reference State values');
+                res.printError(cMessages.NoSetExergyData);
                 return
             end
             % Set exergy data for state
@@ -1346,7 +1344,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Trigger exergy analysis
             res=getExergyResults(obj.fmt,obj.fp1);
             obj.setResults(res);
-            obj.printDebugInfo('Set State: %s',obj.State);
+            obj.printDebugInfo(cMessages.SetState,obj.State);
             obj.setDiagramFP;
         end
 
@@ -1362,10 +1360,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if isValid(obj.fp1)
                 res=getCostResults(obj.fmt,obj.fp1,options);
                 obj.setResults(res);
-                obj.printDebugInfo('Compute Thermoeconomic Analysis for State %s',obj.State);
+                obj.printDebugInfo(cMessages.ComputeTA,obj.State);
             else
                 obj.fp1.printLogger;
-                obj.fp1.printError('Thermoeconomic Analysis cannot be calculated')
+                obj.fp1.printError(cMessages.NoComputeTA,obj.State)
             end
             obj.setRecyclingResults;
         end
@@ -1375,7 +1373,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             id=cType.ResultId.THERMOECONOMIC_DIAGNOSIS;
             if ~obj.isDiagnosis
                 obj.clearResults(id);
-                obj.printDebugInfo('Thermoeconomic Diagnosis is not active');
+                obj.printDebugInfo(cMessages.DiagnosisNotActivated);
                 return
             end
             % Compute diagnosis analysis
@@ -1385,10 +1383,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if sol.status
                 res=getDiagnosisResults(obj.fmt,sol);
                 obj.setResults(res);
-                obj.printDebugInfo('Compute Thermoeconomic Diagnosis for State: %s',obj.State);
+                obj.printDebugInfo(cMessages.ComputeTD,obj.State);
             else
                 sol.printLogger;
-                sol.printError('Thermoeconomic Diagnosis cannot be calculated');
+                sol.printError(cMessages.NoComputeTD,obj.State);
                 obj.clearResults(id);
             end
         end
@@ -1405,7 +1403,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if sr.status
                 res=getSummaryResults(obj.fmt,sr);
                 obj.setResults(res);
-                obj.printDebugInfo('Compute Summary Results');
+                obj.printDebugInfo(cMessages.ComputeSummary,obj.Summary);
             else
                 sr.printLogger;
             end
@@ -1423,7 +1421,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if sr.status
                 res=getSummaryResults(obj.fmt,sr);
                 obj.setResults(res,true);
-                obj.printDebugInfo('Compute Summary Results');
+                obj.printDebugInfo(cMesagges.ComputeSummary);
             else
                  sr.printLogger;
             end
@@ -1440,7 +1438,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 else
                     ra=cWasteAnalysis(obj.fp1,true,obj.ActiveWaste);
                 end
-                obj.printDebugInfo('Compute Recycling Analysis: %s',obj.ActiveWaste);
+                obj.printDebugInfo(cMessages.ComputeRecycling,obj.ActiveWaste);
             else
                 ra=cWasteAnalysis(obj.fp1,false,obj.ActiveWaste);
             end
@@ -1465,7 +1463,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if dfp.status
                 res=getDiagramFP(obj.fmt,dfp);
                 obj.setResults(res);
-                obj.printDebugInfo('DiagramFP active')
+                obj.printDebugInfo(cMessages.ComputeDiagramFP)
             else
                 dfp.printLogger;
             end
@@ -1480,7 +1478,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if pd.status
                 res=getProductiveDiagram(obj.fmt,pd);
                 obj.setResults(res);
-                obj.printDebugInfo('Productive Diagram active')
+                obj.printDebugInfo(cMessages.ComputeProductiveDiagram)
             else
                 pd.printLogger;
             end
@@ -1491,11 +1489,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Ckeck the state information
             res=false;
             if ~obj.DataModel.existState(state)
-                obj.printWarning('Invalid state name %s',state);
+                obj.printWarning(cMessages.InvalidState,state);
                 return
             end
             if strcmp(obj.State,state)
-                obj.printDebugInfo('No state change. The new state is equal to the previous one');
+                obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end
             obj.fp1=obj.rstate.getValues(state);
@@ -1516,11 +1514,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Check the reference state value
             res=false;
             if ~obj.DataModel.existState(state)
-                obj.printWarning('Invalid state name %s',state);
+                obj.printWarning(cMessages.InvalidStateName,state);
                 return
             end
             if strcmp(obj.ReferenceState,state)
-                obj.printDebugInfo('Reference and Operation State are the same');
+                obj.printDebugInfo(cMessages.InvalidDiagnosisState);
                 return
             end
             obj.fp0=obj.rstate.getValues(state);
@@ -1531,11 +1529,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Check the resource sample value
             res=false;
             if ~obj.DataModel.existSample(sample)
-                obj.printWarning('Invalid resource sample %s',sample);
+                obj.printWarning(cMessages.InvalidResourceName,sample);
                 return       
             end
             if isempty(sample) || strcmp(obj.Sample,sample)
-                obj.printDebugInfo('No sample change. The new sample is equal to the previous one');
+                obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end
             % Read resources and check if are valid
@@ -1558,15 +1556,15 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             res=false;
             pct=cType.getCostTables(value);
             if isempty(pct)
-                obj.printWarning('Invalid Cost Tables parameter value: %s',value);
+                obj.printWarning(cMessages.InvalidCostTable,value);
                 return
             end
             if strcmp(obj.CostTables,value)
-                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
+                obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end       
             if bitget(pct,cType.RESOURCES) && ~obj.isResourceCost
-                obj.printWarning('Invalid Parameter %s. Model does not have external resources defined',value);
+                obj.printWarning(cMessages.InvalidCostTable,value);
                 return
             end
             res=true;
@@ -1581,11 +1579,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Check Diagnosis Method parameter
             res=false;
             if ~cType.checkDiagnosisMethod(value)
-                obj.printWarning('Invalid Diagnosis method: %s',value);
+                obj.printWarning(cMessages.InvalidDiagnosisMethod,value);
                 return
             end
             if strcmp(obj.DiagnosisMethod,value)
-                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
+                obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end
             res=true;
@@ -1595,11 +1593,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Check Active Waste Parameter
             res=false;
             if ~obj.wd.existWaste(value)
-                obj.printWarning('Invalid waste flow: %s',value);
+                obj.printWarning(cMessages.InvalidWasteKey,value);
                 return
             end
             if strcmp(obj.ActiveWaste,value)
-                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
+                obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end
             res=true;
@@ -1609,11 +1607,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Ckeck Summary parameter
             res=false;
             if ~checkSummaryOption(obj,value)
-                obj.printDebugInfo('Summary %s option is not available',value);
+                obj.printDebugInfo(cMessages.InvalidSummaryOption,value);
                 return
             end
            if strcmp(obj.Summary,value)
-                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
+                obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end
             res=true;
@@ -1628,16 +1626,16 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Ckeck Summary parameter
             res=false;
             if ~islogical(value)
-                obj.printDebugInfo('Invalid value. Must be true/false');
+                obj.printDebugInfo(cMessages.InvalidRecyclingParameter);
                 return
             end
 
             if ~obj.isWaste
-                obj.printDebugInfo('Recycling Analysis requires waste');
+                obj.printDebugInfo(cMessages.NoWasteDefined);
                 return
             end
             if obj.Recycling==value
-                obj.printDebugInfo('No parameter change. The new value is equal to the previous one');
+                obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end
             res=true;
@@ -1654,7 +1652,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=buildResultInfo(obj);
             end
             if isempty(res)
-                obj.printDebugInfo('%s is not available',cType.Results{index});
+                obj.printDebugInfo(cMessages.ResultNotAvailable,cType.Results{index});
             end
         end
         
@@ -1663,12 +1661,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             res=cMessageLogger();
             tinfo=obj.getTableInfo(table);
             if isempty(tinfo)
-                res.messageLog(cType.ERROR,'Table %s does not exists',table);
+                res.messageLog(cType.ERROR,cMessages.TableNotFound,table);
                 return
             end
             tmp=obj.getResults(tinfo.resultId);
             if ~isValid(tmp)
-                res.messageLog(cType.ERROR,'Table %s is not available',table);
+                res.messageLog(cType.ERROR,cMessages.TableNotAvailable,table);
                 return
             end
             res=tmp;

@@ -32,11 +32,11 @@ classdef cResourceCost < cMessageLogger
 		%	exm - cExergyModel object with state information
 		%
 			if ~isObject(rd,'cResourceData')
-				rd.messageLog(cType.ERROR,'Invalid resource cost data');
+				rd.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return
 			end
 			if ~isObject(exm,'cExergyModel')
-				obj.messageLog(cType.ERROR,'No exergy data model');
+				obj.messageLog(cType.ERROR,cMessages.InvalidExergyModel);
 				return
 			end
 			% Set Resources properties

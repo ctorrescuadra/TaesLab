@@ -47,14 +47,14 @@ classdef (Sealed) cSummaryResults < cResultId
             % Check Input Arguments
             if ~isObject(model,'cThermoeconomicModel')
                 obj.addLogger(model);
-                obj.messageLog(cType.ERROR,'Invalid thermoeconomic model');
+                obj.messageLog(cType.ERROR,cMessages.InvalidThermoeconomicModel);
                 return
             end
             obj.dm=model.DataModel;
             obj.rsd=obj.dm.isResourceCost;
             sopt=obj.dm.SummaryOptions;
             if ~sopt.isEnable
-                obj.messageLog(cType.ERROR,'No Summary Result Available for this model');
+                obj.messageLog(cType.ERROR,cMessages.SummaryNotAvailable);
                 return
             end
             % Check Option
@@ -63,11 +63,11 @@ classdef (Sealed) cSummaryResults < cResultId
             elseif checkId(sopt,option)
                 obj.option=option;
             else
-                obj.messageLog(cType.ERROR,'Invalid summary option');
+                obj.messageLog(cType.ERROR,cMessages.InvalidSummaryOption);
                 return
             end
             if ~obj.option
-                obj.messageLog(cType.ERROR,'Invalid summary option');
+                obj.messageLog(cType.ERROR,cMessages.InvalidSummaryOption);
                 return
             end
             % Get summary tables properties and create dataset
@@ -77,7 +77,7 @@ classdef (Sealed) cSummaryResults < cResultId
             if obj.ds.status
                 obj.Tables=list;
             else
-                obj.messageLog(cType.ERROR,'Invalid summary dataset');
+                obj.messageLog(cType.ERROR,cMessages.InvalidSummaryData);
             end
             % Initialize Dataset
             for i=1:obj.NrOfTables

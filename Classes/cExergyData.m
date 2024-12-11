@@ -21,16 +21,16 @@ classdef cExergyData < cMessageLogger
 		%  ps - cProductiveStructure object
 			% Check arguments
 			if ~isObject(ps,'cProductiveStructure')
-				obj.messageLog(cType.ERROR,'No Productive Structure provided');
+				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
                 return
 			end
             if ~isstruct(data)
-				obj.messageLog(cType.ERROR,'Invalid exergy data provided');
+				obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);
 				return
             end
 			% Check data file content
 			if  ~any(isfield(data,{'stateId','exergy'}))
-                obj.messageLog(cType.ERROR,'Invalid data. Fields Missing');
+                obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);
 				return
 			end
 			% Check exergy data structure
@@ -38,12 +38,12 @@ classdef cExergyData < cMessageLogger
             if  all(isfield(data.exergy,{'key','value'}))
 				values=data.exergy;
 			else
-                obj.messageLog(cType.ERROR,'Wrong exergy values data. Fields Missing');
+                obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);
 				return
             end
 			M=length(values);
             if ps.NrOfFlows ~= M
-                obj.messageLog(cType.ERROR,'NrOfFlows %d is not conformant with productive structure %d',ps.NrOfFlows,M);
+                obj.messageLog(cType.ERROR,cMessages.InvalidExergyDataSize,M);
                 return
             end
             NS=ps.NrOfStreams;
@@ -53,11 +53,11 @@ classdef cExergyData < cMessageLogger
             for i=1:M
 				id=ps.getFlowId(values(i).key);
                 if ~id
-					obj.messageLog(cType.ERROR,'Exergy index %s not found',values(i).key);
+					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,values(i).key);
 					continue
                 end
                 if values(i).value < 0
-                    obj.messageLog(cType.ERROR,'Exergy of flow %s is negative %f',values(i).key,values(i).value);
+                    obj.messageLog(cType.ERROR,cMessages.NegativeExergyFlow,values(i).key,values(i).value);
 				else
 					B(id)=values(i).value;
                 end
@@ -81,7 +81,7 @@ classdef cExergyData < cMessageLogger
             ier=find(E<0);		
 			if ~isempty(ier)
 				for i=ier
-					obj.messageLog(cType.ERROR,'Exergy of stream %s is negative %f',ps.Streams(i).key,E(i));
+					obj.messageLog(cType.ERROR,cMessages.NegativeExergyStream,ps.Streams(i).key,E(i));
 				end
 			end
 			% Compute and check Process Fuel and Product Exergy
@@ -95,7 +95,7 @@ classdef cExergyData < cMessageLogger
             ier=find(vI<0);
 			if ~isempty(ier)
 				for i=ier
-					obj.messageLog(cType.ERROR,'Irreversibility of process %s is negative %f',ps.ProcessKeys{i},vI(i));
+					obj.messageLog(cType.ERROR,cMessages.NegativeIrreversibilty,ps.ProcessKeys{i},vI(i));
 				end
 			end
             % Check fuel and product are non-null
@@ -104,7 +104,7 @@ classdef cExergyData < cMessageLogger
             if ~isempty(ier)
 				for i=ier
 					if vF(i)>0
-						obj.messageLog(cType.ERROR,'Product of process %s is zero',ps.ProcessKeys{i});
+						obj.messageLog(cType.ERROR,cMessages.ZeroProduct,ps.ProcessKeys{i});
 					else
 						bypass(i)=true;
 						obj.messageLog(cType.INFO,cMessages.ProcessNotActive,ps.ProcessKeys{i});

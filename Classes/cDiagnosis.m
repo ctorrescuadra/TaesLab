@@ -93,11 +93,11 @@ classdef(Sealed) cDiagnosis < cResultId
                 return
             end
             if ~ismember(method,[cType.DiagnosisMethod.WASTE_EXTERNAL,cType.DiagnosisMethod.WASTE_INTERNAL])
-                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisMethod);
+                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisMethod,method);
                 return
             end
             if (method==cType.DiagnosisMethod.WASTE_INTERNAL) && ~fp1.isWaste
-                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisMethod);
+                obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisMethod,method);
                 return
             end
             % Check if the states are equal

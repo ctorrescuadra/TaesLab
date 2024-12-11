@@ -33,22 +33,22 @@ classdef cResourceData < cMessageLogger
 		%
 		    % Check arguments and inititiliza class
 			if ~isObject(ps,'cProductiveStructure')
-				obj.messageLog(cType.ERROR,'No Productive Structure provided');
+				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
                 return
 			end
 			if ~isstruct(data)  
-				obj.messageLog(cType.ERROR,'Invalid resource data.');
+				obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return
 			end
 		    % Read resources flows costs
 			if ~isfield(data,{'sampleId','flows'})
-				obj.messageLog(cType.ERROR,'Invalid data model. Fields missing');
+				obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return
 			end
 			if all(isfield(data.flows,{'key','value'}))
 					se=data.flows;
 			else
-				obj.messageLog(cType.ERROR,'Wrong resource cost file. Flows fields missing.');
+				obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return	
 			end
 			obj.Z=zeros(1,ps.NrOfProcesses);
@@ -60,14 +60,14 @@ classdef cResourceData < cMessageLogger
 				id=ps.getFlowId(se(i).key);
 				if id
 					if ~ismember(id,resources)
-						obj.messageLog(cType.ERROR,'Flow key %s is not a resource',se(i).key);
+						obj.messageLog(cType.ERROR,cMessages.InvalidResourceKey,se(i).key);
 					end
 					if (se(i).value < 0)
-						obj.messageLog(cType.ERROR,'Value of resource cost %s is negative %f',se(i).key,se(i).value);
+						obj.messageLog(cType.ERROR,cMessages.InvalidResourceValue,se(i).key,se(i).value);
 					end
 					obj.c0(id)=se(i).value;
 				else
-					obj.messageLog(cType.ERROR,'Resource flow key %s is missing',se(i).key);
+					obj.messageLog(cType.ERROR,cMessages.InvalidResourceKey,se(i).key);
 				end
 			end
             if ~obj.status
@@ -78,7 +78,7 @@ classdef cResourceData < cMessageLogger
 				if all(isfield(data.processes,{'key','value'}))
 					sz=data.processes;
 				else
-					obj.messageLog(cType.ERROR,'Wrong resource cost data. Processes fields missing.');
+					obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel');
 					return	
 				end		
 				% Check processes cost data
@@ -88,10 +88,10 @@ classdef cResourceData < cMessageLogger
 						if (sz(i).value >= 0)
 							obj.Z(id)=sz(i).value;
 						else
-							obj.messageLog(cType.ERROR,'Value of process cost %s is negative: %f',sz(i).key,sz(i).value);
+							obj.messageLog(cType.ERROR,cMessages.InvalidResourceValue,sz(i).key,sz(i).value);
 						end
                     else
-					    obj.messageLog(cType.ERROR,'Process key %s is missing',sz(i).key);
+					    obj.messageLog(cType.ERROR,cMessages.InvalidResourceKey,sz(i).key);
                     end
                 end
 			else
@@ -113,11 +113,11 @@ classdef cResourceData < cMessageLogger
             if length(Z) == obj.ps.NrOfProcesses
 				obj.Z=Z;
 			else
-				log.messageLog(cType.ERROR,'Invalid processes resources size',length(Z));
+				log.messageLog(cType.ERROR,cMessages.InvalidZSize,length(Z));
 				return
             end
             if any(Z<0)
-				log.messageLog(cType.ERROR,'Values of process resources must be non-negatives');
+				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
 				return
             end
 		end
@@ -135,11 +135,11 @@ classdef cResourceData < cMessageLogger
             if length(c0) == obj.ps.NrOfFlows
 				obj.c0=c0;
 			else
-				log.messageLog(cType.ERROR,'Invalid flows resources size',length(c0));
+				log.messageLog(cType.ERROR,cMessages.InvalidCSize,length(c0));
 				return
             end
             if any(c0<0)
-				log.messageLog(cType.ERROR,'Values of flows resources must be non-negatives');
+				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
 				return
             end
 		end
@@ -156,14 +156,14 @@ classdef cResourceData < cMessageLogger
 		%
 			log=cMessageLogger();
 			id=obj.getResourceIndex(key);
-            if isempty(id)
-				log.messageLog(cType.ERROR,'Invalid key: %s',key);
+            if ~id
+				log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,key);
 				return
             end
             if value>=0
 	            obj.c0(id)=value;
             else
-				log.messageLog(cType.ERROR,'Flows resource cost values must be non-negatives');
+				log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,key,value);
 				return
             end
 		end
@@ -180,14 +180,14 @@ classdef cResourceData < cMessageLogger
 		%
 			log=cMessageLogger();
 			id=obj.ps.getProcessId(key);
-            if isempty(id)
-				log.messageLog(cType.ERROR,'Invalid key: %s',key);
+            if ~id
+				log.messageLog(cType.ERROR,cMessages.InvalidProcessKey,key);
 				return
             end
             if value>=0
 	            obj.Z(id)=value;
             else
-				log.messageLog(cType.ERROR,'Processes resource cost values must be non-negatives');
+				log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,key,value);
 				return
             end	
 		end
@@ -206,15 +206,14 @@ classdef cResourceData < cMessageLogger
 	end
 
 	methods(Access=private)
-		function id=getResourceIndex(obj,key)
+		function res=getResourceIndex(obj,key)
 		% Get the index of resource key
 		%	key - key of the resource
+			res=0;
+			rf=obj.ps.Resources.flows;
 			id=obj.ps.getFlowId(key);
-			if ~isempty(id)
-				rf=obj.ps.Resources.flows;
-				if isempty(find(rf==id,1))
-					id=cType.EMPTY;
-				end
+			if ismember(id,rf)
+				res=id;
 			end
 		end
 	end	

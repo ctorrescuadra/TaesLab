@@ -24,7 +24,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %   folder - Folder name where the files will be save if tbl is a cTableIndex
         % 
             if ~isObject(tbl,'cTable')
-                obj.messageLog(cType.ERROR,'Invalid input argument');
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             obj.isIndexTable=isa(tbl,'cTableIndex') && (nargin==2);
@@ -72,7 +72,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
                 fclose(fId);
             catch err
                 log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,'File %s could NOT be saved',filename);
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
             end
         end
     end
