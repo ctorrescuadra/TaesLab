@@ -128,7 +128,7 @@ classdef cDataModel < cResultSet
                 if dm.isWaste
                     data=dm.WasteDefinition;
                 else
-                    data=ps.wasteDefinition;
+                    data=ps.WasteData;
                     obj.messageLog(cType.INFO,cMessages.WasteNotAvailable);
                 end
                 wd=cWasteData(ps,data);

@@ -398,5 +398,29 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 			res=find(~bitget(streamtypes,cType.PRODUCTIVE));
 		end
 
+		function [E,ET]=flows2Streams(obj,val)
+		% Compute the exergy or cost of streams from flow values
+		% Syntax:
+		%   res = obj.flows2Streams(values)
+		% Input Arguments
+		%   values - exergy/cost values
+		% Output Arguments
+		%   E  - exergy/cost of streams
+		%   ET - Total exergy of streams
+			tbl=obj.AdjacencyMatrix;
+            BE=val*tbl.AE;
+			BS=val*tbl.AS';
+            fstreams=obj.getFuelStreams;
+            pstreams=obj.getProductStreams;
+			E=zeros(1,obj.NrOfStreams);
+			E(fstreams)=zerotol(BE(fstreams)-BS(fstreams));
+			E(pstreams)=zerotol(BS(pstreams)-BE(pstreams));
+			if nargout==2
+				ET=zeros(1,obj.NrOfStreams);
+				ET(fstreams)=BE(fstreams);
+				ET(pstreams)=BS(pstreams);
+			end
+		end
+
     end
 end

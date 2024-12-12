@@ -46,9 +46,8 @@ classdef cExergyData < cMessageLogger
                 obj.messageLog(cType.ERROR,cMessages.InvalidExergyDataSize,M);
                 return
             end
-            NS=ps.NrOfStreams;
             N=ps.NrOfProcesses;
-			% Check flows' keys	and get exergy values	
+			% Check flow keys and get exergy values	
             B=zeros(1,M);
             for i=1:M
 				id=ps.getFlowId(values(i).key);
@@ -65,18 +64,8 @@ classdef cExergyData < cMessageLogger
 			if ~obj.status
 				return
 			end
-			% Check exergy values and compute exergy of processes and streams
-			tbl=ps.AdjacencyMatrix;
-            BE=B*tbl.AE;
-			BS=B*tbl.AS';
-            fstreams=ps.getFuelStreams;
-            pstreams=ps.getProductStreams;
-			ET=zeros(1,NS);
-			ET(fstreams)=BE(fstreams);
-			ET(pstreams)=BS(pstreams);
-			E=zeros(1,NS);
-			E(fstreams)=zerotol(BE(fstreams)-BS(fstreams));
-			E(pstreams)=zerotol(BS(pstreams)-BE(pstreams));
+			% Calculate exergy of productive groups
+			[E,ET]=ps.flows2Streams(B);
             % Check streams are non negative
             ier=find(E<0);		
 			if ~isempty(ier)
@@ -85,6 +74,7 @@ classdef cExergyData < cMessageLogger
 				end
 			end
 			% Compute and check Process Fuel and Product Exergy
+            tbl=ps.AdjacencyMatrix;
 			vF=E*tbl.AF;
 			vP=E*tbl.AP';
 			% Calculate total system values

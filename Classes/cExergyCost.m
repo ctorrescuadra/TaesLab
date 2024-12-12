@@ -9,7 +9,6 @@ classdef (Sealed) cExergyCost < cExergyModel
 %   RecirculationFactor    - Recirculation factor of each process
 %   fpOperators            - Structure containing FP Operators (mFP, mRP, opCP,opCR)
 %   pfOperators            - Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
-%   StreamOperators        - Stream operators structure (mG, opE, opI, opR)  
 %   FlowOperators          - Flow operators structure (mG, opB, opI, opR)
 %   isWaste                - Indicate if system have wastes
 %   WasteTable             - cWasteData object
@@ -41,19 +40,16 @@ classdef (Sealed) cExergyCost < cExergyModel
         WasteWeight            % Weight of each waste
         fpOperators            % Structure containing FP Operators (mFP, mRP, opCP,opCR)
         pfOperators            % Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
-        StreamOperators        % Stream operators structure (mG, opE, opI, opR)  
         FlowOperators          % Flow operators structure (mG, opB, opI, opR)
         isWaste=false          % Indicate if system have wastes
         WasteTable             % cWasteData object
         TableR                 % Table R (waste allocation)
         RecycleRatio           % Recycle ratio of each waste
-	end
-
-	properties (Access=private)
-        opEP
-        opBP
-	end
-
+    end
+    properties(Access=private)
+       opBP
+    end
+    
 	methods
 		function obj=cExergyCost(rex,wd)
 		% Creates the cFlowProcessModel object
@@ -69,20 +65,12 @@ classdef (Sealed) cExergyCost < cExergyModel
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
             M=obj.NrOfFlows;
 			N=obj.NrOfProcesses;
-            NS=obj.NrOfStreams;
             vK=obj.UnitConsumption;
             vk1=zerotol(vK-1);
-            % Get Stream Operators
-            spt=obj.StreamProcessTable;
-            mH=spt.mF(:,1:N)*spt.mP(1:N,:)+spt.mS*spt.mE;
-            opE=eye(NS)/(eye(NS)-mH);
-            obj.opEP=spt.mP(1:N,:)*opE;
-            opEI=scaleRow(obj.opEP,vk1);
-            obj.StreamOperators=struct('mH',mH,'opE',opE,'opI',opEI);
             % Get Flow Operators;
 			fpt=obj.FlowProcessTable;
             mG=fpt.mF(:,1:N)*fpt.mP(1:N,:)+fpt.mV;
-            opB=eye(M)+spt.mE*opE*spt.mS;
+            opB=eye(M)/(eye(M)-mG);
             obj.opBP=fpt.mP(1:N,:)*opB;
             opBI=scaleRow(obj.opBP,vk1);
             obj.FlowOperators=struct('mG',mG,'opB',opB,'opI',opBI);
@@ -90,7 +78,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             tfp=obj.TableFP;        
             mPF=divideCol(tfp(:,1:N),obj.FuelExergy);
             mKP=scaleCol(mPF,vK);
-            opP=zerotol(eye(N)+spt.mP(1:N,:)*opE*spt.mF(:,1:N));
+            opP=zerotol(eye(N)+fpt.mP(1:N,:)*opB*fpt.mF(:,1:N));
             opI=scaleRow(opP,vk1);
             obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
@@ -284,37 +272,6 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res.C=res.CE+res.CZ;
             end
         end
-
-        function res=getStreamsCost0(obj,rsc)
-            czoption=(nargin==2);
-            res=struct();
-            zero=zeros(1,obj.NrOfStreams);
-            aux=obj.StreamOperators;
-            tbl=obj.StreamProcessTable;
-            res.E=obj.StreamsExergy.ET;
-            if czoption
-                res.cE=rsc.cs0 * aux.opE;
-                res.CE=res.cE .* res.E;
-                res.cZ=rsc.zP * tbl.mP(1:end-1,:)*aux.opE;  
-                res.CZ=res.cZ .* res.E;
-            else
-                res.cE=tbl.mP(end,:) * aux.opE;
-                res.CE=res.cE .* res.E;
-                res.cZ=zero;
-                res.CZ=zero;
-            end
-            if obj.isWaste
-                res.cR=(res.cE+res.cZ)*aux.opR;
-                res.CR=res.cR .* res.E;
-                res.c=res.cE+res.cZ+res.cR;
-                res.C=res.CE+res.CZ+res.CR;
-            else
-                res.cR=zero;
-                res.CR=zero;
-                res.c=res.cE+res.cZ;
-                res.C=res.CE+res.CZ;
-            end
-        end 
         
         function res=getStreamsCost(obj,fcost)
         % Get the exergy cost of streams
@@ -330,17 +287,17 @@ classdef (Sealed) cExergyCost < cExergyModel
             res=struct();
             zero=zeros(1,obj.NrOfStreams);
             res.E=obj.StreamsExergy.E;
-            res.CE=obj.streamCosts(fcost.CE);
+            res.CE=obj.ps.flows2Streams(fcost.CE);
             res.cE=vDivide(res.CE,res.E);
             if obj.isWaste
-                res.CR=obj.streamCosts(fcost.CR);
+                res.CR=obj.ps.flows2Streams(fcost.CR);
                 res.cR=vDivide(res.CR,res.E);
             else
                 res.CR=zero;
                 res.cR=zero;
             end
             if isfield(fcost,'CZ')
-                res.CZ=obj.streamCosts(fcost.CZ);
+                res.CZ=obj.ps.flows2Streams(fcost.CZ);
                 res.cZ=vDivide(res.CZ,res.E);
                 res.C=res.CE+res.CR+res.CZ;
                 res.c=res.cE+res.cR+res.cZ;
@@ -482,7 +439,6 @@ classdef (Sealed) cExergyCost < cExergyModel
             NR=wt.NrOfWastes;
             N=obj.NrOfProcesses;
             M=obj.NrOfFlows;
-            NS=obj.NrOfProcesses;
             aR=wt.Processes;
             aP=setdiff(1:N,aR);
             tmp=zeros(1,N);
@@ -538,8 +494,6 @@ classdef (Sealed) cExergyCost < cExergyModel
             obj.pfOperators.mKR=mKR;
             obj.pfOperators.opR=cSparseRow(aR,mSKR*opP);
             obj.fpOperators.opR=cExergyCost.similarMatrix(obj.pfOperators.opR,vP);
-            wstreams=obj.ps.Waste.streams;
-            obj.StreamOperators.opR=cSparseRow(wstreams,mSKR*obj.opEP,NS);
             wflows=obj.ps.Waste.flows;
             obj.FlowOperators.opR=cSparseRow(wflows,mSKR*obj.opBP,M);
             obj.RecycleRatio=wt.RecycleRatio;
@@ -602,17 +556,6 @@ classdef (Sealed) cExergyCost < cExergyModel
 		    ke=obj.pfOperators.mKP(end,:);
             tmp(aP, aP) = tmp(aP, aP) + diag(sum(obj.fpOperators.mFP(aP,aR),2));
 		    cp=ke/(eye(N)-tmp);
-        end
-
-        function res=streamCosts(obj,fcost)
-            tbl=obj.ps.AdjacencyMatrix;
-            fstreams=obj.ps.getFuelStreams;
-            pstreams=obj.ps.getProductStreams;
-            res=zeros(1,obj.NrOfStreams);
-            cbe=fcost*tbl.AE;
-            cbs=fcost*tbl.AS';
-            res(fstreams)=cbe(fstreams)-cbs(fstreams);
-            res(pstreams)=cbs(pstreams)-cbe(pstreams);
         end
     end
 end

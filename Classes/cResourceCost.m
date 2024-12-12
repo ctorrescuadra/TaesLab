@@ -15,7 +15,6 @@ classdef cResourceCost < cMessageLogger
 	properties (GetAccess=public, SetAccess=private)
 		sample  % Resource sample name
 		c0      % Unit cost of external resources
-		cs0     % Unit cost of external stream
 		ce      % Process Resource Unit Costs
         Ce      % Process Resource Cost
 		Z       % Cost associated to processes
@@ -42,7 +41,6 @@ classdef cResourceCost < cMessageLogger
 			% Set Resources properties
 			obj.sample=rd.sample;
 			obj.c0=rd.c0;
-			obj.cs0=rd.c0*exm.StreamProcessTable.mS';
 			% Process Resources Cost
 			tbl=exm.FlowProcessTable;
 			obj.ce=obj.c0 * tbl.mL * tbl.mF0(:,1:end-1);

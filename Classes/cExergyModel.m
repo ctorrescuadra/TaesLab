@@ -11,7 +11,7 @@ classdef cExergyModel < cResultId
 %  ProcessesExergy  	- Process exergy properties
 %  StreamsExergy        - Stream exergy properties
 %  FlowProcessTable     - Flow Process Table
-%  StreamProcessTable   - Stream Process Table
+%  AdjacencyTable       - SFP Adjacency Table
 %  TableFP              - Table FP
 %  FuelExergy           - Fuel Exergy
 %  ProductExergy        - Product Exergy
@@ -38,7 +38,7 @@ classdef cExergyModel < cResultId
 		ProcessesExergy  	  % Structure containing the fuel, product of a process
 		StreamsExergy    	  % Exergy values of streams
 		FlowProcessTable      % Flow Process Table
-        StreamProcessTable    % Stream Process Table
+        AdjacencyTable        % SFP Adjacency Table (sfp)
         TableFP               % Table FP
 		FuelExergy            % Fuel Exergy
 		ProductExergy         % Product Exergy
@@ -66,7 +66,6 @@ classdef cExergyModel < cResultId
 				return
             end
 			M=rex.ps.NrOfFlows;
-			NS=rex.ps.NrOfStreams;
 			% Build Exergy Adjacency tables
 			B=rex.FlowsExergy;
 			E=rex.StreamsExergy.E;
@@ -78,15 +77,13 @@ classdef cExergyModel < cResultId
 			tAS=scaleCol(tbl.AS,B);
 			tAF=scaleRow(tbl.AF,E);
             tAP=scaleCol(tbl.AP,E);
-			% Build the Stream-Process Table
+			% Demand driven adjacency matrices
 			mbF=divideCol(tAF,vP);
 			mbF0=divideCol(tAF,vF);
 			mbP=divideCol(tAP,ET);
 			mS=double(tbl.AS);
 			mE=divideCol(tAE,ET);
 			% Build the Flow-Process Table
-			mgV=mE*mS;
-			tgV=scaleCol(mgV,B);
 			mgF=mE*mbF;
 			mgF0=mE*mbF0;
 			tgF=scaleCol(mgF,vP);
@@ -94,16 +91,18 @@ classdef cExergyModel < cResultId
 			tgP=scaleCol(mgP,B);
 			% Build table FP
 			if rex.ps.isModelIO
+				mgV=sparse(M,M);
+				tgV=mgV;
 				mgL=eye(M);
-				mbL=eye(NS)+mS*mE;
 				tfp=mgP*tgF;
 			else
+				mgV=mE*mS;
+				tgV=scaleCol(mgV,B);
 				mgL=eye(M)/(eye(M)-mgV);
-				mbL=eye(NS)+mS*mgL*mE;
 				tfp=mgP*mgL*tgF;
 			end
 			% Build the object
-			obj.StreamProcessTable=struct('tE',tAE,'tS',tAS,'tF',tAF,'tP',tAP,'mE',mE,'mS',mS,'mF',mbF,'mF0',mbF0,'mP',mbP,'mL',mbL);
+			obj.AdjacencyTable=struct('tE',tAE,'tS',tAS,'tF',tAF,'tP',tAP);
 			obj.FlowProcessTable=struct('tV',tgV,'tF',tgF,'tP',tgP,'mV',mgV,'mF',mgF,'mF0',mgF0,'mP',mgP,'mL',mgL);
 			obj.TableFP=full(tfp);
             obj.ps=rex.ps;
