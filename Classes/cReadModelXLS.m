@@ -78,14 +78,9 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 
     methods(Static,Access=private)
         function tbl=importSheet(xls,wsht,props)
-        %Import a workbook/sheet 
+        	% Read sheet and store into a cell array
             tbl=cMessageLogger;
             if isOctave
-		        if ~isstruct(xls)
-			        tbl.messageLog(cType.ERROR,cMessages.InvalidXLS);
-			        return
-		        end
-		        % Read file and store into a cell
 		        try
 			        values=xls2oct(xls,wsht);
                 catch err
@@ -93,11 +88,6 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 			        return
 		        end
             else %Matlab
-                if ~exist(xls,'file')
-                    tbl.messageLog(cType.ERROR,cMessages.FileNotExist,xls);
-                    return
-                end
-                % Read file and store into a cell
 		        try
 		            values=readcell(xls,'Sheet',wsht);
                 catch err

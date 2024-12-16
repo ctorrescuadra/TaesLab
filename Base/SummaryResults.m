@@ -87,7 +87,7 @@ function res = SummaryResults(data,varargin)
         if isempty(param.ResourceSample)
             param.ResourceSample=data.SampleNames{1};
         elseif ~data.existSample(param.ResourceSample)
-            res.printError(cMessages.InvalidSample,param.ResourceSample);
+            res.printError(cMessages.InvalidResourceName,param.ResourceSample);
         end
     end
     % Get the summary results from the thermoeconomic model

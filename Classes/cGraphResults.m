@@ -438,7 +438,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 				return
 			end
 			if (nargin<3) || ~isstruct(nodes)
-				obj.messageLog(cType.ERROR,cMessages.ParameterMissing);
+				obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
 				return
 			end
 			obj.Name=tbl.Description;

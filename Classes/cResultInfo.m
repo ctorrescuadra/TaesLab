@@ -47,7 +47,7 @@ classdef cResultInfo < cResultSet
                 return
             end
             if ~isstruct(tables)
-                obj.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             % Fill the class values
@@ -82,7 +82,7 @@ classdef cResultInfo < cResultSet
         %
             res = cMessageLogger();
             if nargin<2 || ~ischar(name) || isempty(name)
-                res.messageLog(cType.ERROR,cMessages.InvalidTableName);
+                res.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             if strcmp(name,cType.TABLE_INDEX)

@@ -180,7 +180,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 p.parse(varargin{:});
             catch err
                 obj.printError(err.message);
-                obj.UsprintError(cMessage.UseThermoeconomicModel);
+                obj.printError(cMessages.UseThermoeconomicModel);
                 return
             end
             param=p.Results;
@@ -980,7 +980,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError(cMessages.InvalidInputArgument);
+                log.printError(cMessages.InvalidArgument);
                 return
             end       
             msr=obj.getSummaryResults;
@@ -1003,7 +1003,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError(cMessages.InvalidInputArgument);
+                log.printError(cMessages.InvalidArgument);
                 return
             end
             log=saveDataModel(obj.DataModel,filename);
@@ -1020,7 +1020,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError(cMessages.InvalidInputArgument);
+                log.printError(cMessages.InvalidArgument);
                 return
             end
             % Save tables atfp, atcfp
@@ -1044,7 +1044,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError(cMessages.InvalidInputArgument);
+                log.printError(cMessages.InvalidArgument);
                 return
             end
             % Save fat,pat and fpat tables
@@ -1081,7 +1081,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-               log.printError(cMessages.InvalidInputArgument);
+               log.printError(cMessages.InvalidArgument);
                return
             end  
             wt=obj.fp1.WasteTable;
@@ -1109,7 +1109,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   log - cMessageLogger with the status and messages of operation
             log=cMessageLogger();
             if nargin~=2
-               log.printError(cMessages.InvalidInputArgument);
+               log.printError(cMessages.InvalidArgument);
                return
             end  
             wt=obj.fp1.WasteTable;
@@ -1138,7 +1138,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-               log.printError(cMessages.InvalidInputArgument);
+               log.printError(cMessages.InvalidArgument);
                return
             end 
             wt=obj.fp1.WasteTable;
@@ -1489,7 +1489,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Ckeck the state information
             res=false;
             if ~obj.DataModel.existState(state)
-                obj.printWarning(cMessages.InvalidState,state);
+                obj.printWarning(cMessages.InvalidStateName,state);
                 return
             end
             if strcmp(obj.State,state)

@@ -74,7 +74,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     if isempty(param.State)
         param.State=data.StateNames{2};
     elseif ~data.existState(param.State)
-        res.printError(cMessages.InvalidState,param.State);
+        res.printError(cMessages.InvalidStateName,param.State);
         return
     end
     if strcmp(param.ReferenceState,param.State)

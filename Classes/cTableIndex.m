@@ -35,7 +35,7 @@ classdef cTableIndex < cTable
         %
             % Check input parameters
             if ~isObject(res,'cResultInfo')
-                obj.messageLog(cType.ERROR,cMessages.InvalidArgument)
+                obj.messageLog(cType.ERROR,cMessages.InvalidResultSetRequired)
                 return
             end
             % Get tables of the results and build table

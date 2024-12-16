@@ -233,9 +233,6 @@ classdef (Sealed) cProductiveStructure < cProductiveStructureCheck
 		%   if output argument is 1
 		%    res1 - Incidence Matrix 
 		%
-			if ~obj.status
-				return
-			end
             aE=obj.AdjacencyMatrix.AE';
             aS=obj.AdjacencyMatrix.AS;
             aF=obj.AdjacencyMatrix.AF';

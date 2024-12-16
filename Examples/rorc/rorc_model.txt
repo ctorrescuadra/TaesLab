@@ -1,0 +1,467 @@
+{
+  "ProductiveStructure": {
+    "name": "rorc_model",
+    "flows": [
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "QBLR",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "WP",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WN",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QCND",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "BLR",
+        "fuel": "QBLR",
+        "product": "B1-B6",
+        "type": "PRODUCTIVE",
+        "description": "Steam Generator"
+      },
+      {
+        "key": "TRB",
+        "fuel": "B1-B2",
+        "product": "WN+WP",
+        "type": "PRODUCTIVE",
+        "description": "Turbine"
+      },
+      {
+        "key": "IHE",
+        "fuel": "B2-B3",
+        "product": "B6-B5",
+        "type": "PRODUCTIVE",
+        "description": "Internal Heat Exchanger"
+      },
+      {
+        "key": "PMP",
+        "fuel": "WP",
+        "product": "B5-B4",
+        "type": "PRODUCTIVE",
+        "description": "Pump"
+      },
+      {
+        "key": "CND",
+        "fuel": "B3-B4",
+        "product": "QCND",
+        "type": "DISSIPATIVE",
+        "description": "Condenser"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "REF",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 83.57
+          },
+          {
+            "key": "B2",
+            "value": 17.9
+          },
+          {
+            "key": "B3",
+            "value": 15.79
+          },
+          {
+            "key": "B4",
+            "value": 5.784
+          },
+          {
+            "key": "B5",
+            "value": 7.877
+          },
+          {
+            "key": "B6",
+            "value": 9.42
+          },
+          {
+            "key": "QBLR",
+            "value": 100
+          },
+          {
+            "key": "WP",
+            "value": 2.447
+          },
+          {
+            "key": "WN",
+            "value": 50
+          },
+          {
+            "key": "QCND",
+            "value": 10.006
+          }
+        ]
+      },
+      {
+        "stateId": "TRB75",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 89.43
+          },
+          {
+            "key": "B2",
+            "value": 19.54
+          },
+          {
+            "key": "B3",
+            "value": 16.94
+          },
+          {
+            "key": "B4",
+            "value": 6.19
+          },
+          {
+            "key": "B5",
+            "value": 8.43
+          },
+          {
+            "key": "B6",
+            "value": 10.31
+          },
+          {
+            "key": "QBLR",
+            "value": 106.3
+          },
+          {
+            "key": "WP",
+            "value": 2.619
+          },
+          {
+            "key": "WN",
+            "value": 50
+          },
+          {
+            "key": "QCND",
+            "value": 10.75
+          }
+        ]
+      },
+      {
+        "stateId": "PBLR18",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 83.93
+          },
+          {
+            "key": "B2",
+            "value": 18.46
+          },
+          {
+            "key": "B3",
+            "value": 16.39
+          },
+          {
+            "key": "B4",
+            "value": 6.011
+          },
+          {
+            "key": "B5",
+            "value": 7.948
+          },
+          {
+            "key": "B6",
+            "value": 9.471
+          },
+          {
+            "key": "QBLR",
+            "value": 100.8
+          },
+          {
+            "key": "WP",
+            "value": 2.264
+          },
+          {
+            "key": "WN",
+            "value": 50
+          },
+          {
+            "key": "QCND",
+            "value": 10.379000000000001
+          }
+        ]
+      },
+      {
+        "stateId": "PCND2",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 87.64
+          },
+          {
+            "key": "B2",
+            "value": 21.92
+          },
+          {
+            "key": "B3",
+            "value": 19.59
+          },
+          {
+            "key": "B4",
+            "value": 6.34
+          },
+          {
+            "key": "B5",
+            "value": 8.528
+          },
+          {
+            "key": "B6",
+            "value": 10.33
+          },
+          {
+            "key": "QBLR",
+            "value": 103.5
+          },
+          {
+            "key": "WP",
+            "value": 2.554
+          },
+          {
+            "key": "WN",
+            "value": 50
+          },
+          {
+            "key": "QCND",
+            "value": 13.25
+          }
+        ]
+      },
+      {
+        "stateId": "PCND3",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 108
+          },
+          {
+            "key": "B2",
+            "value": 41.99
+          },
+          {
+            "key": "B3",
+            "value": 38.68
+          },
+          {
+            "key": "B4",
+            "value": 9.99
+          },
+          {
+            "key": "B5",
+            "value": 12.62
+          },
+          {
+            "key": "B6",
+            "value": 15.49
+          },
+          {
+            "key": "QBLR",
+            "value": 120.2
+          },
+          {
+            "key": "WP",
+            "value": 3.053
+          },
+          {
+            "key": "WN",
+            "value": 50
+          },
+          {
+            "key": "QCND",
+            "value": 28.689999999999998
+          }
+        ]
+      },
+      {
+        "stateId": "noIHE",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 83.57
+          },
+          {
+            "key": "B2",
+            "value": 17.9
+          },
+          {
+            "key": "B3",
+            "value": 17.9
+          },
+          {
+            "key": "B4",
+            "value": 5.784
+          },
+          {
+            "key": "B5",
+            "value": 7.877
+          },
+          {
+            "key": "B6",
+            "value": 7.877
+          },
+          {
+            "key": "QBLR",
+            "value": 106.9
+          },
+          {
+            "key": "WP",
+            "value": 2.447
+          },
+          {
+            "key": "WN",
+            "value": 50
+          },
+          {
+            "key": "QCND",
+            "value": 12.116
+          }
+        ]
+      }
+    ]
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 11,
+        "precision": 3,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 11,
+        "precision": 3,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 11,
+        "precision": 3,
+        "unit": "(c$/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(c$/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 11,
+        "precision": 4,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "QCND",
+      "type": "DEFAULT",
+      "recycle": 0
+    }
+  },
+  "ResourcesCost": {
+    "Samples": [
+      {
+        "sampleId": "External",
+        "flows": {
+          "key": "QBLR",
+          "value": 0.5
+        },
+        "processes": [
+          {
+            "key": "BLR",
+            "value": 6.51
+          },
+          {
+            "key": "TRB",
+            "value": 151.75
+          },
+          {
+            "key": "IHE",
+            "value": 2.56
+          },
+          {
+            "key": "PMP",
+            "value": 2.11
+          },
+          {
+            "key": "CND",
+            "value": 10.75
+          }
+        ]
+      },
+      {
+        "sampleId": "Internal",
+        "flows": {
+          "key": "QBLR",
+          "value": 0
+        },
+        "processes": [
+          {
+            "key": "BLR",
+            "value": 6.51
+          },
+          {
+            "key": "TRB",
+            "value": 151.75
+          },
+          {
+            "key": "IHE",
+            "value": 2.56
+          },
+          {
+            "key": "PMP",
+            "value": 2.11
+          },
+          {
+            "key": "CND",
+            "value": 10.75
+          }
+        ]
+      }
+    ]
+  }
+}

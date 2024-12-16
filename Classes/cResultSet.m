@@ -192,7 +192,7 @@ classdef cResultSet < cResultId
             if tbl.status
                 showTable(tbl,varargin{:});
             else
-                    tbl.printLogger;
+                tbl.printLogger;
             end
         end
 
@@ -211,7 +211,7 @@ classdef cResultSet < cResultId
             end
             tbl=getTable(res,graph);
             if ~tbl.status
-                obj.printError(cMessages.NoGraphTable,graph);
+                obj.printError(cMessages.TableNotFound,graph);
                 return
             end
             % Get default optional parameters
@@ -305,7 +305,7 @@ classdef cResultSet < cResultId
         %
             log=cMessageLogger();
             if (nargin < 2) || ~isFilename(filename)
-                log.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
+                log.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             if ~obj.status

@@ -408,7 +408,7 @@ classdef cDataModel < cResultSet
 			log=cMessageLogger();
 			% Check inputs
             if (nargin<2) || ~isFilename(filename)
-                log.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
+                log.messageLog(cType.ERROR,cMessages.InvalidArgument);
             end
 			if ~obj.status
 				log.messageLog(cType.ERROR,cMessages.InvalidDataModel);

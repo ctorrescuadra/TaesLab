@@ -42,10 +42,10 @@ classdef cMessageBuilder < cTaesLab
                 debug=false;
             end
             fid=2*(obj.Error==0)+(obj.Error~=0);
-            fprintf(fid,'%s\n',obj.getMessage);
             if debug
                 dbstack;
             end
+            fprintf(fid,'%s\n',obj.getMessage);
         end
     end
 end

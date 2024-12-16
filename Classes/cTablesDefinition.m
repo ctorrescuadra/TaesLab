@@ -283,7 +283,7 @@ classdef cTablesDefinition < cMessageLogger
             for i=1:M
                 colId=cType.getDirColumns(cols{i});
                 if isempty(colId)
-                    res.messageLog(cType.ERROR,cMessages.InvalidDirProp,cols{i});
+                    res.messageLog(cType.ERROR,cMessages.InvalidArgument,cols{i});
                     return
                 end
                 colNames{i+1}=cType.DirColNames{colId};

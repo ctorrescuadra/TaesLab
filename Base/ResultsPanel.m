@@ -209,7 +209,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
                     end
                 end
             else
-                log.printError(cMessages.TableNotAvailable);
+                log.printError(cMessages.NoTableToSave);
             end
         end
     end

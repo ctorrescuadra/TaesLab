@@ -16,7 +16,7 @@ function log=exportMAT(obj,filename)
 %
     log=cMessageLogger();
     if (nargin~=2) || (~isFilename(filename))
-        log.messageLog(cType.ERROR,cMessages.InvalidInputArgument);
+        log.messageLog(cType.ERROR,cMessages.InvalidArgument);
         return
     end
     if ~cType.checkFileExt(filename,cType.FileExt.MAT)

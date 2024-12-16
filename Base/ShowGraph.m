@@ -64,7 +64,7 @@ function ShowGraph(arg,varargin)
 		return
 	end
 	if ~tbl.isGraph
-		log.printError(cMessages.NoGraphTable,param.Graph);
+		log.printError(cMessages.InvalidGraph,param.Graph);
 		return
 	end
 	% Get aditional parameters
