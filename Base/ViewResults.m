@@ -297,7 +297,7 @@ classdef ViewResults < matlab.apps.AppBase
             log=cMessageLogger();
             if nargin~=2 || ~isObject(arg,'cResultSet')
                 log.printError(cMessages.ResultSetRequired);
-                log.printError(cMessages.UseViewResults);
+                log.printError(cMessages.ShowHelp);
                 delete(app);
                 return
             end

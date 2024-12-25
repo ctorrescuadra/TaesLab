@@ -2,8 +2,17 @@ classdef cExergyData < cMessageLogger
 % cExergyData gets and validates the exergy data values for a state of the plant 
 %  	Check if these values are coherent with the productive
 %  	structure and get the exergy values for flows, streams and processes.
-% Methods:
-% 	obj=cExergyData(ps, data)
+%
+% cExergyData constructor:
+% 	obj = cExergyData(ps, data)
+%
+% cExergyData properties:
+%   ps			    - Productive Structure
+%   State           - Exergy State
+%   FlowsExergy     - Exergy of Flows
+%   StreamsExergy   - Exergy of Streams
+%   ProcessesExergy - Exergy of Processes
+%   ActiveProcesses - Active Processes (not bypassed)
 %
 	properties(GetAccess=public,SetAccess=private)
 		ps				  % Productive Structure
@@ -21,7 +30,7 @@ classdef cExergyData < cMessageLogger
 		%  ps - cProductiveStructure object
 			% Check arguments
 			if ~isObject(ps,'cProductiveStructure')
-				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
                 return
 			end
             if ~isstruct(data)

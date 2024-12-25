@@ -5,14 +5,26 @@ classdef (Sealed) ResultsPanel < cTaesLab
 %   In the View menu, you can choose where the tables are shown:  the console, a web browser or a GUI table.
 %   In addition, the current ResultSet can be saved to a file using the menu option File->Save.
 %
-%   Methods:
-%     ResultsPanel(res) - creates the panel and shows the result
-%     showResults(res)  - shows  another results table index
-%     viewPanel    - show the panel on the top
-%     hidePanel    - hide the panel
+%   ResultPanel constructor:
+%     obj = ResultPanel(res)
+%   
+%   ResultPanel properties:
+%     resultInfo - Result set info object
+%     tableView  - Table view option
+%
+%   ResultPanel methods:
+%     ResultsPanel - Creates the panel and shows the result
+%     showResults  - Shows  another results table index
+%     viewPanel    - Show the panel on the top
+%     hidePanel    - Side the panel
 %       
 %   See also cResultSet
 %
+    properties(GetAccess=public,SetAccess=private)
+        resultInfo      % Result Info object
+        tableView       % Table View option
+    end
+
     properties(Access=private)
         fig             % Base Figure
         tname           % Table label
@@ -22,10 +34,6 @@ classdef (Sealed) ResultsPanel < cTaesLab
         mn_view         % Table View menu
         mn_rsave        % Save Results menu
         mn_tsave        % Save Table menu
-    end
-    properties(GetAccess=public,SetAccess=private)
-        resultInfo      % Result Info object
-        tableView       % Table View option
     end
 
     methods
@@ -57,7 +65,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
             % Check Input parameter
             log=cMessageLogger();
             if ~isObject(res,'cResultSet')
-                log.printError(cMessages.InvalidResultSet);
+                log.printError(cMessages.InvalidObject,class(res));
                 return
             end
             % Set table parameters

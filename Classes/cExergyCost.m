@@ -1,7 +1,11 @@
 classdef (Sealed) cExergyCost < cExergyModel
-% cExergyCost - Calculates exergy cost of flows and processes.
+% cExergyCost calculates exergy cost of flows and processes.
+%   It is the class that provides the thermoeconomic analysis results
+%
+% cExergyCost constructor:
+%   obj = cExergyCost(exd,wd)
 % 
-% cExergyCost Properties
+% cExergyCost properties:
 %   SystemOutput           - System Output of processes
 %   FinalDemand            - Final Demand of processes
 %   Resources              - External resources of processes
@@ -16,7 +20,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %   RecycleRatio           - Recycle ratio of each waste
 %   WasteWeight            - Weight of each waste
 %
-% cExergyCost Methods:
+% cExergyCost methods:
 %   buildResultInfo        - Build the cResultInfo object for thermoeconomic analysis
 %   getProcessCost         - Get cost of Processes
 %   getProcessUnitCost     - Get unit cost of Processes
@@ -51,17 +55,17 @@ classdef (Sealed) cExergyCost < cExergyModel
     end
     
 	methods
-		function obj=cExergyCost(rex,wd)
-		% Creates the cFlowProcessModel object
+		function obj=cExergyCost(exd,wd)
+		% Creates an instance of the class
         % Syntax:
-        %   obj=cExergyCost(rex,wd)
+        %   obj=cExergyCost(exd,wd)
         % Input Arguments:
-		%   rex - cExergyData object
+		%   exd - cExergyData object
         %   wd - cWasteData object (optional)
         % Output Arguments Arguments:
         %  obj - cExergyCost object
         %
-			obj=obj@cExergyModel(rex);
+			obj=obj@cExergyModel(exd);
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
             M=obj.NrOfFlows;
 			N=obj.NrOfProcesses;
@@ -525,11 +529,11 @@ classdef (Sealed) cExergyCost < cExergyModel
         %  Input:
         %   wd - cWasteData object
             if ~obj.isWaste
-                obj.messageLog(cType.ERROR,cMessages.NoWasteDefined);
+                obj.messageLog(cType.ERROR,cMessages.NoWasteModel);
                 return
             end
             if ~isObject(wd,'cWasteData')
-                obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(wd));
                 return
             end
             obj.WasteTable=wd;

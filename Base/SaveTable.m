@@ -20,12 +20,12 @@ function SaveTable(tbl,filename)
     % Check Input parameters
     if (nargin~=2) || ~isObject(tbl,'cTable')
         log.printError(cMessages.TableRequired);
-        log.printError(cMessages.UseSaveTable);
+        log.printError(cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
         log.printError(cMessages.InvalidOutputFilename,filename);
-        log.printError(cMessages.UseSaveTable);
+        log.printError(cMessages.ShowHelp);
         return
     end
     % Save table

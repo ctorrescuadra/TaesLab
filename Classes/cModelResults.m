@@ -1,12 +1,16 @@
 classdef (Sealed) cModelResults < cMessageLogger
     % cModelResults is a class container of the model results
     %   This class store the results of cThermoeconomicModel according to its ResultId
+    %
+    % cModelResults constructor:
+    %   obj = cModelResults(data)
     %   
-    % cModelResults Methods:
+    % cModelResults methods:
     %   getResults      - Get a cResultInfo from the container
     %   setResults      - Store a cResultInfo in the container
     %   clearResults    - Delete a cResultInfo from the container
     %   getModelResults - Get the current results of a state
+    %
     properties(Access=private)
         results    % cResultInfo cell array container
     end
@@ -22,7 +26,7 @@ classdef (Sealed) cModelResults < cMessageLogger
         %
             % Check inputs
             if ~isObject(data,'cDataModel')
-                obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(data));
                 return
             end
             % Create results array

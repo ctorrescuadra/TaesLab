@@ -1,0 +1,610 @@
+# Query: cMessages.
+# Flags: CaseSensitive
+
+458 results - 75 files
+
+Base\CopyDataModel.m:
+  21:         log.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
+
+Base\DiagramFP.m:
+  36: 		res.printError(cMessages.DataModelRequired);
+  37: 		res.printError(cMessages.ShowHelp);
+  49: 		res.printError(cMessages.ShowHelp);
+  57: 		res.printError(cMessages.InvalidExergyData,param.State);
+  65:         res.printError(cMessages.InvalidDiagramFP);
+  71:         res.printError(cMessages.InvalidResultSet);
+
+Base\ExergyAnalysis.m:
+  35: 		res.printError(cMessages.DataModelRequired);
+  36: 		res.printError(cMessages.ShowHelp);
+  48:         res.printError(cMessages.ShowHelp);
+  56: 		res.printError(cMessages.InvalidExergyData,param.State);
+  65: 		res.printError(cMessages.InvalidExergyModel);
+  69:         res.printError(cMessages.InvalidResultSet);
+
+Base\ExportResults.m:
+  34: 		res.printError(cMessages.InvalidResultSet);
+  35: 		res.printError(cMessages.ShowHelp);
+  47:         res.printError(cMessages.ShowHelp);
+
+Base\ListResultTables.m:
+  68:         res.printError(cMessages.ShowHelp);
+
+Base\ProductiveDiagram.m:
+  34: 		res.printError(cMessages.DataModelRequired);
+  35:         res.printError(cMessages.ShowHelp);
+  46:         res.printError(cMessages.ShowHelp);
+  56:         res.printError(cMessages.InvalidDiagramFPS);
+  60:         res.printError(cMessages.InvalidResultSet);
+
+Base\ProductiveStructure.m:
+  33: 		res.printError(cMessages.DataModelRequired);
+  34:         res.printError(cMessages.ShowHelp);
+  45:         res.printError(cMessages.ShowHelp);
+  55:         res.printError(cMessages.InvalidProductiveStructure);
+  60:         res.printError(cMessages.InvalidResultSet);
+
+Base\ReadDataModel.m:
+  36:         data.printError(cMessages.ShowHelp);
+  40:         data.printError(cMessages.InvalidInputFile);
+  44:         data.printError(cMessages.FileNotExist,filename);
+  56:         data.printError(cMessages.ShowHelp);
+
+Base\ResultsPanel.m:
+   55:                     log.printError(cMessages.ResultSetRequired);
+   68:                 log.printError(cMessages.InvalidResultSet);
+  197: 				    slog.printInfo(cMessages.InfoFileSave,descr, file);			    
+  199:                     slog.printError(cMessages.FileNotSaved, file);
+  214:                         slog.printInfo(cMessages.InfoFileSaved, tbl.Name,file);			    
+  216:                         slog.printError(cMessages.FileNotSaved, tbl.Name);
+  220:                 log.printError(cMessages.NoTableToSave);
+
+Base\SaveDataModel.m:
+  22:         log.printError(cMessages.DataModelRequired);
+  30:         log.printError(cMessages.DataModelRequired);
+  31:         log.printError(cMessages.ShowHelp);
+  35:         log.printError(cMessages.InvalidOutputFile,filename);
+  36:         log.printError(cMessages.ShowHelp);
+
+Base\SaveResults.m:
+  23:         log.printError(cMessages.ResultSetRequired);
+  24:         log.printError(cMessages.ShowHelp);
+  28:         log.printError(cMessages.InvalidOutputFile,filename);
+  29:         log.printError(cMessages.ShowHelp);
+
+Base\SaveSummary.m:
+  22:         log.printError(cMessages.ResultSetRequired);
+  23:         log.printError(cMessages.ShowHelp);
+  27:         log.printError(cMessages.InvalidOutputFile,filename);
+  28:         log.printError(cMessages.ShowHelp);
+
+Base\SaveTable.m:
+  22:         log.printError(cMessages.TableRequired);
+  23:         log.printError(cMessages.ShowHelp);
+  27:         log.printError(cMessages.InvalidOutputFilename,filename);
+  28:         log.printError(cMessages.ShowHelp);
+
+Base\ShowGraph.m:
+  30: 		log.printError(cMessages.InvalidResultSet);
+  31: 		log.printError(cMessages.ShowHelp);
+  45:         log.printError(cMessages.ShowHelp);
+  57:         log.printError(cMessages.InvalidResultSet);
+  63: 		log.printError(cMessages.InvalidTable,param.Graph);
+  67: 		log.printError(cMessages.InvalidGraph,param.Graph);
+
+Base\ShowResults.m:
+  45:         log.printError(cMessages.InvalidResultSet)
+  46:         log.printError(cMessages.ShowHelp);
+  66:         log.printError(cMessages.ShowHelp);
+
+Base\ShowTable.m:
+  35:         log.printError(cMessages.InvalidTable,'object');
+  36:         log.printError(cMessages.ShowHelp);
+  53:         log.printError(cMessages.ShowHelp);
+
+Base\SummaryResults.m:
+   55: 		res.printError(cMessages.DataModelRequired);
+   56:         res.printError(cMessages.ShowHelp);
+   63:         res.printError(cMessages.SummaryNotAvailable);
+   77:         res.printError(cMessages.ShowHelp);
+   83:         res.printError(cMessages.SummaryNotAvailable);
+   90:             res.printError(cMessages.InvalidResourceName,param.ResourceSample);
+  100:         model.printError(cMessages.InvalidSummary);
+
+Base\ThermoeconomicAnalysis.m:
+   54: 		res.printError(cMessages.DataModelRequired);
+   55:         res.printError(cMessages.ShowHelp);
+   69:         res.printError(cMessages.ShowHelp);
+   77: 		res.printError(cMessages.InvalidExergyData,param.State);
+   88: 		res.printError(cMessages.InvalidCostAnalysis)
+  102:             rd.printError(cMessages.InvalidResourceData,param.ResourceSample);
+  107: 			res.printError(cMessages.InvalidResourceCost,param.ResourceSample);
+  115:         res.printError(cMessages.InvalidResultSet);
+
+Base\ThermoeconomicDiagnosis.m:
+   45: 		res.printError(cMessages.DataModelRequired);
+   46:         res.printError(cMessages.ShowHelp);
+   60:         res.printError(cMessages.ShowHelp);
+   67:         res.printError(cMessages.DiagnosisNotAvailable);
+   71:         res.printError(cMessages.DiagnosisNotAvailable);
+   77:         res.printError(cMessages.InvalidStateName,param.State);
+   81:         res.printError(cMessages.InvalidDiagnosisState)
+   87:         res.printError(cMessages.InvalidExergyData,param.ReferenceState);
+   92:         res.printError(cMessages.InvalidExergyData,param.State);
+  112:         res.printError(cMessages.InvalidDiagnosis);
+  117:         res.printError(cMessages.InvalidResultSet);
+
+Base\ThermoeconomicModel.m:
+  51:         model.printError(cMessages.InvalidInputFile,filename);
+  52:         model.printError(cMessages.ShowHelp);
+  56:         model.printError(cMessages.FileNotExist,filename);
+  82:             model.printError(cMessages.ShowHelp);
+
+Base\ViewResults.m:
+  299:                 log.printError(cMessages.ResultSetRequired);
+  300:                 log.printError(cMessages.ShowHelp);
+
+Base\WasteAnalysis.m:
+   46: 		res.printError(cMessages.DataModelRequired);
+   47:         res.printError(cMessages.ShowHelp);
+   51: 	    res.printError(cMessages.NoWasteDefined)
+   67:         res.printError(cMessages.ShowHelp)
+   76:         res.printError(cMessages.InvalidWasteData);
+   85:         res.printError(cMessages.InvalidWasteFlow,param.ActiveWaste);
+   92:         res.printError(cMessages.InvalidExergyData,param.State);
+   99:         res.printError(cMessages.InvalidCostAnalysis);
+  114: 			    res.printError(cMessages.InvalidResourceCost);
+  129:         res.printError(cMessages.InvalidWasteAnalysis);
+  133:         res.printError(cMessages.InvalidResultSet);
+
+Classes\cBuildHTML.m:
+  27:                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  75:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+
+Classes\cBuildLaTeX.m:
+  32:                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  96:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+
+Classes\cDataModel.m:
+   80:                 obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+   89: 				obj.messageLog(cType.INFO,cMessages.ValidProductiveStructure');
+   92: 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+  100: 				obj.messageLog(cType.INFO,cMessages.ValidFormatDefinition);
+  103: 				obj.messageLog(cType.ERROR,cMessages.InvalidFormatData);
+  114:                 obj.messageLog(cType.ERROR,cMessages.InvalidStateList);
+  122: 					obj.messageLog(cType.INFO,cMessages.ValidExergyData,obj.StateNames{i});
+  125: 					obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,obj.StateNames{i});
+  135:                     obj.messageLog(cType.INFO,cMessages.WasteNotAvailable);
+  141: 					obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
+  143: 					obj.messageLog(cType.INFO,cMessages.ValidWasteDefinition);	
+  149: 				obj.messageLog(cType.INFO,cMessages.NoWasteModel);
+  160:                     obj.messageLog(cType.ERROR,cMessages.InvalidSampleList);
+  168: 						obj.messageLog(cType.INFO,cMessages.ValidResourceCost,obj.SampleNames{i});
+  176:                obj.messageLog(cType.INFO,cMessages.ResourceNotAvailable')
+  287:                 res.printError(cMessages.InvalidExergyDataSize,M);
+  293:                 res.printError(cMessages.InvalidExergyData,state);
+  309:                 res.printError(cMessages.InvalidExergyData,state);
+  414:                 log.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  417: 				log.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+  441: 					log.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
+  444: 				log.messageLog(cType.INFO,cMessages.InfoFileSaved,obj.ResultName,filename);
+  468:                 res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+  486:                 res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+  505:                 res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+  521:                 res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+  556:                     res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+  580:                     res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+  599:                         res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+
+Classes\cDataset.m:
+  42:                 res.messageLog(cType.ERROR,cMessages.InvalidDataSetKey);
+  61:                 log.messageLog(cType.ERROR,cMessages.InvalidDataSetKey);
+
+Classes\cDiagnosis.m:
+   84:                 obj.messageLog(cType.ERROR,cMessages.ExergyCostRequired);
+   88:                 obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisStruct);
+   92:                 obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisConf);
+   96:                 obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisMethod,method);
+  100:                 obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisMethod,method);
+  108:                 obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisStruct);
+
+Classes\cDictionary.m:
+  28:                 obj.messageLog(cType.ERROR,cMessages.ListNotCell);
+  32:                 obj.messageLog(cType.ERROR,cMessages.ListEmpty);
+  36:                 obj.messageLog(cType.ERROR,cMessages.ListNotUnique);
+  40:                 obj.messageLog(cType.ERROR,cMessages.ListNotValid);
+
+Classes\cExergyCost.m:
+  477:                         obj.messageLog(cType.ERROR,cMessages.InvalidWasteType,wt.Type{i},key);
+  481:                     obj.messageLog(cType.ERROR,cMessages.WasteAllocation,key);
+  528:                 obj.messageLog(cType.ERROR,cMessages.NoWasteDefined);
+  532:                 obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
+
+Classes\cExergyData.m:
+   33: 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+   37: 				obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);
+   42:                 obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);
+   50:                 obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);
+   55:                 obj.messageLog(cType.ERROR,cMessages.InvalidExergyDataSize,M);
+   64: 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,values(i).key);
+   68:                     obj.messageLog(cType.ERROR,cMessages.NegativeExergyFlow,values(i).key,values(i).value);
+   82: 					obj.messageLog(cType.ERROR,cMessages.NegativeExergyStream,ps.Streams(i).key,E(i));
+   97: 					obj.messageLog(cType.ERROR,cMessages.NegativeIrreversibilty,ps.ProcessKeys{i},vI(i));
+  106: 						obj.messageLog(cType.ERROR,cMessages.ZeroProduct,ps.ProcessKeys{i});
+  109: 						obj.messageLog(cType.INFO,cMessages.ProcessNotActive,ps.ProcessKeys{i});
+
+Classes\cExergyModel.m:
+  65: 				obj.messageLog(cType.ERROR,cMessages.InvalidExergyModel);
+
+Classes\cFormatData.m:
+  21: 				obj.messageLog(cType.ERROR,cMessages.InvalidFormatDefinition);
+  27:                 obj.messageLog(cType.ERROR,cMessages.InvalidFormatDefinition);
+  35: 			        obj.messageLog(cType.ERROR,cMessages.InvalidFormatKey,fmt.key);
+  45:                     obj.messageLog(cType.ERROR,cMessages.BadFormatDefinition,fmt.key);
+
+Classes\cGraphResults.m:
+   44: 				obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+   48: 				obj.messageLog(cType.ERROR,cMessages.InvalidGraph,tbl.Name);
+   72: 				obj.messageLog(cType.ERROR,cMessages.InvalidGraphType,obj.Type);
+  104: 				obj.messageLog(cType.ERROR,cMessages.InvalidGraphType,obj.Type);
+  280:                 obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
+  284:                 obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
+  289: 				obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
+  351: 					obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
+  383: 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
+  411: 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
+  437: 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
+  441: 				obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+
+Classes\cMessageLogger.m:
+  45: 		%	obj.printError(cMessages.FileNotFound,filename)
+
+Classes\cMessages.m:
+  193:         %   cMessages.Table
+  201:                 data{i}=cMessages.(rowNames{i});
+
+Classes\cModelData.m:
+   44:                     obj.messageLog(cType.ERROR,cMessages.ModelDataMissing,fld);
+  136:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  154:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+
+Classes\cModelResults.m:
+  25:                 obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+
+Classes\cProductiveStructureCheck.m:
+   43: 				obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+   49: 				obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+   53:                 obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+   57: 				obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+   78: 				obj.messageLog(cType.ERROR,cMessages.DuplicatedFlow);
+   90: 				obj.messageLog(cType.ERROR,cMessages.DuplicatedProcess);
+  106: 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveGraph);
+  128: 				obj.messageLog(cType.ERROR,cMessages.InvalidFlowId,id);
+  132: 				obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,data.key);
+  138: 				obj.messageLog(cType.ERROR,cMessages.InvalidFlowType,data.type,data.key);
+  153: 				obj.messageLog(cType.ERROR,cMessages.InvalidProcessId,id);
+  157: 				obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,data.key);
+  162: 				obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,data.type,data.key);
+  165: 				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
+  169: 				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
+  172: 				obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,data.product,data.key);
+  176: 				obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,data.product,data.key);
+  181: 				        obj.messageLog(cType.ERROR,cMessages.InvalidDissipative,obj.cflw{jkey}.key,data.key);
+  262: 						obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.cflw{idx}.key);
+  265: 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,in);
+  278: 						obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.cflw{idx}.key);
+  281: 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,out);
+  316: 					        obj.messageLog(cType.ERROR,cMessages.InvalidOutputFlow,obj.cflw{i}.key);
+  321: 					    	    obj.messageLog(cType.ERROR,cMessages.InvalidOutputFlow,obj.cflw{i}.key);
+  334: 					        obj.messageLog(cType.ERROR,cMessages.InvalidWasteFlow,obj.cflw{i}.key);
+  339: 					    	    obj.messageLog(cType.ERROR,cMessages.InvalidWasteFlow,obj.cflw{i}.key);
+  351: 					        obj.messageLog(cType.ERROR,cMessages.InvalidResourceFlow,obj.cflw{i}.key);
+  374: 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowDefiniton,obj.cflw{id}.key);
+  376: 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowLoop,obj.cflw{id}.key);
+  379: 				obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.cflw{id}.key);
+  381: 				obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream',obj.cflw{id}.key);
+
+Classes\cReadModelCSV.m:
+  16:                 obj.messageLog(cType.ERROR,cMessages.CSVFolderNotExist,folder);
+  35: 					    obj.messageLog(cType.ERROR,cMessages.FileNotRead,fname);
+  39: 				    obj.messageLog(cType.ERROR,cMessages.FileNotFound,fname);
+  56: 					    obj.messageLog(cType.ERROR,cMessages.FileNotRead,fname);
+
+Classes\cReadModelJSON.m:
+  19:                 obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
+
+Classes\cReadModelTable.m:
+   35:                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Flows');
+   42:                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Processes');
+   50:                     obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Format');
+   54:                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Format');
+   60:                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Exergy');
+   65:                 obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Exergy');
+   69:                 obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Exergy');
+   96:                         obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteDefinition');
+  103:                         obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteDefinition');
+  110:                             obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
+  125:                         obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteAllocation');
+  135:                             obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
+  154:                             obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
+  169:                         obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
+  178:                         obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
+  213:             obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Flows');
+
+Classes\cReadModelXLS.m:
+  21: 					obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
+  30: 					obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile,cfgfile);
+  48: 					    obj.messageLog(cType.ERROR,cMessages.SheetNotRead,wsht);
+  52: 					obj.messageLog(cType.ERROR,cMessages.SheetNotExist,wsht);
+  67: 					    obj.messageLog(cType.ERROR,cMessages.SheetNotRead,wsht);
+
+Classes\cReadModelXML.m:
+  15: 		        obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'XML');
+  25:                 obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
+
+Classes\cResourceCost.m:
+  34: 				rd.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
+  38: 				obj.messageLog(cType.ERROR,cMessages.InvalidExergyModel);
+
+Classes\cResourceData.m:
+   36: 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+   40: 				obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
+   45: 				obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
+   51: 				obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
+   63: 						obj.messageLog(cType.ERROR,cMessages.InvalidResourceKey,se(i).key);
+   66: 						obj.messageLog(cType.ERROR,cMessages.InvalidResourceValue,se(i).key,se(i).value);
+   70: 					obj.messageLog(cType.ERROR,cMessages.InvalidResourceKey,se(i).key);
+   81: 					obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel');
+   91: 							obj.messageLog(cType.ERROR,cMessages.InvalidResourceValue,sz(i).key,sz(i).value);
+   94: 					    obj.messageLog(cType.ERROR,cMessages.InvalidResourceKey,sz(i).key);
+   98: 				obj.messageLog(cType.INFO,cMessages.NoResourceData);
+  116: 				log.messageLog(cType.ERROR,cMessages.InvalidZSize,length(Z));
+  120: 				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
+  138: 				log.messageLog(cType.ERROR,cMessages.InvalidCSize,length(c0));
+  142: 				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
+  160: 				log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,key);
+  166: 				log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,key,value);
+  184: 				log.messageLog(cType.ERROR,cMessages.InvalidProcessKey,key);
+  190: 				log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,key,value);
+
+Classes\cResultId.m:
+  44:                 obj.messageLog(cType.ERROR,cMessages.InvalidResultId,id);
+
+Classes\cResultInfo.m:
+  46:                 obj.messageLog(cType.ERROR,cMessages.InvalidResultSet);
+  50:                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  85:                 res.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  93:                 res.messageLog(cType.ERROR,cMessages.TableNotFound,name);
+
+Classes\cResultSet.m:
+  129:                 log.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  136:                 log.messageLog(cType.ERROR,cMessages.TableNotFound,tname);
+  158:                 res.messageLog(cType.ERROR,cMessages.InvalidArgument)
+  165:                 res.messageLog(cType.ERROR,cMessages.TableNotFound,tname);
+  217:                 obj.printError(cMessages.TableNotFound,graph);
+  268:                 obj.printWarning(cMessages.InvalidTableIndex);
+  311:                 log.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  315:                 log.messageLog(cType.ERROR,cMessages.InvalidResultInfo)
+  333:                     log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
+  337:                 log.messageLog(cType.INFO,cMessages.InfoFileSaved,obj.ResultName,filename);
+  356:                 log.messageLog(cType.ERROR,cMessages.NoTableToSave);
+  369:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  380:                 log.messageLog(cType.ERROR,cMessages.IndexTableNotSave);
+  389:                     log.messageLog(cType.ERROR,cMessages.FileNotSaved,fname);
+  407:                 log.messageLog(cType.ERROR,cMessages.NoTableToSave);
+  416:                     log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  426:                     log.messageLog(cType.ERROR,cMessages.IndexTableNotSave);
+  434:                     log.messageLog(cType.ERROR,cMessages.IndexTableNotSave);
+  444:                         log.messageLog(cType.ERROR,cMessages.TableNotSaved,tbl.Name);
+  451:                         log.messageLog(cType.ERROR,cMessages.TableNotSaved,tbl.Name);
+  458:                     log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  477:                 log.messageLog(cType.ERROR,cMessages.NoTableToSave);
+  497:                     log.messageLog(cType.ERROR,cMessages.FileNotSaved,fname);
+  518:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  542:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+
+Classes\cResultTableBuilder.m:
+  34:                 obj.messageLog(cType.ERROR,cMessages.InvalidFormatData);
+  39: 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+
+Classes\cSparseRow.m:
+   54: 				obj.printError(cMessages.InvalidRowValues);
+   64: 				obj.printError(cMessages.InvalidRowSize);
+   72: 				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
+   86: 				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
+   97: 				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
+  111: 				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
+  146: 				nobj.printError(cMessages.InvalidSparseRow);
+  166: 				nobj.printError(cMessages.InvalidSparseRow);
+  191: 				nobj.printError(cMessages.InvalidSparseRow);
+
+Classes\cSummaryResults.m:
+  50:                 obj.messageLog(cType.ERROR,cMessages.InvalidThermoeconomicModel);
+  57:                 obj.messageLog(cType.ERROR,cMessages.SummaryNotAvailable);
+  66:                 obj.messageLog(cType.ERROR,cMessages.InvalidSummaryOption);
+  70:                 obj.messageLog(cType.ERROR,cMessages.InvalidSummaryOption);
+  80:                 obj.messageLog(cType.ERROR,cMessages.InvalidSummaryData);
+
+Classes\cTable.m:
+   86:                 obj.printWarning(cMessages.InvalidTableView);
+  221:                 log.printError(cMessages.InvalidTableValues,obj.Name);
+  239:                 log.printError(cMessages.InvalidTableValues,obj.Name);
+  256:                 log.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  278:                         log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
+  281:                 log.messageLog(cType.INFO,cMessages.TableFileSave,obj.Name, filename);
+  324:                     log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  331:                     log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  345:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  386:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  402:                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+  412:                 vt.printError(cMessages.InvalidTableGUI,obj.Name);
+
+Classes\cTableCell.m:
+   60:                 obj.messageLog(cType.ERROR,cMessages.InvalidTableSize,size(data));
+  260:                 obj.messageLog(cType.ERROR,cMessages.InvalidTableProp);
+
+Classes\cTableData.m:
+  48:                 obj.messageLog(cType.ERROR,cMessages.InvalidTableSize,size(data));
+  65:                 obj.messageLog(cType.ERROR,cMessages.InvalidTableProp);
+
+Classes\cTableIndex.m:
+  38:                 obj.messageLog(cType.ERROR,cMessages.InvalidResultSetRequired)
+
+Classes\cTableMatrix.m:
+   79:                 obj.messageLog(cType.ERROR,cMessages.InvalidTableSize,size(data));
+  278:                 obj.messageLog(cType.ERROR,cMessages.InvalidTableProp);
+
+Classes\cTablesDefinition.m:
+   39: 				obj.messageLog(cType.ERROR,cMessages.InvalidConfigFile,cfgfile);
+  219:                 obj.printError(cMessages.InvalidTableDict);
+  286:                     res.messageLog(cType.ERROR,cMessages.InvalidArgument,cols{i});
+
+Classes\cThermoeconomicModel.m:
+   158:                 obj.printError(cMessages.InvalidDataModel);
+   186:                 obj.printError(cMessages.ShowHelp);
+   208:                     obj.messageLog(cType.ERROR,cMessages.InvalidExergyData);
+   222:                 obj.printError(cMessages.InvalidStateName,param.ReferenceState);
+   235:                 obj.printError(cMessages.InvalidCostTable,param.CostTables);
+   323:                 obj.printDebugInfo(cMessages.SetReferenceState,state);
+   337:                 obj.printDebugInfo(cMessages.SetResourceSample,sample);
+   377:                 obj.printDebugInfo(cMessages.SetActiveWaste,value);
+   392:                 obj.printDebugInfo(cMessages.SetSummaryMode,value);
+   406:                     obj.printDebugInfo(cMessages.RecycleActive);
+   408:                     obj.printDebugInfo(cMessages.RecycleNotActive);
+   418:                 obj.printInfo(cMessages.InfoDebug,upper(log2str(dbg)));
+   701:                 obj.printDebugInfo(cMessages.InvalidDiagnosisStruct);
+   932:                 obj.printDebugInfo(cMessages.SummaryNotAvailable)
+   986:                 log.printError(cMessages.InvalidArgument);
+   991:                 obj.printDebugInfo(cMessages.SummaryNotAvailable);
+  1009:                 log.printError(cMessages.InvalidArgument);
+  1026:                 log.printError(cMessages.InvalidArgument);
+  1050:                 log.printError(cMessages.InvalidArgument);
+  1087:                log.printError(cMessages.InvalidArgument);
+  1092:                 obj.printDebugInfo(cMessages.SetAllocationType,obj.ActiveWaste,wtype);
+  1094:                 log.printError(cMessages.InvalidWasteType,wtype,obj.ActiveWaste);
+  1115:                log.printError(cMessages.InvalidArgument);
+  1120:                 obj.printDebugInfo(cMessages.SetWasteValues,obj.ActiveWaste);
+  1122:                 log.printError(cMessages.NegativeWasteAllocation,obj.ActiveWaste);
+  1144:                log.printError(cMessages.InvalidArgument);
+  1149:                 obj.printDebugInfo(cMessages.SetRecycleRatio,obj.ActiveWaste)
+  1151:                 log.printError(cMessages.InvalidRecycling,val,obj.ActiveWaste);
+  1175:                 res.printError(cMessages.NoGeneralizedCost);
+  1185:                 res.printError(cMessages.InvalidResourceValues);
+  1200:                 res.printError(cMessages.NoGeneralizedCost);
+  1210:                 res.printError(cMessages.InvalidResourceValue,key,value);
+  1225:                 res.printError(cMessages.NoGeneralizedCost);
+  1235:                 res.printError(cMessages.InvalidProcessValues);
+  1249:                 res.printError(cMessages.NoGeneralizedCost);
+  1259:                 res.printError(cMessages.InvalidResourceValue,key,value);
+  1308:                 res.printError(cMessages.NoSetExergyData);
+  1350:             obj.printDebugInfo(cMessages.SetState,obj.State);
+  1366:                 obj.printDebugInfo(cMessages.ComputeTA,obj.State);
+  1369:                 obj.fp1.printError(cMessages.NoComputeTA,obj.State)
+  1379:                 obj.printDebugInfo(cMessages.DiagnosisNotActivated);
+  1389:                 obj.printDebugInfo(cMessages.ComputeTD,obj.State);
+  1392:                 sol.printError(cMessages.NoComputeTD,obj.State);
+  1409:                 obj.printDebugInfo(cMessages.ComputeSummary,obj.Summary);
+  1444:                 obj.printDebugInfo(cMessages.ComputeRecycling,obj.ActiveWaste);
+  1469:                 obj.printDebugInfo(cMessages.ComputeDiagramFP)
+  1484:                 obj.printDebugInfo(cMessages.ComputeProductiveDiagram)
+  1495:                 obj.printWarning(cMessages.InvalidStateName,state);
+  1499:                 obj.printDebugInfo(cMessages.NoParameterChange);
+  1520:                 obj.printWarning(cMessages.InvalidStateName,state);
+  1524:                 obj.printDebugInfo(cMessages.InvalidDiagnosisState);
+  1535:                 obj.printWarning(cMessages.InvalidResourceName,sample);
+  1539:                 obj.printDebugInfo(cMessages.NoParameterChange);
+  1562:                 obj.printWarning(cMessages.InvalidCostTable,value);
+  1566:                 obj.printDebugInfo(cMessages.NoParameterChange);
+  1570:                 obj.printWarning(cMessages.InvalidCostTable,value);
+  1585:                 obj.printWarning(cMessages.InvalidDiagnosisMethod,value);
+  1589:                 obj.printDebugInfo(cMessages.NoParameterChange);
+  1599:                 obj.printWarning(cMessages.InvalidWasteKey,value);
+  1603:                 obj.printDebugInfo(cMessages.NoParameterChange);
+  1613:                 obj.printDebugInfo(cMessages.InvalidSummaryOption,value);
+  1617:                 obj.printDebugInfo(cMessages.NoParameterChange);
+  1632:                 obj.printDebugInfo(cMessages.InvalidRecyclingParameter);
+  1637:                 obj.printDebugInfo(cMessages.NoWasteDefined);
+  1641:                 obj.printDebugInfo(cMessages.NoParameterChange);
+  1658:                 obj.printDebugInfo(cMessages.ResultNotAvailable,cType.Results{index});
+  1667:                 res.messageLog(cType.ERROR,cMessages.TableNotFound,table);
+  1672:                 res.messageLog(cType.ERROR,cMessages.TableNotAvailable,table);
+
+Classes\cWasteAnalysis.m:
+  47:                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  52:                 obj.messageLog(cType.ERROR,cMessages.InvalidExergyModel);
+  57:                 obj.messageLog(cType.ERROR,cMessages.NoWasteModel);
+  61:                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  65:                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+  70:                 obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,wkey);
+  81:                     obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
+
+Classes\cWasteData.m:
+   48: 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+   53:                 obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
+   60: 				obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
+   76: 					obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,wd(i).flow);
+   83:                     obj.messageLog(cType.ERROR,cMessages.InvalidWasteAllocation,wd(i).type,wd(i).flow);
+   86: 					obj.messageLog(cType.ERROR,cMessages.NoWasteFlow,wd(i).flow);
+   91: 						obj.messageLog(cType.ERROR,cMessages.InvalidRecycling,wd(i).recycle,wd(i).flow);
+  103: 							obj.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,wd(i).flow);
+  109: 								obj.messageLog(cType.ERROR,cMessages.InvalidProcessKey,wval(j).process);
+  113: 								obj.messageLog(cType.ERROR,cMessages.InvalidAllocationProcess,wval(j).process);
+  117: 								obj.messageLog(cType.ERROR,cMessages.NegativeWasteAllocation,wval(j).process,wval(j).value);
+  124: 						    obj.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,wd(i).flow);
+
+Functions\exportCSV.m:
+  26:         log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+
+Functions\exportMAT.m:
+  20:         log.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
+  24:         log.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename)
+  28:         log.messageLog(cType.ERROR,cMessages.InvalidObject,class(obj));
+  35:         log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+
+Functions\importDataModel.m:
+  17:         obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'MAT');
+  27: 		obj.messageLog(cType.ERROR,cMessages.FileNotRead,filename);
+  33: 		obj.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
+
+Functions\importMAT.m:
+  20:         obj.printError(cMessages.NoReadFiles,'MAT');
+  30: 		obj.printError(cMessages.FileNotRead,filename);
+  36: 		obj.printError(cMessages.InvalidMatFileObject,class(obj),filename);
+
+Functions\readModel.m:
+  29:             res.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
+  35:         res.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
+  46:         res.messageLog(cType.INFO,cMessages.ValidDataModel,res.ModelName);
+  48:         res.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
+
+Scripts\diagram_fp.m:
+  15: 	data.printError(cMessages.InvalidDataModel);
+
+Scripts\exergy_analysis.m:
+  15:   data.printError(cMessages.InvalidDataModel);
+
+Scripts\productive_diagram.m:
+  13: 	data.printError(cMessages.InvalidDataModel);
+
+Scripts\productive_structure.m:
+  13: 	data.printError(cMessages.InvalidDataModel);
+
+Scripts\recycling_analysis.m:
+  14: 	data.printError(cMessages.InvalidDataModel);
+
+Scripts\summary_results.m:
+  15: 	data.printError(cMessages.InvalidDataModel);
+  21: 	data.printError(cMessages.SummaryNotAvailable);
+
+Scripts\thermoeconomic_analysis.m:
+  13: 	data.printError(cMessages.InvalidDataModel);
+
+Scripts\thermoeconomic_diagnosis.m:
+  15: 	data.printError(cMessages.InvalidDataModel);
+  24: 	data.printError(cMessages.DiagnosisNotAvailable);
+
+Scripts\Utilities\outputResults.m:
+  24: 	res.printInfo(cMessages.ResultVarInfo,VarName);
+
+Scripts\Utilities\selectDataModel.m:
+  11: 	    model.messageLog(cType.ERROR,cMessages.FileNotExist,data_file);

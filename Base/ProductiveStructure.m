@@ -31,7 +31,7 @@ function res=ProductiveStructure(data,varargin)
     res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')
 		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.UseProductiveStructure);
+        res.printError(cMessages.ShowHelp);
 		return
 	end
     %Check input parameters
@@ -42,7 +42,7 @@ function res=ProductiveStructure(data,varargin)
 		p.parse(varargin{:});
     catch err
 		res.printError(err.message);
-        res.printError(cMessages.UseProductiveStructure);
+        res.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;
@@ -52,12 +52,12 @@ function res=ProductiveStructure(data,varargin)
         res=buildResultInfo(ps,data.FormatData);
     else
         ps.printLogger;
-        res.printError(cMessages.InvalidProductiveStructure);
+        res.printError(cMessages.InvalidObject,class(ps));
     end     
 	% Get Productive Structure info
     if ~res.status
 		res.printLogger;
-        res.printError(cMessages.InvalidResultSet);
+        res.printError(cMessages.InvalidObject,class(res));
 		return
     end
     % Show and Save results if required

@@ -31,8 +31,8 @@ function res = ExportResults(arg,varargin)
 %
     res=cMessageLogger();
     if nargin<1 || ~isObject(arg,'cResultSet')
-		res.printError(cMessages.InvalidResultSet);
-		res.printError(cMessages.UseExportResults);
+		res.printError(cMessages.InvalidObject,class(arg));
+		res.printError(cMessages.ShowHelp);
 		return
     end
     % Check input
@@ -44,7 +44,7 @@ function res = ExportResults(arg,varargin)
 		p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.UseExportResults);
+        res.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

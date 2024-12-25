@@ -3,12 +3,15 @@ classdef (Sealed) cSummaryResults < cResultId
 %   There is two types of summary tables
 %    STATES - Summarize the results for each state
 %    RESOURCES - Summarize the results for each resource sample
-% 
-% cSummaryResults Properties
+%
+% cSummaryResults constructor:
+%   obj =cSummaryResults(model,option)
+%
+% cSummaryResults properties:
 %   Tables     - List of the Summary Tabled created
 %   NrOfTables - Number of Tables
 % 
-% cSummaryResults Methods
+% cSummaryResults methods
 %   buildResultInfo            - Build the cResultInfo object with the summary tables
 %   defaultSummaryTables       - Get the default summary tables option name
 %   setSummaryTables           - Set the values of the summary tables
@@ -47,7 +50,7 @@ classdef (Sealed) cSummaryResults < cResultId
             % Check Input Arguments
             if ~isObject(model,'cThermoeconomicModel')
                 obj.addLogger(model);
-                obj.messageLog(cType.ERROR,cMessages.InvalidThermoeconomicModel);
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(model));
                 return
             end
             obj.dm=model.DataModel;

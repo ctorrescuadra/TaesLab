@@ -1,12 +1,16 @@
 classdef cTableIndex < cTable
 % cTableIndex create a cTable which contains the tables of a cResultInfo object
+%   The table includes the description and if the graphic is available
 %
-% cTableIndex Properties
+% cTableIndex constructor:
+%   obj =cTableIndex(res)
+%
+% cTableIndex properties:
 %   Content - Cell array with the cResultInfo tables
 %   Info    - cResultId Info object
 %
-% cTableIndex Methods:
-%   printTable           - Print a table on console
+% cTableIndex methods:
+%   printTable           - Print the index table on console
 %   getDescriptionLabel  - Get the title label for GUI presentation
 %
 % cTable Methods
@@ -23,6 +27,7 @@ classdef cTableIndex < cTable
 %   getStructTable  - get a structure with the table info
 %
 % See also cTable
+%
     properties (GetAccess=public,SetAccess=private)
         Content % Cell array with the cResultInfo tables
         Info    % Info handle
@@ -35,7 +40,7 @@ classdef cTableIndex < cTable
         %
             % Check input parameters
             if ~isObject(res,'cResultInfo')
-                obj.messageLog(cType.ERROR,cMessages.InvalidResultSetRequired)
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(res))
                 return
             end
             % Get tables of the results and build table

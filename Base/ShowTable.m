@@ -33,7 +33,7 @@ function res=ShowTable(tbl,varargin)
     log=cMessageLogger();
     if nargin<1 || ~isObject(tbl,'cTable')
         log.printError(cMessages.InvalidTable,'object');
-        log.printError(cMessages.UseShowTable);
+        log.printError(cMessages.ShowHelp);
         return
     end
     if nargout 
@@ -50,7 +50,7 @@ function res=ShowTable(tbl,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError(cMessages.UseShowTable);
+        log.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

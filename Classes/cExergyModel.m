@@ -1,28 +1,31 @@
 classdef cExergyModel < cResultId
-% cExergyModel contains the information about the exergy values
-%   It provides the exergy analysis and the FP table of the system
+% cExergyModel builds the Flow-Process model
+%   It provides the exergy analysis results and the FP table of the system
+%
+% cExergyModel constructor
+%   obj = cExergyModel(exd)
 % 
 % cExergyModel Properties:
-%  NrOfFlows        	- Number of Flows
-%  NrOfProcesses    	- Number of Processes
-%  NrOfStreams          - Number of Streams
-%  NrOfWastes       	- Number of Wastes
-%  FlowsExergy      	- Exergy values of flows
-%  ProcessesExergy  	- Process exergy properties
-%  StreamsExergy        - Stream exergy properties
-%  FlowProcessTable     - Flow Process Table
-%  AdjacencyTable       - SFP Adjacency Table
-%  TableFP              - Table FP
-%  FuelExergy           - Fuel Exergy
-%  ProductExergy        - Product Exergy
-%  Irreversibility      - Process Irreversibility
-%  UnitConsumption      - Process Unit Consumption
-%  Efficiency           - Process Efficiency
-%  TotalResources	    - Total Resources
-%  FinalProducts        - Final Products
-%  TotalIrreversibility - Total Irreversibility
-%  TotalUnitConsumption - Total Unit Consumption
-%  ActiveProcesses      - Active Processes (not bypass)
+%   NrOfFlows        	 - Number of Flows
+%   NrOfProcesses    	 - Number of Processes
+%   NrOfStreams          - Number of Streams
+%   NrOfWastes       	 - Number of Wastes
+%   FlowsExergy      	 - Exergy values of flows
+%   ProcessesExergy  	 - Process exergy properties
+%   StreamsExergy        - Stream exergy properties
+%   FlowProcessTable     - Flow Process Table
+%   AdjacencyTable       - SFP Adjacency Table
+%   TableFP              - Table FP
+%   FuelExergy           - Fuel Exergy
+%   ProductExergy        - Product Exergy
+%   Irreversibility      - Process Irreversibility
+%   UnitConsumption      - Process Unit Consumption
+%   Efficiency           - Process Efficiency
+%   TotalResources	     - Total Resources
+%   FinalProducts        - Final Products
+%   TotalIrreversibility - Total Irreversibility
+%   TotalUnitConsumption - Total Unit Consumption
+%   ActiveProcesses      - Active Processes (not bypassed)
 %
 % cExergyModel Methods:
 %  buildResultInfo - Build the cResultInfo object associated to EXERGY_ANALYSIS
@@ -54,25 +57,25 @@ classdef cExergyModel < cResultId
     end
     
 	methods
-		function obj=cExergyModel(rex)
+		function obj=cExergyModel(exd)
 		% Build an instance of the object	
 		% Syntax:
-		%   obj = cExergyModel(rex)
+		%   obj = cExergyModel(exd)
 		% Input Arguments:
-		%   rex - cExergyData object
+		%   exd - cExergyData object
 			obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_STATE);
-            if ~isObject(rex,'cExergyData')
-				obj.messageLog(cType.ERROR,cMessages.InvalidExergyModel);
+            if ~isObject(exd,'cExergyData')
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exd));
 				return
             end
-			M=rex.ps.NrOfFlows;
+			M=exd.ps.NrOfFlows;
 			% Build Exergy Adjacency tables
-			B=rex.FlowsExergy;
-			E=rex.StreamsExergy.E;
-            ET=rex.StreamsExergy.ET;
-			vP=rex.ProcessesExergy.vP;
-            vF=rex.ProcessesExergy.vF;
-			tbl=rex.ps.AdjacencyMatrix;
+			B=exd.FlowsExergy;
+			E=exd.StreamsExergy.E;
+            ET=exd.StreamsExergy.ET;
+			vP=exd.ProcessesExergy.vP;
+            vF=exd.ProcessesExergy.vF;
+			tbl=exd.ps.AdjacencyMatrix;
 			tAE=scaleRow(tbl.AE,B);
 			tAS=scaleCol(tbl.AS,B);
 			tAF=scaleRow(tbl.AF,E);
@@ -90,7 +93,7 @@ classdef cExergyModel < cResultId
 			mgP=mbP*mS;
 			tgP=scaleCol(mgP,B);
 			% Build table FP
-			if rex.ps.isModelIO
+			if exd.ps.isModelIO
 				mgV=sparse(M,M);
 				tgV=mgV;
 				mgL=eye(M);
@@ -105,18 +108,18 @@ classdef cExergyModel < cResultId
 			obj.AdjacencyTable=struct('tE',tAE,'tS',tAS,'tF',tAF,'tP',tAP);
 			obj.FlowProcessTable=struct('tV',tgV,'tF',tgF,'tP',tgP,'mV',mgV,'mF',mgF,'mF0',mgF0,'mP',mgP,'mL',mgL);
 			obj.TableFP=full(tfp);
-            obj.ps=rex.ps;
-            obj.NrOfFlows=rex.ps.NrOfFlows;
-			obj.NrOfProcesses=rex.ps.NrOfProcesses;
-			obj.NrOfStreams=rex.ps.NrOfStreams;
-			obj.NrOfWastes=rex.ps.NrOfWastes;
+            obj.ps=exd.ps;
+            obj.NrOfFlows=exd.ps.NrOfFlows;
+			obj.NrOfProcesses=exd.ps.NrOfProcesses;
+			obj.NrOfStreams=exd.ps.NrOfStreams;
+			obj.NrOfWastes=exd.ps.NrOfWastes;
 			obj.FlowsExergy=B;			
-			obj.ProcessesExergy=rex.ProcessesExergy;
-			obj.StreamsExergy=rex.StreamsExergy;
-            obj.ActiveProcesses=rex.ActiveProcesses;
+			obj.ProcessesExergy=exd.ProcessesExergy;
+			obj.StreamsExergy=exd.StreamsExergy;
+            obj.ActiveProcesses=exd.ActiveProcesses;
 			obj.DefaultGraph=cType.Tables.TABLE_FP;
             obj.ModelName=obj.ps.ModelName;
-            obj.State=rex.State;
+            obj.State=exd.State;
 		end		       		
     
 		function res=get.FuelExergy(obj)

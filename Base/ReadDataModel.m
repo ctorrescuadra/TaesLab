@@ -33,7 +33,7 @@ function data=ReadDataModel(filename,varargin)
     data=cMessageLogger();
     % Check parameters
     if nargin<1 
-        data.printError(cMessages.UseReadDataModel);
+        data.printError(cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
@@ -53,7 +53,7 @@ function data=ReadDataModel(filename,varargin)
 		p.parse(varargin{:});
     catch err
 		data.printError(err.message);
-        data.printError(cMessages.UseReadDataModel);
+        data.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

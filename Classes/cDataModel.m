@@ -3,6 +3,9 @@ classdef cDataModel < cResultSet
 %   It receives the data from the cReadModel interface classes, then validates
 %   and organizes the information to be used by the calculation algorithms.
 %
+% cDataModel constructor:
+%   obj = cDataModel(dm)
+%
 % cDataModel properties:
 %   NrOfFlows           - Number of flows
 %   NrOfProcesses       - Number of processes
@@ -74,7 +77,8 @@ classdef cDataModel < cResultSet
             % Check Data Structure
             obj=obj@cResultSet(cType.ClassId.DATA_MODEL);
             if ~isObject(dm,'cModelData')
-                obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+                obj.addLogger(dm)
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(dm));
                 return
             end
             obj.isResourceCost=dm.isResourceCost;
@@ -86,7 +90,7 @@ classdef cDataModel < cResultSet
 				obj.messageLog(cType.INFO,cMessages.ValidProductiveStructure');
             else
                 obj.addLogger(ps);
-				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
                 return
             end
             % Check and get Format	
@@ -97,7 +101,7 @@ classdef cDataModel < cResultSet
 				obj.messageLog(cType.INFO,cMessages.ValidFormatDefinition);
             else
                 obj.addLogger(rfmt);
-				obj.messageLog(cType.ERROR,cMessages.InvalidFormatData);
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(rfmt));
                 return
             end
             % Check Exergy
@@ -114,14 +118,14 @@ classdef cDataModel < cResultSet
             for i=1:obj.NrOfStates
                 exs=dm.getExergyState(i);
                 rex=cExergyData(ps,exs);
-                status = rex.status & status;
+                setValues(obj.ExergyData,i,rex);
                 if rex.status
 					obj.messageLog(cType.INFO,cMessages.ValidExergyData,obj.StateNames{i});
 				else
 					obj.addLogger(rex)
 					obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,obj.StateNames{i});
                 end
-                setValues(obj.ExergyData,i,rex);
+                status = rex.status & status;
             end
             % Check Waste
             if ps.NrOfWastes > 0
@@ -135,7 +139,7 @@ classdef cDataModel < cResultSet
                 status=wd.status & status;
                 obj.addLogger(wd);
                 if ~wd.status
-					obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
+					obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(wd));
                 else
 					obj.messageLog(cType.INFO,cMessages.ValidWasteDefinition);	
                 end
@@ -160,14 +164,14 @@ classdef cDataModel < cResultSet
                 for i=1:obj.NrOfSamples
                     dmr=dm.getResourceSample(i);
                     rsc=cResourceData(ps,dmr);
-                    status=rsc.status & status;
+                    setValues(obj.ResourceData,i,rsc);
                     if rsc.status
 						obj.messageLog(cType.INFO,cMessages.ValidResourceCost,obj.SampleNames{i});
-                        obj.ResourceData.setValues(i,rsc);
                     else
 						obj.addLogger(rsc);
 						obj.messageLog(cType.ERROR,InvalidResourceData,obj.SampleNames{i});
                     end
+                    status=rsc.status & status;
                 end
             else
                obj.messageLog(cType.INFO,cMessages.ResourceNotAvailable')
@@ -411,7 +415,7 @@ classdef cDataModel < cResultSet
                 log.messageLog(cType.ERROR,cMessages.InvalidArgument);
             end
 			if ~obj.status
-				log.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+				log.messageLog(cType.ERROR,cMessages.InvalidObject,class(obj));
                 return
 			end
 

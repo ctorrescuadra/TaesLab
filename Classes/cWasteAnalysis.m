@@ -3,7 +3,10 @@ classdef (Sealed) cWasteAnalysis < cResultId
 %   This class calculates the unit cost of output flows of the plant as function
 %   of the recycling ratio of a waste.
 %
-% cWasteAnalysis Properties:
+% cWasteAnalysis constructor:
+%   obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
+%
+% cWasteAnalysis properties:
 %   Recycling    - Indicate if recycling is available (true | false)
 %   OutputFlows - Output flows cell array
 %   wasteFlow   - Current waste flow key for recycling
@@ -11,7 +14,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
 %   dValues     - Recycling Analysis Direct Cost values
 %   gValues     - Recycling Analysis Generalized Cost values
 %
-% cWasteAnalysis Methods:
+% cWasteAnalysis methods:
 %   buildResultInfo - Build the cResultInfo for Waste Analysis
 % 
     properties(GetAccess=public,SetAccess=private)
@@ -49,7 +52,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             end
             if ~isObject(fpm,'cExergyCost')
                 obj.addLogger(fpm);
-                obj.messageLog(cType.ERROR,cMessages.InvalidExergyModel);
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(fpm));
                 return
             end
             if ~fpm.isWaste
@@ -78,7 +81,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 else
                     rsd.printLogger;
                     obj.addLogger(rsd);
-                    obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
+                    obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(rsd));
                     return
                 end
             end

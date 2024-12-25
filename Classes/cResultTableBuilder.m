@@ -2,7 +2,10 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 % cResultTableBuilder generates the cResultInfo objects for the calculation layer
 %   This class provide methods to obtain the cResultInfo object of each function application
 %
-% cResultTableBuilder Methods:
+% cResultTableBuilder constructor:
+%   obj = cResultTableBuilder(ps,data) 
+%
+% cResultTableBuilder methods:
 %   getProductiveStructure - Get Productive Structure Results
 %   getExergyResults       - Get Exergy Analysis Results
 %   getCostResults         - Get Thermoeconomic Analysis Results
@@ -31,12 +34,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  
             obj=obj@cFormatData(data);
             if ~obj.status
-                obj.messageLog(cType.ERROR,cMessages.InvalidFormatData);
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(obj));
                 return
             end
 
             if ~isObject(ps,'cProductiveStructure')
-				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
                 return
             end
             obj.flowKeys=ps.FlowKeys;

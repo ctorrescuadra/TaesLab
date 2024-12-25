@@ -42,8 +42,8 @@ function res=ShowResults(arg,varargin)
     log=cMessageLogger();
 
     if nargin<1 || ~isObject(arg,'cResultSet')
-        log.printError(cMessages.InvalidResultSet)
-        log.printError(cMessages.UseShowResults);
+        log.printError(cMessages.ResultSetRequired)
+        log.printError(cMessages.ShowHelp);
         return
     end
     % Select View depending of nargout
@@ -63,7 +63,7 @@ function res=ShowResults(arg,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError(cMessages.UseShowResults);
+        log.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

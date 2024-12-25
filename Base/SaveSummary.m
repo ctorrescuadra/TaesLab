@@ -20,12 +20,12 @@ function SaveSummary(model,filename)
     % Check Input parameters
     if (nargin~=2) || ~isObject(model,'cThermoeconomicModel')
         log.printError(cMessages.ResultSetRequired);
-        log.printError(cMessages.UseSaveSummary);
+        log.printError(cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
         log.printError(cMessages.InvalidOutputFile,filename);
-        log.printError(cMessages.UseSaveSummary);
+        log.printError(cMessages.ShowHelp);
         return
     end
     % Save summary results

@@ -24,7 +24,7 @@ function res=readModel(filename)
         case cType.FileType.XLSX
             rdm=cReadModelXLS(filename);
         case cType.FileType.MAT
-            rdm=importMAT(filename);  
+            rdm=importDataModel(filename);  
         otherwise
             res.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
             return
@@ -38,7 +38,7 @@ function res=readModel(filename)
     % If filename is a MAT file then is already done 
     if isa(rdm,'cDataModel') 
         res=rdm;   
-    elseif isa(rdm,'cReadModel') % Import MAT data model
+    elseif isa(rdm,'cReadModel')
         res=rdm.getDataModel;
     end
     % Check if data model is valid

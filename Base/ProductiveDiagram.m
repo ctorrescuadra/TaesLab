@@ -1,9 +1,9 @@
 function res=ProductiveDiagram(data,varargin)
 %ProductiveDiagram - Gets the productive diagrams of a plant.
-%   This function obtains the productive diagrams of a plant.
-%   These diagrams could be represented graphically using the function
-%   ShowGraph, or saving the adjacency tables in xlsx format, which can be
-%   used by external graph software such as yEd
+%  This function obtains the productive diagrams of a plant.
+%  These diagrams could be represented graphically using the function
+%  ShowGraph, or saving the adjacency tables in xlsx format, which can be
+%  used by external graph software such as yEd
 %
 %  Syntax
 %    res = ProductiveStructure(data,Name,Value)
@@ -32,7 +32,7 @@ function res=ProductiveDiagram(data,varargin)
 	res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')
 		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.UseProductiveDiagram);
+        res.printError(cMessages.ShowHelp);
 		return
 	end
     %Check input parameters
@@ -43,7 +43,7 @@ function res=ProductiveDiagram(data,varargin)
 		p.parse(varargin{:});
     catch err
 		res.printError(err.message);
-        res.printError(cMessages.UseProductiveDiagram);
+        res.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;
@@ -53,11 +53,11 @@ function res=ProductiveDiagram(data,varargin)
         res=pd.buildResultInfo(data.FormatData);
     else
         pd.printLogger;
-        res.printError(cMessages.InvalidDiagramFPS);
+        res.printError(cMessages.InvalidObject,class(pd));
     end 
     if ~res.status
 		res.printLogger;
-        res.printError(cMessages.InvalidResultSet);
+        res.printError(cMessages.InvalidObject,class(res));
 		return
     end
     % Show and Save results if required

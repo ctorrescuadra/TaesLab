@@ -53,7 +53,7 @@ function res = SummaryResults(data,varargin)
     % Check data model
 	if nargin <1 || ~isObject(data,'cDataModel')
 		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.UseSummary);
+        res.printError(cMessages.ShowHelp);
 		return
 	end
     sopt=data.SummaryOptions;
@@ -74,7 +74,7 @@ function res = SummaryResults(data,varargin)
         p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.UseSummary);
+        res.printError(cMessages.ShowHelp);
         return
     end
     % Preparing parameters
@@ -97,7 +97,7 @@ function res = SummaryResults(data,varargin)
             'Summary',param.Summary);
     res=model.summaryResults;
     if isempty(res)
-        model.printError(cMessages.InvalidSummary);
+        model.printError(cMessages.SummaryNotAvailable);
     end
     % Show and Save results if required
     if param.Show

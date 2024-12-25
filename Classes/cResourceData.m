@@ -1,12 +1,15 @@
 classdef cResourceData < cMessageLogger
 % cResourceData gets and validates the external cost resources of a system
+% 
+% cResourceData constructor:
+%   obj = cResourceData(ps, data)
 %
-% cResourceData Properties
-% sample  - Resource sample name
-% c0      - Unit cost of external resources
-% Z       - Cost associated to processes
+% cResourceData properties:
+%   sample  - Resource sample name
+%   c0      - Unit cost of external resources
+%   Z       - Cost associated to processes
 %
-% cResourceData	Methods:
+% cResourceData	methods:
 %	setFlowResource         - Set the unit cost of resource flows
 %   setProcessResource      - Set the values of external cost of processes
 %   setFlowResourceValue    - Set an individual resource flow value
@@ -31,9 +34,9 @@ classdef cResourceData < cMessageLogger
 		%	ps - cProductiveStructure object
         %	data - resource data sample
 		%
-		    % Check arguments and inititiliza class
+		    % Check arguments and initilize class
 			if ~isObject(ps,'cProductiveStructure')
-				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveStructure);
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
                 return
 			end
 			if ~isstruct(data)  

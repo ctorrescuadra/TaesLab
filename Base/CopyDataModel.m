@@ -17,8 +17,8 @@ function CopyDataModel(inputFile, outputFile)
 % See also cDataModel, cReadModel
 %
     log=cMessageLogger();
-    if ~isFilename(inputFile) || ~isFilename(outputFile)
-        log.printError(cMessages.UseCopyDataModel);
+    if (nargin~=2) || ~isFilename(inputFile) || ~isFilename(outputFile)
+        log.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
         return
     end
     data=readModel(inputFile);

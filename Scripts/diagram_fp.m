@@ -12,7 +12,7 @@ options=struct('Console','N','Save','Y');
 data=selectDataModel();
 if ~data.status
     data.printLogger;
-	data.printError(cMessages.InvalidDataModel);
+	data.printError(cMessages.InvalidObject,class(data));
 	return
 end
 % Define parameters

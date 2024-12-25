@@ -1,14 +1,15 @@
 classdef cResultInfo < cResultSet
 % cResultInfo is a class container of the application results
-% It stores the tables and the application class info.
+%   It stores the tables and the application class info.
 %   The diferent types (ResultId) of cResultInfo objects are defined in cType.ResultId
 %
-% cResultInfo Properties
-
+% cResultInfo constructor:
+%   obj = cResultInfo(info,tables)
+%
+% cResultInfo properties:
 %   NrOfTables   - Number of tables
 %   Tables       - Struct containing the tables
 %   Info         - cResultId object containing the results
-
 %
 % cResultInfo Methods:
 %   getResultInfo    - Get the result set info
@@ -43,7 +44,7 @@ classdef cResultInfo < cResultSet
             % Check parameters
             obj=obj@cResultSet(info.ResultId);
             if ~info.status
-                obj.messageLog(cType.ERROR,cMessages.InvalidResultSet);
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(info));
                 return
             end
             if ~isstruct(tables)

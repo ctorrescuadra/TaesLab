@@ -13,10 +13,10 @@ function res = WasteAnalysis(data,varargin)
 % Name-Value Arguments
 %   State - Thermoeconomic state. If missing first sample is taken
 %     array char | string
-%   ActiveWaste: Waste Flow key to analyze. If missing first sample is taken
-%     array char | string
 %   Recycling: Waste Recycling analysis 
 %     false | true (default)
+%   ActiveWaste: Waste Flow key to analyze. If missing first sample is taken
+%     array char | string
 %   CostTables - Indicate which cost tables are calculated
 %     'DIRECT' calculates direct exergy cost tables
 %     'GENERALIZED' calculates generalized exergy cost tables
@@ -44,11 +44,11 @@ function res = WasteAnalysis(data,varargin)
     res=cMessageLogger();
     if nargin<1 || ~isObject(data,'cDataModel')
 		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.UseWasteAnalysis);
+        res.printError(cMessages.ShowHelp);
 		return
     end
-    if data.NrOfWastes<1
-	    res.printError(cMessages.NoWasteDefined)
+    if ~data.isWaste
+	    res.printError(cMessages.NoWasteModel)
         return
     end
     % Check and initialize parameters
@@ -56,24 +56,28 @@ function res = WasteAnalysis(data,varargin)
     p.addParameter('State',data.StateNames{1},@data.existState);
     p.addParameter('ResourceSample',cType.EMPTY_CHAR,@ischar);
 	p.addParameter('CostTables',cType.DEFAULT_COST_TABLES,@cType.checkCostTables);
-    p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
     p.addParameter('Recycling',true,@islogical);
+    p.addParameter('ActiveWaste',cType.EMPTY_CHAR,@ischar);
     p.addParameter('Show',false,@islogical);
     p.addParameter('SaveAs',cType.EMPTY_CHAR,@isFilename);
     try
         p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.UseWasteAnalysis)
+        res.printError(cMessages.ShowHelp)
         return
     end
     % 
     param=p.Results;
     % Read waste info
+    if ~data.isWaste
+        res.printError(cMessages.NoWasteModel);
+        return
+    end
     wd=data.WasteData;
     if ~wd.status
         wd.printLogger;
-        res.printError(cMessages.InvalidWasteData);
+        res.printError(cMessages.InvalidObject,class(wd));
         return
     end
     % Check Waste Key
@@ -93,10 +97,10 @@ function res = WasteAnalysis(data,varargin)
         return
 	end
 	% Compute the Model FPR
-    mfp=cExergyCost(ex,wd);
-    if ~mfp.status
-        mfp.printLogger;
-        res.printError(cMessages.InvalidCostAnalysis);
+    fpm=cExergyCost(ex,wd);
+    if ~fpm.status
+        fpm.printLogger;
+        res.printError(cMessages.InvalidObject,class(fpm));
     end
  
     % Read external resources and get results
@@ -114,12 +118,12 @@ function res = WasteAnalysis(data,varargin)
 			    res.printError(cMessages.InvalidResourceCost);
 			    return
             end
-            ra=cWasteAnalysis(mfp,true,param.ActiveWaste,rsd);
+            ra=cWasteAnalysis(fpm,true,param.ActiveWaste,rsd);
         else
-            ra=cWasteAnalysis(mfp,true,param.ActiveWaste); 
+            ra=cWasteAnalysis(fpm,true,param.ActiveWaste); 
         end
     else
-        ra=cWasteAnalysis(mfp,false,param.ActiveWaste); 
+        ra=cWasteAnalysis(fpm,false,param.ActiveWaste); 
     end
     % Execute recycling analysis
     if ra.status
@@ -130,7 +134,7 @@ function res = WasteAnalysis(data,varargin)
     end
     if ~res.status
 		res.printLogger;
-        res.printError(cMessages.InvalidResultSet);
+        res.printError(cMessages.InvalidObject,class(res));
 		return
     end
     % Show and Save results if required

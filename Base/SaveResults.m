@@ -21,12 +21,12 @@ function SaveResults(arg,filename)
     % Check Input parameters
     if (nargin~=2) || ~isObject(arg,'cResultSet')
         log.printError(cMessages.ResultSetRequired);
-        log.printError(cMessages.UseSaveResults);
+        log.printError(cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
         log.printError(cMessages.InvalidOutputFile,filename);
-        log.printError(cMessages.UseSaveResults);
+        log.printError(cMessages.ShowHelp);
         return
     end
     log=saveResults(arg,filename);

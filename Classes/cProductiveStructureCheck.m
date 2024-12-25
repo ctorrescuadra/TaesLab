@@ -1,7 +1,11 @@
 classdef cProductiveStructureCheck < cResultId
-% cProductiveStructureCheck - Gets and validates the productive structure data model
+% cProductiveStructureCheck checks and build the productive structure of a plant
+%   It includes the flows, processes and streams (productive groups)
+%
+% cProductiveStructureCheck constructor:
+%   obj = cProductiveStructureCheck(dm)
 % 
-% cProductiveStructureCheck Properties:
+% cProductiveStructureCheck properties:
 %   NrOfProcesses	  - Number of processes
 %   NrOfFlows         - Number of flows
 %   NrOfStreams	      - Number of streams
@@ -40,7 +44,7 @@ classdef cProductiveStructureCheck < cResultId
         	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
 			% Check/validate file content
             if ~isObject(dm,'cModelData')
-				obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(dm));
 				return
             end
             data=dm.ProductiveStructure;

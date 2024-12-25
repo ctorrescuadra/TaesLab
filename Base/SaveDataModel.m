@@ -28,12 +28,12 @@ function SaveDataModel(arg,filename)
         data=arg.DataModel;
     else
         log.printError(cMessages.DataModelRequired);
-        log.printError(cMessages.UseSaveDataModel);
+        log.printError(cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
         log.printError(cMessages.InvalidOutputFile,filename);
-        log.printError(cMessages.UseSaveDataModel);
+        log.printError(cMessages.ShowHelp);
         return
     end
     % Save the data model

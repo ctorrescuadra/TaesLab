@@ -49,7 +49,7 @@ function model=ThermoeconomicModel(filename,varargin)
     % Check input parameters
     if (nargin<1) || ~isFilename(filename)
         model.printError(cMessages.InvalidInputFile,filename);
-        model.printError(cMessages.UseThermoeconomicModel);
+        model.printError(cMessages.ShowHelp);
         return
     end
     if ~exist(filename,'file')
@@ -79,7 +79,7 @@ function model=ThermoeconomicModel(filename,varargin)
             p.parse(varargin{:});
         catch err
             model.printError(err.message);
-            model.printError(cMessages.UseThermoeconomicModel);
+            model.printError(cMessages.ShowHelp);
             return
         end
         if p.Results.Debug

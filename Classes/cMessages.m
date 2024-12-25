@@ -1,26 +1,11 @@
 classdef cMessages
     properties(Constant)
-        % Usage Base Functions
-        UseCopyDataModel='Usage: CopyDataModel(inputFile,outputFile)'
-        UseProductiveStructure='Usage: ProductiveStructure(data,options)'
-        UseProductiveDiagram='Usage: ProductiveDiagram(data,options)'
-        UseExergyAnalysis='Usage: res=ExergyAnalysis(data,options)'
-        UseDiagramFP='Usage: res=DiagramFP(data,options)'
-        UseCostAnalysis='Usage: res=ThermoeconomicAnalysis(data,options)'
-        UseDiagnosis='Usage: res=ThermoeconomicDiagnosis(data,options)'
-        UseWasteAnalysis='Usage: res=WasteAnalysis(data,options)'
-        UseSummary='Usage: res=SummaryResults(data,option)'
-        UseListResultTables='Usage: res=ListResultTables(options)'
-        UseShowGraph='Usage: ShowGraph(res,options)'
-        UseShowResults='Usage: res=ShowResults(arg,options)'
-        UseShowTable='Usage: res=ShowTable(tbl,options)'
-        UseExportResults='Usage: res=ExportResults(res,options)'
-        UseSaveResults='Usage: SaveResults(res,filename)'
-        UseSaveDataModel='Usage: SaveDataModel(res,filename)'
-        UseSaveSummary='Usage: SaveSummary(res,filename)'
-        UseSaveTable='Usage: SaveTable(tbl,filename)'
-        UseThermoeconomicModel='Usage: model=ThermoeconomicModel(filename,options)'
-        UseViewResults='Usage: ViewResults(res)'
+    % cMessages is a static class which defines the TaesLab messages
+    % 
+    % cMessages methods:
+    %   Table    - get the message tables
+    %   ShowHelp - generate a hyperlink text to the help of the function caller
+    %
         % Read Model messages
         InvalidInputFile='Invalid file name %s'
         InvalidOutputFile='Invalid file name %s. File NOT saved'
@@ -33,28 +18,18 @@ classdef cMessages
         NoReadFiles='Read %s files is not yet implemented in Octave'
         InvalidDataModelFile='Data model file %s is NOT valid'
         ModelDataMissing='%s data is missing'
-        % General Messages
-        InvalidArgument='Invalid input arguments. See help'
+        InvalidMatFileObject='Invalid %s object from file %s'
+        % Input arguments messages
+        InvalidArgument='Invalid input arguments. %s'
         DataModelRequired='First argument must be a valid data model'
         ResultSetRequired='First argument must be a valid cResultSet object'
         TableRequired='First argument must be a valid cTable object'
-        InvalidObject='Invalid cTaesLab object'
-        % Invalid Objects
-        InvalidThermoeconomicModel='Invalid thermoeconomic model. See error log'
+        % Invalid objects messages
+        InvalidObject='Invalid %s object. See error log'
         InvalidDataModel='Invalid data model. See error log'
-        InvalidResultSet='Invalid cResultSet object. See error log'
         InvalidResultId='Invalid result id %d'
-        InvalidProductiveStructure='Invalid productive structure. See error log'
-        InvalidFormatData='Invalid format definition. See error log'
-        InvalidExergyModel='Invalid exergy model. See error log'
         InvalidResourceModel='Invalid resource cost data model. See error log'
-        InvalidDiagramFP='Invalid DiagramFP. See error log'
-        InvalidDiagramSFP='Invalid productive diagram. See error log'
-        InvalidDiagnosis='Invalid diagnosis analysis. See error log'
-        InvalidCostAnalysis='Invalid thermoeconomic analysis. See error log'
         InvalidWasteData='Invalid waste data. See error log'
-        InvalidWasteAnalysis='Invalid waste analysis. See error log'
-        InvalidSummary='Invalid summary results. See error log'
         InvalidExergyData='Invalid exergy data for state %s. See error log'
         InvalidResourceData='Invalid resource data for sample %s. See error log'
         InvalidResourceCost='Invalid resource cost for sample %s. See error log'
@@ -87,7 +62,6 @@ classdef cMessages
         ValidWasteDefinition='Waste Definition is valid'
         ValidResourceCost='Resources Cost sample [%s] is valid'
         WasteNotAvailable='Waste Definition is not available. Default is assumed';
-        NoWasteModel='The model has NOT waste'
         ResourceNotAvailable='No Resources Cost Data available'
         NoResourceData='Processes cost data is missing. Default values are assumed'
         % Productive Structure messages
@@ -126,7 +100,7 @@ classdef cMessages
         InvalidDiagnosisConf='Compare two different plant configurations'
         InvalidDiagnosisMethod='Invalid Diagnosis Method %s'
         % Waste messages
-        NoWasteDefined='Waste Data Model is required'
+        NoWasteModel='The model has NOT waste'
         InvalidWasteAllocation='Invalid allocation method %s for waste %s'
         InvalidWasteType='Invalid type %s for waste %s'
         InvalidRecycling='Invalid recycle ratio %f for waste %s'
@@ -186,7 +160,6 @@ classdef cMessages
         ComputeRecycling='Compute Recycling Analysis: %s'
         ComputeDiagramFP='Compute Diagram FP'
         ComputeProductiveDiagram='Productive Diagram Active'
-        InvalidRecyclingParameter='Invalid Recycling value. Must be true/false'
         InfoDebug='Debug is set to %s'
         % cSparseRow messages
         InvalidRowValues='Invalid cSparseRow arguments. Number of valus must agree'
@@ -200,7 +173,14 @@ classdef cMessages
     end
 
     methods(Static)
-        function res=Table
+        function res = Table
+        % Get or show in console a table with all the messages or show in console
+        %   If no output argument table is shown in console, else a cTableData is created
+        % Syntax:
+        %   cMessages.Table
+        % Output Argument:
+        %   res - cTable with the messages
+        %
             rowNames=fieldnames(cMessages)';
             N=length(rowNames);
             data=cell(N,1);
@@ -214,6 +194,26 @@ classdef cMessages
             res.setStudyCase(props);
             if nargout<1
                 printTable(res);
+            end
+        end
+
+        function res = ShowHelp
+        % Get a string with the hyperlink to the help of the caller function
+        % Syntax:
+        %   cMessage.ShowHelp
+        % Output:
+        %   res - hyperlink text
+        %
+            res=cType.EMPTY_CHAR;
+            stack = dbstack('-completenames');
+            if numel(stack)<2
+                return
+            end
+            fname=stack(2).name;
+            if isOctave
+                res=sprintf('See %s documentation.',fname);
+            else
+                res=sprintf('See help <a href="matlab:help(''%s'')">%s</a>',fname,fname);
             end
         end
     end

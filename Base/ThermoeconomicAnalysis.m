@@ -52,7 +52,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
     res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')
 		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.UseCostAnalysis);
+        res.printError(cMessages.ShowHelp);
 		return
 	end
     % Check input parameters
@@ -66,7 +66,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 		p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.UseCostAnalysis);
+        res.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;
@@ -85,7 +85,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
     end
     if ~fpm.status
         fpm.printLogger;
-		res.printError(cMessages.InvalidCostAnalysis)
+		res.printError(cMessages.InvalidObject,class(fpm))
         return
     end
     % Read external resources and get results
@@ -112,7 +112,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
     res=fpm.buildResultInfo(data.FormatData,param);
     if ~res.status
 		res.printLogger;
-        res.printError(cMessages.InvalidResultSet);
+        res.printError(cMessages.InvalidObject,class(res));
 		return
     end
     % Show and Save results if required

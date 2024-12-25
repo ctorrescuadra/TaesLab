@@ -43,7 +43,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     res=cMessageLogger();
 	if nargin<1 || ~isObject(data,'cDataModel')
 		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.UseDiagnosis);
+        res.printError(cMessages.ShowHelp);
 		return
 	end
     % Check input parameters
@@ -57,7 +57,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.UseDiagnosis);
+        res.printError(cMessages.ShowHelp);
         return
     end
     % Check Parameters
@@ -109,12 +109,12 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         res=dgn.buildResultInfo(data.FormatData);
     else
         dgn.printLogger;
-        res.printError(cMessages.InvalidDiagnosis);
+        res.printError(cMessages.InvalidObject,class(dgn));
         return
     end
     if ~res.status
 		res.printLogger;
-        res.printError(cMessages.InvalidResultSet);
+        res.printError(cMessages.InvalidObject,class(res));
 		return
     end
     % Show and Save results if required

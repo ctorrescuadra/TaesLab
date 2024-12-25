@@ -33,7 +33,7 @@ function res=ExergyAnalysis(data,varargin)
 	res=cMessageLogger();
 	if nargin<1 || ~isObject(data,'cDataModel')
 		res.printError(cMessages.DataModelRequired);
-		res.printError(cMessages.UseExergyAnalysis);
+		res.printError(cMessages.ShowHelp);
 		return
 	end
 	% Check input parameters
@@ -45,7 +45,7 @@ function res=ExergyAnalysis(data,varargin)
 		p.parse(varargin{:});
 	catch err
 		res.printError(err.message);
-        res.printError(cMessages.UseExergyAnalysis);
+        res.printError(cMessages.ShowHelp);
 		return
 	end
 	param=p.Results;
@@ -62,11 +62,11 @@ function res=ExergyAnalysis(data,varargin)
 		res=pm.buildResultInfo(data.FormatData);
 	else
 		pm.printLogger;
-		res.printError(cMessages.InvalidExergyModel);
+		res.printError(cMessages.InvalidObject,class(pm));
 	end
 	if ~res.status
 		res.printLogger;
-        res.printError(cMessages.InvalidResultSet);
+        res.printError(cMessages.InvalidObject,class(res));
 		return
 	end
     % Show and Save results if required

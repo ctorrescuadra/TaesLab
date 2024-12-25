@@ -27,8 +27,8 @@ function ShowGraph(arg,varargin)
 %
     log=cMessageLogger();
 	if nargin < 1 || ~isObject(arg,'cResultSet')
-		log.printError(cMessages.InvalidResultSet);
-		log.printError(cMessages.UseShowGraph);
+		log.printError(cMessages.InvalidObject,class(arg));
+		log.printError(cMessages.ShowHelp);
 		return
 	end
     % Check input parameters
@@ -42,7 +42,7 @@ function ShowGraph(arg,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError(cMessages.UseShowGraph);
+        log.printError(cMessages.ShowHelp);
         return
     end
 	param=p.Results;
@@ -54,7 +54,7 @@ function ShowGraph(arg,varargin)
     end
     if ~res.status
 		printLogger(res)
-        log.printError(cMessages.InvalidResultSet);
+        log.printError(cMessages.InvalidObject,class(res));
 		return
     end
 	tbl=getTable(res,param.Graph);

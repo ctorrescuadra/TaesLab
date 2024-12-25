@@ -5,6 +5,9 @@ classdef cResultSet < cResultId
 %   - Show the results in workspace
 %   - Show the results in graphic user interfaces
 %   - Save the results in files: XLSX, CSV, TXT LaTeX and HTML
+%
+% cResultSet constructor:
+%   obj = cResultSet(id)
 % 
 % cResultSet Properties:
 %   classId - Result Set Id

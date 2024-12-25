@@ -9,7 +9,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %   - Save the data model and results in diferent formats, for further analysis
 %   - Show the results tables in console, as GUI tables or graphs
 %
-% cThermoeconomicModel Properties:
+% cThermoeconomicModel constructor:
+%   obj = cThermoeconomicModel(data, options)
+%
+% cThermoeconomicModel properties:
 %   DataModel       - cDataModel object
 %   StateNames      - cell array with the names of the defined states
 %   SampleNames     - cell array with the names of the defined resource samples
@@ -152,7 +155,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   
             obj=obj@cResultSet(cType.ClassId.RESULT_MODEL);
             if ~isObject(data,'cDataModel')
-                obj.printError(cMessages.InvalidDataModel);
+                obj.printError(cMessages.InvalidObject,class(data));
                 return
             end
             obj.addLogger(data);
@@ -180,7 +183,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 p.parse(varargin{:});
             catch err
                 obj.printError(err.message);
-                obj.printError(cMessages.UseThermoeconomicModel);
+                obj.printError(cMessages.ShowHelp);
                 return
             end
             param=p.Results;
@@ -1626,12 +1629,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Ckeck Summary parameter
             res=false;
             if ~islogical(value)
-                obj.printDebugInfo(cMessages.InvalidRecyclingParameter);
+                obj.printDebugInfo(cMessages.InvalidArgument);
                 return
             end
-
             if ~obj.isWaste
-                obj.printDebugInfo(cMessages.NoWasteDefined);
+                obj.printDebugInfo(cMessages.NoWasteModel);
                 return
             end
             if obj.Recycling==value
