@@ -12,13 +12,25 @@ classdef cResultInfo < cResultSet
 %   Info         - cResultId object containing the results
 %
 % cResultInfo Methods:
-%   getResultInfo    - Get the result set info
-%   getTable         - Get a table of the result info
+%   getResultInfo    - Get the result set object
+%   getTable         - Get a table of the result set
 %   getTableIndex    - Get the summary table of th results
 %   summaryDiagnosis - Get the summary diagnosis info
 %   summaryTables    - Get the available summary tables
 %   isStateSummary   - Check if States Summary is available
 %   isSampleSummary  - Check if Samples Summary is available
+%
+% cResultSet Methods
+%   StudyCase      - Get the study case value names
+%   ListOfTables   - get the table names from a result set
+%   printResults   - Print results on console
+%   showResults    - Show results in different interfaces
+%   showGraph      - Show the graph associated to a table
+%   showTableIndex - Show the table index in different interfaces
+%   exportResults  - Export all the result Tables to another format
+%   saveResults    - Save all the result tables in an external file
+%   saveTable      - Save the results in an external file 
+%   exportTable    - Export a table to another format
 %
 % See also cResultSet, cResultTableBuilder, cTable
 %
@@ -34,10 +46,10 @@ classdef cResultInfo < cResultSet
 
     methods
         function obj=cResultInfo(info,tables)
-        % Construct an instance of this class
-        %  Syntax:
+        % cResultInfo - Construct an instance of this class
+        % Syntax:
         %   obj = cResultInfo(info,tables)
-        %  Input Arguments:
+        % Input Arguments:
         %   info - cResultId containing the results
         %   tables - struct containig the result tables
         %
@@ -49,6 +61,10 @@ classdef cResultInfo < cResultSet
             end
             if ~isstruct(tables)
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                return
+            end
+            if ~obj.checkTables(tables)
+                obj.messageLog(cType.ERROR,cMessages.InvalidResultTables);
                 return
             end
             % Fill the class values
@@ -63,7 +79,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=getResultInfo(obj)
-        % getResultInfo - get cResultInfo object for cResultSet
+        % getResultInfo - Get cResultInfo object for cResultSet
         % Syntax:
         %   res=obj.getResultInfo
         % Output Arguments
@@ -73,7 +89,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=getTable(obj,name)
-        % Get the table called name
+        % getTable - Get the table called name
         % Syntax:
         %   res=obj.getTable(name)
         % Input Argument:
@@ -97,7 +113,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=getTableIndex(obj,varargin)
-        % Get the Table Index
+        % getTableIndex - Get the Table Index
         % Syntax:
         %   res=obj.getTableIndex(options)
         % Input Arguments:
@@ -117,7 +133,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=summaryDiagnosis(obj)
-        % Get the Fuel Impact/Malfunction Cost as a string including format and unit
+        % summaryDiagnosis - Get the Fuel Impact/Malfunction Cost as a string including format and unit
         %   If no output argument values are displayed on console
         % Syntax:
         %   obj.summaryDiagnosis
@@ -140,7 +156,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=summaryTables(obj)
-        % Get/Display available summary tables
+        % summaryTable - Get/Display available summary tables
         %   If no output argument, the value is displayed in console 
         % Syntax:
         %   obj.summaryTables
@@ -157,7 +173,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=isStateSummary(obj)
-        % Check if the States Summary results are available
+        % isStatesSummary - Check if the States Summary results are available
         % Syntax:
         %   res = obj.isStateSummary
         % Output Arguments:
@@ -169,7 +185,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=isSampleSummary(obj)
-        % Check if the Samples Summary results are available
+        % isSampleSummary - Check if the Samples Summary results are available
         % Syntax:
         %   res = obj.isStateSummary
         % Output Arguments:
@@ -183,15 +199,26 @@ classdef cResultInfo < cResultSet
 
     methods(Access=private)
         function setStudyCase(obj,info)
-        % Set model and state properties
+        % Set state and resource sample properties for all result set tables
             cellfun(@(x) setStudyCase(x,info),obj.tableIndex.Content);
             obj.State=info.State;
             obj.Sample=info.Sample;
         end
 
         function status=existTable(obj,name)
-        % Check if there is a table called name
+        % Check if there is a table called name available on the result set
             status=isfield(obj.Tables,name);
         end
+
+        function status=checkTables(obj,tables)
+        % Check if the results set tables are valid
+            names=fieldnames(tables);
+            test=cellfun(@(x) isValid(tables.(x)),names);
+            status=all(test);
+            if ~status
+                cellfun(@(x) obj.addLogger(tables.(x)),names);
+            end
+        end
+
     end
 end

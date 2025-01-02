@@ -70,6 +70,10 @@ classdef (Abstract) cTable < cMessageLogger
         %       cType.TableView.GUI
         %       cType.TableView.HTML
         %
+            if ~obj.status
+                printLogger(obj);
+                return
+            end
             if nargin==1
                 option=cType.TableView.CONSOLE;
             end
@@ -97,6 +101,10 @@ classdef (Abstract) cTable < cMessageLogger
         %       cType.VarMode.CELL: Return a struct with cell values
         %       cType.VarMode.STRUCT: Return a struct with structured array values
         %       cType.VarModel.TABLE: Return a struct of Matlab tables
+            if ~obj.status
+                printLogger(obj);
+                return
+            end
             if nargin==1
                 varmode=cType.VarMode.NONE;
             end        
@@ -182,6 +190,10 @@ classdef (Abstract) cTable < cMessageLogger
         %   res = obj.getMatlabTable
         % Output Argument
         %   res - Matlab table object with values of the cTable object
+            if ~obj.status
+                printLogger(obj)
+                return
+            end
             if isOctave
                 res=obj;
             else

@@ -89,9 +89,9 @@ classdef cExergyModel < cResultId
 			% Build the Flow-Process Table
 			mgF=mE*mbF;
 			mgF0=mE*mbF0;
-			tgF=scaleCol(mgF,vP);
+			tgF=mE*tAF;
 			mgP=mbP*mS;
-			tgP=scaleCol(mgP,B);
+			tgP=mbP*tAS;
 			% Build table FP
 			if exd.ps.isModelIO
 				mgV=sparse(M,M);
@@ -100,7 +100,7 @@ classdef cExergyModel < cResultId
 				tfp=mgP*tgF;
 			else
 				mgV=mE*mS;
-				tgV=scaleCol(mgV,B);
+				tgV=mE*tAS;
 				mgL=eye(M)/(eye(M)-mgV);
 				tfp=mgP*mgL*tgF;
 			end

@@ -63,7 +63,6 @@ function res=ThermoeconomicDiagnosis(data,varargin)
     % Check Parameters
     param=p.Results;
     if ~data.isDiagnosis
-        data.printLogger;
         res.printError(cMessages.DiagnosisNotAvailable);
         return
     end

@@ -35,8 +35,10 @@ classdef cTableIndex < cTable
     methods
         function obj=cTableIndex(res)
         % cTableIndex cTable object constructor
-        %   Input:
-        %       res - cResultInfo object
+        % Syntax:
+        %   obj = cTableIndex(res)
+        % Input:
+        %   res - cResultInfo object
         %
             % Check input parameters
             if ~isObject(res,'cResultInfo')

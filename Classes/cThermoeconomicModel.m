@@ -147,7 +147,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 
     methods
         function obj=cThermoeconomicModel(data,varargin)
-        % Construct an instance of the thermoeconomic model
+        % cThermoeconomicModel - Construct an instance of the class
         % Syntax:
         %   model = cThermoeconomicModel(data)
         %     data - cDataModel object 
@@ -299,7 +299,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Set methods
         %%%%
         function setState(obj,state)
-        % Set a new valid state from StateNames
+        % setState - Set a new valid state from StateNames
         % Syntax:
         %   obj.setState(state)
         % Input Parameters
@@ -312,7 +312,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setReferenceState(obj,state)
-        % Set a new valid reference state from StateNames
+        % setReferenceState - Set a new valid reference state from StateNames
         % Syntax:
         %   obj.setState(state)
         % Input Parameters
@@ -326,7 +326,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setResourceSample(obj,sample)
-        % Set a new valid ResourceSample from SampleNames
+        % setResourceSample- Set a new valid ResourceSample from SampleNames
         % Syntax:
         %   obj.setResourceSample(state)
         % Input Parameters
@@ -340,7 +340,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setCostTables(obj,value)
-        % Set a new value of CostTables parameter
+        % setCostTables - Set a new value of CostTables parameter
         % Syntax:
         %   obj.setCostTables(type)
         % Input Parameters
@@ -353,7 +353,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setDiagnosisMethod(obj,method)
-        % Set a new value of DiagnosisMethod parameter
+        % setDiagnosisMethod - Set a new value of DiagnosisMethod parameter
         % Syntax:
         %   obj.setDiagnosisMethod(method)
         % Input Parameters
@@ -366,7 +366,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setActiveWaste(obj,value)
-        % Set a new waste flow for recycling analysis
+        % setActiveWaste - Set a new waste flow for recycling analysis
         % Syntax:
         %   setActiveWaste(obj,method)
         % Input Parameters
@@ -380,12 +380,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setSummary(obj,value)
-        % Set Summary parameter
+        % setSummary - Set a new Summary available option
         % Syntax:
         %   model.setSummary(value)
         % Input Arguments
-        %   value - Activate/Deactivate summary results
-        %     false | true
+        %   value - Summary options
+        %     'NONE' | 'STATE' | 'RESOURCE' | 'ALL'     
         %
             if obj.checkSummary(value)
                 obj.Summary=value;
@@ -395,11 +395,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
     
         function setRecycling(obj,value)
-        % Set Recycling parameter
+        % setRecycing - Set Recycling parameter
         % Syntax:
         %   model.setRecycling(value)
         % Input Parameters:
-        %   value - Activat/Deactivate recycling analysis
+        %   value - Activate/Deactivate recycling analysis
+        %     true | false
             if obj.checkRecycling(value)
                 obj.Recycling=value;
                 if obj.Recycling
@@ -412,15 +413,20 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setDebug(obj,dbg)
-        % Set debug control variable
+        % setDebug - Set debug control variable
+        % Syntax:
+        %   model.setDebug(value)
+        % Input Parameters:
+        %   value - Activate/Deactivate debug
+        %     true | false
             if islogical(dbg) && (obj.debug~=dbg)
                 obj.debug=dbg;
-                obj.printInfo(cMessages.InfoDebug,upper(log2str(dbg)));
+                if dbg; obj.printInfo(cMessages.InfoDebug,upper(log2str(dbg))); end
             end
         end
 
         function toggleDebug(obj)
-        % Toggle debug property
+        % toggleDebug - Toggle debug property
         % Syntax:
         %   obj.toggleDebug
             setDebug(obj,~obj.debug);
@@ -429,7 +435,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % get cResultInfo objects
         %%%
         function res=productiveStructure(obj)
-        % Get the Productive Structure cResultInfo object
+        % productiveStructure - Get the Productive Structure cResultInfo object
         % Syntax:
         %   res = obj.productiveStructure
         % Output Argument
@@ -438,7 +444,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=exergyAnalysis(obj)
-        % Get the ExergyAnalysis cResultInfo object
+        % exergyAnalysis - Get the ExergyAnalysis cResultInfo object
         %   It containing the exergy and fuel product table
         % Syntax:
         %   res = obj.exergyAnalysis
@@ -448,7 +454,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=thermoeconomicAnalysis(obj)
-        % Get the Thermoeconomic Analysis cResultInfo object
+        % thermoeconomicAnalysis - Get the Thermoeconomic Analysis cResultInfo object
         %   It contains the direct and/or generalized cost tables, 
         %   depending on CostTables property
         % Syntax:
@@ -459,7 +465,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=wasteAnalysis(obj)
-        % Get the Waste Analysis cResultInfo object
+        % wasteAnalysis - Get the Waste Analysis cResultInfo object
         % Syntax:
         %   res = obj.wasteAnalysis
         % Output Argument:
@@ -468,7 +474,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=thermoeconomicDiagnosis(obj)
-        % Get the Thermoeconomic Diagnosis cResultInfo object
+        % thermoeconomicDiagnosis - Get the Thermoeconomic Diagnosis cResultInfo object
         % Syntax:
         %   res = obj.thermoeconomicDiagnosis
         % Output Argument:
@@ -477,7 +483,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function summaryDiagnosis(obj)
-        % Get the diagnosis results summary
+        % summaryDiagnosis - Get the diagnosis results summary
         % Syntax:
         %   res = obj.summaryDiagnosis 
             res=obj.thermoeconomicDiagnosis;
@@ -486,8 +492,26 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
         end
 
+        function res=productiveDiagram(obj)
+        % productiveDiagram - Get the productive diagram cResultInfo object
+        % Syntax:
+        %   res = obj.productiveDiagram 
+        % Output Argument:
+        %   res - cResultInfo with productive diagram        
+            res=obj.getResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
+        end
+    
+        function res=diagramFP(obj)
+        % diagramFP - Get the diagram FP cResultInfo object
+        % Syntax:
+        %   res = obj.diagramFP
+        % Output Argument:
+        %   res - cResultInfo with diagram FP    
+                res=obj.getResults(cType.ResultId.DIAGRAM_FP);
+        end
+
         function res=summaryResults(obj)
-        % Get the Summary Results cResultInfo object
+        % summaryResults - Get the Summary Results cResultInfo object
         % Syntax:
         %   res = obj.summaryResults 
         % Output Argument:
@@ -495,26 +519,8 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
         end
 
-        function res=productiveDiagram(obj)
-        % Get the productive diagram cResultInfo object
-        % Syntax:
-        %   res = obj.productiveDiagram 
-        % Output Argument:
-        %   res - cResultInfo with productive diagram        
-            res=obj.getResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
-        end
-
-        function res=diagramFP(obj)
-        % Get the diagram FP cResultInfo object
-        % Syntax:
-        %   res = obj.diagramFP
-        % Output Argument:
-        %   res - cResultInfo with diagram FP    
-            res=obj.getResults(cType.ResultId.DIAGRAM_FP);
-        end
-
         function res=dataInfo(obj)
-        % Get the data model cResultInfo object
+        % dataInfo - Get the data model cResultInfo object
         % Syntax:
         %   res = obj.dataInfo
         % Output Argument:
@@ -523,11 +529,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=getResultInfo(obj,arg)
-        % Get the cResultInfo with optional parameters
+        % getResultInfo - Get the cResultInfo with optional parameters
+        %   If no arg it returns the model results of the current state
         %   If arg is a ResultId number the function returns
         %   the corresponding cResultInfo
         %   If arg is a table name it returns the cResultInfo
-        %   that contains the tablw 
+        %   that contains the table 
         % Syntax:
         %   res=obj.getResultInfo
         %   res=obj.getResultInfo(arg)
@@ -556,7 +563,8 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=showResultInfo(obj)
-        % Show or get a structure containig the results of the model
+        % showResultInfo - Show or get a structure containig the results of the model
+        %   It shows the available results of the current model 
         % Syntax:
         %   obj.showResultInfo;
         %   res = obj.showResultInfo;
@@ -575,7 +583,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Utility methods
         %%%%
         function res=showProperties(obj)
-        % Show the values of the actual parameters of the model
+        % showProperties - Show the values of the current parameters of the model
         % Syntax:
         %   obj.showProperties
             res=struct('State',obj.State,...
@@ -597,7 +605,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=getStateId(obj,key)
-        % Get the State Id given the name
+        % getStateId - Get the State Id given the name
         % Syntax:
         %   id = obj.getStateId(key)
         % Input Arguments:
@@ -608,7 +616,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=getSampleId(obj,key)
-        % Get the Sample Id given the resource sample name
+        % getSampleId - Get the Sample Id given the resource sample name
         % Syntax:
         %   id = obj.getSampleId(key)
         % Input Arguments:
@@ -619,7 +627,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=getWasteId(obj,key)
-        % Get the Waste flow Id
+        % getWasteId - Get the Waste flow Id
         % Syntax:
         %   id = obj.getWasteId(key)
         % Input Arguments:
@@ -630,7 +638,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
     
         function res=isResourceCost(obj)
-        % Check if the model has resources cost defined
+        % isResourceCost - Check if the model has resources cost defined
         % Syntax:
         %   obj.isResourceCost
         % Output Argument
@@ -639,7 +647,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isDirectCost(obj)
-        % Check if Direct cost tables are selected
+        % isDirectCost - Check if Direct cost tables are selected
         % Syntax:
         %   obj.isDirectCost
         % Output Argument
@@ -653,7 +661,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isGeneralCost(obj)
-        % Check if Generalized cost calculation are activated
+        % isGeneralizedCost - Check if Generalized cost calculation are activated
         %   It is activated if it has resource samples defined in the data model
         %   and 'CostTables' parameter is defined as 'GENERALIZED' | 'ALL'
         % Syntax:
@@ -669,7 +677,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isDiagnosis(obj)
-        % Check if diagnosis computation is available.
+        % isDiagnosis - Check if diagnosis computation is available.
         %   It is activate under the following conditions:
         %   - There is more than one state
         %   - Reference and Operation state are differents
@@ -705,7 +713,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isWaste(obj)
-        % Check if model has wastes defined
+        % isWaste - Check if model has wastes defined
         % Syntax:
         %   res = obj.isWate
         % Output Arguments:
@@ -714,7 +722,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=summaryOptions(obj)
-        % Get the available summary options
+        % summaryOptions - Get the available summary options
         % Syntax:
         %   res = obj.summaryOptions
         % Output Arguments:
@@ -723,7 +731,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isSummaryEnable(obj)
-        % Check if Summary is enable
+        % isSummaryEnable - Check if Summary is enable
         %   The summary result is enabled if the model has more than one state
         % Syntax:
         %   res = obj.isSummaryEnable
@@ -733,7 +741,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isSummaryActive(obj)
-        % Check if Summary has been activated
+        % isSummaryActive - Check if Summary has been activated
         % Syntax:
         %   res = obj.isSummaryEnable
         % Output Arguments:
@@ -746,7 +754,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isStateSummary(obj)
-        % Check if States Summary results has been activated
+        % isStateSummary - Check if States Summary results has been activated
         % Syntax:
         %   res = obj.isStateSummary
         % Output Arguments:
@@ -759,7 +767,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isSampleSummary(obj)
-        % Check if Samples Summary results has been activated
+        % isSampleSummary - Check if Samples Summary results has been activated
         % Syntax:
         %   res = obj.isSampleSummary
         % Output Arguments:
@@ -772,7 +780,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=getResultState(obj,idx)
-        % Get the cExergyCost object of each state 
+        % getResultState - Get the cExergyCost object of each state 
         %   Internal application use: cSummaryResults
         % Syntax:
         %   res = obj.getResultState(idx)
@@ -797,7 +805,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Tables Directory methods
         %%%
         function res=getTablesDirectory(obj,columns)
-        % Create the tables directory of the active model
+        % getTablesDirectory - Create the tables directory of the active model
         % Syntax:
         %   res=obj.getTablesDirectory(columns)
         % Input Arguments:
@@ -831,7 +839,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=getTableInfo(obj,name)
-        % Get the properties of a table
+        % getTableInfo - Get the properties of a table
         % Syntax:
         %   res = obj.getTableInfo
         % Input Arguments:
@@ -845,7 +853,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Results Set methods
         %%%
         function tbl=getTable(obj,name)
-        % Get a table called name, if its available
+        % getTable - Get a table called name, if its available
         % Syntax:
         %   tbl = obj.getTable(name)
         % Input Arguments:
@@ -868,7 +876,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function showResults(obj,name,varargin)
-        % View an individual table
+        % showResults - View an individual table
         % Syntax:
         %   obj.showResults(table,option)
         % Input Arguments:
@@ -892,7 +900,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function showGraph(obj,graph,varargin)
-        % Show a graph table. 
+        % showGraph - Show a graph table. 
         %   Find the resultId asociated to the table
         %   and call cResultInfo.showGraph
         % Syntax:
@@ -917,7 +925,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %  Specific result presentation methods
         %%%
         function showSummary(obj,name,varargin)
-        % Show Summary tables
+        % showSummary - Show Summary tables
         % Syntax:
         %   res = obj.showSummary(name,options)
         % Input Arguments:
@@ -940,7 +948,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function showDataModel(obj,name,varargin)
-        % Show Data Model tables
+        % showDataModel - Show Data Model tables
         % Syntax:
         %   res = obj.showDataModel(name,options)
         % Input Arguments:
@@ -959,7 +967,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function showTablesDirectory(obj,varargin)
-        % Show the list of available tables
+        % showTablesDirectory - Show the list of available tables
         % Syntax:
         %   obj.showTablesDirectory(options)
         % Input Arguments:
@@ -972,7 +980,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Save Results methods
         %%%
         function log=saveSummary(obj,filename)
-        % Save the summary tables into a filename
+        % saveSummary - Save the summary tables into a filename
         %   The following file types are available: XLSX,CSV,TXT,TEX,HTML,MAT
         % Syntax:
         %   log = saveSummary(filename)
@@ -995,7 +1003,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
     
         function log=saveDataModel(obj,filename)
-        % Save the data model in a file
+        % saveDataModel - Save the data model in a file
         %   The following file types are available: JSON,XML,XLSX,CSV,MAT
         % Syntax:
         %   log = obj.saveDataModel(filename)
@@ -1013,7 +1021,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function log=saveDiagramFP(obj,filename)
-        % Save the Adjacency matrix of the Diagram FP in a file
+        % saveDiagramFP - Save the Adjacency matrix of the Diagram FP in a file
         %   The following file types are available: XLSX,CSV,MAT
         %   log = saveDiagramFP(filename)
         %  Input:
@@ -1036,7 +1044,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function log=saveProductiveDiagram(obj,filename)
-        % Save the productive diagram adjacency tables into a file
+        % saveProductiveDiagram - Save the productive diagram adjacency tables into a file
         %   The following file types are available: XLSX,CSV,MAT
         % Syntax:
         %   log = saveProductiveDiagram(filename)
@@ -1063,7 +1071,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Waste Analysis methods
         %%%
         function wasteAllocation(obj)
-        % Show waste information in console
+        % wasteAllocation - Show waste information in console
         % Syntax:
         %   obj.wasteAllocation
         %
@@ -1073,7 +1081,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function log=setWasteType(obj,wtype)
-        % Set the waste type allocation method for Active Waste
+        % setWasteType - Set the waste type allocation method for Active Waste
         % Syntax: 
         %   log = setWasteType(wtype)
         % Input Arguments:
@@ -1103,7 +1111,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function log=setWasteValues(obj,val)
-        % Set the waste table values
+        % setWasteValues - Set the waste table values
         % Syntax:
         %   log = obj.setWasteValues(val)
         % Input Arguments:
@@ -1131,7 +1139,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
    
         function log=setWasteRecycled(obj,val)
-        % Set the waste recycling ratios
+        % setWasteRecycled - Set the waste recycling ratios
         % Syntax:
         %   log = obj.setWasteValues(val)
         % Input Arguments:
@@ -1163,7 +1171,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Resource Cost Methods
         %%%
         function res=setFlowResource(obj,c0)
-        % Set the resource cost of the flows
+        % setFlowResources - Set the resource cost of the flows
         % Syntax:
         %   res = setFlowResources(c0)
         % Input:
@@ -1187,7 +1195,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=setFlowResourceValue(obj,key,value)
-        % Set resource flow cost value
+        % setFlowResourceValue - Set resource flow cost value
         % Syntax:
         %   res = setFlowResourceValue(key,value)
         % Input Arguments:
@@ -1212,7 +1220,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=setProcessResource(obj,Z)
-        % Set the resource cost of the processes
+        % setProcessResource - Set the resource cost of the processes
         % Syntax:
         %   res =obj.setProcessResource(Z)
         % Input Agument:
@@ -1237,7 +1245,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=setProcessResourceValue(obj,key,value)
-        % Set the recource cost of the processes
+        % setProcessResourceValue - Set the recource cost of the processes
         % Input Argument:
         %   key - Process key
         %   value - cost value of the process
@@ -1261,7 +1269,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=getResourceData(obj,sample)
-        % Get the resource data cost values of sample
+        % getResourceData - Get the resource data cost values of sample
         % Syntax:
         %   res = obj.getResourceData(sample)
         % Input Argument:
@@ -1279,7 +1287,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Exergy Data methods
         %
         function res=getExergyData(obj,state)
-        % Get cExergyData object of a state
+        % getExergyData - Get cExergyData object of a state
         % Syntax: 
         %   res = obj.getExergyData(state)
         % Input Arguments:
@@ -1294,7 +1302,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=setExergyData(obj,values)
-        % Set exergy data values to actual state
+        % setExergyData - Set exergy data values to actual state
         % Syntax:
         %   log=obj.setExergyData(values)
         % Input Arguments:
@@ -1335,6 +1343,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
     end
     %%%%%%
     % Internal Methods
+    %%%%%%
     methods(Access=private)
         function printDebugInfo(obj,varargin)
         % Print info messages if debug mode is activated
@@ -1395,7 +1404,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setSummaryResults(obj)
-        % Obtain Summary Results
+        % Set Summary Results
             id=cType.ResultId.SUMMARY_RESULTS;
             if ~obj.isSummaryActive
                 obj.clearResults(id)
@@ -1488,6 +1497,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
         %%%
         % Internal set methods
+        %%%
         function res=checkState(obj,state)
         % Ckeck the state information
             res=false;

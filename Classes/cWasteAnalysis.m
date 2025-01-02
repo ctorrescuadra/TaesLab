@@ -35,7 +35,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
 
     methods
         function obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
-        % Create an instance of cWasteAnalysis
+        % cWasteAnalysis - Create an instance of the class
         % Syntax:
         %   obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
         % Input Arguments:
@@ -73,6 +73,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,wkey);
                 return
             end
+            % Check optional Resource Data
             if nargin==4
                 if isObject(rsd,'cResourceData')
                     obj.isResourceCost=true;
@@ -100,7 +101,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
         end
 
         function res=buildResultInfo(obj,fmt,param)
-        % Get the cResultInfo object
+        % buildResultInfo - Build/Get the cResultInfo object
         % Syntax:
         %   res = obj.buildResultInfo(fmt,options)
         % Input Arguments:
@@ -112,6 +113,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             res=fmt.getWasteAnalysisResults(obj,param);
         end
     end
+    
     methods(Access=private)
         function recyclingAnalysis(obj)
         % Do the recycling analysis for a waste flow

@@ -71,6 +71,7 @@ function res=ListResultTables(varargin)
     param=p.Results;
     % Build the Tables directory 
     if isModel
+        model.setDebug(false);
         tbl=model.getTablesDirectory(param.Columns);
     else
         ctd=cTablesDefinition;

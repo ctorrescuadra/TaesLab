@@ -48,6 +48,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             if tbl.status  
                 if ~tbl.isNumericColumn(1:2)
                     obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Format');
+                    return
                 end
                 sd.Format.definitions=tbl.getStructData;
             else

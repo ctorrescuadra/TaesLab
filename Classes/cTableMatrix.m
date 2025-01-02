@@ -2,47 +2,52 @@ classdef (Sealed) cTableMatrix < cTableResult
 % cTableMatrix Implements cTable interface to store the matrix results
 %   It store the row/col summary of the matrix
 %
-% cTableCell Properties
+% cTableCell constructor
+%   obj = cTableMatrix(data,rowNames,colNames,props)
+%
+% cTableMatrix Properties
 %   GraphOptions  - Options for graphs
 %   SummaryType   - Type of summary type tables
+%   RowTotal	  - Row Total is calculated
+%   ColTotal	  - Column Total is calculated
 % 
-% cTableCell Methods
+% cTableMatrix methods
 %   printTable             - Print a table on console
 %   formatData             - Get formatted data
 %   getDescriptionLabel    - Get the title label for GUI presentation
 %   getMatrixValues        - Get the matrix values
-%   isUnitCostTable        - Check if its a unit cost table (GraphOptions)
-%   isFlowsTable           - Check if its a flows table (GraphOptions)
-%   isGeneralCostTable     - Check if its a general cost table (GraphOptions)
-%   isTotalMalfunctionCost - Check if its Total Malfunction Cost Table (GraphOptions)
+%   isUnitCostTable        - Check if it's a unit cost table (GraphOptions)
+%   isFlowsTable           - Check if it's a flows table (GraphOptions)
+%   isGeneralCostTable     - Check if it's a general cost table (GraphOptions)
+%   isTotalMalfunctionCost - Check if it's Total Malfunction Cost Table (GraphOptions)
 %
-% cTable Methods
-%   showTable       - show the tables in diferent interfaces
-%   exportTable     - export table in diferent formats
-%   saveTable       - save a table into a file in diferent formats
-%   isNumericTable  - check if all data of the table are numeric
-%   isNumericColumn - check if a column data is numeric
-%   isGraph         - check if the table has a graph associated
-%   getColumnFormat - get the format of the columns
-%   getColumnWidth  - get the width of the columns
-%   getStructData   - get data as struct array
-%   getMatlabTable  - get data as MATLAB table
-%   getStructTable  - get a structure with the table info
+% cTable methods
+%   showTable       - Show the tables in diferent interfaces
+%   exportTable     - Export table in diferent formats
+%   saveTable       - Save a table into a file in diferent formats
+%   isNumericTable  - Check if all data of the table are numeric
+%   isNumericColumn - Check if a column data is numeric
+%   isGraph         - Check if the table has a graph associated
+%   getColumnFormat - Get the format of the columns
+%   getColumnWidth  - Get the width of the columns
+%   getStructData   - Get data as struct array
+%   getMatlabTable  - Get data as MATLAB table
+%   getStructTable  - Get a structure with the table info
 %
 % See also cTableResult, cTable, cGraphResults
 %
-    properties (Access=private)
-        RowTotal			% Row Total true/false
-        ColTotal			% Column Total true/false
-    end
     properties (GetAccess=public,SetAccess=private)
         SummaryType     % Type of Summary Table
         GraphOptions    % Graph Type
+        RowTotal	    % Row Total true/false
+        ColTotal	    % Column Total true/false
     end
     methods
         function obj=cTableMatrix(data,rowNames,colNames,props)
-        % Table constructor
-        %  Input:
+        % cTableMatrix - Table constructor
+        % Syntax:
+        %   obj = cTableMatrix(data,rowNames,colNames,props) 
+        % Input:
         %   data - Matrix containing the data
         %   rowNames - Cell Array containing the row's names
         %   colNames - Cell Array containing the column's names
@@ -81,7 +86,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
         
         function res=getMatrixValues(obj)
-        % Get the table data as Array
+        % getMatrixValues - Get the table data as Array
         % Syntax: 
         %   res = obj.getMatrixValues
         % Output Arguments:
@@ -91,7 +96,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res=formatData(obj)
-        % Apply Format to the data values
+        % formatData - Apply Format to the data values
         % Syntax: 
         %   res = obj.formatData
         % Output Arguments:
@@ -101,7 +106,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res=getStructData(obj,fmt)
-        % Get table as formatted structure
+        % getStructData - Get table as formatted structure
         % Syntax:
         %   res = obj.getStructData(fmt)
         % Input Arguments:
@@ -121,7 +126,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res=getMatlabTable(obj)
-        % Get the table as Matlab table
+        % getMatlabTable - Get the table as Matlab table
         % Syntax:
         %   res = obj.getMatlabTable
         % Output Arguments:
@@ -138,7 +143,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res=getStructTable(obj)
-        % Get table info as structure
+        % getStructTable Get table info as structure
         % Syntax:
         %   res = obj.getStructTable
         % Output Arguments:
@@ -150,7 +155,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res = isNumericColumn(obj,idx)
-        % Check if the column is numeric.  
+        % isNumaricColumn - Check if the column is numeric.  
         % Syntax:
         %   res = obj.isNumericColumn(idx)
         % Input Arguments:
@@ -162,7 +167,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res=getDescriptionLabel(obj)
-        % Get the description of the table plus Unit and State
+        % getDescriptionLabel - Get the description of the table plus Unit and State
         % Syntax:
         %   res = obj.getDescriptionLabel
         % Output Arguments:
@@ -183,7 +188,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function printTable(obj,fId)
-        % Print table on console or in a file in a pretty formatted way
+        % printTable - Print table on console or in a file in a pretty formatted way
         % Syntax:
         %   obj.printTable(fid)
         % Input Argument:
@@ -222,7 +227,7 @@ classdef (Sealed) cTableMatrix < cTableResult
 			fprintf(fId,'%s\n',header);
             fprintf(fId,'%s\n',lines);
             arrayfun(@(i) fprintf(fId,sformat,obj.RowNames{i},obj.Data{i,:}),1:nrows-1);
-            % Total summary by rows
+            % Total summary by rows            
             if obj.RowTotal
                 fprintf(fId,'%s\n',lines);
                 tmp=obj.Data(end,:);
@@ -239,22 +244,22 @@ classdef (Sealed) cTableMatrix < cTableResult
         % Graphic Interface functions
         %%%%
         function res = isUnitCostTable(obj)
-        % Table is contains unit costs
+        % isUnitCostTable - Check if table has unit costs
             res=bitget(obj.GraphOptions,1);
         end
 
         function res = isFlowsTable(obj)
-        % Table is contains flows or processes
+        % isFlowtable - Check if table contains flows or processes
             res=bitget(obj.GraphOptions,2);
         end
 
         function res = isGeneralCostTable(obj)
-        % Table is general cost
+        % isGeneralCostTable - Check if table is general cost
             res=bitget(obj.GraphOptions,3);
         end
 
         function res = isTotalMalfunctionCost(obj)
-        % Table is TotalMalfuctionCost
+        % isTotalMalfunctionCost - Check if table is total malfuction cost
             res=bitget(obj.GraphOptions,4);
         end
     end
@@ -271,6 +276,8 @@ classdef (Sealed) cTableMatrix < cTableResult
                 obj.Resources=p.Resources;
                 obj.GraphOptions=p.GraphOptions;
                 obj.SummaryType=p.SummaryType;
+                obj.RowTotal=p.rowTotal;
+                obj.ColTotal=p.colTotal;
                 obj.setColumnFormat;
                 obj.setColumnWidth;
             catch err

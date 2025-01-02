@@ -27,7 +27,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 				    xls=cfgfile;
                 catch err
                     obj.messageLog(cType.ERROR,err.message);
-					obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile,cfgfile);
+					obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
 					return
                 end
             end

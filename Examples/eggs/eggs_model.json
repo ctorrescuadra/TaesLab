@@ -1,0 +1,155 @@
+{
+  "ProductiveStructure": {
+    "name": "eggs_model",
+    "flows": [
+      {
+        "key": "B1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "B5",
+        "type": "OUTPUT"
+      }
+    ],
+    "processes": [
+      {
+        "key": "FRM",
+        "fuel": "B1",
+        "product": "B2+B3",
+        "type": "PRODUCTIVE",
+        "description": "Chicken farm"
+      },
+      {
+        "key": "T1",
+        "fuel": "B2",
+        "product": "B4",
+        "type": "PRODUCTIVE",
+        "description": "City Transport"
+      },
+      {
+        "key": "T2",
+        "fuel": "B3",
+        "product": "B5",
+        "type": "PRODUCTIVE",
+        "description": "Local Transport"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Reference",
+      "exergy": [
+        {
+          "key": "B1",
+          "value": 1000
+        },
+        {
+          "key": "B2",
+          "value": 840
+        },
+        {
+          "key": "B3",
+          "value": 160
+        },
+        {
+          "key": "B4",
+          "value": 800
+        },
+        {
+          "key": "B5",
+          "value": 150
+        }
+      ]
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(dzn)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(dzn)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(tpu)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(€)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(€/dzn)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(dzn)"
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": [
+      {
+        "sampleId": "Base",
+        "flows": {
+          "key": "B1",
+          "value": 0.48
+        },
+        "processes": [
+          {
+            "key": "T1",
+            "value": 440
+          },
+          {
+            "key": "T2",
+            "value": 80
+          }
+        ]
+      },
+      {
+        "sampleId": "Local",
+        "flows": {
+          "key": "B1",
+          "value": 0.48
+        },
+        "processes": [
+          {
+            "key": "T1",
+            "value": 600
+          },
+          {
+            "key": "T2",
+            "value": 60
+          }
+        ]
+      }
+    ]
+  }
+}

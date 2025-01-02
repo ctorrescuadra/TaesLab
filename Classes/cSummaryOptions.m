@@ -2,16 +2,16 @@ classdef cSummaryOptions < cMessageLogger
 % cSummaryOptions determine the summary options depending on the data model
 % 
 % cSummaryOptions Properties
-%  Id    - Summary options Id (see cType.SummaryId)
-%  Names - Available summary options names
+%   Id    - Summary options Id (see cType.SummaryId)
+%   Names - Available summary options names
 %
 % cSummaryOptions Methods
-%  checkId       - Check if the summary id is available
-%  checkName     - Check if the option name is available
-%  defaultOption - Get the default summary option
-%  isEnabled     - Check if summary is enabled
-%  isStates      - Check if there are summary States
-%  isResources   - Check if there are summary Resources
+%   checkId       - Check if the summary id is available
+%   checkName     - Check if the option name is available
+%   defaultOption - Get the default summary option
+%   isEnabled     - Check if summary is enabled
+%   isStates      - Check if there are summary States
+%   isResources   - Check if there are summary Resources
 %
 % See also cSummaryResults
 %
@@ -27,7 +27,7 @@ classdef cSummaryOptions < cMessageLogger
     
     methods
         function obj=cSummaryOptions(NrOfStates,NrOfSamples)
-        % Build an instance of the class
+        % cSummaryOptions - Build an instance of the class
         % Syntax:
         %   obj = cSummaryOptions(data)
         % Input Paramaters
@@ -42,7 +42,7 @@ classdef cSummaryOptions < cMessageLogger
         end
 
         function res=checkId(obj,option)
-        % Check the summary id option
+        % checkId - Check the summary id option
         % Syntax:
         %   res = obj.checkId(option)
         % Input Argument:
@@ -59,7 +59,7 @@ classdef cSummaryOptions < cMessageLogger
         end
 
         function res=checkName(obj,option)
-        % Check the summary name option
+        % checkName - Check the summary name option
         % Syntax:
         %   res = obj.checkName(option)
         % Input Argument:
@@ -75,16 +75,16 @@ classdef cSummaryOptions < cMessageLogger
         end
 
         function res=defaultOption(obj)
-        % Get the default summary option name for the data model
+        % defaultOption - Get the default summary option name for the data model
         % Syntax:
         %   res = obj.defaultOption
         % Output Argument
         %   res - Default option name
-            res=obj.Names{obj.Id+1};
+            res=obj.Names{end};
         end
 
         function res=isEnable(obj)
-        % Check if model has summary enabled
+        % isEnable - Check if model has summary enabled
         % Syntax:
         %   res = obj.isEnable
         % Output Arguments:
@@ -93,7 +93,7 @@ classdef cSummaryOptions < cMessageLogger
         end
 
         function res=isStates(obj)
-        % Check if the model has states summary available
+        % isStates - Check if the model has states summary available
         % Syntax:
         %   res = obj.isStates
         % Output Arguments:
@@ -102,7 +102,7 @@ classdef cSummaryOptions < cMessageLogger
         end
 
         function res=isResources(obj)
-        % Check if the model has resources summary available
+        % isResources - Check if the model has resources summary available
         % Syntax:
         %   res = obj.isResources
         % Output Arguments:

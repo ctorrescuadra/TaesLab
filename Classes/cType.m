@@ -58,7 +58,7 @@ classdef cType
 		EMPTY=[];                 % Empty value
 		EMPTY_CELL={}             % Empty cell array
         EMPTY_CHAR='';            % Empty char
-		PRODUCTIVE=1;             % Productive Bit
+		INTERNAL=1;               % Internal Streams Bit
 		ENVIRONMENT=2;            % Environment Bit
 		WASTE=3;                  % Waste Bit
         WARNING=-1;               % Warning message

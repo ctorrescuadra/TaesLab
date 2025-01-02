@@ -70,10 +70,6 @@ function res = WasteAnalysis(data,varargin)
     % 
     param=p.Results;
     % Read waste info
-    if ~data.isWaste
-        res.printError(cMessages.NoWasteModel);
-        return
-    end
     wd=data.WasteData;
     if ~wd.status
         wd.printLogger;
@@ -102,7 +98,6 @@ function res = WasteAnalysis(data,varargin)
         fpm.printLogger;
         res.printError(cMessages.InvalidObject,class(fpm));
     end
- 
     % Read external resources and get results
 	pct=cType.getCostTables(param.CostTables);
 	param.DirectCost=bitget(pct,cType.DIRECT);
