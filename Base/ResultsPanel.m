@@ -13,7 +13,6 @@ classdef (Sealed) ResultsPanel < cTaesLab
 %     tableView  - Table view option
 %
 %   ResultPanel methods:
-%     ResultsPanel - Creates the panel and shows the result
 %     showResults  - Shows  another results table index
 %     viewPanel    - Show the panel on the top
 %     hidePanel    - Side the panel
@@ -65,7 +64,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
             % Check Input parameter
             log=cMessageLogger();
             if ~isObject(res,'cResultSet')
-                log.printError(cMessages.InvalidObject,class(res));
+                log.printError(cMessages.InvalidArgument,class(res));
                 return
             end
             % Set table parameters

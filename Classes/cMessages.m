@@ -80,6 +80,8 @@ classdef cMessages
         InvalidResourceFlow='Invalid resource flow %s definition'
         InvalidFlowDefiniton='Flow %s do not exist'
         InvalidFlowLoop='Flow %s is defined as a LOOP'
+        NoResources='Data Model has no resource flows defined'
+        NoOutputs='Data Model has no final products defined'
         % Format messages
         InvalidFormatDefinition='Invalid format data structure'
         InvalidFormatKey='Invalid format key %s'

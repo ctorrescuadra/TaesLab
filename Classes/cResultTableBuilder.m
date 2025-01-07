@@ -315,8 +315,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
             % Fill columns
-            data(:,1)={ps.FlowEdges.from};
-            data(:,2)={ps.FlowEdges.to};
+            data(:,1)={obj.flowEdges.from};
+            data(:,2)={obj.flowEdges.to};
             data(:,3)={ps.Flows.type};
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end     

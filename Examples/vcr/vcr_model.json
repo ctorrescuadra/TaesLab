@@ -1,0 +1,357 @@
+{
+  "ProductiveStructure": {
+    "name": "vcr_model",
+    "flows": [
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WC",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "QEVP",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QEXP",
+        "type": "WASTE"
+      },
+      {
+        "key": "QCND",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "CMP",
+        "fuel": "WC",
+        "product": "B2-B1",
+        "type": "PRODUCTIVE",
+        "description": "Compressor"
+      },
+      {
+        "key": "EVP",
+        "fuel": "B4-B1",
+        "product": "QEVP",
+        "type": "PRODUCTIVE",
+        "description": "Evaporator"
+      },
+      {
+        "key": "CND",
+        "fuel": "B2-B3",
+        "product": "QCND",
+        "type": "DISSIPATIVE",
+        "description": "Condenser"
+      },
+      {
+        "key": "VEXP",
+        "fuel": "B3-B4",
+        "product": "QEXP",
+        "type": "DISSIPATIVE",
+        "description": "Expansion Valve"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Reference",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 24.59
+          },
+          {
+            "key": "B2",
+            "value": 65.25
+          },
+          {
+            "key": "B3",
+            "value": 55.81
+          },
+          {
+            "key": "B4",
+            "value": 49.93
+          },
+          {
+            "key": "WC",
+            "value": 50
+          },
+          {
+            "key": "QEVP",
+            "value": 18.06
+          },
+          {
+            "key": "QEXP",
+            "value": 5.8800000000000026
+          },
+          {
+            "key": "QCND",
+            "value": 9.4399999999999977
+          }
+        ]
+      },
+      {
+        "stateId": "CMP75",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 23.05
+          },
+          {
+            "key": "B2",
+            "value": 61.42
+          },
+          {
+            "key": "B3",
+            "value": 52.32
+          },
+          {
+            "key": "B4",
+            "value": 46.81
+          },
+          {
+            "key": "WC",
+            "value": 50
+          },
+          {
+            "key": "QEVP",
+            "value": 16.93
+          },
+          {
+            "key": "QEXP",
+            "value": 5.509999999999998
+          },
+          {
+            "key": "QCND",
+            "value": 9.1000000000000014
+          }
+        ]
+      },
+      {
+        "stateId": "TCND35",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 22.2
+          },
+          {
+            "key": "B2",
+            "value": 63.03
+          },
+          {
+            "key": "B3",
+            "value": 50.81
+          },
+          {
+            "key": "B4",
+            "value": 44.03
+          },
+          {
+            "key": "WC",
+            "value": 50
+          },
+          {
+            "key": "QEVP",
+            "value": 15.56
+          },
+          {
+            "key": "QEXP",
+            "value": 6.7800000000000011
+          },
+          {
+            "key": "QCND",
+            "value": 12.219999999999999
+          }
+        ]
+      },
+      {
+        "stateId": "TEVP12",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 21.01
+          },
+          {
+            "key": "B2",
+            "value": 61.69
+          },
+          {
+            "key": "B3",
+            "value": 52.69
+          },
+          {
+            "key": "B4",
+            "value": 46.53
+          },
+          {
+            "key": "WC",
+            "value": 50
+          },
+          {
+            "key": "QEVP",
+            "value": 16.91
+          },
+          {
+            "key": "QEXP",
+            "value": 6.1599999999999966
+          },
+          {
+            "key": "QCND",
+            "value": 9
+          }
+        ]
+      },
+      {
+        "stateId": "DTCND",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 24.59
+          },
+          {
+            "key": "B2",
+            "value": 65.25
+          },
+          {
+            "key": "B3",
+            "value": 55.95
+          },
+          {
+            "key": "B4",
+            "value": 49.35
+          },
+          {
+            "key": "WC",
+            "value": 50
+          },
+          {
+            "key": "QEVP",
+            "value": 17.64
+          },
+          {
+            "key": "QEXP",
+            "value": 6.6000000000000014
+          },
+          {
+            "key": "QCND",
+            "value": 9.2999999999999972
+          }
+        ]
+      },
+      {
+        "stateId": "DTEVP",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 24.98
+          },
+          {
+            "key": "B2",
+            "value": 65.6
+          },
+          {
+            "key": "B3",
+            "value": 56.25
+          },
+          {
+            "key": "B4",
+            "value": 50.32
+          },
+          {
+            "key": "WC",
+            "value": 50
+          },
+          {
+            "key": "QEVP",
+            "value": 18.05
+          },
+          {
+            "key": "QEXP",
+            "value": 5.93
+          },
+          {
+            "key": "QCND",
+            "value": 9.3499999999999943
+          }
+        ]
+      }
+    ]
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "QEXP",
+        "type": "RESOURCES",
+        "recycle": 0,
+        "values": {
+          "process": "CMP",
+          "value": 1
+        }
+      },
+      {
+        "flow": "QCND",
+        "type": "RESOURCES",
+        "recycle": 0,
+        "values": {
+          "process": "CMP",
+          "value": 1
+        }
+      }
+    ]
+  }
+}

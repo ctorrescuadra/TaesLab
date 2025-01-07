@@ -2,15 +2,18 @@ classdef (Sealed) cBuildHTML < cMessageLogger
 % cBuildHTML convert cTable object into HTML files
 %   If a cTableIndex object is provided it create a HTML index page,
 %   which links HTML files of the cResultInfo tables. 
-%  
-% cBuildHTML Methods:
+% 
+% cBuildHTML constructor:
+%   obj = cBuildHTML(tbl,folder)
+%
+% cBuildHTML methods:
 %   getMarkupHTML - Get the text string with the HTML page
 %   showTable - Show the table in the default web browser
 %   saveTable - Save the HTML table created by the object
 %
     properties (Access=private)
-        head    % HTML head
-        body    % HTML body
+        head         % HTML head
+        body         % HTML body
         isIndexTable % tbl is a index table
     end
     methods

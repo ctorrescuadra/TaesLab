@@ -89,6 +89,12 @@ classdef cExergyData < cMessageLogger
 			% Calculate total system values
 			vF(end)=sum(B(ps.Resources.flows));
 			vP(end)=sum(B(ps.FinalProducts.flows));
+			if zerotol(vF(end)) == 0
+				obj.messageLog(cType.ERROR,cMessages.NoResources);
+			end
+			if zerotol(vP(end)) == 0
+				obj.messageLog(cType.ERROR,cMessages.NoOutputs);
+			end
 			% Check Irreversibility are non-negative
 			vI=zerotol(vF-vP);
             ier=find(vI<0);
@@ -115,11 +121,13 @@ classdef cExergyData < cMessageLogger
 			vK(bypass)=1;
 			vEf(bypass)=100;
             % Assign values object class
-			obj.ps=ps;
-			obj.FlowsExergy=B;
-			obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);
-			obj.StreamsExergy=struct('ET',ET,'E',E);
-			obj.ActiveProcesses= uint8(~bypass);
+			if obj.status
+				obj.ps=ps;
+				obj.FlowsExergy=B;
+				obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);
+				obj.StreamsExergy=struct('ET',ET,'E',E);
+				obj.ActiveProcesses= uint8(~bypass);
+			end
         end
     end
 end

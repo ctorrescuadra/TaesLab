@@ -7,7 +7,11 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 %    - Column Names as header
 %    - Row Names and Data as body
 %    - Table Description as caption code
-%    - Table name as label code 
+%    - Table name as label code
+% 
+% cBuildLaTeX constructor:
+%   obj = cBuildLaTeX(tbl)
+%
 % cBuildLatex methods:
 %   getLaTeXcode - Get a string with the LaTeX code
 %   saveTable    - Save the table into a tex file
