@@ -172,7 +172,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %     dit: Irreversibiliy Variation table
         %     dft: Total Fuel Impact
         %     tmfc: Total Malfunction Cost
-            tbl.dgn=obj.getTableCell(cType.Tables.DIAGNOSIS,dgn.DiagnosisTable);
+            tbl.dgn=obj.getTableCell(cType.Tables.DIAGNOSIS,dgn.getDiagnosisTable);
             tbl.mf=obj.getMalfunctionTable(dgn);
             tbl.mfc=obj.getMalfunctionCostTable(dgn);
             tbl.dit=obj.getIrreversibilityTable(dgn);

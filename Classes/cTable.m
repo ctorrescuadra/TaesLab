@@ -290,7 +290,7 @@ classdef (Abstract) cTable < cMessageLogger
                         log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
             end
             if log.status
-                log.messageLog(cType.INFO,cMessages.TableFileSave,obj.Name, filename);
+                log.messageLog(cType.INFO,cMessages.TableFileSaved,obj.Name, filename);
             end
         end
     

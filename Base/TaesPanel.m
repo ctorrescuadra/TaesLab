@@ -20,10 +20,10 @@ classdef (Sealed) TaesPanel < handle
 %   If the result is selected in the Result Menu, it is saved in the workspace
 %   to work with it interactively.
 %
-% Syntax
-%   app=TaesPanel;
+%   Syntax
+%     app=TaesPanel;
 %
-% See also cThermoeconomicModel
+%   See also cThermoeconomicModel
 %
     properties(Access=private)
         % Widgets definition

@@ -1,16 +1,17 @@
 classdef cLogger < cTaesLab
-% cLogger - simple FIFO queue based on a dinamic cell array
-% 
-% cLogger Properties
-%   Count - Number of elements of the queue
+%cLogger - simple FIFO queue based on a dinamic cell array
+%   Internal use only
 %
-% cLogger Methods
-%   cLogger - Initialize the logger
-%   add     - Add a new element at the end of the queue
-%   clear   - Clear (initialize) the logger
-%   addLogger - Add another queue at the end of this queue
-%   getContent - Get the content of the queue
-%   printContent - Print the content of the queue in console
+%   cLogger properties:
+%     Count - Number of elements of the queue
+%
+%   cLogger methods:
+%     cLogger - Initialize the logger
+%     add     - Add a new element at the end of the queue
+%     clear   - Clear (initialize) the logger
+%     addLogger - Add another queue at the end of this queue
+%     getContent - Get the content of the queue
+%     printContent - Print the content of the queue in console
 %
     properties (GetAccess = public, SetAccess=private)
         Count  % logger size

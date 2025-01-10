@@ -1,37 +1,43 @@
 classdef (Sealed) cDiagramFP < cResultId
-% cDiagramFP obtain the adjacency tables of the diagramFP
-% cDiagramFP Properties
-%   EdgesFP  - Edges struct of the exergy adjacency table FP
-%   EdgesCFP - Edges struct of the exergy cost adjacency table FP
-% cDiagramFP Methods:
-%   buildResultInfo - Build the cResultInfo object of the diagram FP
+%cDiagramFP obtain the adjacency tables of the diagramFP
+%
+%   cDiagramFP constructor:
+%     obj = cDiagramFP(exc)
+%
+%   cDiagramFP properties
+%     EdgesFP  - Edges struct of the exergy adjacency table FP
+%     EdgesCFP - Edges struct of the exergy cost adjacency table FP
+%
+%   cDiagramFP methods:
+%     buildResultInfo - Build the cResultInfo object of the diagram FP
+%     adjacencyTable  - get the adjacency table
 %
     properties (GetAccess=public,SetAccess=private)
         EdgesFP     % Edges struct of the exergy FP adjacency table
         EdgesCFP    % Edges struct of the exergy cost FP adjacency table
     end
     methods
-        function obj = cDiagramFP(mfp)
-        % Construct an instance of this class
+        function obj = cDiagramFP(exc)
+        % cDiagramFP - Construct an instance of this class
         % Syntax:
         %   obj = cDiagramFP(mfp)
         % Input Argument:
-        %   mfp - cExergyCost object
+        %   exc - cExergyCost object
         %
             obj=obj@cResultId(cType.ResultId.DIAGRAM_FP);
             % Create the edges of the tables 
-            nodes=mfp.ps.ProcessKeys;
-            values=mfp.TableFP;
+            nodes=exc.ps.ProcessKeys;
+            values=exc.TableFP;
             obj.EdgesFP=cDiagramFP.adjacencyTable(values,nodes);
-            values=mfp.getCostTableFP;
+            values=exc.getCostTableFP;
             obj.EdgesCFP=cDiagramFP.adjacencyTable(values,nodes);
             obj.DefaultGraph=cType.Tables.DIAGRAM_FP;
-            obj.ModelName=mfp.ModelName;
-            obj.State=mfp.State;
+            obj.ModelName=exc.ModelName;
+            obj.State=exc.State;
         end
 
         function res=buildResultInfo(obj,fmt)
-        % Get cResultInfo object of the DiagramFP
+        % buildResultInfo - Get cResultInfo object of the DiagramFP
         % Syntax:
         %   res = obj.buildResultInfo(fmt)
         % Input Argument:
@@ -44,7 +50,7 @@ classdef (Sealed) cDiagramFP < cResultId
 
     methods(Static)
         function res=adjacencyTable(mFP,nodes)
-        % Get a struct with the Adjacency Table FP
+        % adjacencyTable - Get a struct with the Adjacency Table FP
         % Syntax:
         %   res=cDiagramFP.adjacencyTables(mFP,nodes);
         % Input Argument:

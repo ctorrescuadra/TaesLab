@@ -1,37 +1,40 @@
 classdef(Sealed) cDiagnosis < cResultId
-% cDiagnosis - Make a thermoeconomic diagnosis Analysis
+%cDiagnosis - Make a thermoeconomic diagnosis Analysis
 %   It compares two states of the plant given by two cExergyCost objects.
 %   Two method could be applied:
 %    WASTE_EXTERNAL considers waste as a system output
 %    WASTE_INTERNAL internalize the waste cost according waste table allocation
-%  
-% cDiagnosis Properties
-%   NrOfProcesses        - Number of processes
-%   NrOfWastes           - Number of Wastes
-%   FuelImpact           - Fuel Impact
-%   TotalMalfunctionCost - Total Malfunction Cost
-% 
-% cDiagnosis Methods
-%   buildResultInfo             - Build the cResultInfo associated to thermoeconomic diagnosis
-%   getUnitConsumptionVariation - Get the unit consumption variation of processes
-%   getProcessUnitCostVariation - Get the variation of the unit cost of processes
-%   getIrreversibilityVariation - Get the irreversibility variation of processes
-%   getIrreversibilityTable     - Get the Irreversity Variation table
-%   getOutputVariation          - Get the output variation of processes
-%   getDemandVariation          - Get the final production variation
-%   getDemandVariationCost      - Get the final production cost variation
-%   getWasteVariation           - Get the waste variation of processes
-%   getMalfunction              - Get the malfunction of processes
-%   getMalfunctionTable         - Get the malfunction table
-%   getMalfunctionCost          - Get the malfunction cost of processes
-%   getWasteMalfunctionCost     - Get the malfunction cost due to waste variation
-%   getMalfunctionCostTable     - Get the malfunction cost table
-%   getInternalDisfunction      - Get the internal disfunctions caused by malfunction
-%   getExternalDisfunction      - Get the disfunction caused by waste variation
-%   getDemandVariationEffectiveCost - Get the real demand variation cost
-%   getDemmandCorrectionCost    - Get the correction of real demand variation cost
 %
-% See also cExergyCost
+%   cDiagnosis constructor:
+%     obj = cDiagnosis(fp0,fp1,method)
+% 
+%   cDiagnosis properties:
+%     NrOfProcesses        - Number of processes
+%     NrOfWastes           - Number of Wastes
+%     FuelImpact           - Fuel Impact
+%     TotalMalfunctionCost - Total Malfunction Cost
+% 
+%   cDiagnosis Methods
+%     buildResultInfo             - Build the cResultInfo associated to thermoeconomic diagnosis
+%     getUnitConsumptionVariation - Get the unit consumption variation of processes
+%     getProcessUnitCostVariation - Get the variation of the unit cost of processes
+%     getIrreversibilityVariation - Get the irreversibility variation of processes
+%     getIrreversibilityTable     - Get the Irreversity Variation table
+%     getOutputVariation          - Get the output variation of processes
+%     getDemandVariation          - Get the final production variation
+%     getDemandVariationCost      - Get the final production cost variation
+%     getWasteVariation           - Get the waste variation of processes
+%     getMalfunction              - Get the malfunction of processes
+%     getMalfunctionTable         - Get the malfunction table
+%     getMalfunctionCost          - Get the malfunction cost of processes
+%     getWasteMalfunctionCost     - Get the malfunction cost due to waste variation
+%     getMalfunctionCostTable     - Get the malfunction cost table
+%     getInternalDisfunction      - Get the internal disfunctions caused by malfunction
+%     getExternalDisfunction      - Get the disfunction caused by waste variation
+%     getDemandVariationEffectiveCost - Get the real demand variation cost
+%     getDemmandCorrectionCost    - Get the correction of real demand variation cost
+%
+%   See also cExergyCost
 %
 	properties(GetAccess=public, SetAccess=private)
         NrOfProcesses        % Number of processes
@@ -68,7 +71,7 @@ classdef(Sealed) cDiagnosis < cResultId
 	
 	methods
 		function obj=cDiagnosis(fp0,fp1,method)
-        % Create an object of this class
+        % cDiagnosis - Create an object of this class
         % Syntax:
         %   obj=cDiagnosis(fp0,fp1,method);
         % Input Arguments:
@@ -157,8 +160,21 @@ classdef(Sealed) cDiagnosis < cResultId
             end
         end
 
-        function res=DiagnosisTable(obj)
-        % Get Diagnosis Table
+        function res=buildResultInfo(obj,fmt)
+        % buildResultInfo - Get cResultInfo object for thermoeconomic diagnosis
+        % Syntax:
+        %   res=obj.buildResultInfo(fmt)
+        % Input Arguments:
+        %   fmt - cFormatData object
+            res=fmt.getDiagnosisResults(obj);
+        end
+
+        function res=getDiagnosisTable(obj)
+        % getDiagnosisTable - Get Diagnosis Table
+        % Syntax:
+        %   res=obj.getDiagnosisTable
+        % Output Argument
+        %   res - struct containing the column values of the diagnosis table
             res.MF=zerotol(obj.getMalfunction);
             res.DI=zerotol(obj.getIrreversibilityVariation);
             res.DR=zerotol(obj.getWasteVariation);
@@ -168,31 +184,39 @@ classdef(Sealed) cDiagnosis < cResultId
             res.DCPs=zerotol(obj.getDemandVariationCost);
         end
 
-        function res=buildResultInfo(obj,fmt)
-        % Get cResultInfo object for thermoeconomic diagnosis
-        % Syntax:
-        %   res=obj.buildResultInfo(fmt)
-        % Input Arguments:
-        %   fmt - cFormatData object
-            res=fmt.getDiagnosisResults(obj);
-        end
-
         function res=getUnitConsumptionVariation(obj)
-        % Get the unit consumption variation
+        % getUnitConsumptionVariation - Get the unit consumption variation
+        % Syntax:
+        %   res=obj.getUnitConsumptionVariation
+        % Output Argument
+        %   res - array with the unit consuption variation of each process
             res=sum(obj.DKP,1);
         end
 
         function res=getProcessUnitCostVariation(obj)
+        % getProcessUnitCostVariation - Get the unit process cost variation
+        % Syntax:
+        %   res=obj.getUnitConsumptionVariation
+        % Output Argument
+        %   res - array with the unit process cost variation of each process        
             res=obj.DcP;
         end
 
         function res=getIrreversibilityVariation(obj)
-        % Get the irreversibility vatiation vector
+        % getIrreversibilityVariation - Get the unit process cost variation
+        % Syntax:
+        %   res=obj.getIrreversibilityVariation
+        % Output Argument
+        %   res - array with irreversibility variation of each process     
             res=[obj.vDI,sum(obj.vDI)];
         end
 
         function res=getIrreversibilityTable(obj)
-        % Build the irreversibility table
+        % getIrreversibilityTable - Build the irreversibility table
+        % Syntax:
+        %   res=obj.getIrreversibilityTable
+        % Output Argument
+        %   res - matrix containing the values of the irreversibility table  
             res=[[obj.DIT',[obj.DW;0]];[obj.vMF,0]];
         end
 

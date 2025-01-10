@@ -5,17 +5,18 @@ classdef (Sealed) ResultsPanel < cTaesLab
 %   In the View menu, you can choose where the tables are shown:  the console, a web browser or a GUI table.
 %   In addition, the current ResultSet can be saved to a file using the menu option File->Save.
 %
-%   ResultPanel constructor:
+%   ResultsPanel constructor:
 %     obj = ResultPanel(res)
 %   
-%   ResultPanel properties:
+%   ResultsPanel properties:
 %     resultInfo - Result set info object
 %     tableView  - Table view option
 %
-%   ResultPanel methods:
-%     showResults  - Shows  another results table index
-%     viewPanel    - Show the panel on the top
-%     hidePanel    - Side the panel
+%   ResultsPanel methods:
+%     showResults   - Show another results
+%     setViewOption - Set the view option
+%     viewPanel     - Show the panel on the top
+%     hidePanel     - Hide the panel
 %       
 %   See also cResultSet
 %
@@ -29,7 +30,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
         tname           % Table label
         table_control   % uitable component
         tableIndex      % cTableIndex of the results
-        currentTable    % Sslected table
+        currentTable    % Selected table
         mn_view         % Table View menu
         mn_rsave        % Save Results menu
         mn_tsave        % Save Table menu
@@ -37,13 +38,9 @@ classdef (Sealed) ResultsPanel < cTaesLab
 
     methods
         function app=ResultsPanel(res)
-        % Create a class object
-        %   Input:
-        %     res - cResultSet object
-        %     option - Table View option
-        %       CONSOLE: Show table in the console
-        %       GUI: Show the table in a uitable widget
-        %       HTML: Show the table in a web browser as a HTML table
+        % ResultsPanel - Create an instance of the class
+        % Input Arguments:
+        %   res - cResultSet object
         %
             log=cMessageLogger();
             app.createPanel;
@@ -57,7 +54,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
         end
 
         function showResults(app,res)
-        % Get the table index of the result set and show it in the table panel
+        % showResults - Get the table index of the result set and show it in the table panel
         %  Input:
         %   res - cResultSet 
         %
@@ -81,18 +78,18 @@ classdef (Sealed) ResultsPanel < cTaesLab
         end
 
         function viewPanel(app)
-        % Show the table panel on top window
+        % viewPanel - Show the table panel on top window
             set(app.fig,'Visible','on');
             figure(app.fig);
         end
 
         function hidePanel(app)
-        % Hide the table panel 
+        % hidePanel - Hide the table panel 
             set(app.fig,'Visible','off')
         end
 
         function setViewOption(app,idx)
-        % Set the actual view option and update menu
+        % setViewOption - Set the actual view option and update menu
             pos=idx+1;
             if pos>0
                 app.tableView=idx;
@@ -102,7 +99,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
         end
 
         function closeApp(app,~,~)
-        % Close callback
+        % closeApp - Close callback
             delete(app.fig);
             app.status=false;
         end

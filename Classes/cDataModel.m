@@ -1,42 +1,45 @@
 classdef cDataModel < cResultSet
-% cDataModel - is the data dispatcher for the thermoeconomic analysis classes.
+%cDataModel - is the data dispatcher for the thermoeconomic analysis classes.
 %   It receives the data from the cReadModel interface classes, then validates
 %   and organizes the information to be used by the calculation algorithms.
 %
-% cDataModel constructor:
-%   obj = cDataModel(dm)
+%   cDataModel constructor:
+%     obj = cDataModel(dm)
 %
-% cDataModel properties:
-%   NrOfFlows           - Number of flows
-%   NrOfProcesses       - Number of processes
-%   NrOfWastes          - Number of waste flows
-%   NrOfStates          - Number of exergy data simulations
-%   NrOfSamples         - Number of resource cost samples
-%   isWaste             - Indicate if the model has waste defined
-%   isResourceCost      - Indicate if the model has resource cost data
-%   isDiagnosis         - Indicate if the model has information to make diagnosis
-%   isSummary           - Indicate if the model has information to make summary reports
-%   StateNames          - State names
-%   SampleNames         - Resource sample names
-%   WasteFlows          - Waste Flow names
-%   ProductiveStructure - cProductiveStructure object
-%   FormatData          - cResultTableBuilder object
-%   WasteData           - cWasteData object
-%   ExergyData          - Dataset of cExergyData
-%   ResourceData        - Dataset of cResourceData
-%   ModelData           - cModelData object
+%   cDataModel properties:
+%     NrOfFlows           - Number of flows
+%     NrOfProcesses       - Number of processes
+%     NrOfWastes          - Number of waste flows
+%     NrOfResources       - Number of resource flows
+%     NrOfSystemOutputs   - Number of system outputs
+%     NrOfFinalProducts   - Number of final products
+%     NrOfStates          - Number of exergy data simulations
+%     NrOfSamples         - Number of resource cost samples
+%     isWaste             - Indicate if the model has waste defined
+%     isResourceCost      - Indicate if the model has resource cost data
+%     isDiagnosis         - Indicate if the model has information to make diagnosis
+%     isSummary           - Indicate if the model has information to make summary reports
+%     StateNames          - State names
+%     SampleNames         - Resource sample names
+%     WasteFlows          - Waste Flow names
+%     ProductiveStructure - cProductiveStructure object
+%     FormatData          - cResultTableBuilder object
+%     WasteData           - cWasteData object
+%     ExergyData          - Dataset of cExergyData
+%     ResourceData        - Dataset of cResourceData
+%     ModelData           - cModelData object
 %
-% cDataModel methods:
-%   getExergyData      - Get the cExergyData of a state
-%   setExergyData      - Set the exergy values of a state
-%   getResourceData    - Get the cResourceData for a specific sample
-%   existState         - Check if a state name exists 
-%   existSample        - Check if a sample name exists
-%   getTablesDirectory - Get the tables directory 
-%   getTableInfo       - Get information about a table object
-%   getResultInfo      - Get the cResultInfo associated to the data model
-%   showDataModel      - Show the data model
-%   saveDataModel      - Save the data model
+%   cDataModel methods:
+%     getExergyData      - Get the cExergyData of a state
+%     setExergyData      - Set the exergy values of a state
+%     getResourceData    - Get the cResourceData for a specific sample
+%     existState         - Check if a state name exists 
+%     existSample        - Check if a sample name exists
+%     getTablesDirectory - Get the tables directory 
+%     getTableInfo       - Get information about a table object
+%     getResultInfo      - Get the cResultInfo associated to the data model
+%     showDataModel      - Show the data model
+%     saveDataModel      - Save the data model
 %
 %   See also cResultSet, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
 %
@@ -44,6 +47,9 @@ classdef cDataModel < cResultSet
         NrOfFlows               % Number of flows
         NrOfProcesses           % Number of processes
         NrOfWastes              % Number of waste flows
+        NrOfResources           % Number of resource flows
+        NrOfSystemOutputs       % Number of system outputs
+        NrOfFinalProducts       % Number of final products
         NrOfStates              % Number of exergy data simulations
         NrOfSamples             % Number of resource cost samples
         isWaste                 % Indicate if the model has waste defined
@@ -116,7 +122,7 @@ classdef cDataModel < cResultSet
                 return
             end
             for i=1:obj.NrOfStates
-                exs=dm.getExergyState(i);
+                exs=dm.ExergyStates.States(i);
                 rex=cExergyData(ps,exs);
                 setValues(obj.ExergyData,i,rex);
                 if rex.status
@@ -162,7 +168,7 @@ classdef cDataModel < cResultSet
                     return
                 end
                 for i=1:obj.NrOfSamples
-                    dmr=dm.getResourceSample(i);
+                    dmr=dm.ResourcesCost.Samples(i);
                     rsc=cResourceData(ps,dmr);
                     setValues(obj.ResourceData,i,rsc);
                     if rsc.status
@@ -220,8 +226,25 @@ classdef cDataModel < cResultSet
                 res=obj.ProductiveStructure.NrOfWastes;
             end
         end
+
+        function res=get.NrOfResources(obj)
+        % Get the number of resources of the system
+            res=0;
+            if obj.status
+                res=obj.ProductiveStructure.NrOfResources;
+            end
+        end
+
+        function res=get.NrOfFinalProducts(obj)
+        % Get the number of system outputs
+            res=0;
+            if obj.status
+                res=obj.ProductiveStructure.NrOfSystemOutputs;
+            end
+        end
+        
         function res=get.NrOfStates(obj)
-        % get the number of states
+        % Get the number of states
             res=0;
             if obj.status
                 res=numel(obj.StateNames);

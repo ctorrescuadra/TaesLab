@@ -30,7 +30,7 @@
 %   ListResultTables        - Lists the results tables and their properties.
 %   ShowResults             - Displays the model's results tables.
 %   ShowTable               - Displays an individual table.
-%   ShowGraph               - Displays the graph of associated to a results table.
+%   ShowGraph               - Displays the graph associated to a results table.
 %   ExportResults           - Exports the results tables in different formats.
 %
 % GUI functions

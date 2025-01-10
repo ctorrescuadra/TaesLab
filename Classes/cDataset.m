@@ -1,11 +1,16 @@
-classdef cDataset < cDictionary
-% cDataset creates a container to store data and to access it by key or index
+classdef(Sealed) cDataset < cDictionary
+%cDataset creates a container to store data and to access it by key or index
 %   This class is used to store cExergyData, cExergyCost, and cResourceData objects
 %   and access by state name or sample name.
 %
-% cDataset Methods:
-%   getValues - Get the object associated to an entry
-%   setValues - set an object to an entry
+%   cDataset constructor:
+%     obj = cDataset(list) 
+%
+%   cDataset methods:
+%     getValues - Get the object associated to an entry
+%     setValues - set an object to an entry
+%
+%   See also cDictionary
 %
     properties (Access=private)
         Values       % Cell array with the object
@@ -13,7 +18,7 @@ classdef cDataset < cDictionary
   
     methods
         function obj=cDataset(list)
-        % Build an instance of the object
+        % cDataSet - Build an instance of the object
         % Syntax:
         %   obj = cDataset(list)
         % Input Arguments:
@@ -25,7 +30,7 @@ classdef cDataset < cDictionary
         end
  
         function res=getValues(obj,arg)
-        % Get an element of the dataset
+        % getvalues - Get an element of the dataset
         % Syntax: 
         %   res = obj.getValues(arg)
         % Input Argument:
@@ -44,7 +49,7 @@ classdef cDataset < cDictionary
         end
 
         function log=setValues(obj,arg,val)
-        % Set the values in position indicates by arg
+        % setValues - Set the values in position indicates by arg
         % Syntax: 
         %   res = obj.getValues(arg)
         % Input Argument:

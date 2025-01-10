@@ -6,30 +6,30 @@ function res=DiagramFP(data,varargin)
 %   ShowGraph, or by external graph software as yEd saving the adjancency
 %   tables of the graph in xlsx format.
 %  	
-% Syntax
-%   res = DiagramFP(data,Name,Value);
+%   Syntax
+%     res = DiagramFP(data,Name,Value);
 %
-% Input Arguments
-%   data - cReadModel Object containing the data model information.
+%   Input Arguments
+%     data - cReadModel Object containing the data model information.
 %
-% Name-Value Arguments
-%   State - Indicate one valid state to get exergy values. 
-%     char array
-%   Show -  Show results on console
-%     true | false (default)
-%   SaveAs - Name of the file where the results are saved.
-%     char array | string
+%   Name-Value Arguments
+%     State - Indicate one valid state to get exergy values. 
+%       char array
+%     Show -  Show results on console
+%       true | false (default)
+%     SaveAs - Name of the file where the results are saved.
+%       char array | string
 %
-% Output Arguments
-%   res - cResultInfo object contains the FP diagram tables
-%    The following tables are obtained:
-%     atfp - Diagram FP adjacency matrix                                     
-%     atcfp - Cost Diagram FP adjacency matrix
+%   Output Arguments
+%     res - cResultInfo object contains the FP diagram tables
+%      The following tables are obtained:
+%       atfp - Diagram FP adjacency matrix                                     
+%       atcfp - Cost Diagram FP adjacency matrix
 %   
-% Examples
-%   <a href="matlab:open DiagramFpDemo.mlx">Diagram FP Demo</a>
+%   Examples
+%     <a href="matlab:open DiagramFpDemo.mlx">Diagram FP Demo</a>
 %    
-% See also cDataModel, cExergyCost, cResultInfo
+%   See also cDataModel, cExergyCost, cResultInfo
 %
 	res=cMessageLogger();
 	if nargin<1 || ~isObject(data,'cDataModel')

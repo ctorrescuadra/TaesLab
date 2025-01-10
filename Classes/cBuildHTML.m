@@ -1,12 +1,12 @@
 classdef (Sealed) cBuildHTML < cMessageLogger
-% cBuildHTML convert cTable object into HTML files
+%cBuildHTML convert cTable object into HTML files
 %   If a cTableIndex object is provided it create a HTML index page,
 %   which links HTML files of the cResultInfo tables. 
 % 
-% cBuildHTML constructor:
+%cBuildHTML constructor:
 %   obj = cBuildHTML(tbl,folder)
 %
-% cBuildHTML methods:
+%cBuildHTML methods:
 %   getMarkupHTML - Get the text string with the HTML page
 %   showTable - Show the table in the default web browser
 %   saveTable - Save the HTML table created by the object
@@ -18,7 +18,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
     end
     methods
         function obj=cBuildHTML(tbl,folder)
-        % Build an instance of the object
+        % cBuildHTML - Build an instance of the object
         % Syntax:
         %   obj = cBuildHTML(tbl)
         %   obj = cBuildHTML(index_table, folder)
@@ -40,7 +40,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function res=getMarkupHTML(obj)
-        % Get the HTML text of the table
+        % getMarkupHTML - Get the HTML text of the table
         % Syntax:
         %   res = obj.getMarkupHTML
         %
@@ -48,7 +48,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function showTable(obj)
-        % Show a normal table in the web browser
+        % showTable - Show a normal table in the web browser
         % Syntax:
         %   obj.showTable
         %  
@@ -60,7 +60,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function log=saveTable(obj,filename)
-        % Save the table into a HTML file
+        % saveTable - Save the table into a HTML file
         % Syntax:
         %   log = obj.saveTable(filename)
         % Input Arguments:

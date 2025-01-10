@@ -1,12 +1,15 @@
 classdef cDictionary < cMessageLogger
-% cDictionary implementa a (key, id) dictionary for TaesLab
+%cDictionary implementa a (key, id) dictionary for TaesLab
 %	It uses the containers.Map class
 %
-% cDictionary Methods:
-%   getKey     - Get the key associated to a index
-%   getIndex   - Get the index of a key
-%   existsKey  - Check if a key exists in the dictionary
-%	getKeys    - Get the entries of the dictionary
+%   cDictionary constructor:
+%     obj = cDataset(list)
+%
+%   cDictionary methods:
+%     getKey     - Get the key associated to a index
+%     getIndex   - Get the index of a key
+%     existsKey  - Check if a key exists in the dictionary
+%	  getKeys    - Get the entries of the dictionary
 % 
     properties(Access=protected)
         map     % containers.Map object
@@ -15,7 +18,7 @@ classdef cDictionary < cMessageLogger
 
 	methods
         function obj = cDictionary(data)
-		% Construct an instance of this class
+		% cDictionary - Construct an instance of this class
 		% Syntax:
 		%   obj = cDictionary(data)
 		% Input Arguments:
@@ -47,7 +50,7 @@ classdef cDictionary < cMessageLogger
 		end
 
 		function res = existsKey(obj,key)
-		% Check if key exists
+		% existsKey - Check if key exists
 		% Syntax:
 		%   res = obj.existsKey(key)
 		% Input Arguments:
@@ -58,7 +61,7 @@ classdef cDictionary < cMessageLogger
 		end
 		
         function res = getIndex(obj,key)
-		% Get the corresponding index of a key
+		% getIndex - Get the corresponding index of a key
 		% Syntax:
 		%   res = obj.getIndex(key)
 		% Input Arguments:
@@ -73,7 +76,7 @@ classdef cDictionary < cMessageLogger
 		end
 
         function res = getKey(obj,id)
-		% Get the corresponding key(s) of a set of indexes
+		% getKey - Get the corresponding key(s) of a set of indexes
 		% Syntax:
 		%   res = obj.getKey(id)
 		% Input Arguments:
@@ -95,14 +98,14 @@ classdef cDictionary < cMessageLogger
         end
 
 		function res = getKeys(obj)
-		% Get the keys of the dictionary
+		% getKeys - Get the keys of the dictionary
 		% Syntax:
 		%   res = obj.getKeys;
 			res=obj.keys;
 		end
 
 		function res=isIndex(obj,idx)
-		% Check if the index is valid
+		% isIndex - Check if the index is valid
 		% Syntax:
 		%   res = obj.isIndex(idx)
 		% Input Arguments:

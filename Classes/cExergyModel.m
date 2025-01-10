@@ -2,10 +2,10 @@ classdef cExergyModel < cResultId
 % cExergyModel builds the Flow-Process model
 %   It provides the exergy analysis results and the FP table of the system
 %
-% cExergyModel constructor
+% cExergyModel constructor:
 %   obj = cExergyModel(exd)
 % 
-% cExergyModel Properties:
+% cExergyModel properties:
 %   NrOfFlows        	 - Number of Flows
 %   NrOfProcesses    	 - Number of Processes
 %   NrOfStreams          - Number of Streams
@@ -27,7 +27,7 @@ classdef cExergyModel < cResultId
 %   TotalUnitConsumption - Total Unit Consumption
 %   ActiveProcesses      - Active Processes (not bypassed)
 %
-% cExergyModel Methods:
+% cExergyModel methods:
 %  buildResultInfo - Build the cResultInfo object associated to EXERGY_ANALYSIS
 %
 % See also cExergyCost, cResultId
