@@ -6,29 +6,29 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %   With the option 'CostTables' we choose the type of costs we want to calculate. 
 %   With the option 'ResourceSample' we choose the resource cost sample data.
 %
-% Syntax
-%   res=ThermoeconomicAnalysis(data,Name,Value)
+%   Syntax
+%     res=ThermoeconomicAnalysis(data,Name,Value)
 %
-% Input Arguments
-% 	data - cDataModel object which contains the data model
+%   Input Arguments
+% 	  data - cDataModel object which contains the data model
 %
-% Name-Value Arguments
-%   State - Thermoeconomic state id. If missing first sample is taken
-%     array char | string
-%   CostTables - Indicate which cost tables are calculated
-%     'DIRECT' calculates direct exergy cost tables
-%     'GENERALIZED' calculates generalized exergy cost tables
-%     'ALL' calculate both kind of tables
-%   ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
+%   Name-Value Arguments
+%     State - Thermoeconomic state id. If missing first sample is taken
+%       array char | string
+%     CostTables - Indicate which cost tables are calculated
+%       'DIRECT' calculates direct exergy cost tables
+%       'GENERALIZED' calculates generalized exergy cost tables
+%       'ALL' calculate both kind of tables
+%     ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
+%       char array | string
+%     Show - Show the results in the console
+%       true | false (default)
+%     SaveAs - Name of the file where the results will be saved. 
 %     char array | string
-%   Show - Show the results in the console
-%     true | false (default)
-%   SaveAs - Name of the file where the results will be saved. 
-%     char array | string
 %
-% Output Arguments
-%   res - cResultInfo object contains the results of thermoeconomic Analysis
-%    If DirectCost is selected (default) the following tables are obtained:
+%   Output Arguments
+%     res - cResultInfo object contains the results of thermoeconomic Analysis
+%     If DirectCost is selected (default) the following tables are obtained:
 %      dfcost: Direct Exergy Cost of flows
 %      dcost: Direct Exergy cost of processes
 %      udcost: Unit Direct Exergy Cost of processes table
@@ -36,18 +36,18 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %      dfict: Flows Irreversibility Cost Table
 %      dcfp: Fuel-Product direct cost table
 %      dcfpr: Fuel-Product direct cost table (includes waste)
-%    If GeneralCost is selected, the following tables are obtained:
-%       gcost: Generalized cost of processes 
-%       ugcost: Unit Generalized Cost of processes
-%       gfcost: Generalized Cost of flows
-%       gcfp: Fuel-Product generalized cost table
-%       gict: Irreversibility generalized cost table 
-%       gfict: Flows Irreversibility generalized cost table
+%     If GeneralCost is selected, the following tables are obtained:
+%      gcost: Generalized cost of processes 
+%      ugcost: Unit Generalized Cost of processes
+%      gfcost: Generalized Cost of flows
+%      gcfp: Fuel-Product generalized cost table
+%      gict: Irreversibility generalized cost table 
+%      gfict: Flows Irreversibility generalized cost table
 %
-% Example
-%   <a href="matlab:open ThermoeconomicAnalysisDemo.mlx">Thermoeconomic Analysis Demo</a>
+%   Example
+%     <a href="matlab:open ThermoeconomicAnalysisDemo.mlx">Thermoeconomic Analysis Demo</a>
 %
-% See also cDataModel, cExergyCost, cResultInfo
+%   See also cDataModel, cExergyCost, cResultInfo
 %
     res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')

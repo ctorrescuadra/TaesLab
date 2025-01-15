@@ -1,29 +1,29 @@
 function res = SummaryResults(data,varargin)
 %SummaryResults - Gets the summary cost results for a plant.
 %   This function retrieves the summary tables comparing of the model
-%     There is to types of Summary Result Tables:
-%      - STATES: Comparing cost values for the diferent states
-%      - RESOURCES: Comparing cost values for the diferent resources samples
+%   There is to types of Summary Result Tables:
+%     - STATES: Comparing cost values for the diferent states
+%     - RESOURCES: Comparing cost values for the diferent resources samples
 %
-% Syntax
-%   res=SummaryResults(data,Name,Value)
+%   Syntax
+%     res=SummaryResults(data,Name,Value)
 %
-% Input Arguments
-%   data - cReadModel object containing the data model
+%   Input Arguments
+%     data - cReadModel object containing the data model
 %
-% Name-Value Arguments
-%   Summary - Type of Summary to obtain
-%     'NONE' No summary results are obtained
-%     'STATES' State summary is obtained
-%     'RESOURCES' Resources summary is obtained
-%     'ALL' Both summary reports are obtained 
-%   States - Select a state in the States table. If missing first state is taken
-%   ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
-%     char array
-%   Show -  Show results on console
-%     true | false (default)
-%   SaveAs - Name of the file to save the results
-%     char array | string
+%   Name-Value Arguments
+%     Summary - Type of Summary to obtain
+%       'NONE' No summary results are obtained
+%       'STATES' State summary is obtained
+%       'RESOURCES' Resources summary is obtained
+%       'ALL' Both summary reports are obtained 
+%     States - Select a state in the States table. If missing first state is taken
+%     ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
+%       char array
+%     Show -  Show results on console
+%       true | false (default)
+%     SaveAs - Name of the file to save the results
+%       char array | string
 %
 % Output Arguments
 %   res - cResultInfo object with the summary results

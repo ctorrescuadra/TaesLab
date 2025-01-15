@@ -4,49 +4,49 @@ function res=ListResultTables(varargin)
 %   The 'ExportAs' option allows you to export the table in different formats.
 %   The 'SaveAs' option allows you to save the table as an external file.
 %   The 'Columns' option allows you to select the columns of the table.
-%   If a thermoeconomic model is provided, the active tables of the model are listed.
+%   If a cResultSet is provided, the active tables of the results set are listed.
 %    
-% Syntax
-%  res=ListResultTables(Name,Values)
-%  res=ListResultTables(model,Name,Values)
+%   Syntax
+%     res=ListResultTables(Name,Values)
+%     res=ListResultTables(res,Name,Values)
 %
-% Input Arguments
-%   model - cThermoeconomicModel object (optional)
+%   Input Arguments
+%     res - cResultSet object (optional)
 %
-% Name-Values Arguments
-%   View: Selects how to show the table
-%     CONSOLE - display in the console (default)
-%     GUI - use a GUI table
-%     HTML - use a web browser
-%   ExportAs: Select the VarMode to get the table
-%     NONE - return the cTable object (default)
-%     CELL - return the table as array of cells
-%     STRUCT - returns the table as a structured array
-%     TABLE - returns a matlab table
-%   Columns: Array of cells with the names of the columns to be displayed.
-%     DESCRIPTION - Description of the table
-%     RESULT_NAME - cResultInfo name of the table
-%     GRAPH - Indicates if it has graphical representation
-%     TYPE - Type of cTable
-%     CODE - Text of the code for cType.Tables
-%     RESULT_CODE - Text of the code for cType.ResultId
-%    If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
-% SaveAs: Indicates the name of the file where the table will be saved.
+%   Name-Values Arguments
+%     View: Selects how to show the table
+%       'CONSOLE' display in the console (default)
+%       'GUI'  use a GUI table
+%       'HTML' use a web browser
+%     ExportAs: Select the VarMode to get the table
+%       'NONE' return the cTable object (default)
+%       'CELL' return the table as array of cells
+%       'STRUCT' returns the table as a structured array
+%       'TABLE' returns a matlab table
+%     Columns: Array of cells with the names of the columns to be displayed.
+%       'DESCRIPTION' Description of the table
+%       'RESULT_NAME' cResultInfo name of the table
+%       'GRAPH' - Indicates if it has graphical representation
+%       'TYPE' - Type of cTable
+%       'CODE' - Text of the code for cType.Tables
+%       'RESULT_CODE' - Text of the code for cType.ResultId
+%       If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
+%   SaveAs: Indicates the name of the file where the table will be saved.
 %
-% Output Arguments
-%   res - table object in the format specified in ExportAs, with the selected columns
+%   Output Arguments
+%     res - table object in the format specified in ExportAs, with the selected columns
 %
-% Example
-%   <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
+%   Example
+%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %
-% See also cTablesDefinition, cThermoeconomicModel
+%   See also cTablesDefinition, cThermoeconomicModel
 %
     res=cMessageLogger();
     % Check if model is provided
-    isModel=false;
-    if nargin>0 && isObject(varargin{1},'cThermoeconomicModel')
-        isModel=true;
-        model=varargin{1};
+    isResultSet=false;
+    if nargin>0 && isObject(varargin{1},'cResultSet')
+        isResultSet=true;
+        arg=varargin{1};
         varargin=varargin(2:end);
     end
     % Select View depending of nargout
@@ -70,9 +70,16 @@ function res=ListResultTables(varargin)
     end
     param=p.Results;
     % Build the Tables directory 
-    if isModel
-        model.setDebug(false);
-        tbl=model.getTablesDirectory(param.Columns);
+    if isResultSet
+        switch arg.ClassId
+            case cType.ClassId.RESULT_MODEL
+                arg.setDebug(false);
+                tbl=arg.getTablesDirectory(param.Columns);
+            case cType.ClassId.DATA_MODEL
+                tbl=arg.getTableIndex;
+            case cType.ClassId.RESULT_INFO
+                tbl=arg.getTableIndex;
+        end
     else
         ctd=cTablesDefinition;
         tbl=ctd.getTablesDirectory(param.Columns);

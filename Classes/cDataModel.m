@@ -495,6 +495,8 @@ classdef cDataModel < cResultSet
 			% Process Table
             index=cType.TableDataIndex.PROCESSES;
             sheet=cType.TableDataName{index};
+            p.Name=sheet;
+            p.Description=cType.TableDataDescription{index};
             prc=ps.Processes(1:end-1);
             pNames={prc.key};
             colNames={'key','fuel','product','type'};

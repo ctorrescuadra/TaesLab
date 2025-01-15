@@ -16,7 +16,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     FlowOperators          - Flow operators structure (mG, opB, opI, opR)
 %     isWaste                - Indicate if system have wastes
 %     WasteTable             - cWasteData object
-%     TableR                 - R-Table (waste allocation)
+%     TableR                 - Waste Table (waste allocation)
 %     RecycleRatio           - Recycle ratio of each waste
 %     WasteWeight            - Weight of each waste
 %
@@ -33,6 +33,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     getFlowsICT            - Get Irreversibility Cost table for flows
 %     updateWasteOperator    - Update Waste Operator
 %     similarMatrix          - Calculate the similar matrix B=inv(x)*A*x
+%     computeOperator        - Calculate the cost operator
 %     updateOperator         - Update an operator with the corresponding waste operator
 %  
 %   See also cExergyModel
@@ -69,19 +70,17 @@ classdef (Sealed) cExergyCost < cExergyModel
         %
 			obj=obj@cExergyModel(exd);
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
-            M=obj.NrOfFlows;
 			N=obj.NrOfProcesses;
             vK=obj.UnitConsumption;
             vk1=zerotol(vK-1);
             % Get Flow Operators;
 			fpt=obj.FlowProcessTable;
             mG=fpt.mF(:,1:N)*fpt.mP(1:N,:)+fpt.mV;
-            tmp=eye(M)-mG;           
-            if rcond(tmp) < cType.EPS
-                obj.messageLog(cType.ERROR,cMessages.SingularMatrix,'mG');
+            opB=cExergyCost.computeOperator(mG);          
+            if isempty(opB)
+                obj.messageLog(cType.ERROR,cMessages.SingularMatrix,'opB');
                 return
             end
-            opB=eye(M)/tmp;
             obj.opBP=fpt.mP(1:N,:)*opB;
             opBI=scaleRow(obj.opBP,vk1);
             obj.FlowOperators=struct('mG',mG,'opB',opB,'opI',opBI);
@@ -524,16 +523,36 @@ classdef (Sealed) cExergyCost < cExergyModel
         % Syntax:
         %   res=cExergyCost.similarMatrix(A,x)
         % Input Arguments:
-        %   A: Matrix
-        %   x: vector
+        %   A - Matrix
+        %   x - vector
         % Output Arguments:
-        %   res 
+        %   res - Result matrix
             tmp=scaleCol(A,x);
             res=divideRow(tmp,x);
         end
 
+        function res=computeOperator(A)
+        % computeOperator - Calculate the operator associated to the matrix A: inv(I-A)
+        %   Use de LU factorization and check if A is a M-Matrix: diag(U)>0
+        % Syntax:
+        %   res = cExergyCost.computeOperator(op,opR)
+        % Input:
+        %   A - productive matrix
+        % Output:
+        %   res - operator inv(I-A)
+            res=cType.EMPTY; N=size(A);
+            [L,U]=lu(eye(N)-A);
+            rcnd=min(diag(U));
+            if rcnd < cType.EPS
+                return
+            end
+            res=(eye(N)/U)/L;
+        end
+
         function res=updateOperator(op,opR)
         % updateOperator - Update an operator with the corresponding waste operator
+        % Syntax:
+        %   res = cExergyCost.updateOperator(op,opR)
         % Input:
         %   op - Operator
         %   opR - Waste Operator

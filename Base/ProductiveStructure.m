@@ -4,29 +4,29 @@ function res=ProductiveStructure(data,varargin)
 %   If 'Show' option is activated it displays the productive structure tables on the console.
 %   If 'SaveAs' option is used these tables are saved in an external file.
 %
-% Syntax
-%   res = ProductiveStructure(data,Name,Value)
+%   Syntax
+%     res = ProductiveStructure(data,Name,Value)
 %
-% Input Arguments
-%   data - cReadModel object containing the data information
+%   Input Arguments
+%     data - cReadModel object containing the data information
 %    
-% Name-Value Arguments
-%   Show -  Show the results on console.  
-%     true | false (default)
-%   SaveAs - Name of file (with extension) to save the results.
-%     char array | string
+%   Name-Value Arguments
+%     Show -  Show the results on console.  
+%       true | false (default)
+%     SaveAs - Name of file (with extension) to save the results.
+%       char array | string
 %
-% Output Arguments
-%   res - cResultsInfo object contains the productive structure information
-%   The following tables are obtained:
+%   Output Arguments
+%     res - cResultsInfo object contains the productive structure information
+%     The following tables are obtained:
 %       flows - Flows definition table
 %       streams - Streams definition table
 %       processes - Processes definition table
 %
-% Example
-%   <a href="matlab:open ProductiveStructureDemo.mlx">Productive Structure Demo</a>
+%   Example
+%     <a href="matlab:open ProductiveStructureDemo.mlx">Productive Structure Demo</a>
 %
-% See also cDataModel, cProductiveStructure, cResultInfo
+%   See also cDataModel, cProductiveStructure, cResultInfo
 %
     res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')

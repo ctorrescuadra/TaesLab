@@ -4,17 +4,17 @@ function SaveTable(tbl,filename)
 %   Show a message about the status of the operation
 %   Used as interface of cTable/saveTable
 %
-% Syntax:
-%   SaveTable(tbl,filename)
+%   Syntax:
+%     SaveTable(tbl,filename)
 %
-% Input arguments
-%   tbl - cTable object
-%   filename - Name of the file (with extension) to save the table data
+%   Input arguments
+%     tbl - cTable object
+%     filename - Name of the file (with extension) to save the table data
 %
-% Example
-%   <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
+%   Example
+%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %
-% See also cTable
+%   See also cTable
 %
     log=cMessageLogger();
     % Check Input parameters

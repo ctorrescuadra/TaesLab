@@ -6,39 +6,39 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %   'WASTE_INTERNAL' internalises the waste cost to the productive processes that generate them. 
 %   The data model must have at least two states defined to perform the analysis.
 % 
-% Syntax
-%	res = ThermoeconomicDiagnosis(data,Name,Value)
+%   Syntax
+%	  res = ThermoeconomicDiagnosis(data,Name,Value)
 % 
-% Input Arguments
-%   data - cReadModel object containing the data information
+%   Input Arguments
+%     data - cReadModel object containing the data information
 %    
-% Name-Value Arguments
-%   Reference State - Reference State. If not provided first state is used
-%     char array
-%   State - State to compare. If not provided second state is used
-%     char array
-%   DiagnosisMethod - Select the method to compute diagnosis
-%     'WASTE_EXTERNAL' Waste are considered output, and method compute waste cost variation
-%     'WASTE_INTERNAL' Waste are allocated to productive units, and method compute Malfunction cost of wastes
-%   Show -  Show the results on console.  
-%     true | false (default)
-%   SaveAs - Name of file (with extension) to save the results.
+%   Name-Value Arguments
+%     Reference State - Reference State. If not provided first state is used
+%       char array
+%     State - State to compare. If not provided second state is used
+%       char array
+%     DiagnosisMethod - Select the method to compute diagnosis
+%       'WASTE_EXTERNAL' Waste are considered output, and method compute waste cost variation
+%       'WASTE_INTERNAL' Waste are allocated to productive units, and method compute Malfunction cost of wastes
+%     Show -  Show the results on console.  
+%       true | false (default)
+%     SaveAs - Name of file (with extension) to save the results.
 %     char array | string
 % 
-% Output Arguments
-%   res - cResultsInfo object contains the results of the thermoeconomic diagnosis for the required state
-%    The following tables are obtained:
-%     dgn -  diagnosis summary table
-%     mf -   malfunction table
-%     mfc -  malfunction cost table
-%     dit -  irreversibility variation
-%     tmfc - total malfunction cost
-%     dft  - Fuel Impact
+%   Output Arguments
+%     res - cResultsInfo object contains the results of the thermoeconomic diagnosis for the required state
+%     The following tables are obtained:
+%      dgn -  diagnosis summary table
+%      mf -   malfunction table
+%      mfc -  malfunction cost table
+%      dit -  irreversibility variation
+%      tmfc - total malfunction cost
+%      dft  - Fuel Impact
 %
-% Example
-%   <a href="matlab:open ThermoeconomicDiagnosisDemo.mlx">Thermoeconomic Diagnosis Demo</a>
+%   Example
+%     <a href="matlab:open ThermoeconomicDiagnosisDemo.mlx">Thermoeconomic Diagnosis Demo</a>
 %
-% See also cDataModel, cDiagnosis, cResultInfo
+%   See also cDataModel, cDiagnosis, cResultInfo
 %
     res=cMessageLogger();
 	if nargin<1 || ~isObject(data,'cDataModel')

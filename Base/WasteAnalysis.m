@@ -4,42 +4,42 @@ function res = WasteAnalysis(data,varargin)
 %   If the option 'Recycling' is active, it calculates the tables with the direct
 %   and/or generalized costs as a function of the recycling of waste from 0 to 100 percent 
 %
-% Syntax
-%   res=WasteAnalysis(data,Name,Value)
+%   Syntax
+%     res=WasteAnalysis(data,Name,Value)
 %
-% Input Arguments
-% 	data - cDataModel object whose contains the thermoeconomic data model
+%   Input Arguments
+% 	  data - cDataModel object whose contains the thermoeconomic data model
 %
-% Name-Value Arguments
-%   State - Thermoeconomic state. If missing first sample is taken
-%     array char | string
-%   Recycling: Waste Recycling analysis 
-%     false | true (default)
-%   ActiveWaste: Waste Flow key to analyze. If missing first sample is taken
-%     array char | string
-%   CostTables - Indicate which cost tables are calculated
-%     'DIRECT' calculates direct exergy cost tables
-%     'GENERALIZED' calculates generalized exergy cost tables
-%     'ALL' calculate both kind of tables
-%   ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
-%     char array | string
-%   Show - Show the results in the console
-%     true | false (default)
-%   SaveAs - Name of the file where the results will be saved. 
-%     char array | string
+%   Name-Value Arguments
+%     State - Thermoeconomic state. If missing first sample is taken
+%       array char | string
+%     Recycling: Waste Recycling analysis 
+%       false | true (default)
+%     ActiveWaste: Waste Flow key to analyze. If missing first sample is taken
+%       array char | string
+%     CostTables - Indicate which cost tables are calculated
+%       'DIRECT' calculates direct exergy cost tables
+%       'GENERALIZED' calculates generalized exergy cost tables
+%       'ALL' calculate both kind of tables
+%     ResourceSample - Select a sample in ResourcesCost table. If missing first sample is taken
+%       char array | string
+%     Show - Show the results in the console
+%       true | false (default)
+%     SaveAs - Name of the file where the results will be saved. 
+%       char array | string
 %
-% Output Arguments
-%   res - cResultInfo object contains the results of thermoeconomic Analysis
-%    The following tables are obtained:
+%   Output Arguments
+%     res - cResultInfo object contains the results of thermoeconomic Analysis
+%     The following tables are obtained:
 %      wd - waste definition table
 %      wa - waste allocation table
 %      rad - recycling analysis direct cost
 %      rag - recycling analysis generalized cost
 %
-% Example
-%   <a href="matlab:open RecyclingAnalysisDemo.mlx">Recycling Analysis Demo</a>
+%   Example
+%     <a href="matlab:open RecyclingAnalysisDemo.mlx">Recycling Analysis Demo</a>
 %
-% See also cDataModel, cWasteAnalysis, cResultInfo
+%   See also cDataModel, cWasteAnalysis, cResultInfo
 %
     res=cMessageLogger();
     if nargin<1 || ~isObject(data,'cDataModel')

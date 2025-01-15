@@ -2,23 +2,23 @@ function ShowGraph(arg,varargin)
 %ShowGraph - Shows a result table as a graph.
 %	Depending on the graph, additional options could be used.
 %
-% Syntax 
-%  	ShowGraph(arg,Name,Value)
+%   Syntax 
+%  	  ShowGraph(arg,Name,Value)
 % 
-% Input Argument
-% 	arg - cResultSet object
+%   Input Argument
+% 	  arg - cResultSet object
 %
-% Name-Value Arguments
-%   Graph: Name of the table
-%     char array
-%   ShowOutput: Use for diagnosis tables
-%     false | true (default)
-%   WasteFlow: Waste flow key for waste allocation and recycling
-%     char array 
-%   Variables: Use for summary results. 
-%	  cell array
-%   Colorbar: Use Colorbar in Diagram FP
-%     false | true (default)
+%   Name-Value Arguments
+%     Graph: Name of the table
+%       char array
+%     ShowOutput: Use for diagnosis tables
+%       false | true (default)
+%     WasteFlow: Waste flow key for waste allocation and recycling
+%       char array 
+%     Variables: Use for summary results. 
+%	    cell array
+%     Colorbar: Use Colorbar in Diagram FP
+%       false | true (default)
 %
 % Example
 %   <a href="matlab:open ShowGraphDemo.mlx">Show Graph Demo</a>
