@@ -1,5 +1,5 @@
 function res=isIndex(index,range)
-%isInteger - Check if a number belong to an index range
+%isIndex - Check if a number belong to an index range
 %   
 %   Syntax
 %     res = isIndex(val)

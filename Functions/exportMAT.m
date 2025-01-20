@@ -1,19 +1,19 @@
 function log=exportMAT(obj,filename)
 %exportMAT - Save a cTaesLab object as MAT file
-%  This function is used by SaveResults and SaveTable 
+%   This function is used by SaveResults and SaveTable 
 %
-%  Syntax
-%    log=exportMAT(obj, filename)
+%   Syntax
+%     log=exportMAT(obj, filename)
 %
-%  Input Arguments
-%    obj - cTaesLab object to save
-%    filename - MAT file name
-%      char array | string
+%   Input Arguments
+%     obj - cTaesLab object to save
+%     filename - MAT file name
+%       char array | string
 %
-%  Output Arguments
-%    log - cMessageLogger containing the status of the save and error messages
+%   Output Arguments
+%     log - cMessageLogger containing the status of the save and error messages
 %
-%  See also cDataModel, cResultInfo, cTable, importMAT
+%   See also cDataModel, cResultInfo, cTable, importMAT
 %
     log=cMessageLogger();
     if (nargin~=2) || (~isFilename(filename))

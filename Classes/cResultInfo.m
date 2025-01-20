@@ -3,36 +3,36 @@ classdef cResultInfo < cResultSet
 %   It stores the tables and the application class info.
 %   The diferent types (ResultId) of cResultInfo objects are defined in cType.ResultId
 %
-% cResultInfo constructor:
-%   obj = cResultInfo(info,tables)
+%   cResultInfo constructor:
+%     obj = cResultInfo(info,tables)
 %
-% cResultInfo properties:
-%   NrOfTables   - Number of tables
-%   Tables       - Struct containing the tables
-%   Info         - cResultId object containing the results
+%   cResultInfo properties:
+%     NrOfTables   - Number of tables
+%     Tables       - Struct containing the tables
+%     Info         - cResultId object containing the results
 %
-% cResultInfo Methods:
-%   getResultInfo    - Get the result set object
-%   getTable         - Get a table of the result set
-%   getTableIndex    - Get the summary table of th results
-%   summaryDiagnosis - Get the summary diagnosis info
-%   summaryTables    - Get the available summary tables
-%   isStateSummary   - Check if States Summary is available
-%   isSampleSummary  - Check if Samples Summary is available
+%   cResultInfo Methods:
+%     getResultInfo    - Get the result set object
+%     getTable         - Get a table of the result set
+%     getTableIndex    - Get the summary table of th results
+%     summaryDiagnosis - Get the summary diagnosis info
+%     summaryTables    - Get the available summary tables
+%     isStateSummary   - Check if States Summary is available
+%     isSampleSummary  - Check if Samples Summary is available
 %
-% cResultSet Methods
-%   StudyCase      - Get the study case value names
-%   ListOfTables   - get the table names from a result set
-%   printResults   - Print results on console
-%   showResults    - Show results in different interfaces
-%   showGraph      - Show the graph associated to a table
-%   showTableIndex - Show the table index in different interfaces
-%   exportResults  - Export all the result Tables to another format
-%   saveResults    - Save all the result tables in an external file
-%   saveTable      - Save the results in an external file 
-%   exportTable    - Export a table to another format
+%   cResultSet Methods
+%     StudyCase      - Get the study case value names
+%     ListOfTables   - get the table names from a result set
+%     printResults   - Print results on console
+%     showResults    - Show results in different interfaces
+%     showGraph      - Show the graph associated to a table
+%     showTableIndex - Show the table index in different interfaces
+%     exportResults  - Export all the result Tables to another format
+%     saveResults    - Save all the result tables in an external file
+%     saveTable      - Save the results in an external file 
+%     exportTable    - Export a table to another format
 %
-% See also cResultSet, cResultTableBuilder, cTable
+%   See also cResultSet, cResultTableBuilder, cTable
 %
     properties (GetAccess=public, SetAccess=private)
         Tables       % Struct containing the tables
@@ -46,7 +46,7 @@ classdef cResultInfo < cResultSet
 
     methods
         function obj=cResultInfo(info,tables)
-        % cResultInfo - Construct an instance of this class
+        %cResultInfo - Construct an instance of this class
         % Syntax:
         %   obj = cResultInfo(info,tables)
         % Input Arguments:
@@ -75,11 +75,12 @@ classdef cResultInfo < cResultSet
             obj.ModelName=info.ModelName;
             obj.setDefaultGraph(info.DefaultGraph);
             obj.setStudyCase(info);
+            obj.ClassId=cType.ClassId.RESULT_INFO;
             obj.status=info.status;
         end
 
         function res=getResultInfo(obj)
-        % getResultInfo - Get cResultInfo object for cResultSet
+        %getResultInfo - Get cResultInfo object for cResultSet
         % Syntax:
         %   res=obj.getResultInfo
         % Output Arguments
@@ -89,7 +90,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=getTable(obj,name)
-        % getTable - Get the table called name
+        %getTable - Get the table called name
         % Syntax:
         %   res=obj.getTable(name)
         % Input Argument:
@@ -113,7 +114,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=getTableIndex(obj,varargin)
-        % getTableIndex - Get the Table Index
+        %getTableIndex - Get the Table Index
         % Syntax:
         %   res=obj.getTableIndex(options)
         % Input Arguments:
@@ -133,7 +134,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=summaryDiagnosis(obj)
-        % summaryDiagnosis - Get the Fuel Impact/Malfunction Cost as a string including format and unit
+        %summaryDiagnosis - Get the Fuel Impact/Malfunction Cost as a string including format and unit
         %   If no output argument values are displayed on console
         % Syntax:
         %   obj.summaryDiagnosis
@@ -156,7 +157,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=summaryTables(obj)
-        % summaryTable - Get/Display available summary tables
+        %summaryTable - Get/Display available summary tables
         %   If no output argument, the value is displayed in console 
         % Syntax:
         %   obj.summaryTables
@@ -173,7 +174,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=isStateSummary(obj)
-        % isStatesSummary - Check if the States Summary results are available
+        %isStatesSummary - Check if the States Summary results are available
         % Syntax:
         %   res = obj.isStateSummary
         % Output Arguments:
@@ -185,7 +186,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=isSampleSummary(obj)
-        % isSampleSummary - Check if the Samples Summary results are available
+        %isSampleSummary - Check if the Samples Summary results are available
         % Syntax:
         %   res = obj.isStateSummary
         % Output Arguments:

@@ -65,8 +65,6 @@ classdef (Sealed) cExergyCost < cExergyModel
         % Input Arguments:
 		%   exd - cExergyData object
         %   wd - cWasteData object (optional)
-        % Output Arguments Arguments:
-        %  obj - cExergyCost object
         %
 			obj=obj@cExergyModel(exd);
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
@@ -76,14 +74,16 @@ classdef (Sealed) cExergyCost < cExergyModel
             % Get Flow Operators;
 			fpt=obj.FlowProcessTable;
             mG=fpt.mF(:,1:N)*fpt.mP(1:N,:)+fpt.mV;
-            opB=cExergyCost.computeOperator(mG);          
-            if isempty(opB)
-                obj.messageLog(cType.ERROR,cMessages.SingularMatrix,'opB');
+            opB=obj.computeOperator(mG);          
+            if obj.status
+                obj.opBP=fpt.mP(1:N,:)*opB;
+                opBI=scaleRow(obj.opBP,vk1);
+                obj.FlowOperators=struct('mG',mG,'opB',opB,'opI',opBI);
+            else
+                obj.messageLog(cType.ERROR,cMessages.InvalidOperator,'opB');
                 return
             end
-            obj.opBP=fpt.mP(1:N,:)*opB;
-            opBI=scaleRow(obj.opBP,vk1);
-            obj.FlowOperators=struct('mG',mG,'opB',opB,'opI',opBI);
+
             % Get Process Operators
             tfp=obj.TableFP;        
             mPF=divideCol(tfp(:,1:N),obj.FuelExergy);
@@ -168,6 +168,33 @@ classdef (Sealed) cExergyCost < cExergyModel
                 options.GeneralCost=false;
             end
             res=fmt.getCostResults(obj,options);
+        end
+
+        function res=computeOperator(obj,A)
+        % computeOperator - Calculate the operator associated to the matrix A: inv(I-A)
+        % Syntax:
+        %   res = obj.computeOperator(A)
+        % Input:
+        %   A - Square non-negative matrix
+        % Output:
+        %   res - The inverse of the matrix I - A
+            sz=size(A); res=cType.EMPTY;
+            % Check the matrix is square and non-negative
+            if ~isnumeric(A) | (sz(1)~=sz(2))
+                obj.messageLog(cType.ERROR,cMessages.NoSquareMatrix);
+                return
+            end
+            if any(A(:)<0)
+                obj.messageLog(cType.ERROR,cMessages.NegativeMatrix);
+                return
+            end
+            A=full(eye(sz)-A);
+            % Check if the matrix is badly conditioned
+            if rcond(A) < cType.EPS
+                obj.messageLog(cType.ERROR,cMessages.SingularMatrix);
+                return
+            end
+            res=eye(sz)/A;
         end
    
         function res=getProcessCost(obj,rsc)
@@ -529,24 +556,6 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   res - Result matrix
             tmp=scaleCol(A,x);
             res=divideRow(tmp,x);
-        end
-
-        function res=computeOperator(A)
-        % computeOperator - Calculate the operator associated to the matrix A: inv(I-A)
-        %   Use de LU factorization and check if A is a M-Matrix: diag(U)>0
-        % Syntax:
-        %   res = cExergyCost.computeOperator(op,opR)
-        % Input:
-        %   A - productive matrix
-        % Output:
-        %   res - operator inv(I-A)
-            res=cType.EMPTY; N=size(A);
-            [L,U]=lu(eye(N)-A);
-            rcnd=min(diag(U));
-            if rcnd < cType.EPS
-                return
-            end
-            res=(eye(N)/U)/L;
         end
 
         function res=updateOperator(op,opR)

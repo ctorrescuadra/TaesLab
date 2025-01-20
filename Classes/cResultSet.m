@@ -38,9 +38,9 @@ classdef cResultSet < cResultId
 
     methods
         function obj = cResultSet(id)
-        % cResultSet - construct an instance of this class
+        %cResultSet - construct an instance of this class
         % Input Arguments:
-        %   id - result id
+        %   id - Result Id
             obj=obj@cResultId(id);
             switch obj.ResultId
                 case cType.ResultId.RESULT_MODEL
@@ -57,7 +57,7 @@ classdef cResultSet < cResultId
         % Result Set functions.
         %%%
         function res=StudyCase(obj)
-        % StudyCase - Get/display the study case names
+        %StudyCase - Get/display the study case names
         %   If output argument is not provided names are shown on console
         % Syntax:
         %   obj.StudyCase;
@@ -72,7 +72,7 @@ classdef cResultSet < cResultId
         end
 
         function res=ListOfTables(obj)
-        % ListOfTables - Get the list of tables as cell array
+        %ListOfTables - Get the list of tables as cell array
         % Syntax:
         %   obj.ListOfTables
         % Output Arguments:
@@ -85,7 +85,7 @@ classdef cResultSet < cResultId
         end
 
         function res=getTableIndex(obj,varargin)
-        % getTableIndex - Get the table index of the results set
+        %getTableIndex - Get the table index of the results set
         % Syntax:
         %   res=getTableIndex(obj,options)
         % Input Arguments:
@@ -96,22 +96,20 @@ classdef cResultSet < cResultId
         %     cType.VarModel.TABLE: Matlab table
         % Output Arguments:
         %   res - Table Index info in the format selected
-        %
             tmp=getResultInfo(obj);
             res=getTableIndex(tmp,varargin{:});
         end
 
         function printResults(obj)
-        % printResults - print the result tables on console
+        %printResults - print the result tables on console
         % Syntax:
         %   obj.printResults
-        %
             tidx=getTableIndex(obj);
             cellfun(@(x) printTable(x),tidx.Content);
         end
 
         function showResults(obj,name,varargin)
-        % showResults - View an individual table
+        %showResults - View an individual table
         %   If no parameters are provided print the result tables on console.
         % Syntax:
         %   obj.showResults(table,option)
@@ -121,7 +119,6 @@ classdef cResultSet < cResultId
         %     cType.TableView.CONSOLE 
         %     cType.TableView.GUI
         %     cType.TableView.HTML (default)
-        %
             if nargin==1
                 printResults(obj);
                 return
@@ -135,7 +132,7 @@ classdef cResultSet < cResultId
         end
 
         function showGraph(obj,graph,varargin)
-        % showGraph - Show graph with options
+        %showGraph - Show graph with options
         % Syntax:
         %   obj.showGraph(graph, options)
         % Input Arguments:
@@ -187,7 +184,7 @@ classdef cResultSet < cResultId
         end 
 
         function showTableIndex(obj,varargin)
-        % showTableIndex - View the index table of the results set
+        %showTableIndex - View the index table of the results set
         %  Syntax:
         %    obj.showTableIndex(option)
         %  Input Parameters:
@@ -205,7 +202,7 @@ classdef cResultSet < cResultId
         end
 
         function res=exportResults(obj,varmode,fmt)
-        % exportResults - Export result tables into a structure using diferent formats.
+        %exportResults - Export result tables into a structure using diferent formats.
         % Syntax:
         %   res=obj.exportResults(varmode,fmt)
         % Input Arguments:
@@ -232,7 +229,7 @@ classdef cResultSet < cResultId
         end
 
         function log=saveResults(obj,filename)
-        % saveResults - Save result tables in different file formats depending on file extension
+        %saveResults - Save result tables in different file formats depending on file extension
         %   Accepted extensions: xlsx, csv, html, txt, tex
         % Syntax:
         %   log=obj.saveResults(filename)
@@ -274,7 +271,7 @@ classdef cResultSet < cResultId
         end
 
         function res=getTable(obj,name)
-        % getTable - Get the table called name
+        %getTable - Get the table called name
         % Syntax:
         %   res=obj.getTable(name)
         % Input Arguments:
@@ -287,7 +284,7 @@ classdef cResultSet < cResultId
         end
     
         function log=saveTable(obj,tname,filename)
-        % saveTable - Save a result table into a file depending on extension
+        %saveTable - Save a result table into a file depending on extension
         %   Valid extension depends of the result set
         % Syntax
         %   obj.saveTable(tname, filename)
@@ -312,7 +309,7 @@ classdef cResultSet < cResultId
         end
     
         function res=exportTable(obj,tname,varargin)
-        % exportTable - Export tname into the selected varmode/format
+        %exportTable - Export tname into the selected varmode/format
         % Syntax
         %   obj.exportTable(tname,options)
         % Input Arguments
@@ -343,7 +340,7 @@ classdef cResultSet < cResultId
 
     methods(Access=protected)
         function log=saveAsCSV(obj,filename)
-        % saveAsCSV - Save result tables as CSV files, each table in a file
+        %saveAsCSV - Save result tables as CSV files, each table in a file
         %   Create a index file with the folder the files are located
         % Syntax:
         %   log=obj.saveAsCSV(filename)
@@ -395,7 +392,7 @@ classdef cResultSet < cResultId
         end
         
         function log=saveAsXLS(obj,filename)
-        % saveAsXLS - Save the result tables in a Excel file, each table in a worksheet.
+        %saveAsXLS - Save the result tables in a Excel file, each table in a worksheet.
         % Syntax:
         %   log=obj.saveASXLS(filename)
         % Input Arguments:
@@ -464,7 +461,7 @@ classdef cResultSet < cResultId
         end
                 
         function log=saveAsHTML(obj,filename)
-        % saveAsHTML - Save result tables as HTML files.
+        %saveAsHTML - Save result tables as HTML files.
         %	Create a index file and a folder containing all the table files
         % Syntax:
         %   log=obj.saveAsHTML(filename)
@@ -503,7 +500,7 @@ classdef cResultSet < cResultId
         end
         
         function log=saveAsTXT(obj,filename)
-        % saveAsTXT - Save the result tables if a formatted text file
+        %saveAsTXT - Save the result tables if a formatted text file
         % Syntax:
         %   log=saveAsTXT(filename)
         % Input Arguments:
@@ -527,7 +524,7 @@ classdef cResultSet < cResultId
         end
         
         function log=saveAsLaTeX(obj,filename)
-        % saveAsLaTeX - Save the tables into a file in LaTeX format
+        %saveAsLaTeX - Save the tables into a file in LaTeX format
         % Syntax:
         %   log=saveAsLaTeX(filename)
         % Input Arguments:

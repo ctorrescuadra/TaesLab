@@ -14,6 +14,14 @@ function res=ListResultTables(varargin)
 %     res - cResultSet object (optional)
 %
 %   Name-Values Arguments
+%     Columns: Array of cells with the names of the columns to be displayed.
+%       'DESCRIPTION' Description of the table
+%       'RESULT_NAME' cResultInfo name of the table
+%       'GRAPH' - Indicates if it has graphical representation
+%       'TYPE' - Type of cTable
+%       'CODE' - Text of the code for cType.Tables
+%       'RESULT_CODE' - Text of the code for cType.ResultId
+%       If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
 %     View: Selects how to show the table
 %       'CONSOLE' display in the console (default)
 %       'GUI'  use a GUI table
@@ -23,14 +31,6 @@ function res=ListResultTables(varargin)
 %       'CELL' return the table as array of cells
 %       'STRUCT' returns the table as a structured array
 %       'TABLE' returns a matlab table
-%     Columns: Array of cells with the names of the columns to be displayed.
-%       'DESCRIPTION' Description of the table
-%       'RESULT_NAME' cResultInfo name of the table
-%       'GRAPH' - Indicates if it has graphical representation
-%       'TYPE' - Type of cTable
-%       'CODE' - Text of the code for cType.Tables
-%       'RESULT_CODE' - Text of the code for cType.ResultId
-%       If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
 %   SaveAs: Indicates the name of the file where the table will be saved.
 %
 %   Output Arguments
@@ -42,12 +42,17 @@ function res=ListResultTables(varargin)
 %   See also cTablesDefinition, cThermoeconomicModel
 %
     res=cMessageLogger();
-    % Check if model is provided
-    isResultSet=false;
-    if nargin>0 && isObject(varargin{1},'cResultSet')
+    % Check the variable arguments
+    if nargin==0
+        isResultSet=false;
+    elseif nargin>0 && isObject(varargin{1},'cResultSet')
         isResultSet=true;
         arg=varargin{1};
         varargin=varargin(2:end);
+    else
+        res.printError(cMessages.InvalidArgument);
+        res.printError(cMessages.ShowHelp);
+        return
     end
     % Select View depending of nargout
     if nargout 
@@ -69,7 +74,7 @@ function res=ListResultTables(varargin)
         return
     end
     param=p.Results;
-    % Build the Tables directory 
+    % Get the table index or table directory
     if isResultSet
         switch arg.ClassId
             case cType.ClassId.RESULT_MODEL

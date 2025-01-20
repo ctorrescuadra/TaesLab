@@ -1,5 +1,5 @@
 function res=isInteger(val)
-%isInteger - Check if the value is an integer nuember
+%isInteger - Check if the value is an integer number
 %   
 %   Syntax
 %     res = isInteger(val)

@@ -94,7 +94,10 @@ classdef cMessages
         NegativeIrreversibilty='Irreversibility of process %s is negative %f'
         ZeroProduct='Product of process %s is zero'
         ProcessNotActive='Process %s is not active'
-        SingularMatrix='The cost matrix %s is singular or badly conditioned'
+        SingularMatrix='The matrix is singular or badly conditioned.'
+        NoSquareMatrix='The matrix is not square'
+        NegativeMatrix='The matrix is negative'
+        InvalidOperator='The cost operator %s is invalid. See error log'
         % Diagnosis
         ExergyCostRequired='Input parameters are NOT cExergyCost objects'
         DiagnosisNotAvailable='Thermoeconomic Diagnosis is NOT available'
@@ -118,7 +121,7 @@ classdef cMessages
         NegativeResourceValue='Resource values must be non-negative'
         InvalidProcessValues='Invalid resource values'
         % Summary messages
-        SummaryNotAvailable='Summary results are NOT available'
+        SummaryNotAvailable='Summary Results NOT available'
         InvalidSummaryOption='Invalid summary option'
         InvalidSummaryData='Invalid summary dataset'
         % Table messages

@@ -30,7 +30,7 @@ classdef cProductiveStructure < cResultId
 %
 %   cProductiveStructure methods:
 %     buildResultInfo   - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
-%     WasteData         - Get the deafault waste data
+%     WasteData         - Get the default waste data
 %     IncidenceMatrix   - Get the incidence matrices 
 %     StructuralMatrix  - Get the structural matrix
 %     ProductiveMatrix  - Get the productive matrix
@@ -44,6 +44,9 @@ classdef cProductiveStructure < cResultId
 %     getStreamTypes    - Get the stream number of type typeId
 %     getFuelStreams    - Get the Fuel streams ids
 %     getProductStreams - Get the Product streams ids
+%     getResourceNames  - Get the resource flow names
+%     getProductNames   - Get the final product flow names
+%     getWasteNames     - Get the waste flow names
 %     flows2streams     - Compute the exergy or cost of streams from flow values
 %
 %   See also cDataModel, cResultId
@@ -85,6 +88,8 @@ classdef cProductiveStructure < cResultId
     methods
 		function obj = cProductiveStructure(dm)
 		% cProductiveStructure - Creates an instance of the class
+		% Syntax:
+		%   obj = cProductiveStructure(dm)
 		% Input argument:
         %   dm - cModelData object
         	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
@@ -442,7 +447,7 @@ classdef cProductiveStructure < cResultId
 		function res=getFlowTypes(obj,typeId)
 		% getFlowTypes - Get the flowId of type typeId
 		% Syntax:
-		%   res = obj.getFlowTypes(key)
+		%   res = obj.getFlowTypes(typeId)
 		% Input Arguments:
 		%   typeId - Flow type id
 		% Output Arguments:
@@ -455,7 +460,7 @@ classdef cProductiveStructure < cResultId
 		function res=getProcessTypes(obj,typeId)
 		% getProcessTypes - Get the process-id of type typeId
 		% Syntax:
-		%   res = obj.getProcessTypes(key)
+		%   res = obj.getProcessTypes(TypeId)
 		% Input Arguments:
 		%   typeId - Process type id
 		% Output Arguments:
@@ -468,7 +473,7 @@ classdef cProductiveStructure < cResultId
 		function res=getStreamTypes(obj,typeId)
 		% getStreamTypes - Get the stream-id of type typeId
 		% Syntax:
-		%   res = obj.getStreamTypes(key)
+		%   res = obj.getStreamTypes(typeId)
 		% Input Arguments:
 		%   typeId - stream type id
 		% Output Arguments:
@@ -481,8 +486,8 @@ classdef cProductiveStructure < cResultId
 		function res=getProductStreams(obj)
 		% getProductStreams - Get the product streams id (including resources)
 		% Syntax:
-		%   res = obj.getProductStreams(key)
-		% Output Aguments
+		%   res = obj.getProductStreams
+		% Output Arguments:
 		%   res - Array with the product streams id
 			streamtypes=[obj.Streams.typeId];
 			res=find(bitget(streamtypes,cType.INTERNAL));
@@ -491,13 +496,40 @@ classdef cProductiveStructure < cResultId
 		function res=getFuelStreams(obj)
 		%getFuelStreams - Get the fuel streams id (including output and wastes)
 		% Syntax:
-		%   res = obj.getFuelStreams(key)
-		% Output Aguments
+		%   res = obj.getFuelStreams
+		% Output Arguments:
 		%   res - Array with the fuel streams id
 			streamtypes=[obj.Streams.typeId];	
 			res=find(~bitget(streamtypes,cType.INTERNAL));
 		end
-	
+
+		function res=getResourceNames(obj)
+		%getResourceNames - Get the name of the resource flows
+		% Syntax:
+		%   res = obj.getResourceNames
+		% Output Arguments:
+		%   res - Cell Array with the resource names
+			res=obj.FlowKeys(obj.Resources.flows);
+		end
+
+		function res=getProductNames(obj)
+		%getProductNames - Get the name of the final products flows
+		% Syntax:
+		%   res = obj.getProductNames
+		% Output Arguments
+		%   res - Cell Array with the final product names
+			res=obj.FlowKeys(obj.FinalProducts.flows);
+		end
+
+		function res=getWasteNames(obj)
+		%getWasteNames - Get the name of the waste flows
+		% Syntax
+		%   res = obj.getProductNames
+		% Output Aguments
+		%   res - Cell Array with the waste flow names
+			res=obj.FlowKeys(obj.Waste.flows);
+		end
+
 		function [E,ET]=flows2Streams(obj,val)
 		% flows2streams - Compute the exergy or cost of streams from flow values
 		% Syntax:

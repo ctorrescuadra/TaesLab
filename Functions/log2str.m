@@ -1,5 +1,5 @@
 function res=log2str(val)
-% Get the string representation of a logical value
+%log2str - Get the string representation of a logical value
 %
 %   Syntax
 %     str = log2str(x)

@@ -1,10 +1,15 @@
 function res=transitiveClosure(A)
-% transitiveClosure - Compute the transitive closure of a digraph
+%transitiveClosure - Compute the transitive closure of a digraph
 %   Use the Warshall's Algorithm
-% Input Arguments
-%   A - Adjacency matrix of the digraph
-% Output Arguments
-%   res - Connectivity matrix
+%
+%   Syntax
+%     res = transitiveClosure(A)
+% 
+%   Input Arguments
+%     A - Adjacency matrix of the digraph
+%
+%   Output Arguments
+%     res - Connectivity matrix
 %
     res=A;
     idx=1:size(A,1);

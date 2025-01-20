@@ -18,7 +18,7 @@ classdef(Sealed) cDataset < cDictionary
   
     methods
         function obj=cDataset(list)
-        % cDataSet - Build an instance of the object
+        %cDataSet - Build an instance of the object
         % Syntax:
         %   obj = cDataset(list)
         % Input Arguments:
@@ -26,11 +26,13 @@ classdef(Sealed) cDataset < cDictionary
         %
             % Validate list
             obj=obj@cDictionary(list);
-            obj.Values=cell(1,length(obj));
+            if obj.status
+                obj.Values=cell(1,length(obj));
+            end
         end
  
         function res=getValues(obj,arg)
-        % getvalues - Get an element of the dataset
+        %getvalues - Get an element of the dataset
         % Syntax: 
         %   res = obj.getValues(arg)
         % Input Argument:
@@ -49,7 +51,7 @@ classdef(Sealed) cDataset < cDictionary
         end
 
         function log=setValues(obj,arg,val)
-        % setValues - Set the values in position indicates by arg
+        %setValues - Set the values in position indicates by arg
         % Syntax: 
         %   res = obj.getValues(arg)
         % Input Argument:

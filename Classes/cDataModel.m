@@ -93,7 +93,7 @@ classdef cDataModel < cResultSet
             status=ps.status;
             if status
                 obj.ProductiveStructure=ps;
-				obj.messageLog(cType.INFO,cMessages.ValidProductiveStructure');
+				obj.messageLog(cType.INFO,cMessages.ValidProductiveStructure);
             else
                 obj.addLogger(ps);
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
