@@ -81,12 +81,12 @@ classdef cDataModel < cResultSet
         %   dm - cModelData object with the data of the model
         %
             % Check Data Structure
-            obj=obj@cResultSet(cType.ClassId.DATA_MODEL);
             if ~isObject(dm,'cModelData')
                 obj.addLogger(dm)
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(dm));
                 return
             end
+            obj.ClassId=cType.ClassId.DATA_MODEL;
             obj.isResourceCost=dm.isResourceCost;
             % Check and get Productive Structure
             ps=cProductiveStructure(dm);
@@ -281,7 +281,7 @@ classdef cDataModel < cResultSet
         % Get Data model information
         %%%
         function res=getExergyData(obj,state)
-        % Get the exergy data for a state
+        %getExergyData - Get the exergy data for a state
         % Syntax:
         %   res = obj.getExergyData(state)
         % Input Arguments:
@@ -294,7 +294,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=setExergyData(obj,state,values)
-        % Set the exergy data values of a state
+        %setExergyData - Set the exergy data values of a state
         % Syntax:
         %   res = obj.setExergyData(state,values)
         % Input Argument:
@@ -335,7 +335,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=getResourceData(obj,sample)
-        % Get the resource data for a sample
+        %getResourceData - Get the resource data for a sample
         % Syntax:
         %   res = obj.getResourceData(sample)
         % Input Arguments:
@@ -348,7 +348,7 @@ classdef cDataModel < cResultSet
         end
 		
 		function res=existState(obj,state)
-		% Check if state is defined in States
+		%existState - Check if state is defined in States
         % Syntax:
         %   res = obj.existState(state)
         % Input Argument:
@@ -360,7 +360,7 @@ classdef cDataModel < cResultSet
         end
 
 		function res=existSample(obj,sample)
-		% Check if sample is defined in ResourceState
+		%existSample - Check if sample is defined in ResourceState
         % Syntax:
         %   res = obj.existState(sample)
         % Input Argument:
@@ -372,7 +372,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=getTablesDirectory(obj,varargin)
-        % Get the tables directory
+        %getTablesDirectory - Get the tables directory
         % Syntax:
         %   res = obj.getTablesDirectory(options)
         % Input Arguments:
@@ -385,7 +385,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=getTableInfo(obj,name)
-        % Get information about a table
+        %getTableInfo - Get information about a table
         % Syntax:
         %   res = obj.getTableInfo(name)
         % Input Argument:
@@ -400,7 +400,7 @@ classdef cDataModel < cResultSet
         % ResultSet Methods
         %%%
         function res=getResultInfo(obj)
-        % Get data model result info
+        %getResultInfo - Get data model result info
         % Syntax:
         %   res=obj.getResultInfo
         % Output Arguments:
@@ -410,7 +410,7 @@ classdef cDataModel < cResultSet
         end
 
         function showDataModel(obj,varargin)
-        % View a table in a GUI Table
+        %showDataModel - View a table in a GUI Table
         % Syntax:
         %   obj.showDataModel(options)
         % Input Arguments:
@@ -425,7 +425,7 @@ classdef cDataModel < cResultSet
         end
 
         function log=saveDataModel(obj,filename)
-		% Save data model depending of filename extension
+		%SaveDataModel - Save data model depending of filename extension
         %   Valid extension are: txt, csv, html, xlsx, json, xml, mat
         % Input Arguments:
         %   filename - name of the file including extension.

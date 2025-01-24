@@ -38,7 +38,10 @@ classdef (Sealed) cProductiveDiagram < cResultId
         % Input Argument:
         %   ps - cProductiveStructure object
         %
-            obj=obj@cResultId(cType.ResultId.PRODUCTIVE_DIAGRAM);
+            if ~isObject(ps,'cProductiveStructure')
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
+                return
+            end
             % Get Flows (FAT) info  
             nodenames=[ps.FlowKeys];
             flowMatrix=ps.StructuralMatrix;
@@ -67,6 +70,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
             nodetypes=[repmat({cType.NodeType.PROCESS},1,length(nodenames))];
             obj.NodesPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             % Set ResultId properties
+            obj.ResultId=cType.ResultId.PRODUCTIVE_DIAGRAM;
             obj.DefaultGraph=cType.Tables.FLOWS_DIAGRAM;
             obj.ModelName=ps.ModelName;
             obj.State=ps.State;

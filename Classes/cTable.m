@@ -45,10 +45,12 @@ classdef (Abstract) cTable < cMessageLogger
         Resources=false % Contains resources info
         GraphType=0     % Graph Type associated to table
     end
+    
     properties(Access=protected)
         fcol            % Array with columns format
         wcol            % Array with columns width
     end
+
     methods
         function res=get.Values(obj)
         % Get the table Values

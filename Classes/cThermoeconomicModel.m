@@ -154,7 +154,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   data - cDataModel object 
         %   varargin - optional paramaters (see ThermoeconomicModel)
         %   
-            obj=obj@cResultSet(cType.ResultId.RESULT_MODEL);
             if ~isObject(data,'cDataModel')
                 obj.printError(cMessages.InvalidObject,class(data));
                 return
@@ -168,6 +167,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             obj.ResultName=cType.Results{obj.ResultId};
             obj.ModelName=data.ModelName;
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
+            obj.ClassId=cType.ClassId.RESULT_MODEL;
             % Check optional input parameters
             p = inputParser;
             refstate=data.StateNames{1};

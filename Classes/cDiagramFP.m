@@ -24,13 +24,18 @@ classdef (Sealed) cDiagramFP < cResultId
         % Input Argument:
         %   exc - cExergyCost object
         %
-            obj=obj@cResultId(cType.ResultId.DIAGRAM_FP);
-            % Create the edges of the tables 
+            if ~isObject(exc,'cExergyCost')
+                obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exc));
+                return
+            end
+            % Create the edges of the tables
             nodes=exc.ps.ProcessKeys;
             values=exc.TableFP;
             obj.EdgesFP=cDiagramFP.adjacencyTable(values,nodes);
             values=exc.getCostTableFP;
             obj.EdgesCFP=cDiagramFP.adjacencyTable(values,nodes);
+            % cResultId properties
+            obj.ResultId=cType.ResultId.DIAGRAM_FP;
             obj.DefaultGraph=cType.Tables.DIAGRAM_FP;
             obj.ModelName=exc.ModelName;
             obj.State=exc.State;

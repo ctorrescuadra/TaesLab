@@ -46,7 +46,6 @@ classdef (Sealed) cSummaryResults < cResultId
         %   option - Type of summary results to obtain
         %    If it is missing is determined by the model (cSummaryOptions)
         %
-            obj=obj@cResultId(cType.ResultId.SUMMARY_RESULTS);
             % Check Input Arguments
             if ~isObject(model,'cThermoeconomicModel')
                 obj.addLogger(model);
@@ -94,6 +93,7 @@ classdef (Sealed) cSummaryResults < cResultId
             obj.setSummaryTables(model);
             % cResultId properties
             obj.sopt=sopt;
+            obj.ResultId=cType.ResultId.SUMMARY_RESULTS;
             obj.DefaultGraph=obj.setDefaultSummaryGraph;
             obj.ModelName=model.ModelName;
             obj.State=model.State;

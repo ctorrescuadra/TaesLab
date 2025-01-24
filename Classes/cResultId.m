@@ -1,4 +1,4 @@
-classdef cResultId < cMessageLogger
+classdef(Abstract) cResultId < cMessageLogger
 % cResultId base class to define the ResultId of the classes which provide results
 % 	It is used in: cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
 %	cRecyclingAnalysis, cDiagramFP, cWasteData and cSummaryResults
@@ -17,33 +17,15 @@ classdef cResultId < cMessageLogger
 %   setDefaultGraph - Set the default graph
 
 	properties(GetAccess=public,SetAccess=protected)
-		ResultId       % Result Id
-		ResultName     % Result Name
-        ModelName      % Model Name
-        State          % State Name
-        Sample         % Sample Name
-		DefaultGraph   % Default Graph
+		ResultId                       % Result Id
+		ResultName                     % Result Name
+        ModelName=cType.EMPTY_CHAR     % Model Name
+        State=cType.EMPTY_CHAR         % State Name
+        Sample=cType.EMPTY_CHAR        % Sample Name
+		DefaultGraph=cType.EMPTY_CHAR  % Default Graph
     end
 
 	methods
-		function obj = cResultId(id)
-        % Class constructor
-        % Syntax:
-        %   obj = cResultId(id)
-		% Input Arguments:
-		%	id - Result identifier. 
-        % See also cType.ResultId
-        %
-            if isIndex(id,1:cType.MAX_RESULT_INFO)
-			    obj.ResultId=id;
-                obj.ModelName=cType.EMPTY_CHAR;
-                obj.State=cType.EMPTY_CHAR;
-                obj.Sample=cType.EMPTY_CHAR;
-                obj.DefaultGraph=cType.EMPTY_CHAR;
-            else
-                obj.messageLog(cType.ERROR,cMessages.InvalidResultId,id);
-            end
-        end
 		
         function res=get.ResultName(obj)
         % Get the result name
@@ -64,7 +46,7 @@ classdef cResultId < cMessageLogger
         end
 
         function setDefaultGraph(obj,graph)
-        % Set DefaultGraph. Internal package use only
+        % Set Default Graph. Internal package use only
             obj.DefaultGraph=graph;
         end
 	end

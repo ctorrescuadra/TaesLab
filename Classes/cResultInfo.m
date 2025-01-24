@@ -54,7 +54,6 @@ classdef cResultInfo < cResultSet
         %   tables - struct containig the result tables
         %
             % Check parameters
-            obj=obj@cResultSet(info.ResultId);
             if ~info.status
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(info));
                 return
@@ -70,12 +69,13 @@ classdef cResultInfo < cResultSet
             % Fill the class values
             obj.Info=info;
             obj.Tables=tables;
+            obj.ClassId=cType.ClassId.RESULT_INFO;
+            obj.ResultId=info.ResultId;
             obj.tableIndex=cTableIndex(obj);
             obj.NrOfTables=obj.tableIndex.NrOfRows;
             obj.ModelName=info.ModelName;
             obj.setDefaultGraph(info.DefaultGraph);
             obj.setStudyCase(info);
-            obj.ClassId=cType.ClassId.RESULT_INFO;
             obj.status=info.status;
         end
 

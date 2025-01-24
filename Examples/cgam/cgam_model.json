@@ -59,8 +59,8 @@
       {
         "key": "COMB",
         "description": "Combustor",
-        "fuel": "NG",
-        "product": "B4-B3",
+        "fuel": "NG+B3",
+        "product": "B4",
         "type": "PRODUCTIVE"
       },
       {
@@ -546,7 +546,7 @@
   "WasteDefinition": {
     "wastes": {
       "flow": "QG",
-      "type": "MANUAL",
+      "type": "EXERGY",
       "recycle": 0,
       "values": [
         {

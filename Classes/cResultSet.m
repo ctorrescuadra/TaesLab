@@ -1,4 +1,4 @@
-classdef cResultSet < cResultId
+classdef(Abstract) cResultSet < cResultId
 % cResultSet is the base class for results classes
 %   The results classes are cResultInfo, cDataModel and cThermoeconomicModel
 %   It provide methods to:
@@ -7,11 +7,8 @@ classdef cResultSet < cResultId
 %   - Show the results in graphic user interfaces
 %   - Save the results in files: XLSX, CSV, TXT LaTeX and HTML
 %
-% cResultSet constructor:
-%   obj = cResultSet(id)
-% 
 % cResultSet Properties:
-%   classId - Result Set Id
+%   ClassId - Result Set Id
 %     cType.ClassId.RESULT_INFO
 %     cType.ClassId.DATA_MODEL
 %     cTtpe.ClassId.RESULT_MODEL
@@ -37,22 +34,6 @@ classdef cResultSet < cResultId
     end
 
     methods
-        function obj = cResultSet(id)
-        %cResultSet - construct an instance of this class
-        % Input Arguments:
-        %   id - Result Id
-            obj=obj@cResultId(id);
-            switch obj.ResultId
-                case cType.ResultId.RESULT_MODEL
-                    res=cType.ClassId.RESULT_MODEL;
-                case cType.ResultId.DATA_MODEL
-                    res=cType.ClassId.DATA_MODEL;
-                otherwise
-                    res=cType.ClassId.RESULT_INFO;
-            end
-            obj.ClassId=res;
-        end
-        
         %%%
         % Result Set functions.
         %%%

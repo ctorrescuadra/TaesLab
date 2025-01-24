@@ -92,7 +92,7 @@ classdef cProductiveStructure < cResultId
 		%   obj = cProductiveStructure(dm)
 		% Input argument:
         %   dm - cModelData object
-        	obj=obj@cResultId(cType.ResultId.PRODUCTIVE_STRUCTURE);
+		%
 			% Check/validate file content
             if ~isObject(dm,'cModelData')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(dm));
@@ -195,6 +195,7 @@ classdef cProductiveStructure < cResultId
 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveGraph);
 				return
 			end
+			obj.ResultId=cType.ResultId.PRODUCTIVE_STRUCTURE;
 			obj.ModelName=data.name;
 			obj.State='SUMMARY';
         end

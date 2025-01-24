@@ -81,7 +81,6 @@ classdef(Sealed) cDiagnosis < cResultId
         %     cType.DiagnosisMethod.WASTE_EXTERNAL
         %     cType.DiagnosisMethod.WASTE_INTERNAL
         %
-            obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_DIAGNOSIS);
             % Check Arguments
             if ~isObject(fp0,'cExergyCost') || ~isObject(fp1,'cExergyCost')
                 obj.messageLog(cType.ERROR,cMessages.ExergyCostRequired);
@@ -137,8 +136,9 @@ classdef(Sealed) cDiagnosis < cResultId
             obj.DWTEC=obj.computeDWTEC(dpuk0.cP,obj.dpuk.cP);
             obj.DFT=sum(fp1.Resources-fp0.Resources);
             obj.A0=obj.DFT - sum(obj.DWTEC);
-            % Object Status Information
             obj.Method=method;
+            % cResultId properties
+            obj.ResultId=cType.ResultId.THERMOECONOMIC_DIAGNOSIS;
             obj.DefaultGraph=cType.Tables.MALFUNCTION_COST;
             obj.ModelName=fp1.ModelName;
             obj.State=fp1.State;

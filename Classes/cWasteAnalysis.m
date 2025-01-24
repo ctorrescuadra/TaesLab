@@ -44,7 +44,6 @@ classdef (Sealed) cWasteAnalysis < cResultId
         %   wkey - Current waste flow key 
         %   rsd - cResourcesData object (optional)
         %
-            obj=obj@cResultId(cType.ResultId.WASTE_ANALYSIS);
             % Check mandatory parameters
             if nargin < 3
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
@@ -94,6 +93,8 @@ classdef (Sealed) cWasteAnalysis < cResultId
             if recycling
                 obj.recyclingAnalysis;
             end
+            % cResultI dProperties
+            obj.ResultId=cType.ResultId.WASTE_ANALYSIS;
             obj.DefaultGraph=cType.Tables.WASTE_ALLOCATION;
             obj.ModelName=fpm.ModelName;
             obj.State=fpm.State;

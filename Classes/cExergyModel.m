@@ -63,7 +63,6 @@ classdef cExergyModel < cResultId
 		%   obj = cExergyModel(exd)
 		% Input Arguments:
 		%   exd - cExergyData object
-			obj=obj@cResultId(cType.ResultId.THERMOECONOMIC_STATE);
             if ~isObject(exd,'cExergyData')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exd));
 				return
@@ -118,6 +117,8 @@ classdef cExergyModel < cResultId
 			obj.StreamsExergy=exd.StreamsExergy;
             obj.ActiveProcesses=exd.ActiveProcesses;
 			obj.DefaultGraph=cType.Tables.TABLE_FP;
+			% cResultId properties
+			obj.ResultId=cType.ResultId.THERMOECONOMIC_STATE;
             obj.ModelName=obj.ps.ModelName;
             obj.State=exd.State;
 		end		       		
