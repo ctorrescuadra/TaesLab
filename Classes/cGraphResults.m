@@ -35,8 +35,6 @@ classdef (Sealed) cGraphResults < cMessageLogger
 		%      List of flows/processes to show
 		%    waste: cType.GraphType.WASTE_ALLOCATION
 		%      Waste flow to analize 
-		%    waste: cType.GraphType.RECYCLING
-		%      Waste flow to analyze
 		%    nodes: cType.GraphType.DIGRAPH
 		%      Nodes structure of productive grapphs
 		% 

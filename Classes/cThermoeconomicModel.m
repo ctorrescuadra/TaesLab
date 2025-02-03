@@ -707,7 +707,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
             % Check configurations
             if ~all(obj.fp0.ActiveProcesses==obj.fp1.ActiveProcesses)
-                obj.printDebugInfo(cMessages.InvalidDiagnosisStruct);
+                obj.printDebugInfo(cMessages.InvalidDiagnosisConf);
                 return
             end
             res=true;
@@ -890,6 +890,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if nargin==1
                 res=getResultInfo(obj);
                 printResults(res);
+                return
+            end
+            if ~ischar(name)
+                obj.printWarning(cMessages.InvalidArgument)
                 return
             end
             tbl=getTable(obj,name);
@@ -1433,7 +1437,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if sr.status
                 res=getSummaryResults(obj.fmt,sr);
                 obj.setResults(res,true);
-                obj.printDebugInfo(cMesagges.ComputeSummary);
+                obj.printDebugInfo(cMessages.ComputeSummary,obj.Summary);
             else
                  sr.printLogger;
             end

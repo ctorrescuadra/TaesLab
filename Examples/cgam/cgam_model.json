@@ -35,20 +35,16 @@
         "type": "INTERNAL"
       },
       {
-        "key": "B8",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B9",
-        "type": "OUTPUT"
+        "key": "WC",
+        "type": "INTERNAL"
       },
       {
         "key": "WN",
         "type": "OUTPUT"
       },
       {
-        "key": "WC",
-        "type": "INTERNAL"
+        "key": "QV",
+        "type": "OUTPUT"
       },
       {
         "key": "QG",
@@ -64,14 +60,14 @@
         "type": "PRODUCTIVE"
       },
       {
-        "key": "COMP",
+        "key": "CMP",
         "description": "Compressor",
         "fuel": "WC",
         "product": "B2-B1",
         "type": "PRODUCTIVE"
       },
       {
-        "key": "TURB",
+        "key": "TRB",
         "description": "Turbine",
         "fuel": "B4-B5",
         "product": "WC+WN",
@@ -88,7 +84,7 @@
         "key": "HRSG",
         "description": "HRSG",
         "fuel": "B6-B7",
-        "product": "B9-B8",
+        "product": "QV",
         "type": "PRODUCTIVE"
       },
       {
@@ -107,7 +103,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 82.711
+            "value": 72465
           },
           {
             "key": "B1",
@@ -115,47 +111,43 @@
           },
           {
             "key": "B2",
-            "value": 28.511
+            "value": 28651
           },
           {
             "key": "B3",
-            "value": 47.246
+            "value": 50339
           },
           {
             "key": "B4",
-            "value": 104.268
+            "value": 102530
           },
           {
             "key": "B5",
-            "value": 40.496
+            "value": 38810
           },
           {
             "key": "B6",
-            "value": 19.557
+            "value": 14784
           },
           {
             "key": "B7",
-            "value": 2.092
-          },
-          {
-            "key": "B8",
-            "value": 0
-          },
-          {
-            "key": "B9",
-            "value": 12.626
-          },
-          {
-            "key": "WN",
-            "value": 30
+            "value": 2122
           },
           {
             "key": "WC",
-            "value": 31.096
+            "value": 31105
+          },
+          {
+            "key": "WN",
+            "value": 30000
+          },
+          {
+            "key": "QV",
+            "value": 9302.57
           },
           {
             "key": "QG",
-            "value": 2.092
+            "value": 2122
           }
         ]
       },
@@ -164,7 +156,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 83.674
+            "value": 73327
           },
           {
             "key": "B1",
@@ -172,47 +164,43 @@
           },
           {
             "key": "B2",
-            "value": 29.338
+            "value": 29507
           },
           {
             "key": "B3",
-            "value": 47.84
+            "value": 50896
           },
           {
             "key": "B4",
-            "value": 105.253
+            "value": 103462
           },
           {
             "key": "B5",
-            "value": 40.502
+            "value": 38735
           },
           {
             "key": "B6",
-            "value": 19.815
+            "value": 15021
           },
           {
             "key": "B7",
-            "value": 2.207
-          },
-          {
-            "key": "B8",
-            "value": 0
-          },
-          {
-            "key": "B9",
-            "value": 12.745
-          },
-          {
-            "key": "WN",
-            "value": 30
+            "value": 2230
           },
           {
             "key": "WC",
-            "value": 31.998
+            "value": 32033
+          },
+          {
+            "key": "WN",
+            "value": 30000
+          },
+          {
+            "key": "QV",
+            "value": 9403.36
           },
           {
             "key": "QG",
-            "value": 2.207
+            "value": 2230
           }
         ]
       },
@@ -221,7 +209,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 83.964
+            "value": 73600
           },
           {
             "key": "B1",
@@ -229,47 +217,43 @@
           },
           {
             "key": "B2",
-            "value": 29.096
+            "value": 29337
           },
           {
             "key": "B3",
-            "value": 48.499
+            "value": 51926
           },
           {
             "key": "B4",
-            "value": 106.398
+            "value": 104971
           },
           {
             "key": "B5",
-            "value": 41.747
+            "value": 40230
           },
           {
             "key": "B6",
-            "value": 20.064
+            "value": 15213
           },
           {
             "key": "B7",
-            "value": 2.116
-          },
-          {
-            "key": "B8",
-            "value": 0
-          },
-          {
-            "key": "B9",
-            "value": 12.97
-          },
-          {
-            "key": "WN",
-            "value": 30
+            "value": 2156
           },
           {
             "key": "WC",
-            "value": 31.734
+            "value": 31849
+          },
+          {
+            "key": "WN",
+            "value": 30000
+          },
+          {
+            "key": "QV",
+            "value": 9590.97
           },
           {
             "key": "QG",
-            "value": 2.116
+            "value": 2156
           }
         ]
       },
@@ -278,7 +262,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 83.688
+            "value": 73297
           },
           {
             "key": "B1",
@@ -286,56 +270,52 @@
           },
           {
             "key": "B2",
-            "value": 29.063
+            "value": 29196
           },
           {
             "key": "B3",
-            "value": 47.89
+            "value": 51018
           },
           {
             "key": "B4",
-            "value": 105.588
+            "value": 103813
           },
           {
             "key": "B5",
-            "value": 41.009
+            "value": 39295
           },
           {
             "key": "B6",
-            "value": 19.986
+            "value": 15137
           },
           {
             "key": "B7",
-            "value": 2.087
-          },
-          {
-            "key": "B8",
-            "value": 0
-          },
-          {
-            "key": "B9",
-            "value": 12.931
-          },
-          {
-            "key": "WN",
-            "value": 30
+            "value": 2112
           },
           {
             "key": "WC",
-            "value": 31.87
+            "value": 31869
+          },
+          {
+            "key": "WN",
+            "value": 30000
+          },
+          {
+            "key": "QV",
+            "value": 9564.02
           },
           {
             "key": "QG",
-            "value": 2.087
+            "value": 2112
           }
         ]
       },
       {
-        "stateId": "RP84",
+        "stateId": "RP8",
         "exergy": [
           {
             "key": "NG",
-            "value": 82.711
+            "value": 72283
           },
           {
             "key": "B1",
@@ -343,56 +323,52 @@
           },
           {
             "key": "B2",
-            "value": 28.311
+            "value": 27863
           },
           {
             "key": "B3",
-            "value": 47.364
+            "value": 51048
           },
           {
             "key": "B4",
-            "value": 104.389
+            "value": 103163
           },
           {
             "key": "B5",
-            "value": 40.84
+            "value": 40324
           },
           {
             "key": "B6",
-            "value": 19.532
+            "value": 14597
           },
           {
             "key": "B7",
-            "value": 2.11
-          },
-          {
-            "key": "B8",
-            "value": 0
-          },
-          {
-            "key": "B9",
-            "value": 12.599
-          },
-          {
-            "key": "WN",
-            "value": 30
+            "value": 2228
           },
           {
             "key": "WC",
-            "value": 30.891
+            "value": 30295
+          },
+          {
+            "key": "WN",
+            "value": 30000
+          },
+          {
+            "key": "QV",
+            "value": 9097
           },
           {
             "key": "QG",
-            "value": 2.11
+            "value": 2228
           }
         ]
       },
       {
-        "stateId": "PINCH10",
+        "stateId": "PINCH15",
         "exergy": [
           {
             "key": "NG",
-            "value": 82.711
+            "value": 72465
           },
           {
             "key": "B1",
@@ -400,47 +376,43 @@
           },
           {
             "key": "B2",
-            "value": 28.511
+            "value": 28651
           },
           {
             "key": "B3",
-            "value": 47.246
+            "value": 50339
           },
           {
             "key": "B4",
-            "value": 104.268
+            "value": 102530
           },
           {
             "key": "B5",
-            "value": 40.496
+            "value": 38810
           },
           {
             "key": "B6",
-            "value": 19.557
+            "value": 14784
           },
           {
             "key": "B7",
-            "value": 2.186
-          },
-          {
-            "key": "B8",
-            "value": 0
-          },
-          {
-            "key": "B9",
-            "value": 12.512
-          },
-          {
-            "key": "WN",
-            "value": 30
+            "value": 2353
           },
           {
             "key": "WC",
-            "value": 31.096
+            "value": 31105
+          },
+          {
+            "key": "WN",
+            "value": 30000
+          },
+          {
+            "key": "QV",
+            "value": 9038.12
           },
           {
             "key": "QG",
-            "value": 2.186
+            "value": 2353
           }
         ]
       },
@@ -449,7 +421,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 82.711
+            "value": 72465
           },
           {
             "key": "B1",
@@ -457,47 +429,43 @@
           },
           {
             "key": "B2",
-            "value": 28.511
+            "value": 28651
           },
           {
             "key": "B3",
-            "value": 47.246
+            "value": 50339
           },
           {
             "key": "B4",
-            "value": 104.268
+            "value": 102530
           },
           {
             "key": "B5",
-            "value": 40.496
+            "value": 38810
           },
           {
             "key": "B6",
-            "value": 19.557
+            "value": 14784
           },
           {
             "key": "B7",
-            "value": 19.557
-          },
-          {
-            "key": "B8",
-            "value": 0
-          },
-          {
-            "key": "B9",
-            "value": 0
-          },
-          {
-            "key": "WN",
-            "value": 30
+            "value": 14784
           },
           {
             "key": "WC",
-            "value": 31.096
+            "value": 31105
+          },
+          {
+            "key": "WN",
+            "value": 30000
+          },
+          {
+            "key": "QV",
+            "value": 0
           },
           {
             "key": "QG",
-            "value": 19.557
+            "value": 14784
           }
         ]
       }
@@ -508,13 +476,13 @@
       {
         "key": "EXERGY",
         "width": 11,
-        "precision": 3,
+        "precision": 1,
         "unit": "(MW)"
       },
       {
         "key": "EXERGY_COST",
         "width": 11,
-        "precision": 3,
+        "precision": 1,
         "unit": "(MW)"
       },
       {
@@ -546,7 +514,7 @@
   "WasteDefinition": {
     "wastes": {
       "flow": "QG",
-      "type": "EXERGY",
+      "type": "RESOURCES",
       "recycle": 0,
       "values": [
         {
@@ -574,28 +542,28 @@
         "sampleId": "Base",
         "flows": {
           "key": "NG",
-          "value": 20
+          "value": 3
         },
         "processes": [
           {
             "key": "COMB",
-            "value": 3.6
+            "value": 0.36
           },
           {
-            "key": "COMP",
-            "value": 32.5
+            "key": "CMP",
+            "value": 3.25
           },
           {
-            "key": "TURB",
-            "value": 46
+            "key": "TRB",
+            "value": 4.6
           },
           {
             "key": "PHTR",
-            "value": 20
+            "value": 2
           },
           {
             "key": "HRSG",
-            "value": 29
+            "value": 4
           }
         ]
       },
@@ -603,24 +571,24 @@
         "sampleId": "CGAMR",
         "flows": {
           "key": "NG",
-          "value": 20
+          "value": 3
         },
         "processes": [
           {
             "key": "COMB",
-            "value": 3.6
+            "value": 0.36
           },
           {
-            "key": "COMP",
-            "value": 32.5
+            "key": "CMP",
+            "value": 3.25
           },
           {
-            "key": "TURB",
-            "value": 46
+            "key": "TRB",
+            "value": 4.6
           },
           {
             "key": "PHTR",
-            "value": 20
+            "value": 2
           },
           {
             "key": "HRSG",

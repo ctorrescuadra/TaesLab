@@ -71,7 +71,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
             set(app.table_control,'Data',data);
             set(app.mn_tsave,'enable','off');
             app.tableIndex=tbl;
-            app.resultInfo=res;
+            app.resultInfo=res.getResultInfo;
             app.currentTable=cType.EMPTY;
             % show panel
             app.viewPanel;
@@ -173,7 +173,11 @@ classdef (Sealed) ResultsPanel < cTaesLab
             sg=(indices(2)==cType.GRAPH_COLUMN);
             if tbl.isGraph && sg
                graph=app.tableIndex.RowNames{idx};
-               showGraph(app.resultInfo,graph);
+               res=app.resultInfo;
+               if res.Info.ResultId==cType.ResultId.RESULT_MODEL
+                   res=getResultInfo(res.Info,graph);
+               end
+               showGraph(res,graph);
             else
                showTable(tbl,app.tableView);
             end

@@ -342,7 +342,11 @@ classdef (Sealed) TaesTool < handle
             sg=(indices(2)==cType.GRAPH_COLUMN);
             if tbl.isGraph && sg
                 graph=app.tableIndex.RowNames{idx};
-                showGraph(app.currentNode,graph);
+                res=app.currentNode;
+                if res.Info.ResultId==cType.ResultId.RESULT_MODEL
+                    res=getResultInfo(res.Info,graph);
+                end
+                showGraph(res,graph);
             else
                 app.currentTable=tbl;
                 set(app.mn_tsave,'enable','on')
