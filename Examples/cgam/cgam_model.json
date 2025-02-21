@@ -74,7 +74,7 @@
         "type": "PRODUCTIVE"
       },
       {
-        "key": "PHTR",
+        "key": "APH",
         "description": "Preheater",
         "fuel": "B5-B6",
         "product": "B3-B2",
@@ -103,7 +103,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 72465
+            "value": 72.465
           },
           {
             "key": "B1",
@@ -111,43 +111,43 @@
           },
           {
             "key": "B2",
-            "value": 28651
+            "value": 28.651
           },
           {
             "key": "B3",
-            "value": 50339
+            "value": 50.339
           },
           {
             "key": "B4",
-            "value": 102530
+            "value": 102.53
           },
           {
             "key": "B5",
-            "value": 38810
+            "value": 38.81
           },
           {
             "key": "B6",
-            "value": 14784
+            "value": 14.784
           },
           {
             "key": "B7",
-            "value": 2122
+            "value": 2.122
           },
           {
             "key": "WC",
-            "value": 31105
+            "value": 31.105
           },
           {
             "key": "WN",
-            "value": 30000
+            "value": 30
           },
           {
             "key": "QV",
-            "value": 9302.57
+            "value": 9.30257
           },
           {
             "key": "QG",
-            "value": 2122
+            "value": 2.122
           }
         ]
       },
@@ -156,7 +156,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 73327
+            "value": 73.327
           },
           {
             "key": "B1",
@@ -164,43 +164,43 @@
           },
           {
             "key": "B2",
-            "value": 29507
+            "value": 29.507
           },
           {
             "key": "B3",
-            "value": 50896
+            "value": 50.896
           },
           {
             "key": "B4",
-            "value": 103462
+            "value": 103.462
           },
           {
             "key": "B5",
-            "value": 38735
+            "value": 38.735
           },
           {
             "key": "B6",
-            "value": 15021
+            "value": 15.021
           },
           {
             "key": "B7",
-            "value": 2230
+            "value": 2.23
           },
           {
             "key": "WC",
-            "value": 32033
+            "value": 32.033
           },
           {
             "key": "WN",
-            "value": 30000
+            "value": 30
           },
           {
             "key": "QV",
-            "value": 9403.36
+            "value": 9.4033600000000011
           },
           {
             "key": "QG",
-            "value": 2230
+            "value": 2.23
           }
         ]
       },
@@ -209,7 +209,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 73600
+            "value": 73.6
           },
           {
             "key": "B1",
@@ -217,43 +217,43 @@
           },
           {
             "key": "B2",
-            "value": 29337
+            "value": 29.337
           },
           {
             "key": "B3",
-            "value": 51926
+            "value": 51.926
           },
           {
             "key": "B4",
-            "value": 104971
+            "value": 104.971
           },
           {
             "key": "B5",
-            "value": 40230
+            "value": 40.23
           },
           {
             "key": "B6",
-            "value": 15213
+            "value": 15.213
           },
           {
             "key": "B7",
-            "value": 2156
+            "value": 2.156
           },
           {
             "key": "WC",
-            "value": 31849
+            "value": 31.849
           },
           {
             "key": "WN",
-            "value": 30000
+            "value": 30
           },
           {
             "key": "QV",
-            "value": 9590.97
+            "value": 9.5909699999999987
           },
           {
             "key": "QG",
-            "value": 2156
+            "value": 2.156
           }
         ]
       },
@@ -262,7 +262,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 73297
+            "value": 73.297
           },
           {
             "key": "B1",
@@ -270,43 +270,43 @@
           },
           {
             "key": "B2",
-            "value": 29196
+            "value": 29.196
           },
           {
             "key": "B3",
-            "value": 51018
+            "value": 51.018
           },
           {
             "key": "B4",
-            "value": 103813
+            "value": 103.813
           },
           {
             "key": "B5",
-            "value": 39295
+            "value": 39.295
           },
           {
             "key": "B6",
-            "value": 15137
+            "value": 15.137
           },
           {
             "key": "B7",
-            "value": 2112
+            "value": 2.112
           },
           {
             "key": "WC",
-            "value": 31869
+            "value": 31.869
           },
           {
             "key": "WN",
-            "value": 30000
+            "value": 30
           },
           {
             "key": "QV",
-            "value": 9564.02
+            "value": 9.5640200000000011
           },
           {
             "key": "QG",
-            "value": 2112
+            "value": 2.112
           }
         ]
       },
@@ -315,7 +315,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 72283
+            "value": 72.283
           },
           {
             "key": "B1",
@@ -323,43 +323,43 @@
           },
           {
             "key": "B2",
-            "value": 27863
+            "value": 27.863
           },
           {
             "key": "B3",
-            "value": 51048
+            "value": 51.048
           },
           {
             "key": "B4",
-            "value": 103163
+            "value": 103.163
           },
           {
             "key": "B5",
-            "value": 40324
+            "value": 40.324
           },
           {
             "key": "B6",
-            "value": 14597
+            "value": 14.597
           },
           {
             "key": "B7",
-            "value": 2228
+            "value": 2.228
           },
           {
             "key": "WC",
-            "value": 30295
+            "value": 30.295
           },
           {
             "key": "WN",
-            "value": 30000
+            "value": 30
           },
           {
             "key": "QV",
-            "value": 9097
+            "value": 9.097
           },
           {
             "key": "QG",
-            "value": 2228
+            "value": 2.228
           }
         ]
       },
@@ -368,7 +368,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 72465
+            "value": 72.465
           },
           {
             "key": "B1",
@@ -376,43 +376,43 @@
           },
           {
             "key": "B2",
-            "value": 28651
+            "value": 28.651
           },
           {
             "key": "B3",
-            "value": 50339
+            "value": 50.339
           },
           {
             "key": "B4",
-            "value": 102530
+            "value": 102.53
           },
           {
             "key": "B5",
-            "value": 38810
+            "value": 38.81
           },
           {
             "key": "B6",
-            "value": 14784
+            "value": 14.784
           },
           {
             "key": "B7",
-            "value": 2353
+            "value": 2.353
           },
           {
             "key": "WC",
-            "value": 31105
+            "value": 31.105
           },
           {
             "key": "WN",
-            "value": 30000
+            "value": 30
           },
           {
             "key": "QV",
-            "value": 9038.12
+            "value": 9.038120000000001
           },
           {
             "key": "QG",
-            "value": 2353
+            "value": 2.353
           }
         ]
       },
@@ -421,7 +421,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 72465
+            "value": 72.465
           },
           {
             "key": "B1",
@@ -429,35 +429,35 @@
           },
           {
             "key": "B2",
-            "value": 28651
+            "value": 28.651
           },
           {
             "key": "B3",
-            "value": 50339
+            "value": 50.339
           },
           {
             "key": "B4",
-            "value": 102530
+            "value": 102.53
           },
           {
             "key": "B5",
-            "value": 38810
+            "value": 38.81
           },
           {
             "key": "B6",
-            "value": 14784
+            "value": 14.784
           },
           {
             "key": "B7",
-            "value": 14784
+            "value": 14.784
           },
           {
             "key": "WC",
-            "value": 31105
+            "value": 31.105
           },
           {
             "key": "WN",
-            "value": 30000
+            "value": 30
           },
           {
             "key": "QV",
@@ -465,7 +465,7 @@
           },
           {
             "key": "QG",
-            "value": 14784
+            "value": 14.784
           }
         ]
       }
@@ -476,13 +476,13 @@
       {
         "key": "EXERGY",
         "width": 11,
-        "precision": 1,
+        "precision": 3,
         "unit": "(MW)"
       },
       {
         "key": "EXERGY_COST",
         "width": 11,
-        "precision": 1,
+        "precision": 3,
         "unit": "(MW)"
       },
       {
@@ -500,7 +500,7 @@
       {
         "key": "GENERALIZED_UNIT_COST",
         "width": 11,
-        "precision": 3,
+        "precision": 4,
         "unit": "($/MWh)"
       },
       {
@@ -522,15 +522,15 @@
           "value": 0.76
         },
         {
-          "process": "COMP",
+          "process": "CMP",
           "value": 0.08
         },
         {
-          "process": "TURB",
+          "process": "TRB",
           "value": 0.08
         },
         {
-          "process": "PHTR",
+          "process": "APH",
           "value": 0.08
         }
       ]
@@ -547,23 +547,23 @@
         "processes": [
           {
             "key": "COMB",
-            "value": 0.36
+            "value": 0.6
           },
           {
             "key": "CMP",
-            "value": 3.25
+            "value": 5.8
           },
           {
             "key": "TRB",
-            "value": 4.6
+            "value": 8
           },
           {
-            "key": "PHTR",
-            "value": 2
+            "key": "APH",
+            "value": 3.5
           },
           {
             "key": "HRSG",
-            "value": 4
+            "value": 7.5
           }
         ]
       },
@@ -576,19 +576,19 @@
         "processes": [
           {
             "key": "COMB",
-            "value": 0.36
+            "value": 0.6
           },
           {
             "key": "CMP",
-            "value": 3.25
+            "value": 5.8
           },
           {
             "key": "TRB",
-            "value": 4.6
+            "value": 8
           },
           {
-            "key": "PHTR",
-            "value": 2
+            "key": "APH",
+            "value": 3.5
           },
           {
             "key": "HRSG",

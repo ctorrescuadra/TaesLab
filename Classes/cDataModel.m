@@ -74,11 +74,11 @@ classdef cDataModel < cResultSet
 
     methods
         function obj = cDataModel(dm)
-        % Creates the cDataModel object
-        % Syntax:
-        %   obj = cDataModel(dm)
-        % Input Argument:
-        %   dm - cModelData object with the data of the model
+        %cDataModel - Creates the cDataModel object
+        %   Syntax:
+        %     obj = cDataModel(dm)
+        %   Input Argument:
+        %     dm - cModelData object with the data of the model
         %
             % Check Data Structure
             if ~isObject(dm,'cModelData')
@@ -175,7 +175,7 @@ classdef cDataModel < cResultSet
 						obj.messageLog(cType.INFO,cMessages.ValidResourceCost,obj.SampleNames{i});
                     else
 						obj.addLogger(rsc);
-						obj.messageLog(cType.ERROR,InvalidResourceData,obj.SampleNames{i});
+						obj.messageLog(cType.ERROR,cMessages.InvalidResourceData,obj.SampleNames{i});
                     end
                     status=rsc.status & status;
                 end
@@ -282,27 +282,27 @@ classdef cDataModel < cResultSet
         %%%
         function res=getExergyData(obj,state)
         %getExergyData - Get the exergy data for a state
-        % Syntax:
-        %   res = obj.getExergyData(state)
-        % Input Arguments:
-        %   state - state key name or id
-        %     char array | number
-        % Output Arguments:
-        %   res = cExergyData object
+        %   Syntax:
+        %     res = obj.getExergyData(state)
+        %   Input Arguments:
+        %     state - state key name or id
+        %       char array | number
+        %   Output Arguments:
+        %     res = cExergyData object
         %
             res=obj.ExergyData.getValues(state);
         end
 
         function res=setExergyData(obj,state,values)
         %setExergyData - Set the exergy data values of a state
-        % Syntax:
-        %   res = obj.setExergyData(state,values)
-        % Input Argument:
-        %   state - state key name or id
-        %     char array | number
-        %   values - array with the exergy values of the flows
-        % Output:
-        %   res - cExergyData object associated to the values
+        %   Syntax:
+        %     res = obj.setExergyData(state,values)
+        %   Input Argument:
+        %     state - state key name or id
+        %       char array | number
+        %     values - array with the exergy values of the flows
+        %   Output:
+        %     res - cExergyData object associated to the values
         %
             res=cMessageLogger();
             M=size(values,2);
@@ -336,49 +336,52 @@ classdef cDataModel < cResultSet
 
         function res=getResourceData(obj,sample)
         %getResourceData - Get the resource data for a sample
-        % Syntax:
-        %   res = obj.getResourceData(sample)
-        % Input Arguments:
-        %   sample - Resource sample name key or id
-        %     char array | number
-        % Output Arguments:
-        %   res - cResourceData object
+        %   Syntax:
+        %     res = obj.getResourceData(sample)
+        %   Input Arguments:
+        %     sample - Resource sample name key or id
+        %       char array | number
+        %   Output Arguments:
+        %     res - cResourceData object
         %
             res=obj.ResourceData.getValues(sample);
         end
 		
 		function res=existState(obj,state)
 		%existState - Check if state is defined in States
-        % Syntax:
-        %   res = obj.existState(state)
-        % Input Argument:
-        %   state - state name
-        % Output Argument:
-        %   res - true | false
+        %   Syntax:
+        %     res = obj.existState(state)
+        %   Input Argument:
+        %     state - state name
+        %   Output Argument:
+        %     res - true | false
         %
 			res=obj.ExergyData.getIndex(state);
         end
 
 		function res=existSample(obj,sample)
 		%existSample - Check if sample is defined in ResourceState
-        % Syntax:
-        %   res = obj.existState(sample)
-        % Input Argument:
-        %   sample - Resource sample name
-        % Output Argument:
-        %   res - true | false
+        %   Syntax:
+        %     res = obj.existState(sample)
+        %   Input Argument:
+        %     sample - Resource sample name
+        %   Output Argument:
+        %     res - true | false
         %
 			res=obj.ResourceData.getIndex(sample);
         end
 
+        %%%
+        % Get Tables information
+        %%%
         function res=getTablesDirectory(obj,varargin)
         %getTablesDirectory - Get the tables directory
-        % Syntax:
-        %   res = obj.getTablesDirectory(options)
-        % Input Arguments:
-        %   options - cell array with selected columns properties
-        % Output Arguments:
-        %   res - cTable object with the available tables and its properties
+        %   Syntax:
+        %     res = obj.getTablesDirectory(options)
+        %   Input Arguments:
+        %     options - cell array with selected columns properties
+        %   Output Arguments:
+        %     res - cTable object with the available tables and its properties
         % See also ListResultTables
         %
             res=getTablesDirectory(obj.FormatData,varargin{:});
@@ -386,12 +389,12 @@ classdef cDataModel < cResultSet
 
         function res=getTableInfo(obj,name)
         %getTableInfo - Get information about a table
-        % Syntax:
-        %   res = obj.getTableInfo(name)
-        % Input Argument:
-        %   name - table name
-        % Output Argument:
-        %   res - struct with table properties
+        %   Syntax:
+        %     res = obj.getTableInfo(name)
+        %   Input Argument:
+        %     name - table name
+        %   Output Argument:
+        %     res - struct with table properties
         %
             res=getTableInfo(obj.FormatData,name);
         end
@@ -401,25 +404,25 @@ classdef cDataModel < cResultSet
         %%%
         function res=getResultInfo(obj)
         %getResultInfo - Get data model result info
-        % Syntax:
-        %   res=obj.getResultInfo
-        % Output Arguments:
-        %   res - cResultInfo of data model
+        %   Syntax:
+        %     res=obj.getResultInfo
+        %   Output Arguments:
+        %     res - cResultInfo of data model
         % 
             res=obj.modelInfo;
         end
 
         function showDataModel(obj,varargin)
         %showDataModel - View a table in a GUI Table
-        % Syntax:
-        %   obj.showDataModel(options)
-        % Input Arguments:
-        %   name - [optional] Name of the table
-        %     If is missing all tables are shown in the console
-        %   options - TableView option
-        %     cType.TableView.CONSOLE (default)
-        %     cType.TableView.GUI
-        %     cType.TableView.HTML
+        %   Syntax:
+        %     obj.showDataModel(options)
+        %   Input Arguments:
+        %     name - [optional] Name of the table
+        %       If is missing all tables are shown in the console
+        %     options - TableView option
+        %       cType.TableView.CONSOLE (default)
+        %       cType.TableView.GUI
+        %       cType.TableView.HTML
         %
             showResults(obj,varargin{:})
         end
@@ -427,10 +430,11 @@ classdef cDataModel < cResultSet
         function log=saveDataModel(obj,filename)
 		%SaveDataModel - Save data model depending of filename extension
         %   Valid extension are: txt, csv, html, xlsx, json, xml, mat
-        % Input Arguments:
-        %   filename - name of the file including extension.
-        % Output Arguments:
-        %   log - cMessageLog including save status and messages
+        %
+        %   Input Arguments:
+        %     filename - name of the file including extension.
+        %   Output Arguments:
+        %     log - cMessageLog including save status and messages
         %
 			log=cMessageLogger();
 			% Check inputs

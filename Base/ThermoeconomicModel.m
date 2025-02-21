@@ -48,7 +48,7 @@ function model=ThermoeconomicModel(filename,varargin)
     model=cMessageLogger();
     % Check input parameters
     if (nargin<1) || ~isFilename(filename)
-        model.printError(cMessages.InvalidInputFile,filename);
+        model.printError(cMessages.InvalidInputFile);
         model.printError(cMessages.ShowHelp);
         return
     end
