@@ -452,10 +452,11 @@ classdef (Sealed) cExergyCost < cExergyModel
             % Compute Flows ICT 
             if nargin==2
                 cm=(rsc.c0+cn*fpm.mP(1:N,:))*fpm.mL;
+                fict=[ict*obj.mpL;cm];      
             else
                 cm=ones(1,M);
-            end
-            fict=[ict*obj.mpL;cm];         	
+                fict=[obj.flowOperators.opI;cm];
+            end   	
         end
 
         function updateWasteOperators(obj)
@@ -563,8 +564,9 @@ classdef (Sealed) cExergyCost < cExergyModel
         %     mR - Waste allocation matrix
         %     opL - Cost Operator
         %
-            mSR=(eye(mR.NR)-mR.mValues*opL(:,mR.mRows))\mR.mValues;
-            res=cSparseRow(mR.mRows,mSR*opL);
+            tmp=mR.mValues*opL;
+            opR=(eye(mR.NR)-tmp(:,mR.mRows))\tmp;
+            res=cSparseRow(mR.mRows,opR);
         end
 
     end

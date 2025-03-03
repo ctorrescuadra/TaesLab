@@ -177,12 +177,12 @@ classdef cType
             'dmindex','rmindex'};
 		% Save extensions
 		SAVE_RESULTS={'*.xlsx','XLSX Files';'*.txt','TXT Files'; '*.csv','CSV Files'; ...
-		              '*.csv','CSV Files';'*.html','HTML Files';'*.tex','LaTeX Files';'*.mat','MAT Files'};
+		              '*.html','HTML Files';'*.tex','LaTeX Files';'*.mat','MAT Files'};
 		SAVE_DATA={'*.xlsx','XLSX Files';'*.json','JSON Files'; '*.csv','CSV Files';...
 		           '*.xml','XML Files';'*.mat','MAT Files'};
 		SAVE_TABLES={'*.xlsx','XLSX Files';'*.txt','TXT Files'; '*.csv','CSV Files'; ...
-		             '*.csv','CSV Files';'*.html','HTML Files';'*.tex','LaTeX Files';
-		             '*.json','JSON Files';'*.xml','XML Files';'*.mat','MAT Files'};
+		             '*.html','HTML Files';'*.tex','LaTeX Files';'*.mat','MAT Files'; ...
+		             '*.json','JSON Files';'*.xml','XML Files'};
         % ClassId types
         ClassId=struct('RESULT_INFO',1,'DATA_MODEL',2,'RESULT_MODEL',3)
 		% Tables Directory configuration

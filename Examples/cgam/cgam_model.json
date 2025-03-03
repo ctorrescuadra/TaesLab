@@ -514,24 +514,24 @@
   "WasteDefinition": {
     "wastes": {
       "flow": "QG",
-      "type": "RESOURCES",
+      "type": "MANUAL",
       "recycle": 0,
       "values": [
         {
           "process": "COMB",
-          "value": 0.76
+          "value": 0.768
         },
         {
           "process": "CMP",
-          "value": 0.08
+          "value": 0.093
         },
         {
           "process": "TRB",
-          "value": 0.08
+          "value": 0.05
         },
         {
           "process": "APH",
-          "value": 0.08
+          "value": 0.089
         }
       ]
     }
@@ -542,28 +542,28 @@
         "sampleId": "Base",
         "flows": {
           "key": "NG",
-          "value": 3
+          "value": 30
         },
         "processes": [
           {
             "key": "COMB",
-            "value": 0.6
+            "value": 3.6
           },
           {
             "key": "CMP",
-            "value": 5.8
+            "value": 32.5
           },
           {
             "key": "TRB",
-            "value": 8
+            "value": 46
           },
           {
             "key": "APH",
-            "value": 3.5
+            "value": 20
           },
           {
             "key": "HRSG",
-            "value": 7.5
+            "value": 35
           }
         ]
       },
@@ -571,24 +571,24 @@
         "sampleId": "CGAMR",
         "flows": {
           "key": "NG",
-          "value": 3
+          "value": 30
         },
         "processes": [
           {
             "key": "COMB",
-            "value": 0.6
+            "value": 3.6
           },
           {
             "key": "CMP",
-            "value": 5.8
+            "value": 32.5
           },
           {
             "key": "TRB",
-            "value": 8
+            "value": 46
           },
           {
             "key": "APH",
-            "value": 3.5
+            "value": 20
           },
           {
             "key": "HRSG",
