@@ -528,7 +528,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  res - cTableMatrix object
             tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION_COST);
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
-            values=dgn.getMalfunctionTable;
+            values=dgn.getMalfunctionCostTable;
             if dgn.Method==cType.DiagnosisMethod.WASTE_INTERNAL
                 DPt=[cType.Symbols.delta,'Pt*'];
             else
@@ -563,7 +563,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             values=zeros(N,M);
             values(:,1)=dgn.getMalfunctionCost';
             values(:,2)=dgn.getWasteMalfunctionCost';
-            values(:,3)=dgn.getDemmandCorrectionCost';
+            values(:,3)=dgn.getDemandCorrectionCost';
             tp=obj.getMatrixTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
             rowNames=[obj.processKeys(1:end)];
             colNames={'key','MF*','MR*','MPt*'};

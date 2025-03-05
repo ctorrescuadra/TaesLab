@@ -17,7 +17,7 @@ classdef(Sealed) cDiagnosis < cResultId
 %   cDiagnosis Methods
 %     buildResultInfo             - Build the cResultInfo associated to thermoeconomic diagnosis
 %     getUnitConsumptionVariation - Get the unit consumption variation of processes
-%     getProcessUnitCostVariation - Get the variation of the unit cost of processes
+%     getUnitCostVariation        - Get the variation of the unit cost of processes
 %     getIrreversibilityVariation - Get the irreversibility variation of processes
 %     getIrreversibilityTable     - Get the Irreversity Variation table
 %     getOutputVariation          - Get the output variation of processes
@@ -46,13 +46,13 @@ classdef(Sealed) cDiagnosis < cResultId
     properties(Access=private)
         iwr     % Waste index
         dpuk    % Direct Unit exergy cost (operation)
+        dpuk0   % Direct Unit exergy cost (reference) 
         opI     % Irreversibility operator
         DKP     % Unit Cost Variation Matrix
         DW0     % System output variation
         DWt     % Final demand variation
         DWr     % Waste variation
-        DR      % Waste variation (internal allocation)
-        DcP     % Unit Cost Variation     
+        DR      % Waste variation (internal allocation) 
 	    tMF     % Malfunction Matrix
         tDF     % Disfunction Matrix
         vMF     % Process Malfunction
@@ -71,15 +71,15 @@ classdef(Sealed) cDiagnosis < cResultId
 	
 	methods
 		function obj=cDiagnosis(fp0,fp1,method)
-        % cDiagnosis - Create an object of this class
-        % Syntax:
-        %   obj=cDiagnosis(fp0,fp1,method);
-        % Input Arguments:
-        %   fp0 - cExergyCost object for reference state
-        %   fp1 - cExergyCost object for operation state
-        %   method - Diagnosis Method used. 
-        %     cType.DiagnosisMethod.WASTE_EXTERNAL
-        %     cType.DiagnosisMethod.WASTE_INTERNAL
+        %cDiagnosis - Create an object of this class
+        %   Syntax:
+        %     obj=cDiagnosis(fp0,fp1,method);
+        %   Input Arguments:
+        %     fp0 - cExergyCost object for reference state
+        %     fp1 - cExergyCost object for operation state
+        %     method - Diagnosis Method used. 
+        %       cType.DiagnosisMethod.WASTE_EXTERNAL
+        %       cType.DiagnosisMethod.WASTE_INTERNAL
         %
             % Check Arguments
             if ~isObject(fp0,'cExergyCost') || ~isObject(fp1,'cExergyCost')
@@ -119,8 +119,7 @@ classdef(Sealed) cDiagnosis < cResultId
             % Cost Information
             obj.opI=fp1.pfOperators.opI;
             obj.dpuk=fp1.getProcessUnitCost;
-            dpuk0=fp0.getProcessUnitCost;
-            obj.DcP=obj.dpuk.cP-dpuk0.cP;
+            obj.dpuk0=fp0.getProcessUnitCost;
             % Malfunction and Disfunction Matrix
             obj.tMF=scaleCol(obj.DKP,fp0.ProductExergy);
             obj.vMF=sum(obj.tMF);
@@ -128,12 +127,12 @@ classdef(Sealed) cDiagnosis < cResultId
             % Calculate the malfunction cost according to the chosen method
             switch method
                 case cType.DiagnosisMethod.WASTE_EXTERNAL
-                    obj.wasteOutputMethod;
+                    obj.wasteExternalMethod;
                 case cType.DiagnosisMethod.WASTE_INTERNAL
                     obj.wasteInternalMethod(fp0,fp1);
             end
             % Fuel Impact and Malfunction Cost
-            obj.DWTEC=obj.computeDWTEC(dpuk0.cP,obj.dpuk.cP);
+            obj.DWTEC=obj.computeDWTEC;
             obj.DFT=sum(fp1.Resources-fp0.Resources);
             obj.A0=obj.DFT - sum(obj.DWTEC);
             obj.Method=method;
@@ -161,20 +160,22 @@ classdef(Sealed) cDiagnosis < cResultId
         end
 
         function res=buildResultInfo(obj,fmt)
-        % buildResultInfo - Get cResultInfo object for thermoeconomic diagnosis
-        % Syntax:
-        %   res=obj.buildResultInfo(fmt)
-        % Input Arguments:
-        %   fmt - cFormatData object
+        %buildResultInfo - Get cResultInfo object for thermoeconomic diagnosis
+        %   Syntax:
+        %     res=obj.buildResultInfo(fmt)
+        %   Input Arguments:
+        %     fmt - cFormatData object
+        %   Ouput Arguments:
+        %     res - cResultInfo (cType.ResultInfo.THERMOECONOMIC_DIAGNOSIS)
             res=fmt.getDiagnosisResults(obj);
         end
 
         function res=getDiagnosisTable(obj)
-        % getDiagnosisTable - Get Diagnosis Table
-        % Syntax:
-        %   res=obj.getDiagnosisTable
-        % Output Argument
-        %   res - struct containing the column values of the diagnosis table
+        %getDiagnosisTable - Get Diagnosis Table
+        %   Syntax:
+        %     res=obj.getDiagnosisTable
+        %   Output Argument
+        %     res - struct containing the column values of the diagnosis table
             res.MF=zerotol(obj.getMalfunction);
             res.DI=zerotol(obj.getIrreversibilityVariation);
             res.DR=zerotol(obj.getWasteVariation);
@@ -185,99 +186,160 @@ classdef(Sealed) cDiagnosis < cResultId
         end
 
         function res=getUnitConsumptionVariation(obj)
-        % getUnitConsumptionVariation - Get the unit consumption variation
-        % Syntax:
-        %   res=obj.getUnitConsumptionVariation
-        % Output Argument
-        %   res - array with the unit consuption variation of each process
+        %getUnitConsumptionVariation - Get the unit consumption variation
+        %   Syntax:
+        %     res=obj.getUnitConsumptionVariation
+        %   Output Argument
+        %     res - array with the unit consuption variation of each process
             res=sum(obj.DKP,1);
         end
 
-        function res=getProcessUnitCostVariation(obj)
-        % getProcessUnitCostVariation - Get the unit process cost variation
-        % Syntax:
-        %   res=obj.getUnitConsumptionVariation
-        % Output Argument
-        %   res - array with the unit process cost variation of each process        
-            res=obj.DcP;
+        function res=getUnitCostVariation(obj)
+        %getUnitCostVariation - Get the unit process cost variation
+        %   Syntax:
+        %     res=obj.getUnitConsumptionVariation
+        %   Output Argument
+        %     res - array with the unit process cost variation of each process        
+        res=obj.dpuk.cP-obj.dpuk0.cP;
         end
 
         function res=getIrreversibilityVariation(obj)
-        % getIrreversibilityVariation - Get the unit process cost variation
-        % Syntax:
-        %   res=obj.getIrreversibilityVariation
-        % Output Argument
-        %   res - array with irreversibility variation of each process     
+        %getIrreversibilityVariation - Get the unit process cost variation
+        %   Syntax:
+        %     res=obj.getIrreversibilityVariation
+        %   Output Argument
+        %     res - array with irreversibility variation of each process     
             res=[obj.vDI,sum(obj.vDI)];
         end
 
         function res=getIrreversibilityTable(obj)
-        % getIrreversibilityTable - Build the irreversibility table
-        % Syntax:
-        %   res=obj.getIrreversibilityTable
-        % Output Argument
-        %   res - matrix containing the values of the irreversibility table  
+        %getIrreversibilityTable - Build the irreversibility table
+        %   Syntax:
+        %     res=obj.getIrreversibilityTable
+        %   Output Argument
+        %     res - matrix containing the values of the irreversibility table  
             res=[[obj.DIT',[obj.DW;0]];[obj.vMF,0]];
         end
 
         function res=getOutputVariation(obj)
-        % Get the system output variation
+        %getOutputVariation - Get the system output variation
+        %   Syntax:
+        %     res=obj.getOutputVariation
+        %   Output Argument
+        %     res - Array containing the values of the system output variation  
+        % 
             res=[obj.DW0', sum(obj.DW0)];
         end
 
         function res=getDemandVariation(obj)
+        %getDemandVariation - Get the system demand variation
+        %   Syntax:
+        %     res=obj.getDemandVariation
+        %   Output Argument
+        %     res - Array containing the values of the system demand variation  
+        % 
             res=[obj.DWt', sum(obj.DWt)];
         end   
 
         function res=getDemandVariationCost(obj)
-        % get the output cost variation
+        %getDemandVariationCost - Get the system demand variation cost
+        %   Syntax:
+        %     res=obj.getDemandVariationCost
+        %   Output Argument
+        %     res - Array containing the values of the system demand variation cost
+        % 
             res=[obj.DCW,sum(obj.DCW)];
         end 
 
         function res=getMalfunction(obj)
-        % Get the malfunction vector
+        %getMalfunction - Get the malfunction vector
+        %   Syntax:
+        %     res=obj.getMalfunction
+        %   Output Argument
+        %     res - Array containing the values of the processes malfunctions
+        %         
             aux=obj.vMF;
             res=[aux,sum(aux)];
         end
 
 		function res=getMalfunctionTable(obj)
-        % get Malfunction table
+        %getMalfunctionTable - Get the Malfunction table
+        %   Syntax:
+        %     res=obj.getMalfunctionTable
+        %   Output Argument
+        %     res - Matrix containing the values of the Malfunction Table
+        % 
             res=[obj.tMF,[obj.DW0;0]];
         end
         
         function res=getMalfunctionCost(obj)
-        % Get the malfunction cost vector
+        %getMalfunctionCost - Get the malfunction cost vector
+        %   Syntax:
+        %     res=obj.getMalfunctionCoat
+        %   Output Argument
+        %     res - Array containing the values of the processes cost malfunctions
+        %       
             aux=zerotol(sum(obj.tDF))+obj.vMF;
 			res=[aux,sum(aux)];
         end
         
         function res=getWasteMalfunctionCost(obj)
-        % Default method for Waste Variation Cost
+        %getWasteMalfunctionCost - Get the waste cost variation
+        %   Syntax:
+        %     res=obj.getWasteMalfunctionCoat
+        %   Output Argument
+        %     res - Array containing the values of the waste variation cost
+        %     
 	        res=[obj.vMCR,sum(obj.vMCR)];
         end
 
         function res=getMalfunctionCostTable(obj)
-        % Build the malfunction cost table
+        %getMalfunctionCostTable - Get the malfunction cost table
+        %   Syntax:
+        %     res=obj.getMalfunctionCostTable
+        %   Output Argument
+        %     res - Matrix containing the values of the Malfunction Cost Table
+        % 
             res=[[obj.MFC,obj.DCW'];[obj.vMF,0]];
         end
 
         function res=getInternalDisfunction(obj)
-        % Get internal disfunction matrix
+        %getInternalDisfunction - Get the internal disfunction matrix
+        %   Syntax:
+        %     res=obj.getInternalDisfunction
+        %   Output Argument
+        %     res - Matrix containing the values of the internal disfunction values
+        %
             res=obj.DFin';
         end
 
         function res=getExternalDisfunction(obj)
-        % Get waste disfunction matrix
+        %getExternalDisfunction - Get the external disfunction matrix
+        %   Syntax:
+        %     res=obj.getInternalDisfunction
+        %   Output Argument
+        %     res - Matrix containing the values of the internal disfunction values
+        %
             res=obj.DFex';
         end
 
         function res=getDemandVariationEffectiveCost(obj)
-        % Get Demand Variation effective cost.
+        %getDemandVariationRfectiveCost - Get Demand Variation effective cost.
+        %   Syntax:
+        %     res=obj.getDemandVariationEffectiveCost
+        %   Output Argument
+        %     res - Array containing the values of demand variation effective cost
+        %
             res=[obj.DWTEC,sum(obj.DWTEC)];
         end
 
-        function res=getDemmandCorrectionCost(obj)
-        % Get Demand Correction
+        function res=getDemandCorrectionCost(obj)
+        %getDemmandCorrectionCost - Get Demand Correction Cost
+        %   Syntax:
+        %     res=obj.getDemandCorrectionCost
+        %   Output Argument
+        %     res - Array containing the values of demand correction cost
+        %
             tmp=obj.DCW-obj.DWTEC;
             res=[tmp,sum(tmp)];
         end
@@ -289,7 +351,7 @@ classdef(Sealed) cDiagnosis < cResultId
     end
 
     methods(Access=private)
-        function wasteOutputMethod(obj)
+        function wasteExternalMethod(obj)
         % Compute internal variables with WASTE_EXTERNAL method
             N=obj.NrOfProcesses;
             mf=obj.tMF(1:N,:);
@@ -329,11 +391,11 @@ classdef(Sealed) cDiagnosis < cResultId
             obj.DIT=obj.DFin+obj.DFex+mdwr;
         end
 
-        function res=computeDWTEC(obj,c0,c1)
+        function res=computeDWTEC(obj)
         % Compute the cost of the final product variation (alternate version)
         % If the variation is positive takes the reference cost
         % If the variation is negative takes the actual cost
-            cpt = c0 .* (obj.DWt>0)' + c1 .* (obj.DWt<0)';
+            cpt = obj.dpuk0.cP .* (obj.DWt>0)' + obj.dpuk.cP .* (obj.DWt<0)';
             res = cpt .* obj.DWt';
         end
 	end
