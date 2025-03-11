@@ -170,7 +170,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       dit: Irreversibiliy Variation table
         %       dft: Total Fuel Impact
         %       tmfc: Total Malfunction Cost
-            tbl.dgn=obj.getTableCell(cType.Tables.DIAGNOSIS,dgn.getDiagnosisTable);
+            tbl.dgn=obj.getSummaryDiagnosis(dgn);
             tbl.mf=obj.getMalfunctionTable(dgn);
             tbl.mfc=obj.getMalfunctionCostTable(dgn);
             tbl.dit=obj.getIrreversibilityTable(dgn);
@@ -506,6 +506,24 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
             
         %-- Diagnosis Tables
+        function res=getSummaryDiagnosis(obj,dgn)
+            tp=obj.getMatrixTableProperties(cType.Tables.DIAGNOSIS);
+            rowNames=obj.processKeys;
+            DI=[cType.Symbols.delta,'I'];
+            DR=[cType.Symbols.delta,'R'];
+            DPs=[cType.Symbols.delta,'Pt'];
+            switch dgn.Method
+                case cType.DiagnosisMethod.WASTE_EXTERNAL
+                    DPt=[cType.Symbols.delta,'Ps*'];
+                case cType.DiagnosisMethod.WASTE_INTERNAL
+                    DPt=[cType.Symbols.delta,'Pt*'];
+            end
+            MF='MF'; CMF='MF*'; CMR='MR*';
+            colNames={'key',MF,DI,DR,DPs,CMF,CMR,DPt};
+            [~,val]=dgn.getDiagnosisTable;
+            res=obj.createMatrixTable(tp,val,rowNames,colNames);
+        end
+
         function res=getMalfunctionTable(obj,dgn)
         % Get a cTableMatrix with the mafunction table values
         % Input:
@@ -514,9 +532,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  res - cTableMatrix object
             tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION);
             rowNames=obj.processKeys;
-            DPt=[cType.Symbols.delta,'Ps'];
+            DPs=[cType.Symbols.delta,'Ps'];
             values=dgn.getMalfunctionTable;
-            colNames=horzcat('key',rowNames(1:end-1),DPt);
+            colNames=horzcat('key',rowNames(1:end-1),DPs);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
             
@@ -529,10 +547,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION_COST);
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
             values=dgn.getMalfunctionCostTable;
-            if dgn.Method==cType.DiagnosisMethod.WASTE_INTERNAL
-                DPt=[cType.Symbols.delta,'Pt*'];
-            else
-                DPt=[cType.Symbols.delta,'Ps*'];
+            switch dgn.Method
+                case cType.DiagnosisMethod.WASTE_EXTERNAL
+                    DPt=[cType.Symbols.delta,'Ps*'];
+                case cType.DiagnosisMethod.WASTE_INTERNAL
+                    DPt=[cType.Symbols.delta,'Pt*'];
             end
             colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
@@ -546,7 +565,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  res - cTableMatrix object
             tp=obj.getMatrixTableProperties(cType.Tables.IRREVERSIBILITY_VARIATION);
             rowNames=[obj.processKeys,'MF'];
-            DPt=[cType.Symbols.delta,'Pt'];
+            switch dgn.Method
+            case cType.DiagnosisMethod.WASTE_EXTERNAL
+                DPt=[cType.Symbols.delta,'Ps'];
+            case cType.DiagnosisMethod.WASTE_INTERNAL
+                DPt=[cType.Symbols.delta,'Pt'];
+            end 
             colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
             values=dgn.getIrreversibilityTable;
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
@@ -586,7 +610,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             rowNames=[obj.processKeys(1:end)];
             DI=[cType.Symbols.delta,'I'];
             DR=[cType.Symbols.delta,'R'];
-            DPs=[cType.Symbols.delta,'Ps'];
+            DPs=[cType.Symbols.delta,'Pt'];
             colNames={'key',DI,DR,DPs};
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end

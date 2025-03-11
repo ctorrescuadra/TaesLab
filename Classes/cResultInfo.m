@@ -148,10 +148,10 @@ classdef cResultInfo < cResultSet
                 unit=obj.Tables.dit.Unit;
                 tfmt=['Fuel Impact:     ',format,' ',unit];
                 res.FuelImpact=sprintf(tfmt,obj.Info.FuelImpact);
-                tfmt=['Malfunction Cost:',format,' ',unit];
-                res.MalfunctionCost=sprintf(tfmt,obj.Info.TotalMalfunctionCost);
+                tfmt=['Technical Saving:',format,' ',unit];
+                res.TechnicalSaving=sprintf(tfmt,obj.Info.TechnicalSaving);
                 if nargout==0
-                    fprintf('%s\n%s\n\n',res.FuelImpact,res.MalfunctionCost);
+                    fprintf('%s\n%s\n\n',res.FuelImpact,res.TechnicalSaving);
                 end
             end
         end
