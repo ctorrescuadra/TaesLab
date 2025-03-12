@@ -43,7 +43,7 @@ classdef(Sealed) cDiagnosis < cResultId
         TechnicalSaving      % Total Malfunction Cost
         Method               % Diagnosis Method
     end
-    properties(Access=private)
+    properties(Access=public)
         dpuk    % Direct Unit exergy cost (operation)
         dpuk0   % Direct Unit exergy cost (reference) 
         opI     % Irreversibility operator
@@ -60,10 +60,10 @@ classdef(Sealed) cDiagnosis < cResultId
         DFin    % Internal disfunction matrix
         DFex    % External disfunction matrix
         DF0     % Output variation disfunction
-        tDF     % Disfunction table
+        tDI     % Disfunction table
+        tMC     % Malfunction Cost table
         DFT     % Fuel Impact
         DCW     % Cost of Output Variation
-        DW      % Output Variation
         A0      % Technical Saving
     end
 	
@@ -168,7 +168,7 @@ classdef(Sealed) cDiagnosis < cResultId
             res=fmt.getDiagnosisResults(obj);
         end
 
-        function [res,tbl]=getDiagnosisTable(obj)
+        function [res]=getDiagnosisTable(obj)
         %getDiagnosisTable - Get Diagnosis Table
         %   Syntax:
         %     res=obj.getDiagnosisTable
@@ -182,15 +182,6 @@ classdef(Sealed) cDiagnosis < cResultId
             res.MFC=zerotol(obj.getMalfunctionCost);
             res.MRC=zerotol(obj.getWasteMalfunctionCost);
             res.DCPs=zerotol(obj.getDemandVariationCost);
-            if nargout==1
-                return
-            end
-            % Get table values
-            names=fieldnames(res);
-            N=obj.NrOfProcesses+1;
-            M=numel(names);
-            tbl=zeros(N,numel(names));
-            for j=1:M,tbl(:,j)=res.(names{j}); end
         end
 
         function res=getUnitConsumptionVariation(obj)
@@ -273,7 +264,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %   Output Argument
         %     res - matrix containing the values of the irreversibility table  
         %
-            res=[obj.tDF',obj.DW;obj.DF0',0;obj.vMF,0];
+            res=[obj.tDI',obj.DWt;obj.DF0',0;obj.vMF,0];
         end
 
 
@@ -315,7 +306,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %   Output Argument
         %     res - Matrix containing the values of the Malfunction Cost Table
         % 
-            res=[obj.tDF,obj.DCW';obj.vMF,0];
+            res=[obj.tMC,obj.DCW';obj.vMF,0];
         end
 
         function res=getInternalDisfunction(obj)
@@ -347,9 +338,6 @@ classdef(Sealed) cDiagnosis < cResultId
         %
             dcpt = (obj.dpuk.cP-obj.dpuk0.cP) .* (obj.DWt>0)';
             val = dcpt .* obj.DWt';
-            if (obj.Method==cType.DiagnosisMethod.WASTE_EXTERNAL) && (obj.NrOfWastes>0)
-                val = val + obj.dpuk.cPE .* (obj.DWr-obj.opR*obj.DWt)';
-            end
             res=[val,sum(val)];
         end
     end
@@ -358,29 +346,28 @@ classdef(Sealed) cDiagnosis < cResultId
         function wasteExternalMethod(obj)
         % Compute internal variables with WASTE_EXTERNAL method
             N=obj.NrOfProcesses;
-            obj.DW=obj.DW0;
-            obj.DCW=obj.dpuk.cPE .* obj.DW0';
+            obj.DCW=obj.dpuk.cP .* obj.DWt';
             obj.DF0=obj.opI*obj.DW0;
+            obj.vMCR=obj.dpuk.cPE .* (obj.DWr-obj.opR*obj.DWt)';
             obj.DFex=zeros(N,N);
-            obj.tDF=obj.DFin;
-            obj.vMCR=zeros(1,N);
+            obj.tDI=obj.DFin + diag(obj.DWr);
+            obj.tMC=obj.DFin + diag(obj.vMCR);
         end
         
         function wasteInternalMethod(obj)
         % Compute internal variables with WASTE_INTERNAL method
             N=obj.NrOfProcesses;
-            obj.DW=obj.DWt;
             obj.DCW=obj.dpuk.cP .* obj.DWt';
             % Prepare internal variables
             mf=obj.tMF(1:N,:);
             mr=obj.DKR;
             mdwr=mr+obj.opR*(mf+mr);
-            opIR=cExergyCost.updateOperator(obj.opI,obj.opR);
-            obj.DF0=opIR*obj.DWt;
+            opIR=obj.opI+obj.opI*obj.opR;
+            obj.DF0=opIR*obj.DWt+obj.opR*obj.DWt;
             % Compute External Disfunctions
             obj.DFex=obj.opI*mdwr+mdwr;
-            obj.tDF=obj.DFin+obj.DFex;
-            % Compute Waste Cost          
+            obj.tDI=obj.DFin+obj.DFex;
+            obj.tMC=obj.tDI;      
             obj.vMCR=sum(obj.DFex);
         end
 

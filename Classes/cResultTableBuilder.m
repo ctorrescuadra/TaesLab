@@ -507,21 +507,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             
         %-- Diagnosis Tables
         function res=getSummaryDiagnosis(obj,dgn)
-            tp=obj.getMatrixTableProperties(cType.Tables.DIAGNOSIS);
-            rowNames=obj.processKeys;
-            DI=[cType.Symbols.delta,'I'];
-            DR=[cType.Symbols.delta,'R'];
-            DPs=[cType.Symbols.delta,'Pt'];
-            switch dgn.Method
-                case cType.DiagnosisMethod.WASTE_EXTERNAL
-                    DPt=[cType.Symbols.delta,'Ps*'];
-                case cType.DiagnosisMethod.WASTE_INTERNAL
-                    DPt=[cType.Symbols.delta,'Pt*'];
-            end
-            MF='MF'; CMF='MF*'; CMR='MR*';
-            colNames={'key',MF,DI,DR,DPs,CMF,CMR,DPt};
-            [~,val]=dgn.getDiagnosisTable;
-            res=obj.createMatrixTable(tp,val,rowNames,colNames);
+        % Get the Summary Diagnosis Tables
+        % Input:
+        %   dgn - cDiagnosis object
+        % Output:
+        %   res - Summary Diagnosis cTable
+            res=obj.getTableCell(cType.Tables.DIAGNOSIS,dgn.getDiagnosisTable);
         end
 
         function res=getMalfunctionTable(obj,dgn)
@@ -547,12 +538,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION_COST);
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
             values=dgn.getMalfunctionCostTable;
-            switch dgn.Method
-                case cType.DiagnosisMethod.WASTE_EXTERNAL
-                    DPt=[cType.Symbols.delta,'Ps*'];
-                case cType.DiagnosisMethod.WASTE_INTERNAL
-                    DPt=[cType.Symbols.delta,'Pt*'];
-            end
+            DPt=[cType.Symbols.delta,'Pt*'];
             colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
@@ -565,12 +551,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  res - cTableMatrix object
             tp=obj.getMatrixTableProperties(cType.Tables.IRREVERSIBILITY_VARIATION);
             rowNames=[obj.processKeys,'MF'];
-            switch dgn.Method
-            case cType.DiagnosisMethod.WASTE_EXTERNAL
-                DPt=[cType.Symbols.delta,'Ps'];
-            case cType.DiagnosisMethod.WASTE_INTERNAL
-                DPt=[cType.Symbols.delta,'Pt'];
-            end 
+            DPt=[cType.Symbols.delta,'Pt'];
             colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
             values=dgn.getIrreversibilityTable;
             res=obj.createMatrixTable(tp,values,rowNames,colNames);
