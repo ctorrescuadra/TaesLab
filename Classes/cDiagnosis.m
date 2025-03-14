@@ -43,13 +43,10 @@ classdef(Sealed) cDiagnosis < cResultId
         TechnicalSaving      % Total Malfunction Cost
         Method               % Diagnosis Method
     end
-    properties(Access=public)
+    properties(Access=private)
         dpuk    % Direct Unit exergy cost (operation)
         dpuk0   % Direct Unit exergy cost (reference) 
-        opI     % Irreversibility operator
-        opR     % Waste operator
-        DKP     % Unit Consuption Variation Matrix
-        DKR     % Unit Waste generation matrix            
+        DKP     % Unit Consuption Variation Matrix       
         DW0     % System output variation
         DWt     % Final demand variation
         DWr     % Waste variation
@@ -64,7 +61,6 @@ classdef(Sealed) cDiagnosis < cResultId
         tMC     % Malfunction Cost table
         DFT     % Fuel Impact
         DCW     % Cost of Output Variation
-        A0      % Technical Saving
     end
 	
 	methods
@@ -108,33 +104,51 @@ classdef(Sealed) cDiagnosis < cResultId
                 obj.messageLog(cType.ERROR,cMessages.InvalidDiagnosisStruct);
                 return
             end
-            % Product Variation
+            % Product Variation and Fuel Impact
             obj.DW0=zerotol(fp1.SystemOutput - fp0.SystemOutput);
             obj.DWt=zerotol(fp1.FinalDemand - fp0.FinalDemand);
             obj.DWr=zerotol(obj.DW0-obj.DWt);
             obj.vDI=zerotol(fp1.Irreversibility - fp0.Irreversibility);
+            obj.DFT=sum(fp1.Resources-fp0.Resources);
             % Cost Information
-            obj.opI=fp1.pfOperators.opI;
-            obj.opR=fp1.pfOperators.opR;
             obj.dpuk=fp1.getProcessUnitCost;
             obj.dpuk0=fp0.getProcessUnitCost;
             % Malfunction and Disfunction Matrix
+            opI=fp1.pfOperators.opI;
             obj.tMF=scaleCol(obj.DKP,fp0.ProductExergy);
             obj.vMF=sum(obj.tMF);
-            obj.DFin=zerotol(obj.opI*obj.tMF(1:end-1,:));
-            % Calculate the malfunction cost according to the chosen method
+            obj.DFin=zerotol(opI*obj.tMF(1:end-1,:));
+            obj.DCW=obj.dpuk.cP .* obj.DWt';
+            % Calculate the malfunction cost and disfunction tables according to the chosen method
+            N=obj.NrOfProcesses;
+            if obj.NrOfWastes>0 % Waste depending parameter
+                tMR=full(scaleCol(fp1.pfOperators.mKR-fp0.pfOperators.mKR,fp0.ProductExergy));
+                mfr=obj.tMF(1:N,:)+tMR;
+                opR=fp1.pfOperators.opR;
+                opIR=opI + opI*opR;
+                mdwr=tMR + opR*mfr;
+                tMCR=scaleRow(mdwr,obj.dpuk.cPE);
+            else
+                tMCR=zeros(N,N);
+            end
             switch method
                 case cType.DiagnosisMethod.WASTE_EXTERNAL
-                    obj.wasteExternalMethod;
-                case cType.DiagnosisMethod.WASTE_INTERNAL
-                    obj.DKR=full(scaleCol(fp1.pfOperators.mKR-fp0.pfOperators.mKR,fp0.ProductExergy));
-                    obj.wasteInternalMethod;
-            end
-            % Fuel Impact and Malfunction Cost
-            obj.DFT=sum(fp1.Resources-fp0.Resources);
-            obj.A0=obj.getTechnicalSaving;
-            obj.Method=method;
+                    % WASTE_EXTERNAL method
+                    obj.DF0=opI*obj.DW0;
+                    obj.vMCR=sum(tMCR,2)';
+                    obj.DFex=zeros(N,N);
+                    obj.tDI=obj.DFin + diag(obj.DWr);
+                    obj.tMC=obj.DFin + diag(obj.vMCR);
+                case cType.DiagnosisMethod.WASTE_INTERNAL 
+                    % WASTE_EXTERNAL method  
+                    obj.DF0=(opIR+opR)*obj.DWt;
+                    obj.vMCR=sum(tMCR);
+                    obj.DFex=mdwr + opI*mdwr;
+                    obj.tDI=obj.DFin + obj.DFex;
+                    obj.tMC=obj.DFin + tMCR;
+            end 
             % cResultId properties
+            obj.Method=method;
             obj.ResultId=cType.ResultId.THERMOECONOMIC_DIAGNOSIS;
             obj.DefaultGraph=cType.Tables.MALFUNCTION_COST;
             obj.ModelName=fp1.ModelName;
@@ -153,7 +167,8 @@ classdef(Sealed) cDiagnosis < cResultId
         % Total Malfunction Cost (Internal and External)
             res=0;
             if obj.status
-                res=obj.A0;
+                cpt = obj.dpuk0.cP .* (obj.DWt>0)' + obj.dpuk.cP .* (obj.DWt<0)';
+                res = obj.DFT - cpt * obj.DWt;
             end
         end
 
@@ -341,43 +356,4 @@ classdef(Sealed) cDiagnosis < cResultId
             res=[val,sum(val)];
         end
     end
-
-    methods(Access=private)
-        function wasteExternalMethod(obj)
-        % Compute internal variables with WASTE_EXTERNAL method
-            N=obj.NrOfProcesses;
-            obj.DCW=obj.dpuk.cP .* obj.DWt';
-            obj.DF0=obj.opI*obj.DW0;
-            obj.vMCR=obj.dpuk.cPE .* (obj.DWr-obj.opR*obj.DWt)';
-            obj.DFex=zeros(N,N);
-            obj.tDI=obj.DFin + diag(obj.DWr);
-            obj.tMC=obj.DFin + diag(obj.vMCR);
-        end
-        
-        function wasteInternalMethod(obj)
-        % Compute internal variables with WASTE_INTERNAL method
-            N=obj.NrOfProcesses;
-            obj.DCW=obj.dpuk.cP .* obj.DWt';
-            % Prepare internal variables
-            mf=obj.tMF(1:N,:);
-            mr=obj.DKR;
-            mdwr=mr+obj.opR*(mf+mr);
-            opIR=obj.opI+obj.opI*obj.opR;
-            obj.DF0=opIR*obj.DWt+obj.opR*obj.DWt;
-            % Compute External Disfunctions
-            obj.DFex=obj.opI*mdwr+mdwr;
-            obj.tDI=obj.DFin+obj.DFex;
-            obj.tMC=obj.tDI;      
-            obj.vMCR=sum(obj.DFex);
-        end
-
-        function res=getTechnicalSaving(obj)
-        % Compute the real technical saving
-        % Discount the demand variation cost to the fuel impact
-        % If the demand variation is positive takes the reference cost
-        % If the demand variation is negative takes the actual cost
-            cpt = obj.dpuk0.cP .* (obj.DWt>0)' + obj.dpuk.cP .* (obj.DWt<0)';
-            res = obj.DFT - cpt * obj.DWt;
-        end
-	end
 end
