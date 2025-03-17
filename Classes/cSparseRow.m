@@ -122,7 +122,8 @@ classdef  cSparseRow < cMessageLogger
 
 		function x = sumRows(obj)
 		% Sum the rows of the matrices
-			x=sum(obj.mValues,2);
+            x=zeros(obj.N,1);
+			x(obj.mRows)=sum(obj.mValues,2);
 		end
 
         function res=sum(obj,dim)

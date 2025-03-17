@@ -50,15 +50,16 @@ classdef(Sealed) cDiagnosis < cResultId
         DW0     % System output variation
         DWt     % Final demand variation
         DWr     % Waste variation
-	    tMF     % Malfunction Matrix
+	    tMF     % Malfunction table [MF]
         vMF     % Process Malfunction
         vDI     % Irreversibility Variation
         vMCR    % Waste Malfuction Cost
         DFin    % Internal disfunction matrix
         DFex    % External disfunction matrix
         DF0     % Output variation disfunction
-        tDI     % Disfunction table
+        tDI     % Disfunction table 
         tMC     % Malfunction Cost table
+        tMCR    % Waste Malfunction Cost table [MR*]
         DFT     % Fuel Impact
         DCW     % Cost of Output Variation
     end
@@ -122,30 +123,29 @@ classdef(Sealed) cDiagnosis < cResultId
             % Calculate the malfunction cost and disfunction tables according to the chosen method
             N=obj.NrOfProcesses;
             if obj.NrOfWastes>0 % Waste depending parameter
-                tMR=full(scaleCol(fp1.pfOperators.mKR-fp0.pfOperators.mKR,fp0.ProductExergy));
-                mfr=obj.tMF(1:N,:)+tMR;
+                tMR=scaleCol(fp1.pfOperators.mKR-fp0.pfOperators.mKR,fp0.ProductExergy);
                 opR=fp1.pfOperators.opR;
                 opIR=opI + opI*opR;
-                mdwr=tMR + opR*mfr;
-                tMCR=scaleRow(mdwr,obj.dpuk.cPE);
+                tDR=tMR + opR*tMR + opR*obj.tMF(1:N,:);
+                obj.tMCR=scaleRow(tDR,obj.dpuk.cPE);
             else
-                tMCR=zeros(N,N);
+                obj.tMCR=zeros(N,N);
             end
             switch method
                 case cType.DiagnosisMethod.WASTE_EXTERNAL
                     % WASTE_EXTERNAL method
                     obj.DF0=opI*obj.DW0;
-                    obj.vMCR=sum(tMCR,2)';
+                    obj.vMCR=sum(obj.tMCR,2)';
                     obj.DFex=zeros(N,N);
                     obj.tDI=obj.DFin + diag(obj.DWr);
                     obj.tMC=obj.DFin + diag(obj.vMCR);
                 case cType.DiagnosisMethod.WASTE_INTERNAL 
-                    % WASTE_EXTERNAL method  
+                    % WASTE_INTERNAL method  
                     obj.DF0=(opIR+opR)*obj.DWt;
-                    obj.vMCR=sum(tMCR);
-                    obj.DFex=mdwr + opI*mdwr;
+                    obj.vMCR=sum(obj.tMCR);
+                    obj.DFex=tDR + opI*tDR;
                     obj.tDI=obj.DFin + obj.DFex;
-                    obj.tMC=obj.DFin + tMCR;
+                    obj.tMC=obj.DFin + obj.tMCR;
             end 
             % cResultId properties
             obj.Method=method;
@@ -313,6 +313,15 @@ classdef(Sealed) cDiagnosis < cResultId
         %     
 	        res=[obj.vMCR,sum(obj.vMCR)];
         end
+
+        function res=getWasteMalfunctionCostTable(obj)
+            %getWasteMalfunctionCost - Get the waste malfunction cost table
+            %     res=obj.getWasteMalfunctionCoat
+            %   Output Argument
+            %     res - cSparseRow Matrix containing the values of the table
+            %     
+                res=obj.tMCR;
+            end
 
         function res=getMalfunctionCostTable(obj)
         %getMalfunctionCostTable - Get the malfunction cost table
