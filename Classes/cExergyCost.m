@@ -451,12 +451,11 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             % Compute Flows ICT 
             if nargin==2
-                cm=(rsc.c0+cn*fpm.mP(1:N,:))*fpm.mL;
-                fict=[ict*obj.mpL;cm];      
+                cm=rsc.c0*fpm.mL+cn*obj.mpL;  
             else
                 cm=ones(1,M);
-                fict=[obj.flowOperators.opI;cm];
-            end   	
+            end
+            fict=[ict*obj.mpL;cm];    	
         end
 
         function updateWasteOperators(obj)
@@ -484,7 +483,11 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             % Compute Waste table depending on waste definition type
             for i=1:NR
-                j=aR(i); 
+                j=aR(i);
+                if ~obj.ActiveProcesses(j)
+                    obj.messageLog(cType.WARNING,cMessages.ProcessNotActive,obj.ps.ProcessKeys{j});
+                    continue
+                end 
                 key=wt.Names{i};      
                 switch wt.TypeId(i)
                     case cType.WasteAllocation.MANUAL

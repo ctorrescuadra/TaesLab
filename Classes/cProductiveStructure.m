@@ -168,7 +168,9 @@ classdef cProductiveStructure < cResultId
                 return
             end
             % Create enviroment elements
-            obj.buildEnvironment;
+			if ~obj.buildEnvironment
+				return
+			end
 			% Check Graph Connectivity
             if ~obj.checkFlowsConnectivity
 				return
@@ -273,22 +275,22 @@ classdef cProductiveStructure < cResultId
 		% Public methods
 		%%%%%%
 		function res=buildResultInfo(obj,fmt)
-		% buildResultInfo - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
-		% Syntax:
-		%   res=obj.buildResultInfo(fmt)
-		% Input Argument:
-		%   fmt - cFormatData object
-		% Output Argument
-		%   res - cResultInfo object
+		%buildResultInfo - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
+		%   Syntax:
+		%     res=obj.buildResultInfo(fmt)
+		%   Input Argument:
+		%     fmt - cFormatData object
+		%   Output Argument
+		%     res - cResultInfo object
 			res=fmt.getProductiveStructure(obj);
 		end
 			
 		function res=WasteData(obj)
-		% WasteData - Get default waste data info
-		% Syntax:
-		%   res=obj.WasteData
-		% Output Argument:
-		%   res - Waste data info structure
+		%WasteData - Get default waste data info
+		%   Syntax:
+		%     res=obj.WasteData
+		%   Output Argument:
+		%     res - Waste data info structure
 			NR=obj.NrOfWastes;
 			if NR>0
 				wastes=cell(NR,1);
@@ -304,15 +306,15 @@ classdef cProductiveStructure < cResultId
 		end
 	
 		function [res1,res2]=IncidenceMatrix(obj)
-		% IncidenceMatrix - Get incidence matrices of the plant
-		% Syntax:
-		%   [res1,res2] = obj.IncidenceMatrix
-		% Output Arguments:
-		%	if output arguments are 2
-		%    res1 - Fuel Incidence Matrix
-		%    res2 - Product Incidence matrix
-		%   if output argument is 1
-		%    res1 - Incidence Matrix 
+		%IncidenceMatrix - Get incidence matrices of the plant
+		%   Syntax:
+		%     [res1,res2] = obj.IncidenceMatrix
+		%   Output Arguments:
+		%	  if output arguments are 2
+		%       res1 - Fuel Incidence Matrix
+		%       res2 - Product Incidence matrix
+		%     if output argument is 1
+		%       res1 - Incidence Matrix 
 		%
 			aE=obj.AdjacencyMatrix.AE';
 			aS=obj.AdjacencyMatrix.AS;
@@ -328,11 +330,11 @@ classdef cProductiveStructure < cResultId
 		end
 	
 		function res=StructuralMatrix(obj)
-		% StructuralMatrix - Get the Structural Theory Flows Adjacency Matrix
-		% Syntax:
-		%   res = obj.StructuralMatrix
-		% Output Argument
-		%   res - logical matrix
+		%StructuralMatrix - Get the Structural Theory Flows Adjacency Matrix
+		%   Syntax:
+		%     res = obj.StructuralMatrix
+		%   Output Argument
+		%     res - logical matrix
 		%
 			x=obj.AdjacencyMatrix;
 			mI=eye(obj.NrOfStreams,"logical");
@@ -340,11 +342,11 @@ classdef cProductiveStructure < cResultId
         end	
         
         function res=ProductiveMatrix(obj)
-		% ProductiveMatrix - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
-		% Syntax:
-		%   res = obj.ProductiveMatrix
-		% Output Argument:
-		%   res - logical matrix
+		%ProductiveMatrix - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
+		%   Syntax:
+		%     res = obj.ProductiveMatrix
+		%   Output Argument:
+		%     res - logical matrix
 			x=obj.AdjacencyMatrix;
 			N=obj.NrOfProcesses;
 			M=obj.NrOfFlows;
@@ -355,11 +357,11 @@ classdef cProductiveStructure < cResultId
 		end
 			
 		function res=FlowProcessMatrix(obj)
-		% FlowProcessMatrix - Get the Flow-Process Adjacency Matrix (Flows, Processes)
-		% Syntax:
-		%   res = obj.FlowProcessMatrix
-		% Output Argument:
-		%   res - logical matrix
+		%FlowProcessMatrix - Get the Flow-Process Adjacency Matrix (Flows, Processes)
+		%   Syntax:
+		%     res = obj.FlowProcessMatrix
+		%   Output Argument:
+		%     res - logical matrix
 			x=obj.AdjacencyMatrix;
 			N=obj.NrOfProcesses;
 			res=[x.AE*x.AS,x.AE*x.AF(:,1:end-1);...
@@ -367,11 +369,11 @@ classdef cProductiveStructure < cResultId
 		end
 	
 		function res=ProcessMatrix(obj)
-		% ProcessMatrix - Get the Process Adjacency Matrix (logical FP table)
-		% Syntax:
-		%   res = obj.ProcessMatrix
-		% Output Argument:
-		%   res - logical matrix
+		%ProcessMatrix - Get the Process Adjacency Matrix (logical FP table)
+		%   Syntax:
+		%     res = obj.ProcessMatrix
+		%   Output Argument:
+		%     res - logical matrix
 			x=obj.AdjacencyMatrix;
 			tmp=x.AS*x.AE;
 			tc=transitiveClosure(tmp);
@@ -379,11 +381,11 @@ classdef cProductiveStructure < cResultId
 		end
 
 		function res=FlowEdges(obj)
-		% FlowEdges - Get a structure array with the stream edges names of the flows
-		% Syntax:
-		%   res = obj.FlowEdges
-		% Output Argument:
-		%   res - struct(from,to) defining the flow edges
+		%FlowEdges - Get a structure array with the stream edges names of the flows
+		%   Syntax:
+		%     res = obj.FlowEdges
+		%   Output Argument:
+		%     res - struct(from,to) defining the flow edges
 		%
 			res=cType.EMPTY;
 			if ~obj.status
@@ -395,24 +397,24 @@ classdef cProductiveStructure < cResultId
 		end
 
 		function res=isModelIO(obj)
-		% isModelIO - Check if the model is Input-Output
-		% Syntax:
-		%   res=obj.isModelIO
-		% Output Argument:
-		%   true | false
+		%isModelIO - Check if the model is Input-Output
+		%   Syntax:
+		%     res=obj.isModelIO
+		%   Output Argument:
+		%     true | false
 			from=[obj.Flows.from];
 			to=[obj.Flows.to];
 			res=isempty(intersect(from,to));
 		end
 	
 		function id=getProcessId(obj,key)
-		% getProcessId - Get the Id of a process given its key
-		% Syntax:
-		%   id = obj.getProcessId(key)
-		% Input Argument:
-		%   key - process key
-		% Output Argument
-		%   id - Process Id:
+		%getProcessId - Get the Id of a process given its key
+		%   Syntax:
+		%     id = obj.getProcessId(key)
+		%   Input Argument:
+		%     key - process key
+		%   Output Argument
+		%     id - Process Id:
 			id=0;
 			if ischar(key)
 				id=obj.pDict.getIndex(key);
@@ -427,12 +429,12 @@ classdef cProductiveStructure < cResultId
 			
 		function id=getFlowId(obj,key)
 		% getFlowId - Get the Id of a flow given its key
-		% Syntax:
-		%   id = obj.getFlowId(key)
-		% Input Argument:
-		%   key - flow key
-		% Output Argument
-		%   id - flow Id:
+		%   Syntax:
+		%     id = obj.getFlowId(key)
+		%   Input Argument:
+		%     key - flow key
+		%   Output Argument
+		%     id - flow Id:
 			id=0;
 			if ischar(key)
 				id=obj.fDict.getIndex(key);
@@ -446,100 +448,100 @@ classdef cProductiveStructure < cResultId
 		end
 	
 		function res=getFlowTypes(obj,typeId)
-		% getFlowTypes - Get the flowId of type typeId
-		% Syntax:
-		%   res = obj.getFlowTypes(typeId)
-		% Input Arguments:
-		%   typeId - Flow type id
-		% Output Arguments:
-		%   res - Array with the ids of the flows of this type
+		%getFlowTypes - Get the flowId of type typeId
+		%   Syntax:
+		%     res = obj.getFlowTypes(typeId)
+		%   Input Arguments:
+		%     typeId - Flow type id
+		%   Output Arguments:  
+		%     res - Array with the ids of the flows of this type
 		%
 			flowtypes=[obj.Flows.typeId];
 			res=find(flowtypes==typeId);
 		end
 	
 		function res=getProcessTypes(obj,typeId)
-		% getProcessTypes - Get the process-id of type typeId
-		% Syntax:
-		%   res = obj.getProcessTypes(TypeId)
-		% Input Arguments:
-		%   typeId - Process type id
-		% Output Arguments:
-		%   res - Array with the ids of the processes of this type
+		%getProcessTypes - Get the process-id of type typeId
+		%   Syntax:
+		%     res = obj.getProcessTypes(TypeId)
+		%   Input Arguments:
+		%     typeId - Process type id
+		%   Output Arguments:
+		%     res - Array with the ids of the processes of this type
 		%
 			processtypes=[obj.Processes.typeId];
 			res=find(processtypes==typeId);
 		end
 	
 		function res=getStreamTypes(obj,typeId)
-		% getStreamTypes - Get the stream-id of type typeId
-		% Syntax:
-		%   res = obj.getStreamTypes(typeId)
-		% Input Arguments:
-		%   typeId - stream type id
-		% Output Arguments:
-		%   res - Array with the ids of the processes of this type
+		%getStreamTypes - Get the stream-id of type typeId
+		%   Syntax:
+		%     res = obj.getStreamTypes(typeId)
+		%   Input Arguments:
+		%     typeId - stream type id
+		%   Output Arguments:
+		%     res - Array with the ids of the processes of this type
 		%
 			streamtypes=[obj.Streams.typeId];
 			res=find(streamtypes==typeId);
 		end
 	
 		function res=getProductStreams(obj)
-		% getProductStreams - Get the product streams id (including resources)
-		% Syntax:
-		%   res = obj.getProductStreams
-		% Output Arguments:
-		%   res - Array with the product streams id
+		%getProductStreams - Get the product streams id (including resources)
+		%   Syntax:
+		%     res = obj.getProductStreams
+		%   Output Arguments:
+		%     res - Array with the product streams id
 			streamtypes=[obj.Streams.typeId];
 			res=find(bitget(streamtypes,cType.INTERNAL));
 		end
 	
 		function res=getFuelStreams(obj)
 		%getFuelStreams - Get the fuel streams id (including output and wastes)
-		% Syntax:
-		%   res = obj.getFuelStreams
-		% Output Arguments:
-		%   res - Array with the fuel streams id
+		%   Syntax:
+		%     res = obj.getFuelStreams
+		%   Output Arguments:
+		%     res - Array with the fuel streams id
 			streamtypes=[obj.Streams.typeId];	
 			res=find(~bitget(streamtypes,cType.INTERNAL));
 		end
 
 		function res=getResourceNames(obj)
 		%getResourceNames - Get the name of the resource flows
-		% Syntax:
-		%   res = obj.getResourceNames
-		% Output Arguments:
-		%   res - Cell Array with the resource names
+		%   Syntax:
+		%     res = obj.getResourceNames
+		%   Output Arguments:
+		%     res - Cell Array with the resource names
 			res=obj.FlowKeys(obj.Resources.flows);
 		end
 
 		function res=getProductNames(obj)
 		%getProductNames - Get the name of the final products flows
-		% Syntax:
-		%   res = obj.getProductNames
-		% Output Arguments
-		%   res - Cell Array with the final product names
+		%   Syntax:
+		%     res = obj.getProductNames
+		%   Output Arguments
+		%     res - Cell Array with the final product names
 			res=obj.FlowKeys(obj.FinalProducts.flows);
 		end
 
 		function res=getWasteNames(obj)
 		%getWasteNames - Get the name of the waste flows
-		% Syntax
-		%   res = obj.getProductNames
-		% Output Aguments
-		%   res - Cell Array with the waste flow names
-			res=obj.FlowKeys(obj.Waste.flows);
+		%   Syntax
+		%     res = obj.getProductNames
+		%   Output Aguments
+		%     res - Cell Array with the waste flow names
+			  res=obj.FlowKeys(obj.Waste.flows);
 		end
 
 		function [E,ET]=flows2Streams(obj,val)
-		% flows2streams - Compute the exergy or cost of streams from flow values
-		% Syntax:
-		%   res = obj.flows2Streams(values)
-		% Input Arguments
-		%   values - exergy/cost values
-		% Output Arguments
-		%   E  - exergy/cost of streams
-		%   ET - Total exergy of streams
+		%flows2streams - Compute the exergy or cost of streams from flow values
+		%   Syntax:
+		%     res = obj.flows2Streams(values)
+		%   Input Arguments
+		%     values - exergy/cost values
+		%   Output Arguments
+		%     E  - exergy/cost of streams
+		%     ET - Total exergy of streams
 			tbl=obj.AdjacencyMatrix;
 			BE=val*tbl.AE;
 			BS=val*tbl.AS';
@@ -553,8 +555,7 @@ classdef cProductiveStructure < cResultId
 				ET(fstreams)=BE(fstreams);
 				ET(pstreams)=BS(pstreams);
 			end
-		end
-	
+		end	
 	end
 
     methods(Access=private)
@@ -717,7 +718,7 @@ classdef cProductiveStructure < cResultId
 			status=obj.status;
         end
 
-        function buildEnvironment(obj)
+        function res=buildEnvironment(obj)
         % Create de environment entries for processes and streams
 			iout=0;ires=0;iwst=0;      % Counters
 			fdesc=cType.EMPTY_CHAR;
@@ -786,11 +787,12 @@ classdef cProductiveStructure < cResultId
             obj.cprc{N1}=struct('id',N1,'key','ENV','type','ENVIRONMENT','typeId',cType.Process.ENVIRONMENT,...
 				'fuel',fdesc(2:end),'product',pdesc(2:end), ...
                 'fuelStreams',obj.NrOfSystemOutputs,'productStreams',obj.NrOfResources);
+			res=obj.status;
         end
 
         function res=checkFlowsConnectivity(obj)
         % Check the connectivity of flow id
-		% Output:
+		% Output Arguments:
 		%   res - true | false indicating is the flow edges are well defined
 		%   
 			for id=1:obj.NrOfFlows
@@ -810,11 +812,11 @@ classdef cProductiveStructure < cResultId
         end
 
         function res=checkGraphConnectivity(obj)
-		% Check the graph connectivity
+		%Check the graph connectivity
 		%   The algorithm calculates the transitive closure (logical inverse matrix)
 		%   of the Stream Process Matrix
-		% Output:
-		%   res - true | false indicating if the productive graph is a network
+		%   Output Arguments:
+		%     res - true | false indicating if the productive graph is a network
 		%
 			x=obj.AdjacencyMatrix;
 			A=x.AS*x.AE+x.AF*x.AP;

@@ -48,7 +48,6 @@ classdef cDataModel < cResultSet
         NrOfProcesses           % Number of processes
         NrOfWastes              % Number of waste flows
         NrOfResources           % Number of resource flows
-        NrOfSystemOutputs       % Number of system outputs
         NrOfFinalProducts       % Number of final products
         NrOfStates              % Number of exergy data simulations
         NrOfSamples             % Number of resource cost samples
@@ -90,23 +89,23 @@ classdef cDataModel < cResultSet
             obj.isResourceCost=dm.isResourceCost;
             % Check and get Productive Structure
             ps=cProductiveStructure(dm);
+            obj.addLogger(ps);
             status=ps.status;
             if status
                 obj.ProductiveStructure=ps;
 				obj.messageLog(cType.INFO,cMessages.ValidProductiveStructure);
             else
-                obj.addLogger(ps);
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
                 return
             end
             % Check and get Format	
             rfmt=cResultTableBuilder(ps,dm.Format);
             obj.FormatData=rfmt;
+            obj.addLogger(rfmt);
             status = rfmt.status & status;
             if rfmt.status
 				obj.messageLog(cType.INFO,cMessages.ValidFormatDefinition);
             else
-                obj.addLogger(rfmt);
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(rfmt));
                 return
             end
@@ -125,10 +124,10 @@ classdef cDataModel < cResultSet
                 exs=dm.ExergyStates.States(i);
                 rex=cExergyData(ps,exs);
                 setValues(obj.ExergyData,i,rex);
+                obj.addLogger(rex)
                 if rex.status
 					obj.messageLog(cType.INFO,cMessages.ValidExergyData,obj.StateNames{i});
 				else
-					obj.addLogger(rex)
 					obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,obj.StateNames{i});
                 end
                 status = rex.status & status;
@@ -159,22 +158,22 @@ classdef cDataModel < cResultSet
             if obj.isResourceCost
                 list=dm.getSampleNames;
                 tmp=cDataset(list);
+                obj.addLogger(tmp)
                 if tmp.status
                     obj.SampleNames=list;
                     obj.ResourceData=tmp;
                 else
-                    obj.addLogger(tmp)
                     obj.messageLog(cType.ERROR,cMessages.InvalidSampleList);
                     return
                 end
                 for i=1:obj.NrOfSamples
                     dmr=dm.ResourcesCost.Samples(i);
                     rsc=cResourceData(ps,dmr);
-                    setValues(obj.ResourceData,i,rsc);
+                    obj.addLogger(rsc);
                     if rsc.status
+                        setValues(obj.ResourceData,i,rsc);
 						obj.messageLog(cType.INFO,cMessages.ValidResourceCost,obj.SampleNames{i});
                     else
-						obj.addLogger(rsc);
 						obj.messageLog(cType.ERROR,cMessages.InvalidResourceData,obj.SampleNames{i});
                     end
                     status=rsc.status & status;
@@ -239,7 +238,7 @@ classdef cDataModel < cResultSet
         % Get the number of system outputs
             res=0;
             if obj.status
-                res=obj.ProductiveStructure.NrOfSystemOutputs;
+                res=obj.ProductiveStructure.NrOfFinalProducts;
             end
         end
         

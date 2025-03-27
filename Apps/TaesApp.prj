@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2270241964" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps\TaesApp.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps" name="TaesApp" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="4076863282" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps\TaesApp.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps" name="TaesApp" target="target.mlapps" target-name="Package App">
     <param.appname>TaesApp</param.appname>
     <param.authnamewatermark>César Torres Cuadra</param.authnamewatermark>
     <param.email>ctorresc@unizar.es</param.email>
@@ -18,15 +18,17 @@
     <param.products.id />
     <param.products.version />
     <param.platforms />
-    <param.output>${PROJECT_ROOT}</param.output>
+    <param.output>C:\Users\ctorr\Documents</param.output>
     <param.guid>55d0bfae-2823-49d2-a65e-ee998521156a</param.guid>
     <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
       <param.screenshot />
       <param.products.name />
       <param.products.id />
       <param.products.version />
       <param.platforms />
-      <param.output />
     </unset>
     <fileset.main>
       <file>${PROJECT_ROOT}\TaesApp.mlapp</file>
@@ -121,7 +123,7 @@
     </fileset.resources>
     <fileset.package />
     <build-deliverables>
-      <file location="C:\Users\ctorr\Documents\Proyectos\TaesLab" name="Apps" optional="false">C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps</file>
+      <file location="C:\Users\ctorr" name="Documents" optional="false">C:\Users\ctorr\Documents</file>
     </build-deliverables>
     <workflow />
     <matlab>

@@ -203,7 +203,7 @@ classdef (Sealed) cGraphResults < cMessageLogger
 			if obj.isColorbar
 				r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 				colormap(red2blue);
-				plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
+				plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat","LineWidth",1.5);
 				c=colorbar(ax);
 				c.Label.String=obj.xLabel;
 				c.Label.FontSize=12;

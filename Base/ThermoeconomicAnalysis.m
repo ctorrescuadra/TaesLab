@@ -83,8 +83,8 @@ function res=ThermoeconomicAnalysis(data,varargin)
     else
         fpm=cExergyCost(ex);
     end
+    fpm.printLogger;
     if ~fpm.status
-        fpm.printLogger;
 		res.printError(cMessages.InvalidObject,class(fpm))
         return
     end
