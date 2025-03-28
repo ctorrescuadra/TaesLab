@@ -510,7 +510,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                         return
                 end
                 if isempty(find(tmp,1))				
-                    obj.messageLog(cType.ERROR,cMessages.WasteAllocation,key);
+                    obj.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,key);
                     return
                 end
                 sol(i,:)=tmp/sum(tmp);
