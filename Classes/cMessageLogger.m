@@ -162,8 +162,10 @@ classdef cMessageLogger < cTaesLab
 			else
 				text=sprintf(varargin{:});
 			end
+			if error==cType.ERROR
+				obj.status=logical(error);
+			end
 			message=cMessageBuilder(error,class(obj),text);
-			obj.status=logical(error);
 		end
 
 		function printMessage(obj,error,varargin)
