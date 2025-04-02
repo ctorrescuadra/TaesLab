@@ -13,10 +13,10 @@ classdef cMessageLogger < cTaesLab
 %   addLogger - concatenate two loggers
 %   clearLogger - clear the messages of the logger
 %
-% See also cLogger, cType, cMessages
+% See also cQueue, cType, cMessages
 %
 	properties(Access=protected)
-		logger      % cLogger containinig object messages
+		logger      % cQueue containinig object messages
 	end
 	
 	methods
@@ -31,7 +31,7 @@ classdef cMessageLogger < cTaesLab
 			if nargin==1
 				obj.status=val;
 			end
-			obj.logger=cLogger();
+			obj.logger=cQueue();
 		end
 
 		function printError(obj,varargin)
@@ -141,7 +141,7 @@ classdef cMessageLogger < cTaesLab
 		%	obj1 - current object
 		%   obj2 - cMessagesLogger containing object messages
 		%
-            obj1.logger.addLogger(obj2.logger);
+            obj1.logger.addQueue(obj2.logger);
 			obj1.status=isValid(obj1) && isValid(obj2);
         end
 

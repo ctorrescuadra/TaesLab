@@ -53,6 +53,7 @@ classdef cExergyModel < cResultId
 		TotalIrreversibility  % Total Irreversibility
 		TotalUnitConsumption  % Total Unit Consumption
         ActiveProcesses       % Active Processes (not bypass)
+		Stability             % Reciprocal Condition number of the model operator
 	    ps					  % Productive Structure
     end
     
@@ -69,6 +70,7 @@ classdef cExergyModel < cResultId
 				return
             end
 			M=exd.ps.NrOfFlows;
+			NS=exd.ps.NrOfStreams;
 			% Build Exergy Adjacency tables
 			B=exd.FlowsExergy;
 			E=exd.StreamsExergy.E;
@@ -86,6 +88,13 @@ classdef cExergyModel < cResultId
 			mbP=divideCol(tAP,ET);
 			mS=double(tbl.AS);
 			mE=divideCol(tAE,ET);
+			% Check if model is valid
+			A=eye(NS)-mbF*mbP-mS*mE;
+			obj.Stability=rcond(A);
+			if rcond(A) < cType.EPS
+                obj.messageLog(cType.ERROR,cMessages.InvalidOperator);
+                return
+			end
 			% Build the Flow-Process Table
 			mgF=mE*mbF;
 			mgF0=mE*mbF0;

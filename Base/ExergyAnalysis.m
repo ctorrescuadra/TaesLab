@@ -63,6 +63,7 @@ function res=ExergyAnalysis(data,varargin)
 	else
 		pm.printLogger;
 		res.printError(cMessages.InvalidObject,class(pm));
+		return
 	end
 	if ~res.status
 		res.printLogger;

@@ -1,5 +1,5 @@
 classdef cTablesDefinition < cMessageLogger
-% cTablesDefinition reads the tables format configuration file 
+%cTablesDefinition reads the tables format configuration file 
 %   This class is use for two purposes:
 %   - This class is defined as base class of cFormatData reading the printformat.json
 %   - Provide information of the result tables of the application (TablesDirectory)
@@ -25,7 +25,7 @@ classdef cTablesDefinition < cMessageLogger
     end
     methods
         function obj=cTablesDefinition()
-        % Create an instance of the object
+        %cTablesDefinition - Create an instance of the object
         % Syntax:
         %   obj = cTablesDefinition();
         %      
@@ -45,7 +45,9 @@ classdef cTablesDefinition < cMessageLogger
             obj.cfgSummary=config.summary;
             obj.cfgTypes=config.format;
             obj.buildTablesDictionary;
-            obj.buildTablesDirectory;
+            if obj.status
+                obj.buildTablesDirectory;
+            end
         end
 
         function res=get.TablesDefinition(obj)
@@ -58,13 +60,13 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getTableProperties(obj,name)
-        % Get the properties of a table
-        % Syntax:
-        %   res = obj.getTableProperties(name)
-        % Input Argument:
-        %   name - Name of the table
-        % Output Argument:
-        %   res - structure containing table properties
+        %getTableProperties - Get the properties of a table
+        %   Syntax:
+        %     res = obj.getTableProperties(name)
+        %   Input Argument:
+        %     name - Name of the table
+        %   Output Argument:
+        %     res - structure containing table properties
         %
             res=cType.EMPTY;
             idx=obj.getTableId(name);
@@ -83,19 +85,19 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getTablesDirectory(obj,varargin)
-        % Get the tables directory
-        % Syntax: 
-        %   res=getTablesDirectory(cols)
-        % Input Arguments
-        %   cols - cell array with the column names to show
-        %     'DESCRIPTION': Table Description
-        %     'RESULT_NAME': Result Info
-        %     'GRAPH': true | false
-        %     'TYPE':  type of table
-        %     'CODE':  table code name
-        %     'RESULT_CODE': Result Info code name
-        % Output Arguments:
-        %   res - cTableData containing the tables directory
+        %getTablesDirectory - Get the tables directory
+        %   Syntax: 
+        %     res=getTablesDirectory(cols)
+        %   Input Arguments
+        %     cols - cell array with the column names to show
+        %       'DESCRIPTION': Table Description
+        %       'RESULT_NAME': Result Info
+        %       'GRAPH': true | false
+        %       'TYPE':  type of table
+        %       'CODE':  table code name
+        %       'RESULT_CODE': Result Info code name
+        %   Output Arguments:
+        %     res - cTableData containing the tables directory
         %
             if nargin==1
                 res=obj.tDirectory;
@@ -105,38 +107,38 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function saveTablesDirectory(obj,filename)
-        % Save result tables in different file formats depending on file extension
+        %saveTablesDirectory - Save result tables in different file formats depending on file extension
         %   Valid extension are: *.json, *.xml, *.csx, *.xlsx, *.txt, *.html, *.tex
-        % Syntax:
-        %   log=obj.saveTablesDirectory(filename)
-        % Input Argument:
-        %   filename - File name with extension
-        % Output Arguments:
-        %   log - cMessageLogger object with error messages
+        %   Syntax:
+        %     log=obj.saveTablesDirectory(filename)
+        %   Input Argument:
+        %     filename - File name with extension
+        %   Output Arguments:
+        %     log - cMessageLogger object with error messages
             log=saveTable(obj.tDirectory,filename);
             log.printLogger;
         end
 
         function res=getTableId(obj,name)
-        % Get tableId from dictionary. Internal use
-        % Syntax:
-        %   res = obj.getTableId(name)
-        % Input Argument:
-        %   name - Table name
-        % Output Argument:
-        %   res - Internal table id
+        %gettableId - Get tableId from dictionary. Internal use
+        %   Syntax:
+        %     res = obj.getTableId(name)
+        %   Input Argument:
+        %     name - Table name
+        %   Output Argument:
+        %     res - Internal table id
         %
             res=getIndex(obj.tDictionary,name);
         end
 
         function res=getResultIdTables(obj,id)
-        % Get the tables of an specific resultId
-        % Syntax:
-        %   res = obj.getResultIdTables(id)
-        % Input Argument:
-        %   id - ResultId
-        % Output Argument
-        %   res - cell array with id tables
+        %getResultIdTables - Get the tables of an specific resultId
+        %   Syntax:
+        %     res = obj.getResultIdTables(id)
+        %   Input Argument:
+        %     id - ResultId
+        %   Output Argument
+        %     res - cell array with id tables
         %
             rid=[obj.tableIndex.resultId];
             idx=find(rid==id);
@@ -144,8 +146,22 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getSummaryTables(obj,option,rsc)
-        % Get Summary Tables
+        %getSummaryTables - Get Summary Tables
+        %   Syntax: 
+        %     res=obj.getSummaryTables(option,rec)
+        %   Input Arguments:
+        %     option - type of summary tables
+        %     rsc    - Resource tables (true/false)
+        %   Output Arguments:
+        %     res - List of summary tables selected
             res=cType.EMPTY_CELL;
+            switch nargin
+                case 1
+                    option=cType.SummaryId.ALL;
+                    rsc=true;
+                case 2
+                    rsc=false;
+            end
             tsummary={obj.cfgSummary.key};
             tbl=[obj.cfgSummary.table];
             drt=~[obj.cfgSummary.rsc];

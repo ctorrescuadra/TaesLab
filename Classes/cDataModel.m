@@ -111,6 +111,9 @@ classdef cDataModel < cResultSet
             end
             % Check Exergy
             list=dm.getStateNames;
+            if ~cParseStream.checkListNames(list)
+                obj.messageLog(cType.ERROR,cMessages.InvalidStateList);
+            end
             tmp=cDataset(list);
             if tmp.status
                 obj.StateNames=list;
@@ -157,6 +160,9 @@ classdef cDataModel < cResultSet
             % Check ResourceCost
             if obj.isResourceCost
                 list=dm.getSampleNames;
+                if ~cParseStream.checkListNames(list)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidSampleList);
+                end
                 tmp=cDataset(list);
                 obj.addLogger(tmp)
                 if tmp.status

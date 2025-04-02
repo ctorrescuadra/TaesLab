@@ -2,23 +2,21 @@ function B=scaleRow(A,x)
 %scaleRow - computes B=diag(x)*A
 %	Multiplies each row of matrix A, by the corresponding element of vector x.
 %
-%   Usage
+%   Syntax
 %     B = scaleRow(A, x)
 %
-%   Input Arguments
+%   Input Arguments:
 %	  A - Matrix to be scaled
 %	  x - scale vector
 %
 %   Output Arguments
 %	  B - Scaled Matrix 
 %
-    [N,~]=size(A);
-    if(N~=length(x))
-        error('Matrix dimensions must agree: %d %d',N,length(x));
-    end   
-    if issparse(A)
-        B=diag(sparse(x))*A;
-    else
-        B=diag(x)*A;
+    [sz,M]=size(x);
+    N=size(A);
+    if M>1,x=x';sz=M;end
+    if(sz~=N)
+        error('ERROR: scaleRow.  Matrix dimensions must agree: %d %d',sz,N);
     end
-end 
+    B=x.*A;
+end

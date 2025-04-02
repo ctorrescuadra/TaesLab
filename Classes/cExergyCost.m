@@ -67,21 +67,20 @@ classdef (Sealed) cExergyCost < cExergyModel
         %     wd - cWasteData object (optional)
         %
 			obj=obj@cExergyModel(exd);
+            if ~obj.status
+                return
+            end
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
 			N=obj.NrOfProcesses;
+            M=obj.NrOfFlows;
             vK=obj.UnitConsumption;
             vk1=zerotol(vK-1);
             % Get Flow Operators;
 			fpm=obj.FlowProcessModel;
             mG=fpm.mF(:,1:N)*fpm.mP(1:N,:)+fpm.mV;
-            opB=obj.computeOperator(mG);          
-            if obj.status
-                obj.mpL=fpm.mP(1:N,:)*fpm.mL;
-                obj.flowOperators=struct('mG',mG,'opB',zerotol(opB));
-            else
-                obj.messageLog(cType.ERROR,cMessages.InvalidOperator,'opB');
-                return
-            end
+            opB=eye(M)/(eye(M)-mG);        
+            obj.mpL=fpm.mP(1:N,:)*fpm.mL;
+            obj.flowOperators=struct('mG',mG,'opB',zerotol(opB));
             % Get Process Operators
             tfp=obj.TableFP;        
             mPF=divideCol(tfp(:,1:N),obj.FuelExergy);
@@ -92,7 +91,6 @@ classdef (Sealed) cExergyCost < cExergyModel
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
             opCP=cExergyCost.similarMatrix(opP,obj.ProductExergy);
             obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
-            obj.flowOperators.opI=opI*obj.mpL;
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
             % Initialize waste operators
             if (nargin==2) && (obj.NrOfWastes>0)
@@ -167,36 +165,6 @@ classdef (Sealed) cExergyCost < cExergyModel
                 options.GeneralCost=false;
             end
             res=fmt.getCostResults(obj,options);
-        end
-
-        function res=computeOperator(obj,A)
-        %computeOperator - Calculate the operator associated to the matrix A: inv(I-A)
-        %   If matrix has not inverse returns [] and store messages in object logger
-        %
-        %   Syntax:
-        %     res = obj.computeOperator(A)
-        %   Input Argument:
-        %     A - Square non-negative matrix
-        %   Output Argument:
-        %   res - The inverse of the matrix I - A
-        %
-            sz=size(A); res=cType.EMPTY;
-            % Check the matrix is square and non-negative
-            if ~isnumeric(A) | (sz(1)~=sz(2))
-                obj.messageLog(cType.ERROR,cMessages.NoSquareMatrix);
-                return
-            end
-            if any(A(:)<0)
-                obj.messageLog(cType.ERROR,cMessages.NegativeMatrix);
-                return
-            end
-            A=full(eye(sz)-A);
-            % Check if the matrix is badly conditioned
-            if rcond(A) < cType.EPS
-                obj.messageLog(cType.ERROR,cMessages.SingularMatrix);
-                return
-            end
-            res=eye(sz)/A;
         end
    
         function res=getProcessCost(obj,rsc)

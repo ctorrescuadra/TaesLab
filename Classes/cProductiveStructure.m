@@ -81,7 +81,6 @@ classdef cProductiveStructure < cResultId
 		cflw			% Internal flows cell array
 		cstr            % Internal streams cell array
 		cprc            % Internal processes cell array
-        parser          % cParseStream object
 		ftypes          % Flows types
     end
 
@@ -159,7 +158,6 @@ classdef cProductiveStructure < cResultId
 				return
 			end
             % Create productive groups (streams)
-            obj.parser=cParseStream();
             for i=1:obj.NrOfProcesses
   				obj.createProcessStreams(i,cType.Stream.FUEL);
 				obj.createProcessStreams(i,cType.Stream.PRODUCT);
@@ -569,7 +567,7 @@ classdef cProductiveStructure < cResultId
 				obj.messageLog(cType.ERROR,cMessages.InvalidFlowId,id);
 				return
 			end
-			if ~cType.checkTextKey(data.key)
+			if ~cParseStream.checkTextKey(data.key)
 				obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,data.key);
 				return
 			end
@@ -595,7 +593,7 @@ classdef cProductiveStructure < cResultId
 				obj.messageLog(cType.ERROR,cMessages.InvalidProcessId,id);
 				return
 			end
-			if ~cType.checkTextKey(data.key)
+			if ~cParseStream.checkTextKey(data.key)
 				obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,data.key);
 				return
 			end
@@ -603,14 +601,14 @@ classdef cProductiveStructure < cResultId
 			if isempty(ptype)	        
 				obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,data.type,data.key);
 			end
-			if ~cParseStream.checkProcess(data.fuel) % Check Fuel stream
+			if ~cParseStream.checkDefinitionFP(data.fuel) % Check Fuel stream
 				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
 			end
 			fl=cParseStream.getFlowsList(data.fuel);
 			if ~obj.fDict.existsKey(fl)
 				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
 			end  
-			if ~cParseStream.checkProcess(data.product) % Check Product stream
+			if ~cParseStream.checkDefinitionFP(data.product) % Check Product stream
 				obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,data.product,data.key);
 			end
 			fl=cParseStream.getFlowsList(data.product);
@@ -681,15 +679,10 @@ classdef cProductiveStructure < cResultId
 		% Output Arguments:
 		%   status - Result of the check true|false
 		%
-            switch fp
-                case cType.Stream.FUEL
-				    [fe,fs]=obj.parser.getFlows(expr);
-			    case cType.Stream.PRODUCT
-				    [fs,fe]=obj.parser.getFlows(expr);
-            end
+            [fe,fs]=cParseStream.getStreamFlows(expr,fp);
             % set input flows of the stream          
-            for i=1:fe.Count
-			    in=fe.getContent(i);
+            for i=1:length(fe)
+			    in=fe{i};
 				idx=obj.fDict.getIndex(in);
                 if idx
 					if ~obj.cflw{idx}.to
@@ -702,8 +695,8 @@ classdef cProductiveStructure < cResultId
                 end
             end
             % set output flows of the stream
-            for i=1:fs.Count
-			    out=fs.getContent(i);
+            for i=1:length(fs)
+			    out=fs{i};
 				idx=obj.fDict.getIndex(out);
                 if idx
 					if ~obj.cflw{idx}.from

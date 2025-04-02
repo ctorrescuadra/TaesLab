@@ -28,7 +28,7 @@
 				},
 				{
 					"name": "CE",
-					"header": "Be*",
+					"header": "Bin*",
 					"type": 4
 				},
 				{
@@ -43,7 +43,7 @@
 				},
 				{
 					"name": "cE",
-					"header": "ke*",
+					"header": "kin*",
 					"type": 5
 				},
 				{
@@ -81,7 +81,7 @@
 				},
 				{
 					"name": "CE",
-					"header": "CE",
+					"header": "Cin",
 					"type": 6
 				},
 				{
@@ -101,7 +101,7 @@
 				},
 				{
 					"name": "cE",
-					"header": "ce",
+					"header": "cin",
 					"type": 7
 				},
 				{
@@ -139,12 +139,12 @@
 				},
 				{
 					"name": "CPE",
-					"header": "Pe*",
+					"header": "Pin*",
 					"type": 4
 				},
 				{
 					"name": "CPR",
-					"header": "Pr*",
+					"header": "Pex*",
 					"type": 4
 				},
 				{
@@ -182,12 +182,12 @@
 				},
 				{
 					"name": "cPE",
-					"header": "kPe*",
+					"header": "kin*",
 					"type": 5
 				},
 				{
 					"name": "cPR",
-					"header": "kPr*",
+					"header": "kex*",
 					"type": 5
 				},
 				{
@@ -230,7 +230,7 @@
 				},
 				{
 					"name": "CPE",
-					"header": "CPe",
+					"header": "CPin",
 					"type": 6
 				},
 				{
@@ -240,7 +240,7 @@
 				},
 				{
 					"name": "CPR",
-					"header": "CPr",
+					"header": "CPex",
 					"type": 6
 				},
 				{
@@ -283,7 +283,7 @@
 				},
 				{
 					"name": "cPE",
-					"header": "cPe",
+					"header": "cPin",
 					"type": 7
 				},
 				{
@@ -293,7 +293,7 @@
 				},
 				{
 					"name": "cPR",
-					"header": "cPr",
+					"header": "cPex",
 					"type": 7
 				},
 				{
@@ -336,12 +336,12 @@
 				},
 				{
 					"name": "CE",
-					"header": "Ce*",
+					"header": "Ein*",
 					"type": 4
 				},
 				{
 					"name": "CR",
-					"header": "Cr*",
+					"header": "Er*",
 					"type": 4
 				},
 				{
@@ -351,7 +351,7 @@
 				},
 				{
 					"name": "cE",
-					"header": "ke*",
+					"header": "kin*",
 					"type": 5
 				},
 				{
@@ -389,7 +389,7 @@
 				},
 				{
 					"name": "CE",
-					"header": "CE",
+					"header": "Cin",
 					"type": 6
 				},
 				{
@@ -399,7 +399,7 @@
 				},
 				{
 					"name": "CR",
-					"header": "CR",
+					"header": "Cr",
 					"type": 6
 				},
 				{
@@ -409,7 +409,7 @@
 				},
 				{
 					"name": "cE",
-					"header": "cE",
+					"header": "cin",
 					"type": 7
 				},
 				{
@@ -419,7 +419,7 @@
 				},
 				{
 					"name": "cR",
-					"header": "cR",
+					"header": "cr",
 					"type": 7
 				}
 			]

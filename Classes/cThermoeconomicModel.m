@@ -20,7 +20,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     ResourceData    - cResourceData object
 %     ResourceCost    - cResource Cost object
 %     State           - Current State name
-%     Sample          - Current Resource sample name
+%     ResourceSample  - Current Resource sample name
 %     ReferenceState  - Active Reference state name
 %     CostTables      - Selected Cost Result Tables
 %       'DIRECT' | 'GENERALIZED' | 'ALL'
@@ -203,10 +203,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             % Load Exergy values (all states)
             obj.rstate=cDataset(data.StateNames);
             for i=1:data.NrOfStates
+                sname=data.StateNames{i};
                 rex=data.getExergyData(i);
                 if ~rex.status
                     obj.addLogger(rex);
-                    obj.messageLog(cType.ERROR,cMessages.InvalidExergyData);
+                    obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,sname);
+                    obj.printLogger;
                     return
                 end
                 if obj.isWaste
@@ -214,26 +216,29 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 else
                     cex=cExergyCost(rex);
                 end
+                if ~cex.status
+                    obj.addLogger(cex);
+                    obj.messageLog(cType.ERROR,cMessages.NoComputeTA,sname);
+                    obj.printLogger;
+                    return
+                end
                 setValues(obj.rstate,i,cex);
             end
             % Set Operation and Reference State
             if obj.checkReferenceState(param.ReferenceState)
                 obj.ReferenceState=param.ReferenceState;
             else
-                obj.printError(cMessages.InvalidStateName,param.ReferenceState);
                 return
             end
             if obj.checkState(param.State)
                 obj.State=param.State;
             else
-                obj.printError(InvalidStateName,param.State);
                 return
             end
             % Check Cost Tables
             if obj.checkCostTables(param.CostTables)
                 obj.CostTables=param.CostTables;
             else
-                obj.printError(cMessages.InvalidCostTable,param.CostTables);
                 return
             end
             % Read Resource Data
@@ -244,7 +249,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 if obj.checkResourceSample(param.ResourceSample)
                     obj.Sample=param.ResourceSample;
                 else 
-                    obj.printError(InvalidSampleName,param.ResourceSample);
                     return
                 end
             end

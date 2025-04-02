@@ -1,12 +1,12 @@
-classdef cLogger < cTaesLab
-%cLogger - simple FIFO queue based on a dinamic cell array
+classdef cQueue < cTaesLab
+%cQueue - simple FIFO queue based on a dinamic cell array
 %   Internal use only
 %
-%   cLogger properties:
+%   cQueue properties:
 %     Count - Number of elements of the queue
 %
-%   cLogger methods:
-%     cLogger - Initialize the logger
+%   cQueue methods:
+%     cQueue - Initialize the logger
 %     add     - Add a new element at the end of the queue
 %     clear   - Clear (initialize) the logger
 %     addLogger - Add another queue at the end of this queue
@@ -21,8 +21,8 @@ classdef cLogger < cTaesLab
     end
     
     methods
-        function obj = cLogger()
-        % Create a cLogger object. Initialize the logger as a empty cell array 
+        function obj = cQueue()
+        %cQueue - Create a cQueue object. Initialize as a empty cell array 
             obj.clear;
         end
         
@@ -31,20 +31,26 @@ classdef cLogger < cTaesLab
             res=numel(obj.buffer);
         end
 
-        function obj = add(obj, element)
-        % Add an element at the end of the queue
+        function add(obj, element)
+        %add - Add an element at the end of the queue
+        %   Syntax:
+        %     obj.add(element)
+        %   Input Argument:
+        %     element - element to add to the queue 
             obj.buffer{end+1} = element;
         end
         
         function obj = clear(obj)
-        % Clear the queue
+        %clear - Clear the queue
+        %   Syntax: 
+        %     obj.clear 
             obj.buffer = cType.EMPTY_CELL;
         end
 
-        function obj = addLogger(obj, logger)
+        function obj = addQueue(obj, queue)
         % Add another queue at the end of this queue
-            if ~isempty(logger.buffer)
-                obj.buffer = [obj.buffer, logger.buffer];
+            if ~isempty(queue.buffer)
+                obj.buffer = [obj.buffer, queue.buffer];
             end
         end
               

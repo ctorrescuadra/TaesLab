@@ -1,56 +1,51 @@
 classdef cType
-% cType It is a static class to manage the constants of ExIoLab
+%cType It is a static class to manage the constants of TaesLab
 %  	This class include constants, enumeration types defined as constant structures, 
 %  	methods to check the correct type names, and determine the key and value of
 %  	the enumerated types.
-% cType methods:
-%  	res=checkCostAlgorithm(text)
-%  	res=checkDiagnosisMethod(text) 
-%  	res=checkCostTables(text)
-% Check data types methods:
-%  	res=checkFlowKey(text)
-%  	res=checkProcessKey(text)
-%  	res=checkStreamKey(text)
-%  	res=checkResourcesKey(text)
-%  	res=checkWasteKey(text)
-%	res=checkTextKey(key)
-% Get key type from id:
-%  	key=getCostAlgorithm(id)
-%  	key=getDiagnosisMethod(id)
-%  	key=getFlowKey(id)
-%  	key=getProcessKey(id)
-%  	key=getStreamKey(id)
-%  	key=getWasteKey(id)
-%  	key=getResourcesKey(id)
-% Get id from key:
-%  	id=getFlowId(key)
-%  	id=getProcessId(key)
-%  	id=getStreamKey(key)
-%  	id=getWasteKey(key)
-%  	id=getResourcesKey(key)
-% Get type options:
-%	res=FlowTypeOptions()
-%	res=ProcessTypeOptions()
-%	res=StreamTypeOptions()
-%	res=WasteTypeOptions()
-%	res=CostAlgorithmsOptions()
-%	res=CostTablesOptions()
-%	res=DiagnosisOptions()
-%	res=getInputTables()
-% File Methods
-%	res=getFileType(filename)
-%	res=checkFileWrite(filename)
-%	res=checkFileRead(filename)
-%	res=checkFileExt(filename,ext)
-% Other methods:
-%	res=checkTextKey(key)
-%	res=getInputTables;
-%  	img=getIcon(name)
-%  	file=getTaesImage(path)          
-%  	text=getTextErrorCode(val)      
-%  	id=getFileType(ext)                           
-%  	char=getNewline()                               
-%  	char=getPathDelimiter()                
+%
+%   cType methods:
+%  	  res=checkCostAlgorithm(text)
+%  	  res=checkDiagnosisMethod(text) 
+%  	  res=checkCostTables(text)
+%   Check data types methods:
+%  	  res=checkFlowKey(text)
+%  	  res=checkProcessKey(text)
+%  	  res=checkStreamKey(text)
+%  	  res=checkResourcesKey(text)
+%  	  res=checkWasteKey(text)
+%   Get key type from id:
+%  	  key=getCostAlgorithm(id)
+%  	  key=getDiagnosisMethod(id)
+%  	  key=getFlowKey(id)
+%  	  key=getProcessKey(id)
+%  	  key=getStreamKey(id)
+%  	  key=getWasteKey(id)
+%  	  key=getResourcesKey(id)
+%   Get id from key:
+%  	  id=getFlowId(key)
+%  	  id=getProcessId(key)
+%  	  id=getStreamKey(key)
+%  	  id=getWasteKey(key)
+%  	  id=getResourcesKey(key)
+%   Get type options:
+%	  res=FlowTypeOptions()
+%	  res=ProcessTypeOptions()
+%	  res=StreamTypeOptions()
+%	  res=WasteTypeOptions()
+%	  res=CostTablesOptions()
+%	  res=DiagnosisOptions()
+%   File Methods
+%	  res=getFileType(filename)
+%	  res=checkFileWrite(filename)
+%	  res=checkFileRead(filename)
+%	  res=checkFileExt(filename,ext)
+%   Other methods:
+%  	  img=getIcon(name)
+%  	  file=getTaesImage(path)          
+%  	  text=getTextErrorCode(val)                                
+%  	  char=getNewline()                               
+%  	  char=getPathDelimiter()                
 %                 
 	properties (Constant)
 		INVALID=false;            % Invalid status
@@ -213,17 +208,13 @@ classdef cType
 		PATH_UNIX='/'         % Path Character for Unix
 		% File Pattern
 		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+.(xlsx|csv|mat|txt|json|xml|html|tex)$'
-		% Key Text Patterm
-		KEY_PATTERN='^[A-Z][A-Za-z0-9]+$'
-		NAME_PATTERN='[A-Za-z]\w+$'
-		KEY_LENGTH=2:8
     end
     %----------------------------
     % Static Methods for types
     %----------------------------
 	methods (Static)
 		function res=checkTypeKey(s,key)
-		% Check if key is a field of type structure s
+		% Check if key is a field of type structure
 		% Input:
         %   s   - type structure
 		%   key - key
@@ -406,25 +397,6 @@ classdef cType
 		function res=VarModeOptions()
 		% Get a cell array with the VarMode Type options
 			res=fieldnames(cType.VarMode);
-		end
-
-		function res=checkTextKey(text)
-		% Check if an element key (flow/process) has a correct format
-		%	- Its lenght must be bigger than 1 and less than 8
-		%   - Satisfy the regular expression cType.KEY_PATTERN
-		%	INPUT:
-		%		text - key string
-		%   OUTPUT:
-		%		res - true/false
-		%
-			res=false;
-			if ~ismember(length(text),cType.KEY_LENGTH)
-				return
-			end
-			if isempty(regexp(text,cType.KEY_PATTERN,'once'))
-				return
-			end
-			res=true;
 		end
 		
 		function tableCode(name)

@@ -65,8 +65,8 @@ classdef cMessages
         ResourceNotAvailable='No Resources Cost Data available'
         NoResourceData='Processes cost data is missing. Default values are assumed'
         % Productive Structure messages
-        DuplicatedFlow='There is duplicated flows'
-        DuplicatedProcess='There is duplicated processes'
+        DuplicatedFlow='There are duplicated flows in Dictionary'
+        DuplicatedProcess='There are duplicated processses in Dictionary'
         InvalidProductiveGraph='Invalid productive structure graph'
         InvalidFlowType='Invalid type %s for flow %s'
         InvalidProcessType='Invalid type %s for process %s'
@@ -94,10 +94,7 @@ classdef cMessages
         NegativeIrreversibilty='Irreversibility of process %s is negative %f'
         ZeroProduct='Product of process %s is zero'
         ProcessNotActive='Process %s is not active'
-        SingularMatrix='The matrix is singular or badly conditioned.'
-        NoSquareMatrix='The matrix is not square'
-        NegativeMatrix='The matrix is negative'
-        InvalidOperator='The cost operator %s is invalid. See error log'
+        InvalidOperator='The cost operator is singular or badly conditioned.'
         % Diagnosis
         ExergyCostRequired='Input parameters are NOT cExergyCost objects'
         DiagnosisNotAvailable='Thermoeconomic Diagnosis is NOT available'
