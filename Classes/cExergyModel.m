@@ -90,8 +90,8 @@ classdef cExergyModel < cResultId
 			mE=divideCol(tAE,ET);
 			% Check if model is valid
 			A=eye(NS)-mbF*mbP-mS*mE;
-			obj.Stability=rcond(A);
-			if rcond(A) < cType.EPS
+			obj.Stability=1/condest(A);
+			if obj.Stability < cType.EPS
                 obj.messageLog(cType.ERROR,cMessages.InvalidOperator);
                 return
 			end

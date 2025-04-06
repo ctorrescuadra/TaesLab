@@ -61,7 +61,7 @@ classdef cMessages
         ValidExergyData='Exergy values [%s] are valid'
         ValidWasteDefinition='Waste Definition is valid'
         ValidResourceCost='Resources Cost sample [%s] is valid'
-        WasteNotAvailable='Waste Definition is not available. Default is assumed';
+        WasteNotAvailable='Waste Definition is not available. Default is assumed'
         ResourceNotAvailable='No Resources Cost Data available'
         NoResourceData='Processes cost data is missing. Default values are assumed'
         % Productive Structure messages

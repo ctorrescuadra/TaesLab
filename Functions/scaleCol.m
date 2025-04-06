@@ -12,11 +12,14 @@ function B=scaleCol(A,x)
 %   Output Arguments
 %	  B - Scaled Matrix 
 %
-    [N,sz]=size(x);
     M=size(A,2);
-    if N>1,x=x';sz=N;end
-    if(sz~=M)
-        error('ERROR: scaleCol.  Matrix dimensions must agree: %d %d',sz,M);
+    if(M~=length(x))
+        error('ERROR: scaleCol.  Matrix dimensions must agree: %d %d',length(x),M);
     end
-    B=x.*A;
+    if issparse(A)
+        B = A * spdiags(x(:), 0, M, M);
+    else
+        if iscolumn(x), x=x'; end
+        B = x .* A;
+    end
 end

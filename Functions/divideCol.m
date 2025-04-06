@@ -20,6 +20,7 @@ function B=divideCol(A,x)
 	if(M~=length(x))
 		error('Matrix dimensions must agree: %d %d',M,length(x));
 	end
-    x(x~=0)=1./x(x~=0);
+	ind=find(x);
+    x(ind)=1./x(ind);
     B=scaleCol(A,x);
 end

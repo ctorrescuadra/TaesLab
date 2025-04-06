@@ -89,7 +89,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             opI=scaleRow(opP,vk1);
             obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
-            opCP=cExergyCost.similarMatrix(opP,obj.ProductExergy);
+            opCP=similarOperator(opP,obj.ProductExergy);
             obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
             % Initialize waste operators
@@ -502,20 +502,6 @@ classdef (Sealed) cExergyCost < cExergyModel
     end   
     
     methods(Static)
-        function res=similarMatrix(A,x)
-        %similarMatrix - Calculate the similar matrix B=inv(x)*A*x
-        %   Syntax:
-        %     res=cExergyCost.similarMatrix(A,x)
-        %   Input Arguments:
-        %     A - Matrix
-        %     x - vector
-        %   Output Arguments:
-        %     res - Result matrix
-        %
-            tmp=scaleCol(A,x);
-            res=divideRow(tmp,x);
-        end
-
         function res=updateOperator(op,opR)
         %updateOperator - Update an operator with the corresponding waste operator
         %   Syntax:

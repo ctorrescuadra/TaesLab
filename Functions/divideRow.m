@@ -20,6 +20,7 @@ function B=divideRow(A,x)
 	if(N~=length(x))
 		error('Matrix dimensions must agree: %d %d',N,length(x));
 	end
-    x(x~=0)=1./x(x~=0);
+	ind=find(x);
+    x(ind)=1 ./ x(ind);
     B=scaleRow(A,x);
 end

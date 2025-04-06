@@ -185,7 +185,7 @@ classdef cDataModel < cResultSet
                     status=rsc.status & status;
                 end
             else
-               obj.messageLog(cType.INFO,cMessages.ResourceNotAvailable')
+               obj.messageLog(cType.INFO,cMessages.ResourceNotAvailable)
             end
             % Set ResultId properties
             obj.status=status;

@@ -12,11 +12,14 @@ function B=scaleRow(A,x)
 %   Output Arguments
 %	  B - Scaled Matrix 
 %
-    [sz,M]=size(x);
-    N=size(A);
-    if M>1,x=x';sz=M;end
-    if(sz~=N)
-        error('ERROR: scaleRow.  Matrix dimensions must agree: %d %d',sz,N);
+    N=size(A,1);
+    if(N~=length(x))
+        error('ERROR: scaleRow.  Matrix dimensions must agree: %d %d',length(x),N);
     end
-    B=x.*A;
+    if issparse(A)
+        B = spdiags(x(:), 0, N, N) * A;
+    else
+        if isrow(x), x=x'; end
+        B = x .* A;
+    end
 end

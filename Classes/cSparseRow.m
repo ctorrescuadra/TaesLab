@@ -66,10 +66,10 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=scaleCol(obj,x)
-		% Scale Columns function
+		% Overload scaleCol function
 			log=cMessageLogger();
 			if(obj.M~=length(x))
-				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
+				log.printError(cMessages.InvalidSparseRow,obj.M,length(rows));
 				return
 			end
 			B=scaleCol(obj.mValues,x);
@@ -77,13 +77,13 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=divideCol(obj,x)
-		% Divide Columns function
+		% Overload divideCol function
 			nobj=cMessageLogger();
 			if nargin==1
 				x=obj.sumCols;
 			end
 			if(obj.M~=length(x))
-				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
+				log.printError(cMessages.InvalidSparseRow,obj.M,length(rows));
 				return
 			end
 			B=divideCol(obj.mValues,x);
@@ -91,10 +91,10 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=scaleRow(obj,x)
-		% Scale Rows function
+		% Overload scaleRow function
 			nobj=cMessageLogger();
 			if(obj.N~=length(x))
-				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
+				log.printError(cMessages.InvalidSparseRow,obj.N,length(rows));
 				return
 			end
 			B=scaleRow(obj.mValues,x(obj.mRows));
@@ -102,13 +102,13 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=divideRow(obj,x)
-		% Divide Rows function
+		% Overload divideRow function
 			nobj=cMessageLogger();
 			if nargin==1
 				x(obj.mRows)=obj.sumRows;
 			end
 			if(obj.N~=length(x))
-				log.printError(cMessages.InvalidSparseRow,obj.NR,length(rows));
+				log.printError(cMessages.InvalidSparseRow,obj.N,length(rows));
 				return
 			end
 			B=divideRow(obj.mValues,x(obj.mRows));
