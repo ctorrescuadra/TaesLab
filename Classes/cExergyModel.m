@@ -69,27 +69,31 @@ classdef cExergyModel < cResultId
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exd));
 				return
             end
+			N=exd.ps.NrOfProcesses;
 			M=exd.ps.NrOfFlows;
 			NS=exd.ps.NrOfStreams;
-			% Build Exergy Adjacency tables
+			% Get Exergy Values
 			B=exd.FlowsExergy;
 			E=exd.StreamsExergy.E;
             ET=exd.StreamsExergy.ET;
 			vP=exd.ProcessesExergy.vP;
             vF=exd.ProcessesExergy.vF;
+			vP(end)=sum(B(exd.ps.Resources.flows));
+			vF(end)=sum(B(exd.ps.SystemOutput.flows));
+			% Build Exergy Adjacency Tables
 			tbl=exd.ps.AdjacencyMatrix;
 			tAE=scaleRow(tbl.AE,B);
 			tAS=scaleCol(tbl.AS,B);
 			tAF=scaleRow(tbl.AF,E);
             tAP=scaleCol(tbl.AP,E);
-			% Demand driven adjacency matrices
+			% Demand Driven Adjacency Matrices
 			mbF=divideCol(tAF,vP);
 			mbF0=divideCol(tAF,vF);
 			mbP=divideCol(tAP,ET);
 			mS=double(tbl.AS);
 			mE=divideCol(tAE,ET);
 			% Check if model is valid
-			A=eye(NS)-mbF*mbP-mS*mE;
+			A=eye(NS)-mbF(:,1:N)*mbP(1:N,:)-mS*mE;
 			obj.Stability=1/condest(A);
 			if obj.Stability < cType.EPS
                 obj.messageLog(cType.ERROR,cMessages.InvalidOperator);
@@ -158,7 +162,7 @@ classdef cExergyModel < cResultId
 		% Get the unit consumption of the processes
 			res=cType.EMPTY;
 			if obj.status
-				res=obj.ProcessesExergy.vK(1:end-1);
+				res=obj.ProcessesExergy.vK(1:end-1);	
 			end
         end
 
@@ -201,6 +205,32 @@ classdef cExergyModel < cResultId
 				res=obj.ProcessesExergy.vI(end);
 			end
         end
+
+		function res=TotalOutput(obj)
+		%TotalOutput - get the total output exergy
+		%   Syntax:
+		%     res=obj.TotalOutput
+		%
+			ind=obj.ps.SystemOutput.flows;
+			res=sum(obj.FlowsExergy(ind));
+		end
+
+		function res=InternalIrreversibility(obj)
+		%InternalIrreversibility - get the total internal irreversibility
+		%   Syntax:
+		%     res=obj.InternalIrreversibility
+		%
+			res=sum(obj.Irreversibility);
+		end
+
+		function res=ExternalIrreversibility(obj)
+		%ExternalIrreversibility - get the total external irreversibility (waste)
+		%   Syntax:
+		%     res=obj.InternalIrreversibility
+		%
+			ind=obj.ps.Waste.flows;
+			res=sum(obj.FlowsExergy(ind));
+		end
 
         function res=buildResultInfo(obj,fmt)
         %buildResultInfo - Get the cResultInfo object

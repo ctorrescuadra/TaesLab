@@ -89,7 +89,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             opI=scaleRow(opP,vk1);
             obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
-            opCP=similarOperator(opP,obj.ProductExergy);
+            opCP=similarResourceOperator(opP,obj.ProductExergy);
             obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
             % Initialize waste operators

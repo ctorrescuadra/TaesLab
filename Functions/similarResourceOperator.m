@@ -1,8 +1,8 @@
-function B = similarOperator(A, x)
+function B = similarResourceOperator(A, x)
 %similarOperator - Compute the resource-driven operator from the demmand drive operator
 %   Compute B(i,j) = (1/x(i)) * A(i,j) * x(j), making sure the diagonal of A remains invaraint.
 %   Usage:
-%     B = similarOperator(A,x)
+%     B = similarResourceOperator(A,x)
 %   Input Arguments:
 %     A - Demand-Driven Operator
 %     x - Transformation vector
@@ -20,15 +20,15 @@ function B = similarOperator(A, x)
     if iscolumn(x)
         x = x';  % Ensure row vector
     end
-    y=zeros(1,n);
+    y=1./x;
     % Find not null elements
-    ind=find(x); jnd=find(~x',1); 
+    ind=find(~x',1);
+    y(ind)=0;
     % Compute Similar Operator
-    y(ind) = 1 ./x(ind);
     B = (y' * x) .* A;
     % Restore diagonal of null elements
-    if ~isempty(jnd)
-        idx=sub2ind(size(A),jnd,jnd);
+    if ~isempty(ind)
+        idx=sub2ind(size(A),ind,ind);
         B(idx)=A(idx);
     end 
 end
