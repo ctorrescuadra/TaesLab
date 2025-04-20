@@ -1,6 +1,6 @@
 function B=scaleCol(A,x)
-% scaleCol - Compute B=A*diag(x)
-%	Multiplies each column of matrix A, by the corresponding element of vector x.
+% scaleCol - Multiplies each column of matrix A, by the corresponding element of vector x.
+%   Compute B(i,j)=A(i,j)*x(j)
 %
 %   Usage
 %     B = scaleCol(A, x)

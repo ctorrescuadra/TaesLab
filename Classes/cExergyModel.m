@@ -21,14 +21,18 @@ classdef cExergyModel < cResultId
 %     Irreversibility      - Process Irreversibility
 %     UnitConsumption      - Process Unit Consumption
 %     Efficiency           - Process Efficiency
-%     TotalResources	   - Total Resources
-%     FinalProducts        - Final Products
+%     TotalResources	   - Total Resources Exergy
+%     FinalProducts        - Final Products Exergy
 %     TotalIrreversibility - Total Irreversibility
 %     TotalUnitConsumption - Total Unit Consumption
 %     ActiveProcesses      - Active Processes (not bypassed)
 %
 %   cExergyModel methods:
 %     buildResultInfo - Build the cResultInfo object associated to EXERGY_ANALYSIS
+%     TotalOutput     - Get the total exergy output the system
+%     FlowPorcessTable - Get the Flow-Process Table
+%     InternalIrreversibilities - Get the total internal irreversibilities
+%     ExternalIrreversibilities - Get the total external irreversibilities
 %
 %   See also cExergyCost, cResultId
 %
@@ -230,7 +234,27 @@ classdef cExergyModel < cResultId
 		%
 			ind=obj.ps.Waste.flows;
 			res=sum(obj.FlowsExergy(ind));
-		end
+        end
+
+        function [res,tbl]=FlowProcessTable(obj)
+        %FlowProcessTable - get the Flow-Process table 
+        %   Syntax:
+        %     res=obj.FlowProcessTable
+        %   Output Arguments
+        %     res - Structure containg tables tV,tF,tP
+		%     tbl - Table in matrix format
+        %
+            a=obj.FlowProcessModel;
+            B=obj.FlowsExergy;
+            P=[obj.ProductExergy,obj.TotalResources];
+            N=obj.NrOfProcesses+1;
+            res.tV=scaleCol(a.mV,B);
+            res.tF=scaleCol(a.mF,P);
+            res.tP=scaleCol(a.mP,B);
+            if nargout==2
+                tbl=[res.tV,res.tF;res.tP,zeros(N,N)];
+            end
+        end
 
         function res=buildResultInfo(obj,fmt)
         %buildResultInfo - Get the cResultInfo object

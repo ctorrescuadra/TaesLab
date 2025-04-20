@@ -1,6 +1,6 @@
 function B=scaleRow(A,x)
-%scaleRow - computes B=diag(x)*A
-%	Multiplies each row of matrix A, by the corresponding element of vector x.
+%scaleRow - Multiplies each row of matrix A, by the corresponding element of vector x.
+%	Compute B(i,j)=x(i)*A(i,j)
 %
 %   Syntax
 %     B = scaleRow(A, x)

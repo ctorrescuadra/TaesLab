@@ -104,6 +104,7 @@ classdef cMessages
         InvalidDiagnosisMethod='Invalid Diagnosis Method %s'
         % Waste messages
         NoWasteModel='The model has NOT waste'
+        NoWasteFlows='No WASTE flows defined'
         InvalidWasteAllocation='Invalid allocation method %s for waste %s'
         InvalidWasteType='Invalid type %s for waste %s'
         InvalidRecycling='Invalid recycle ratio %f for waste %s'

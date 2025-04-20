@@ -228,7 +228,17 @@ classdef  cSparseRow < cMessageLogger
 		% return the sparse matrix form
 			[ix,iy,val]=find(obj.mValues);
 			mat=sparse(obj.mRows(ix),iy,val,obj.N,obj.M);
-		end		
+		end
+		
+		function res=ctranspose(obj)
+		% Overload ctranspose operator
+			res=transpose(full(obj));
+		end
+
+		function res=transpose(obj)
+		% Overload ctranspose operator
+			res=transpose(full(obj));
+		end
 
 		function disp(obj)
 		% overload display object

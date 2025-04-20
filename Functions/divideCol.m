@@ -1,7 +1,7 @@
 function B=divideCol(A,x)
-%divideCol - Compute A*inv(diag(x)) = A/diag(x)
-%	Divide each colums of matrix A, by the corresponding element of vector x.
-% 	If x is not provided, the columns of the matrix are scaled by its sum
+%divideCol - Divide each colums of matrix A, by the corresponding element of vector x.
+%   Compute B(i,j)= A(i,j)/x(j)
+% 	If x is not provided, the columns of the matrix are divided by its sum
 %
 %	Syntax
 %		B=divideCol(A,x)
@@ -18,7 +18,7 @@ function B=divideCol(A,x)
 	end
 	[~,M]=size(A);
 	if(M~=length(x))
-		error('Matrix dimensions must agree: %d %d',M,length(x));
+		error('ERROR: divideCol. Matrix dimensions must agree: %d %d',M,length(x));
 	end
 	ind=find(x);
     x(ind)=1./x(ind);

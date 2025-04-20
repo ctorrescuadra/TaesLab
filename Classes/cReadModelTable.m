@@ -86,6 +86,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             if  isWasteAllocation || isWasteDefinition
                 pswd=obj.WasteData(tm);
                 if isempty(pswd)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteDefinition');
                     return
                 end
                 wf={pswd.wastes.flow};
@@ -211,11 +212,12 @@ classdef (Abstract) cReadModelTable < cReadModel
             fields=[ft.ColNames(2:end)];
             cid=find(strcmp(fields,'type'),1);
             if isempty(cid)
-            obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Flows');
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Flows');
                 return
             end
             types=[ft.Data(:,cid)];
-            rid=find(strcmp(types,'WASTE'));
+            typeId=cType.getFlowId(types);
+            rid=find(typeId==cType.Flow.WASTE);
             NR=numel(rid);
             if NR>0           
                 wf=[fl(rid)];
@@ -227,6 +229,8 @@ classdef (Abstract) cReadModelTable < cReadModel
                     wastes{i}.recycle=0.0;
                 end
                 res.wastes=cell2mat(wastes);
+            else
+                obj.messageLog(cType.ERROR,cMessages.NoWasteFlows);
             end
         end
     end

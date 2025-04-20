@@ -1,16 +1,19 @@
 function B = similarDemandMatrix(A, x, y)
-%similarMatrix - Compute the demand-driven sparse adjacency matrix from the resource-driven matrix
+%similarDemandMatrix - Compute the demand-driven sparse adjacency matrix from the resource-driven matrix
 %   Compute B(i,j) = x(i) * A(i,j) * (1./y(j)) for sparse matrices
-%   Usage:
+%
+%   Syntax
 %     B = similarDemandMatrix(A,x,y)
-%   Input Arguments:
+%
+%   Input Arguments
 %     A - Resource-Driven matrix
 %     x - Left transformation vector
 %     y - Right transformation vector
-%   Output Arguments:
+%
+%   Output Arguments
 %     B - Demand-Driven Operator
 %
-    % Check Matrix
+    % Check Arguments
     [n,m] = size(A);
     if (nargin==2)
             y=x;
@@ -21,6 +24,7 @@ function B = similarDemandMatrix(A, x, y)
     if length(y) ~= m
         error('ERROR: similarMatrix. Right vector must be compatible with matrix %d',m);
     end
+    % Compute Matrix
     ind=find(y);
     y(ind) = 1 ./ y(ind);
     if issparse(A)
@@ -30,6 +34,8 @@ function B = similarDemandMatrix(A, x, y)
         tmp= x(i) .* val .* y(j);
         B = sparse(i,j,tmp,n,m);
     else
-        B=diag(x)*A*diag(y);
+        if isrow(x), x = x'; end
+        if iscolumn(y), y = y'; end
+        B= (x * y) .* A;
     end
 end

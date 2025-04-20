@@ -1,6 +1,6 @@
 function B=divideRow(A,x)
-%divideRow - Computes inv(diag(x))*A = diag(x)\A
-% 	Divide each row of matrix A, by the corresponding element of vector x.
+%divideRow - Divide each row of matrix A, by the corresponding element of vector x.
+% 	Compute B(i,j)=A(i,j)/x(i)
 % 	If x is not provided, the columns of the matrix are scaled by its sum
 %
 %	Syntax
@@ -18,7 +18,7 @@ function B=divideRow(A,x)
 	end
 	[N,~]=size(A);
 	if(N~=length(x))
-		error('Matrix dimensions must agree: %d %d',N,length(x));
+		error('ERROR: divideRow. Matrix dimensions must agree: %d %d',N,length(x));
 	end
 	ind=find(x);
     x(ind)=1 ./ x(ind);

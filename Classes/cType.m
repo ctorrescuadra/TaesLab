@@ -221,9 +221,12 @@ classdef cType
         % Output:
         %   res - true/false
 			res=false;
-			if ischar(key)
+            if ischar(key)
             	res=isfield(s,upper(key));
-			end
+            elseif iscell(key)
+					id=cellfun(@(x) cType.checkTypeKey(s,x),key);
+					res=all(id);
+            end
         end
 		
 		function id=getTypeId(s,key)
