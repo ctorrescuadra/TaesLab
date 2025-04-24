@@ -26,13 +26,14 @@ classdef cExergyModel < cResultId
 %     TotalIrreversibility - Total Irreversibility
 %     TotalUnitConsumption - Total Unit Consumption
 %     ActiveProcesses      - Active Processes (not bypassed)
+%     Stability            - Reciprocal Condition number of the model operator
 %
 %   cExergyModel methods:
 %     buildResultInfo - Build the cResultInfo object associated to EXERGY_ANALYSIS
 %     TotalOutput     - Get the total exergy output the system
-%     FlowPorcessTable - Get the Flow-Process Table
-%     InternalIrreversibilities - Get the total internal irreversibilities
-%     ExternalIrreversibilities - Get the total external irreversibilities
+%     FlowProcessTable - Get the Flow-Process Table
+%     InternalIrreversibility - Get the total internal irreversibilities
+%     ExternalIrreversibility - Get the total external irreversibilities
 %
 %   See also cExergyCost, cResultId
 %

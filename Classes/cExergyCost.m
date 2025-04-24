@@ -22,7 +22,6 @@ classdef (Sealed) cExergyCost < cExergyModel
 %
 %   cExergyCost methods:
 %     buildResultInfo              - Build the cResultInfo object for thermoeconomic analysis
-%     computeOperator              - Calculate the cost operator with validation
 %     getProcessCost               - Get cost of Processes
 %     getProcessUnitCost           - Get unit cost of Processes
 %     getFlowsCost                 - Get cost of flows
@@ -31,9 +30,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     getDirectCostTableFPR        - Get the direct cost FPR table
 %     getGeneralCostTableFPR       - Get the generalized cost FPR table
 %     getIrreversibilityCostTables - Get Irreversibility Cost Tables for processes and flows
-%     getFlowsICT                  - Get Irreversibility Cost table for flows
 %     updateWasteOperators         - Update Waste Operator
-%     similarMatrix                - Calculate the similar matrix B=inv(x)*A*x
 %     updateOperator               - Update an operator with the corresponding waste operator
 %  
 %   See also cExergyModel
@@ -255,33 +252,35 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Output
         %   res - cost of flows structure (B,CE,CZ,CR,C,cE,cZ,cR,c)
         %
+            fpm=obj.FlowProcessModel;
+            [~,frsc,val]=find(fpm.mP(end,:));
             czoption=(nargin==2);
             res=struct();
             zero=zeros(1,obj.NrOfFlows);	   
             aux=obj.flowOperators;
-            fpm=obj.FlowProcessModel;
             res.B=obj.FlowsExergy;
             if czoption
-                res.cE=rsc.c0 * aux.opB;
-                res.CE=res.cE .* res.B;
-                res.cZ=rsc.zP * fpm.mP(1:end-1,:)*aux.opB;  
-                res.CZ=res.cZ .* res.B;
+                zB = rsc.zP * fpm.mP(1:end-1,:);
+                res.cE = rsc.c0(frsc) * aux.opB(frsc,:);
+                res.CE = res.cE .* res.B;
+                res.cZ = zB * aux.opB;  
+                res.CZ = res.cZ .* res.B;
             else
-                res.cE=fpm.mP(end,:) * aux.opB;
-                res.CE=res.cE .* res.B;
-                res.cZ=zero;
-                res.CZ=zero;
+                res.cE = val * aux.opB(frsc,:);
+                res.CE = res.cE .* res.B;
+                res.cZ = zero;
+                res.CZ = zero;
             end
             if obj.isWaste
-                res.cR=(res.cE+res.cZ)*aux.opR;
-                res.CR=res.cR .* res.B;
-                res.c=res.cE+res.cZ+res.cR;
-                res.C=res.CE+res.CZ+res.CR;
+                res.cR = (res.cE + res.cZ) * aux.opR;
+                res.CR = res.cR .* res.B;
+                res.c = res.cE + res.cZ + res.cR;
+                res.C = res.CE + res.CZ+res.CR;
             else
-                res.cR=zero;
-                res.CR=zero;
-                res.c=res.cE+res.cZ;
-                res.C=res.CE+res.CZ;
+                res.cR = zero;
+                res.CR = zero;
+                res.c = res.cE+res.cZ;
+                res.C = res.CE+res.CZ;
             end
         end
         

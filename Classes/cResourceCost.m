@@ -1,8 +1,8 @@
 classdef cResourceCost < cMessageLogger
-% cResourceCost computes the resources cost values properties for a state
+%cResourceCost computes the resources cost values properties for a state
 %
-%   cResourcesCost constructor:
-%     obj = cResourcesCost(rsd, exm)
+%   cResourceCost constructor
+%     obj = cResourceCost(rsd, exm)
 %
 %   cResourceCost properties:
 %     sample  - Resource sample name
@@ -24,7 +24,7 @@ classdef cResourceCost < cMessageLogger
 	end
 	methods		
 		function obj=cResourceCost(rsd,exm)
-		%cResourcesCost - Create an instance of the class
+		%cResourceCost - Create an instance of the class
 		%   Syntax:
 		%     obj = cResourceCost(rsd, exm)
 		%   Input Argument:
@@ -40,18 +40,19 @@ classdef cResourceCost < cMessageLogger
 				return
 			end
 			% Set Resources properties
+			idx=rsd.frsc;
 			obj.sample=rsd.sample;
 			obj.c0=rsd.c0;
 			% Process Resources Cost
 			fpm=exm.FlowProcessModel;
-			obj.ce=obj.c0 * fpm.mL * fpm.mF0(:,1:end-1);
-			obj.Ce=obj.ce .* exm.FuelExergy;
+			obj.ce = obj.c0(idx) * fpm.mL(idx,:) * fpm.mF0(:,1:end-1);
+			obj.Ce = obj.ce .* exm.FuelExergy;
 			% Set Process Properties
-            idx=~exm.ActiveProcesses;
-			obj.Z=rsd.Z;
-	        obj.Z(idx)=0.0;
-			obj.zP=vDivide(obj.Z,exm.ProductExergy);
-			obj.zF=vDivide(obj.Z,exm.FuelExergy);
+            idx = ~exm.ActiveProcesses;
+			obj.Z = rsd.Z;
+	        obj.Z(idx) = 0.0;
+			obj.zP = vDivide(obj.Z,exm.ProductExergy);
+			obj.zF = vDivide(obj.Z,exm.FuelExergy);
 		end
 	end	
 end	
