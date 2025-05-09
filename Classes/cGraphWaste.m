@@ -1,11 +1,37 @@
-classdef cGraphWaste < cBuildGraph
-    %UNTITLED Summary of this class goes here
-    %   Detailed explanation goes here
-
+classdef cGraphWaste < cGraphResults
+%cGraphWaste - Show the waste allocation graph
+%   There is two graph methods to show the waste allocation
+%   - PieChart - active waste allocation is shown in a PieChart
+%   - BarGraph - all the waste flows allocation is show in a bar chart
+%   If graph is launched in a app BarPlot is always use
+%
+%   cGraphWaste Constructor
+%     obj=cGraphWaste(tbl,info,option)
+%
+%   cGraphWaste Methods
+%     showGraph   - show the graph in a window 
+%     showGraphUI - show the graph in the graph pannel of a GUI app
+%
+%   See also cGraphResults
+	properties(Access=private)
+		isPieChart    %Pie Chart is used
+	end
     methods
-        function obj = cGraphWaste(tbl,wf)
+        function obj = cGraphWaste(tbl,info,option)
+		%cGraphWaste - Build an instance of the object
+        %   Syntax:
+        %     obj = cGraphWaste(tbl,info,option)
+        %   Input Arguments:
+        %     tbl - cTable with the data to show graphically
+        %     info - cWasteAnalysis object with additional info
+		%     option - (true/false) indicate if PieChart is used or not
+        %
+			if (nargin==2)
+				option=true;
+			end
+			wf=info.wasteFlow;
 			obj.Name='Waste Allocation';
-			if (nargin==2) && (~isempty(wf))  % Use pie chart for the waste flow
+			if option
 				cols=tbl.ColNames(2:end);
 				idx=find(strcmp(cols,wf),1);
 				if isempty(idx)
@@ -37,18 +63,53 @@ classdef cGraphWaste < cBuildGraph
         end
 
         function showGraph(obj)
+		%showGraph - show the graph in a window
+        %   Syntax:
+        %     obj.showGraph
+		%
             if obj.isPieChart
                 obj.showPieChart;
             else
                 obj.showBarGraph
             end
         end
+
+		function showGraphUI(obj,app)
+		%showGraphUI - show the graph in a GUI app
+        %   Syntax:
+        %     obj.showGraphUI(app)
+		%	Input Parameter:
+		%	  app - GUI app reference object
+		%
+            if app.isColorbar
+                delete(app.Colorbar);
+            end
+            bar(obj.xValues,obj.yValues',...
+                'EdgeColor','none',...
+                'BarLayout','stacked',...
+                'Horizontal','on',...
+                'Parent',app.UIAxes);
+            title(app.UIAxes,obj.Title,'FontSize',14);
+            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
+            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
+            legend(app.UIAxes,obj.Categories,'FontSize',8);
+            app.UIAxes.Legend.Location='bestoutside';
+            app.UIAxes.Legend.Orientation='horizontal';
+            xtick=(0:10:100);
+            app.UIAxes.XTick = xtick;
+            app.UIAxes.XTickLabel=arrayfun(@(x) sprintf('%3d',x),xtick,'UniformOutput',false);
+            app.UIAxes.XLimMode="auto";
+            app.UIAxes.XGrid = 'on';
+            app.UIAxes.YGrid = 'off';
+            % Show the figure after all components are created
+            app.UIAxes.Visible = 'on';
+		end
     end
 
     methods(Access=private)
         function showPieChart(obj)
     	% Plot the waste allocation pie chart
-			f=figure('name',obj.Name,'numbertitle','off','colormap',turbo,...
+			f=figure('name',obj.Name,'numbertitle','off','visible','off','colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
 			if isMatlab
@@ -59,10 +120,12 @@ classdef cGraphWaste < cBuildGraph
 			title(ax,obj.Title,'fontsize',14);
 			hl=legend(obj.Legend);
 			set(hl,'Orientation','horizontal','Location','southoutside');
+			set(f,'visible','on');
         end
         
         function showBarGraph(obj)
-        		f=figure('name',obj.Name, 'numbertitle','off', 'colormap',turbo,...
+		% Plot the waste allocation bar graph
+        	f=figure('name',obj.Name, 'numbertitle','off','visible','off','colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
 			barh(obj.xValues,obj.yValues,'stacked','edgecolor','none','parent',ax); 
@@ -75,6 +138,7 @@ classdef cGraphWaste < cBuildGraph
 			box(ax,'on');
 			hl=legend(obj.Legend);
 			set(hl,'location','southoutside','orientation','horizontal','fontsize',10);
+			set(hf,'visible','on');
         end
     end
 end

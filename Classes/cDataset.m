@@ -19,10 +19,10 @@ classdef(Sealed) cDataset < cDictionary
     methods
         function obj=cDataset(list)
         %cDataSet - Build an instance of the object
-        % Syntax:
-        %   obj = cDataset(list)
-        % Input Arguments:
-        %   list - cell array containig the key values
+        %   Syntax:
+        %     obj = cDataset(list)
+        %   Input Arguments:
+        %     list - cell array containig the key values
         %
             % Validate list
             obj=obj@cDictionary(list);
@@ -33,12 +33,12 @@ classdef(Sealed) cDataset < cDictionary
  
         function res=getValues(obj,arg)
         %getvalues - Get an element of the dataset
-        % Syntax: 
-        %   res = obj.getValues(arg)
-        % Input Argument:
-        %   arg - key or index of the values to retrive
-        % Output Argument:
-        %   res - object with the required values
+        %   Syntax: 
+        %     res = obj.getValues(arg)
+        %   Input Argument:
+        %     arg - key or index of the values to retrive
+        %   Output Argument:
+        %     res - object with the required values
         %
             % Validate arguments
             res=cMessageLogger();
@@ -52,13 +52,13 @@ classdef(Sealed) cDataset < cDictionary
 
         function log=setValues(obj,arg,val)
         %setValues - Set the values in position indicates by arg
-        % Syntax: 
-        %   res = obj.getValues(arg)
-        % Input Argument:
-        %   arg - key or index of the values
-        %   val - object with the values to store
-        % Output Argument:
-        %   log - cMessagesLog with status and messages
+        %   Syntax: 
+        %     res = obj.getValues(arg)
+        %   Input Argument:
+        %     arg - key or index of the values
+        %     val - object with the values to store
+        %   Output Argument:
+        %     log - cMessagesLog with status and messages
         %
             log=cMessageLogger();
             idx=obj.validateArguments(arg);

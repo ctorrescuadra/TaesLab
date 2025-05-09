@@ -1,32 +1,32 @@
 classdef (Sealed) cTableCell < cTableResult
-% cTableCell Implements cTable interface to store the tabular results as array cells.
+%cTableCell Implements cTable interface to store the tabular results as cell arrays.
 % 
-% cTableCell constructor
-%   obj = cTableCell(data,rowNames,colNames,props)
+%   cTableCell constructor
+%     obj = cTableCell(data,rowNames,colNames,props)
 %
-% cTableCell properties
-%   FieldNames  - Cell array with field names 
-%   ShowNumber  - Logical variable indicating if line number is printed
-%   NodeType    - RowNames type indicator 
+%   cTableCell properties
+%     FieldNames  - Cell array with field names 
+%     ShowNumber  - Logical variable indicating if line number is printed
+%     NodeType    - RowNames type indicator 
 %
-% cTableCell methods
-%   printTable           - Print a table on console
-%   formatData           - Get formatted data
-%   getDescriptionLabel  - Get the title label for GUI presentation
-%   getColumnValues      - Get the values of a column (using FieldNames)
+%   cTableCell methods
+%     printTable           - Print a table on console
+%     formatData           - Get formatted data
+%     getDescriptionLabel  - Get the title label for GUI presentation
+%     getColumnValues      - Get the values of a column (using FieldNames)
 %
-% cTable Methods
-%   showTable       - Show the tables in diferent interfaces
-%   exportTable     - Export table in diferent formats
-%   saveTable       - Save a table into a file in diferent formats
-%   isNumericTable  - Check if all data of the table are numeric
-%   isNumericColumn - Check if a column data is numeric
-%   isGraph         - Check if the table has a graph associated
-%   getColumnFormat - Get the format of the columns
-%   getColumnWidth  - Get the width of the columns
-%   getStructData   - Get data as struct array
-%   getMatlabTable  - Get data as MATLAB table
-%   getStructTable  - Get a structure with the table info
+%   cTable Methods
+%     showTable       - Show the tables in diferent interfaces
+%     exportTable     - Export table in diferent formats
+%     saveTable       - Save a table into a file in diferent formats
+%     isNumericTable  - Check if all data of the table are numeric
+%     isNumericColumn - Check if a column data is numeric
+%     isGraph         - Check if the table has a graph associated
+%     getColumnFormat - Get the format of the columns
+%     getColumnWidth  - Get the width of the columns
+%     getStructData   - Get data as struct array
+%     getMatlabTable  - Get data as MATLAB table
+%     getStructTable  - Get a structure with the table info
 %
 % See also cTableResult, cTable
 %
@@ -38,22 +38,22 @@ classdef (Sealed) cTableCell < cTableResult
 	
     methods
         function obj=cTableCell(data,rowNames,colNames,props)
-        % cTableCell - Create Cell Table object
-        % Syntax:
-        %   obj = cTableCell(data,rowNames,colNames,props)
-        % Input:
-        %   data - data values as cell array
-        %   rowNames - row's names as cell array 
-        %   colNames - column's  names as cell array
-        %   props - additional properties:
-        %     Name: Name of the table
-        %     Description: table description
-        %     Unit: cell array with the unit name of the data columns
-        %     Format: cell array with the format of the data columns
-        %     GraphType: type of graph asociated
-        %     FieldNames: optional field name of the columns
-        %     ShowNumber: true/false show column number option
-        %     NodeType: Type of node (flow, process, stream)
+        %cTableCell - Create Cell Table object
+        %   Syntax:
+        %     obj = cTableCell(data,rowNames,colNames,props)
+        %   Input:
+        %     data - data values as cell array
+        %     rowNames - row's names as cell array 
+        %     colNames - column's  names as cell array
+        %     props - additional properties:
+        %       Name: Name of the table
+        %       Description: table description
+        %       Unit: cell array with the unit name of the data columns
+        %       Format: cell array with the format of the data columns
+        %       GraphType: type of graph asociated
+        %       FieldNames: optional field name of the columns
+        %       ShowNumber: true/false show column number option
+        %       NodeType: Type of node (flow, process, stream)
         %
             obj.Data=data;
             obj.RowNames=rowNames;
@@ -68,11 +68,11 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=formatData(obj)
-        % formatData - Apply format to data
-        % Syntax:
-        %   res=obj.formatData
-        % Output Results:
-        %   res - formatted data (numeric)
+        %formatData - Apply format to data
+        %   Syntax:
+        %     res=obj.formatData
+        %   Output Results:
+        %     res - formatted data (numeric)
         %
             N=obj.NrOfRows;
             M=obj.NrOfCols-1;
@@ -88,12 +88,11 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getMatlabTable(obj)
-        % getMatlabTable - Get table as Matlab table object
-        %   Including properties
+        %getMatlabTable - Get table as Matlab table object
         % Syntax:
         %   res=obj.getMatlabTable
         % Output Results:
-        %   res - matlab table object
+        %   res - Matlab table with data information and properties
         %
             res=getMatlabTable@cTable(obj);
             if isMatlab && obj.status

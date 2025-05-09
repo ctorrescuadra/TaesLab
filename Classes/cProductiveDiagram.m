@@ -32,11 +32,11 @@ classdef (Sealed) cProductiveDiagram < cResultId
 
     methods
         function obj = cProductiveDiagram(ps)
-        % Construct an instance of this class
-        % Syntax:
-        %   obj = cProductiveDiagram(ps)
-        % Input Argument:
-        %   ps - cProductiveStructure object
+        %cProductiveStructure - Construct an instance of this class
+        %   Syntax:
+        %     obj = cProductiveDiagram(ps)
+        %   Input Argument:
+        %     ps - cProductiveStructure object
         %
             if ~isObject(ps,'cProductiveStructure')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
@@ -77,13 +77,13 @@ classdef (Sealed) cProductiveDiagram < cResultId
         end
 
         function res = getNodeTable(obj,name)
-        % Get the nodes table of a productive diagram
-        % Syntax:
-        %   res = obj.getNodeTable(name)
-        % Input Parameter:
-        %   name - Name of the diagram
-        % Output Parameter:
-        %   res - Nodes table of the diagram
+        %getNodeTable - Get the nodes table of a productive diagram
+        %   Syntax:
+        %     res = obj.getNodeTable(name)
+        %   Input Parameter:
+        %     name - Name of the diagram
+        %   Output Parameter:
+        %     res - Nodes table of the diagram
         %
             switch name
                 case cType.Tables.FLOWS_DIAGRAM
@@ -98,13 +98,13 @@ classdef (Sealed) cProductiveDiagram < cResultId
         end
 
         function res = getEdgeTable(obj,name)
-        % Get the edges table of a productive diagram
-        % Syntax:
-        %   res = obj.getEdgeTable(name)
-        % Input Parameter:
-        %   name - Name of the diagram
-        % Output Parameter:
-        %   res - Edges table of the diagram
+        %getEdgeTable - Get the edges table of a productive diagram
+        %   Syntax:
+        %     res = obj.getEdgeTable(name)
+        %   Input Parameter:
+        %     name - Name of the diagram
+        %   Output Parameter:
+        %     res - Edges table of the diagram
         %
             switch name
                 case cType.Tables.FLOWS_DIAGRAM
@@ -119,13 +119,13 @@ classdef (Sealed) cProductiveDiagram < cResultId
         end 
 
         function res = buildResultInfo(obj,fmt)
-        % Get cResultInfo object
-        % Syntax:
-        %   res = obj.buildResultInfo(fmt)
-        % Input Arguments:
-        %   fmt - cResultTableBuilder object
-        % Output Arguments:
-        %   res - cResultInfo for ProductiveDiagram
+        %buildResultInfo - Get cResultInfo object
+        %   Syntax:
+        %     res = obj.buildResultInfo(fmt)
+        %   Input Arguments:
+        %     fmt - cResultTableBuilder object
+        %   Output Arguments:
+        %     res - cResultInfo for ProductiveDiagram
         %
             res=fmt.getProductiveDiagram(obj);
         end

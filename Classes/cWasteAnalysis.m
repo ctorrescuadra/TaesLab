@@ -1,21 +1,21 @@
 classdef (Sealed) cWasteAnalysis < cResultId
-% cWasteAnalysis analyze the potential cost saving of waste recycling
+%cWasteAnalysis analyze the potential cost saving of waste recycling
 %   This class calculates the unit cost of output flows of the plant as function
 %   of the recycling ratio of a waste.
 %
-% cWasteAnalysis constructor:
-%   obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
+%   cWasteAnalysis constructor:
+%     obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
 %
-% cWasteAnalysis properties:
-%   Recycling    - Indicate if recycling is available (true | false)
-%   OutputFlows - Output flows cell array
-%   wasteFlow   - Current waste flow key for recycling
-%   wasteTable  - cWasteData object
-%   dValues     - Recycling Analysis Direct Cost values
-%   gValues     - Recycling Analysis Generalized Cost values
+%   cWasteAnalysis properties:
+%     Recycling    - Indicate if recycling is available (true | false)
+%     OutputFlows - Output flows cell array
+%     wasteFlow   - Current waste flow key for recycling
+%     wasteTable  - cWasteData object
+%     dValues     - Recycling Analysis Direct Cost values
+%     gValues     - Recycling Analysis Generalized Cost values
 %
-% cWasteAnalysis methods:
-%   buildResultInfo - Build the cResultInfo for Waste Analysis
+%   cWasteAnalysis methods:
+%     buildResultInfo - Build the cResultInfo for Waste Analysis
 % 
     properties(GetAccess=public,SetAccess=private)
         Recycling    % Indicate if recycling is available
@@ -35,14 +35,14 @@ classdef (Sealed) cWasteAnalysis < cResultId
 
     methods
         function obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
-        % cWasteAnalysis - Create an instance of the class
-        % Syntax:
-        %   obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
-        % Input Arguments:
-        %   fpm - cExergyCost object
-        %   recycling - Indicating if recycling analysis is required
-        %   wkey - Current waste flow key 
-        %   rsd - cResourcesData object (optional)
+        %cWasteAnalysis - Create an instance of the class
+        %   Syntax:
+        %     obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
+        %   Input Arguments:
+        %     fpm - cExergyCost object
+        %     recycling - Indicating if recycling analysis is required
+        %     wkey - Current waste flow key 
+        %     rsd - cResourcesData object (optional)
         %
             % Check mandatory parameters
             if nargin < 3
@@ -102,15 +102,15 @@ classdef (Sealed) cWasteAnalysis < cResultId
         end
 
         function res=buildResultInfo(obj,fmt,param)
-        % buildResultInfo - Build/Get the cResultInfo object
-        % Syntax:
-        %   res = obj.buildResultInfo(fmt,options)
-        % Input Arguments:
-        %   fmt - cResultsTableBuilder object
-        %   options - structure containing the fields:
-        %     DirectCost - Direct Cost Tables will be obtained
-        %     GeneralCost - General Cost Tables will be obtained
-        %     ResourceCost - cResourceData object if generalized cost is required
+        %buildResultInfo - Build/Get the cResultInfo object
+        %   Syntax:
+        %     res = obj.buildResultInfo(fmt,options)
+        %   Input Arguments:
+        %     fmt - cResultsTableBuilder object
+        %     options - structure containing the fields:
+        %       DirectCost - Direct Cost Tables will be obtained
+        %       GeneralCost - General Cost Tables will be obtained
+        %       ResourceCost - cResourceData object if generalized cost is required
             res=fmt.getWasteAnalysisResults(obj,param);
         end
     end

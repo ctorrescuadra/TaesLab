@@ -16,6 +16,7 @@ classdef cQueue < cTaesLab
     properties (GetAccess = public, SetAccess=private)
         Count  % logger size
     end
+
     properties(Access=private)
         buffer % data cell array
     end
@@ -43,18 +44,32 @@ classdef cQueue < cTaesLab
         function obj = clear(obj)
         %clear - Clear the queue
         %   Syntax: 
-        %     obj.clear 
+        %     obj.clear
+        %   Output Argument
+        %     obj - Current obj
             obj.buffer = cType.EMPTY_CELL;
         end
 
         function obj = addQueue(obj, queue)
-        % Add another queue at the end of this queue
+        %addQueue - Add another queue at the end of this queue
+        %   Syntax:
+        %     obj.addQueue(queue)
+        %   Output Argument
+        %     obj - Current obj   
             if ~isempty(queue.buffer)
                 obj.buffer = [obj.buffer, queue.buffer];
             end
         end
               
         function res=getContent(obj,idx)
+        %getContent - get the content of the queue
+        %   Syntax:
+        %     res=obj.getContent(idx)
+        %   Input Argument:
+        %     idx - Index of the cell array to obtain (optional)
+        %   Output Argument:
+        %     res - If index if provided the value of the specific position of the queue
+        %           if not provided return a cell array with all values of the queue
             if nargin==1
                 res=obj.buffer;
             else
@@ -63,7 +78,9 @@ classdef cQueue < cTaesLab
         end
 
         function printContent(obj)
-        % Print the content of the buffer
+        %printContent - Print the content of the buffer
+        %   Syntax:
+        %     obj.printContent
             arrayfun(@(i) disp(obj.buffer{i}), 1:obj.Count);
         end
         

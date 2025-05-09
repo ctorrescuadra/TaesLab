@@ -1,27 +1,27 @@
 classdef (Sealed) cSummaryResults < cResultId
-% cSummaryResults gets the summary results tables of the model
+%cSummaryResults gets the summary results tables of the model
 %   There is two types of summary tables
 %    STATES - Summarize the results for each state
 %    RESOURCES - Summarize the results for each resource sample
 %
-% cSummaryResults constructor:
-%   obj =cSummaryResults(model,option)
+%   cSummaryResults constructor:
+%     obj =cSummaryResults(model,option)
 %
-% cSummaryResults properties:
-%   Tables     - List of the Summary Tabled created
-%   NrOfTables - Number of Tables
+%   cSummaryResults properties:
+%     Tables     - List of the Summary Tabled created
+%     NrOfTables - Number of Tables
 % 
-% cSummaryResults methods
-%   buildResultInfo            - Build the cResultInfo object with the summary tables
-%   defaultSummaryTables       - Get the default summary tables option name
-%   setSummaryTables           - Set the values of the summary tables
-%   getValues                  - Get the summary tables info
-%   getRowNames                - Get the row names of the summary tables
-%   getColNames                - Get the column names of the summary tables
-%   getDefaultFlowVariables    - Get the names of the output flows for summary graphs
-%   getDefaultProcessVariables - Get the names of the output processes for summary graphs
+%   cSummaryResults methods
+%     buildResultInfo            - Build the cResultInfo object with the summary tables
+%     defaultSummaryTables       - Get the default summary tables option name
+%     setSummaryTables           - Set the values of the summary tables
+%     getValues                  - Get the summary tables info
+%     getRowNames                - Get the row names of the summary tables
+%     getColNames                - Get the column names of the summary tables
+%     getDefaultFlowVariables    - Get the names of the output flows for summary graphs
+%     getDefaultProcessVariables - Get the names of the output processes for summary graphs
 %
-% See also cThermoeconomicModel
+%   See also cThermoeconomicModel
 %
     properties(GetAccess=public,SetAccess=private)
         Tables       % Names of Summary Tabled created
@@ -38,13 +38,13 @@ classdef (Sealed) cSummaryResults < cResultId
 
     methods
         function obj = cSummaryResults(model,option)
-        % Build an instance of this class
-        % Syntax:
-        %   obj = cSummaryResults(model,option)
-        % Input Arguments:
-        %   model - cThermoeconomicModel object
-        %   option - Type of summary results to obtain
-        %    If it is missing is determined by the model (cSummaryOptions)
+        %cSummaryResults - Build an instance of this class
+        %   Syntax:
+        %     obj = cSummaryResults(model,option)
+        %   Input Arguments:
+        %     model - cThermoeconomicModel object
+        %     option - Type of summary results to obtain
+        %       If it is missing is determined by the model (cSummaryOptions)
         %
             % Check Input Arguments
             if ~isObject(model,'cThermoeconomicModel')
@@ -106,32 +106,34 @@ classdef (Sealed) cSummaryResults < cResultId
         end
 
         function res=buildResultInfo(obj,fmt)
-        % Get cResultInfo object
-        % Syntax:
-        %   res=obj.buildResultInfo(fmt)
-        % Input Argument
-        %   fmt - cResultTableBuilder object
-        % Output Argument
-        %   res - cResultInfo object with the summary results
+        %buildResultInfo - Get cResultInfo object
+        %   Syntax:
+        %     res=obj.buildResultInfo(fmt)
+        %   Input Argument
+        %     fmt - cResultTableBuilder object
+        %   Output Argument
+        %     res - cResultInfo object with the summary result
+        %
             res=fmt.getSummaryResults(obj);
         end
 
         function res=defaultSummaryTables(obj)
-        % Get the default summary tables option name
-        % Syntax:
-        %   res=obj.defaultSummaryTable
-        % Output Argument:
-        %   res - Get the default summary option name
+        %defaultSummaryTables - Get the default summary tables option name
+        %   Syntax:
+        %     res=obj.defaultSummaryTable
+        %   Output Argument:
+        %     res - Get the default summary option name
             res=obj.sopt.defaultOption;
         end
         
         function setSummaryTables(obj,model,option)
-        % Fill the values of the summary tables with the values of the model
+        %setSummaryTables - Fill the values of the summary tables with the values of the model
         % Syntax:
         %   obj.setSummaryTables(model,option)
         % Input Argument:
         %   model - cThermoeconomicModel object
         %   option - Type of summary result
+        %
             if nargin==2
                 option=obj.option;
             end

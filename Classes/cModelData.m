@@ -36,12 +36,12 @@ classdef (Sealed) cModelData < cMessageLogger
 
     methods
         function obj = cModelData(name,s)
-        % cModelData Construct an instance of this class
-        % Syntax:
-        %   obj = cModelData(name,s)
-        % Input Arguments:
-        %   name - Name of the data model
-        %   s - struct containing the data
+        %cModelData - Construct an instance of this class
+        %   Syntax:
+        %     obj = cModelData(name,s)
+        %   Input Arguments:
+        %     name - Name of the data model
+        %     s - struct containing the data
         % 
             obj.dm=struct();
             obj.ModelName=name;
@@ -103,43 +103,43 @@ classdef (Sealed) cModelData < cMessageLogger
         end
     
         function res=getStateNames(obj)
-        % getStateNames - Get a cell array list with the names of the states
-        % Syntax:
-        %   res = obj.getStateNames()
-        % Output Arguments:
-        %   res = cell array with the state names
+        %getStateNames - Get a cell array list with the names of the states
+        %   Syntax:
+        %     res = obj.getStateNames()
+        %   Output Arguments:
+        %     res = cell array with the state names
         %
             res={obj.dm.ExergyStates.States(:).stateId};
         end
 
         function res=getSampleNames(obj)
-        % getSampleNames - Get a cell array list with the names of the resource samples
-        % Syntax:
-        %   res = obj.getStateNames()
-        % Output Arguments:
-        %   res = cell array with the sample names
+        %getSampleNames - Get a cell array list with the names of the resource samples
+        %   Syntax:
+        %     res = obj.getStateNames()
+        %   Output Arguments:
+        %     res = cell array with the sample names
         %
             res={obj.dm.ResourcesCost.Samples(:).sampleId};
         end
 
         function res=isWaste(obj)
-        % isWaste - Indicate is optional waste element exists
+        %isWaste - Indicate is optional waste element exists
             id=cType.DataId.WASTE;
             res = isfield(obj.dm,cType.DataElements{id});
         end
 
         function res=isResourceCost(obj)
-        % isResources - Indicate is optional resources cost element exists
+        %isResources - Indicate is optional resources cost element exists
             id=cType.DataId.RESOURCES;
             res = isfield(obj.dm,cType.DataElements{id});
         end
 
         function log=saveAsXML(obj,filename)
-        % saveAsXML - save data model as XML file
-        %  Input:
-        %   filename - name of the output file
-        %  Output:
-        %   log: cStatusLog class containing error messages ans status
+        %saveAsXML - save data model as XML file
+        %   Input Arguments:
+        %     filename - name of the output file
+        %   Output Arguments:
+        %     log: cStatusLog class containing error messages ans status
             log=cMessageLogger();
             try
                 writestruct(obj.dm,filename,'StructNodeName','root','AttributeSuffix','Id');
@@ -150,11 +150,11 @@ classdef (Sealed) cModelData < cMessageLogger
 		end
 
         function log=saveAsJSON(obj,filename)
-        % saveAsJSON - save data model as JSON file
-        %  Input:
-        %   filename - name of the output file
-        %  Output:
-        %   log: cStatusLog class containing error messages and status
+        %saveAsJSON - save data model as JSON file
+        %   Input Arguments:
+        %     filename - name of the output file
+        %   Output Arguments:
+        %     log: cStatusLog class containing error messages and status
             log=cMessageLogger();
             try
                 text=jsonencode(obj.dm,'PrettyPrint',true);

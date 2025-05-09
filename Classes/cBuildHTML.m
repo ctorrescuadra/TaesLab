@@ -18,13 +18,13 @@ classdef (Sealed) cBuildHTML < cMessageLogger
     end
     methods
         function obj=cBuildHTML(tbl,folder)
-        % cBuildHTML - Build an instance of the object
-        % Syntax:
-        %   obj = cBuildHTML(tbl)
-        %   obj = cBuildHTML(index_table, folder)
-        % Input Arguments:
-        %   tbl - cTable object to convert
-        %   folder - Folder name where the files will be save if tbl is a cTableIndex
+        %cBuildHTML - Build an instance of the object
+        %   Syntax:
+        %     obj = cBuildHTML(tbl)
+        %     obj = cBuildHTML(index_table, folder)
+        %   Input Arguments:
+        %     tbl - cTable object to convert
+        %     folder - Folder name where the files will be save if tbl is a cTableIndex
         % 
             if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
@@ -40,17 +40,17 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function res=getMarkupHTML(obj)
-        % getMarkupHTML - Get the HTML text of the table
-        % Syntax:
-        %   res = obj.getMarkupHTML
+        %getMarkupHTML - Get the HTML text of the table
+        %   Syntax:
+        %     res = obj.getMarkupHTML
         %
             res=[obj.head,obj.body];
         end
 
         function showTable(obj)
-        % showTable - Show a normal table in the web browser
-        % Syntax:
-        %   obj.showTable
+        %showTable - Show a normal table in the web browser
+        %   Syntax:
+        %     obj.showTable
         %  
             if obj.isIndexTable
                 return
@@ -60,13 +60,13 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function log=saveTable(obj,filename)
-        % saveTable - Save the table into a HTML file
-        % Syntax:
-        %   log = obj.saveTable(filename)
-        % Input Arguments:
-        %   filename - name of the file with html extension
-        % Output Arguments:
-        %   log - cMessageLogger object with status and messages
+        %saveTable - Save the table into a HTML file
+        %   Syntax:
+        %     log = obj.saveTable(filename)
+        %   Input Arguments:
+        %     filename - name of the file with html extension
+        %   Output Arguments:
+        %     log - cMessageLogger object with status and messages
         %
             log=cMessageLogger();
             try

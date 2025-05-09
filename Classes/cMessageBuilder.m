@@ -26,16 +26,16 @@ classdef cMessageBuilder < cTaesLab
 
     methods
         function obj = cMessageBuilder(type,class,text)
-        % cMessageBuilder - Construct an instance of this class
-        % Syntax:
-        %   obj = cMessageBuilder(type,class,text)
+        %cMessageBuilder - Construct an instance of this class
+        %   Syntax:
+        %     obj = cMessageBuilder(type,class,text)
         %   Input Arguments:
-        %   type - type of error
-        %     'ERROR': error message
-        %     'WARNING': warning message
-        %     'INFO': info message
-        %   class - class name where message is produced
-        %   text  - text of the message
+        %     type - type of error
+        %       'ERROR': error message
+        %       'WARNING': warning message
+        %       'INFO': info message
+        %     class - class name where message is produced
+        %     text  - text of the message
         %
             obj.Error=type;
             obj.Class=class;
@@ -43,16 +43,16 @@ classdef cMessageBuilder < cTaesLab
         end
 
         function text = getMessage(obj)
-        % getMessage - Get the message as text
-        % Syntax:
-        %   text = obj.ggetMessage
-        % Output Argument:
-        %   text - message text which appears in the logger including error type, class name and text.  
+        %getMessage - Get the message as text
+        %   Syntax:
+        %     text = obj.ggetMessage
+        %   Output Argument:
+        %     text - message text which appears in the logger including error type, class name and text.  
             text=[cType.getTextErrorCode(obj.Error),': ',obj.Class,'. ',obj.Text];              
         end
 
         function disp(obj,debug)
-        % Overload disp function
+        %dip - Overload disp function
         %   fid=1 is the standard output file id
         %   fid=2 is the error output file id
             if nargin==1

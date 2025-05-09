@@ -3,7 +3,10 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 %   This class read a XLSX file containing the thermoeconomic model data
 %   and build the data model
 %
-% See also cReadModel, cReadModelTable
+%   cReadModelCSV constructor
+%     obj=cReadModelCSV(cfgfile)
+%
+%   See also cReadModel, cReadModelTable
 %
     methods
         function obj = cReadModelXLS(cfgfile)

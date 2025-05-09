@@ -15,10 +15,10 @@ classdef cFormatData < cTablesDefinition
 	methods
 		function obj=cFormatData(data)
 		% Create an instance of the object
-		% Syntax:
-		%   obj = cFormatData(data)
-		% Input Argument:
-		%	data - Format struct from cModelData
+		%   Syntax:
+		%     obj = cFormatData(data)
+		%   Input Argument:
+		%	  data - Format struct from cModelData
 		%
 			if ~isstruct(data) || ~isfield(data,'definitions') 
 				obj.messageLog(cType.ERROR,cMessages.InvalidFormatDefinition);

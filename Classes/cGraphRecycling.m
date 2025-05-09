@@ -1,7 +1,22 @@
-classdef cGraphRecycling < cBuildGraph
-
+classdef cGraphRecycling < cGraphResults
+%cGraphCost - Plot Waste Recycling cost
+%
+%   cGraphRecycling Constructor
+%     obj=cGraphRecycling(tbl)
+%
+%   cGraphRecycling Methods
+%     showGraph   - show the graph in a window 
+%     showGraphUI - show the graph in the graph pannel of a GUI app
+%
+%   See also cGraphResults
     methods
         function obj = cGraphRecycling(tbl)
+		%cGraphRecycling - Build an instance of the object
+        %   Syntax:
+        %     obj = cGraphRecycling(tbl)
+        %   Input Arguments:
+        %     tbl - cTable with the data to show graphically
+        %
 			obj.Name='Recycling Cost Analysis';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',tbl.ColNames{end},']'];
 			obj.xValues=(0:10:100);
@@ -18,13 +33,34 @@ classdef cGraphRecycling < cBuildGraph
         end
 
         function showGraph(obj)
- 		% Plot the graph recycling
-			f=figure('name',obj.Name,'numbertitle','off','colormap',turbo,...
+ 		%showGraph - show the graph in a window
+        %   Syntax:
+        %     obj.showGraphUI(app)
+			f=figure('name',obj.Name,'numbertitle','off','visible','off','colormap',turbo,...
 				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
 			ax=axes(f);
 			plot(obj.xValues,obj.yValues,'Marker','diamond','LineWidth',1);
 			tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
 			obj.setGraphParameters(ax);
+			set(hf,'visible','on');
         end
+
+		function showGraphUI(obj,app)
+        %showGraphUI - show the graph in a GUI app
+        %   Syntax:
+        %     obj.showGraphUI(app)
+		%	Input Parameter:
+		%	  app - GUI app reference object
+		%
+			if app.isColorbar
+				delete(app.Colorbar);
+			end
+			plot(obj.xValues,obj.yValues,...
+				'Marker','diamond',...
+				'LineWidth',1,...
+				'Parent',app.UIAxes);
+			SetGraphParametersUI(obj,app);
+			app.UIAxes.Visible='on';
+		end
     end
 end

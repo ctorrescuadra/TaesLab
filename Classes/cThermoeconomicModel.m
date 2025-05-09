@@ -924,7 +924,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
             res=obj.getResultTable(graph);
             if res.status
-                showGraph(res,graph,varargin{:});
+                showGraph(res,graph);
             else
                 printLogger(res);
             end

@@ -47,11 +47,11 @@ classdef cResultInfo < cResultSet
     methods
         function obj=cResultInfo(info,tables)
         %cResultInfo - Construct an instance of this class
-        % Syntax:
-        %   obj = cResultInfo(info,tables)
-        % Input Arguments:
-        %   info - cResultId containing the results
-        %   tables - struct containig the result tables
+        %   Syntax:
+        %     obj = cResultInfo(info,tables)
+        %   Input Arguments:
+        %     info - cResultId containing the results
+        %     tables - struct containig the result tables
         %
             % Check parameters
             if ~info.status
@@ -81,22 +81,22 @@ classdef cResultInfo < cResultSet
 
         function res=getResultInfo(obj)
         %getResultInfo - Get cResultInfo object for cResultSet
-        % Syntax:
-        %   res=obj.getResultInfo
-        % Output Arguments
-        %   res - cResultInfo associated to the result set
+        %   Syntax:
+        %     res=obj.getResultInfo
+        %   Output Arguments
+        %     res - cResultInfo associated to the result set
         %
             res=obj;
         end
 
         function res=getTable(obj,name)
         %getTable - Get the table called name
-        % Syntax:
-        %   res=obj.getTable(name)
-        % Input Argument:
-        %   name - Name of the table
-        % Output Argument:
-        %   res - cTable object
+        %   Syntax:
+        %     res=obj.getTable(name)
+        %   Input Argument:
+        %     name - Name of the table
+        %   Output Argument:
+        %     res - cTable object
         %
             res = cMessageLogger();
             if nargin<2 || ~ischar(name) || isempty(name)
@@ -115,16 +115,16 @@ classdef cResultInfo < cResultSet
 
         function res=getTableIndex(obj,varargin)
         %getTableIndex - Get the Table Index
-        % Syntax:
-        %   res=obj.getTableIndex(options)
-        % Input Arguments:
-        %   options - VarMode options
-        %     cType.VarMode.NONE: cTable object (default)
-        %     cType.VarMode.CELL: cell array
-        %     cType.VarMode.STRUCT: structured array
-        %     cType.VarModel.TABLE: Matlab table
-        % Output Argument:
-        %   res - Table Index info in the format selected
+        %   Syntax:
+        %     res=obj.getTableIndex(options)
+        %   Input Arguments:
+        %     options - VarMode options
+        %       cType.VarMode.NONE: cTable object (default)
+        %       cType.VarMode.CELL: cell array
+        %       cType.VarMode.STRUCT: structured array
+        %       cType.VarModel.TABLE: Matlab table
+        %   Output Argument:
+        %     res - Table Index info in the format selected
         %
             if nargin==1
                 res=obj.tableIndex;
@@ -133,14 +133,53 @@ classdef cResultInfo < cResultSet
             end
         end
 
+        function showGraph(obj,graph)
+        %showGraph - Show graph with default options
+        %   Syntax:
+        %     obj.showGraph(graph, options)
+        %   Input Arguments:
+        %     graph - graph table name [optional]
+        %   See also cGraphResults
+        %
+            res=getResultInfo(obj);
+            if nargin==1
+                graph=res.Info.DefaultGraph;
+            end
+            tbl=getTable(res,graph);
+            if ~tbl.status
+                obj.printError(cMessages.TableNotFound,graph);
+                return
+            end
+            % build graph using default parameters
+            switch tbl.GraphType
+                case cType.GraphType.COST
+                    gr=cGraphCost(tbl);
+                case cType.GraphType.DIAGNOSIS
+                    gr=cGraphDiagnosis(tbl,obj.Info);
+                case cType.GraphType.WASTE_ALLOCATION
+                    gr=cGraphWaste(tbl,obj.Info,true);
+                case cType.GraphType.RECYCLING
+                    gr=cGraphRecycling(tbl);
+                case cType.GraphType.DIGRAPH
+                    gr=cDigraph(tbl,obj.Info);
+                case cType.GraphType.DIAGRAM_FP
+                    gr=cGraphDiagramFP(tbl);
+                case cType.GraphType.SUMMARY
+                    gr=cGraphSummary(tbl,obj.Info);
+            end
+            % Show Graph
+            gr.showGraph;
+        end 
+
         function res=summaryDiagnosis(obj)
         %summaryDiagnosis - Get the Fuel Impact/Malfunction Cost as a string including format and unit
         %   If no output argument values are displayed on console
-        % Syntax:
-        %   obj.summaryDiagnosis
-        %   res=obj.summaryDiagnosis
-        % Output Arguments:
-        %   res - Struct with diagnosis summary results
+        % 
+        %   Syntax:
+        %     obj.summaryDiagnosis
+        %     res=obj.summaryDiagnosis
+        %   Output Arguments:
+        %     res - Struct with diagnosis summary results
         %  
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
@@ -158,12 +197,13 @@ classdef cResultInfo < cResultSet
 
         function res=summaryTables(obj)
         %summaryTable - Get/Display available summary tables
-        %   If no output argument, the value is displayed in console 
-        % Syntax:
-        %   obj.summaryTables
-        %   res=obj.summaryTables;
-        % Output Argument
-        %   res - Default Summary Option
+        %   If no output argument, the value is displayed in console
+        %
+        %   Syntax:
+        %     obj.summaryTables
+        %     res=obj.summaryTables;
+        %   Output Argument
+        %     res - Default Summary Option
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
                 res=obj.Info.defaultSummaryTables;
@@ -175,10 +215,10 @@ classdef cResultInfo < cResultSet
 
         function res=isStateSummary(obj)
         %isStatesSummary - Check if the States Summary results are available
-        % Syntax:
-        %   res = obj.isStateSummary
-        % Output Arguments:
-        %   res - true | false
+        %   Syntax:
+        %     res = obj.isStateSummary
+        %   Output Arguments:
+        %     res - true | false
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
                 res=obj.Info.isStateSummary;
@@ -187,10 +227,10 @@ classdef cResultInfo < cResultSet
 
         function res=isSampleSummary(obj)
         %isSampleSummary - Check if the Samples Summary results are available
-        % Syntax:
-        %   res = obj.isStateSummary
-        % Output Arguments:
-        %   res - true | false
+        %   Syntax:
+        %     res = obj.isStateSummary
+        %   Output Arguments:
+        %     res - true | false
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
                 res=obj.Info.isSampleSummary;

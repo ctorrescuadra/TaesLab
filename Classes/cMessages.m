@@ -1,11 +1,11 @@
 classdef cMessages
+%cMessages - is a static class which defines the TaesLab messages
+% 
+%   cMessages methods:
+%     Table    - get the message tables
+%     ShowHelp - generate a hyperlink text to the help of the function caller
+%
     properties(Constant)
-    % cMessages is a static class which defines the TaesLab messages
-    % 
-    % cMessages methods:
-    %   Table    - get the message tables
-    %   ShowHelp - generate a hyperlink text to the help of the function caller
-    %
         % Read Model messages
         InvalidInputFile='Invalid file name %s'
         InvalidOutputFile='Invalid file name %s. File NOT saved'

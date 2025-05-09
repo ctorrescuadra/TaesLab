@@ -11,19 +11,19 @@ function ShowGraph(arg,varargin)
 %   Name-Value Arguments
 %     Graph: Name of the table
 %       char array
-%     ShowOutput: Use for diagnosis tables
+%     ShowOutput: Show Output variation.Use for diagnosis tables. 
 %       false | true (default)
-%     WasteFlow: Waste flow key for waste allocation and recycling
-%       char array 
+%     PieChart: Use Pie Chart graph for Waste Allocation
+%       false | true (default) 
+%     BarGraph: Use Bar Graph for summary results
+%		false | true (default)
 %     Variables: Use for summary results. 
 %	    cell array
-%     Colorbar: Use Colorbar in Diagram FP
-%       false | true (default)
 %
-% Example
-%   <a href="matlab:open ShowGraphDemo.mlx">Show Graph Demo</a>
+% 	Example
+%     <a href="matlab:open ShowGraphDemo.mlx">Show Graph Demo</a>
 %
-% See also cGraphResults, cResultSet
+%   See also cGraphResults, cResultSet
 %
     log=cMessageLogger();
 	if nargin < 1 || ~isObject(arg,'cResultSet')
@@ -35,9 +35,9 @@ function ShowGraph(arg,varargin)
     p = inputParser;
     p.addParameter('Graph',arg.DefaultGraph);
 	p.addParameter('ShowOutput',true,@islogical);
+	p.addParameter('PieChart',true,@islogical);
+	p.addParameter('BarGraph',false,@islogical);
 	p.addParameter('Variables',cType.EMPTY_CELL,@iscell);
-	p.addParameter('WasteFlow',cType.EMPTY_CHAR,@ischar);
-	p.addParameter('Colorbar',true,@islogical);
     try
 		p.parse(varargin{:});
     catch err
@@ -48,7 +48,7 @@ function ShowGraph(arg,varargin)
 	param=p.Results;
     % Get the resultId and table value
     if arg.ResultId==cType.ResultId.RESULT_MODEL
-		res=arg.buildResultInfo(param.Graph);
+		res=arg.getResultInfo(param.Graph);
 	else
 		res=arg;
     end
@@ -67,38 +67,23 @@ function ShowGraph(arg,varargin)
 		log.printError(cMessages.InvalidGraph,param.Graph);
 		return
 	end
-	% Get aditional parameters
-	option=cType.EMPTY;
+	% Create Graph
 	switch tbl.GraphType
+        case cType.GraphType.COST
+            gr=cGraphCost(tbl);
 		case cType.GraphType.DIAGNOSIS
-			if res.Info.Method==cType.DiagnosisMethod.WASTE_INTERNAL
-				option=param.ShowOutput;
-            else
-				option=true;
-			end
-		case cType.GraphType.DIGRAPH
-			option=res.Info.getNodeTable(param.Graph);
+            gr=cGraphDiagnosis(tbl,res.Info,param.ShowOutput);
 		case cType.GraphType.WASTE_ALLOCATION
-            if isempty(param.WasteFlow)
-                option=res.Info.wasteFlow;
-            else
-                option=param.WasteFlow;
-            end
+            gr=cGraphWaste(tbl,res.Info,param.PieChart);
+        case cType.GraphType.RECYCLING
+            gr=cGraphRecycling(tbl);
+		case cType.GraphType.DIGRAPH
+			gr=cDigraph(tbl,res.Info);
+		case cType.GraphType.DIAGRAM_FP
+			gr=cGraphDiagramFP(tbl);
 		case cType.GraphType.SUMMARY
-			if isempty(param.Variables)
-				if tbl.isFlowsTable
-					param.Variables=res.Info.getDefaultFlowVariables;
-				else
-					param.Variables=res.Info.getDefaultProcessVariables;
-				end
-			end
-			option=param.Variables;
-        case cType.GraphType.DIAGRAM_FP
-            option=param.Colorbar;
-        case cType.GraphType.DIGRAPH_FP
-            option=param.Colorbar;
+			gr=cGraphSummary(tbl,res.Info,param);
 	end
 	% Show Graph
-	gr=cGraphResults(tbl,option);
 	gr.showGraph;
 end

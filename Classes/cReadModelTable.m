@@ -2,8 +2,9 @@ classdef (Abstract) cReadModelTable < cReadModel
 % cReadModelTable Abstract class to read table data model
 %   This class derives cReadModelCSV and cReadmodelXLS
 %   
-% cReadModelTable Methods:
-%   getModelTable - Get the tables of the data model
+%   cReadModelTable Methods:
+%     getModelTable    - Get the tables of the data model
+%     buildModelTables - Build the cModelData object
 %	
 % See also cReadModel, cReadModelXLS, cReadModelCSV
 %

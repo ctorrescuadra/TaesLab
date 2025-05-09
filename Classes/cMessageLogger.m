@@ -1,5 +1,8 @@
 classdef cMessageLogger < cTaesLab
-% cStatusLogger - Create and manage a messages logger for cTaesLab objects
+%cStatusLogger - Create and manage a messages logger for cTaesLab objects
+%
+% cMessageLogger constructor
+%   obj=cMessageLogger(status)
 %	
 % cMessageLogger Methods:
 %   cMessageLogger - create a messages logger
@@ -21,12 +24,12 @@ classdef cMessageLogger < cTaesLab
 	
 	methods
 		function obj=cMessageLogger(val)
-        % Creates an instance of the class
-		% Syntax:
-		%   obj = cMessageLogger(status)
-		% Input Argument
-		%	status - Initial status of the object [optional]
-		%     cType.VALID | cType.INVALID
+        %cMessageLogger - Creates an instance of the class
+		%   Syntax:
+		%     obj = cMessageLogger(status)
+		%   Input Argument
+		%	  status - Initial status of the object [optional]
+		%       cType.VALID | cType.INVALID
 		%
 			if nargin==1
 				obj.status=val;
@@ -35,49 +38,49 @@ classdef cMessageLogger < cTaesLab
 		end
 
 		function printError(obj,varargin)
-		% Print error message. 
-		% Syntax:
-		%	obj.printError(varargin)
-		% Input Argument:
-		%   text - text message, use fprintf syntax
-		%     varargin
-		% Example:
-		%	obj.printError(cMessages.FileNotFound,filename)
+		%printError - Print error message. 
+		%   Syntax:
+		%	  obj.printError(varargin)
+		%   Input Argument:
+		%     text - text message, use fprintf syntax
+		%       varargin
+		%   Example:
+		%	  obj.printError(cMessages.FileNotFound,filename)
 		%
 			printMessage(obj,cType.ERROR,varargin{:});
 		end
 			
 		function printWarning(obj,varargin)
-		% Print warning message. 
-		% Syntax:
-		% 	obj.printWarning(varargin)
-		% Input Argument:
-		%   text - text message, use fprintf syntax
-		%     varargin
+		%printWarning - Print warning message. 
+		%   Syntax:
+		% 	  obj.printWarning(varargin)
+		%   Input Argument:
+		%     text - text message, use fprintf syntax
+		%       varargin
 		% 
 			printMessage(obj,cType.WARNING,varargin{:});
 		end
 			
 		function printInfo(obj,varargin)
-		% Print info message. Use fprintf syntax
-		% Syntax:
-		%  obj.printInfo(text)
-		% Input Argument:
-		%   text - text message, using fprintf syntax
-		%     varargin
+		%printInfo - Print info message. Use fprintf syntax
+		%   Syntax:
+		%     obj.printInfo(text)
+		%   Input Argument:
+		%     text - text message, using fprintf syntax
+		%       varargin
 		%
 			printMessage(obj,cType.VALID,varargin{:});
 		end
 		
 		function messageLog(obj,error,varargin)
-		% Add a message to the logger
-        % Syntax:
-		%    obj.messageLog(type,text)	
-		%  Input:
-		%   error - error type code
-		%     cType.ERROR | cType.WARNING | cType.INFO
-		%   text - message text, use fprintf format
-		%     varargin
+		%messageLog - Add a message to the logger
+        %   Syntax:
+		%      obj.messageLog(type,text)	
+		%   Input:
+		%     error - error type code
+		%       cType.ERROR | cType.WARNING | cType.INFO
+		%     text - message text, use fprintf format
+		%       varargin
 		% Example:
 		%   obj.messageLog(cType.ERROR,'Invalid file name %s',filename)
 		%
@@ -89,20 +92,20 @@ classdef cMessageLogger < cTaesLab
 		end
 		
 		function printLogger(obj)
-		% Print the logger
-		% Syntax:
-		%   obj.printLogger
+		%printLogger - Print the logger
+		%   Syntax:
+		%     obj.printLogger
 		%
 			printContent(obj.logger);
 		end
 
 		function printLoggerType(obj,type)
-		% Print the messages of the logger of the specified type
-		% Syntax:
-		%   obj.printLoggerType(type)
-		%  Input Arguments:
-		%	type - type of error message
-		%     cType.ERROR | cType.WARNING | cType.INFO
+		%printLoggerType - Print the messages of the logger of the specified type
+		%   Syntax:
+		%     obj.printLoggerType(type)
+		%   Input Arguments:
+		%	  type - type of error message
+		%       cType.ERROR | cType.WARNING | cType.INFO
 		%
 			q=obj.logger;
 			for i=1:q.Count
@@ -114,12 +117,12 @@ classdef cMessageLogger < cTaesLab
 		end
 
 		function [res,index]=tableLogger(obj)
-		% Build a table logger to use in apps
-		% Syntax:
-		%   [res,index]=obj.tableLogger
-		% Output Arguments:
-		%  	res: cell array containing the table (Error, Class, Message)
-		%  	index: array containing the error index of each message
+		%tableLogger - Build a table logger to use in apps
+		% 	Syntax:
+		%     [res,index]=obj.tableLogger
+		%   Output Arguments:
+		%  	  res: cell array containing the table (Error, Class, Message)
+		%  	  index: array containing the error index of each message
 		%
 			q=obj.logger;
 			res=cell(q.Count,3);
@@ -134,21 +137,21 @@ classdef cMessageLogger < cTaesLab
 		end
 	
 		function addLogger(obj1,obj2)
-		% Concatenate two message loggers
-		% Syntax:
-		%   addLogger(obj1,obj2)
-		% Input Arguments
-		%	obj1 - current object
-		%   obj2 - cMessagesLogger containing object messages
+		%addLogger - Concatenate two message loggers
+		%   Syntax:
+		%     addLogger(obj1,obj2)
+		%   Input Arguments
+		%	  obj1 - current object
+		%     obj2 - cMessagesLogger containing object messages
 		%
             obj1.logger.addQueue(obj2.logger);
 			obj1.status=isValid(obj1) && isValid(obj2);
         end
 
 		function clearLogger(obj)
-		% Clear the message logger
-		% Syntax:
-		%   obj.clearLogger
+		%clearLogger - Clear the message logger
+		%   Syntax:
+		%     obj.clearLogger
 		%
 			obj.logger.clear;
 		end

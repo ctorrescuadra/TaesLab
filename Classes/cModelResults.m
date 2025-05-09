@@ -1,15 +1,15 @@
 classdef (Sealed) cModelResults < cMessageLogger
-    % cModelResults is a class container of the model results
+    %cModelResults is a class container of the model results
     %   This class store the results of cThermoeconomicModel according to its ResultId
     %
-    % cModelResults constructor:
-    %   obj = cModelResults(data)
+    %   cModelResults constructor:
+    %     obj = cModelResults(data)
     %   
-    % cModelResults methods:
-    %   getResults      - Get a cResultInfo from the container
-    %   setResults      - Store a cResultInfo in the container
-    %   clearResults    - Delete a cResultInfo from the container
-    %   getModelResults - Get the current results of a state
+    %   cModelResults methods:
+    %     getResults      - Get a cResultInfo from the container
+    %     setResults      - Store a cResultInfo in the container
+    %     clearResults    - Delete a cResultInfo from the container
+    %     getModelResults - Get the current results of a state
     %
     properties(Access=private)
         results    % cResultInfo cell array container
@@ -17,12 +17,13 @@ classdef (Sealed) cModelResults < cMessageLogger
 
     methods
         function obj = cModelResults(data)
-        % cModelResults Construct an instance of this class
-        %  Initialize the results model from data model
-        % Syntax:
-        %   obj = cModelResults(data)
-        % Input Arguments:
-        %   data - cDataModel object
+        %cModelResults - Construct an instance of this class
+        %   Initialize the results model from data model
+        %
+        %   Syntax:
+        %     obj = cModelResults(data)
+        %   Input Arguments:
+        %     data - cDataModel object
         %
             % Check inputs
             if ~isObject(data,'cDataModel')
@@ -36,13 +37,13 @@ classdef (Sealed) cModelResults < cMessageLogger
         end
 
         function res=getResults(obj,id)
-        % Get the cResultInfo from the container
-        % Syntax:
-        %   res = obj.getResults(id)
-        % Input Arguments:
-        %   id - ResultId index
-        % Output:
-        %   res - cResultInfo with ResultId equals to index
+        % getResults - Get the cResultInfo from the container
+        %   Syntax:
+        %     res = obj.getResults(id)
+        %   Input Arguments:
+        %     id - ResultId index
+        %   Output Arguments:
+        %     res - cResultInfo for the corresponding index
             res=cType.EMPTY;
             if nargin==1
                 res=obj.results;
@@ -52,13 +53,13 @@ classdef (Sealed) cModelResults < cMessageLogger
         end
 
         function res=clearResults(obj,id)
-        % Clear the result index in the container
-        % Syntax:
-        %   res = obj.clearResults(id)
-        % Input Arguments:
-        %   id - ResultId index to remove from the container
-        % Output Arguments:
-        %   res - previous cResultInfo stored
+        %clearResults - Clear the result index in the container
+        %   Syntax:
+        %     res = obj.clearResults(id)
+        %   Input Arguments:
+        %     id - ResultId index to remove from the container
+        %   Output Arguments:
+        %     res - previous cResultInfo stored
             if ~isIndex(id,1:cType.MAX_RESULT_INFO)
                 return
             end
@@ -72,12 +73,13 @@ classdef (Sealed) cModelResults < cMessageLogger
         end
 
         function setResults(obj,res,force)
-        % Store the cResultInfo in the results container using ResultId as index
-        % Syntax:
-        %   obj.setResults(id)
-        % Input Arguments:
-        %   res   - cResultInfo to store
-        %   force - store without comparison
+        %setResults - Store the cResultInfo in the results container using ResultId as index
+        %   Syntax:
+        %     obj.setResults(id)
+        %   Input Arguments:
+        %     res   - cResultInfo to store
+        %     force - store without comparison
+        %       true | false (default)
         %
             if ~isObject(res,'cResultInfo')
                 return
@@ -96,11 +98,11 @@ classdef (Sealed) cModelResults < cMessageLogger
         end
 
         function res=getModelResults(obj)
-        % Get a cell array with the cResultInfo objects of the current state
-        % Syntax:
-        %   res = obj.getModelResults
-        % Output Arguments:
-        %   res - cell array with the current cResultInfo objects
+        %getModelResult - Get a cell array with the cResultInfo objects of the current state
+        %   Syntax:
+        %     res = obj.getModelResults
+        %   Output Arguments:
+        %     res - cell array with the current cResultInfo objects
         %   
             stateResults=obj.results(1:cType.MAX_RESULT);
             res=obj.results(~cellfun(@isempty,stateResults));

@@ -13,7 +13,7 @@ classdef ViewResults < matlab.apps.AppBase
 %   See also cThermoeconomicTool
 %
     % Properties that correspond to app components
-    properties (Access = private)
+    properties (Access = public)
         UIFigure          matlab.ui.Figure
         GridLayout        matlab.ui.container.GridLayout
         LogField          matlab.ui.control.Label
@@ -32,11 +32,11 @@ classdef ViewResults < matlab.apps.AppBase
         SaveResultsMenu   matlab.ui.container.Menu
         ContextMenu3      matlab.ui.container.ContextMenu
         SaveTableMenu     matlab.ui.container.Menu
+        Colorbar                    
     end
    
     properties (Access = private)
         State            % Results State
-        Colorbar         % Colorbar
         ExpandedNode     % Current Node
         TableIndex       % Table Index
         CurrentTable     % Current Table
@@ -44,179 +44,6 @@ classdef ViewResults < matlab.apps.AppBase
     end
     
     methods (Access = private)
-        % View the graph of a ICT table
-        function GraphCost(app,tbl)
-        % get the graph parameter
-            obj=cGraphResults(tbl);
-            M=numel(obj.Legend);
-            cm=turbo(M);
-            if app.isColorbar
-                delete(app.Colorbar);
-            end
-            % Plot the bar graph
-            b=bar(obj.yValues,...
-                'EdgeColor','none','BarWidth',0.5,...
-                'BarLayout','stacked',...
-                'BaseValue',obj.BaseLine,...
-                'FaceColor','flat',...
-                'Parent',app.UIAxes);
-            for i=1:M, b(i).CData=cm(i,:); end
-            app.SetGraphParameters(obj);
-            app.UIAxes.Visible='on';
-        end
-        
-        % View the graph of a diagnosis table
-        function GraphDiagnosis(app,tbl)
-            % Get the graph parameters
-            obj=cGraphResults(tbl);
-            M=numel(obj.Legend);
-            cm=turbo(M);
-            if app.isColorbar
-                delete(app.Colorbar);
-            end
-            % Plot the bar graph
-            b=bar(obj.yValues,...
-                    'EdgeColor','none','BarWidth',0.5,...
-                    'BarLayout','stacked',...
-                    'BaseValue',obj.BaseLine,...
-                    'FaceColor','flat',...
-                    'Parent',app.UIAxes);
-            for i=1:M, b(i).CData=cm(i,:); end
-            bs=b.BaseLine;
-            bs.BaseValue=0.0;
-            bs.LineStyle='-';
-            bs.Color=[0.6,0.6,0.6];
-            app.SetGraphParameters(obj);
-            app.UIAxes.Visible='on';
-        end
-
-        % View the graph of summary table
-        function GraphSummary(app,tbl,res)
-            % get the graph parameters
-            if tbl.isFlowsTable
-                var=res.getDefaultFlowVariables;
-            else
-                var=res.getDefaultProcessVariables; 				       
-            end
-            obj=cGraphResults(tbl,var);
-            % plot the graph
-            if app.isColorbar
-                delete(app.Colorbar);
-            end
-            % Plot the bar graph
-            bar(obj.xValues, obj.yValues,...
-                    'EdgeColor','none','BarWidth',0.5,...
-                    'BaseValue',obj.BaseLine,...
-                    'FaceColor','flat',...
-                    'Parent',app.UIAxes);
-            app.SetGraphParameters(obj);
-            app.UIAxes.Visible='on';
-        end
-
-        % View the graph recycling
-        function GraphRecycling(app,tbl)
-            % Get the graph properties
-            wkey=tbl.ColNames{end};
-            obj=cGraphResults(tbl,wkey);
-            % plot the graph
-            if app.isColorbar
-                delete(app.Colorbar);
-            end
-		    plot(obj.xValues,obj.yValues,...
-                'Marker','diamond',...
-                'LineWidth',1,...
-                'Parent',app.UIAxes);
-            app.SetGraphParameters(obj);
-            app.UIAxes.Visible='on';
-        end
-
-        % Show Waste Allocation graph
-        function GraphWasteAllocation(app,tbl)
-            % Get graph Properties
-            obj=cGraphResults(tbl);
-            % Plot the bar graph
-            if app.isColorbar
-                delete(app.Colorbar);
-            end
-            bar(obj.xValues,obj.yValues',...
-                'EdgeColor','none',...
-                'BarLayout','stacked',...
-                'Horizontal','on',...
-                'Parent',app.UIAxes);
-            title(app.UIAxes,obj.Title,'FontSize',14);
-            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
-            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
-            legend(app.UIAxes,obj.Categories,'FontSize',8);
-            app.UIAxes.Legend.Location='bestoutside';
-            app.UIAxes.Legend.Orientation='horizontal';
-            xtick=(0:10:100);
-            app.UIAxes.XTick = xtick;
-            app.UIAxes.XTickLabel=arrayfun(@(x) sprintf('%3d',x),xtick,'UniformOutput',false);
-            app.UIAxes.XLimMode="auto";
-            app.UIAxes.XGrid = 'on';
-            app.UIAxes.YGrid = 'off';
-            % Show the figure after all components are created
-            app.UIAxes.Visible = 'on';
-        end
-
-        function ShowDiagramFP(app,tbl)
-            obj=cGraphResults(tbl);
-            app.UIAxes.YLimMode="auto";
-            r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
-            app.UIAxes.Colormap=red2blue;
-            plot(app.UIAxes,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
-            app.Colorbar=colorbar(app.UIAxes);
-            app.Colorbar.Label.String=['Exergy ', tbl.Unit];
-            app.UIAxes.Title.String=obj.Title;
-            app.UIAxes.XLabel.String=cType.EMPTY_CHAR;
-            app.UIAxes.YLabel.String=cType.EMPTY_CHAR;
-            app.UIAxes.XTick=cType.EMPTY;
-            app.UIAxes.YTick=cType.EMPTY;
-            app.UIAxes.XGrid = 'off';
-            app.UIAxes.YGrid = 'off';
-            legend(app.UIAxes,'off');
-            app.UIAxes.Visible='on';
-        end
-
-        % Show digraphs (productiveDiagram, diagramFP object)
-        function ShowDigraph(app,tbl,res)
-            % get the graph properties
-            nodes=res.getNodeTable(tbl.Name);
-            obj=cGraphResults(tbl,nodes);
-            colors=eye(3);
-            nodetable=obj.xValues.Nodes;
-            nodecolors=colors(nodetable.Type,:);
-            nodenames=nodetable.Name;
-            plot(app.UIAxes,obj.xValues,"Layout","auto","NodeLabel",nodenames,"NodeColor",nodecolors,"Interpreter","none");         
-            app.UIAxes.Title.String=[tbl.Description, ' [',app.State,']'];
-            app.UIAxes.XLabel.String=cType.EMPTY_CHAR;
-            app.UIAxes.YLabel.String=cType.EMPTY_CHAR;
-            app.UIAxes.XTick=cType.EMPTY;
-            app.UIAxes.YTick=cType.EMPTY;
-            app.UIAxes.XGrid = 'off';
-            app.UIAxes.YGrid = 'off';
-            legend(app.UIAxes,'off');
-            app.UIAxes.Visible='on';
-        end
-        % Set some common graph parameters
-        function SetGraphParameters(app,obj)
-            title(app.UIAxes,obj.Title,'FontSize',14);
-            xlabel(app.UIAxes,obj.xLabel,'FontSize',12);
-            ylabel(app.UIAxes,obj.yLabel,'FontSize',12);
-            legend(app.UIAxes,obj.Legend,'FontSize',8);
-            yticks(app.UIAxes,'auto');
-            app.UIAxes.XTick=obj.xValues;
-            app.UIAxes.XTickLabel=obj.Categories;
-            app.UIAxes.XGrid = 'off';
-            app.UIAxes.YGrid = 'on';
-            app.UIAxes.YLimMode="auto";
-            tmp=ylim(app.UIAxes);
-            app.UIAxes.YLim=[obj.BaseLine, tmp(2)];
-            app.UIAxes.TickLabelInterpreter='none';
-            app.UIAxes.Legend.Location='northeastoutside';
-            app.UIAxes.Legend.Orientation='vertical';    
-        end
-        
         % Show the index table in table panel
         function ViewIndexTable(app,res)
             app.Label.Text=res.ResultName;
@@ -240,25 +67,24 @@ classdef ViewResults < matlab.apps.AppBase
         end
         
         % Show table in graph panel
-        function ViewGraph(app,tbl,res)
+        function ViewGraph(app,tbl,info)
             switch tbl.GraphType
                 case cType.GraphType.COST
-                    app.GraphCost(tbl);
+                    gr=cGraphCost(tbl);
                 case cType.GraphType.DIAGNOSIS
-                    app.GraphDiagnosis(tbl);
+                    gr=cGraphDiagnosis(tbl,info);
                 case cType.GraphType.SUMMARY
-                    app.GraphSummary(tbl,res)
+                    gr=cGraphSummary(tbl,info);
                 case cType.GraphType.DIAGRAM_FP
-                    app.ShowDiagramFP(tbl);
-                case cType.GraphType.DIGRAPH_FP
-                    app.ShowDiagramFP(tbl);
+                    gr=cGraphDiagramFP(tbl);
                 case cType.GraphType.DIGRAPH
-                    app.ShowDigraph(tbl,res);
+                    gr=cDigraph(tbl,info);
                 case cType.GraphType.RECYCLING
-                    app.GraphRecycling(tbl);
+                    gr=cGraphRecycling(tbl);
                 case cType.GraphType.WASTE_ALLOCATION
-                    app.GraphWasteAllocation(tbl);
-            end           
+                    gr=CGraphWaste(tbl,info,false);
+            end
+            gr.showGraphUI(app)           
         end
 
         % Clear Tab contents befere new results calculation
@@ -277,15 +103,6 @@ classdef ViewResults < matlab.apps.AppBase
                 app.UIAxes.Legend.Visible=false;
             end
             delete(app.UIAxes.Children);
-        end
-
-        % Check if Colorbar object is defined
-        function res=isColorbar(app)
-            try
-                res=~isempty(app.Colorbar);
-            catch
-                res=false;
-            end
         end
     end
 
@@ -450,7 +267,6 @@ classdef ViewResults < matlab.apps.AppBase
             app.LogField.Text=logtext;
         end
 
-
         % Close request function: UIFigure
         function CloseApp(app, ~)
             selection = uiconfirm(app.UIFigure,{'Close the Application?'},'Confirmation');   
@@ -592,6 +408,15 @@ classdef ViewResults < matlab.apps.AppBase
     % App creation and deletion
     methods (Access = public)
 
+        %Check Colorbar
+        function res=isColorbar(app)
+            try
+                res=~isempty(app.Colorbar);
+            catch
+                res=false;
+            end
+        end
+
         % Construct app
         function app = ViewResults(varargin)
 
@@ -610,8 +435,7 @@ classdef ViewResults < matlab.apps.AppBase
         end
 
         % Code that executes before app deletion
-        function delete(app)
-
+        function delete(app) 
             % Delete UIFigure when app is deleted
             delete(app.UIFigure)
         end

@@ -27,6 +27,8 @@ classdef  cSparseRow < cMessageLogger
 	%   res=sum(a,dim)
 	%   full(a)
 	%   sparse(a)
+	%   transpose(a)
+	%   ctranspose(a)
 	%	disp(a)
     %
 	properties (GetAccess=public, SetAccess=private)
@@ -39,13 +41,13 @@ classdef  cSparseRow < cMessageLogger
 
 	methods
 		function obj=cSparseRow(rows,vals,n)
-		% Matrix constructor
-		% Syntax:
-		%   obj = cSparseRow(rows,vals,n)
-		% Input Argument
-		%   rows - array containing index of the active rows
-		%   vals - Matrix containing the values of active rows
-		%   n    - Number of rows
+		%cSparseRow - create an instance of the class
+		%   Syntax:
+		%     obj = cSparseRow(rows,vals,n)
+		%   Input Argument
+		%     rows - array containing index of the active rows
+		%     vals - Matrix containing the values of active rows
+		%     n    - Number of rows (optional)
 		%
 			narginchk(2,3);
 			obj.NR=size(vals,1);

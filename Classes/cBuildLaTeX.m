@@ -26,11 +26,11 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 
     methods
         function obj=cBuildLaTeX(tbl)
-        % Create an instance of the class
-        % Syntax:
-        %   obj = cBuildLaTeX(tbl)
-        % Input Argument:
-        %   tbl - cTable object
+        %cBuildLaTex - Create an instance of the class
+        %   Syntax:
+        %     obj = cBuildLaTeX(tbl)
+        %   Input Argument:
+        %     tbl - cTable object
         %
             if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
@@ -65,9 +65,9 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         end
 
         function res=getLaTeXcode(obj)
-        % Get the LaTeX code as string
-        % Syntax:
-        %   obj.getLaTeXcode
+        %getLaTeXcode - Get the LaTeX code as string
+        %   Syntax:
+        %     obj.getLaTeXcode
         %
             res=sprintf('%s\n','\begin{table}[H]');
             res=[res,sprintf('%s\n',obj.caption)];
@@ -83,13 +83,13 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         end
 
         function log=saveTable(obj,filename)
-        % Save the table as LaTeX code into filename
-        % Syntax:
-        %   log=obj.saveTable(filename);
-        % Input Arguments:
-        %   filename - Name of the file
-        % Output Arguments:
-        %   log - cMessageLogger object with status and messages
+        %saveTable - Save the table as LaTeX code into filename
+        %   Syntax:
+        %     log=obj.saveTable(filename);
+        %   Input Arguments:
+        %     filename - Name of the file
+        %   Output Arguments:
+        %     log - cMessageLogger object with status and messages
             log=cMessageLogger;
             try
                 fId = fopen (filename, 'wt');

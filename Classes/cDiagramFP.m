@@ -18,11 +18,11 @@ classdef (Sealed) cDiagramFP < cResultId
     end
     methods
         function obj = cDiagramFP(exc)
-        % cDiagramFP - Construct an instance of this class
-        % Syntax:
-        %   obj = cDiagramFP(mfp)
-        % Input Argument:
-        %   exc - cExergyCost object
+        %cDiagramFP - Construct an instance of this class
+        %   Syntax:
+        %     obj = cDiagramFP(mfp)
+        %   Input Argument:
+        %     exc - cExergyCost object
         %
             if ~isObject(exc,'cExergyCost')
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exc));
@@ -42,31 +42,31 @@ classdef (Sealed) cDiagramFP < cResultId
         end
 
         function res=buildResultInfo(obj,fmt)
-        % buildResultInfo - Get cResultInfo object of the DiagramFP
-        % Syntax:
-        %   res = obj.buildResultInfo(fmt)
-        % Input Argument:
-        %   fmt - cFormatData object
-        % Output Argument:
-        %   res - cResultInfo object
+        %buildResultInfo - Get cResultInfo object of the DiagramFP
+        %   Syntax:
+        %     res = obj.buildResultInfo(fmt)
+        %   Input Argument:
+        %     fmt - cFormatData object
+        %   Output Argument:
+        %     res - cResultInfo object
             res=fmt.getDiagramFP(obj);
         end
     end
 
     methods(Static)
         function res=adjacencyTable(mFP,nodes)
-        % adjacencyTable - Get a struct with the Adjacency Table FP
-        % Syntax:
-        %   res=cDiagramFP.adjacencyTables(mFP,nodes);
-        % Input Argument:
-        %  mFP - FP matrix values
-        %  nodes - Cell Array with the process node names
-        % Output Argument:
-        %  res - Struct Array containing the adjacency matrix
-        %    The struct has the following fields
-        %     source - source node of the edge
-        %     target - target node of the edge
-        %     value  - value of the edge
+        %adjacencyTable - Get a struct with the Adjacency Table FP
+        %   Syntax:
+        %     res=cDiagramFP.adjacencyTables(mFP,nodes);
+        %   Input Argument:
+        %     mFP - FP matrix values
+        %     nodes - Cell Array with the process node names
+        %   Output Argument:
+        %     res - Struct Array containing the adjacency matrix
+        %      The struct has the following fields
+        %        source - source node of the edge
+        %        target - target node of the edge
+        %        value  - value of the edge
         %
             % Build Internal Edges
             fields={'source','target','value'};

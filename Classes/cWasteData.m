@@ -1,29 +1,29 @@
 classdef cWasteData < cMessageLogger
-% cWasteData contains the waste data information.
+%cWasteData - store the waste data information.
 %
-% cWasteData constructor:
-%   obj = cWasteData(ps,data)
+%   cWasteData constructor:
+%     obj = cWasteData(ps,data)
 %
-% cWasteData properties:
-%   NrOfWastes    - Number of wastes
-%   Names		  - Waste Flow names
-%   Flows         - Waste Flows Id
-%   Processes     - Dissipative Processes Id
-%   Type          - Waste Allocation types
-%   TypeId        - Waste Type Id
-%   Values        - Waste Allocation values
-%   RecycleRatio  - Recycle Ratio
+%   cWasteData properties:
+%     NrOfWastes    - Number of wastes
+%     Names		  - Waste Flow names
+%     Flows         - Waste Flows Id
+%     Processes     - Dissipative Processes Id
+%     Type          - Waste Allocation types
+%     TypeId        - Waste Type Id
+%     Values        - Waste Allocation values
+%     RecycleRatio  - Recycle Ratio
 %
-% cWasteData methods:
-%   getWasteFlows    - Get the waste flows key
-%   getWasteIndex    - Get the waste flows index
-%   existWaste       - Check if a waste flow is defined
-%   getValues        - Get the allocation cost values of a waste
-%   getType          - Get the allocation type of a waste
-%   getRecycleRatio  - Get the recycling ratio of a waste
-%   setType          - Set the allocation type of a waste
-%   setValues        - Set the allocation calues of a waste
-%   setRecycleRatio  - Set the recycling ratio of a waste
+%   cWasteData methods:
+%     getWasteFlows    - Get the waste flows key
+%     getWasteIndex    - Get the waste flows index
+%     existWaste       - Check if a waste flow is defined
+%     getValues        - Get the allocation cost values of a waste
+%     getType          - Get the allocation type of a waste
+%     getRecycleRatio  - Get the recycling ratio of a waste
+%     setType          - Set the allocation type of a waste
+%     setValues        - Set the allocation calues of a waste
+%     setRecycleRatio  - Set the recycling ratio of a waste
 %
 	properties (GetAccess=public,SetAccess=private)
         NrOfWastes      % Number of wastes

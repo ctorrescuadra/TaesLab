@@ -1,9 +1,9 @@
 classdef (Abstract) cTableResult < cTable
-% cTableResult Abstrat class to store results into a cTable
+%cTableResult - Abstrat class to store results into a cTable
 %
-% cTableResults Properties
-%   Format - Format of the table columns
-%   Unit   - Units of the table columns
+%   cTableResults Properties
+%     Format - Format of the table columns
+%     Unit   - Units of the table columns
 %
 % See also cTable, cTableMatrix, cTableCell
 %
@@ -11,12 +11,15 @@ classdef (Abstract) cTableResult < cTable
         Format    % Format of the table cells
         Unit      % Units of the table cell
     end
+
     methods      
         function res=exportTable(obj,varmode,fmt)
-        % Get cTable info in diferent types of variables
-        % Input:
-        %   varmode - type of variable
-        %   fmt - use formatted data true | false (default)
+        %exportTable - Get cTable info in diferent types of variables
+        %   Syntax:
+        %     res=obj.exportTable(varmode,fmt)
+        %   Input:
+        %     varmode - type of variable
+        %     fmt - use formatted data true | false (default)
             switch nargin
                 case 1
                     varmode=cType.VarMode.NONE;
@@ -41,11 +44,13 @@ classdef (Abstract) cTableResult < cTable
         end
 
         function res=getCellData(obj,fmt)
-        % Get table as cell array
-        %  Input:
-        %   fmt - (true/false) indicate is the numerical values of the table must be formatted
-        %  Output
-        %   res - cell array with the table values
+        %getCellData - Get table as cell array
+        %   Syntax:
+        %     obj.getCellData(fmt)
+        %   Input Arguments:
+        %     fmt - (true/false) indicate is the numerical values of the table must be formatted
+        %   Output Argumenta
+        %     res - cell array with the table values
             if nargin==1
                 fmt=false;
             end

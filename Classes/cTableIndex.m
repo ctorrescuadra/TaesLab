@@ -1,30 +1,30 @@
 classdef cTableIndex < cTable
-% cTableIndex create a cTable which contains the tables of a cResultInfo object
-%   The table includes the description and if the graphic is available
+%cTableIndex create a cTable with the tables of a cResultInfo
+%   The table index is a property of the cResultInfo object
+%   
+%   cTableIndex constructor:
+%     obj = cTableIndex(res)
 %
-% cTableIndex constructor:
-%   obj =cTableIndex(res)
+%   cTableIndex properties:
+%     Content - Cell array with the cResultInfo tables
+%     Info    - cResultId Info object
 %
-% cTableIndex properties:
-%   Content - Cell array with the cResultInfo tables
-%   Info    - cResultId Info object
+%   cTableIndex methods:
+%     printTable           - Print the index table on console
+%     getDescriptionLabel  - Get the title label for GUI presentation
 %
-% cTableIndex methods:
-%   printTable           - Print the index table on console
-%   getDescriptionLabel  - Get the title label for GUI presentation
-%
-% cTable Methods
-%   showTable       - show the tables in diferent interfaces
-%   exportTable     - export table in diferent formats
-%   saveTable       - save a table into a file in diferent formats
-%   isNumericTable  - check if all data of the table are numeric
-%   isNumericColumn - check if a column data is numeric
-%   isGraph         - check if the table has a graph associated
-%   getColumnFormat - get the format of the columns
-%   getColumnWidth  - get the width of the columns
-%   getStructData   - get data as struct array
-%   getMatlabTable  - get data as MATLAB table
-%   getStructTable  - get a structure with the table info
+%   cTable Methods
+%     showTable       - show the tables in diferent interfaces
+%     exportTable     - export table in diferent formats
+%     saveTable       - save a table into a file in diferent formats
+%     isNumericTable  - check if all data of the table are numeric
+%     isNumericColumn - check if a column data is numeric
+%     isGraph         - check if the table has a graph associated
+%     getColumnFormat - get the format of the columns
+%     getColumnWidth  - get the width of the columns
+%     getStructData   - get data as struct array
+%     getMatlabTable  - get data as MATLAB table
+%     getStructTable  - get a structure with the table info
 %
 % See also cTable
 %
@@ -34,11 +34,11 @@ classdef cTableIndex < cTable
     end
     methods
         function obj=cTableIndex(res)
-        % cTableIndex cTable object constructor
-        % Syntax:
-        %   obj = cTableIndex(res)
-        % Input:
-        %   res - cResultInfo object
+        %cTableIndex - create a instance of the class
+        %   Syntax:
+        %     obj = cTableIndex(res)
+        %   Input:
+        %     res - cResultInfo object
         %
             % Check input parameters
             if ~isObject(res,'cResultInfo')
@@ -66,23 +66,23 @@ classdef cTableIndex < cTable
         end
 
         function res=getDescriptionLabel(obj)
-        % Get table description
-        % Syntax:
-        %   res = obj.getDescriptionLabel
-        % Output Argument:
-        %   res - char array with the table description
+        %getDescriptionLabel - Get table description
+        %   Syntax:
+        %     res = obj.getDescriptionLabel
+        %   Output Argument:
+        %     res - char array with the table description
         %
             res=[obj.Description, ' - Table Index'];
         end
 
         function printTable(obj,fid)
-        % Print table on console or in a file in a pretty formatted way
-        % Syntax:
-        %   obj.printTable(fid)
-        % Input Argument:
-        %   fId - optional parameter 
-        %     If not provided, table is show in console
-        %     If provided, table is writen to a file identified by fId
+        %printTable - Print table on console or in a file in a pretty formatted way
+        %   Syntax:
+        %     obj.printTable(fid)
+        %   Input Argument:
+        %     fId - optional parameter 
+        %       If not provided, table is show in console
+        %       If provided, table is writen to a file identified by fId
         % See also fopen
         %
             if nargin==1

@@ -1,20 +1,20 @@
 classdef(Abstract) cResultId < cMessageLogger
-% cResultId base class to define the ResultId of the classes which provide results
+%cResultId base class to define the ResultId of the classes which provide results
 % 	It is used in: cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
 %	cRecyclingAnalysis, cDiagramFP, cWasteData and cSummaryResults
 %
-% cResultId Properties
-%   ResultId     - Result Id
-%   ResultName   - Result Name
-%   ModelName    - Model Name
-%   State        - State Name
-%   Sample       - Resource Sample Name
-%   DefaultGraph - Default Graph
+%   cResultId Properties
+%     ResultId     - Result Id
+%     ResultName   - Result Name
+%     ModelName    - Model Name
+%     State        - State Name
+%     Sample       - Resource Sample Name
+%     DefaultGraph - Default Graph
 % 
-% cResultId Methods
-%   setResultId     - Set the resultId
-%   setSample       - Set the resource sample name
-%   setDefaultGraph - Set the default graph
+%   cResultId Methods
+%     setResultId     - Set the resultId
+%     setSample       - Set the resource sample name
+%     setDefaultGraph - Set the default graph
 
 	properties(GetAccess=public,SetAccess=protected)
 		ResultId                       % Result Id
@@ -36,17 +36,23 @@ classdef(Abstract) cResultId < cMessageLogger
         end
 
         function setResultId(obj,id)
-        % Set ResultId. Internal package use only
+        %setResultId - Set ResultId. Internal package use only
+        %   Input Arguments
+        %     id - ResultId number
             obj.ResultId=id;
         end
 
         function setSample(obj,sample)
-        % Set Resource Sample Name. Internal package use only
+        %setSample - Set Resource Sample Name. Internal package use only
+        %   Input Arguments
+        %     sample - Resource sample name
             obj.Sample=sample;
         end
 
         function setDefaultGraph(obj,graph)
-        % Set Default Graph. Internal package use only
+        %setDefaultGraph - Set Default Graph. Internal package use only
+        %   Input Arguments
+        %     sample - Resource sample name
             obj.DefaultGraph=graph;
         end
 	end

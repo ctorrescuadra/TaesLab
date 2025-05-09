@@ -3,6 +3,9 @@ classdef (Sealed) cReadModelXML < cReadModelStruct
 %   This class read a XML file containing the thermoeconomic model data
 %   and store it into a structure data
 %
+%   cReadModelXML constructor
+%     obj=cReadModelXML(cfgfile)
+%
 % See also cReadModel, cReadModelStruct
 %
 	methods
