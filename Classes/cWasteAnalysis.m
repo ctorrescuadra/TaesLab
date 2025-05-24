@@ -152,6 +152,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             % Restore original values
             wt.setRecycleRatio(obj.wasteFlow,wrc);
             wt.updateValues(wval);
+            sol.updateWasteOperators;
         end
     end
 end

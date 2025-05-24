@@ -36,7 +36,7 @@ function ShowGraph(arg,varargin)
     p.addParameter('Graph',arg.DefaultGraph);
 	p.addParameter('ShowOutput',true,@islogical);
 	p.addParameter('PieChart',true,@islogical);
-	p.addParameter('BarGraph',false,@islogical);
+	p.addParameter('BarGraph',true,@islogical);
 	p.addParameter('Variables',cType.EMPTY_CELL,@iscell);
     try
 		p.parse(varargin{:});

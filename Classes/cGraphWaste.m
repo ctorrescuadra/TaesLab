@@ -109,8 +109,13 @@ classdef cGraphWaste < cGraphResults
     methods(Access=private)
         function showPieChart(obj)
     	% Plot the waste allocation pie chart
-			f=figure('name',obj.Name,'numbertitle','off','visible','off','colormap',turbo,...
-				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
+			set(groot,'defaultTextInterpreter','none');
+			f=figure('name',obj.Name,...
+				'numbertitle','off',...
+				'colormap',turbo,...
+				'units','normalized',...
+				'position',[0.1 0.1 0.45 0.6],...
+				'color',[1 1 1]);
 			ax=axes(f);
 			if isMatlab
 				pie(obj.xValues,'%5.1f%%');
@@ -120,13 +125,17 @@ classdef cGraphWaste < cGraphResults
 			title(ax,obj.Title,'fontsize',14);
 			hl=legend(obj.Legend);
 			set(hl,'Orientation','horizontal','Location','southoutside');
-			set(f,'visible','on');
         end
         
         function showBarGraph(obj)
 		% Plot the waste allocation bar graph
-        	f=figure('name',obj.Name, 'numbertitle','off','visible','off','colormap',turbo,...
-				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
+			set(groot,'defaultTextInterpreter','none');
+        	f=figure('name',obj.Name,...
+				'numbertitle','off',...
+				'colormap',turbo,...
+				'units','normalized',...
+				'position',[0.1 0.1 0.45 0.6],...
+				'color',[1 1 1]);
 			ax=axes(f);
 			barh(obj.xValues,obj.yValues,'stacked','edgecolor','none','parent',ax); 
 			title(ax,obj.Title,'fontsize',14);
@@ -138,7 +147,6 @@ classdef cGraphWaste < cGraphResults
 			box(ax,'on');
 			hl=legend(obj.Legend);
 			set(hl,'location','southoutside','orientation','horizontal','fontsize',10);
-			set(hf,'visible','on');
         end
     end
 end

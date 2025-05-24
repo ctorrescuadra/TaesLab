@@ -43,15 +43,19 @@ classdef cGraphCost < cGraphResults
 		%
             M=numel(obj.Legend);
             cm=turbo(M);
-            f=figure('name',obj.Name, 'visible','off',...
-            'numbertitle','off','colormap',turbo,...
-            'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]);
-            ax=axes(f);
+            set(groot,'defaultTextInterpreter','none');
+            f = figure('Name', obj.Name, ...
+                    'NumberTitle', 'off', ...
+                    'Colormap', turbo, ...
+                    'Units', 'normalized', ...
+                    'Position', [0.1 0.1 0.45 0.6], ...
+                    'Color', [1 1 1]);
+            ax = axes(f);        
             b=bar(obj.yValues,'stacked','edgecolor','none','barwidth',0.5,'parent',ax);
             for i=1:M, set(b(i),'facecolor',cm(i,:)); end
             tmp=ylim;yl(1)=obj.BaseLine;yl(2)=tmp(2);ylim(yl);
             obj.setGraphParameters(ax);
-            set(f,'visible','on');
+            %set(f,'visible','on');
         end
 
         function showGraphUI(obj,app)

@@ -83,7 +83,7 @@ classdef cGraphDiagnosis < cGraphResults
         bs.BaseValue=0.0;
         bs.LineStyle='-';
         bs.Color=[0.6,0.6,0.6];
-        SetGraphParametersUI(obj,app);
+        setGraphParametersUI(obj,app);
         app.UIAxes.Visible='on';
         end
     end
@@ -115,8 +115,13 @@ classdef cGraphDiagnosis < cGraphResults
         %
             M=numel(obj.Legend);
             cm=turbo(M);
-            f = figure('numbertitle','off','Name',obj.Name,'visible','off','colormap',turbo,...
-                       'units','normalized','position',[0.1 0.1 0.4 0.6],'color',[1,1,1]);
+            set(groot,'defaultTextInterpreter','none');
+            f = figure('numbertitle','off',...
+                'Name',obj.Name,...
+                'colormap',turbo,...
+                'units','normalized',...
+                'position',[0.1 0.1 0.4 0.6],...
+                'color',[1,1,1]);
             ax = axes(f,'Position',[0.1 0.1 0.85 0.8]);
             hold(ax,'on');
             b=bar(obj.yValues,...
@@ -130,7 +135,6 @@ classdef cGraphDiagnosis < cGraphResults
             bs.LineStyle='-';
             bs.Color=[0.6,0.6,0.6];
             obj.setGraphParameters(ax);
-            set(hf,'visible','on');
         end
     end
 end

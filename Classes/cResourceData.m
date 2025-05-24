@@ -215,9 +215,8 @@ classdef cResourceData < cMessageLogger
 		%   Input Arguments:
 		%     key - Flow key
 		%   Output Argument:
-		%     res - flow index
+		%     res - Flow index
 		%
-		%	key - key of the resource
 			res=0;
 			id=obj.ps.getFlowId(key);
 			if ismember(id,obj.frsc)

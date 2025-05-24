@@ -11,12 +11,18 @@ classdef (Abstract) cReadModelTable < cReadModel
 	properties (Access=protected)
 		modelTables
 	end
+
+    properties (Access=private)
+        ftype
+    end
+
     methods
         function res=getModelTables(obj)
         % Get the tables of the data model
             res=obj.modelTables;
         end
     end
+
 	methods (Access=protected)  
         function res=buildModelData(obj,tm)
         % Build the cModelData from data tables
@@ -27,8 +33,8 @@ classdef (Abstract) cReadModelTable < cReadModel
         %
             res=cMessageLogger();
             sd=struct();
-            % Productive Structure Tables
             tmp.name=obj.ModelName;
+            % Flows table
             ftbl=tm.Flows;
             if ftbl.status
                 tmp.flows=ftbl.getStructData;
@@ -36,6 +42,22 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Flows');
                 return
             end
+            % Check Flows types
+            fields=[ftbl.ColNames(2:end)];
+            cid=find(strcmp(fields,'type'),1);
+            if isempty(cid)
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Flows');
+                return
+            end
+            types=[ftbl.Data(:,cid)];
+            id=obj.getFlowTypeId(ftbl,types);
+            if isempty(id)
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Flows');
+                return
+            else
+                obj.ftype=id;
+            end
+            % Processes table
             ptbl=tm.Processes;
             if ptbl.status
                 tmp.processes=ptbl.getStructData;
@@ -43,6 +65,19 @@ classdef (Abstract) cReadModelTable < cReadModel
                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Processes');
                 return
             end
+            % Check Processes types
+            fields=[ptbl.ColNames(2:end)];
+            cid=find(strcmp(fields,'type'),1);
+            if isempty(cid)
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Processes');
+                return
+            end
+            types=[ptbl.Data(:,cid)];
+            id=obj.getProcessTypeId(ptbl,types);
+            if isempty(id)
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Flows');
+                return
+            end           
             sd.ProductiveStructure=tmp;
             % Get Format definition
             tbl=tm.Format;
@@ -84,8 +119,8 @@ classdef (Abstract) cReadModelTable < cReadModel
             % Get Waste definition
             isWasteDefinition=isfield(tm,'WasteDefinition');
             isWasteAllocation=isfield(tm,'WasteAllocation');
-            if  isWasteAllocation || isWasteDefinition
-                pswd=obj.WasteData(tm);
+            if  isWasteAllocation || isWasteDefinition                
+                pswd=obj.WasteData(tm.Flows);
                 if isempty(pswd)
                     obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteDefinition');
                     return
@@ -171,11 +206,15 @@ classdef (Abstract) cReadModelTable < cReadModel
                     if (NrOfSamples<1) || ~tbl.isNumericColumn(2:tbl.NrOfCols-1)
                         obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
                         return
-                    end
-            
+                    end              
                     samples=tbl.ColNames(3:end);
                     fields={'key','value'};
-                    idx=cellfun(@(x) cType.getResourcesId(x),tbl.Data(:,1));
+                    types=tbl.Data(:,1);
+                    idx=obj.getResourcesTypeId(tbl,types);
+                    if isempty(idx)
+                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
+                        return
+                    end
                     fidx=find(idx==cType.Resources.FLOW);
                     if isempty(fidx)
                         obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
@@ -204,21 +243,12 @@ classdef (Abstract) cReadModelTable < cReadModel
         end
     end
     methods(Access=private)
-        function res=WasteData(obj,tm)
+        function res=WasteData(obj,tbl)
         % Get default waste data info
             res=cType.EMPTY;
             % Search Wastes in Flows Table
-            ft=tm.Flows;
-            fl=[ft.RowNames];
-            fields=[ft.ColNames(2:end)];
-            cid=find(strcmp(fields,'type'),1);
-            if isempty(cid)
-                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'Flows');
-                return
-            end
-            types=[ft.Data(:,cid)];
-            typeId=cType.getFlowId(types);
-            rid=find(typeId==cType.Flow.WASTE);
+            fl=[tbl.RowNames];
+            rid=find(obj.ftype==cType.Flow.WASTE);
             NR=numel(rid);
             if NR>0           
                 wf=[fl(rid)];
@@ -232,6 +262,51 @@ classdef (Abstract) cReadModelTable < cReadModel
                 res.wastes=cell2mat(wastes);
             else
                 obj.messageLog(cType.ERROR,cMessages.NoWasteFlows);
+            end
+        end
+
+        function res=getFlowTypeId(obj,tbl,types)
+        % Get Flows typeId
+            fnames=[tbl.RowNames]; 
+            tst=cellfun(@(x) cType.checkFlowKey(x), types);
+            if all(tst)
+                res=cellfun(@(x) cType.getFlowId(x), types);
+            else
+                ier=find(~tst);
+                for i=transpose(ier)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidFlowType,types{i},fnames{i});
+                end
+                res=cType.EMPTY;
+            end
+        end
+
+        function res=getProcessTypeId(obj,tbl,types)
+        % Get Processes typeId
+            pnames=[tbl.RowNames]; 
+            tst=cellfun(@(x) cType.checkProcessKey(x), types);
+            if all(tst)
+                res=cellfun(@(x) cType.getProcessId(x), types);
+            else
+                ier=find(~tst);
+                for i=transpose(ier)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,types{i},pnames{i});
+                end
+                res=cType.EMPTY;
+            end
+        end
+
+        function res=getResourcesTypeId(obj,tbl,types)
+        % Get Resources typeId
+            rnames=[tbl.RowNames];
+            tst=cellfun(@(x) cType.checkResourcesKey(x), types);
+            if all(tst)
+                res=cellfun(@(x) cType.getResourcesId(x), types);
+            else
+                ier=find(~tst);
+                for i=transpose(ier)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,types{i},rnames{i});
+                end
+                res=cType.EMPTY;
             end
         end
     end

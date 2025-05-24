@@ -1,51 +1,53 @@
 classdef cType
 %cType It is a static class to manage the constants of TaesLab
-%  	This class include constants, enumeration types defined as constant structures, 
-%  	methods to check the correct type names, and determine the key and value of
-%  	the enumerated types.
+%   This class includes constants, enumeration types defined as constant structures, 
+%  	and methods to check the correct option names as well as other miscellaneous functions
 %
 %   cType methods:
-%  	  res=checkCostAlgorithm(text)
-%  	  res=checkDiagnosisMethod(text) 
-%  	  res=checkCostTables(text)
-%   Check data types methods:
+%    Check data types methods:
 %  	  res=checkFlowKey(text)
 %  	  res=checkProcessKey(text)
-%  	  res=checkStreamKey(text)
 %  	  res=checkResourcesKey(text)
 %  	  res=checkWasteKey(text)
-%   Get key type from id:
-%  	  key=getCostAlgorithm(id)
-%  	  key=getDiagnosisMethod(id)
-%  	  key=getFlowKey(id)
-%  	  key=getProcessKey(id)
-%  	  key=getStreamKey(id)
-%  	  key=getWasteKey(id)
-%  	  key=getResourcesKey(id)
-%   Get id from key:
+%    Check option methods
+%     res=checkCostTables(option)
+%     res=checkSummaryOption(option)
+%     res=checkDiagnosisMethod(option)
+%     res=checkVarMode(option)
+%     res=checkTableView(option)
+%     res=checkDirColumns(option)
+%    Get type id from key:
 %  	  id=getFlowId(key)
 %  	  id=getProcessId(key)
-%  	  id=getStreamKey(key)
-%  	  id=getWasteKey(key)
-%  	  id=getResourcesKey(key)
-%   Get type options:
-%	  res=FlowTypeOptions()
-%	  res=ProcessTypeOptions()
-%	  res=StreamTypeOptions()
+%  	  id=getWasteId(key)
+%     id=getResourcesId(key)
+%     id=getFormatId(key)
+%    Get option id
+%     id=getCostTables(text)
+%     id=getSummaryId(text)
+%     id=getDiagnosisMethod(text)
+%     id=getVarMode(text)
+%     id=getTableView(text)
+%     id=getDirColumns(text)    
+%    Get type options:
 %	  res=WasteTypeOptions()
 %	  res=CostTablesOptions()
 %	  res=DiagnosisOptions()
-%   File Methods
+%     res=SummaryOptions()
+%     res=VarModeOptions()
+%     res=TableViewOptions()
+%    File Methods  
 %	  res=getFileType(filename)
-%	  res=checkFileWrite(filename)
-%	  res=checkFileRead(filename)
 %	  res=checkFileExt(filename,ext)
-%   Other methods:
-%  	  img=getIcon(name)
-%  	  file=getTaesImage(path)          
-%  	  text=getTextErrorCode(val)                                
+%    Other methods:
+%     res=tableCode()
+%     res=sequence()
+%     res=getLine(lenght)
+%  	  text=getTextErrorCode(val) 
 %  	  char=getNewline()                               
-%  	  char=getPathDelimiter()                
+%  	  char=getPathDelimiter() 
+%  	  img=getIcon(name)
+%  	  file=getTaesImage(path)                        
 %                 
 	properties (Constant)
 		INVALID=false;            % Invalid status
@@ -88,12 +90,16 @@ classdef cType
 		WasteAllocation=struct('MANUAL',0,'DEFAULT',1,'RESOURCES',1,'COST',2,'EXERGY',3,'IRREVERSIBILITY',4,'HYBRID',5);
         % Types of Resources
 		Resources=struct('FLOW',1,'PROCESS',2);
+		% Types of define formats
+		Format=struct('NODE',1,'TEXT',2,'EXERGY',3,'EXERGY_COST',4,'EXERGY_UNIT_COST',5,...
+		'GENERALIZED_COST',6,'GENERALIZED_UNIT_COST',7,'DIAGNOSIS',8,'PERCENTAGE',9);
 		% Variable Display Options
         VarMode=struct('NONE',1,'CELL',2,'STRUCT',3,'TABLE',4);
 		DEFAULT_VARMODE='NONE';
         % Cost Table options
         CostTables=struct('DIRECT',1,'GENERALIZED',2,'ALL',3);
 		DEFAULT_COST_TABLES='DIRECT';
+		% Summary Options
 		SummaryId=struct('NONE',0,'STATES',1,'RESOURCES',2,'ALL',3);
 		DEFAULT_SUMMARY='NONE';
         % Options for diagnosis calculation
@@ -149,17 +155,12 @@ classdef cType
 		TypeTables={'TABLE','MATRIX','SUMMARY'};
 		GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5,...
 				'WASTE_ALLOCATION',6,'DIGRAPH',7);
-		% Types of define formats
-		Format=struct('NODE',1,'TEXT',2,'EXERGY',3,'EXERGY_COST',4,'EXERGY_UNIT_COST',5,...
-		'GENERALIZED_COST',6,'GENERALIZED_UNIT_COST',7,'DIAGNOSIS',8,'PERCENTAGE',9);
-		% Special symbols unicode (simple dash - \u002D)
-		Symbols=jsondecode('{"dash": "\u2014","delta": "\u0394"}');
-        % Result Id types
+		% Result Id types
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
             'WASTE_ANALYSIS',4,'THERMOECONOMIC_DIAGNOSIS',5,'PRODUCTIVE_DIAGRAM',6,'DIAGRAM_FP',7,...
 			'SUMMARY_RESULTS',8,'DATA_MODEL',9,'RESULT_MODEL',10);
-		% Icon Files
-		IconFile={'ps.png','ea.png','ta.png','wa.png','td.png','pd.png','fp.png','sr.png','md.png','mr.png'};
+		% ClassId types
+        ClassId=struct('RESULT_INFO',1,'DATA_MODEL',2,'RESULT_MODEL',3)
 		% Names for cModelResults	
 		Results={'Productive Structure','Exergy Analysis','Thermoeconomic Analysis',...
 			'Waste Analysis','Thermoeconomic Diagnosis','Productive Diagram','Diagram FP',...
@@ -178,8 +179,6 @@ classdef cType
 		SAVE_TABLES={'*.xlsx','XLSX Files';'*.txt','TXT Files'; '*.csv','CSV Files'; ...
 		             '*.html','HTML Files';'*.tex','LaTeX Files';'*.mat','MAT Files'; ...
 		             '*.json','JSON Files';'*.xml','XML Files'};
-        % ClassId types
-        ClassId=struct('RESULT_INFO',1,'DATA_MODEL',2,'RESULT_MODEL',3)
 		% Tables Directory configuration
 		DirCols=struct('DESCRIPTION',1,'RESULT_NAME',2,'GRAPH',3,'TYPE',4,'CODE',5,'RESULT_CODE',6);
 		DirColNames={'Description','Results','Graph','Type','Code','Results Code'};
@@ -200,6 +199,11 @@ classdef cType
 		TaesImage='TaesLab.png';
         % Taess app Resources folder
 		AppResources='Resources';
+		% Special symbols unicode (simple dash - \u002D)
+		Symbols=jsondecode('{"dash": "\u2014","delta": "\u0394"}');  
+		% Icon Files
+		IconFile={'ps.png','ea.png','ta.png','wa.png','td.png','pd.png','fp.png','sr.png','md.png','mr.png'};
+		% System constanst
 		NEWLINE_PC='\r\n';    % Newline character for Windows
 		NEWLINE_UNIX='\n';    % Newline character for Unix (MAC)
         MAX_PRINT_COLS=20;    % Maximun cols to print in console
@@ -212,71 +216,101 @@ classdef cType
     %----------------------------
     % Static Methods for types
     %----------------------------
-	methods (Static)
+	methods (Static,Access=private)
 		function res=checkTypeKey(s,key)
-		% Check if key is a field of type structure
-		% Input:
-        %   s   - type structure
-		%   key - key
-        % Output:
-        %   res - true/false
+		%checkTypeKey - Check if key is a field of type structure
+		%   Syntax
+		%     res=cType.checkType(s,key)
+		%   Input Arguments:
+        %     s   - type structure
+		%     key - key
+        %   Output Arguments:
+        %     res - true/false
+		%
 			res=false;
             if ischar(key)
             	res=isfield(s,upper(key));
-            elseif iscell(key)
-					id=cellfun(@(x) cType.checkTypeKey(s,x),key);
-					res=all(id);
             end
         end
-		
+	
 		function id=getTypeId(s,key)
-        % Get the value of key in the type structure s
-		% Input:
-        %   s   - type structure
-		%   key - type key
-        % Output:
-        %   id - type id
+        %getTypeId - Get the value of key in the type structure s
+		%   Syntax
+		%     res=cType.checkType(s,key)
+		%   Input Arguments:
+        %     s   - type structure
+		%     key - type key
+        %   Output Arguments:
+        %     id - type id
+		%
 			id=cType.EMPTY;
 			if ischar(key)
 				if cType.checkTypeKey(s,key)
 					id=s.(upper(key));
 				end
-			elseif iscell(key)
-				try
-					id=cellfun(@(x) cType.getTypeId(s,x),key);
-				catch
-					return
-				end
 			end
 		end
-		
-		function res=getProcessId(text)
-		% Get the internal code of a process type text
-			res=cType.getTypeId(cType.Process,text);
-		end
+	end
 
-		function res=getStreamId(text)
-		% Get the internal code of a stream type text
-			res=cType.getTypeId(cType.Stream,text);	
-		end
+	methods (Static)	
+		function res=getProcessId(text)
+		%getProcessId - Get the internal code of a process type text
+        %
+        %   Syntax
+        %     res=cType.getProcessId(text)
+        %   Input Arguments
+        %     text - Process type text
+        %   Output Arguments
+        %     res - Process Type Id. (empty if it doesn't exist)
+        %
+			res=cType.getTypeId(cType.Process,text);
+        end
 
 		function res=getFlowId(text)
-		% Get the internal id of a flow type text
-        	res=cType.getTypeId(cType.Flow,text);
-		end
+		%getFlowId - Get the internal code of a flow type text
+        %   Syntax
+        %     res=cType.getFlowId(text)
+        %   Input Arguments
+        %     text - Flow type text
+        %   Output Arguments
+        %     res - Flow Type Id (empty if it doesn't exist)
+        %
+			res=cType.getTypeId(cType.Flow,text);
+        end
 
-		function res=getWasteId(text)
-		% Get internal code of a waste allocation type text
-            res=cType.getTypeId(cType.WasteAllocation,text);
-		end
-
-		function res=getResourcesId(text)
-		% Get internal code of a resources cost type text
+        function res=getResourcesId(text)
+		%getResources - Get internal code of a resources cost type text
+        %   Syntax
+        %     res=cType.getResourcesId(text)
+        %   Input Arguments
+        %     text - Resource type text
+        %   Output Arguments
+        %     res - Resource Type Id (empty if it doesn't exist)
+        %
             res=cType.getTypeId(cType.Resources,text);
         end
 
+		function res=getWasteId(text)
+		%getWasteId - Get internal code of a waste allocation type text
+        %   Syntax
+        %     res=cType.getWasteId(text)
+        %   Input Arguments
+        %     text - Waste Allocation type text
+        %   Output Arguments
+        %     res - Waste Allocation Type Id (empty if it doesn't exist)
+        %
+            res=cType.getTypeId(cType.WasteAllocation,text);
+        end
+
 		function res=getFormatId(text)
-		% Get internal code of a resources cost type text
+		% Get internal code of format type text
+        %   Syntax
+        %     res=cType.getFormatId(text)
+        %   Input Arguments
+        %     text - Format type text
+        %   Output Arguments
+        %     res - Format Type Id (empty if it doesn't exist)
+        %
 			res=cType.getTypeId(cType.Format,text);
 		end
 
@@ -286,6 +320,7 @@ classdef cType
 		end
 
 		function res=getSummaryId(text)
+		% Get id for Summary option
 			res=cType.getTypeId(cType.SummaryId,text);
 		end
 
@@ -384,6 +419,7 @@ classdef cType
 		end
 
 		function res=SummaryOptions()
+		% Get a cell array with the Summary Options
 			res=fieldnames(cType.SummaryId);
 		end
 
@@ -401,7 +437,35 @@ classdef cType
 		% Get a cell array with the VarMode Type options
 			res=fieldnames(cType.VarMode);
 		end
-		
+
+		%%%%
+		% File Functions
+		%%%%%
+		function [res,ext]=getFileType(filename)
+		% Get file type acording its extension (ext)
+            res=cType.EMPTY;
+			[~,~,ext]=fileparts(filename);
+			values=struct2cell(cType.FileExt);
+			idx=find(strcmp(values(:),ext));
+            if ~isempty(idx)
+                res=idx;
+            end
+		end
+
+        function res=checkFileExt(filename,fext)
+		% Check if filename has a valid extension
+            [~,~,ext]=fileparts(filename);
+            res=strcmp(fext,ext);
+        end
+
+		%%%
+		% Other functions
+		%%%
+		function res=getLine(length)
+		% Get a dash line of the given length
+			res=repmat(cType.Symbols.dash,1,length);
+		end
+
 		function tableCode(name)
 		% Get the key code of a table
 			if ~ischar(name)
@@ -427,33 +491,6 @@ classdef cType
 			res=counter;
 		end
 
-		%%%%
-		% File Functions
-		%%%%%
-		function [res,ext]=getFileType(filename)
-		% Get file type acording its extension (ext)
-            res=cType.EMPTY;
-			[~,~,ext]=fileparts(filename);
-			values=struct2cell(cType.FileExt);
-			idx=find(strcmp(values(:),ext));
-            if ~isempty(idx)
-                res=idx;
-            end
-		end
-
-        function res=checkFileExt(filename,fext)
-		% Check if filename has a valid extension
-            [~,~,ext]=fileparts(filename);
-            res=strcmp(fext,ext);
-        end
-
-		function res=getLine(length)
-			res=repmat(cType.Symbols.dash,1,length);
-		end
-
-		%%%
-		% Other functions
-		%%%
 		function res=getTextErrorCode(error)
 		% Get the text of the corresponding error code
 			switch error

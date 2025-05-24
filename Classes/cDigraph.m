@@ -41,17 +41,20 @@ classdef cDigraph < cGraphResults
         %   Syntax:
         %     obj.showGraph
 		%
- 			f=figure('name',obj.Name,'visible','off','numbertitle','off', ...
-				     'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
+		    set(groot,'defaultTextInterpreter','none');
+ 			f=figure('name',obj.Name,...
+				'numbertitle','off', ...
+				'units','normalized',...
+				'position',[0.1 0.1 0.45 0.6],...
+				'color',[1 1 1]); 
 			ax=axes(f);    
 			% Plot the digraph
             colors=eye(3);
             nodetable=obj.xValues.Nodes;
             nodecolors=colors(nodetable.Type,:);
             nodenames=nodetable.Name;
-            plot(ax,obj.xValues,'Layout','auto','NodeLabel',nodenames,'NodeColor',nodecolors,'Interpreter','none');
-            title(obj.Title,'fontsize',14,"Interpreter","none");
-			set(f,'visible','on');
+            plot(ax,obj.xValues,'Layout','auto','NodeLabel',nodenames,'NodeColor',nodecolors);
+            title(obj.Title,'fontsize',14);
         end
 
 		function showGraphUI(obj,app)

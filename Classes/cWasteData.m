@@ -108,11 +108,11 @@ classdef cWasteData < cMessageLogger
                         end
                         for j=1:length(wval)
 							jp=ps.getProcessId(wval(j).process);
-							if isempty(jp)
+                            if isempty(jp)
 								obj.messageLog(cType.ERROR,cMessages.InvalidProcessKey,wval(j).process);
 								continue
-							end
-							if(ps.Processes(jp).type==cType.Process.DISSIPATIVE)
+                            end
+							if(ps.Processes(jp).typeId==cType.Process.DISSIPATIVE)                             
 								obj.messageLog(cType.ERROR,cMessages.InvalidAllocationProcess,wval(j).process);
 								continue
 							end

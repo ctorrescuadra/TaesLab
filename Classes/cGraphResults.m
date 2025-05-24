@@ -31,8 +31,8 @@ classdef (Abstract) cGraphResults < cMessageLogger
             hold(ax,'off');
             title(ax,obj.Title,'fontsize',14);
             set(ax,'xtick',obj.xValues,'xticklabel',obj.Categories);
-            xlabel(ax,obj.xLabel,'fontsize',12);
-            ylabel(ax,obj.yLabel,'fontsize',12);
+            xlabel(ax,obj.xLabel,'fontsize',12,'interpreter','none');
+            ylabel(ax,obj.yLabel,'fontsize',12,'interpreter','none');
             set(ax,'ygrid','on');
             set(ax,'xgrid','off')
             box(ax,'on');

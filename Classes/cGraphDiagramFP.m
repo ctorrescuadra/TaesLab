@@ -53,8 +53,12 @@ classdef cGraphDiagramFP < cGraphResults
         %   Syntax:
         %     obj.showGraph
 		%
-            f=figure('name',obj.Name, 'numbertitle','off', 'visible','off',...
-				'units','normalized','position',[0.1 0.1 0.45 0.6],'color',[1 1 1]); 
+            set(groot,'defaultTextInterpreter','none');
+            f=figure('name',obj.Name,...
+                'numbertitle','off',...
+				'units','normalized',...
+                'position',[0.1 0.1 0.45 0.6],...
+                'color',[1 1 1]); 
 			ax=axes(f);
 			r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 			colormap(red2blue);
@@ -63,7 +67,6 @@ classdef cGraphDiagramFP < cGraphResults
 			c.Label.String=obj.xLabel;
 			c.Label.FontSize=12;
 			title(ax,obj.Title,'fontsize',14);
-            set(f,'visible','on');
         end
 
         function showGraphUI(obj,app)

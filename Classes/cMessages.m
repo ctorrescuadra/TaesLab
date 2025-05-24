@@ -70,6 +70,7 @@ classdef cMessages
         InvalidProductiveGraph='Invalid productive structure graph'
         InvalidFlowType='Invalid type %s for flow %s'
         InvalidProcessType='Invalid type %s for process %s'
+        InvalidResourcesType='Invalid type %s for resource %s'
         InvalidFuelStream='Invalid fuel stream %s in process %s'
         InvalidProductStream='Invalid product stream %s in process %s'
         InvalidDissipative='Product %s of dissipative process %s must be a waste'
