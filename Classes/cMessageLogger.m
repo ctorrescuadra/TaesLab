@@ -1,22 +1,22 @@
 classdef cMessageLogger < cTaesLab
 %cStatusLogger - Create and manage a messages logger for cTaesLab objects
 %
-% cMessageLogger constructor
-%   obj=cMessageLogger(status)
+%   cMessageLogger constructor
+%     obj=cMessageLogger(status)
 %	
-% cMessageLogger Methods:
-%   cMessageLogger - create a messages logger
-%   printError - show a error message in the console
-%   printWarning - show a warning message in the console
-%   printInfo - show a print message in the console
-%   messageLog - add a message to the the logger queue
-%   printLogger - show the messages logger in console
-%   printLoggerType - show a type of messages in the console 
-%   tableLogger - create a table with the logger messages
-%   addLogger - concatenate two loggers
-%   clearLogger - clear the messages of the logger
+%   cMessageLogger Methods:
+%     cMessageLogger - create a messages logger
+%     printError - show a error message in the console
+%     printWarning - show a warning message in the console
+%     printInfo - show a print message in the console
+%     messageLog - add a message to the the logger queue
+%     printLogger - show the messages logger in console
+%     printLoggerType - show a type of messages in the console 
+%     tableLogger - create a table with the logger messages
+%     addLogger - concatenate two loggers
+%     clearLogger - clear the messages of the logger
 %
-% See also cQueue, cType, cMessages
+%   See also cQueue, cType, cMessages
 %
 	properties(Access=protected)
 		logger      % cQueue containinig object messages

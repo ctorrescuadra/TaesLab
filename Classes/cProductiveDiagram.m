@@ -1,23 +1,26 @@
 classdef (Sealed) cProductiveDiagram < cResultId
-% cProductiveDiagram build the productive diagrams info
+%cProductiveDiagram build the productive diagrams info
 %   Flows Diagram (FAT)
 %   Process Diagram (PAT)
 %   Flow-Process Diagram (FPAT)
 %   Productive Diagram (SFPAT)
+%   
+%   cProductiveDiagram Constructor
+%     obj = cProductiveDiagram(ps)
 %
-% cProductiveDiagram Properties
-%   NodesFAT   - Flow nodes table
-%   EdgesFAT   - Flow edges table
-%   NodesPAT   - Process nodes table
-%   EdgesPAT   - Process nodes table
-%   NodesFPAT  - Flow-Process nodes table
-%   EdgesFPAT  - Flow-Process edges table
-%   NodesSFPAT - Productive table nodes
-%   EdgesSFAT  - Productive table edges
-% cProductiveDiagram Methods
-%   buildResultInfo - Build the cResultInfo for Productive Diagrams
-%   getNodeTable    - Get the nodes of the diagram
-%   getEdgeTable    - Get the edges of the diagram
+%   cProductiveDiagram Properties
+%     NodesFAT   - Flow nodes table
+%     EdgesFAT   - Flow edges table
+%     NodesPAT   - Process nodes table
+%     EdgesPAT   - Process nodes table
+%     NodesFPAT  - Flow-Process nodes table
+%     EdgesFPAT  - Flow-Process edges table
+%     NodesSFPAT - Productive table nodes
+%     EdgesSFAT  - Productive table edges
+%   cProductiveDiagram Methods
+%     buildResultInfo - Build the cResultInfo for Productive Diagrams
+%     getNodeTable    - Get the nodes of the diagram
+%     getEdgeTable    - Get the edges of the diagram
 %
     properties(Access=private)
         EdgesFAT          % Flow edges table

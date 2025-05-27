@@ -1,26 +1,26 @@
 classdef cTableData < cTable
-% cTableData - Implement cTable to store data model tables
+%cTableData - Implement cTable to store data model tables
 % 
-% cTableData Methods:
-%   cTableData.create    - Create table from cell array
-%   printTable           - Print a table on console
-%   formatData           - Get formatted data
-%   getDescriptionLabel  - Get the title label for GUI presentation
+%   cTableData Methods:
+%     cTableData.create    - Create table from cell array
+%     printTable           - Print a table on console
+%     formatData           - Get formatted data
+%     getDescriptionLabel  - Get the title label for GUI presentation
 %
-% cTable Methods
-%   showTable       - show the tables in diferent interfaces
-%   exportTable     - export table in diferent formats
-%   saveTable       - save a table into a file in diferent formats
-%   isNumericTable  - check if all data of the table are numeric
-%   isNumericColumn - check if a column data is numeric
-%   isGraph         - check if the table has a graph associated
-%   getColumnFormat - get the format of the columns
-%   getColumnWidth  - get the width of the columns
-%   getStructData   - get data as struct array
-%   getMatlabTable  - get data as MATLAB table
-%   getStructTable  - get a structure with the table info
-%   setColumnValues - set the values of a column
-%   setRowValues    - set the values of a row
+%   cTable Methods
+%     showTable       - show the tables in diferent interfaces
+%     exportTable     - export table in diferent formats
+%     saveTable       - save a table into a file in diferent formats
+%     isNumericTable  - check if all data of the table are numeric
+%     isNumericColumn - check if a column data is numeric
+%     isGraph         - check if the table has a graph associated
+%     getColumnFormat - get the format of the columns
+%     getColumnWidth  - get the width of the columns
+%     getStructData   - get data as struct array
+%     getMatlabTable  - get data as MATLAB table
+%     getStructTable  - get a structure with the table info
+%     setColumnValues - set the values of a column
+%     setRowValues    - set the values of a row
 %
 % See also cTable
     methods

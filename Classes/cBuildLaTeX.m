@@ -1,5 +1,5 @@
 classdef (Sealed) cBuildLaTeX < cMessageLogger
-% cBuildLaTeX convert cTable object into a LaTeX code table
+%cBuildLaTeX convert cTable object into a LaTeX code table
 %   The LaTeX code includes:
 %    - table environment
 %    - booktabs package
@@ -9,12 +9,12 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 %    - Table Description as caption code
 %    - Table name as label code
 % 
-% cBuildLaTeX constructor:
-%   obj = cBuildLaTeX(tbl)
+%   cBuildLaTeX constructor:
+%     obj = cBuildLaTeX(tbl)
 %
-% cBuildLatex methods:
-%   getLaTeXcode - Get a string with the LaTeX code
-%   saveTable    - Save the table into a tex file
+%   cBuildLatex methods:
+%     getLaTeXcode - Get a string with the LaTeX code
+%     saveTable    - Save the table into a tex file
 %
     properties(Access=private)
         tabular  % tablular code - column aligment  

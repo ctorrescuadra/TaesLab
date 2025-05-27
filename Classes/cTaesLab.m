@@ -28,7 +28,7 @@ classdef  cTaesLab < handle
         function obj = cTaesLab()
         %cTaesLab - Initialize a cTaesLab object
             obj.status=cType.VALID;   
-            obj.objectId=cType.sequence;
+            obj.objectId=cTaesLab.sequence;
         end
 
         function set.status(obj,val)
@@ -54,5 +54,18 @@ classdef  cTaesLab < handle
         % Overload ne operator. Check if two class objects are different. 
             res=(obj1.objectId~=obj2.objectId);
 		end
+    end
+
+    methods(Static,Access=private)
+        function res=sequence()
+		% Generate a sequence of numbers. Internal function,
+			persistent counter;
+			if isempty(counter)
+				counter=uint64(1);
+			else
+				counter=counter+1;
+			end
+			res=counter;
+        end
     end
 end

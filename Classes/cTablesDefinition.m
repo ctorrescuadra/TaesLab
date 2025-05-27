@@ -3,17 +3,25 @@ classdef cTablesDefinition < cMessageLogger
 %   This class is use for two purposes:
 %   - This class is defined as base class of cFormatData reading the printformat.json
 %   - Provide information of the result tables of the application (TablesDirectory)
-%   Methods:
-%       obj=cTablesDirectory;
-%       res=obj.getTableProperties(name)
-%       res=obj.getTablesDirectory(varmode)
-%       res=obj.showTablesDirectory(options)
-%       res=obj.saveTablesDirectory(filename)
-%       res=obj.getResultIdTables(id)
+%
+%   cTableDefinition Constructor
+%     obj = cTablesDefinition
+
+%   cTablesDefinition Methods:
+%     getTableProperties  - Get the properties of a table
+%     getTablesDirectory  - Get the a cTableData ata with the tables directory
+%     showTablesDirectory - Show the Table Directory
+%     saveTablesDirectory - Save the Table Directory into a file
+%     getTableId          - Get the TableId of a table
+%     getResultIdTables   - Get the Tables of a ResultId
+%     getSummaryTables    - Get the Summary Tables Info
+%
 %   See also cFormatData
+%
     properties(GetAccess=public,SetAccess=private)
         TablesDefinition  % Tables properties struct
     end
+
     properties (Access=protected)
         cfgTables 	    % Cell tables configuration
         cfgMatrices     % Matrix tables configuration
@@ -138,7 +146,7 @@ classdef cTablesDefinition < cMessageLogger
         %   Input Argument:
         %     id - ResultId
         %   Output Argument
-        %     res - cell array with id tables
+        %     res - cell array with the ResultId tables
         %
             rid=[obj.tableIndex.resultId];
             idx=find(rid==id);
@@ -153,7 +161,7 @@ classdef cTablesDefinition < cMessageLogger
         %     option - type of summary tables
         %     rsc    - Resource tables (true/false)
         %   Output Arguments:
-        %     res - List of summary tables selected
+        %     res - cell array with the names of the selected summary tables 
             res=cType.EMPTY_CELL;
             switch nargin
                 case 1

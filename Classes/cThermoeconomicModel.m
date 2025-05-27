@@ -27,7 +27,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     DiagnosisMethod - Method to calculate fuel impact of wastes
 %	    'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
 %     Summary         - Summary Results Selected
-%     'NONE' | 'STATES' | 'RESOURCES'
+%       'NONE' | 'STATES' | 'RESOURCES'
 %     Recycling       - Recycling Analysis active (true | false)
 %     ActiveWaste     - Active waste flow name for Waste Analysis
 %

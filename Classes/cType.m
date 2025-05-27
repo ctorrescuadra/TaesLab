@@ -5,49 +5,48 @@ classdef cType
 %
 %   cType methods:
 %    Check data types methods:
-%  	  res=checkFlowKey(text)
-%  	  res=checkProcessKey(text)
-%  	  res=checkResourcesKey(text)
-%  	  res=checkWasteKey(text)
+%  	  res=cType.checkFlowKey
+%  	  res=cType.checkProcessKey(text)
+%  	  res=cType.checkResourcesKey(text)
+%  	  res=cType.checkWasteKey(text)
 %    Check option methods
-%     res=checkCostTables(option)
-%     res=checkSummaryOption(option)
-%     res=checkDiagnosisMethod(option)
-%     res=checkVarMode(option)
-%     res=checkTableView(option)
-%     res=checkDirColumns(option)
+%     res=cType.checkCostTables(option)
+%     res=cType.checkSummaryOption(option)
+%     res=cType.checkDiagnosisMethod(option)
+%     res=cType.checkVarMode(option)
+%     res=cType.checkTableView(option)
+%     res=cType.checkDirColumns(option)
 %    Get type id from key:
-%  	  id=getFlowId(key)
-%  	  id=getProcessId(key)
-%  	  id=getWasteId(key)
-%     id=getResourcesId(key)
-%     id=getFormatId(key)
+%  	  id=cType.getFlowId(key)
+%  	  id=cType.getProcessId(key)
+%  	  id=cType.getWasteId(key)
+%     id=cType.getResourcesId(key)
+%     id=cType.getFormatId(key)
 %    Get option id
-%     id=getCostTables(text)
-%     id=getSummaryId(text)
-%     id=getDiagnosisMethod(text)
-%     id=getVarMode(text)
-%     id=getTableView(text)
-%     id=getDirColumns(text)    
+%     id=cType.getCostTables(text)
+%     id=cType.getSummaryId(text)
+%     id=cType.getDiagnosisMethod(text)
+%     id=cType.getVarMode(text)
+%     id=cType.getTableView(text)
+%     idcType.=getDirColumns(text)    
 %    Get type options:
-%	  res=WasteTypeOptions()
-%	  res=CostTablesOptions()
-%	  res=DiagnosisOptions()
-%     res=SummaryOptions()
-%     res=VarModeOptions()
-%     res=TableViewOptions()
+%	  res=cType.WasteTypeOptions()
+%	  res=cType.CostTablesOptions()
+%	  res=cType.DiagnosisOptions()
+%     res=cType.SummaryOptions()
+%     res=cType.VarModeOptions()
+%     res=cType.TableViewOptions()
 %    File Methods  
-%	  res=getFileType(filename)
-%	  res=checkFileExt(filename,ext)
+%	  res=cType.getFileType(filename)
+%	  res=cType.checkFileExt(filename,ext)
 %    Other methods:
-%     res=tableCode()
-%     res=sequence()
-%     res=getLine(lenght)
-%  	  text=getTextErrorCode(val) 
-%  	  char=getNewline()                               
-%  	  char=getPathDelimiter() 
-%  	  img=getIcon(name)
-%  	  file=getTaesImage(path)                        
+%     res=cType.tableCode()
+%     res=cType.getLine(lenght)
+%  	  text=cType.getTextErrorCode(val) 
+%  	  char=cType.getNewline()                               
+%  	  char=cType.getPathDelimiter() 
+%  	  img=cType.getIcon(name)
+%  	  file=cType.getTaesImage(path)                        
 %                 
 	properties (Constant)
 		INVALID=false;            % Invalid status
@@ -279,7 +278,7 @@ classdef cType
         end
 
         function res=getResourcesId(text)
-		%getResources - Get internal code of a resources cost type text
+		%getResourcesId - Get internal code of a resources cost type text
         %   Syntax
         %     res=cType.getResourcesId(text)
         %   Input Arguments
@@ -303,7 +302,7 @@ classdef cType
         end
 
 		function res=getFormatId(text)
-		% Get internal code of format type text
+		%getFormatId - Get internal code of format type text
         %   Syntax
         %     res=cType.getFormatId(text)
         %   Input Arguments
@@ -315,126 +314,234 @@ classdef cType
 		end
 
 		function res=getCostTables(text)
-		% Get id for CostTables option
+		%getCostTables - Get id for CostTables option
+		%   Syntax
+        %     res=cType.getCostTables(text)
+        %   Input Arguments
+        %     text - Cost Tables type text
+        %   Output Arguments
+        %     res - Cost Tables type Id (empty if it doesn't exist)
+        %
 			res=cType.getTypeId(cType.CostTables,text);
 		end
 
 		function res=getSummaryId(text)
-		% Get id for Summary option
+		%getSummaryId - Get id for Summary option
+		%   Syntax
+        %     res=cType.getSummaryId(text)
+        %   Input Arguments
+        %     text - Summary type text
+        %   Output Arguments
+        %     res - Summary Type Id (empty if it doesn't exist)
+        %
 			res=cType.getTypeId(cType.SummaryId,text);
 		end
 
 		function res=getDiagnosisMethod(text)
-		% Get id for Diagnosis Method option
+		%getDiagnosisMethod - Get id for Diagnosis Method option
+		%   Syntax
+        %     res=cType.getDiagnosisMethod(text)
+        %   Input Arguments
+        %     text - Diagnosis Method type text
+        %   Output Arguments
+        %     res - Diagnosis Method type Id (empty if it doesn't exist)
+        %
 			res=cType.getTypeId(cType.DiagnosisMethod,text);
 		end
 
 		function res=getVarMode(text)
-		% Get id for VarMode option
+		%getVarMode - Get id for VarMode option
+        %   Syntax
+        %     res=cType.getVarMode(text)
+        %   Input Arguments
+        %     text - Type of result type text
+        %   Output Arguments
+        %     res - VarMode Type Id (empty if it doesn't exist)
+        %
 			res=cType.getTypeId(cType.VarMode,text);
 		end
 
 		function res=getTableView(text)
-		% Get id for TableView option
+		%getTableView - Get id for TableView option
+        %   Syntax
+        %     res=cType.getTableView(text)
+        %   Input Arguments
+        %     text - TableView type text
+        %   Output Arguments
+        %     res - TableView ype Id (empty if it doesn't exist)
+        %
 			res=cType.getTypeId(cType.TableView,text);
 		end
 
 		function res=getDirColumns(text)
-		% Get id for Directory Table Columns option
+		%getDirColumns - Get id for Directory Table Columns option
+		%   Syntax
+        %     res=cType.getDirColumns(text)
+        %   Input Arguments
+        %     text - Directory table columns names.
+        %   Output Arguments
+        %     res - Directory table columns Id (empty if it doesn't exist)
+        %
 			res=cType.getTypeId(cType.DirCols,text);
 		end
 
 		function res=checkProcessKey(text)
-		% Check if process type text is valid
+		%checkProcessKey - Check if Process Type is correct
+		%   Syntax
+        %     res=cType.checkProcessKey(text)
+        %   Input Arguments
+        %     text - Process type text.
+        %   Output Arguments
+        %     res - true/false
+        %
 			res=cType.checkTypeKey(cType.Process,text);
 		end
 
 		function res=checkFlowKey(text)
-		% Check if flow type text is valid
+		%checkFlowKey - Check if flow type text is valid
+		%   Syntax
+        %     res=cType.checkFlowKey(text)
+        %   Input Arguments
+        %     text - Flow type text.
+        %   Output Arguments
+        %     res - true/false
+        %
         	res=cType.checkTypeKey(cType.Flow,text);
 		end
 
 		function res=checkWasteKey(text)
-		% Check if waste allocation type text is valid
+		%checkWasteKey - Check if waste allocation type text is valid
+		%   Syntax
+        %     res=cType.checkWasteKey(text)
+        %   Input Arguments
+        %     text - Process type text.
+        %   Output Arguments
+        %     res - true/false
+        %
         	res=cType.checkTypeKey(cType.WasteAllocation,text);
 		end
 
 		function res=checkResourcesKey(text)
-		% Check if resources cost type text is valid
+		%checkResourcesKey - Check if resources cost type text is valid
+		%   Syntax
+        %     res=cType.checkWasteKey(text)
+        %   Input Arguments
+        %     text - Process type text.
+        %   Output Arguments
+        %     res - true/false
+        %
         	res=cType.checkTypeKey(cType.Resources,text);
 		end
 
 		function res=checkCostTables(text)
-		% Check CostTable value 
+		%checkCostTables - Check CostTable type text
+		%   Syntax
+        %     res=cType.checkCostTables(text)
+        %   Input Arguments
+        %     text - Cost Tables type text.
+        %   Output Arguments
+        %     res - true/false
+        %		
 			res=cType.checkTypeKey(cType.CostTables,text);
 		end
 
 		function res=checkSummaryOption(text)
+		%checkSummaryOption - Check Summary type text
+		%   Syntax
+        %     res=cType.checkSummaryOption(text)
+        %   Input Arguments
+        %     text - Summary type text.
+        %   Output Arguments
+        %     res - true/false
+        %
 			res=cType.checkTypeKey(cType.SummaryId,text);
 		end
 
 		function res=checkDiagnosisMethod(text)
-		% Check DiagnosisMethod value
+		%checkDiagnosisMethod - Check Diagnosis method type text
+		%   Syntax
+        %     res=cType.checkDiagnosisMethod(text)
+        %   Input Arguments
+        %     text - Diagnosis method text.
+        %   Output Arguments
+        %     res - true/false
+        %
 			res=cType.checkTypeKey(cType.DiagnosisMethod,text);
 		end
 
 		function res=checkVarMode(text)
-		% Check DiagnosisMethod value
+		%checkVarMode - Check Variable display option
+		%   Syntax
+        %     res=cType.checkVarMode(text)
+        %   Input Arguments
+        %     text - Variable display type text.
+        %   Output Arguments
+        %     res - true/false
+        %
 			res=cType.checkTypeKey(cType.VarMode,text);
 		end
 
 		function res=checkTableView(text)
-		% Check TableView value
+		%checkTableView - Check TableView value
+		%   Syntax
+        %     res=cType.checkTableView(text)
+        %   Input Arguments
+        %     text - Table view type text.
+        %   Output Arguments
+        %     res - true/false
+        %
 			res=cType.checkTypeKey(cType.TableView,text);
 		end
 
 		function res=checkDirColumns(text)
-		% Check Directory Table Columns option
+		%checkDirColums - Check Table Directory Columns names
+		%   Syntax
+        %     res=cType.checkDirColumns(text)
+        %   Input Arguments
+        %     text - Table Directory column name
+        %   Output Arguments
+        %     res - true/false
+        %
 			res=cType.checkTypeKey(cType.DirCols,text);
 		end
 
-		function res=FlowTypeOptions()
-		% Get a cell array with the Flow Type options
-			res=fieldnames(cType.Flow);
-		end
-
-		function res=StreamTypeOptions()
-		% Get a cell array with the Stream Type options
-			res=fieldnames(cType.Stream);
-		end
-
-		function res=ProcessTypeOptions()
-		% Get a cell array with the Process Type options
-			res=fieldnames(cType.Stream);
-		end
-
 		function res=WasteTypeOptions()
-		% Get a cell array with the Waste Allocation Type options
+		%WasteTypeOptions - Get a cell array with the Waste Allocation Type options
+		%   Syntax
+        %     res=cType.WasteTypeOptions
 			res=fieldnames(cType.WasteAllocation);
 		end
 
 		function res=CostTablesOptions()
-		% Get a cell array with the Cost Tables Type options
+		%CostTablesOptions - Get a cell array with the Cost Tables Type options
+		%   Syntax
+        %     res=cType.CostTablesOptions
 			res=fieldnames(cType.CostTables);
 		end
 
 		function res=SummaryOptions()
-		% Get a cell array with the Summary Options
+		%SummaryOptions - Get a cell array with the Summary Options
+		%   Syntax
+        %     res=cType.SummaryOptions
 			res=fieldnames(cType.SummaryId);
 		end
 
 		function res=TableViewOptions()
-			% Get a cell array with the Cost Tables Type options
+		%TableViewOptions - Get a cell array with the Table view options
+		%   Syntax
+        %     res=cType.TableViewOptions
 			res=fieldnames(cType.TableView);
 		end
 
 		function res=DiagnosisOptions()
-		% Get a cell array with the Diagnosis Type options
+		%DiagnosisOptions - Get a cell array with the Diagnosis Type options
+		%   Syntax
+        %     res=cType.DiagnosisOptions
 			res=fieldnames(cType.DiagnosisMethod);
 		end
 		
 		function res=VarModeOptions()
-		% Get a cell array with the VarMode Type options
+		%VarModeOptions - Get a cell array with the VarMode Type options
 			res=fieldnames(cType.VarMode);
 		end
 
@@ -442,7 +549,14 @@ classdef cType
 		% File Functions
 		%%%%%
 		function [res,ext]=getFileType(filename)
-		% Get file type acording its extension (ext)
+		%getFileType - Get file type acording its extension (ext)
+		%   Syntax
+        %     res=cType.getFileType(filename)
+		%   Input Arguments:
+		%     filename - file name with extension
+		%   Output Arguments:
+		%     res - File Type Id
+		%     ext - extension characters
             res=cType.EMPTY;
 			[~,~,ext]=fileparts(filename);
 			values=struct2cell(cType.FileExt);
@@ -453,7 +567,14 @@ classdef cType
 		end
 
         function res=checkFileExt(filename,fext)
-		% Check if filename has a valid extension
+		%checkFileExt - Check if filename has a valid extension
+		%   Syntax
+        %     res=cType.checkFileExt
+		%   Input Arguments
+		%     filename - file name
+		%     fext - Expected file extension
+		%   Output Arguments
+		%     res - true/false
             [~,~,ext]=fileparts(filename);
             res=strcmp(fext,ext);
         end
@@ -462,12 +583,22 @@ classdef cType
 		% Other functions
 		%%%
 		function res=getLine(length)
-		% Get a dash line of the given length
+		%getLine - Get a dash line of the given length
+		%   Syntax
+        %     res=cType.getLine
+		%   Input Arguments
+		%     length - lenght of the line in chars
+		%   Output Arguments
+		%     res - array of chars with the line		
 			res=repmat(cType.Symbols.dash,1,length);
 		end
 
 		function tableCode(name)
-		% Get the key code of a table
+		%tableCode - display the key code of a table
+		%   Syntax
+        %     res=cType.tableCode
+		%   Input Arguments
+		%     name - table name
 			if ~ischar(name)
 				return
 			end
@@ -480,19 +611,14 @@ classdef cType
 			disp(['cType.Tables.',codes{idx}]);
 		end
 
-		function res=sequence()
-		% Generate a sequence of numbers
-			persistent counter;
-			if isempty(counter)
-				counter=uint64(1);
-			else
-				counter=counter+1;
-			end
-			res=counter;
-		end
-
 		function res=getTextErrorCode(error)
-		% Get the text of the corresponding error code
+		%getTextErrorCode - Get the text of the corresponding error code
+		%   Syntax
+        %     res=cType.getTextErrorCode
+		%   Input Arguments
+		%     error - error code
+		%   Output Arguments
+		%     res - error code text
 			switch error
 				case cType.VALID
 					res='INFO';
@@ -506,7 +632,9 @@ classdef cType
 		end
 
 		function res=getNewline()
-		% Get the newline character depending on operating system
+		%getNewLine - Get the newline character depending on operating system
+		%   Syntax
+        %     res=cType.getNewline
 			if ispc
 				res=cType.NEWLINE_PC;
 			else
@@ -515,7 +643,9 @@ classdef cType
 		end
 
 		function res=getPathDelimiter()
-		% get path delimiter
+		%getPathDelimiter - get the path delimiter
+		%   Syntax
+        %     res=cType.getPathDelimiter	
 			if ispc
 				res=cType.PATH_PC;
 			else
@@ -524,7 +654,13 @@ classdef cType
 		end
 
 		function res=getIcon(icon)
-		% Get app icons path
+		%getIcon - Get app icons
+		%   Syntax
+        %     res=cType.getIcon
+		%   Input Arguments
+		%     icon - icon name
+		%   Output Arguments
+		%     res - icon image
 			filename=cType.IconFile{icon};
             path=fileparts(mfilename('fullpath'));         
             if isOctave
@@ -537,9 +673,13 @@ classdef cType
 		end
 
 		function res=getTaesImage(path)
-		% Get the full path of the Taes Welcome image
-		% Input
-		%  path - path of the Resources app
+		%getTaesImage - Get the full path of the Taes Welcome image
+		%	Syntax
+		%     res=cType.getTaesImage
+		%   Input Argument
+		%     path - path of the Resources app
+		%   Output Argument
+		%     res - full path of the image
 			res=strcat(path,filesep,cType.AppResources,filesep,cType.TaesImage);
 		end
 	end

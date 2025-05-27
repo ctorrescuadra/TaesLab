@@ -42,6 +42,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         SystemUnitConsumption  % Total unit consumption of the system
         RecirculationFactor    % Recirculation factor of each process
         WasteWeight            % Weight of each waste
+        SpectralRatio          % Spectral Ratio of matrix mG
         fpOperators            % Structure containing FP Operators (mFP, mRP, opCP,opCR)
         pfOperators            % Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
         flowOperators          % Flow operators structure (mG, opB, opI, opR)
@@ -88,6 +89,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
             opCP=similarResourceOperator(opP,obj.ProductExergy);
             obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
+            obj.SpectralRatio=abs(eigs(mG,1));
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
             % Initialize waste operators
             if (nargin==2) && (obj.NrOfWastes>0)
