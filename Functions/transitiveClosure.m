@@ -12,8 +12,8 @@ function res=transitiveClosure(A)
 %     res - Connectivity matrix
 %
     res=A;
-    idx=1:size(A,1);
-    for k = idx
+    for k = 1:size(A,1)
         res = res | (res(:, k) * res(k, :));
     end
+    res = eye(size(A)) | res;
 end

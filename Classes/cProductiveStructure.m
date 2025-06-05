@@ -812,8 +812,8 @@ classdef cProductiveStructure < cResultId
 		%     res - true | false indicating if the productive graph is a network
 		%
 			x=obj.AdjacencyMatrix;
-			A=x.AS*x.AE+x.AF*x.AP;
-			E=eye(size(A))+transitiveClosure(A);
+			A=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
+			E=transitiveClosure(A);
 			y1=x.AP(end,:)*E; 
 			y2=E*x.AF(:,end);
 			res=all(y1) && all(y2');

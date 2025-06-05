@@ -11,7 +11,7 @@ function res=ExergyAnalysis(data,varargin)
 %    
 %   Name-Value Arguments
 %     State - State name of the exergy data. If not provided, first state is used
-%	    char array
+%       char array
 %     Show -  Show the results on console.  
 %       true | false (default)
 %     SaveAs - Name of file (with extension) to save the results.

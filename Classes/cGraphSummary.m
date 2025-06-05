@@ -45,7 +45,7 @@ classdef cGraphSummary < cGraphResults
 					var=info.getDefaultProcessVariables;
 				end
             else
-                var=option.Variables;
+                var=options.Variables;
             end
 			if ~iscell(var)
                 obj.messageLog(cType.ERROR,cMessages.InvalidParameter);

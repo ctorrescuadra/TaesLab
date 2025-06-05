@@ -147,8 +147,12 @@ classdef cResultInfo < cResultSet
             end
             tbl=getTable(res,graph);
             if ~tbl.status
-                obj.printError(cMessages.TableNotFound,graph);
+                tbl.printError(cMessages.TableNotFound,graph);
                 return
+            end
+            if ~tbl.isGraph
+		        tbl.printError(cMessages.InvalidGraph,param.Graph);
+		        return
             end
             % build graph using default parameters
             switch tbl.GraphType

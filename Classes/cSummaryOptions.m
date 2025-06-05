@@ -71,7 +71,7 @@ classdef cSummaryOptions < cMessageLogger
         %     true | false
         %
             res=false;
-            if ~char(option)
+            if ~ischar(option)
                 return
             end
             res=ismember(option,obj.Names);

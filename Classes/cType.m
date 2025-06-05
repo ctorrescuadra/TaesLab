@@ -71,8 +71,8 @@ classdef cType
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance
 		DEFAULT_NUM_LENGHT=10     % Default number length (use in cTableData)
-        TRUE='on'                 % Logical true text
-        FALSE='off'               % Logical false text                         
+        ON='on'                   % GUI on text
+        OFF='off'                 % GUI off text                      
 		FUEL='FUEL'               % Fuel type option text
 		PRODUCT='PRODUCT'         % Product type option text
 		FORMAT_ID='%3d'           % Line number format
@@ -629,6 +629,20 @@ classdef cType
 				otherwise
 					res='UNDEFINED';
 			end
+		end
+
+		function res=log2text(val)
+		%log2str - Get the text representation of a logical value. Used in GUI Apps
+		%   Syntax
+		%     res = log2text(x)
+	    %   Input Argument
+        %     val - logical variable or array
+        %   Output Argument
+        %     res - string or cell array
+        %
+			res=cType.OFF;
+			if ~islogical(val) && ~isnumeric(val),  return; end
+			if val, res=cType.ON;end
 		end
 
 		function res=getNewline()

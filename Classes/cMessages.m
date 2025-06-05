@@ -91,7 +91,7 @@ classdef cMessages
         InvalidExergyDataSize='Invalid number of exergy values %d'
         InvalidExergyDefinition='Invalid exergy data structure definition'
         NegativeExergyFlow='Exergy of flow %s is negative %f'
-        NegativeExergyStream='Exergy of stream %s is negetive %f'
+        NegativeExergyStream='Exergy of stream %s is negative %f'
         NegativeIrreversibilty='Irreversibility of process %s is negative %f'
         ZeroProduct='Product of process %s is zero'
         ProcessNotActive='Process %s is not active'

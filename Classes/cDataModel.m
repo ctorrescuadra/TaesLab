@@ -49,6 +49,7 @@ classdef cDataModel < cResultSet
         NrOfWastes              % Number of waste flows
         NrOfResources           % Number of resource flows
         NrOfFinalProducts       % Number of final products
+        NrOfSystemOutputs       % Number of system outputs
         NrOfStates              % Number of exergy data simulations
         NrOfSamples             % Number of resource cost samples
         isWaste                 % Indicate if the model has waste defined
@@ -239,6 +240,15 @@ classdef cDataModel < cResultSet
                 res=obj.ProductiveStructure.NrOfResources;
             end
         end
+
+        function res=get.NrOfSystemOutputs(obj)
+        % Get the number of system outputs
+            res=0;
+            if obj.status
+                res=obj.ProductiveStructure.NrOfSystemOutputs;
+            end
+        end
+
 
         function res=get.NrOfFinalProducts(obj)
         % Get the number of system outputs
@@ -450,7 +460,6 @@ classdef cDataModel < cResultSet
 				log.messageLog(cType.ERROR,cMessages.InvalidObject,class(obj));
                 return
 			end
-
 			% Save data model depending of fileType
 			fileType=cType.getFileType(filename);
             switch fileType

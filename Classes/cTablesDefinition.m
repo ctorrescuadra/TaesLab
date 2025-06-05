@@ -317,7 +317,7 @@ classdef cTablesDefinition < cMessageLogger
                     case cType.DirCols.RESULT_NAME
                         data(:,i)=[cType.Results([tI.resultId])];
                     case  cType.DirCols.GRAPH
-                        data(:,i)=log2str([tI.graph]);
+                        data(:,i)=arrayfun(@(x) mat2str(logical(x)),[tI.graph],'UniformOutput',false);
                     case  cType.DirCols.TYPE
                         data(:,i)=[cType.TypeTables([tI.type])];
                     case cType.DirCols.CODE

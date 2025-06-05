@@ -1,8 +1,8 @@
-function obj = importDataModel(filename)
-%importDataModel - get a cDataModel object from a previous saved MAT file
+function obj = ImportDataModel(filename)
+%ImportDataModel - get a cDataModel object from a previous saved MAT file
 %
 %   Syntax
-%     obj=importDataModel(matfile)
+%     obj=ImportDataModel(matfile)
 %
 %   Input Argument
 %     filename - Existing MAT file containing a TaesLab object
@@ -17,6 +17,10 @@ function obj = importDataModel(filename)
         obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'MAT');
 		return
     end
+    if (nargin~=1) || ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.MAT)
+        obj.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
+        return
+    end
     % Load and check the model
 	try
         S=load(filename);
@@ -27,7 +31,7 @@ function obj = importDataModel(filename)
 		obj.messageLog(cType.ERROR,cMessages.FileNotRead,filename);
 		return
 	end
-	if isValid(var)
+	if isObject(var,'cDataModel')
         obj=var;
 	else
 		obj.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);

@@ -357,7 +357,7 @@ classdef (Sealed) TaesTool < handle
         function setDebug(app,evt,~)
         % Menu Debug callback
             val=~app.debug;
-            check=log2str(val);
+            check=cType.log2text(val);
             app.debug=val;
             set(evt,'checked',check);
             if isValid(app.model)

@@ -298,7 +298,7 @@ classdef (Sealed) TaesPanel < handle
         function setDebug(app,evt,~)
         % Menu Debug callback
             val=~app.debug;
-            check=log2str(val);
+            check=cType.log2text(val);
             app.debug=val;
             set(evt,'checked',check);
             if isValid(app.model)
@@ -309,7 +309,7 @@ classdef (Sealed) TaesPanel < handle
         function setConsole(app,src,~)
         % Menu Console callback
             val=~app.console;
-            check=log2str(val);
+            check=cType.log2text(val);
             app.console=val;
             set(src,'checked',check);
             if app.console
@@ -322,7 +322,7 @@ classdef (Sealed) TaesPanel < handle
         function setPanel(app,src,~)
         % Menu Panel callback
             val=~app.panel;
-            check=log2str(val);
+            check=cType.log2text(val);
             app.panel=val;
             set(src,'checked',check);
             if app.panel

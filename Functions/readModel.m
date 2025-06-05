@@ -24,7 +24,7 @@ function res=readModel(filename)
         case cType.FileType.XLSX
             rdm=cReadModelXLS(filename);
         case cType.FileType.MAT
-            rdm=importDataModel(filename);  
+            rdm=ImportDataModel(filename);  
         otherwise
             res.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
             return
