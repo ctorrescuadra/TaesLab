@@ -11,8 +11,8 @@ param=struct();
 options=struct('Console','Y','Save','N');
 data=selectDataModel();
 if ~data.status
-  data.printLogger;
-  data.printError(cMessages.InvalidObject,class(data));
+	data.printLogger;
+    data.printError(cMessages.InvalidObject,class(data));
 	return
 end
 % Assign function paramater

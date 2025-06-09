@@ -25,8 +25,7 @@ classdef cExergyModel < cResultId
 %     FinalProducts        - Final Products Exergy
 %     TotalIrreversibility - Total Irreversibility
 %     TotalUnitConsumption - Total Unit Consumption
-%     ActiveProcesses      - Active Processes (not bypassed)
-%     Stability            - Reciprocal Condition number of the model operator
+%     ActiveProcesses      - Active Processes Array (not bypassed)
 %
 %   cExergyModel methods:
 %     buildResultInfo - Build the cResultInfo object associated to EXERGY_ANALYSIS
@@ -58,7 +57,6 @@ classdef cExergyModel < cResultId
 		TotalIrreversibility  % Total Irreversibility
 		TotalUnitConsumption  % Total Unit Consumption
         ActiveProcesses       % Active Processes (not bypass)
-		Stability             % Reciprocal Condition number of the model operator
 	    ps					  % Productive Structure
     end
     
@@ -97,11 +95,10 @@ classdef cExergyModel < cResultId
 			mbP=divideCol(tAP,ET);
 			mS=double(tbl.AS);
 			mE=divideCol(tAE,ET);
-			% Check if model is valid
+			% Check if model is valid. Octave compatibility
 			A=eye(NS)-mbF(:,1:N)*mbP(1:N,:)-mS*mE;
-			obj.Stability=rcond(A);
-			if obj.Stability < cType.EPS
-                obj.messageLog(cType.ERROR,cMessages.InvalidOperator);
+			if condest(A) > cType.DMAX
+                obj.messageLog(cType.ERROR,cMessages.InvalidCostOperator);
                 return
 			end
 			% Build the Flow-Process Table

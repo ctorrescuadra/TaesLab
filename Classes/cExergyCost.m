@@ -95,7 +95,11 @@ classdef (Sealed) cExergyCost < cExergyModel
             if (nargin==2) && (obj.NrOfWastes>0)
 				obj.isWaste=true;
                 setWasteTable(obj,wd)
-                obj.updateWasteOperators;
+                wlog=obj.updateWasteOperators;
+                if ~wlog.status
+                    obj.addLogger(wlog);
+                    obj.messaggeLogger(cType.ERROR,cType.InvalidWasteDefinition)
+                end
             end
 		end
 
@@ -427,11 +431,13 @@ classdef (Sealed) cExergyCost < cExergyModel
             fict=[ict*obj.mpL;cm];    	
         end
 
-        function updateWasteOperators(obj)
+        function log=updateWasteOperators(obj)
         %updateWasteOperators - Calculate the waste allocation ratios and cost operators.
         %   Syntax
         %     obj.updateWasteOperators
-        %
+        %   Output Argument
+        %     log - cMessageLogger with error messages
+            log=cMessageLogger;
             wt=obj.WasteTable;
             NR=wt.NrOfWastes;
             N=obj.NrOfProcesses;
@@ -445,6 +451,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             mKP=obj.pfOperators.mKP;
             opP=obj.pfOperators.opP;
             opI=obj.pfOperators.opI;
+            opCP=obj.fpOperators.opCP;
             vP=obj.ProductExergy;
             % Compute direct exergy cost for type 2 allocation
             if (any(wt.TypeId==cType.WasteAllocation.COST))
@@ -475,17 +482,23 @@ classdef (Sealed) cExergyCost < cExergyModel
                         tmp=tmp/sum(tmp);  
                         tmp(aP)=tmp(aP)+opI(aP,j)';
                     otherwise
-                        obj.messageLog(cType.ERROR,cMessages.InvalidWasteType,wt.Type{i},key);
+                        log.messageLog(cType.ERROR,cMessages.InvalidWasteType,wt.Type{i},key);
                         return
                 end
                 if isempty(find(tmp,1))				
-                    obj.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,key);
+                    log.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,key);
                     return
                 end
                 sol(i,:)=tmp/sum(tmp);
             end
-            % Create Waste Tables object
+            % Check if waste operator is valid
             sol=scaleRow(sol,1-wt.RecycleRatio);
+            mS=eye(NR)-sol*opCP(:,aR);
+            if condest(mS) > cType.DMAX
+                log.messageLog(cType.ERROR,cMessages.InvalidWasteOperator);
+                return
+            end
+            % Update object values
             wt.updateValues(sol);
             mRP=cSparseRow(aR,sol);
             obj.TableR=scaleRow(mRP,vP);
@@ -495,7 +508,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             wflows=obj.ps.Waste.flows;
             obj.pfOperators.mKR=mKR;
             obj.pfOperators.opR=opR;
-            obj.fpOperators.opR=cExergyCost.getOpR(mRP,obj.fpOperators.opCP);
+            obj.fpOperators.opR=cExergyCost.getOpR(mRP,opCP);
             obj.flowOperators.opR=cSparseRow(wflows,opR.mValues*obj.mpL,M);
             obj.RecycleRatio=wt.RecycleRatio;
             obj.WasteTable=wt;

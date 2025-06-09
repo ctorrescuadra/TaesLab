@@ -68,7 +68,7 @@ classdef (Sealed) TaesTool < handle
     methods
         % TaesTool constructor
         function app=TaesTool()
-            % Initialize application variabbles
+            % Initialize application variables
 			app.model=cMessageLogger(cType.INVALID);
             % Create GUI components
             createComponents(app);

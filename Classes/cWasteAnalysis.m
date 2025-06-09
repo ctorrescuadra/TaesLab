@@ -136,7 +136,9 @@ classdef (Sealed) cWasteAnalysis < cResultId
             yg=zeros(size(x,1),size(outputId,2));     
             for i=1:size(x,1)
                 wt.setRecycleRatio(obj.wasteFlow,x(i));
-                sol.updateWasteOperators;
+                if ~isValid(sol.updateWasteOperators)
+                    continue
+                end
                 if obj.directCost
                     fc=sol.getFlowsCost;
                     yd(i,:)=fc.c(outputId);

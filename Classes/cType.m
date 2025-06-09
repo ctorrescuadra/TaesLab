@@ -70,6 +70,7 @@ classdef cType
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance
+		DMAX=1.0e+8               % Infinite value for tolerance
 		DEFAULT_NUM_LENGHT=10     % Default number length (use in cTableData)
         ON='on'                   % GUI on text
         OFF='off'                 % GUI off text                      

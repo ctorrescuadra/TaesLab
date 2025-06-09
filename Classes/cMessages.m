@@ -15,10 +15,12 @@ classdef cMessages
         FileNotRead='Error reading file %s'
         SheetNotExist='Sheet %s NOT exists'
         SheetNotRead='Sheet %s NOT read'
-        NoReadFiles='Read %s files is not yet implemented in Octave'
+        NoReadFiles='Read %s files is not implemented in Octave'
+        NoSaveFiles='Save %s files is not implemented in Octave'
         InvalidDataModelFile='Data model file %s is NOT valid'
         ModelDataMissing='%s data is missing'
         InvalidMatFileObject='Invalid %s object from file %s'
+        NoDataModel='MAT file does not contains a valid Data Model'
         % Input arguments messages
         InvalidArgument='Invalid input arguments. %s'
         DataModelRequired='First argument must be a valid data model'
@@ -95,7 +97,7 @@ classdef cMessages
         NegativeIrreversibilty='Irreversibility of process %s is negative %f'
         ZeroProduct='Product of process %s is zero'
         ProcessNotActive='Process %s is not active'
-        InvalidOperator='The cost operator is singular or badly conditioned.'
+        InvalidCostOperator='The cost operator is singular or badly conditioned.'
         % Diagnosis
         ExergyCostRequired='Input parameters are NOT cExergyCost objects'
         DiagnosisNotAvailable='Thermoeconomic Diagnosis is NOT available'
@@ -113,6 +115,8 @@ classdef cMessages
         NoWasteAllocationValues='No allocation values defined for waste %s'
         NegativeWasteAllocation='Waste allocation value for waste %s cannot be NEGATIVE %f'
         InvalidAllocationProcess='Waste %s cannot be asssigned to dissipative units'
+        InvalidWasteOperator='The waste operator is singular or bad conditioned'
+        InvalidWasteDefinition='Invalid waste defintion. See error log.'
         % Resource messages
         InvalidResourceValue='Resource %s value is negative %f'
         InvalidZSize='Invalid resource process size %d'

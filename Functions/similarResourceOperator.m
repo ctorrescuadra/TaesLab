@@ -12,7 +12,7 @@ function B = similarResourceOperator(A, x)
 %   Output Arguments
 %     B - Resource-Driven Operator
 %
-    % Check Mattrix
+    % Check Matrix
     [n,m] = size(A);
     if m ~= n
         error('ERROR: similarOperator. Matrix must be square');
@@ -22,13 +22,14 @@ function B = similarResourceOperator(A, x)
     end
     % Find null elements and compute 1/x
     if iscolumn(x), x = x'; end 
-    ind=find(~x',1);
-    y=1./x; y(ind)=0;
+    ind=find(x);
+    y=x; y(ind)=1./y(ind);
     % Compute Similar Operator
     B = (y' * x) .* A;
     % Restore diagonal of null elements
-    if ~isempty(ind)
-        idx=sub2ind(size(A),ind,ind);
+    if length(ind) < n
+        jnd=find(~x);
+        idx=sub2ind(size(A),jnd,jnd);
         B(idx)=A(idx);
     end 
 end

@@ -8,7 +8,6 @@
 % Read Data Models
 %   ReadDataModel           - Reads a data model file.
 %   CopyDataModel           - Copies a data model file to another format.
-%   ImportDataModel         - Restore a data model from a mat file
 %
 % Get Thermoeconomic Results
 %   ThermoeconomicModel     - Gets the complete thermoeconomic model of a plant.

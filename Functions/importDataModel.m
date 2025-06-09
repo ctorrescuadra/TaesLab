@@ -1,4 +1,4 @@
-function obj = ImportDataModel(filename)
+function obj = importDataModel(filename)
 %ImportDataModel - get a cDataModel object from a previous saved MAT file
 %
 %   Syntax
@@ -11,14 +11,14 @@ function obj = ImportDataModel(filename)
 %   Output Argument
 %     obj - cDataModel object
 %
-    obj=cMessageLogger();
+    obj=cMessageLogger(cType.INVALID);
 	% Check input arguments
     if isOctave
         obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'MAT');
 		return
     end
     if (nargin~=1) || ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.MAT)
-        obj.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
+        obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
         return
     end
     % Load and check the model
@@ -29,11 +29,10 @@ function obj = ImportDataModel(filename)
 	catch err
 		obj.messageLog(cType.ERROR,err.message)
 		obj.messageLog(cType.ERROR,cMessages.FileNotRead,filename);
-		return
 	end
 	if isObject(var,'cDataModel')
         obj=var;
 	else
-		obj.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
+		obj.messageLog(cType.ERROR,cMessages.NoDataModel);
 	end
 end

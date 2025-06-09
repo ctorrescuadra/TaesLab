@@ -172,7 +172,11 @@ classdef cResultInfo < cResultSet
                     gr=cGraphSummary(tbl,obj.Info);
             end
             % Show Graph
-            gr.showGraph;
+            if gr.status
+                gr.showGraph;
+            else
+                gr.printLogger;
+            end
         end 
 
         function res=summaryDiagnosis(obj)

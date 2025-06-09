@@ -1109,7 +1109,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 log.printError(cMessages.InvalidWasteType,wtype,obj.ActiveWaste);
                 return
             end
-            obj.fp1.updateWasteOperators;
+            wlog=obj.fp1.updateWasteOperators;
+            if ~wlog.status
+                printLogger(wlog);
+                return
+            end
             obj.setThermoeconomicAnalysis;
             obj.setSummaryTables;
             if obj.isDiagnosis
@@ -1137,7 +1141,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 log.printError(cMessages.NegativeWasteAllocation,obj.ActiveWaste);
                 return
             end
-            obj.fp1.updateWasteOperators;
+            wlog=obj.fp1.updateWasteOperators;
+            if ~wlog.status
+                printLogger(wlog);
+                return
+            end
             obj.setThermoeconomicAnalysis;
             obj.setSummaryTables;
             if obj.isDiagnosis
@@ -1166,7 +1174,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 log.printError(cMessages.InvalidRecycling,val,obj.ActiveWaste);
                 return 
             end
-            obj.fp1.updateWasteOperators;
+            wlog=obj.fp1.updateWasteOperators;
+            if ~wlog.status
+                printLogger(wlog);
+                return
+            end
             obj.setThermoeconomicAnalysis;
             obj.setSummaryTables;
             if obj.isDiagnosis

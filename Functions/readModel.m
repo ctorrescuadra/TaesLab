@@ -24,7 +24,7 @@ function res=readModel(filename)
         case cType.FileType.XLSX
             rdm=cReadModelXLS(filename);
         case cType.FileType.MAT
-            rdm=ImportDataModel(filename);  
+            rdm=importDataModel(filename); 
         otherwise
             res.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
             return
@@ -41,7 +41,7 @@ function res=readModel(filename)
     elseif isa(rdm,'cReadModel')
         res=rdm.getDataModel;
     end
-    % Check if data model is valid
+    % Set log message
     if res.status
         res.messageLog(cType.INFO,cMessages.ValidDataModel,res.ModelName);
     else

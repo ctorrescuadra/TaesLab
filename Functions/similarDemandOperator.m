@@ -22,13 +22,14 @@ function B = similarDemandOperator(A, x)
     end
     % Find null elements and compute 1/x
     if isrow(x), x = x'; end
-    ind=find(~x,1);
-    y=1./x; y(ind)=0;
+    ind=find(x); 
+    y=x; y(ind)=1./x(ind);
     % Compute Similar Operator
     B = (x * y') .* A;
     % Restore diagonal of null elements
-    if ~isempty(ind)
-        idx=sub2ind(size(A),ind,ind);
+    if length(ind) < n
+        jnd=find(~x);
+        idx=sub2ind(size(A),jnd,jnd);
         B(idx)=A(idx);
     end 
 end

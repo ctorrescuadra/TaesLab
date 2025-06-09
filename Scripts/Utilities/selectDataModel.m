@@ -12,5 +12,5 @@ function model=selectDataModel()
         return
 	end
 	% Read and Check model
-	model=ReadDataModel(data_file);
+	model=readModel(data_file);
 end

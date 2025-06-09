@@ -16,6 +16,10 @@ function log=exportMAT(obj,filename)
 %   See also cDataModel, cResultInfo, cTable, importMAT
 %
     log=cMessageLogger();
+    if isOctave
+        log.messageLog(cType.ERROR,cMessages.NoSaveFiles,'MAT');
+		return
+    end
     if (nargin~=2) || (~isFilename(filename))
         log.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
         return
