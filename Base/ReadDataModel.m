@@ -1,11 +1,10 @@
 function data=ReadDataModel(filename,varargin)
-%ReadDataModel - Reads a data model file.
+%cReadDataModel - Reads a data model file.
 %   This function loads a data model file into a cDataModel object.
-%   Check that all the elements are valid, and show it in the console
-%   if 'Debug' option is selected. 
-%   If option 'Show' is selected, display the data tables in the console.
-%   A copy of the data model (usually a MAT file) could be created 
-%   if the 'SaveAs' option is selected.
+%   It checks that all elements are valid and displays them in the console.
+%   If the 'Debug' option is selected, it provides additional information about the data model.
+%   If the 'Show' option is selected, it displays the data tables in the console.
+%   A copy of the data model (usually a MAT file) can be created  if the 'SaveAs' option is selected.
 %
 %   Syntax
 %     data = ReadDataModel(data,Name,Value);

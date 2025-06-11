@@ -1,8 +1,8 @@
 function res=ShowTable(tbl,varargin)
-%ShowTable - Allows to display, export or save a table object.
-%   Depending on the ' View ' option, a table can be displayed in different ways: 
-%   in the console, in a web browser or in a GUI table.
-%   Tables can be exported or saved to a file with the 'ExportAs' and 'SaveAs' options.
+%ShowTable - Allows you to display, export, or save a table object.
+%  Depending on the “View” option, a table can be displayed in different ways: 
+%  in the console, in a web browser, or in a GUI table.
+%  Tables can be exported or saved to a file using the 'ExportAs' and 'SaveAs' options.
 %
 %   Syntax
 %     res=ShowTable(tbl,Name,Value)

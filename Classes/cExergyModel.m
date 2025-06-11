@@ -1,6 +1,6 @@
 classdef cExergyModel < cResultId
-%cExergyModel builds the Flow-Process model
-%   It provides the exergy analysis results and the FP table of the system
+%cExergyModel Builds the Flow-Process exergy model
+%   It provides the exergy analysis results and the FP table of a state of the plant
 %
 %   cExergyModel constructor:
 %     obj = cExergyModel(exd)

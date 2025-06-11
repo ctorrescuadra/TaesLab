@@ -1,6 +1,6 @@
 classdef (Sealed) cExergyCost < cExergyModel
-%cExergyCost calculates exergy cost of flows and processes.
-%   It is the class that provides the thermoeconomic analysis results
+%cExergyCost - Calculate the exergy cost of flows and processes.
+%   It is the class that provides the thermoeconomic analysis results of a state of the plant
 %
 %   cExergyCost constructor:
 %     obj = cExergyCost(exd,wd)
@@ -16,16 +16,16 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     flowOperators          - Flow operators structure (mG, opB, opI, opR)
 %     isWaste                - Indicate if system have wastes
 %     WasteTable             - cWasteData object
-%     TableR                 - Waste Table (waste allocation)
+%     TableR                 - Waste Allocation Table
 %     RecycleRatio           - Recycle ratio of each waste
 %     WasteWeight            - Weight of each waste
 %
 %   cExergyCost methods:
-%     buildResultInfo              - Build the cResultInfo object for thermoeconomic analysis
+%     buildResultInfo              - Build the cResultInfo object for THERMOECONOMIC_ANALYSIS
 %     getProcessCost               - Get cost of Processes
 %     getProcessUnitCost           - Get unit cost of Processes
 %     getFlowsCost                 - Get cost of flows
-%     getStreamsCost               - Get cost of streams
+%     getStreamsCost               - Get cost of productive groups
 %     getCostTableFP               - Get cost table FP
 %     getDirectCostTableFPR        - Get the direct cost FPR table
 %     getGeneralCostTableFPR       - Get the generalized cost FPR table
@@ -48,7 +48,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         flowOperators          % Flow operators structure (mG, opB, opI, opR)
         isWaste=false          % Indicate if system have wastes
         WasteTable             % cWasteData object
-        TableR                 % Table R (waste allocation)
+        TableR                 % Waste Allocation Table
         RecycleRatio           % Recycle ratio of each waste
     end
     properties(Access=private)

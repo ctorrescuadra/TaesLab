@@ -1,9 +1,9 @@
 function res = SummaryResults(data,varargin)
-%SummaryResults - Gets the summary cost results for a plant.
-%   This function retrieves the summary tables comparing of the model
-%   There is to types of Summary Result Tables:
-%     - STATES: Comparing cost values for the diferent states
-%     - RESOURCES: Comparing cost values for the diferent resources samples
+%SummaryResults - Gets the summary results for a system.
+%   This function retrieves the summary tables to compare different states or samples of the model
+%   There are two types of Summary Result Tables:
+%     - STATES: Comparing cost values for the different states
+%     - RESOURCES: Comparing cost values for the different resource samples
 %
 %   Syntax
 %     res=SummaryResults(data,Name,Value)

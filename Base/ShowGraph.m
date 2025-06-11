@@ -11,13 +11,13 @@ function ShowGraph(arg,varargin)
 %   Name-Value Arguments
 %     Graph: Name of the table
 %       char array
-%     ShowOutput: Show Output variation.Use for diagnosis tables. 
+%     ShowOutput: Show Output variation.Use for Diagnosis tables. 
 %       false | true (default)
 %     PieChart: Use Pie Chart graph for Waste Allocation
 %       false | true (default) 
-%     BarGraph: Use Bar Graph for summary results
+%     BarGraph: Use Bar Graph for Summary results
 %		false | true (default)
-%     Variables: Use for summary results. 
+%     Variables: Variables used in Summary results. 
 %	    cell array
 %
 % 	Example

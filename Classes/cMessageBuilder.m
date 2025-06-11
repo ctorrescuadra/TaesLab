@@ -52,7 +52,7 @@ classdef cMessageBuilder < cTaesLab
         end
 
         function disp(obj,debug)
-        %dip - Overload disp function
+        %disp - Overload disp function
         %   fid=1 is the standard output file id
         %   fid=2 is the error output file id
             if nargin==1

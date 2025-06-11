@@ -1,7 +1,7 @@
 classdef(Abstract) cResultId < cMessageLogger
-%cResultId base class to define the ResultId of the classes which provide results
-% 	It is used in: cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
-%	cRecyclingAnalysis, cDiagramFP, cWasteData and cSummaryResults
+%cResultID - Base class for the classes that provide results info.
+%    It is used by cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
+%    cRecyclingAnalysis, cDiagramFP, cWasteData, and cSummaryResults.
 %
 %   cResultId Properties
 %     ResultId     - Result Id
@@ -15,6 +15,10 @@ classdef(Abstract) cResultId < cMessageLogger
 %     setResultId     - Set the resultId
 %     setSample       - Set the resource sample name
 %     setDefaultGraph - Set the default graph
+%
+%   See also cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
+%            cWasteAnalysis, cDiagramFP, cWasteData, and cSummaryResults.
+%   
 
 	properties(GetAccess=public,SetAccess=protected)
 		ResultId                       % Result Id

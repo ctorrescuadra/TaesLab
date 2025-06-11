@@ -1,12 +1,12 @@
 function ShowResults(arg,varargin)
-%ShowResults is the console interface to show the results 
-%   Depending on the options you could work with all the results or one specific table
-%   If 'Table' option is not selected it works at results set level
-%   If 'Table' option is selected the table could be shown in the console, web browser or GUI table
-%   depending the 'View' option.
-%   If 'Panel' option is selected, the tables could be selected via the ResultsPanel
-%   Results or individual tables could be saved into a file in diferent formats with the option 'SaveAs'
-%   Use Table 'tindex' to show the table index of the result set
+%ShowResults - This is the console interface for displaying results. 
+%   Depending on the options, you can work with all results or with a specific table.
+%   If the 'Table' option is not selected, it works at the result set level.
+%   If the 'Table' option is selected, the table can be displayed in the console, web browser, or GUI table,
+%   depending on the 'View' option.
+%   If the 'Panel' option is selected, tables can be selected through the Results Panel.
+%   Individual results or tables can be saved to a file in different formats using the “Save as” option.
+%   Use the 'tindex' table to display the table index of the result set.
 %
 %   Syntax:
 %     ShowResults(arg,Name,Value)

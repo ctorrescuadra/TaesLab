@@ -1,8 +1,8 @@
 function SaveResults(arg,filename)
-%SaveResults - Saves the result tables into a file
-%   The available formats are: XLSX, CSV, TXT, HTML, LaTeX and MAT.
-%   Show a message about the status of the operation
-%   Used as the interface of cResultSet/saveResults
+%SaveResults - Save the result tables into a file
+%   The available formats are: XLSX, CSV, JSON, XML, and MAT.
+%   Displays a message about the status of the operation.
+%   Used as an interface for cResultSet/saveResults.
 %   
 %   Syntax
 %     SaveResults(arg, filename)

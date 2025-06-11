@@ -1,8 +1,8 @@
 function SaveTable(tbl,filename)
-%SaveTable - Save a result table in different formats
-%   The available formats are XLSX, CSV, TXT, HTML, LaTeX, JSON, XML and MAT.
-%   Show a message about the status of the operation
-%   Used as interface of cTable/saveTable
+%SaveTable - Saves a table of results in different formats.
+%   The available formats are XLSX, CSV, TXT, HTML, LaTeX, JSON, XML, and MAT.
+%   Displays a message about the status of the operation.
+%   Used as an interface for cTable/saveTable.
 %
 %   Syntax:
 %     SaveTable(tbl,filename)

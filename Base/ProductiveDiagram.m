@@ -1,6 +1,5 @@
 function res=ProductiveDiagram(data,varargin)
 %ProductiveDiagram - Gets the productive diagrams of a plant.
-%   This function obtains the productive diagrams of a plant.
 %   These diagrams could be represented graphically using the function
 %   ShowGraph, or saving the adjacency tables in xlsx format, which can be
 %   used by external graph software such as yEd

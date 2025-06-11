@@ -1,5 +1,5 @@
 function res=ExergyAnalysis(data,varargin)
-%ExergyAnalysis - Get the exergy balances for one state of the plant
+%ExergyAnalysis - Gets the exergy balances for a state of the plant
 %   Given a data model of a plant, this function performs an exergy analysis,
 %   including the exergy balances and the Fuel-Product table.
 % 

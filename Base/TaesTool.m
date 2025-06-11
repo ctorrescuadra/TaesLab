@@ -7,9 +7,9 @@ classdef (Sealed) TaesTool < handle
 %    - thermoeconomicDiagnosis
 %	 - wasteAnalysis
 %   and perform the following operations:
-%    - Save the results in several formats (xlsx, csv, html, txt,..)
-%    - Save variables in the base workspace
-%    - View the result as tables or graphs
+%    - Saves the results in several formats (xlsx, csv, html, txt,..)
+%    - Saves variables in the base workspace
+%    - Shows the result as tables or graphs
 %   The application has two panels: the Taess panel, where the parameters
 %   of the Thermoeconomic Model are selected, and the results panel, 
 %   where the user selects the tables and graphs to show.

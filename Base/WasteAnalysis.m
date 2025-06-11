@@ -1,8 +1,8 @@
 function res = WasteAnalysis(data,varargin)
-%WasteAnalysis - Perform a waste analysis of a plant state.
-%   It calculates the waste allocation for the criteria defined in the data model.
-%   If the option 'Recycling' is active, it calculates the tables with the direct
-%   and/or generalized costs as a function of the recycling of waste from 0 to 100 percent 
+%Waste analysis - Performs a waste analysis of a plant state.
+%   Calculates waste allocation according to the criteria defined in the data model.
+%   If the 'Recycling' option is active, it calculates tables with direct
+%   and/or generalized costs depending on the waste recycling from 0 to 100%.
 %
 %   Syntax
 %     res=WasteAnalysis(data,Name,Value)

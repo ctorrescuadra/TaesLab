@@ -1,8 +1,8 @@
 function SaveDataModel(arg,filename)
-%SaveDataModel - Saves a copy of the data model into a file 
-%   The available formats are: XLSX, CSV, JSON, XML and MAT.
-%   Show a message about the status of the operation
-%   Used as the interface of cDataModel/saveDataModel
+%SaveDataModel - Saves a copy of the data model to a file. 
+%   The available formats are: XLSX, CSV, JSON, XML, and MAT.
+%   Displays a message about the status of the operation.
+%   Used as an interface for cDataModel/saveDataModel.
 %   
 %   Syntax
 %     SaveDataModel(arg,filename)

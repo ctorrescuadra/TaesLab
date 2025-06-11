@@ -1,8 +1,8 @@
 function SaveSummary(model,filename)
-%SaveSummary saves the summary model results into a file
-%   The available formats are: XLSX, CSV, TXT, HTML, LaTeX and MAT.
-%   Show a message about the status of the operation
-%   Used as the interface of cThermoeconomicModel/saveSummary
+%SaveSummary - Save the summary model results into a file
+%   The available formats are: XLSX, CSV, JSON, XML, and MAT.
+%   Displays a message about the status of the operation.
+%   Used as an interface for cResultSet/saveSummary.
 %
 %   Syntax:
 %     SaveTable(tbl,filename)

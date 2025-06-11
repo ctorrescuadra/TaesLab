@@ -1,23 +1,22 @@
 classdef (Sealed) TaesPanel < handle
-%TaesPanel - Graphic user interface to select the thermoeconomic model parameters.
-%   Execute the basic functions of class cThermoeconomicModel:
+%TaesPanel - Graphical user interface for selecting thermoeconomic model parameters.
+%    Executes the basic functions of the cThermoeconomicModel class:
 %    - productiveStructure
 %    - thermoeconomicState
 %    - thermoeconomicAnalysis
 %    - thermoeconomicDiagnosis
 %    - wasteAnalysis
-%   and perform the following operations:
-%    - Save the results in several formats (xlsx, csv, html, txt,..)
+%   and performs the following operations:
+%    - Save results in various formats (xlsx, csv, html, txt, etc.)
 %    - Save variables in the base workspace
-%    - View Result in tables and graphs.
+%    - View results in tables and graphs.
 %
-%   By clicking on a result button on the toolbar, the result is activated. 
-%   The results can then be displayed in the console if the 'Console' option
-%   in the View menu is activated. 
-%   The results can also be saved to a file using the 'Save' option in the File menu.  
-%   If 'Panel' is active in the View menu, the Results Panel is activated, 
-%   and the user can then select the table or graph to be displayed.
-%   If the result is selected in the Result Menu, it is saved in the workspace
+%   Clicking on a results button in the toolbar activates the result. 
+%   Results can be displayed in the console if the “Console” option in the “View” menu is activated. 
+%   Results can also be saved to a file using the “Save” option in the File menu.  
+%   If 'Panel' is active in the View menu, the Results Panel tool is activated, 
+%   and the user can select the table or graph they want to display.
+%   If the result is selected in the Result menu, it is saved in the workspace
 %   to work with it interactively.
 %
 %   Syntax

@@ -1,7 +1,6 @@
 function res = ExportResults(arg,varargin)
 %ExportResults - Exports the results tables in the selected format.
 %   If the option 'Table' is not used, the function returns a structure with all tables converted to the desired format. 
-%   If the option 'Table' is selected, the table is obtained in the desired format.
 %
 %   Syntax
 %     res=ExportResults(arg,Name,Value)

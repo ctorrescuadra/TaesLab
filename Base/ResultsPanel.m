@@ -1,9 +1,9 @@
 classdef (Sealed) ResultsPanel < cTaesLab
-%ResultsPanel - Graphical user interface to display the results interactively.
-%   The class creates a panel and displays the table index of the chosen cResultSet.
-%   A table or graph can be selected by clicking on the corresponding table.
-%   In the View menu, you can choose where the tables are shown:  the console, a web browser or a GUI table.
-%   In addition, the current ResultSet can be saved to a file using the menu option File->Save.
+%ResultsPanel - Graphical user interface for displaying results interactively.
+%   The class creates a panel and displays the table index of the selected cResultSet.
+%   You can select a table or graph by clicking on the corresponding table.
+%   In the 'View' menu, you can choose where the tables are displayed:  the console, a web browser, or a GUI table.
+%   In addition, the current ResultSet can be saved to a file using the File->Save menu option.
 %
 %   ResultsPanel constructor:
 %     obj = ResultPanel(res)

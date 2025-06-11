@@ -97,7 +97,9 @@ classdef cMessages
         NegativeIrreversibilty='Irreversibility of process %s is negative %f'
         ZeroProduct='Product of process %s is zero'
         ProcessNotActive='Process %s is not active'
-        InvalidCostOperator='The cost operator is singular or badly conditioned.'
+        InvalidCostOperator='The cost operator is singular or badly conditioned'
+        SingularMatrix='The matrix is singular'
+        NegativeMatrix='The Matrix has negative elements'
         % Diagnosis
         ExergyCostRequired='Input parameters are NOT cExergyCost objects'
         DiagnosisNotAvailable='Thermoeconomic Diagnosis is NOT available'

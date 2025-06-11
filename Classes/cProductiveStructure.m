@@ -375,7 +375,7 @@ classdef cProductiveStructure < cResultId
 			x=obj.AdjacencyMatrix;
 			tmp=x.AS*x.AE;
 			tc=transitiveClosure(tmp);
-			res=x.AP*tc*x.AF;
+			res=logical(x.AP*tc*x.AF);
 		end
 
 		function res=FlowEdges(obj)

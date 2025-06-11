@@ -1,10 +1,8 @@
 function res=DiagramFP(data,varargin)
-%DiagramFP - Gets the diagram FP tables for one plant State
-%   This function gets the adjacency tables of the diagram FP
-%   for one state of the plant. 
-%   These diagrams could be represented grafically using the function
-%   ShowGraph, or by external graph software as yEd saving the adjancency
-%   tables of the graph in xlsx format.
+%DiagramFP - Gets the FP diagrams for a plant state.
+%   These diagrams can be represented graphically using the ShowGraph function, 
+%   or using external graphics software such as yEd, saving the adjacency tables
+%   of the graph in xlsx format.
 %  	
 %   Syntax
 %     res = DiagramFP(data,Name,Value);
