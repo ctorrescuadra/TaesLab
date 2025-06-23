@@ -37,6 +37,8 @@ classdef cMessages
         InvalidResourceCost='Invalid resource cost for sample %s. See error log'
         InvalidStateList='Invalid states list'
         InvalidSampleList='Invalid samples list'
+        NodeNotReachedFromSource='Stream %s not reached from resources'
+        OutputNotReachedFromNode='Output not reached from Stream %s'
         % Invalid keys
         InvalidFlowId='Invalid flow Id %d'
         InvalidProcessId='Invalid process Id %d'
@@ -97,7 +99,7 @@ classdef cMessages
         NegativeIrreversibilty='Irreversibility of process %s is negative %f'
         ZeroProduct='Product of process %s is zero'
         ProcessNotActive='Process %s is not active'
-        InvalidCostOperator='The cost operator is singular or badly conditioned'
+        NoProductiveState='The data model is not productive for state %s'
         SingularMatrix='The matrix is singular'
         NegativeMatrix='The Matrix has negative elements'
         % Diagnosis
@@ -117,7 +119,7 @@ classdef cMessages
         NoWasteAllocationValues='No allocation values defined for waste %s'
         NegativeWasteAllocation='Waste allocation value for waste %s cannot be NEGATIVE %f'
         InvalidAllocationProcess='Waste %s cannot be asssigned to dissipative units'
-        InvalidWasteOperator='The waste operator is singular or bad conditioned'
+        InvalidWasteOperator='The waste operator for State %s is singular or bad conditioned'
         InvalidWasteDefinition='Invalid waste defintion. See error log.'
         % Resource messages
         InvalidResourceValue='Resource %s value is negative %f'

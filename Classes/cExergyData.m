@@ -7,12 +7,14 @@ classdef cExergyData < cMessageLogger
 % 	  obj = cExergyData(ps, data)
 %
 %   cExergyData properties:
-%     ps			    - Productive Structure
+%     ps			  - Productive Structure
 %     State           - Exergy State
 %     FlowsExergy     - Exergy of Flows
 %     StreamsExergy   - Exergy of Streams
 %     ProcessesExergy - Exergy of Processes
 %     ActiveProcesses - Active Processes (not bypassed)
+%     AdjacencyTable  - Adjacency Table of the productive graph
+%	  AdjacencyMatrix - Adjacency Matrix of the productive graph
 %
 	properties(GetAccess=public,SetAccess=private)
 		ps				  % Productive Structure
@@ -21,6 +23,8 @@ classdef cExergyData < cMessageLogger
         StreamsExergy     % Exergy of Streams
         ProcessesExergy   % Exergy of Processes
 		ActiveProcesses   % Active Processes (not bypassed)
+		AdjacencyTable    % Adjacency Table of the productive graph
+		AdjacencyMatrix   % Adjacency Matrix of the productive graph
     end
     
 	methods
@@ -74,9 +78,7 @@ classdef cExergyData < cMessageLogger
 					B(id)=values(i).value;
                 end
             end
-			if ~obj.status
-				return
-			end
+			if ~obj.status, return; end
 			% Calculate exergy of productive groups
 			[E,ET]=ps.flows2Streams(B);
             % Check streams are non negative
@@ -124,13 +126,43 @@ classdef cExergyData < cMessageLogger
 			vEf=100*vDivide(vP,vF);
 			vK(bypass)=1;
 			vEf(bypass)=100;
-            % Assign values object class
-			if obj.status
+			if ~obj.status, return; end
+			% Build Exergy Adjacency Table
+			tbl=ps.AdjacencyMatrix;
+			tAE=scaleRow(tbl.AE,B);
+			tAS=scaleCol(tbl.AS,B);
+			tAF=scaleRow(tbl.AF,E);
+            tAP=scaleCol(tbl.AP,E);
+			% Demand Driven Adjacency Matrices
+			mbF=divideCol(tAF,vP);
+			mbP=divideCol(tAP,ET);
+			mbE=divideCol(tAE,ET);
+            mbS=divideCol(tAS,B);
+			A=mbS*mbE+mbF(:,1:end-1)*mbP(1:end-1,:);
+			% Validate Productive Graph and log errors if apply
+			if isNonSingularMatrix(A)
 				obj.ps=ps;
 				obj.FlowsExergy=B;
 				obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);
 				obj.StreamsExergy=struct('ET',ET,'E',E);
+				obj.AdjacencyTable=struct('AF',tAF,'AP',tAP,'AE',tAE,'AS',tAS);
+				obj.AdjacencyMatrix=struct('AF',mbF,'AP',mbP,'AE',mbE,'AS',mbS);
 				obj.ActiveProcesses= uint8(~bypass);
+			else
+				E=transitiveClosure(A);
+                v=tbl.AP(end,:);
+				w=tbl.AF(:,end);
+				s=v*E; t=E*w;
+				% Log errors
+            	ier=find(~s,1);
+            	for i=ier
+					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,ps.StreamKeys{i});
+            	end
+				ier=find(~t);
+            	for i=ier'
+					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,ps.StreamKeys{i});
+            	end
+				obj.messageLog(cType.ERROR,cMessages.NoProductiveState,obj.State);
 			end
         end
     end

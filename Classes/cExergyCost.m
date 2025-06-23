@@ -19,6 +19,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     TableR                 - Waste Allocation Table
 %     RecycleRatio           - Recycle ratio of each waste
 %     WasteWeight            - Weight of each waste
+%     SpectralRatio          - Spectral Ratio of the productive matrix (mG)
 %
 %   cExergyCost methods:
 %     buildResultInfo              - Build the cResultInfo object for THERMOECONOMIC_ANALYSIS
@@ -42,7 +43,6 @@ classdef (Sealed) cExergyCost < cExergyModel
         SystemUnitConsumption  % Total unit consumption of the system
         RecirculationFactor    % Recirculation factor of each process
         WasteWeight            % Weight of each waste
-        SpectralRatio          % Spectral Ratio of matrix mG
         fpOperators            % Structure containing FP Operators (mFP, mRP, opCP,opCR)
         pfOperators            % Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
         flowOperators          % Flow operators structure (mG, opB, opI, opR)
@@ -50,6 +50,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         WasteTable             % cWasteData object
         TableR                 % Waste Allocation Table
         RecycleRatio           % Recycle ratio of each waste
+        SpectralRatio          % Spectral Ratio of production matrix (mG)
     end
     properties(Access=private)
        mpL
@@ -76,14 +77,14 @@ classdef (Sealed) cExergyCost < cExergyModel
             % Get Flow Operators;
 			fpm=obj.FlowProcessModel;
             mG=fpm.mF(:,1:N)*fpm.mP(1:N,:)+fpm.mV;
-            opB=eye(M)/(eye(M)-mG);        
+            opB=eye(M)/(eye(M)-mG);
             obj.mpL=fpm.mP(1:N,:)*fpm.mL;
             obj.flowOperators=struct('mG',mG,'opB',zerotol(opB));
             % Get Process Operators
             tfp=obj.TableFP;        
             mPF=divideCol(tfp(:,1:N),obj.FuelExergy);
             mKP=scaleCol(mPF,vK);
-            opP=zerotol(eye(N)+fpm.mP(1:N,:)*opB*fpm.mF(:,1:N));
+            opP=eye(N)/(eye(N)-mKP(1:N,:));
             opI=scaleRow(opP,vk1);
             obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
@@ -98,7 +99,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 wlog=obj.updateWasteOperators;
                 if ~wlog.status
                     obj.addLogger(wlog);
-                    obj.messaggeLogger(cType.ERROR,cType.InvalidWasteDefinition)
+                    obj.messaggeLogger(cType.ERROR,cMessages.InvalidWasteOperator,obj.State);
                 end
             end
 		end
@@ -493,9 +494,9 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             % Check if waste operator is valid
             sol=scaleRow(sol,1-wt.RecycleRatio);
-            mS=eye(NR)-sol*opCP(:,aR);
-            if condest(mS) > cType.DMAX
-                log.messageLog(cType.ERROR,cMessages.InvalidWasteOperator);
+            mS=sol*opCP(:,aR);
+            if ~isNonSingularMatrix(mS)
+                log.messageLog(cType.ERROR,cMessages.InvalidWasteOperator,obj.State);
                 return
             end
             % Update object values
@@ -540,13 +541,13 @@ classdef (Sealed) cExergyCost < cExergyModel
             res=cSparseRow(mR.mRows,opR);
         end
 
-    end
+	end
 
     methods(Access=private)
         function setWasteTable(obj,wd)
-        % Set the Waste Table for the cExergyCost 
-        %  Input:
-        %   wd - cWasteData object
+        %setWasteTable -Set the Waste Table for the cExergyCost 
+        %   Input:
+        %     wd - cWasteData object
             if ~obj.isWaste
                 obj.messageLog(cType.ERROR,cMessages.NoWasteModel);
                 return
@@ -559,17 +560,21 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
 
         function res=getMinCost(obj,rsc)
-        % Calculate the minimun cost of the flows
-        %  Input:
-        %   rsc - cost of external resources
+        %getMinCost - Calculate the minimun cost of the flows
+        %   Input:
+        %     rsc - cost of external resources
+        %   Output:
+        %     res - Minimun cost of the flows
             N=obj.NrOfProcesses;
             res=(rsc.ce+rsc.zF)/(eye(N)-obj.pfOperators.mPF(1:N,:));
         end
     
         function cp=computeCostR(obj,aR)
-	    % Compute production cost including waste allocation, using table FP info
+	    %computeCostR - Compute production cost including waste allocation, using table FP info
         %   Input:
         %     aR - array with dissipative processes index
+        %   Output:
+        %     cp - production cost
 		    N=obj.NrOfProcesses;
 		    tmp=zeros(N,N);
 		    aP=setdiff(1:N,aR);

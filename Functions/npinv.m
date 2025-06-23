@@ -20,7 +20,7 @@ function [res,log]=npinv(A)
 		log.messageLog(cType.ERROR,cMessages.NoSquareMatrix);
 		return
 	end
-	if any(A(:) < -cType.EPS)
+	if ~isNonNegativeMatrix(A)
 		log.messageLog(cType.ERROR,cMessages.NegativeMatrix);
 		return
 	end

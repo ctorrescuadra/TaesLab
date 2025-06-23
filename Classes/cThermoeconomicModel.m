@@ -206,23 +206,19 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 sname=data.StateNames{i};
                 rex=data.getExergyData(i);
                 if ~rex.status
-                    obj.addLogger(rex);
-                    obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,sname);
-                    obj.printLogger;
-                    return
+                    rex.messageLog(cType.ERROR,cMessages.InvalidExergyData,sname);
+                    rex.printLogger;
                 end
                 if obj.isWaste
                     cex=cExergyCost(rex,obj.wd);
                 else
                     cex=cExergyCost(rex);
                 end
-                if ~cex.status
-                    obj.addLogger(cex);
-                    obj.messageLog(cType.ERROR,cMessages.NoComputeTA,sname);
-                    obj.printLogger;
-                    return
-                end
                 setValues(obj.rstate,i,cex);
+                if ~cex.status
+                    cex.messageLog(cType.ERROR,cMessages.NoComputeTA,sname);
+                    cex.printLogger;
+                end
             end
             % Set Operation and Reference State
             if obj.checkReferenceState(param.ReferenceState)
@@ -1373,10 +1369,15 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 
         function setStateInfo(obj)
         % Trigger exergy analysis
+            if ~isValid(obj.fp1)
+                return
+            end
             res=getExergyResults(obj.fmt,obj.fp1);
-            obj.setResults(res);
-            obj.printDebugInfo(cMessages.SetState,obj.State);
-            obj.setDiagramFP;
+            if res.status
+                obj.setResults(res);
+                obj.printDebugInfo(cMessages.SetState,obj.State);
+                obj.setDiagramFP;
+            end           
         end
 
         function setThermoeconomicAnalysis(obj)
@@ -1393,7 +1394,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 obj.setResults(res);
                 obj.printDebugInfo(cMessages.ComputeTA,obj.State);
             else
-                obj.fp1.printLogger;
                 obj.fp1.printError(cMessages.NoComputeTA,obj.State)
             end
             obj.setRecyclingResults;
@@ -1523,8 +1523,13 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end
-            obj.fp1=obj.rstate.getValues(state);
-            res=true;
+            tmp=obj.rstate.getValues(state);
+            if isValid(tmp)
+                obj.fp1=tmp;
+                res=true;
+            else
+                obj.printWarning(cMessages.InvalidStateName,state);
+            end
         end
 
         function triggerStateChange(obj)

@@ -303,12 +303,12 @@ classdef (Abstract) cTable < cMessageLogger
         function setStudyCase(obj,info)
         %setStudyCase. Set state and sample values. Internal function
         %   Syntax:
-        %     obj.saveTable(filename)
+        %     obj.setStudyCase(filename)
         %   Input Argument:
         %     info - Struct with state and sample names
         %   
             obj.State=info.State;
-            if obj.Resources
+            if obj.Resources && isfield(info.Sample)
                 obj.Sample=info.Sample;
             else
                 obj.Sample=cType.EMPTY_CHAR;

@@ -72,52 +72,31 @@ classdef cExergyModel < cResultId
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exd));
 				return
             end
-			N=exd.ps.NrOfProcesses;
 			M=exd.ps.NrOfFlows;
-			NS=exd.ps.NrOfStreams;
-			% Get Exergy Values
 			B=exd.FlowsExergy;
-			E=exd.StreamsExergy.E;
-            ET=exd.StreamsExergy.ET;
-			vP=exd.ProcessesExergy.vP;
-            vF=exd.ProcessesExergy.vF;
-			vP(end)=sum(B(exd.ps.Resources.flows));
+			vF=exd.ProcessesExergy.vF;
 			vF(end)=sum(B(exd.ps.SystemOutput.flows));
 			% Build Exergy Adjacency Tables
-			tbl=exd.ps.AdjacencyMatrix;
-			tAE=scaleRow(tbl.AE,B);
-			tAS=scaleCol(tbl.AS,B);
-			tAF=scaleRow(tbl.AF,E);
-            tAP=scaleCol(tbl.AP,E);
+			tbl=exd.AdjacencyTable;
+			mat=exd.AdjacencyMatrix;
 			% Demand Driven Adjacency Matrices
-			mbF=divideCol(tAF,vP);
-			mbF0=divideCol(tAF,vF);
-			mbP=divideCol(tAP,ET);
-			mS=double(tbl.AS);
-			mE=divideCol(tAE,ET);
-			% Check if model is valid. Octave compatibility
-			A=eye(NS)-mbF(:,1:N)*mbP(1:N,:)-mS*mE;
-			if condest(A) > cType.DMAX
-                obj.messageLog(cType.ERROR,cMessages.InvalidCostOperator);
-                return
-			end
+			AF0=divideCol(tbl.AF,vF);
 			% Build the Flow-Process Table
-			mgF=mE*mbF;
-			mgF0=mE*mbF0;
-			tgF=mE*tAF;
-			mgP=mbP*mS;
+			mgF=mat.AE*mat.AF;
+			mgF0=mat.AE*AF0;
+			tgF=mat.AE*tbl.AF;
+			mgP=mat.AP*mat.AS;
 			% Build table FP
 			if exd.ps.isModelIO
 				mgV=sparse(M,M);
 				mgL=eye(M);
 				tfp=mgP*tgF;
 			else
-				mgV=mE*mS;
+				mgV=mat.AE*mat.AS;
 				mgL=eye(M)/(eye(M)-mgV);
 				tfp=mgP*mgL*tgF;
 			end
 			% Build the object
-			obj.AdjacencyTable=struct('tE',tAE,'tS',tAS,'tF',tAF,'tP',tAP);
 			obj.FlowProcessModel=struct('mV',mgV,'mF',mgF,'mF0',mgF0,'mP',mgP,'mL',mgL);
 			obj.TableFP=full(tfp);
             obj.ps=exd.ps;
@@ -125,9 +104,10 @@ classdef cExergyModel < cResultId
 			obj.NrOfProcesses=exd.ps.NrOfProcesses;
 			obj.NrOfStreams=exd.ps.NrOfStreams;
 			obj.NrOfWastes=exd.ps.NrOfWastes;
-			obj.FlowsExergy=B;			
+			obj.FlowsExergy=exd.FlowsExergy;			
 			obj.ProcessesExergy=exd.ProcessesExergy;
 			obj.StreamsExergy=exd.StreamsExergy;
+			obj.AdjacencyTable=exd.AdjacencyTable;
             obj.ActiveProcesses=exd.ActiveProcesses;
 			obj.DefaultGraph=cType.Tables.TABLE_FP;
 			% cResultId properties
@@ -265,5 +245,5 @@ classdef cExergyModel < cResultId
 		%
             res=fmt.getExergyResults(obj);
         end
-	end		
+    end
 end

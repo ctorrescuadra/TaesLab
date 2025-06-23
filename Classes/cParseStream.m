@@ -159,7 +159,7 @@ classdef cParseStream
         %     test - true/false
 			prev=1;par=0;
             tt=cParseStream.TRANSITION_TABLE;
-			exp=upper(strtrim(exp));
+			exp=upper(exp);
 			for i=1:length(exp) %Read characters
 				act=cParseStream.getType(exp(i));
                 if ~act

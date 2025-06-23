@@ -262,7 +262,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         function res=getSummaryResults(obj,sr)
         %getSummaryResults - Get the cResultInfo for Summary Results
         %   Syntax
-        %     res = getSummayResults(ms)
+        %     res = obj.getSummayResults(sr)
         %   Input Arguments:
         %     sr - cSummaryResults object
         %   Output Arguments:

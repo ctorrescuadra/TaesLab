@@ -114,6 +114,7 @@ classdef cDataModel < cResultSet
             list=dm.getStateNames;
             if ~cParseStream.checkListNames(list)
                 obj.messageLog(cType.ERROR,cMessages.InvalidStateList);
+                return
             end
             tmp=cDataset(list);
             if tmp.status

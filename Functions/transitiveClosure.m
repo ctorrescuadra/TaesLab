@@ -11,7 +11,12 @@ function res=transitiveClosure(A)
 %   Output Arguments
 %     res - Connectivity matrix
 %
-    res=A;
+    if issparse(A)
+        res=full(A);
+    else
+        res=A;
+    end
+    if ~islogical(res), res=logicalMatrix(res); end
     for k = 1:size(A,1)
         res = res | (res(:, k) * res(k, :));
     end

@@ -70,13 +70,13 @@ classdef cType
 		DIRECT_SUMMARY_TABLES=4   % Number of Direct Cost Summary Tables
 		GENERAL_SUMMARY_TABLES=8  % Number of Generalized Cost Summary Tables
 		EPS=1.0e-8                % Zero value for tolerance
-		DMAX=1.0e+8               % Infinite value for tolerance
 		DEFAULT_NUM_LENGHT=10     % Default number length (use in cTableData)
         ON='on'                   % GUI on text
         OFF='off'                 % GUI off text                      
 		FUEL='FUEL'               % Fuel type option text
 		PRODUCT='PRODUCT'         % Product type option text
 		FORMAT_ID='%3d'           % Line number format
+		SPACES='\s+'              % Spaces Regular Expresion
 		DEBUG_MODE=false
 		% Node types
 		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3,'ENV',4);

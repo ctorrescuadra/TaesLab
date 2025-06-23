@@ -175,8 +175,11 @@ classdef cProductiveStructure < cResultId
             end
             % Convert properties to structures
 			obj.Flows=cell2mat(obj.cflw);
-			obj.Streams=cell2mat(obj.cstr);
 			obj.Processes=cell2mat(obj.cprc);
+            obj.Streams=cell2mat(obj.cstr);
+            obj.FlowKeys={obj.Flows.key};
+            obj.ProcessKeys={obj.Processes.key};
+            obj.StreamKeys={obj.Streams.key};
 			% Build productive structure lists (internal)
 			fto=[obj.Flows.to];
 			ffrom=[obj.Flows.from];
@@ -203,30 +206,6 @@ classdef cProductiveStructure < cResultId
 		%%%%%
 		% Public get properties
 		%%%%%
-		function res=get.FlowKeys(obj)
-		% Get the Flows keys as cell array
-			res=cType.EMPTY_CELL;
-			if obj.status
-				res={obj.Flows.key};
-			end
-		end
-
-		function res=get.ProcessKeys(obj)
-		% Get the Processes keys as cell array
-			res=cType.EMPTY_CELL;
-			if obj.status
-				res={obj.Processes.key};
-			end
-		end
-
-		function res=get.StreamKeys(obj)
-		% Get the Streams keys as cell array
-			res=cType.EMPTY_CELL;
-			if obj.status
-				res={obj.Streams.key};
-			end
-        end
-		
 		function res=get.Waste(obj)
 		% Get an array with flows defined as waste.
 			res=cType.EMPTY;
@@ -326,6 +305,17 @@ classdef cProductiveStructure < cResultId
 				res1=iAF; res2=iAP;
 			end
 		end
+
+		function res=StreamMatrix(obj)
+		%StreamMatrix - Get the Streams graph adjacency matrix
+		%   Syntax:
+		%     res = obj.StructuralMatrix
+		%   Output Argument
+		%     res - logical matrix
+		%
+			x=obj.AdjacencyMatrix;
+			res=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
+        end
 	
 		function res=StructuralMatrix(obj)
 		%StructuralMatrix - Get the Structural Theory Flows Adjacency Matrix
@@ -601,14 +591,18 @@ classdef cProductiveStructure < cResultId
 			if isempty(ptype)	        
 				obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,data.type,data.key);
 			end
-			if ~cParseStream.checkDefinitionFP(data.fuel) % Check Fuel stream
+			% Check Fuel stream
+			data.fuel=regexprep(data.fuel,cType.SPACES,cType.EMPTY_CHAR);
+			if ~cParseStream.checkDefinitionFP(data.fuel)
 				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
 			end
 			fl=cParseStream.getFlowsList(data.fuel);
 			if ~obj.fDict.existsKey(fl)
 				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
-			end  
-			if ~cParseStream.checkDefinitionFP(data.product) % Check Product stream
+			end
+			% Check Product stream
+			data.product=regexprep(data.product,cType.SPACES,cType.EMPTY_CHAR);
+			if ~cParseStream.checkDefinitionFP(data.product) 
 				obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,data.product,data.key);
 			end
 			fl=cParseStream.getFlowsList(data.product);
@@ -805,18 +799,30 @@ classdef cProductiveStructure < cResultId
         end
 
         function res=checkGraphConnectivity(obj)
-		%Check the graph connectivity
+		%Check the productive graph connectivity
 		%   The algorithm calculates the transitive closure (logical inverse matrix)
-		%   of the Stream Process Matrix
+		%   of the Flow Matrix
 		%   Output Arguments:
-		%     res - true | false indicating if the productive graph is a network
-		%
-			x=obj.AdjacencyMatrix;
-			A=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
+		%     res - true | false
+            res=true;
+            %Compute the transitive closure of Flows matrix
+			A=obj.StreamMatrix;
 			E=transitiveClosure(A);
-			y1=x.AP(end,:)*E; 
-			y2=E*x.AF(:,end);
-			res=all(y1) && all(y2');
+			x=obj.AdjacencyMatrix;
+            w=x.AF(:,end);
+			v=x.AP(end,:);
+			s=v*E; t=E*w;
+            if all(s) && all(t), return; end
+            % Error Log if fails
+            ier=find(~s,1);
+            for i=1:ier
+				obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.StreamKeys{i});
+            end
+			ier=find(~t);
+            for i=ier'
+				obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.StreamKeys{i});
+            end
+            res=false;
 		end
 
     end
