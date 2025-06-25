@@ -857,7 +857,7 @@
 			"id": 22,
 			"key": "pat",
 			"number": false,
-			"description": "Process Diagram",
+			"description": "Processes Diagram",
 			"resultId": 6,
 			"graph": 7,
 			"columns": 3,

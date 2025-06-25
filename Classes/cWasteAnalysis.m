@@ -123,7 +123,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             wId=wt.getWasteIndex(obj.wasteFlow);
             idx=wt.Flows(wId);
             % Get Output Flows Id
-            tmp=ps.FinalProducts.flows;
+            tmp=ps.FinalProductFlows;
             outputId=[tmp,idx];
             obj.OutputFlows=ps.FlowKeys(outputId);
             % Save original values

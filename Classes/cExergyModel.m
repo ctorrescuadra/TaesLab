@@ -75,7 +75,7 @@ classdef cExergyModel < cResultId
 			M=exd.ps.NrOfFlows;
 			B=exd.FlowsExergy;
 			vF=exd.ProcessesExergy.vF;
-			vF(end)=sum(B(exd.ps.SystemOutput.flows));
+			vF(end)=sum(B(exd.ps.SystemOutputFlows));
 			% Build Exergy Adjacency Tables
 			tbl=exd.AdjacencyTable;
 			mat=exd.AdjacencyMatrix;
@@ -193,7 +193,7 @@ classdef cExergyModel < cResultId
 		%   Syntax:
 		%     res=obj.TotalOutput
 		%
-			ind=obj.ps.SystemOutput.flows;
+			ind=obj.ps.SystemOutputFlows;
 			res=sum(obj.FlowsExergy(ind));
 		end
 

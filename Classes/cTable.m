@@ -308,7 +308,7 @@ classdef (Abstract) cTable < cMessageLogger
         %     info - Struct with state and sample names
         %   
             obj.State=info.State;
-            if obj.Resources && isfield(info.Sample)
+            if obj.Resources && isfield(info,'Sample')
                 obj.Sample=info.Sample;
             else
                 obj.Sample=cType.EMPTY_CHAR;
@@ -329,6 +329,7 @@ classdef (Abstract) cTable < cMessageLogger
             end
         end
     end
+    
     methods(Access=protected)
         function log=exportCSV(obj,filename)
         %exportCSV - save table values as CSV file

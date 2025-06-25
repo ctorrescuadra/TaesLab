@@ -59,7 +59,7 @@ classdef cResourceData < cMessageLogger
 			obj.Z=zeros(1,ps.NrOfProcesses);
 			obj.c0=zeros(1,ps.NrOfFlows);
 			obj.sample=data.sampleId;
-			obj.frsc=ps.Resources.flows;
+			obj.frsc=ps.ResourceFlows;
 			obj.ps=ps;
 			% Check Resource Flows data
 			for i=1:length(se)

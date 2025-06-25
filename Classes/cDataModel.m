@@ -574,8 +574,8 @@ classdef cDataModel < cResultSet
             if obj.isResourceCost
 				colNames=[{'Key','Type'},obj.SampleNames];
 				%Flows
-                fId=ps.Resources.flows;
-				rNames=fNames(ps.Resources.flows);
+                fId=ps.ResourceFlows;
+				rNames=fNames(ps.ResourceFlows);
 				rTypes=repmat({'FLOW'},numel(rNames),1);
 				rval=zeros(numel(fId),obj.NrOfSamples);
                 for i=1:obj.NrOfSamples

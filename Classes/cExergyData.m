@@ -93,8 +93,8 @@ classdef cExergyData < cMessageLogger
 			vF=E*tbl.AF;
 			vP=E*tbl.AP';
 			% Calculate total system values
-			vF(end)=sum(B(ps.Resources.flows));
-			vP(end)=sum(B(ps.FinalProducts.flows));
+			vF(end)=sum(B(ps.ResourceFlows));
+			vP(end)=sum(B(ps.FinalProductFlows));
 			if zerotol(vF(end)) == 0
 				obj.messageLog(cType.ERROR,cMessages.NoResources);
 			end
@@ -147,20 +147,18 @@ classdef cExergyData < cMessageLogger
 				obj.StreamsExergy=struct('ET',ET,'E',E);
 				obj.AdjacencyTable=struct('AF',tAF,'AP',tAP,'AE',tAE,'AS',tAS);
 				obj.AdjacencyMatrix=struct('AF',mbF,'AP',mbP,'AE',mbE,'AS',mbS);
-				obj.ActiveProcesses= uint8(~bypass);
+				obj.ActiveProcesses= logical(~bypass);
 			else
-				E=transitiveClosure(A);
-                v=tbl.AP(end,:);
-				w=tbl.AF(:,end);
-				s=v*E; t=E*w;
+				E = eye(N+1) | logicalMatrix(mbP) * transitiveClosure(A) * logicalMatrix(mbF);
+                s=E(end,:);t=E(:,end);
 				% Log errors
             	ier=find(~s,1);
             	for i=ier
-					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,ps.StreamKeys{i});
+					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,ps.ProcessKeys{i});
             	end
-				ier=find(~t);
-            	for i=ier'
-					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,ps.StreamKeys{i});
+				ier=transpose(find(~t));
+            	for i=ier
+					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,ps.ProcessKeys{i});
             	end
 				obj.messageLog(cType.ERROR,cMessages.NoProductiveState,obj.State);
 			end

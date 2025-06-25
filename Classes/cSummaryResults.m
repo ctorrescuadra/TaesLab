@@ -200,7 +200,7 @@ classdef (Sealed) cSummaryResults < cResultId
         % Output Argument
         %   res - cell array with system output flows names
             ps=obj.dm.ProductiveStructure;
-            id=ps.SystemOutput.flows;
+            id=ps.SystemOutputFlows;
             res=ps.FlowKeys(id);
         end
     
@@ -211,7 +211,7 @@ classdef (Sealed) cSummaryResults < cResultId
         % Output Argument
         %   res - cell array with system output processes names
             ps=obj.dm.ProductiveStructure;
-            id=ps.SystemOutput.processes;
+            id=ps.OutputProcesses;
             res=ps.ProcessKeys(id);
         end
 
