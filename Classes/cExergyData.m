@@ -90,15 +90,17 @@ classdef cExergyData < cMessageLogger
 			end
 			% Compute and check Process Fuel and Product Exergy
             tbl=ps.AdjacencyMatrix;
-			vF=E*tbl.AF;
-			vP=E*tbl.AP';
-			% Calculate total system values
-			vF(end)=sum(B(ps.ResourceFlows));
-			vP(end)=sum(B(ps.FinalProductFlows));
+			eF=E*tbl.AF;
+			eP=E*tbl.AP';
+			% Compute global plant resources and production 
+			Bin=sum(B(ps.ResourceFlows));
+			Bout=sum(B(ps.FinalProductFlows));
+			vF=[eF(1:end-1),Bin];
+			vP=[eP(1:end-1),Bout];
 			if zerotol(vF(end)) == 0
 				obj.messageLog(cType.ERROR,cMessages.NoResources);
 			end
-			if zerotol(vP(end)) == 0
+			if zerotol(Bout) == 0
 				obj.messageLog(cType.ERROR,cMessages.NoOutputs);
 			end
 			% Check Irreversibility are non-negative
@@ -134,7 +136,7 @@ classdef cExergyData < cMessageLogger
 			tAF=scaleRow(tbl.AF,E);
             tAP=scaleCol(tbl.AP,E);
 			% Demand Driven Adjacency Matrices
-			mbF=divideCol(tAF,vP);
+			mbF=divideCol(tAF,eP);
 			mbP=divideCol(tAP,ET);
 			mbE=divideCol(tAE,ET);
             mbS=divideCol(tAS,B);

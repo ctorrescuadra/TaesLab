@@ -9,7 +9,6 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     SystemOutput           - System Output of processes
 %     FinalDemand            - Final Demand of processes
 %     Resources              - External resources of processes
-%     SystemUnitConsumption  - Total unit consumption of the system
 %     RecirculationFactor    - Recirculation factor of each process
 %     fpOperators            - Structure containing FP Operators (mFP, mRP, opCP,opCR)
 %     pfOperators            - Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
@@ -40,7 +39,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         SystemOutput           % System Output of processes
         FinalDemand            % Final Demand of processes
         Resources              % External resources of processes
-        SystemUnitConsumption  % Total unit consumption of the system
+        SystemUnitCost         % System Unit Consumption
         RecirculationFactor    % Recirculation factor of each process
         WasteWeight            % Weight of each waste
         fpOperators            % Structure containing FP Operators (mFP, mRP, opCP,opCR)
@@ -90,7 +89,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
             opCP=similarResourceOperator(opP,obj.ProductExergy);
             obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
-            obj.SpectralRatio=abs(eigs(mG,1));
+            obj.SpectralRatio=eigs(mG,1,'lm');
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
             % Initialize waste operators
             if (nargin==2) && (obj.NrOfWastes>0)
@@ -128,9 +127,16 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res=obj.TableFP(end,1:end-1);
             end
         end
-    
-        function res=get.SystemUnitConsumption(obj)
-        % Get the total unit consumtion of the sistem
+
+        function res=get.SystemUnitCost(obj)
+        %SystemUnitConsumption - Get the total unit consumption of the system 
+        %   It take into account waste recycling as final product
+        %
+        %   Syntax:
+        %     res=obj.SystemUnitConsumption
+        %   Output Arguments
+        %     res - Total unit consumption value
+        %  
             res=cType.EMPTY;
             if obj.status
                 res=sum(obj.Resources)/sum(obj.FinalDemand);

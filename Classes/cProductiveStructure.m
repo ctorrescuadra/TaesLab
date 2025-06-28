@@ -470,7 +470,7 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments:  
 		%     res - Array with the ids of the flows of this type
 		%
-			res=find(obj.ftypes==typeId,1);
+			res=find(obj.ftypes==typeId);
 		end
 	
 		function res=getProcessTypes(obj,typeId)

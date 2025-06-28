@@ -23,6 +23,7 @@ classdef cExergyModel < cResultId
 %     Efficiency           - Process Efficiency
 %     TotalResources	   - Total Resources Exergy
 %     FinalProducts        - Final Products Exergy
+%     TotalOutput          - Total Output Exergy (OUTPUT,WASTE)
 %     TotalIrreversibility - Total Irreversibility
 %     TotalUnitConsumption - Total Unit Consumption
 %     ActiveProcesses      - Active Processes Array (not bypassed)
@@ -54,12 +55,13 @@ classdef cExergyModel < cResultId
         Efficiency            % Process Efficiency
 		TotalResources		  % Total Resources
 		FinalProducts         % Final Products
+		TotalOutput
 		TotalIrreversibility  % Total Irreversibility
 		TotalUnitConsumption  % Total Unit Consumption
         ActiveProcesses       % Active Processes (not bypass)
 	    ps					  % Productive Structure
     end
-    
+
 	methods
 		function obj=cExergyModel(exd)
 		%cExergyModel - Create an instance of the class	
@@ -73,17 +75,12 @@ classdef cExergyModel < cResultId
 				return
             end
 			M=exd.ps.NrOfFlows;
-			B=exd.FlowsExergy;
-			vF=exd.ProcessesExergy.vF;
-			vF(end)=sum(B(exd.ps.SystemOutputFlows));
 			% Build Exergy Adjacency Tables
 			tbl=exd.AdjacencyTable;
 			mat=exd.AdjacencyMatrix;
 			% Demand Driven Adjacency Matrices
-			AF0=divideCol(tbl.AF,vF);
 			% Build the Flow-Process Table
 			mgF=mat.AE*mat.AF;
-			mgF0=mat.AE*AF0;
 			tgF=mat.AE*tbl.AF;
 			mgP=mat.AP*mat.AS;
 			% Build table FP
@@ -96,6 +93,10 @@ classdef cExergyModel < cResultId
 				mgL=eye(M)/(eye(M)-mgV);
 				tfp=mgP*mgL*tgF;
 			end
+			% Compute mgF0 adjacency matrix
+			vF=sum(tfp,1);
+			AF0=divideCol(tbl.AF,vF);
+			mgF0=mat.AE*AF0;
 			% Build the object
 			obj.FlowProcessModel=struct('mV',mgV,'mF',mgF,'mF0',mgF0,'mP',mgP,'mL',mgL);
 			obj.TableFP=full(tfp);
@@ -152,7 +153,7 @@ classdef cExergyModel < cResultId
 		% Get the effciency of the processes
 			res=cType.EMPTY;
 			if obj.status
-            	res=vDivide(obj.ProductExergy,obj.FuelExergy);
+				res.ProcessesExergy(vEf)
 			end
         end
 
@@ -188,13 +189,15 @@ classdef cExergyModel < cResultId
 			end
         end
 
-		function res=TotalOutput(obj)
+		function res=get.TotalOutput(obj)
 		%TotalOutput - get the total output exergy
 		%   Syntax:
 		%     res=obj.TotalOutput
 		%
-			ind=obj.ps.SystemOutputFlows;
-			res=sum(obj.FlowsExergy(ind));
+			res=cType.EMPTY;
+			if obj.status
+				res=sum(obj.TableFP(1:end-1,end));
+			end
 		end
 
 		function res=InternalIrreversibility(obj)

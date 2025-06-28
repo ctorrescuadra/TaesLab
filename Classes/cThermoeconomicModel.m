@@ -23,11 +23,8 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     ResourceSample  - Current Resource sample name
 %     ReferenceState  - Active Reference state name
 %     CostTables      - Selected Cost Result Tables
-%       'DIRECT' | 'GENERALIZED' | 'ALL'
 %     DiagnosisMethod - Method to calculate fuel impact of wastes
-%	    'NONE' | 'WASTE_EXTERNAL' | 'WASTE_INTERNAL'
 %     Summary         - Summary Results Selected
-%       'NONE' | 'STATES' | 'RESOURCES'
 %     Recycling       - Recycling Analysis active (true | false)
 %     ActiveWaste     - Active waste flow name for Waste Analysis
 %
@@ -1152,9 +1149,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         function log=setWasteRecycled(obj,val)
         %setWasteRecycled - Set the waste recycling ratios
         % Syntax:
-        %   log = obj.setWasteValues(val)
+        %   log = obj.setWasteRecycled(val)
         % Input Arguments:
-        %   val - vector containing the recycling ratios of each waste
+        %   val - Recycling ratio of the active waste
         % Output Arguments:
         %   log - cMessageLogger with the status and messages of operation
         %
