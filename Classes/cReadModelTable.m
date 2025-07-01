@@ -1,5 +1,5 @@
 classdef (Abstract) cReadModelTable < cReadModel
-% cReadModelTable Abstract class to read table data model
+% cReadModelTable - Abstract class to read table data model.
 %   This class derives cReadModelCSV and cReadmodelXLS
 %   
 %   cReadModelTable Methods:

@@ -1,5 +1,5 @@
 classdef (Sealed) cReadModelXML < cReadModelStruct
-% cReadModelXML implements the cReadModel to read XML data model files
+% cReadModelXML implements the cReadModelStruct to read XML data model files.
 %   This class read a XML file containing the thermoeconomic model data
 %   and store it into a structure data
 %

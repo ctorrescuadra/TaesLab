@@ -1,5 +1,5 @@
 function SaveSummary(model,filename)
-%SaveSummary - Save the summary model results into a file
+%SaveSummary - Save the summary results into a file.
 %   The available formats are: XLSX, CSV, JSON, XML, and MAT.
 %   Displays a message about the status of the operation.
 %   Used as an interface for cResultSet/saveSummary.

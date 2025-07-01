@@ -1,5 +1,5 @@
 function res=isObject(obj,class)
-    %isObject - Check is a cTaesLab object belong to a specific class
+    %isObject - Check is a cTaesLab object belong to a specific class.
     %
     %   Syntax:
     %     res = isObject(obj,class)

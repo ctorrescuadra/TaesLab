@@ -1,5 +1,5 @@
 classdef (Sealed) cResultTableBuilder < cFormatData
-% cResultTableBuilder generates the cResultInfo objects for the calculation layer
+% cResultTableBuilder - Build the cResultInfo objects for the calculation layer
 %   This class provide methods to obtain the cResultInfo object of each function application
 %
 %   cResultTableBuilder constructor:

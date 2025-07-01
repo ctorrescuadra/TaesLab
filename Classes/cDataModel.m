@@ -1,7 +1,7 @@
 classdef cDataModel < cResultSet
-%cDataModel - is the data dispatcher for the thermoeconomic analysis classes.
+%cDataModel - Create the data model object.
 %   It receives the data from the cReadModel interface classes, then validates
-%   and organizes the information to be used by the calculation algorithms.
+%   and dispatch the information to be used by the calculation algorithms.
 %
 %   cDataModel constructor:
 %     obj = cDataModel(dm)

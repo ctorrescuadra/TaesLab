@@ -1,5 +1,5 @@
 classdef (Abstract) cGraphResults < cMessageLogger
-%cGraphResults - Abstract class for show graphs in interactive mode and apps
+%cGraphResults - Abstract class used to show graphs in interactive mode and apps.
 %   
 %   cGraphResults Derived classes:
 %     cDigraph        - Show productive structure diagrams

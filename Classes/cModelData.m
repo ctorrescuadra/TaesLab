@@ -1,5 +1,5 @@
 classdef (Sealed) cModelData < cMessageLogger
-%cModelData - is a container class of the Data Model structure
+%cModelData - Container class for the Data Model structure.
 %   Contains the data model from read interface
 %
 %   cModelData constructor:

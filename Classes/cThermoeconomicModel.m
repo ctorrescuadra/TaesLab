@@ -1,5 +1,5 @@
 classdef (Sealed) cThermoeconomicModel < cResultSet
-%cThermoeconomicModel - Interactive tool for thermoeconomic analysis
+%cThermoeconomicModel - Create the thermoeconomic model results object.
 %   It is the main class of TaesLab package, and provide the following functionality:
 %   - Read and check a thermoeconomic data model
 %   - Compute direct and generalized exergy cost

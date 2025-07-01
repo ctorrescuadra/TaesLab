@@ -1,5 +1,5 @@
 classdef cWasteData < cMessageLogger
-%cWasteData - store the waste data information.
+%cWasteData - Get the waste data information.
 %
 %   cWasteData constructor:
 %     obj = cWasteData(ps,data)

@@ -1,5 +1,5 @@
 classdef cDictionary < cMessageLogger
-%cDictionary implementa a (key, id) dictionary for TaesLab
+%cDictionary - Implementa a (key, id) dictionary for TaesLab.
 %	It uses the containers.Map class
 %
 %   cDictionary constructor:
@@ -66,6 +66,7 @@ classdef cDictionary < cMessageLogger
 		%     res - Index of the key.
 		%
 			res=0;
+			if ~ischar(key), return; end
 			if obj.map.isKey(key)
 				res=obj.map(key);
 			end

@@ -1,5 +1,5 @@
 classdef (Sealed) cViewTable < cMessageLogger
-%cViewTable shows a table of results via GUI (uitable)
+%cViewTable - Show a result table using a GUI (uitable)
 % 	called by showTable/cTable method with GUI option
 % 
 %   cViewTable Methods:

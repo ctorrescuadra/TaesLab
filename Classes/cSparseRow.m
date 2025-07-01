@@ -1,5 +1,5 @@
 classdef  cSparseRow < cMessageLogger
-	% cSparseRow Defines objects to store matrix which contains a few non-null rows.
+	% cSparseRow - Store and operate with matrices that contain few non-null rows.
 	%	This class is used to manage  waste allocation matrices, and provide a set of
 	%   algebraic operations. 
 	%

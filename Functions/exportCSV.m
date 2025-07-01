@@ -1,5 +1,5 @@
 function log=exportCSV(values,filename)
-%exportCSV - Save a cell array as CSV file
+%exportCSV - Save a cell array as CSV file.
 %   Octave/Matlab compatibility
 %
 %   Syntax

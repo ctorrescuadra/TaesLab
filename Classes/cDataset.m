@@ -1,5 +1,5 @@
 classdef(Sealed) cDataset < cDictionary
-%cDataset creates a container to store data and to access it by key or index
+%cDataset - Class container to store data and to access it by key or index.
 %   This class is used to store cExergyData, cExergyCost, and cResourceData objects
 %   and access by state name or sample name.
 %

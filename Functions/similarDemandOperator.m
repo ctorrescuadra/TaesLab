@@ -1,5 +1,5 @@
 function B = similarDemandOperator(A, x)
-%similarOperator - Compute the demand-driven operator from the resource-drive operator
+%similarOperator - Compute the demand-driven operator from the resource-drive operator.
 %   Compute B(i,j) = x(i) * A(i,j) * (1./x(j)), making sure the diagonal of A remains invariant.
 %
 %   Syntax

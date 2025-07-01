@@ -1,5 +1,5 @@
 classdef cResourceCost < cMessageLogger
-%cResourceCost computes the resources cost values properties for a state
+%cResourceCost - Compute the resource cost properties for a state.
 %
 %   cResourceCost constructor
 %     obj = cResourceCost(rsd, exm)
@@ -22,6 +22,7 @@ classdef cResourceCost < cMessageLogger
         zP      % Cost associated to process per unit of Product
         zF      % Cost associated to process per unit of Fuel
 	end
+
 	methods		
 		function obj=cResourceCost(rsd,exm)
 		%cResourceCost - Create an instance of the class

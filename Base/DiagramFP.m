@@ -1,5 +1,5 @@
 function res=DiagramFP(data,varargin)
-%DiagramFP - Gets the FP diagrams for a plant state.
+%DiagramFP - Get the FP diagrams for a plant state.
 %   These diagrams can be represented graphically using the ShowGraph function, 
 %   or using external graphics software such as yEd, saving the adjacency tables
 %   of the graph in xlsx format.

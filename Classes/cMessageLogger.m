@@ -1,5 +1,5 @@
 classdef cMessageLogger < cTaesLab
-%cStatusLogger - Create and manage a messages logger for cTaesLab objects
+%cStatusLogger - Create and manage a messages logger for cTaesLab objects.
 %
 %   cMessageLogger constructor
 %     obj=cMessageLogger(status)

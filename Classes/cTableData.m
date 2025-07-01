@@ -1,5 +1,5 @@
 classdef cTableData < cTable
-%cTableData - Implement cTable to store data model tables
+%cTableData - Implement cTable to store data model tables.
 % 
 %   cTableData Methods:
 %     cTableData.create    - Create table from cell array

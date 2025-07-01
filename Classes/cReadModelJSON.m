@@ -1,5 +1,5 @@
 classdef (Sealed) cReadModelJSON < cReadModelStruct
-%cReadModelXML implements the cReadModel to read JSON data model files
+%cReadModelXML - Implement the cReadModelStruct to read JSON data model files.
 %   This class read a JSON file containing the thermoeconomic model data
 %   and build the data model
 %

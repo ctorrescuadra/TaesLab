@@ -1,5 +1,5 @@
 classdef (Sealed) cDiagramFP < cResultId
-%cDiagramFP obtain the adjacency tables of the diagramFP
+%cDiagramFP - Build the Diagram FP adjacency tables.
 %
 %   cDiagramFP constructor:
 %     obj = cDiagramFP(exc)

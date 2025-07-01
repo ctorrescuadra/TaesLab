@@ -1,5 +1,5 @@
 function model=ThermoeconomicModel(filename,varargin)
-%ThermoeconomicModel - Creates a cThermoeconomicModel object from a data model file 
+%ThermoeconomicModel - Creates a cThermoeconomicModel object from a data model file.
 %   This function creates a cThermoeconomicModel object. Once the object has been created, 
 %   all the functions available in the class can be used, 
 %   allowing you to obtain all the results of a thermoeconomic analysis interactively.

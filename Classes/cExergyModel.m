@@ -1,5 +1,5 @@
 classdef cExergyModel < cResultId
-%cExergyModel Builds the Flow-Process exergy model
+%cExergyModel - Build the Flow-Process exergy model.
 %   It provides the exergy analysis results and the FP table of a state of the plant
 %
 %   cExergyModel constructor:

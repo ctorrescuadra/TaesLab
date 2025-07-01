@@ -1,5 +1,5 @@
 classdef (Abstract) cReadModelStruct < cReadModel
-%cReadModelStruct Abstract class to read structured data model
+%cReadModelStruct - Abstract class to read structured data model.
 %   This class derives cReadModelJSON and cReadModelXML
 %
 %   cReadModelStruct methods

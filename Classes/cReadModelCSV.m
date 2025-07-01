@@ -1,5 +1,5 @@
 classdef cReadModelCSV < cReadModelTable
-%cReadModelCSV implements the cReadModel to read XLSX data model files
+%cReadModelCSV - Implements the cReadModelTable to read XLSX data model files.
 %   This class read a set of CSV files containing the thermoeconomic model data
 %   and build the data model
 % 

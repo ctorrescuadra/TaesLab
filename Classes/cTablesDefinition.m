@@ -1,5 +1,5 @@
 classdef cTablesDefinition < cMessageLogger
-%cTablesDefinition reads the tables format configuration file 
+%cTablesDefinition - Read and store the tables format configuration file. 
 %   This class is use for two purposes:
 %   - This class is defined as base class of cFormatData reading the printformat.json
 %   - Provide information of the result tables of the application (TablesDirectory)

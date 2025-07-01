@@ -1,5 +1,5 @@
 function res = ExportResults(arg,varargin)
-%ExportResults - Exports the results tables in the selected format.
+%ExportResults - Exports the results tables in different formats.
 %   If the option 'Table' is not used, the function returns a structure with all tables converted to the desired format. 
 %
 %   Syntax

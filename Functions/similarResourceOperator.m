@@ -1,5 +1,5 @@
 function B = similarResourceOperator(A, x)
-%similarOperator - Compute the resource-driven operator from the demmand drive operator
+%similarOperator - Compute the resource-driven operator from the demmand drive operator.
 %   Compute B(i,j) = (1/x(i)) * A(i,j) * x(j), making sure the diagonal of A remains invariant.
 %
 %   Syntqx

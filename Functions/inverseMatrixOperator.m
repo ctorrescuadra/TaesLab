@@ -1,5 +1,5 @@
 function [res,log]=inverseMatrixOperator(A)
-%npinv - calculate the inverse of the M-Matrix, I - A 
+%npinv - Calculate the inverse of the M-Matrix, I-A.
 %   Use matlab algorithms with error logs control
 %	
 %	Usage

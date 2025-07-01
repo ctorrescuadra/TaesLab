@@ -1,5 +1,5 @@
 classdef cProductiveStructure < cResultId
-%cProductiveStructure - Build the productive structure of a plant
+%cProductiveStructure - Build the productive structure of a plant.
 %   Check the data model and build the productive structure, which
 %   include information about:
 %   - Flows, Processes and Productive Groups (Streams)

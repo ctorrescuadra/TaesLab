@@ -1,6 +1,6 @@
 classdef cResultInfo < cResultSet
-% cResultInfo is a class container of the application results
-%   It stores the tables and the application class info.
+% cResultInfo - Dispatcher class for the application results.
+%   It stores the tables and the application class info, and provide methods to show them
 %   The diferent types (ResultId) of cResultInfo objects are defined in cType.ResultId
 %
 %   cResultInfo constructor:

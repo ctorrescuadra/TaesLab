@@ -1,5 +1,5 @@
 classdef cDigraph < cGraphResults
-%cDigraph - Plot Productive Structure Digraphs
+%cDigraph - Plot the productive structure digraphs.
 %
 %   cDigraph Constructor
 %     obj=cDigraph(tbl,info)

@@ -1,5 +1,5 @@
 classdef (Sealed) cBuildHTML < cMessageLogger
-%cBuildHTML convert cTable object into HTML files
+%cBuildHTML - Convert a cTable object into HTML files.
 %   If a cTableIndex object is provided it create a HTML index page,
 %   which links HTML files of the cResultInfo tables. 
 % 

@@ -1,5 +1,5 @@
 classdef (Abstract) cTableResult < cTable
-%cTableResult - Abstrat class to store results into a cTable
+%cTableResult - Abstrat class to store results into a cTable.
 %
 %   cTableResults Properties
 %     Format - Format of the table columns

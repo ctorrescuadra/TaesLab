@@ -1,5 +1,5 @@
 function res=isNonSingularMatrix(A)
-%isNonSingularMatrix - Check if the matrix U-A is non-singular
+%isNonSingularMatrix - Check if the matrix I-A is non-singular.
 %
 %   Syntax:
 %     res = isNonSingularMatrix

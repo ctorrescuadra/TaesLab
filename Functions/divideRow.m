@@ -1,5 +1,5 @@
 function B=divideRow(A,x)
-%divideRow - Divide each row of matrix A, by the corresponding element of vector x.
+%divideRow - Divide each row of matrix A by the corresponding element of vector x.
 % 	Compute B(i,j)=A(i,j)/x(i)
 % 	If x is not provided, the columns of the matrix are scaled by its sum
 %

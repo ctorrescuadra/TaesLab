@@ -1,5 +1,5 @@
 classdef cGraphSummary < cGraphResults
-%cGraphSummary - Show the summary graphs for selecting flows or processes
+%cGraphSummary - Plot the summary graphs for selecting flows or processes.
 %   There is two graph methods to show the summary results
 %   - BarGraph: Values are show in bar graphs grouped by STATE or SAMPLE 
 %   - PlotGraph: Values are show in plot graphs

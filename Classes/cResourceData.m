@@ -1,5 +1,5 @@
 classdef cResourceData < cMessageLogger
-%cResourceData gets and validates the external cost resources of a system
+%cResourceData - Gets and validates the external cost resources of a system.
 % 
 %   cResourceData constructor:
 %     obj = cResourceData(ps, data)

@@ -1,5 +1,5 @@
 function obj = importMAT(filename)
-%importMAT create a cTaesLab object from a previous saved MAT file
+%importMAT - Create a cTaesLab object from a previous saved MAT file.
 %   Files can be created using exportMAT function
 %
 %   Syntax

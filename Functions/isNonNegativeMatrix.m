@@ -1,5 +1,5 @@
 function res=isNonNegativeMatrix(A)
-%isNonNegativeMatrix - Check if the matrix is non-negative
+%isNonNegativeMatrix - Check if the matrix is non-negative.
 %   Check if all elements of the matriz are non-negative with a tolerance of cType.EPS
 %
 %   Syntax:

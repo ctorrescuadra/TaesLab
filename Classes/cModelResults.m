@@ -1,5 +1,5 @@
 classdef (Sealed) cModelResults < cMessageLogger
-    %cModelResults is a class container of the model results
+    %cModelResults Class container for the model results.
     %   This class store the results of cThermoeconomicModel according to its ResultId
     %
     %   cModelResults constructor:

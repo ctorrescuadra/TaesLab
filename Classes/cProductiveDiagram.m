@@ -1,5 +1,5 @@
 classdef (Sealed) cProductiveDiagram < cResultId
-%cProductiveDiagram build the productive diagrams info
+%cProductiveDiagram - Build the productive diagrams adjacency tables
 %   Flows Diagram (FAT)
 %   Process Diagram (PAT)
 %   Flow-Process Diagram (FPAT)
@@ -74,7 +74,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.NodesPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             % Set ResultId properties
             obj.ResultId=cType.ResultId.PRODUCTIVE_DIAGRAM;
-            obj.DefaultGraph=cType.Tables.FLOWS_DIAGRAM;
+            obj.DefaultGraph=cType.Tables.FLOW_DIAGRAM;
             obj.ModelName=ps.ModelName;
             obj.State=ps.State;
         end
@@ -89,7 +89,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
         %     res - Nodes table of the diagram
         %
             switch name
-                case cType.Tables.FLOWS_DIAGRAM
+                case cType.Tables.FLOW_DIAGRAM
                     res=obj.NodesFAT;
                 case cType.Tables.FLOW_PROCESS_DIAGRAM
                     res=obj.NodesFPAT;
@@ -110,7 +110,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
         %     res - Edges table of the diagram
         %
             switch name
-                case cType.Tables.FLOWS_DIAGRAM
+                case cType.Tables.FLOW_DIAGRAM
                     res=obj.EdgesFAT;
                 case cType.Tables.PROCESS_DIAGRAM
                     res=obj.EdgesPAT;

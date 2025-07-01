@@ -1,5 +1,5 @@
 function res=isOctave()
-%isOctave - Identifies if the funcion has been executed in Matlab
+%isOctave - Identifies if the funcion has been executed in Octave.
 %	
 %	Syntax
 %     res = isOctave;

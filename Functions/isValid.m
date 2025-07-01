@@ -1,5 +1,5 @@
 function res = isValid(obj)
-%isValid - Check if a cTaesLab object is valid
+%isValid - Check if it is a valid TaesLab object.
 %
 %   Syntax:
 %     res = isValid(obj)

@@ -1,5 +1,5 @@
 classdef(Sealed) cDiagnosis < cResultId
-%cDiagnosis - Make a thermoeconomic diagnosis Analysis
+%cDiagnosis - Make a thermoeconomic diagnosis analysis.
 %   It compares two states of the plant given by two cExergyCost objects.
 %   Two method could be applied:
 %    WASTE_EXTERNAL considers waste as a system output

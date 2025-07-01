@@ -1,5 +1,5 @@
 function res=isMatlab()
-%isMatlab - Identifies if the funcion has been executed in Matlab
+%isMatlab - Identifies if the funcion has been executed in MATLAB.
 %	
 %	Syntax
 %     res = isMatlab;

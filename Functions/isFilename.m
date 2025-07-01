@@ -1,5 +1,5 @@
 function res=isFilename(filename)
-%isFilename - Check if file name is valid for read/write mode
+%isFilename - Check if file name is valid for read/write mode.
 %   
 %   Syntax
 %     res = isFilename(filename)

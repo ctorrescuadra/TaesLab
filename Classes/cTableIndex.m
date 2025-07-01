@@ -1,5 +1,5 @@
 classdef cTableIndex < cTable
-%cTableIndex create a cTable with the tables of a cResultInfo
+%cTableIndex - Create a cTable with the index table of a cResultInfo.
 %   The table index is a property of the cResultInfo object
 %   
 %   cTableIndex constructor:

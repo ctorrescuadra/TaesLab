@@ -1,5 +1,5 @@
 function A=zerotol(A,eps)
-%zerotol - Sets to zero values near to zero 
+%zerotol - Sets to zero the matrix values near to zero.
 %	Set to zero all elements of a matrix which absolute value is small to 
 % 	a tolerance value eps. If eps is missing tolerance is taking as cType.EPS (1.0e-8)
 %

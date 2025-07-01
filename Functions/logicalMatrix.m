@@ -1,5 +1,5 @@
 function res=logicalMatrix(A,eps)
-%logicalMatrix - convert a matrix to logical with zero tolerance 
+%logicalMatrix - Convert a real matrix to logical with zero tolerance.
 %	Set to zero all elements of a matrix which absolute value is small to eps
 % 	and converts to logical
 %

@@ -1,5 +1,5 @@
 function B = similarDemandMatrix(A, x, y)
-%similarDemandMatrix - Compute the demand-driven sparse adjacency matrix from the resource-driven matrix
+%similarDemandMatrix - Compute the demand-driven adjacency matrix from the resource-driven matrix.
 %   Compute B(i,j) = x(i) * A(i,j) * (1./y(j)) for sparse matrices
 %
 %   Syntax

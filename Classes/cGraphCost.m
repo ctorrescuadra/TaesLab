@@ -1,5 +1,5 @@
 classdef cGraphCost < cGraphResults
-%cGraphCost - Plot Irreversibility-Cost Table
+%cGraphCost - Plot the Irreversibility-cost graph.
 %
 %   cGraphCost Constructor
 %     obj=cGraphCost(tbl)

@@ -1,5 +1,5 @@
 classdef cSummaryOptions < cMessageLogger
-%cSummaryOptions determine the summary options depending on the data model
+%cSummaryOptions - Determine the summary options depending on the data model
 % 
 %   cSummaryOptions Constructor
 %     obj = cSummaryOptions(NrOfStates,NrOfSamples)

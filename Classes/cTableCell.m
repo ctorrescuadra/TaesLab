@@ -1,5 +1,5 @@
 classdef (Sealed) cTableCell < cTableResult
-%cTableCell Implements cTable interface to store the tabular results as cell arrays.
+%cTableCell -Implements cTableResult interface to store results as cell arrays.
 % 
 %   cTableCell constructor
 %     obj = cTableCell(data,rowNames,colNames,props)

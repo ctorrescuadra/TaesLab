@@ -1,5 +1,5 @@
 function B = similarResourceMatrix(A, x, y)
-%similarResourceMatrix - Compute the resource-driven adjacency matrix from the demand-driven matrix
+%similarResourceMatrix - Compute the resource-driven adjacency matrix from the demand-driven matrix.
 %   Compute B(i,j) = (1/x(i)) * A(i,j) * y(j)
 %
 %   Syntax

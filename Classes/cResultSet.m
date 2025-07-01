@@ -1,5 +1,5 @@
 classdef(Abstract) cResultSet < cResultId
-% cResultSet is the base class for results classes
+% cResultSet - Base class for results dispacher
 %   The results classes are cResultInfo, cDataModel and cThermoeconomicModel
 %   It provide methods to:
 %   - Show the results in console

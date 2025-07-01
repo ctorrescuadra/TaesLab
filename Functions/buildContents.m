@@ -1,0 +1,61 @@
+function buildContents(folder, output)
+%buildContents - Build the Content.m file of a directory
+%
+%   Usage:
+%     buildContents(dir, output)
+%
+%   Input Arguments:
+%     folder - directory name 
+%     output - file name of the Contents help
+%
+    if nargin < 1
+        folder = '.'; 
+    end
+    if nargin < 2
+        output = 'Contents.txt';
+    end
+
+    files = dir(fullfile(folder, '*.m'));
+    flen=max(cellfun(@length,{files.name}))+2;
+    fmt=sprintf('%s %%-%ds - %%s\n','%%',flen);
+    fid = fopen(output, 'w');
+
+    if fid == -1
+        error('Output file could not be opem.');
+    end
+
+    for k = 1:length(files)
+        name = files(k).name;
+        path = fullfile(folder, name);
+        Description = getComment(path);
+        
+        fprintf(fid, fmt, name, Description);
+    end
+
+    fclose(fid);
+    fprintf('Contents Index created in: %s\n', fullfile(folder,output));
+end
+
+function res = getComment(filename)
+%getComment - read file until first comment line and extract it
+%   Input:
+%     filename - Name of file to extact comment
+%   Output:
+%     res - Comment line 
+    fid = fopen(filename, 'r');
+    res = '(No Description)';
+    if fid == -1
+        return;
+    end
+
+    while ~feof(fid)
+        line = strtrim(fgetl(fid));
+        if startsWith(line, '%')
+            res = strtrim(line(2:end));
+            break;
+        end
+    end
+    fclose(fid);
+end
+
+

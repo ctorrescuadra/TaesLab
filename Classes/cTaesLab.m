@@ -1,5 +1,5 @@
 classdef  cTaesLab < handle
-    %TaesLab - Base class of the TaesLab toolbox
+    %TaesLab - Base class of the TaesLab toolbox.
     %   Asign a unique objectId to each object
     %   and permit to set the status of the class
     %   to each class derived from it.

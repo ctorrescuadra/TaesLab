@@ -1,5 +1,5 @@
 function res=transitiveClosure(A)
-%transitiveClosure - Compute the transitive closure of a digraph
+%transitiveClosure - Compute the transitive closure of a digraph.
 %   Use the Warshall's Algorithm
 %
 %   Syntax

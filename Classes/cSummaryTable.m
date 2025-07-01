@@ -1,5 +1,5 @@
 classdef cSummaryTable < cMessageLogger
-%cSummaryTable stores the properties and values of each summary table
+%cSummaryTable - Store the properties and values of each summary table.
 %   Each cSummaryTable is stores in a dataset element using 'Name' as key
 %   It is an internal class of cSummaryResults
 %

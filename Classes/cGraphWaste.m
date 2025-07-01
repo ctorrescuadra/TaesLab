@@ -1,5 +1,5 @@
 classdef cGraphWaste < cGraphResults
-%cGraphWaste - Show the waste allocation graph
+%cGraphWaste - Plot the Waste Allocation Graph.
 %   There is two graph methods to show the waste allocation
 %   - PieChart - active waste allocation is shown in a PieChart
 %   - BarGraph - all the waste flows allocation is show in a bar chart

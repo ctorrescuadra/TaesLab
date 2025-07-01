@@ -1,5 +1,5 @@
 function x = vDivide(arg1,arg2)
-%vDivide - Element-wise right division. Overload operator rdivide when 0/0
+%vDivide - Element-wise right division. Overload operator rdivide when 0/0.
 %   If the value is NaN it returns zero
 %
 %   Syntax

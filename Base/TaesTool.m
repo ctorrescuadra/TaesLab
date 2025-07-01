@@ -1,5 +1,5 @@
 classdef (Sealed) TaesTool < handle
-%TaesTool - Compatible user interface for Matlab/Octave
+%TaesTool - Compatible user interface App for MATLAB/Octave.
 %   Execute the basic functions of class cThermoeconomicModel:
 %    - productiveStructure
 %    - thermoeconomicState

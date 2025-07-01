@@ -1,5 +1,6 @@
 function ShowResults(arg,varargin)
-%ShowResults - This is the console interface for displaying results. 
+%ShowResults - Show the results tables in different formats.
+%   This is the console interface for displaying results. 
 %   Depending on the options, you can work with all results or with a specific table.
 %   If the 'Table' option is not selected, it works at the result set level.
 %   If the 'Table' option is selected, the table can be displayed in the console, web browser, or GUI table,

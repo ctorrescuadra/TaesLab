@@ -1,5 +1,5 @@
 classdef cQueue < cTaesLab
-%cQueue - simple FIFO queue based on a dinamic cell array
+%cQueue - Simple FIFO queue based on a dinamic cell array
 %   Internal use only
 %
 %   cQueue properties:

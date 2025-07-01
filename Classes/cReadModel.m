@@ -1,5 +1,5 @@
 classdef (Abstract) cReadModel < cMessageLogger
-%cReadModel - Abstract class to implemenent the model reader classes
+%cReadModel - Abstract class to implemenent the model reader classes.
 %   These classes generate the data model.
 %
 %   cReadModel Properties:

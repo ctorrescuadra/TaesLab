@@ -1,5 +1,5 @@
 classdef (Sealed) cBuildLaTeX < cMessageLogger
-%cBuildLaTeX convert cTable object into a LaTeX code table
+%cBuildLaTeX - Convert cTable object into a LaTeX code table.
 %   The LaTeX code includes:
 %    - table environment
 %    - booktabs package

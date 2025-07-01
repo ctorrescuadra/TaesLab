@@ -1,5 +1,5 @@
 classdef cParseStream
-%cParseStream static utility class to check and validadate strings
+%cParseStream - Static utility class to check and validadate strings.
 %   Contains functions to check names and fuel-product string definition
 %
 %   cParseStream Methods

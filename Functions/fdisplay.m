@@ -1,5 +1,5 @@
 function fdisplay(A,fmt,label)
-%fdisplay - Display a matrix A using C-like fmt
+%fdisplay - Display a matrix A using C-like fmt.
 %   An optional text label could be used, if not variable name is used
 %
 %   Syntax

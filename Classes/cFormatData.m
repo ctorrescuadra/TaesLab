@@ -1,5 +1,5 @@
 classdef cFormatData < cTablesDefinition
-%cFormatData gets the format configuration data used to display tables of results.
+%cFormatData -Get the format configuration data used to display tables of results.
 %	cResultTableBuilder derives from this class
 %
 %   cFormatData constructor:

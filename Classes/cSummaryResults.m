@@ -1,5 +1,5 @@
 classdef (Sealed) cSummaryResults < cResultId
-%cSummaryResults gets the summary results tables of the model
+%cSummaryResults - Get the summary results tables of the model.
 %   There is two types of summary tables
 %    STATES - Summarize the results for each state
 %    RESOURCES - Summarize the results for each resource sample

@@ -1,5 +1,5 @@
 function B=divideCol(A,x)
-%divideCol - Divide each colums of matrix A, by the corresponding element of vector x.
+%divideCol - Divide each colums of matrix A by the corresponding element of vector x.
 %   Compute B(i,j)= A(i,j)/x(j)
 % 	If x is not provided, the columns of the matrix are divided by its sum
 %

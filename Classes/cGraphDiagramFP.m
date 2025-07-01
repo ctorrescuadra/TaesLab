@@ -1,5 +1,5 @@
 classdef cGraphDiagramFP < cGraphResults
-%cGraphDiagramFP - Plot the FP Diagram
+%cGraphDiagramFP - Plot the FP Diagram.
 %
 %   cGraphDiagramFP Constructor
 %     obj=cDiagramFP(tbl,info)

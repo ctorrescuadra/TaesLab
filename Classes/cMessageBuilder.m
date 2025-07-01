@@ -1,5 +1,5 @@
 classdef cMessageBuilder < cTaesLab
-%cMessageBuilder -  create a message
+%cMessageBuilder -  Create a message for logger
 %   The message include the type of error, the class which cause the message and the text message
 %   There is three types of messages registered
 %     cType.ERROR - Error which cause the object be invalid

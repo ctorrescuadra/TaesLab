@@ -1,5 +1,5 @@
 classdef cGraphDiagnosis < cGraphResults
-%cGraphDiagnosis - Plot Diagnosis Graphs
+%cGraphDiagnosis - Plot the diagnosis graphs.
 %
 %   cGraphDiagnosis Constructor
 %     obj=cGraphDiagnosis(tbl,info,option)

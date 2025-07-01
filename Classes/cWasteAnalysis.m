@@ -1,5 +1,5 @@
 classdef (Sealed) cWasteAnalysis < cResultId
-%cWasteAnalysis analyze the potential cost saving of waste recycling
+%cWasteAnalysis - Analyze the potential cost saving of waste recycling.
 %   This class calculates the unit cost of output flows of the plant as function
 %   of the recycling ratio of a waste.
 %

@@ -1,5 +1,5 @@
 classdef cGraphRecycling < cGraphResults
-%cGraphCost - Plot Waste Recycling cost
+%cGraphCost - Plot the waste recycling cost graphs.
 %
 %   cGraphRecycling Constructor
 %     obj=cGraphRecycling(tbl)

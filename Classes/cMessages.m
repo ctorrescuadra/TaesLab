@@ -1,5 +1,5 @@
 classdef cMessages
-%cMessages - is a static class which defines the TaesLab messages
+%cMessages - Static class which defines the TaesLab messages.
 % 
 %   cMessages methods:
 %     Table    - get the message tables
