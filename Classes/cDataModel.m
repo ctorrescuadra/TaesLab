@@ -30,18 +30,20 @@ classdef cDataModel < cResultSet
 %     ModelData           - cModelData object
 %
 %   cDataModel methods:
+%     existState         - Check if a state name exists 
+%     existSample        - Check if a sample name exists
 %     getExergyData      - Get the cExergyData of a state
 %     setExergyData      - Set the exergy values of a state
 %     getResourceData    - Get the cResourceData for a specific sample
-%     existState         - Check if a state name exists 
-%     existSample        - Check if a sample name exists
+%     setFlowResource    - Set Flow-resource values of a sample
+%     setProcessResource - Set Process-resource values of a sample
 %     getTablesDirectory - Get the tables directory 
 %     getTableInfo       - Get information about a table object
 %     getResultInfo      - Get the cResultInfo associated to the data model
 %     showDataModel      - Show the data model
 %     saveDataModel      - Save the data model
 %
-%   See also cResultSet, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData
+%   See also cResultSet, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData, cModelData
 %
     properties(GetAccess=public, SetAccess=private)
         NrOfFlows               % Number of flows
@@ -296,6 +298,30 @@ classdef cDataModel < cResultSet
         %%%
         % Get Data model information
         %%%
+        function res=existState(obj,state)
+		%existState - Check if state is defined in States
+        %   Syntax:
+        %     res = obj.existState(state)
+        %   Input Argument:
+        %     state - state name
+        %   Output Argument:
+        %     res - true | false
+        %
+			res=obj.ExergyData.getIndex(state);
+        end
+
+		function res=existSample(obj,sample)
+		%existSample - Check if sample is defined in ResourceState
+        %   Syntax:
+        %     res = obj.existState(sample)
+        %   Input Argument:
+        %     sample - Resource sample name
+        %   Output Argument:
+        %     res - true | false
+        %
+			res=obj.ResourceData.getIndex(sample);
+        end
+
         function res=getExergyData(obj,state)
         %getExergyData - Get the exergy data for a state
         %   Syntax:
@@ -362,29 +388,45 @@ classdef cDataModel < cResultSet
         %
             res=obj.ResourceData.getValues(sample);
         end
-		
-		function res=existState(obj,state)
-		%existState - Check if state is defined in States
+
+        function log=setFlowResource(obj,sample,values)
+        %setFlowResourceData - Set the flow-resource value of a sample
         %   Syntax:
-        %     res = obj.existState(state)
-        %   Input Argument:
-        %     state - state name
+        %     log = obj.setFlowResourceData(sample,values)
+        %   Input Arguments:
+        %     sample - Sample key/id
+        %     values - Array containing the flow-resource values
         %   Output Argument:
-        %     res - true | false
+        %     log - cMessageLogger with the operation status and errors
         %
-			res=obj.ExergyData.getIndex(state);
+            log=cMessageLogger();
+            rsd=obj.getResourceData(sample);
+            if rsd.status
+                lrsd=rsd.setFlowResource(values);
+                log.addLogger(lrsd);
+            else
+                log.addLogger(rsd);
+            end
         end
 
-		function res=existSample(obj,sample)
-		%existSample - Check if sample is defined in ResourceState
+        function log=setProcessResource(obj,sample,values)
+        %setProcessResourceData - Set the process-resource value of a sample
         %   Syntax:
-        %     res = obj.existState(sample)
-        %   Input Argument:
-        %     sample - Resource sample name
+        %     log = obj.setProcessResourceData(sample,values)
+        %   Input Arguments:
+        %     sample - Sample key/id
+        %     values - Array containing the process-resource values
         %   Output Argument:
-        %     res - true | false
+        %     log - cMessageLogger with the operation status and errors
         %
-			res=obj.ResourceData.getIndex(sample);
+            log=cMessageLogger();
+            rsd=obj.getResourceData(sample);
+            if rsd.status
+                lrsd=rsd.setProcessResource(values);
+                log.addLogger(lrsd);
+            else
+                log.addLogger(rsd);
+            end
         end
 
         %%%

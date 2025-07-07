@@ -10,5 +10,6 @@ function res=isObject(obj,class)
     %  
     %   Output Argument:
     %     res - true | false
+    %
         res = isValid(obj) && isa(obj,class);
     end

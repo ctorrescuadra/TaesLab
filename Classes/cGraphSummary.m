@@ -12,6 +12,7 @@ classdef cGraphSummary < cGraphResults
 %     showGraphUI - show the graph in the graph pannel of a GUI app
 %
 %   See also cGraphResults
+%
 	properties(Access=private)
 		isBarGraph
 	end

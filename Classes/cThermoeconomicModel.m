@@ -104,8 +104,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     getResourceData         - Get the resource data of a sample
 %     setFlowResource         - Set the resource flows values
 %     setProcessResource      - Set the processes resource values
-%     setFlowResourceValue    - Set a value of the resource flows
-%     setProcessResourceValue - Set a value of the process resources
 %
 %    Exergy Data Methods
 %     getExergyData - Get the exergy data of a state
@@ -1206,31 +1204,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
         end
 
-        function res=setFlowResourceValue(obj,key,value)
-        %setFlowResourceValue - Set resource flow cost value
-        % Syntax:
-        %   res = setFlowResourceValue(key,value)
-        % Input Arguments:
-        %   key - key name of the resource flow
-        %   value - resource cost value
-        % Output Argument:
-        %   res - cResourceCost object with the new values
-            res=cMessageLogger();
-            if ~obj.isGeneralCost
-                res.printError(cMessages.NoGeneralizedCost);
-                return
-            end
-            log=setFlowResourceValue(obj.rsd,key,value);
-            if log.status
-                obj.setThermoeconomicAnalysis;
-                obj.setSummaryTables;
-                res=obj.rsc;
-            else
-                printLogger(log);
-                res.printError(cMessages.InvalidResourceValue,key,value);
-            end
-        end
-
         function res=setProcessResource(obj,Z)
         %setProcessResource - Set the resource cost of the processes
         % Syntax:
@@ -1255,31 +1228,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res.printError(cMessages.InvalidProcessValues);
             end
         end
-
-        function res=setProcessResourceValue(obj,key,value)
-        %setProcessResourceValue - Set the recource cost of the processes
-        % Input Argument:
-        %   key - Process key
-        %   value - cost value of the process
-        % Output Argument:
-        %   res - cResourceCost object
-        %
-            res=cMessageLogger();
-            if ~obj.isGeneralCost
-                res.printError(cMessages.NoGeneralizedCost);
-                return
-            end
-            log=setProcessResourceValue(obj.rsd,key,value);
-            if log.status
-                obj.setThermoeconomicAnalysis;
-                obj.setSummaryTables;
-                res=obj.rsc;
-            else
-                printLogger(log);
-                res.printError(cMessages.InvalidResourceValue,key,value);
-            end
-        end
-
         function res=getResourceData(obj,sample)
         %getResourceData - Get the resource data cost values of sample
         % Syntax:

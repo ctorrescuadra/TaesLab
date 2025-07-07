@@ -22,7 +22,8 @@ classdef cTableData < cTable
 %     setColumnValues - set the values of a column
 %     setRowValues    - set the values of a row
 %
-% See also cTable
+%   See also cTable
+%
     methods
         function obj = cTableData(data,rowNames,colNames,props)
         % cTableData Construct an instance of this class

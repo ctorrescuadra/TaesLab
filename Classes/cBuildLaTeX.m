@@ -16,6 +16,8 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 %     getLaTeXcode - Get a string with the LaTeX code
 %     saveTable    - Save the table into a tex file
 %
+%   See also cTable
+%
     properties(Access=private)
         tabular  % tablular code - column aligment  
         header   % header code - Colnames

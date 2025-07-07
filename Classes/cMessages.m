@@ -127,6 +127,7 @@ classdef cMessages
         InvalidCSize='Invalid resource flow size %d'
         NegativeResourceValue='Resource values must be non-negative'
         InvalidProcessValues='Invalid resource values'
+        ZeroResourceCost='Total resource-Flow cost is zero'
         % Summary messages
         SummaryNotAvailable='Summary Results NOT available'
         InvalidSummaryOption='Invalid summary option'

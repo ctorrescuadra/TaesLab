@@ -5,7 +5,7 @@ classdef (Abstract) cTableResult < cTable
 %     Format - Format of the table columns
 %     Unit   - Units of the table columns
 %
-% See also cTable, cTableMatrix, cTableCell
+%   See also cTable, cTableMatrix, cTableCell
 %
     properties (GetAccess=public, SetAccess=protected)
         Format    % Format of the table cells

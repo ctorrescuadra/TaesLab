@@ -1,5 +1,5 @@
 classdef (Sealed) cResultTableBuilder < cFormatData
-% cResultTableBuilder - Build the cResultInfo objects for the calculation layer
+%cResultTableBuilder - Build the cResultInfo objects for the calculation layer
 %   This class provide methods to obtain the cResultInfo object of each function application
 %
 %   cResultTableBuilder constructor:
@@ -14,7 +14,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 %     getProductiveDiagram   - Get Productive Diagram Results
 %     getSummaryResults      - Get Summary Results
 %
-% See also cFormatData, cResultInfo
+%   See also cFormatData, cResultInfo
 %
     properties(Access=private)
         flowKeys     % Flow Key names

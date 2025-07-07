@@ -9,6 +9,7 @@ classdef cGraphDiagnosis < cGraphResults
 %     showGraphUI - show the graph in the graph pannel of a GUI app
 %
 %   See also cGraphResults
+%
     methods
         function obj=cGraphDiagnosis(tbl,info,option)
 		%cDigraph - Build an instance of the object

@@ -16,7 +16,9 @@ classdef (Sealed) cWasteAnalysis < cResultId
 %
 %   cWasteAnalysis methods:
 %     buildResultInfo - Build the cResultInfo for Waste Analysis
-% 
+%
+%   See also cResultId, cExergyCost
+%
     properties(GetAccess=public,SetAccess=private)
         Recycling    % Indicate if recycling is available
         OutputFlows  % Output flows

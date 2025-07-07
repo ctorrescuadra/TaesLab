@@ -9,6 +9,7 @@ classdef cGraphCost < cGraphResults
 %     showGraphUI - show the graph in the graph pannel of a GUI app
 %
 %   See also cGraphResults
+%
     methods
         function obj=cGraphCost(tbl)
         %cGraphCost - Build an instance of the object

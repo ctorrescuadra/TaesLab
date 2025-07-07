@@ -9,6 +9,7 @@ classdef cGraphRecycling < cGraphResults
 %     showGraphUI - show the graph in the graph pannel of a GUI app
 %
 %   See also cGraphResults
+%
     methods
         function obj = cGraphRecycling(tbl)
 		%cGraphRecycling - Build an instance of the object

@@ -22,6 +22,8 @@ classdef (Sealed) cProductiveDiagram < cResultId
 %     getNodeTable    - Get the nodes of the diagram
 %     getEdgeTable    - Get the edges of the diagram
 %
+%   See also cResultId, cProductiveStructure
+%
     properties(Access=private)
         EdgesFAT          % Flow edges table
         EdgesFPAT         % Flow-Process edges table

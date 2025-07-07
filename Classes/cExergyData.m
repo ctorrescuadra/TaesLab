@@ -16,6 +16,8 @@ classdef cExergyData < cMessageLogger
 %     AdjacencyTable  - Adjacency Table of the productive graph
 %	  AdjacencyMatrix - Adjacency Matrix of the productive graph
 %
+%   See also cDataModel
+%
 	properties(GetAccess=public,SetAccess=private)
 		ps				  % Productive Structure
 		State             % Exergy State

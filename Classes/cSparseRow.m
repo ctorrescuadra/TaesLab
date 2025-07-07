@@ -1,35 +1,35 @@
 classdef  cSparseRow < cMessageLogger
-	% cSparseRow - Store and operate with matrices that contain few non-null rows.
+	%cSparseRow - Store and operate with matrices that contain few non-null rows.
 	%	This class is used to manage  waste allocation matrices, and provide a set of
 	%   algebraic operations. 
 	%
-	% cSparseRow Properties
-	%   N 		- Number of rows
-	%   NR  	- Number of active rows
-	%   M		- Number of Columns
-	%   mRows   - list containing the non-null rows
-	%   mValues - Matrix (NR x M) containing the active value
+	%   cSparseRow Properties:
+	%     N 		- Number of rows
+	%     NR  	- Number of active rows
+	%     M		- Number of Columns
+	%     mRows   - list containing the non-null rows
+	%     mValues - Matrix (NR x M) containing the active value
 	%
-	% cSparseRow Methods:
-	%   scaleCol  - Scale the columns of the matrix by a vector
-	%   scaleRow  - Scale the rows of the matrix by a vector
-	%   divideCol - Divide the columns of the matrix by a vector
-	%   divideRow - Divide the rows of the matrix by a vector
-	%   sumRows   - Sum the matrix by rows
-	%   sumCols   - sum the matrix by cols
+	%   cSparseRow Methods:
+	%     scaleCol  - Scale the columns of the matrix by a vector
+	%     scaleRow  - Scale the rows of the matrix by a vector
+	%     divideCol - Divide the columns of the matrix by a vector
+	%     divideRow - Divide the rows of the matrix by a vector
+	%     sumRows   - Sum the matrix by rows
+	%     sumCols   - sum the matrix by cols
 	%
-	% Overloaded operators:
-	%   res=a+b (plus)
-	%	res=a-b (minus)	
-	%	res=-a (uminus) 
-	%	res=a*b (mtimes)
-	%	res=size(a)
-	%   res=sum(a,dim)
-	%   full(a)
-	%   sparse(a)
-	%   transpose(a)
-	%   ctranspose(a)
-	%	disp(a)
+	%   Overloaded operators:
+	%     res=a+b (plus)
+	%	  res=a-b (minus)	
+	%	  res=-a (uminus) 
+	%	  res=a*b (mtimes)
+	%	  res=size(a)
+	%     res=sum(a,dim)
+	%     full(a)
+	%     sparse(a)
+	%     transpose(a)
+	%     ctranspose(a)
+	%	  disp(a)
     %
 	properties (GetAccess=public, SetAccess=private)
 		N 		% Number of rows

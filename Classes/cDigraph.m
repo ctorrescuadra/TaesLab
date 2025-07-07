@@ -9,6 +9,7 @@ classdef cDigraph < cGraphResults
 %     showGraphUI - show the graph in the graph pannel of a GUI app
 %
 %   See also cGraphResults
+%
     methods
         function obj = cDigraph(tbl,info)
 		%cDigraph - Build an instance of the object
@@ -41,7 +42,6 @@ classdef cDigraph < cGraphResults
         %   Syntax:
         %     obj.showGraph
 		%
-		    set(groot,'defaultTextInterpreter','none');
  			f=figure('name',obj.Name,...
 				'numbertitle','off', ...
 				'units','normalized',...
@@ -53,7 +53,7 @@ classdef cDigraph < cGraphResults
             nodetable=obj.xValues.Nodes;
             nodecolors=colors(nodetable.Type,:);
             nodenames=nodetable.Name;
-            plot(ax,obj.xValues,'Layout','auto','NodeLabel',nodenames,'NodeColor',nodecolors);
+            plot(ax,obj.xValues,'Layout','auto','NodeLabel',nodenames,'NodeColor',nodecolors,'Interpreter','none');
             title(obj.Title,'fontsize',14);
         end
 

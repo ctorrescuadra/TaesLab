@@ -25,29 +25,29 @@ function res = SummaryResults(data,varargin)
 %     SaveAs - Name of the file to save the results
 %       char array | string
 %
-% Output Arguments
-%   res - cResultInfo object with the summary results
-%    It contains the following tables for STATES
-%      Exergy of the states (exergy)
-%      Unit consumption of the processes (pku)
-%      Direct Cost of the processes (dpc)
-%      Direct unit cost of the processes (dpuc)
-%      Direct flows cost (dfc)
-%      Direct unit flow costs (dfuc)
-%    If Resource Cost is defined:
-%      Generalized Processes cost (gpc)
-%      Generalized unit cost of processes (gpuc)
-%      Generalized cost of flows (gfc)
-%      Generalized unit cost of flows (gfuc)
-%    For RESOURCES
-%      Generalized Processes cost (rgpc)
-%      Generalized unit cost of processes (rgpuc)
-%      Generalized cost of flows (rgfc)
-%      Generalized unit cost of flows (rgfuc)
-% Example
-%   <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
+%   Output Arguments
+%     res - cResultInfo object with the summary results
+%      It contains the following tables for STATES
+%       Exergy of the states (exergy)
+%       Unit consumption of the processes (pku)
+%       Direct Cost of the processes (dpc)
+%       Direct unit cost of the processes (dpuc)
+%       Direct flows cost (dfc)
+%       Direct unit flow costs (dfuc)
+%      If Resource Cost is defined:
+%       Generalized Processes cost (gpc)
+%       Generalized unit cost of processes (gpuc)
+%       Generalized cost of flows (gfc)
+%       Generalized unit cost of flows (gfuc)
+%      For RESOURCES
+%       Generalized Processes cost (rgpc)
+%       Generalized unit cost of processes (rgpuc)
+%       Generalized cost of flows (rgfc)
+%       Generalized unit cost of flows (rgfuc)
+%   Example
+%     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
 %
-% See also cDataModel, cSummaryResults, cResultInfo
+%   See also cDataModel, cSummaryResults, cResultInfo
 %
     res=cMessageLogger();
     % Check data model

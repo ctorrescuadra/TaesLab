@@ -8,5 +8,6 @@ function res=isNonNegativeMatrix(A)
 %     A - Matrix to check
 %   Output Argument
 %     res - true/false
+%
     res=all(zerotol(A(:))>=0);
 end

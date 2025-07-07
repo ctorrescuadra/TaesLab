@@ -11,6 +11,8 @@ classdef (Sealed) cBuildHTML < cMessageLogger
 %   showTable - Show the table in the default web browser
 %   saveTable - Save the HTML table created by the object
 %
+%   See also cTable
+%
     properties (Access=private)
         head         % HTML head
         body         % HTML body

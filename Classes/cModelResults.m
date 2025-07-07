@@ -1,5 +1,5 @@
 classdef (Sealed) cModelResults < cMessageLogger
-    %cModelResults Class container for the model results.
+    %cModelResults - Class container for the model results.
     %   This class store the results of cThermoeconomicModel according to its ResultId
     %
     %   cModelResults constructor:
@@ -10,6 +10,8 @@ classdef (Sealed) cModelResults < cMessageLogger
     %     setResults      - Store a cResultInfo in the container
     %     clearResults    - Delete a cResultInfo from the container
     %     getModelResults - Get the current results of a state
+    %
+    %   See cThermoeconomicModel
     %
     properties(Access=private)
         results    % cResultInfo cell array container

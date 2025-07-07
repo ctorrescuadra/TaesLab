@@ -1,5 +1,5 @@
 classdef(Abstract) cResultSet < cResultId
-% cResultSet - Base class for results dispacher
+%cResultSet - Base class for results dispacher
 %   The results classes are cResultInfo, cDataModel and cThermoeconomicModel
 %   It provide methods to:
 %   - Show the results in console
@@ -7,27 +7,27 @@ classdef(Abstract) cResultSet < cResultId
 %   - Show the results in graphic user interfaces
 %   - Save the results in files: XLSX, CSV, TXT LaTeX and HTML
 %
-% cResultSet Properties:
-%   ClassId - Result Set Id
-%     cType.ClassId.RESULT_INFO
-%     cType.ClassId.DATA_MODEL
-%     cTtpe.ClassId.RESULT_MODEL
+%   cResultSet Properties:
+%     ClassId - Result Set Id
+%       cType.ClassId.RESULT_INFO
+%       cType.ClassId.DATA_MODEL
+%       cTtpe.ClassId.RESULT_MODEL
 % 
-% cResultSet Methods:
-%   StudyCase      - Get the study case value names
-%   ListOfTables   - Get the table names from a result set
-%   getTableIndex  - Get the table index from a result set
-%   printResults   - Print results on console
-%   showResults    - Show results in different interfaces
-%   showGraph      - Show the graph associated to a table
-%   showTableIndex - Show the table index in different interfaces
-%   exportResults  - Export all the result Tables to another format
-%   saveResults    - Save all the result tables in an external file
-%   getTable       - Get a table of the result set by name
-%   saveTable      - Save the results in an external file 
-%   exportTable    - Export a table to another format
+%   cResultSet Methods:
+%     StudyCase      - Get the study case value names
+%     ListOfTables   - Get the table names from a result set
+%     getTableIndex  - Get the table index from a result set
+%     printResults   - Print results on console
+%     showResults    - Show results in different interfaces
+%     showGraph      - Show the graph associated to a table
+%     showTableIndex - Show the table index in different interfaces
+%     exportResults  - Export all the result Tables to another format
+%     saveResults    - Save all the result tables in an external file
+%     getTable       - Get a table of the result set by name
+%     saveTable      - Save the results in an external file 
+%     exportTable    - Export a table to another format
 %
-% See also cResultInfo, cThermoeconomicModel, cDataModel
+%   See also cResultInfo, cThermoeconomicModel, cDataModel
 %
     properties(GetAccess=public,SetAccess=protected)
         ClassId  % Class Id (see cType.ClassId)

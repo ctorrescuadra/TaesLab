@@ -5,6 +5,8 @@ classdef (Sealed) cViewTable < cMessageLogger
 %   cViewTable Methods:
 %     showTable - show the table on a uitable
 %
+%   See also cTable
+%
 	properties (Access=private)
 		hf			% uifigure object
 		colWidth 	% Width of columns

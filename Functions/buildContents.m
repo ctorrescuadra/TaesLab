@@ -8,18 +8,19 @@ function buildContents(folder, output)
 %     folder - directory name 
 %     output - file name of the Contents help
 %
+    % Default Parameters
     if nargin < 1
         folder = '.'; 
     end
     if nargin < 2
         output = 'Contents.txt';
     end
-
+    % Get the files of the directory
     files = dir(fullfile(folder, '*.m'));
     flen=max(cellfun(@length,{files.name}))+2;
     fmt=sprintf('%s %%-%ds - %%s\n','%%',flen);
+    % Open output file
     fid = fopen(output, 'w');
-
     if fid == -1
         error('Output file could not be opem.');
     end
@@ -27,8 +28,7 @@ function buildContents(folder, output)
     for k = 1:length(files)
         name = files(k).name;
         path = fullfile(folder, name);
-        Description = getComment(path);
-        
+        Description = getComment(path);      
         fprintf(fid, fmt, name, Description);
     end
 
@@ -51,7 +51,7 @@ function res = getComment(filename)
     while ~feof(fid)
         line = strtrim(fgetl(fid));
         if startsWith(line, '%')
-            res = strtrim(line(2:end));
+            res = regexprep(line,'%\w+ - ',cType.EMPTY_CHAR);
             break;
         end
     end

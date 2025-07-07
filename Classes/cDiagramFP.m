@@ -12,6 +12,9 @@ classdef (Sealed) cDiagramFP < cResultId
 %     buildResultInfo - Build the cResultInfo object of the diagram FP
 %     adjacencyTable  - get the adjacency table
 %
+%
+%   See also cExergyCost, cResultId
+%
     properties (GetAccess=public,SetAccess=private)
         EdgesFP     % Edges struct of the exergy FP adjacency table
         EdgesCFP    % Edges struct of the exergy cost FP adjacency table

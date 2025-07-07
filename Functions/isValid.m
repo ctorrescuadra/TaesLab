@@ -8,6 +8,7 @@ function res = isValid(obj)
 %     obj   - cTaesLab object
 %  
 %   Output Argument:
-%     res - true | false    
+%     res - true | false
+%  
     res = isa(obj,'cTaesLab') && obj.status;
 end

@@ -21,6 +21,8 @@ classdef (Sealed) cModelData < cMessageLogger
 %     saveAsXML         - Save data as XML file
 %     saveAsJSON        - Save data as JSON file
 %
+%   See also cThermoeconomicModel  
+%
     properties(GetAccess=public,SetAccess=private)
         ModelName             % Model Name
         ProductiveStructure   % Productive Structure data

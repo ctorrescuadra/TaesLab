@@ -6,7 +6,7 @@ classdef cWasteData < cMessageLogger
 %
 %   cWasteData properties:
 %     NrOfWastes    - Number of wastes
-%     Names		  - Waste Flow names
+%     Names		    - Waste Flow names
 %     Flows         - Waste Flows Id
 %     Processes     - Dissipative Processes Id
 %     Type          - Waste Allocation types
@@ -24,6 +24,8 @@ classdef cWasteData < cMessageLogger
 %     setType          - Set the allocation type of a waste
 %     setValues        - Set the allocation calues of a waste
 %     setRecycleRatio  - Set the recycling ratio of a waste
+%
+%   See also cDataModel
 %
 	properties (GetAccess=public,SetAccess=private)
         NrOfWastes      % Number of wastes

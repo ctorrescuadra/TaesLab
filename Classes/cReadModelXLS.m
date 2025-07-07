@@ -1,5 +1,5 @@
 classdef (Sealed) cReadModelXLS < cReadModelTable
-% cReadModelXLS -Implement the cReadModelTable to read XLSX data model files
+%cReadModelXLS -Implement the cReadModelTable to read XLSX data model files
 %   This class read a XLSX file containing the thermoeconomic model data
 %   and build the data model
 %

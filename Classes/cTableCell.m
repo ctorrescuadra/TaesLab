@@ -1,5 +1,5 @@
 classdef (Sealed) cTableCell < cTableResult
-%cTableCell -Implements cTableResult interface to store results as cell arrays.
+%cTableCell - Implements cTableResult interface to store results as cell arrays.
 % 
 %   cTableCell constructor
 %     obj = cTableCell(data,rowNames,colNames,props)
@@ -28,7 +28,7 @@ classdef (Sealed) cTableCell < cTableResult
 %     getMatlabTable  - Get data as MATLAB table
 %     getStructTable  - Get a structure with the table info
 %
-% See also cTableResult, cTable
+%   See also cTableResult, cTable
 %
     properties (GetAccess=public,SetAccess=private)
         FieldNames  % Cell array with field names (optional)

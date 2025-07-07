@@ -13,8 +13,6 @@ classdef cResourceData < cMessageLogger
 %   cResourceData	methods:
 %	  setFlowResource         - Set the unit cost of resource flows
 %     setProcessResource      - Set the values of external cost of processes
-%     setFlowResourceValue    - Set an individual resource flow value
-%     setProcessResourceValue - Set an individual value of process resources
 %	  getResourceCost         - Get the corresponding cResourceCost object
 %
 	properties (GetAccess=public, SetAccess=private) 
@@ -112,9 +110,7 @@ classdef cResourceData < cMessageLogger
 		%      log - cMessageLog object with messages and errors
 		%
 			log=cMessageLogger();
-            if length(Z) == obj.ps.NrOfProcesses
-				obj.Z=Z;
-			else
+            if length(Z) ~= obj.ps.NrOfProcesses
 				log.messageLog(cType.ERROR,cMessages.InvalidZSize,length(Z));
 				return
             end
@@ -122,6 +118,7 @@ classdef cResourceData < cMessageLogger
 				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
 				return
             end
+			obj.Z=Z;
 		end
 
 		function log=setFlowResource(obj,c0)
@@ -134,65 +131,26 @@ classdef cResourceData < cMessageLogger
 		%     log - cMessageLog object with messages and errors
 		%
 			log=cMessageLogger();
-            if length(c0) == obj.ps.NrOfFlows
-				obj.c0=c0;
-			else
-				log.messageLog(cType.ERROR,cMessages.InvalidSize,length(c0));
+            if length(c0) ~= obj.ps.NrOfFlows
+	
+				log.messageLog(cType.ERROR,cMessages.InvalidCSize,length(c0));
 				return
             end
-            if any(c0<0)
+			if any(c0<0)
 				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
 				return
-            end
+			end
+			idx=obj.frsc;
+			ft=sum(c0(idx));
+			if ft<cType.EPS
+				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
+				return
+			end
+			obj.c0(idx)=c0(idx);
+	
 		end
 
-		function log=setFlowResourceValue(obj,key,value)
-		%setFlowResourceValue - Set the value of a resource flow
-		%   Syntax:
-		%     log=setFlowResourceValue(obj,key,value)
-		%   Input Arguments:
-		%     key - Resource flow name
-		%     value - unit cost of the resource
-		%   Output Argument:
-		%     log - cMessageLog object with messages and errors
-		%
-			log=cMessageLogger();
-			id=obj.getResourceIndex(key);
-            if ~id
-				log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,key);
-				return
-            end
-            if value>=0
-	            obj.c0(id)=value;
-            else
-				log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,key,value);
-				return
-            end
-		end
 
-		function log=setProcessResourceValue(obj,key,value)
-		%setProcessResourceValue - Set the value of a process external resource
-		%   Syntax:
-		%     log=setProcessResourceValue(obj,key,value)
-		%   Input Arguments:
-		%     key - Process name
-		%     value - Cost of the resource
-		%   Output Argument:
-		%     log - cMessageLog object with messages and errors
-		%
-			log=cMessageLogger();
-			id=obj.ps.getProcessId(key);
-            if ~id
-				log.messageLog(cType.ERROR,cMessages.InvalidProcessKey,key);
-				return
-            end
-            if value>=0
-	            obj.Z(id)=value;
-            else
-				log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,key,value);
-				return
-            end	
-		end
 
 		function res=getResourceCost(obj,exm)
 		%getResourceCost - Get cResourceCost object

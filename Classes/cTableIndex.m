@@ -26,7 +26,7 @@ classdef cTableIndex < cTable
 %     getMatlabTable  - get data as MATLAB table
 %     getStructTable  - get a structure with the table info
 %
-% See also cTable
+%   See also cTable
 %
     properties (GetAccess=public,SetAccess=private)
         Content % Cell array with the cResultInfo tables

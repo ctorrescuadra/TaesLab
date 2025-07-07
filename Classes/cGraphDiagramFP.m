@@ -2,14 +2,14 @@ classdef cGraphDiagramFP < cGraphResults
 %cGraphDiagramFP - Plot the FP Diagram.
 %
 %   cGraphDiagramFP Constructor
-%     obj=cDiagramFP(tbl,info)
+%     obj=cGraphDiagramFP(tbl,info)
 %
 %   cGraphDiagramFP Methods
 %     showGraph   - show the graph in a window 
 %     showGraphUI - show the graph in the graph pannel of a GUI app
 %
 %   See also cGraphResults
-
+%
     properties(Access=private)
         Unit
     end
@@ -53,7 +53,6 @@ classdef cGraphDiagramFP < cGraphResults
         %   Syntax:
         %     obj.showGraph
 		%
-            set(groot,'defaultTextInterpreter','none');
             f=figure('name',obj.Name,...
                 'numbertitle','off',...
 				'units','normalized',...
@@ -62,7 +61,7 @@ classdef cGraphDiagramFP < cGraphResults
 			ax=axes(f);
 			r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 			colormap(red2blue);
-			plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat","LineWidth",1.5);
+			plot(ax,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat","LineWidth",1.5,'Interpreter','none');
 			c=colorbar(ax);
 			c.Label.String=obj.xLabel;
 			c.Label.FontSize=12;

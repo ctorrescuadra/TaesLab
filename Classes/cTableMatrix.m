@@ -1,5 +1,5 @@
 classdef (Sealed) cTableMatrix < cTableResult
-%cTableMatrix Implements cTableResult interface to store matrix results.
+%cTableMatrix - Implements cTableResult interface to store matrix results.
 %   It store the row/col summary of the matrix
 %
 %   cTableCell constructor
