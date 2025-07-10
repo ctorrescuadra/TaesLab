@@ -176,13 +176,14 @@ classdef cTableData < cTable
     methods (Static,Access=public)
         function tbl=create(values,props)
         % Create a cTableData from values
-            tbl=cMessageLogger(cType.ERROR);
-            if all(size(A)>1)
-      
+            tbl=cMessageLogger(cType.INVALID);
+            if all(size(values)>1)   
                 rowNames=values(2:end,1);
                 colNames=values(1,:);
                 data=values(2:end,2:end);
                 tbl=cTableData(data,rowNames',colNames,props);
+            else
+                tbl.messageLog(cType.ERROR,cMessages.NoValuesAvailable);
             end
         end
     end

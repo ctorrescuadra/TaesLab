@@ -142,7 +142,7 @@ classdef cMessageLogger < cTaesLab
 		%     addLogger(obj1,obj2)
 		%   Input Arguments
 		%	  obj1 - current object
-		%     obj2 - cMessagesLogger containing object messages
+		%     obj2 - cMessageLogger containing object messages
 		%
             obj1.logger.addQueue(obj2.logger);
 			obj1.status=isValid(obj1) && isValid(obj2);

@@ -13,7 +13,7 @@ function [res,log]=inverseMatrixOperator(A)
 %	  log - cMessageLogger with the calculation status and logs
 %
     warning('off','MATLAB:singularMatrix');
-    log=cMessageLogger(cType.VALID);
+    log=cMessageLogger();
 	sz=size(A); res=cType.EMPTY;
     lastwarn(cType.EMPTY_CHAR,cType.EMPTY_CHAR);
 	% Check the matrix is square and non-negative

@@ -347,6 +347,10 @@ classdef cDataModel < cResultSet
         %     res - cExergyData object associated to the values
         %
             res=cMessageLogger();
+            if nargin<3
+                res.printError(cMessages.InvalidArgument);
+                return
+            end
             M=length(values);
             if obj.NrOfFlows~=M
                 res.printError(cMessages.InvalidExergyDataSize,M);

@@ -238,6 +238,13 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function res=getColumnData(obj,idx)
+        %getColumnData - Get a key/value array struct of a column table
+        %   Syntax:
+        %     res = obj.setColumnData(idx)
+        %   Input Arguments:
+        %     idx - Column data index
+        %   Output Arguments:
+        %     res - array struct key/value         
             try
                 res=cell2struct([obj.RowNames',obj.Data(:,idx)],{'key','value'},2);
             catch

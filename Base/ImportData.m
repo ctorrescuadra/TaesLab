@@ -1,8 +1,8 @@
 function res=ImportData(filename,varargin)
-%ImportData - Import Data to a cTableData from CSV or XLSX files
+%ImportData - Import external data to a cTableData from CSV or XLSX files.
 %
 %   Syntax
-%     res=ImportXLSX(filename,Name,Value)
+%     res=ImportData(filename,Name,Value)
 %  
 %   Input Arguments
 %     filename - Name of the file, including .xlsx extension
@@ -66,12 +66,13 @@ function res=ImportData(filename,varargin)
             res.printError(cMessages.InvalidFileExt,filename);
             return
     end
-    if ~tbl.status
-        printLogger(tbl)
+    if ~res.status
+        printLogger(res)
     end
 end
 
 function tbl=importCSV(filename,props)
+%importCVS - import CSV files to cTableData object
     tbl=cMessageLogger();
     if isOctave
 		try
@@ -100,6 +101,7 @@ function tbl=importCSV(filename,props)
 end
 
 function tbl=importXLSX(filename,props)
+%importCVS - import CSV files to cTableData object
     tbl=cMessageLogger();
     % Open the file
     if isOctave
@@ -153,7 +155,4 @@ function tbl=importXLSX(filename,props)
         props.Name=wsht;
     end
     tbl=cTableData.create(values,props);
-    if ~tbl.status
-        printLogger(tbl)
-    end
 end
