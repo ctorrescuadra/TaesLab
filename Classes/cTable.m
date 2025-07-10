@@ -222,6 +222,29 @@ classdef (Abstract) cTable < cMessageLogger
             'State',obj.State,'Data',data);
         end
 
+        function res=getColumnValue(obj,idx)
+        %getColumnValues - Get the values of a column table
+        %   Syntax:
+        %     res = obj.setColumnValues(idx)
+        %   Input Arguments:
+        %     idx - Column data index
+        %   Output Arguments:
+        %     value - array if column is numeric or cell array otherwise
+            if isNumericColumn(obj,idx)
+                res=cell2mat(obj.Data(:,idx));
+            else
+                res=obj.Data(:,idx);
+            end
+        end
+
+        function res=getColumnData(obj,idx)
+            try
+                res=cell2struct([obj.RowNames',obj.Data(:,idx)],{'key','value'},2);
+            catch
+                res=[];
+            end
+        end
+
         function log=setColumnValues(obj,idx,value)
         %setColumnValues - Set the values of a column table
         %   Syntax:

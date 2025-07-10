@@ -48,109 +48,72 @@ classdef cResourceData < cMessageLogger
 				obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return
 			end
-			if all(isfield(data.flows,{'key','value'}))
-					se=data.flows;
-			else
-				obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
-				return	
-			end
 			obj.Z=zeros(1,ps.NrOfProcesses);
 			obj.c0=zeros(1,ps.NrOfFlows);
 			obj.sample=data.sampleId;
 			obj.frsc=ps.ResourceFlows;
 			obj.ps=ps;
-			% Check Resource Flows data
-			for i=1:length(se)
-				id=obj.getResourceIndex(se(i).key);
-				if id
-					if (se(i).value < 0)
-						obj.messageLog(cType.ERROR,cMessages.InvalidResourceValue,se(i).key,se(i).value);
-					end
-					obj.c0(id)=se(i).value;
-				else
-					obj.messageLog(cType.ERROR,cMessages.InvalidResourceKey,se(i).key);
-				end
+			% Read flows costs
+			log=obj.setFlowResourceData(data.flows);
+			if ~log.status
+				obj.addLogger(log);
+				return
 			end
-            if ~obj.status
-                return
-            end
 		    % Read processes costs	
 			if isfield(data,'processes')
-				if all(isfield(data.processes,{'key','value'}))
-					sz=data.processes;
-				else
-					obj.messageLog(cType.ERROR,cMessages.InvalidResourceModel');
-					return	
-				end		
-				% Check processes cost data
-                for i=1:length(sz)
-					id=ps.getProcessId(sz(i).key);
-                    if id
-						if (sz(i).value >= 0)
-							obj.Z(id)=sz(i).value;
-						else
-							obj.messageLog(cType.ERROR,cMessages.InvalidResourceValue,sz(i).key,sz(i).value);
-						end
-                    else
-					    obj.messageLog(cType.ERROR,cMessages.InvalidResourceKey,sz(i).key);
-                    end
-                end
+				log=obj.setProcessResourceData(data.processes);
+				if ~log.status
+					obj.addLogger(log);
+					return
+				end
 			else
-				obj.messageLog(cType.INFO,cMessages.NoResourceData);
+				obj.messageLog(cType.INFO,cMessages.NoProcessResourceData);
 			end
 		end
 
-		function log=setProcessResource(obj,Z)
-		%setProcessResource - Set the Resources cost of processes
-		%    Syntax:
-		%      log=setProcessResource(obj,Z)
-		%    Input Arguments:
-		%      Z - Resources cost processes values array
-		%    Output Argument:
-		%      log - cMessageLog object with messages and errors
-		%
-			log=cMessageLogger();
-            if length(Z) ~= obj.ps.NrOfProcesses
-				log.messageLog(cType.ERROR,cMessages.InvalidZSize,length(Z));
-				return
+		function log=setFlowResource(obj,values)
+        %setFlowResourceData - Set the flow-resource value of a sample
+        %   Syntax:
+        %     log = obj.setFlowResourceData(sample,values)
+        %   Input Arguments:
+        %     sample - Sample key/id
+        %     values - Array or key/value struct containing the flow-resource values
+        %   Output Argument:
+        %     log - cMessageLogger with the operation status and errors
+        %
+            log=cMessageLogger();
+            if isstruct(values)
+                lrsd=obj.setFlowResourceData(values);
+                log.addLogger(lrsd);
+            elseif isnumeric(values)
+                lrsd=obj.setFlowResourceValues(values);
+                log.addLogger(lrsd);
+            else
+                log.messageLog(cType.Error,cMessages.InvalidArgument,class(values));
             end
-            if any(Z<0)
-				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
-				return
+        end
+
+        function log=setProcessResource(obj,values)
+        %setProcessResourceData - Set the process-resource value of a sample
+        %   Syntax:
+        %     log = obj.setProcessResourceData(sample,values)
+        %   Input Arguments:
+        %     sample - Sample key/id
+        %     values - Array or key value struct containing the process-resource values
+        %   Output Argument:
+        %     log - cMessageLogger with the operation status and errors
+        %
+            log=cMessageLogger();
+            if isstruct(values)
+                lrsd=obj.setProcessResourceData(values);
+                log.addLogger(lrsd);
+            elseif isnumeric(values)
+                lrsd=obj.setProcessResourceValues(values);
+                log.addLogger(lrsd);
+            else
+                log.messageLog(cType.Error,cMessages.InvalidArgument,class(values));
             end
-			obj.Z=Z;
-		end
-
-		function log=setFlowResource(obj,c0)
-		%setFlowResource - Set the unit cost of resources flows
-		%   Syntax:
-		%     log=setFlowResource(obj,Z)
-		%   Input Arguments:
-		%     c0 - Resources flows unit cost values array
-		%   Output Argument:
-		%     log - cMessageLog object with messages and errors
-		%
-			log=cMessageLogger();
-            if length(c0) ~= obj.ps.NrOfFlows
-	
-				log.messageLog(cType.ERROR,cMessages.InvalidCSize,length(c0));
-				return
-            end
-			if any(c0<0)
-				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
-				return
-			end
-			idx=obj.frsc;
-			ft=sum(c0(idx));
-			if ft<cType.EPS
-				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
-				return
-			end
-			obj.c0(idx)=c0(idx);
-	
-		end
-
-
+        end
 
 		function res=getResourceCost(obj,exm)
 		%getResourceCost - Get cResourceCost object
@@ -180,6 +143,118 @@ classdef cResourceData < cMessageLogger
 			if ismember(id,obj.frsc)
 				res=id;
 			end
+		end
+
+		function log=setFlowResourceData(obj,se)
+ 		%setFlowResourceData - Set the unit cost of resource flows
+		%    Syntax:
+		%      log=setProcessResource(obj,Z)
+		%    Input Arguments:
+		%      sz - key/value structure with the unit cost of resource flows
+		%    Output Argument:
+		%      log - cMessageLog object with messages and errors
+		%               
+			log=cMessageLogger();
+			if ~all(isfield(se,{'key','value'}))
+				log.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
+				return	
+			end
+			% Check Resource Flows data
+			for i=1:length(se)
+				id=obj.getResourceIndex(se(i).key);
+				if id
+					if (se(i).value < 0)
+						log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,se(i).key,se(i).value);
+					else
+						obj.c0(id)=se(i).value;
+					end
+				else
+					log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,se(i).key);
+				end
+			end
+			idx=obj.frsc;
+			ft=sum(obj.c0(idx));
+			if ft<cType.EPS
+				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
+				return
+			end
+		end
+
+		function log=setFlowResourceValues(obj,c0)
+		%setFlowResourceValues - Set the unit cost of resources flows
+		%   Syntax:
+		%     log=setFlowResource(obj,Z)
+		%   Input Arguments:
+		%     c0 - Resources flows unit cost values array
+		%   Output Argument:
+		%     log - cMessageLog object with messages and errors
+		%
+			log=cMessageLogger();
+            if length(c0) ~= obj.ps.NrOfFlows	
+				log.messageLog(cType.ERROR,cMessages.InvalidCSize,length(c0));
+				return
+            end
+			if any(c0<0)
+				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
+				return
+			end
+			idx=obj.frsc;
+			ft=sum(c0(idx));
+			if ft<cType.EPS
+				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
+				return
+			end
+			obj.c0(idx)=c0(idx);	
+		end
+
+		function log=setProcessResourceData(obj,sz)
+		%setProcessResourceData - Set the Resources cost of processes
+		%    Syntax:
+		%      log=setProcessResource(obj,Z)
+		%    Input Arguments:
+		%      sz - key/value structure with the resource cost of processes
+		%    Output Argument:
+		%      log - cMessageLog object with messages and errors
+		%        
+			log=cMessageLogger();
+			if ~all(isfield(sz,{'key','value'}))
+				log.messageLog(cType.ERROR,cMessages.InvalidResourceModel');
+				return	
+			end		
+			% Check processes cost data
+            for i=1:length(sz)
+				id=obj.ps.getProcessId(sz(i).key);
+                if id
+					if (sz(i).value >= 0)
+						obj.Z(id)=sz(i).value;
+					else
+						log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,sz(i).key,sz(i).value);
+					end
+                else
+					log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,sz(i).key);
+                end
+            end
+		end
+
+		function log=setProcessResourceValues(obj,Z)
+		%setProcessResourceValues - Set the Resources cost of processes
+		%    Syntax:
+		%      log=setProcessResource(obj,Z)
+		%    Input Arguments:
+		%      Z - Resources cost processes values array
+		%    Output Argument:
+		%      log - cMessageLog object with messages and errors
+		%
+			log=cMessageLogger();
+            if length(Z) ~= obj.ps.NrOfProcesses
+				log.messageLog(cType.ERROR,cMessages.InvalidZSize,length(Z));
+				return
+            end
+            if any(Z<0)
+				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
+				return
+            end
+			obj.Z=Z;
 		end
 	end	
 end	

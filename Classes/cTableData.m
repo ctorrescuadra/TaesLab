@@ -37,9 +37,9 @@ classdef cTableData < cTable
         %     Name - name of the table
         %     Description - table description
         %
+            obj.Data=data;
             obj.RowNames=rowNames;
             obj.ColNames=colNames;
-            obj.Data=data;
             obj.NrOfCols=length(obj.ColNames);
             obj.NrOfRows=length(obj.RowNames);
             obj.State='DATA';
@@ -176,10 +176,14 @@ classdef cTableData < cTable
     methods (Static,Access=public)
         function tbl=create(values,props)
         % Create a cTableData from values
-            rowNames=values(2:end,1);
-            colNames=values(1,:);
-            data=values(2:end,2:end);
-            tbl=cTableData(data,rowNames',colNames,props);
+            tbl=cMessageLogger(cType.ERROR);
+            if all(size(A)>1)
+      
+                rowNames=values(2:end,1);
+                colNames=values(1,:);
+                data=values(2:end,2:end);
+                tbl=cTableData(data,rowNames',colNames,props);
+            end
         end
     end
 end

@@ -8,6 +8,7 @@
 % Read Data Models
 %   ReadDataModel           - Read a data model file.
 %   CopyDataModel           - Creates a copy of a data model file in another format.
+%   ImportData              - Import Data to a cTableData from CSV or XLSX files
 %
 % Get Thermoeconomic Results
 %   ThermoeconomicModel     - Creates a cThermoeconomicModel object from a data model file.

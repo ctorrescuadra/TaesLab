@@ -22,7 +22,7 @@ classdef cMessages
         InvalidMatFileObject='Invalid %s object from file %s'
         NoDataModel='MAT file does not contains a valid Data Model'
         % Input arguments messages
-        InvalidArgument='Invalid input arguments. %s'
+        InvalidArgument='Invalid input arguments %s'
         DataModelRequired='First argument must be a valid data model'
         ResultSetRequired='First argument must be a valid cResultSet object'
         TableRequired='First argument must be a valid cTable object'
@@ -128,6 +128,7 @@ classdef cMessages
         NegativeResourceValue='Resource values must be non-negative'
         InvalidProcessValues='Invalid resource values'
         ZeroResourceCost='Total resource-Flow cost is zero'
+        NoProcessResourceData='No resource process data'
         % Summary messages
         SummaryNotAvailable='Summary Results NOT available'
         InvalidSummaryOption='Invalid summary option'
@@ -146,6 +147,7 @@ classdef cMessages
         InvalidTableValues='Invalid table %s values'
         InvalidTableGUI='Invalid uitable %s'
         InvalidTableDict='Invalid tables dictionary'
+        NoValuesAvailable='No values available %s'
         % Graph messages
         GraphNotImplemented='Graph function NOT implemented in Octave'
         InvalidGraph='Invalid graph %s'

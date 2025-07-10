@@ -347,8 +347,7 @@ classdef cDataModel < cResultSet
         %     res - cExergyData object associated to the values
         %
             res=cMessageLogger();
-            M=size(values,2);
-            % Validate the number of flows
+            M=length(values);
             if obj.NrOfFlows~=M
                 res.printError(cMessages.InvalidExergyDataSize,M);
                 return
@@ -359,13 +358,19 @@ classdef cDataModel < cResultSet
                 res.printError(cMessages.InvalidExergyData,state);
                 return
             end
-            % Build exergy data structure
-            fields={'key','value'};
-            keys=obj.ProductiveStructure.FlowKeys;
-            tmp=[keys;num2cell(values)];
-            % Retrieve exergy state object and set value
             exs.stateId=state;
-            exs.exergy=cell2struct(tmp,fields,1);
+            % Build exergy data structure
+            if isstruct(values)
+                exs.exergy=values;
+            elseif isnumeric(values)
+                fields={'key','value'};
+                keys=obj.ProductiveStructure.FlowKeys;
+                tmp=[keys;num2cell(values)];
+                exs.exergy=cell2struct(tmp,fields,1);
+            else
+                res.printError(cMessages.InvalidExergyData,state);
+                return
+            end
             % Check and create a cExergyData object
             res=cExergyData(obj.ProductiveStructure,exs);
             if res.status
@@ -402,7 +407,7 @@ classdef cDataModel < cResultSet
             log=cMessageLogger();
             rsd=obj.getResourceData(sample);
             if rsd.status
-                lrsd=rsd.setFlowResource(values);
+                lrsd=setFlowResource(rsd,values);
                 log.addLogger(lrsd);
             else
                 log.addLogger(rsd);
@@ -422,7 +427,7 @@ classdef cDataModel < cResultSet
             log=cMessageLogger();
             rsd=obj.getResourceData(sample);
             if rsd.status
-                lrsd=rsd.setProcessResource(values);
+                lrsd=setProcessResource(rsd,values);
                 log.addLogger(lrsd);
             else
                 log.addLogger(rsd);
