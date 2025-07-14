@@ -16,7 +16,7 @@ classdef cResourceData < cMessageLogger
 %	  getResourceCost         - Get the corresponding cResourceCost object
 %
 	properties (GetAccess=public, SetAccess=private) 
-		sample  % Resource sample name
+		Sample  % Resource sample name
 		frsc    % Resource flows index
 		c0      % Unit cost of external resources
 		Z       % Cost associated to processes
@@ -50,7 +50,7 @@ classdef cResourceData < cMessageLogger
 			end
 			obj.Z=zeros(1,ps.NrOfProcesses);
 			obj.c0=zeros(1,ps.NrOfFlows);
-			obj.sample=data.sampleId;
+			obj.Sample=data.sampleId;
 			obj.frsc=ps.ResourceFlows;
 			obj.ps=ps;
 			% Read flows costs
@@ -126,6 +126,7 @@ classdef cResourceData < cMessageLogger
 		%
 			res=cResourceCost(obj,exm);
 		end
+
 	end
 
 	methods(Access=private)

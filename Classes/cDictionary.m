@@ -13,7 +13,9 @@ classdef cDictionary < cMessageLogger
 % 
     properties(Access=protected)
         map     % containers.Map object
-		keys    % cell array with the keys
+	end
+	properties(GetAccess=public,SetAccess=protected)
+		Keys    % cell array with the keys
     end
 
 	methods
@@ -42,7 +44,7 @@ classdef cDictionary < cMessageLogger
 			% Create map container
 			index=uint16(1:N);
 			obj.map=containers.Map(data,index);
-			obj.keys=data;
+			obj.Keys=data;
 		end
 
 		function res = existsKey(obj,key)
@@ -88,17 +90,17 @@ classdef cDictionary < cMessageLogger
             end
             % Return values or cells depending on index
             if isscalar(id)
-                res=obj.Entries{id};
+                res=obj.Keys{id};
             else
-                res=obj.Entries(id);
+                res=obj.Keys(id);
             end
         end
 
 		function res = getKeys(obj)
 		% getKeys - Get the keys of the dictionary
 		%   Syntax:
-		%     res = obj.getKeys;
-			res=obj.keys;
+		%     res = obj.getKeys
+			res=obj.Keys;
 		end
 
 		function res=isIndex(obj,idx)
@@ -110,6 +112,15 @@ classdef cDictionary < cMessageLogger
 		%   Output Argument:
 		%     res - true | false
 			  res=isIndex(idx,1:length(obj));
+		end
+
+		function idx=addKey(obj,key)
+			idx=0;
+			if ~obj.existsKey(key)
+				idx=obj.map.Count+1;
+				obj.map(key)=idx;
+				obj.Keys{idx}=key;
+			end
 		end
 
         function res=size(obj)

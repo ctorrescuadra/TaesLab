@@ -1228,6 +1228,32 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res.printError(cMessages.InvalidProcessValues);
             end
         end
+
+        function res=addResourceData(obj,sample,c0,Z)
+        %addExergyData - Set exergy data values to actual state
+        % Syntax:
+        %   log=obj.setExergyData(values)
+        % Input Arguments:
+        %   state - new state name to add
+        %   values - Array with the exergy values of the flows
+        % Output Arguments:
+        %   log - cMessageLogger object with the status and messages of operation
+        %
+            res=cMessageLogger();
+            % Check state is no reference 
+            if ~cParseStream.checkName(sample) || existsKey(sample)
+                res.messageLog(cType.WARNING,cMessages.InvalidSampleName);
+                return
+            end
+            % Set resource data for sample
+            data=obj.DataModel;
+            rs=data.addResourceData(sample,c0,Z);
+            if ~rs.status
+                printLogger(rs);
+                return
+            end
+        end
+        
         function res=getResourceData(obj,sample)
         %getResourceData - Get the resource data cost values of sample
         % Syntax:
@@ -1298,6 +1324,46 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
             % Get results
             obj.triggerStateChange;
+            obj.setSummaryTables(cType.RESOURCES);
+        end
+    
+
+    function res=addExergyData(obj,state,values)
+        %addExergyData - Set exergy data values to actual state
+        % Syntax:
+        %   log=obj.setExergyData(values)
+        % Input Arguments:
+        %   state - new state name to add
+        %   values - Array with the exergy values of the flows
+        % Output Arguments:
+        %   log - cMessageLogger object with the status and messages of operation
+        %
+            res=cMessageLogger();
+            % Check state is no reference 
+            if ~cParseStream.checkName(state) || existsKey(state)
+                res.messageLog(cType.WARNING,cMessages.InvalidStateName);
+                return
+            end
+            % Set exergy data for state
+            data=obj.DataModel;
+            rex=data.addExergyData(state,values);
+            if ~rex.status
+                printLogger(rex);
+                return
+            end
+            % Compute cExergyCost
+            if obj.isWaste
+                res=cExergyCost(rex,obj.wd);
+            else
+                res=cExergyCost(rex);
+            end
+            if res.status
+                obj.rstate.setValues(state,res);
+            else
+                printLogger(res);
+                return
+            end
+            % Update Summary Tables
             obj.setSummaryTables(cType.RESOURCES);
         end
     end

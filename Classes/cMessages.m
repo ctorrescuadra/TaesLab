@@ -50,6 +50,8 @@ classdef cMessages
         InvalidDataSetKey='Invalid dataset key'
         InvalidStateName='Invalid state name %s'
         InvalidResourceName='Invalid resource name %s'
+        StateAlreadyExists='State %s already exists'
+        SampleAlreadyExists='Resource Sample %s already exists'
         % Save messages
         FileNotSaved='File %s NOT saved. See error log'
         NoTableToSave='No tables to save'

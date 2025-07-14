@@ -68,6 +68,16 @@ classdef(Sealed) cDataset < cDictionary
                 log.messageLog(cType.ERROR,cMessages.InvalidDataSetKey);
             end
         end
+
+        function log=addValues(obj,key,val)
+            log=cMessageLogger();
+            idx=obj.addKey(key);
+            if idx
+                obj.Values{end+1}=val;
+            else
+                log.messageLog(cType.ERROR,cMessages.InvalidDataSetKey);
+            end
+        end
     end
 
     methods(Access=private)

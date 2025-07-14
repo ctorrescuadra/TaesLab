@@ -120,7 +120,6 @@ classdef cDataModel < cResultSet
             end
             tmp=cDataset(list);
             if tmp.status
-                obj.StateNames=list;
                 obj.ExergyData=tmp;
             else
                 obj.addLogger(tmp);
@@ -170,7 +169,6 @@ classdef cDataModel < cResultSet
                 tmp=cDataset(list);
                 obj.addLogger(tmp)
                 if tmp.status
-                    obj.SampleNames=list;
                     obj.ResourceData=tmp;
                 else
                     obj.messageLog(cType.ERROR,cMessages.InvalidSampleList);
@@ -203,13 +201,7 @@ classdef cDataModel < cResultSet
             obj.State='DATA_MODEL';
             obj.DefaultGraph=cType.EMPTY_CHAR;
             obj.ModelData=dm;
-            % Get the Model Info
-            res=buildResultInfo(obj);
-            if ~res.status
-                obj.addLogger(res);
-            else
-                obj.modelInfo=res;
-            end          
+            obj.getResultInfo;
         end
 
     	function res=get.NrOfFlows(obj)
@@ -258,6 +250,19 @@ classdef cDataModel < cResultSet
             res=0;
             if obj.status
                 res=obj.ProductiveStructure.NrOfFinalProducts;
+            end
+        end
+
+        function res=get.StateNames(obj)
+            res=cType.EMPTY_CELL;
+            if obj.status
+                res=obj.ExergyData.Keys;
+            end
+        end
+
+        function res=get.SampleNames(obj)
+            if obj.isResourceCost && obj.status
+                res=obj.ResourceData.Keys;
             end
         end
         
@@ -335,7 +340,7 @@ classdef cDataModel < cResultSet
             res=obj.ExergyData.getValues(state);
         end
 
-        function res=setExergyData(obj,state,values)
+        function res=buildExergyData(obj,state,values)
         %setExergyData - Set the exergy data values of a state
         %   Syntax:
         %     res = obj.setExergyData(state,values)
@@ -356,12 +361,7 @@ classdef cDataModel < cResultSet
                 res.printError(cMessages.InvalidExergyDataSize,M);
                 return
             end
-            % Validate state
-            idx=obj.ExergyData.getIndex(state);
-            if ~idx
-                res.printError(cMessages.InvalidExergyData,state);
-                return
-            end
+            % Build exergy data structure
             exs.stateId=state;
             % Build exergy data structure
             if isstruct(values)
@@ -372,17 +372,48 @@ classdef cDataModel < cResultSet
                 tmp=[keys;num2cell(values)];
                 exs.exergy=cell2struct(tmp,fields,1);
             else
-                res.printError(cMessages.InvalidExergyData,state);
+                res.messageLog(cType.ERROR,cMessages.InvalidExergyData,state);
                 return
             end
             % Check and create a cExergyData object
             res=cExergyData(obj.ProductiveStructure,exs);
             if res.status
-                obj.ExergyData.setValues(idx,res);
+                res.messageLog(cType.INFO,cMessages.ValidExergyData,state)
             else
-                printLogger(res);
-                res.printError(cMessages.InvalidExergyData,state);
+                res.messageLog(cType.ERROR,cMessages.InvalidExergyData,state);
             end 
+        end
+
+        function log=setExergyData(obj,state,val)
+            log=cMessageLogger();
+            ds=obj.ExergyData;
+            if ds.existsKey(state)
+                exs=obj.buildExergyData(state,val);
+                if ~isValid(exs)
+                    log.addLogger(exs)
+                    log.messageLog(cType.ERROR,cMessages.InvalidExergyData,state);
+                    return
+                end
+                log=ds.setValues(key,exs);
+            else
+                log.messageLog(cType.ERROR,cMessages.InvalidStateName,state);
+            end
+        end
+
+        function log=addExergyData(obj,state,val)
+            log=cMessageLogger();
+            ds=obj.ExergyData;
+            if cParseStream.checkName(state) && ~ds.existsKey(state)
+                exs=obj.buildExergyData(state,val);
+                if ~isValid(exs)
+                    log.addLogger(exs)
+                    log.messageLog(cType.ERROR,cMessages.InvalidExergyData,state);
+                    return
+                end
+                log=ds.addValues(key,exs);
+            else
+                log.messageLog(cType.ERROR,cMessages.StateAlreadyExists,state);
+            end
         end
 
         function res=getResourceData(obj,sample)
@@ -438,6 +469,75 @@ classdef cDataModel < cResultSet
             end
         end
 
+        function res=buildResourceData(obj,sample,rval,pval)
+            res=cMessageLogger();
+            if nargin<3
+                res.printError(cMessages.InvalidArgument);
+                return
+            end
+            ps=obj.ProductiveStructure;
+            %Build Resource Data structure
+            rsd.sampleId=sample;
+            if isstruct(rval)
+                rsd.flows=rval;
+            elseif isnumeric(rval)
+                if obj.NrOfFlows~=length(rval)
+                    res.printError(cMessages.InvalidExergyDataSize,M);
+                    return
+                end
+                fields={'key','value'};
+                irsd=ps.ResourceFlows;
+                keys=ps.FlowKeys(irsd);
+                vals=values(irsd);
+                tmp=[keys;num2cell(vals)];
+                rsd.flows=cell2struct(tmp,fields,1);
+            else
+                res.printError(cMessages.InvalidExergyData,state);
+                return
+            end
+            if nargin==4
+                if isstruct(pval)
+                    rsd.processes=rval;
+                elseif isnumeric(pval)
+                    if obj.NrOfProcesses~=length(pval)
+                        res.printError(cMessages.InvalidExergyDataSize,M);
+                        return
+                    end
+                    fields={'key','value'};
+                    keys=ps.ProcessKeys(1:end-1);
+                    if iscolumn(pval), pval=pval';end
+                    tmp=[keys;num2cell(pval)];
+                    rsd.processes=cell2struct(tmp,fields,1);
+                else
+                    res.printError(cMessages.InvalidResourceData,sample);
+                    return
+                end
+            end
+            res=cResourceData(ps,rsd);
+            if res.status
+                res.printInfo(cMessages.ValidResourceCost,sample)
+            else
+                printLogger(res);
+                res.printError(cMessages.InvalidResourceData,sample);
+            end
+        end
+
+        function log=addResourceData(obj,sample,rval,pval)
+            log=cMessageLogger();
+            ds=obj.ResourceData;
+            if cParseStream.checkName(sample) && ~existsKey(sample)
+                rsd=obj.buildResourceData(sample,rval,pval);
+                if ~isValid(rsd)
+                    log.addLogger(rsd)
+                    log.messageLog(cType.ERROR,cMessages.InvalidResourceData,sample);
+                    return
+                end
+                log=ds.addValues(key,rsd);
+            else
+                log.messageLog(cType.ERROR,cMessages.SampleAlreadyExists,key);
+            end
+        end
+
         %%%
         % Get Tables information
         %%%
@@ -476,7 +576,12 @@ classdef cDataModel < cResultSet
         %   Output Arguments:
         %     res - cResultInfo of data model
         % 
-            res=obj.modelInfo;
+            res=buildResultInfo(obj);
+            if ~res.status
+                obj.addLogger(res);
+            else
+                obj.modelInfo=res;
+            end
         end
 
         function showDataModel(obj,varargin)

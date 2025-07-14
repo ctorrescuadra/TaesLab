@@ -103,6 +103,10 @@ classdef cParseStream
             end
         end
 
+        function res=checkName(name)
+            res=~isempty(regexp(name,cParseStream.NAME_PATTERN,'once'));
+        end
+        
         function res=checkListNames(list)
         %checkName - Check if a name (State,Sample) is valid
         %   Syntax:
@@ -111,7 +115,7 @@ classdef cParseStream
         %     list: cell array of text
         %   Output Argument:
         %     res - true/false
-            res=~any(cellfun(@isempty,regexp(list,cParseStream.NAME_PATTERN)));
+            res=all(cellfun(@(x) cParseStream.checkName(x),list));
         end
 
         function res=checkTextKey(key)
