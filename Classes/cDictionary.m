@@ -115,6 +115,14 @@ classdef cDictionary < cMessageLogger
 		end
 
 		function idx=addKey(obj,key)
+		%addKey - add a new key if doesn't exists
+		%   Syntax:
+		%     res = obj.addKey(idx)
+		%   Input Arguments:
+		%     key - key name
+		%   Output Argument:
+		%     idx - true | false
+		%
 			idx=0;
 			if ~obj.existsKey(key)
 				idx=obj.map.Count+1;

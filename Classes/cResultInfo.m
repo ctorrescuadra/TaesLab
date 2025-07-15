@@ -67,6 +67,7 @@ classdef cResultInfo < cResultSet
                 return
             end
             % Fill the class values
+            props=struct('State',info.State,'Sample',info.Sample);
             obj.Info=info;
             obj.Tables=tables;
             obj.ClassId=cType.ClassId.RESULT_INFO;
@@ -75,7 +76,7 @@ classdef cResultInfo < cResultSet
             obj.NrOfTables=obj.tableIndex.NrOfRows;
             obj.ModelName=info.ModelName;
             obj.setDefaultGraph(info.DefaultGraph);
-            obj.setStudyCase(info);
+            obj.setStudyCase(props);
             obj.status=info.status;
         end
 

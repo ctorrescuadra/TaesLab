@@ -42,7 +42,7 @@ classdef cResourceCost < cMessageLogger
 			end
 			% Set Resources properties
 			idx=rsd.frsc;
-			obj.sample=rsd.sample;
+			obj.sample=rsd.Sample;
 			obj.c0=rsd.c0;
 			% Process Resources Cost
 			fpm=exm.FlowProcessModel;

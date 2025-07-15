@@ -201,10 +201,11 @@ classdef cResourceData < cMessageLogger
 			end
 			idx=obj.frsc;
 			ft=sum(c0(idx));
-			if ft<cType.EPS
+            if ft<cType.EPS
 				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
 				return
-			end
+            end
+            if iscolumn(c0), c0=c0';end
 			obj.c0(idx)=c0(idx);	
 		end
 
@@ -255,6 +256,7 @@ classdef cResourceData < cMessageLogger
 				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
 				return
             end
+            if iscolumn(Z),Z=Z';end
 			obj.Z=Z;
 		end
 	end	

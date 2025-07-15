@@ -8,6 +8,7 @@ classdef cParseStream
 %     getStreams     - Get the list of productive groups
 %	  getFlows       - Get the input and output flows of a productive group
 %     checkKeyText   - Check if a key name is valid
+%     checkName      - Check if a State or Sample name is valid
 %     checkListNames - Check if a list of names (states, samples) are valid 
 %
 	properties (Constant,Access=private)
@@ -104,13 +105,20 @@ classdef cParseStream
         end
 
         function res=checkName(name)
+        %checkName - Check if a name (state | sample) is valid
+        %   Syntax:
+        %     res=checkName(name)
+        %   Input Argument:
+        %     name: char array to check
+        %   Output Argument:
+        %     res - true/false
             res=~isempty(regexp(name,cParseStream.NAME_PATTERN,'once'));
         end
         
         function res=checkListNames(list)
-        %checkName - Check if a name (State,Sample) is valid
+        %checkListNames - Check if a list of names is valid
         %   Syntax:
-        %     res=checkNAme(name)
+        %     res=checkListNames(name)
         %   Input Argument:
         %     list: cell array of text
         %   Output Argument:

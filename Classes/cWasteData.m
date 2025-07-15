@@ -145,13 +145,13 @@ classdef cWasteData < cMessageLogger
 		end
 
 		function res=getWasteFlows(obj,idx)
-		% Return the name of the corresponding index
-		% Syntax:
-		%   res = getWasteFlows  
-		% Input Arguments:
-		%  idx - state index to retrieve
-		% Output Arguments:
-		%  res - cell array with the waste flows keys
+		%getWasteFlows - Get the waste name of the corresponding index
+		%   Syntax:
+		%     res = obj.getWasteFlows  
+		%   Input Arguments:
+		%     idx - waste index to retrieve
+		%   Output Arguments:
+		%    res - cell array with the waste flows keys
 		%
 			res=cType.EMPTY_CELL;
 			if nargin==1
@@ -169,13 +169,13 @@ classdef cWasteData < cMessageLogger
 		end
 			
 		function res=getWasteIndex(obj,key)
-		% Get the id of the corresponding waste key
-		% Syntax:
-		%   res = obj.getWasteIndex(key)
-		% Input Argument:
-		%  key - waste flow name
-		% Output Argument:
-		%  res - waste flow id
+		%getWasteIndex - Get the id of the corresponding waste key
+		%   Syntax:
+		%     res = obj.getWasteIndex(key)
+		%   Input Argument:
+		%     key - waste flow name
+		%   Output Argument:
+		%     res - waste flow id
 		%
 			res=0;
 			if ischar(key)
@@ -184,13 +184,13 @@ classdef cWasteData < cMessageLogger
 		end
 			
 		function res=existWaste(obj,key)
-		% Determine if waste key is defined
-		% Syntax:
-		%   res = obj.existWaste(key)
-		% Input Argument:
-		%  key - waste flow name
-		% Output Argument:
-		%  res - true | false
+		%existWaste - Determine if waste key is defined
+		%   Syntax:
+		%     res = obj.existWaste(key)
+		%   Input Argument:
+		%    key - waste flow name
+		%   Output Argument:
+		%    res - true | false
 		%
 			res=false;
 			if ischar(key)
@@ -199,13 +199,14 @@ classdef cWasteData < cMessageLogger
         end
 
 		function res=getValues(obj,arg)
-		% Get the allocation ratios of a waste
-		% Syntax:
-		%   res = obj.getValues(arg)
-		% Input:
-		%   arg - waste key or id
-		% Output:
-		%  res - vector with the allocation waste ratios of waste id
+		%getValues - Get the allocation ratios of a waste
+		%   Syntax:
+		%     res = obj.getValues(arg)
+		%   Input Arguments:
+		%     arg - waste key or id
+		%   Output Arguments:
+		%     res - vector with the allocation waste ratios of waste
+		%
 			res=cType.EMPTY;
 			id=validateArg(obj,arg);
 			if id>0
@@ -214,14 +215,15 @@ classdef cWasteData < cMessageLogger
 		end
 	
 		function status=setValues(obj,arg,val)
-		% Set the cost allocation values of a waste
-		% Syntax:
-		%   res = obj.setValues(arg,val)
-		% Input Arguments:
-		%  arg - waste key name or id
-		%  val - Vector contains the allocation values
-		% Output Arguments:
-		%  res - true | false
+		%setValues - Set the cost allocation values of a waste
+		%   Syntax:
+		%     res = obj.setValues(arg,val)
+		%   Input Arguments:
+		%     arg - waste key name or id
+		%     val - Vector contains the allocation values
+		%   Output Arguments:
+		%     res - true | false
+		%
 			status=false;
 			id=validateArg(obj,arg);
 			if id<1
@@ -239,13 +241,13 @@ classdef cWasteData < cMessageLogger
 		end
 		
 		function res=getType(obj,arg)
-		% Get the waste type
-		% Syntax:
-		%   res = obj.getType(arg)
-		% Input Argument:
-		%   arg - waste key or id
-		% Output Argument:
-		%   res - waste type 
+		%getType - Get the waste allocation type
+		%   Syntax:
+		%     res = obj.getType(arg)
+		%   Input Argument:
+		%     arg - waste key or id
+		%   Output Argument:
+		%     res - waste type 
 		%
 			res=cType.EMPTY_CHAR;
 			id=validateArg(obj,arg);
@@ -255,13 +257,15 @@ classdef cWasteData < cMessageLogger
 		end
 	
 		function status=setType(obj,arg,type)
-		% Syntax:
-		%   res = obj.setType(arg,val)
-		% Input Arguments:
-		%  arg - waste key name or id
-		%  type -waste type
-		% Output Arguments:
-		%  res - true | false
+		%setType - Set the waste allocation type
+		% 	Syntax:
+		%     res = obj.setType(arg,val)
+		%   Input Arguments:
+		%     arg - waste key name or id
+		%     type - waste type
+		%   Output Arguments:
+		%     res - true | false
+		%
 			status=false;
 			id=validateArg(obj,arg);
 			if id<1
@@ -276,13 +280,13 @@ classdef cWasteData < cMessageLogger
 		end            
 					
 		function res=getRecycleRatio(obj,arg)
-		% Get the recycle ratio value of a waste
-		% Syntax:
-		%   res = obj.RecycleRatio(arg)
-		% Input Argument:
-		%   arg - waste key or id
-		% Output Argument:
-		%   res - waste recycle ratio
+		%getRecycleRatio - Get the recycle ratio value of a waste
+		%   Syntax:
+		%     res = obj.RecycleRatio(arg)
+		%   Input Argument:
+		%     arg - waste key or id
+		%   Output Argument:
+		%     res - waste recycle ratio
 		%
 			res=cType.EMPTY;
 			id=validateArg(obj,arg);
@@ -292,14 +296,14 @@ classdef cWasteData < cMessageLogger
 		end
 		
 		function status=setRecycleRatio(obj,arg,val)
-		% Set the recycle ratio
-		% Syntax:
-		%   res = obj.setType(arg,val)
-		% Input Arguments:
-		%  arg - waste key name or id
-		%  val - recycle ratio
-		% Output Arguments:
-		%  res - true | false
+		%setRecycleRatio - Set the recycle ratio of a waste
+		%   Syntax:
+		%     res = obj.setType(arg,val)
+		%   Input Arguments:
+		%     arg - waste key name or id
+		%     val - recycle ratio
+		%   Output Arguments:
+		%     res - true | false
 			status=false;
 			id=validateArg(obj,arg);
 			if id<1

@@ -8,7 +8,8 @@ classdef(Sealed) cDataset < cDictionary
 %
 %   cDataset methods:
 %     getValues - Get the object associated to an entry
-%     setValues - set an object to an entry
+%     setValues - Set an object to an entry
+%     addValues - Add a new entry
 %
 %   See also cDictionary
 %
@@ -53,7 +54,7 @@ classdef(Sealed) cDataset < cDictionary
         function log=setValues(obj,arg,val)
         %setValues - Set the values in position indicates by arg
         %   Syntax: 
-        %     res = obj.getValues(arg)
+        %     res = obj.setValues(arg,val)
         %   Input Argument:
         %     arg - key or index of the values
         %     val - object with the values to store
@@ -70,6 +71,15 @@ classdef(Sealed) cDataset < cDictionary
         end
 
         function log=addValues(obj,key,val)
+        %addValues - Add a new value at the end of the dataset
+        %   Syntax: 
+        %     res = obj.addValues(key,val)
+        %   Input Argument:
+        %     key - key name
+        %     val - object with the values to store
+        %   Output Argument:
+        %     log - cMessagesLog with status and messages
+        %        
             log=cMessageLogger();
             idx=obj.addKey(key);
             if idx

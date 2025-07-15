@@ -34,9 +34,15 @@ classdef cDataModel < cResultSet
 %     existSample        - Check if a sample name exists
 %     getExergyData      - Get the cExergyData of a state
 %     setExergyData      - Set the exergy values of a state
+%     addExergyData      - Add a new exergy state
 %     getResourceData    - Get the cResourceData for a specific sample
 %     setFlowResource    - Set Flow-resource values of a sample
 %     setProcessResource - Set Process-resource values of a sample
+%     addResourceData    - Add a new resource sample
+%     getWasteDefinition - Get Waste definition info
+%     setWasteType       - Modify the type of a waste
+%     setWasteValues     - Modify the allocation values of a waste
+%     setWasteRecycled   - Modify the recycling ratio of a waste
 %     getTablesDirectory - Get the tables directory 
 %     getTableInfo       - Get information about a table object
 %     getResultInfo      - Get the cResultInfo associated to the data model
@@ -201,7 +207,7 @@ classdef cDataModel < cResultSet
             obj.State='DATA_MODEL';
             obj.DefaultGraph=cType.EMPTY_CHAR;
             obj.ModelData=dm;
-            obj.getResultInfo;
+            obj.buildResultInfo;
         end
 
     	function res=get.NrOfFlows(obj)
@@ -327,6 +333,9 @@ classdef cDataModel < cResultSet
 			res=obj.ResourceData.getIndex(sample);
         end
 
+        %%%
+        % Get/Set Exergy methods
+        %%%
         function res=getExergyData(obj,state)
         %getExergyData - Get the exergy data for a state
         %   Syntax:
@@ -369,6 +378,7 @@ classdef cDataModel < cResultSet
             elseif isnumeric(values)
                 fields={'key','value'};
                 keys=obj.ProductiveStructure.FlowKeys;
+                if iscolumn(values),values=values';end
                 tmp=[keys;num2cell(values)];
                 exs.exergy=cell2struct(tmp,fields,1);
             else
@@ -385,6 +395,15 @@ classdef cDataModel < cResultSet
         end
 
         function log=setExergyData(obj,state,val)
+        %setExergyData - set exergy data to a state
+        %   Syntax: 
+        %     log = obj.setExergyData(state,val)
+        %   Input Argument:
+        %     state - state to change 
+        %     val - array | struct with exergy values
+        %   Output Argument:
+        %     log - true | false status of the operation
+        %
             log=cMessageLogger();
             ds=obj.ExergyData;
             if ds.existsKey(state)
@@ -400,22 +419,33 @@ classdef cDataModel < cResultSet
             end
         end
 
-        function log=addExergyData(obj,state,val)
-            log=cMessageLogger();
+        function res=addExergyData(obj,state,val)
+        %setExergyData - add a new  exergy data state
+        %   Syntax: 
+        %     log = obj.addExergyData(state,val)
+        %   Input Argument:
+        %     state - state to change 
+        %     val - array | struct with exergy values
+        %   Output Argument:
+        %     log - true | false status of the operation
+        %
+            res=cMessageLogger();
             ds=obj.ExergyData;
             if cParseStream.checkName(state) && ~ds.existsKey(state)
-                exs=obj.buildExergyData(state,val);
-                if ~isValid(exs)
-                    log.addLogger(exs)
-                    log.messageLog(cType.ERROR,cMessages.InvalidExergyData,state);
+                res=obj.buildExergyData(state,val);
+                if ~isValid(res)
+                    res.addLogger(res)
                     return
                 end
-                log=ds.addValues(key,exs);
+                ds.addValues(state,res);
             else
-                log.messageLog(cType.ERROR,cMessages.StateAlreadyExists,state);
+                res.messageLog(cType.ERROR,cMessages.StateAlreadyExists,state);
             end
         end
 
+        %%%
+        % Get/Set Resource Definition methods
+        %%%
         function res=getResourceData(obj,sample)
         %getResourceData - Get the resource data for a sample
         %   Syntax:
@@ -470,6 +500,16 @@ classdef cDataModel < cResultSet
         end
 
         function res=buildResourceData(obj,sample,rval,pval)
+        %buildResourceData - create a new cResourceData object
+        %   Syntax:
+        %     res = obj.buildResourceData(sample,rval,pval)
+        %   Input Arguments:
+        %     sample - name of the resource sample
+        %     rval - array | struct with the flow resource values
+        %     pval - array | struct with the processes resource values (optional)
+        %   Output Arguments:
+        %     res - cResourceData object
+        %
             res=cMessageLogger();
             if nargin<3
                 res.printError(cMessages.InvalidArgument);
@@ -488,7 +528,8 @@ classdef cDataModel < cResultSet
                 fields={'key','value'};
                 irsd=ps.ResourceFlows;
                 keys=ps.FlowKeys(irsd);
-                vals=values(irsd);
+                if iscolumn(rval), rval=rval';end
+                vals=rval(irsd);
                 tmp=[keys;num2cell(vals)];
                 rsd.flows=cell2struct(tmp,fields,1);
             else
@@ -514,28 +555,132 @@ classdef cDataModel < cResultSet
                 end
             end
             res=cResourceData(ps,rsd);
-            if res.status
-                res.printInfo(cMessages.ValidResourceCost,sample)
-            else
+            if ~res.status
                 printLogger(res);
                 res.printError(cMessages.InvalidResourceData,sample);
             end
         end
 
-        function log=addResourceData(obj,sample,rval,pval)
-            log=cMessageLogger();
+        function rsd=addResourceData(obj,sample,rval,varargin)
+        %addResourceData - create a new cResourceData object and add to Resource samples
+        %   Syntax:
+        %     res = obj.addResourceData(sample,rval,pval)
+        %   Input Arguments:
+        %     sample - name of the resource sample
+        %     rval - array | struct with the flow resource values
+        %     pval - array | struct with the processes resource values (optional)
+        %   Output Arguments:
+        %     log - true | false status of the operaton
+        %
+            if nargin<3
+                return
+            end
+            rsd=cMessageLogger();
             ds=obj.ResourceData;
-            if cParseStream.checkName(sample) && ~existsKey(sample)
-                rsd=obj.buildResourceData(sample,rval,pval);
+            if cParseStream.checkName(sample) && ~ds.existsKey(sample)
+                rsd=obj.buildResourceData(sample,rval,varargin{:});
                 if ~isValid(rsd)
-                    log.addLogger(rsd)
-                    log.messageLog(cType.ERROR,cMessages.InvalidResourceData,sample);
+                    rsd.addLogger(rsd)
                     return
                 end
-                log=ds.addValues(key,rsd);
+                ds.addValues(sample,rsd);
             else
-                log.messageLog(cType.ERROR,cMessages.SampleAlreadyExists,key);
+                rsd.messageLog(cType.ERROR,cMessages.SampleAlreadyExists,sample);
             end
+        end
+
+        %%%
+        % Get/Set Waste Analysis methods
+        %%%
+        function res=getWasteDefinition(obj)
+        %getWasteDefinition - Get Waste Data
+        %   Syntax:
+        %     obj.getWasteDefinition;
+        %     res = obj.getWasteDefinition
+        %   Output Arguments:
+        %     res - (optional) cWasteData
+        %       If no output, it shows waste tables
+        %
+            res=obj.WasteData;
+            if nargout==0
+                showResults(obj.modelInfo,cType.TableData.WASTE_DEFINITION);
+                tbl=getTable(obj.modelInfo,cType.TableData.WASTE_ALLOCATION);
+                if tbl.status, printTable(tbl); end
+            end
+        end
+
+        function log=setWasteType(obj,key,wtype)
+        %setWasteType - Set the waste type allocation method for Active Waste
+        %   Syntax: 
+        %     log = setWasteType(wtype)
+        %   Input Arguments:
+        %     key - waste key 
+        %     wtype - waste allocation type
+        %   Output Arguments:
+        %     log - cMessageLogger with the status and messages of operation
+        %   See also cType.WasteAllocation
+        %
+            log=cMessageLogger();
+            if nargin~=3
+               log.printError(cMessages.InvalidArgument);
+               return
+            end
+            if ~setType(obj.WasteData,key,wtype)
+                log.printError(cMessages.InvalidWasteAllocation,wtype);
+            end
+        end
+
+        function log=setWasteValues(obj,key,val)
+        %setWasteValues - Set the waste table values
+        %   Syntax:
+        %     log = obj.setWasteValues(val)
+        %   Input Arguments:
+        %     key - waste key 
+        %     val - vector containing the waste allocation values for processes
+        %   Output Arguments:
+        %     log - cMessageLogger with the status and messages of operation
+            log=cMessageLogger();
+            if nargin~=3
+               log.printError(cMessages.InvalidArgument);
+               return
+            end
+            if ~setValues(obj.WasteData,key,val)
+                log.printError(cMessages.InvalidWasteValues,key);
+            end 
+        end
+   
+        function log=setWasteRecycled(obj,key,val)
+        %setWasteRecycled - Set the waste recycling ratios
+        %   Syntax:
+        %     log = obj.setWasteRecycled(val)
+        %   Input Arguments:
+        %     key - Waste key
+        %     val - Recycling ratio of the active waste
+        %   Output Arguments:
+        %     log - cMessageLogger with the status and messages of operation
+        %
+            log=cMessageLogger();
+            if nargin~=3
+               log.printError(cMessages.InvalidArgument);
+               return
+            end 
+            if ~setRecycleRatio(obj.WasteData,key,val)
+                log.printError(cMessages.InvalidRecycling,val,key);
+            end
+        end
+
+        function log=updateModel(obj)
+        %updateDataModel - Update the Data Model if there is changes
+        %   Update cModelData and cResultInfo if changes have been made
+        %   by setExergy, setResources or setWaste methods
+        %   Syntax
+        %     log = obj.updataModel
+        %   Output
+        %     log - true | false status of the update.
+        % 
+            buildModelData(obj)
+            buildResultInfo(obj);
+            log=obj.status;
         end
 
         %%%
@@ -549,7 +694,7 @@ classdef cDataModel < cResultSet
         %     options - cell array with selected columns properties
         %   Output Arguments:
         %     res - cTable object with the available tables and its properties
-        % See also ListResultTables
+        %   See also ListResultTables
         %
             res=getTablesDirectory(obj.FormatData,varargin{:});
         end
@@ -576,12 +721,7 @@ classdef cDataModel < cResultSet
         %   Output Arguments:
         %     res - cResultInfo of data model
         % 
-            res=buildResultInfo(obj);
-            if ~res.status
-                obj.addLogger(res);
-            else
-                obj.modelInfo=res;
-            end
+            res=obj.modelInfo;
         end
 
         function showDataModel(obj,varargin)
@@ -646,9 +786,8 @@ classdef cDataModel < cResultSet
     end
 
     methods(Access=private)
-        function res=buildResultInfo(obj)
+        function buildResultInfo(obj)
         % Get the cResultInfo with the data model tables
-            res=cMessageLogger(cType.INVALID);
             ps=obj.ProductiveStructure;
             p=struct('Name','','Description','');
 			% Flows Table
@@ -663,8 +802,8 @@ classdef cDataModel < cResultSet
             if tbl.status
                 tables.(sheet)=tbl;
             else
-                res.addLogger(tbl);
-                res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+                obj.addLogger(tbl);
+                obj.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                 return
             end
 			% Process Table
@@ -683,8 +822,8 @@ classdef cDataModel < cResultSet
             if tbl.status
                 tables.(sheet)=tbl;
             else
-                res.addLogger(tbl);
-                res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+                obj.addLogger(tbl);
+                obj.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                 return
             end
             % Exergy Table
@@ -702,8 +841,8 @@ classdef cDataModel < cResultSet
             if tbl.status
                 tables.(sheet)=tbl;
             else
-                res.addLogger(tbl);
-                res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+                obj.addLogger(tbl);
+                obj.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                 return
             end
             % Format Table
@@ -718,8 +857,8 @@ classdef cDataModel < cResultSet
             if tbl.status
                 tables.(sheet)=tbl;
             else
-                res.addLogger(tbl);
-                res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+                obj.addLogger(tbl);
+                obj.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                 return
             end
             % Resources Cost tables
@@ -753,8 +892,8 @@ classdef cDataModel < cResultSet
                 if tbl.status
                     tables.(sheet)=tbl;
                 else
-                    res.addLogger(tbl);
-                    res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+                    obj.addLogger(tbl);
+                    obj.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                     return
                 end
 				tables.(sheet)=tbl;
@@ -777,8 +916,8 @@ classdef cDataModel < cResultSet
                 if tbl.status
                     tables.(sheet)=tbl;
                 else
-                    res.addLogger(tbl);
-                    res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+                    obj.addLogger(tbl);
+                    obj.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                     return
                 end
 				% Waste Allocation
@@ -796,13 +935,94 @@ classdef cDataModel < cResultSet
                     if tbl.status
                         tables.(sheet)=tbl;
                     else
-                        res.addLogger(tbl);
-                        res.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
+                        obj.addLogger(tbl);
+                        obj.messageLog(cType.ERROR,cMessages.TableNotCreated,sheet);
                         return
                     end
                 end
             end
+            % Create Data Mode Result Info
             res=cResultInfo(obj,tables);
+            if isValid(res)
+                obj.modelInfo=res;
+            else
+                obj.addLogger(res);
+            end
+        end
+
+        function buildModelData(obj)
+        %buildModelData - Update the ModelData
+            % General variables
+            ps=obj.ProductiveStructure;
+            % Exergy
+            ds=obj.ExergyData;
+            fields={'key','value'};
+            snames=obj.StateNames;
+            st=cell(obj.NrOfStates,1);
+            for i=1:obj.NrOfStates
+                st{i}.stateId=snames{i};
+                exd=ds.getValues(i);
+                values=[ps.FlowKeys;num2cell(exd.FlowsExergy)];
+                st{i}.exergy=cell2struct(values,fields,1);
+            end
+            ExergyStates.States=cell2mat(st);
+            %Waste Definition
+            if obj.isWaste
+                keys=ps.ProcessKeys;
+                wd=obj.WasteData;
+                NR=obj.NrOfWastes;
+                pswd=cell(NR,1);
+                for i=1:NR
+                    pswd{i}.flow=wd.Names{i};
+                    pswd{i}.type=wd.Type{i};
+                    pswd{i}.recycle=wd.RecycleRatio(i);
+                    [~,cols,vals]=find(wd.Values(i,:));
+                    nnz=length(vals);
+                    if nnz>0
+                        tmp=cell(nnz,1);
+                        for j=1:nnz
+                            tmp{j}.process=keys{cols(j)};
+                            tmp{j}.value=vals(j);
+                        end
+                        pswd{i}.values=cell2mat(tmp);
+                    end
+                end
+                WasteDefinition.wastes=cell2mat(pswd);
+            end
+            %Resource data
+            if obj.isResourceCost
+                ds=obj.ResourceData;
+                snames=obj.SampleNames;
+                rs=cell(obj.NrOfSamples,1);
+                for i=1:obj.NrOfSamples
+                    rs{i}.sampleId=snames{i};
+                    rsd=ds.getValues(i);
+                    % Flow Resources
+                    idx=rsd.frsc;
+                    keys=ps.FlowKeys(idx);
+                    vals=num2cell(rsd.c0(idx));            
+                    values=[keys;vals];
+                    rs{i}.flows=cell2struct(values,fields,1);
+                    % Process Resources
+                    keys=ps.ProcessKeys(1:end-1);
+                    vals=num2cell(rsd.Z);            
+                    values=[keys;vals];
+                    rs{i}.processes=cell2struct(values,fields,1);
+                end
+            end
+            % Build Model Data
+            ResourcesCost.Samples=cell2mat(rs);
+            md=struct('ProductiveStructure',obj.ModelData.ProductiveStructure,...
+                'Format',obj.ModelData.Format,...
+                'ExergyStates',ExergyStates,...
+                'WasteDefinition',WasteDefinition,...
+                'ResourcesCost',ResourcesCost);
+            res=cModelData(obj.ModelName,md);
+            if res.status
+                obj.ModelData=res;
+            else
+                obj.addLogger(res);
+            end
         end
     end
 end

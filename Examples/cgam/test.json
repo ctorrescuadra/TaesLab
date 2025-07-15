@@ -1,6 +1,6 @@
 {
   "ProductiveStructure": {
-    "name": "test",
+    "name": "cgam_model",
     "flows": [
       {
         "key": "NG",
@@ -54,36 +54,42 @@
     "processes": [
       {
         "key": "COMB",
+        "description": "Combustor",
         "fuel": "NG+B3",
         "product": "B4",
         "type": "PRODUCTIVE"
       },
       {
         "key": "CMP",
+        "description": "Compressor",
         "fuel": "WC",
         "product": "B2-B1",
         "type": "PRODUCTIVE"
       },
       {
         "key": "TRB",
+        "description": "Turbine",
         "fuel": "B4-B5",
         "product": "WC+WN",
         "type": "PRODUCTIVE"
       },
       {
         "key": "APH",
+        "description": "Preheater",
         "fuel": "B5-B6",
         "product": "B3-B2",
         "type": "PRODUCTIVE"
       },
       {
         "key": "HRSG",
+        "description": "HRSG",
         "fuel": "B6-B7",
         "product": "QV",
         "type": "PRODUCTIVE"
       },
       {
         "key": "STCK",
+        "description": "Stack",
         "fuel": "B7",
         "product": "QG",
         "type": "DISSIPATIVE"
@@ -521,7 +527,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 72.465
+            "value": 75.805
           },
           {
             "key": "B1",
@@ -529,31 +535,31 @@
           },
           {
             "key": "B2",
-            "value": 28.651
+            "value": 28.614
           },
           {
             "key": "B3",
-            "value": 50.339
+            "value": 48.095
           },
           {
             "key": "B4",
-            "value": 102.53
+            "value": 102.461
           },
           {
             "key": "B5",
-            "value": 38.81
+            "value": 38.784
           },
           {
             "key": "B6",
-            "value": 14.784
+            "value": 16.623
           },
           {
             "key": "B7",
-            "value": 2.122
+            "value": 1.731
           },
           {
             "key": "WC",
-            "value": 31.105
+            "value": 31.064
           },
           {
             "key": "WN",
@@ -561,11 +567,11 @@
           },
           {
             "key": "QV",
-            "value": 9.30257
+            "value": 10.878
           },
           {
             "key": "QG",
-            "value": 2.122
+            "value": 1.731
           }
         ]
       }
@@ -600,7 +606,7 @@
       {
         "key": "GENERALIZED_UNIT_COST",
         "width": 11,
-        "precision": 4,
+        "precision": 2,
         "unit": "($/MWh)"
       },
       {

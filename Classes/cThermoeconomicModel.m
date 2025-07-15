@@ -104,10 +104,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     getResourceData         - Get the resource data of a sample
 %     setFlowResource         - Set the resource flows values
 %     setProcessResource      - Set the processes resource values
+%     addResourceData         - Add a new resource sample
 %
 %    Exergy Data Methods
 %     getExergyData - Get the exergy data of a state
 %     setExergyData - Set the exergy values of a state
+%     addExergyData - Add a new exergy state
 %
 %   See also cResultSet, cResultId
 %
@@ -1215,9 +1217,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             res=cMessageLogger();
             if ~obj.isGeneralCost
-                res.printError(cMessages.NoGeneralizedCost);
+                res.printWarning(cMessages.NoGeneralizedCost);
                 return
-            end          
+            end
             log=setProcessResource(obj.rsd,Z);
             if log.status
                 obj.setThermoeconomicAnalysis;
@@ -1225,33 +1227,40 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=obj.rsc;
             else
                 printLogger(log);
-                res.printError(cMessages.InvalidProcessValues);
+                res.printWarning(cMessages.InvalidProcessValues);
             end
         end
 
-        function res=addResourceData(obj,sample,c0,Z)
+        function res=addResourceData(obj,sample,c0,varargin)
         %addExergyData - Set exergy data values to actual state
         % Syntax:
         %   log=obj.setExergyData(values)
         % Input Arguments:
-        %   state - new state name to add
-        %   values - Array with the exergy values of the flows
+        %   sample - new sample name to add
+        %   c0 - array | struct with the unit cost of the resource flows
+        %   Z -  array | struct with the cost associated to processes
         % Output Arguments:
         %   log - cMessageLogger object with the status and messages of operation
         %
-            res=cMessageLogger();
+            log=cMessageLogger();
+            if nargin<3
+                obj.printWarning(cMessages.InvalidArgument);
+                return
+            end
+            ds=obj.DataModel.ResourceData;
             % Check state is no reference 
-            if ~cParseStream.checkName(sample) || existsKey(sample)
-                res.messageLog(cType.WARNING,cMessages.InvalidSampleName);
+            if ~cParseStream.checkName(sample) || existsKey(ds,sample)
+                log.messageLog(cType.WARNING,cMessages.InvalidSampleName);
                 return
             end
             % Set resource data for sample
             data=obj.DataModel;
-            rs=data.addResourceData(sample,c0,Z);
-            if ~rs.status
-                printLogger(rs);
+            res=data.addResourceData(sample,c0,varargin{:});
+            if ~res.status
+                printLogger(res);
                 return
             end
+            obj.setResourceSample(sample);
         end
         
         function res=getResourceData(obj,sample)
@@ -1299,7 +1308,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             res=cMessageLogger();
             % Check state is no reference 
             if strcmp(obj.ReferenceState,obj.State)
-                res.printError(cMessages.NoSetExergyData);
+                res.printWarning(cMessages.NoSetExergyData);
                 return
             end
             % Set exergy data for state
@@ -1339,9 +1348,14 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   log - cMessageLogger object with the status and messages of operation
         %
             res=cMessageLogger();
-            % Check state is no reference 
-            if ~cParseStream.checkName(state) || existsKey(state)
-                res.messageLog(cType.WARNING,cMessages.InvalidStateName);
+            if nargin<3
+                res.printWarning(cMessages.InvalidArgument);
+                return
+            end
+            % Check state doesn't exist
+            ds=obj.DataModel.ExergyData;
+            if ~cParseStream.checkName(state) || existsKey(ds,state)
+                res.printWarning(cMessages.InvalidStateName);
                 return
             end
             % Set exergy data for state
@@ -1358,13 +1372,23 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=cExergyCost(rex);
             end
             if res.status
-                obj.rstate.setValues(state,res);
+                obj.rstate.addValues(state,res);
             else
                 printLogger(res);
                 return
             end
-            % Update Summary Tables
-            obj.setSummaryTables(cType.RESOURCES);
+            % Set the new current state
+            obj.setState(state);
+        end
+
+        function log=updateModel(obj)
+        %updateDataModel - update the data model if have been changes
+        %   Syntax:
+        %     log = obj.updateModel
+        %   Output Arguments
+        %     log - true|false 
+        %
+            log=updateModel(obj.DataModel);
         end
     end
     %%%%%%
