@@ -8,7 +8,7 @@
 % Read Data Models
 %   ReadDataModel           - Read a data model file.
 %   CopyDataModel           - Creates a copy of a data model file in another format.
-%   ImportData              - IImportData - Import external data to a cTableData from CSV or XLSX files.
+%   ImportData              - Import external data to a cTableData from CSV or XLSX files.
 %
 % Get Thermoeconomic Results
 %   ThermoeconomicModel     - Creates a cThermoeconomicModel object from a data model file.
@@ -22,17 +22,17 @@
 %   SummaryResults          - Get the summary results of the plant.
 %
 % Save Results Tables 
-%   SaveResults             - Saves the results tables into a file
-%   SaveSummary             - Saves the summary results into a file.
-%   SaveDataModel           - Saves the data model tables into a file.
-%   SaveTable               - Saves a table into a file.
+%   SaveResults             - Save the results tables into a file
+%   SaveSummary             - Save the summary results into a file.
+%   SaveDataModel           - Save the data model tables into a file.
+%   SaveTable               - Save a table content into a file.
 %
 % Display Results 
-%   ListResultTables        - Lists the results tables and their properties.
+%   ListResultTables        - List the results tables and their properties.
 %   ShowResults             - Dsiplay the results tables in different formats.
 %   ShowTable               - Display an individual table.
 %   ShowGraph               - Display the graph associated with a results table.
-%   ExportResults           - Exports the results tables in different formats.
+%   ExportResults           - Export the results tables in different formats.
 %
 % GUI functions
 %   TaesPanel               - Graphical user interface for selecting thermoeconomic model parameters.

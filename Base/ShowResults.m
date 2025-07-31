@@ -24,8 +24,8 @@ function ShowResults(arg,varargin)
 %       'GUI' - use uitable
 %     Panel: Use ResultsPanel
 %       true | false (default)
-%     SaveAs: Save the ResultSet/Table in an external file.
-%       char array | string of a valid filename
+%     SaveAs:  Name of the file (with extension) to save the result tables
+%       char array | string 
 %
 %   Example:
 %     <a href="matlab:open ShowResultsDemo.mlx">Show Results Demo</a>

@@ -1,14 +1,14 @@
-function model=ThermoeconomicModel(filename,varargin)
+function model=ThermoeconomicModel(arg,varargin)
 %ThermoeconomicModel - Creates a cThermoeconomicModel object from a data model file.
 %   This function creates a cThermoeconomicModel object. Once the object has been created, 
 %   all the functions available in the class can be used, 
-%   allowing you to obtain all the results of a thermoeconomic analysis interactively.
+%   allowing you to get all the results of a thermoeconomic analysis interactively.
 %
 %   Syntax
-%     model = ThermoeconomicModel(filename,Name,Value)
+%     model = ThermoeconomicModel(arg,Name,Value)
 %
 %   Input Arguments
-%     filename - Name of the file with the data mode
+%     arg - Name of the file with the data model or cDataModel object
 %
 %   Name-Value Arguments
 %     ReferenceState - Reference state name. If it is not defined, first state is taken.
@@ -47,20 +47,21 @@ function model=ThermoeconomicModel(filename,varargin)
 %
     model=cMessageLogger();
     % Check input parameters
-    if (nargin<1) || ~isFilename(filename)
-        model.printError(cMessages.InvalidInputFile);
+    if isFilename(arg)
+        filename=char(arg);
+        if exist(filename,'file')
+            data=readModel(filename);
+        else
+            model.printError(cMessages.FileNotExist,filename);
+            return
+        end
+    elseif isa(arg,'cDataModel')
+        data=arg;
+    else
+        model.printError(cMessages.InvalidArgument);
         model.printError(cMessages.ShowHelp);
         return
     end
-    if ~exist(filename,'file')
-        model.printError(cMessages.FileNotExist,filename);
-        return
-    end
-    if isstring(filename)
-        filename=convertStringsToChars(filename);
-    end
-    % Check Data Model file
-        data=readModel(filename);
     % Check optional parameters and create cThermoeconomicModel obeject
     if data.status
         p = inputParser;

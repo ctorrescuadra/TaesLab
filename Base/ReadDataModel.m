@@ -1,5 +1,5 @@
 function data=ReadDataModel(filename,varargin)
-%cReadDataModel - Reads a data model file.
+%ReadDataModel - Reads a data model file.
 %   This function loads a data model file into a cDataModel object.
 %   It checks that all elements are valid and displays them in the console.
 %   If the 'Debug' option is selected, it provides additional information about the data model.

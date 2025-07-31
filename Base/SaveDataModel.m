@@ -9,7 +9,8 @@ function SaveDataModel(arg,filename)
 %
 %   Input Arguments:
 %     arg - cDataModel or cThermoeconomicModel object
-%     filename - name of the output file (with extension)
+%     filename - Name of the output file (with extension)
+%       array char | string
 %
 %   Example
 %     <a href="matlab:open SaveDataModelDemo.mlx">Save Data Model Demo</a>

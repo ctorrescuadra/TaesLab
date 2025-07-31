@@ -5,7 +5,7 @@ function res=ProductiveDiagram(data,varargin)
 %   used by external graph software such as yEd
 %
 %   Syntax
-%     res = ProductiveStructure(data,Name,Value)
+%     res = ProductiveDiagram(data,Name,Value)
 %
 %   Input Arguments
 %     data - cReadModel object containing the data information

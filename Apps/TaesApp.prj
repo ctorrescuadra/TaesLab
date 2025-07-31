@@ -1,9 +1,9 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="4076863282" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps\TaesApp.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps" name="TaesApp" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="3463769365" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps\TaesApp.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps" name="TaesApp" target="target.mlapps" target-name="Package App">
     <param.appname>TaesApp</param.appname>
     <param.authnamewatermark>César Torres Cuadra</param.authnamewatermark>
     <param.email>ctorresc@unizar.es</param.email>
-    <param.company>Universidad de Zaragoza</param.company>
+    <param.company>Instituto Energaia. Universidad de Zaragoz</param.company>
     <param.icon>${PROJECT_ROOT}\TaesApp_resources\icon_24.png</param.icon>
     <param.icons>
       <file>${PROJECT_ROOT}\TaesApp_resources\icon_48.png</file>
@@ -11,24 +11,24 @@
       <file>${PROJECT_ROOT}\TaesApp_resources\icon_16.png</file>
     </param.icons>
     <param.summary>TAES App</param.summary>
-    <param.description>Thermoeconomic Analysis of Energy System App</param.description>
-    <param.screenshot />
-    <param.version>1.7.3</param.version>
+    <param.description>Thermoeconomic Analysis of Energy System</param.description>
+    <param.screenshot>C:\Users\ctorr\AppData\Local\Temp\tpd2a0e9be_d093_4455_a4a4_819d5e3ed380.png</param.screenshot>
+    <param.version>1.7</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
     <param.platforms />
-    <param.output>C:\Users\ctorr\Documents</param.output>
+    <param.output>${PROJECT_ROOT}</param.output>
     <param.guid>55d0bfae-2823-49d2-a65e-ee998521156a</param.guid>
     <unset>
       <param.authnamewatermark />
       <param.email />
       <param.company />
-      <param.screenshot />
       <param.products.name />
       <param.products.id />
       <param.products.version />
       <param.platforms />
+      <param.output />
     </unset>
     <fileset.main>
       <file>${PROJECT_ROOT}\TaesApp.mlapp</file>
@@ -46,12 +46,18 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDiagnosis.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDiagramFP.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDictionary.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDigraph.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyCost.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyData.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyModel.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cFormatData.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphCost.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphDiagnosis.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphDiagramFP.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphRecycling.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphResults.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cLogger.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphSummary.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphWaste.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cMessageBuilder.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cMessageLogger.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cMessages.m</file>
@@ -60,6 +66,7 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cParseStream.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cProductiveDiagram.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cProductiveStructure.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cQueue.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModel.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelCSV.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelJSON.m</file>
@@ -106,13 +113,16 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isIndex.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isInteger.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isMatlab.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isNonNegativeMatrix.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isNonSingularMatrix.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isObject.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isOctave.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isValid.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\log2str.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\logicalMatrix.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\readModel.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\scaleCol.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\scaleRow.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\similarResourceOperator.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\transitiveClosure.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\vDivide.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\zerotol.m</file>
@@ -123,7 +133,7 @@
     </fileset.resources>
     <fileset.package />
     <build-deliverables>
-      <file location="C:\Users\ctorr" name="Documents" optional="false">C:\Users\ctorr\Documents</file>
+      <file location="C:\Users\ctorr\Documents\Proyectos\TaesLab" name="Apps" optional="false">C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps</file>
     </build-deliverables>
     <workflow />
     <matlab>

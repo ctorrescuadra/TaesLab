@@ -16,6 +16,7 @@ classdef(Abstract) cResultSet < cResultId
 %   cResultSet Methods:
 %     StudyCase      - Get the study case value names
 %     ListOfTables   - Get the table names from a result set
+%     LIstOfGraphs   - Get the graphic table names from a result set
 %     getTableIndex  - Get the table index from a result set
 %     printResults   - Print results on console
 %     showResults    - Show results in different interfaces
@@ -62,6 +63,25 @@ classdef(Abstract) cResultSet < cResultId
                 res=fieldnames(tmp.Tables);
             end
         end
+
+        function res=ListOfGraphs(obj)
+        %ListOfGraphs - Get the list of graph tables as cell array
+        %   Syntax:
+        %     obj.ListOfTables
+        %   Output Arguments:
+        %     res - cell array with the graph table names
+            res=cType.EMPTY_CELL;
+            tmp=getResultInfo(obj);
+            if ~tmp.status
+                return
+            end
+            tbls=struct2cell(tmp.Tables);
+            idx=cellfun(@(x) isGraph(x),tbls);
+            if any(idx)
+                res=cellfun(@(x) x.Name,tbls(idx),'UniformOutput',false);
+            end
+        end
+
 
         function res=getTableIndex(obj,varargin)
         %getTableIndex - Get the table index of the results set

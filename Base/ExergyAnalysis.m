@@ -26,7 +26,7 @@ function res=ExergyAnalysis(data,varargin)
 %     tfp - Exergy Fuel-Product table
 %
 %   Example
-%   <a href="matlab:open ExergyAnalysisDemo.mlx">Exergy Analysis Demo</a>
+%     <a href="matlab:open ExergyAnalysisDemo.mlx">Exergy Analysis Demo</a>
 %
 %   See also cDataModel, cExergyModel, cResultInfo
 %

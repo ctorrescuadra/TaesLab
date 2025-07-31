@@ -16,15 +16,15 @@ function res=ImportData(filename,varargin)
 %     Sheet: Name of the data sheet, in case of XLSX files.
 %       If ommitted the first sheet is used.
 %       char array
-%     If Name or Description are omitted, if filename is CSV use
-%       the name of the file without extension, if filename is XLSX
+%     If Name or Description are omitted, when filename is CSV use
+%       the name of the file without extension, when filename is XLSX
 %       use the name of the sheet
 %
 %   Output Arguments
 %     tbl - cTableData with the content of the file/sheet
 %
 %   Example
-%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
+%     <a href="matlab:open ImportDataDemo.mlx">Import Data Demo</a>
 %  
 %   See also cTableData
 %

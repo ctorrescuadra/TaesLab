@@ -3,10 +3,10 @@ function ShowGraph(arg,varargin)
 %	Depending on the graph, additional options could be used.
 %
 %   Syntax 
-%  	  ShowGraph(arg,Name,Value)
+%     ShowGraph(arg,Name,Value)
 % 
 %   Input Argument
-% 	  arg - cResultSet object
+%     arg - cResultSet object
 %
 %   Name-Value Arguments
 %     Graph: Name of the table
@@ -16,11 +16,11 @@ function ShowGraph(arg,varargin)
 %     PieChart: Use Pie Chart graph for Waste Allocation
 %       false | true (default) 
 %     BarGraph: Use Bar Graph for Summary results
-%		false | true (default)
+%       false | true (default)
 %     Variables: Variables used in Summary results. 
-%	    cell array
+%       cell array
 %
-% 	Example
+%   Example
 %     <a href="matlab:open ShowGraphDemo.mlx">Show Graph Demo</a>
 %
 %   See also cGraphResults, cResultSet

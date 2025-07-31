@@ -23,7 +23,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %     Show - Show the results in the console
 %       true | false (default)
 %     SaveAs - Name of the file where the results will be saved. 
-%     char array | string
+%       char array | string
 %
 %   Output Arguments
 %     res - cResultInfo object contains the results of thermoeconomic Analysis

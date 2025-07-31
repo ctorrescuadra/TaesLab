@@ -9,7 +9,7 @@
 %  scaleRow                   - Multiplies each row of matrix A by the corresponding element of vector x.
 %  vDivide                    - Element-wise right division. Overload operator rdivide when 0/0.
 %  zerotol                    - Sets to zero the matrix values near to zero.
-%  logicalMatrix.             - Convert a real matrix to logical with zero tolerance.
+%  logicalMatrix              - Convert a real matrix to logical with zero tolerance.
 %  fdisplay                   - Display a matrix A using C-like fmt.
 %
 %  exportCSV                  - Save a cell array as a CSV file.

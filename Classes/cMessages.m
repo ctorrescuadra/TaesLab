@@ -49,7 +49,7 @@ classdef cMessages
         InvalidWasteKey='Invalid waste flow key %s'
         InvalidDataSetKey='Invalid dataset key'
         InvalidStateName='Invalid state name %s'
-        InvalidResourceName='Invalid resource name %s'
+        InvalidSampleName='Invalid resource sample name %s'
         StateAlreadyExists='State %s already exists'
         SampleAlreadyExists='Resource Sample %s already exists'
         % Save messages

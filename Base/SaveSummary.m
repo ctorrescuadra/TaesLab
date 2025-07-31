@@ -1,6 +1,6 @@
 function SaveSummary(model,filename)
 %SaveSummary - Save the summary results into a file.
-%   The available formats are: XLSX, CSV, JSON, XML, and MAT.
+%   The available formats are: XLSX, CSV, HTML, TXT, TeX and MAT.
 %   Displays a message about the status of the operation.
 %   Used as an interface for cResultSet/saveSummary.
 %
@@ -10,11 +10,12 @@ function SaveSummary(model,filename)
 %   Input Arguments
 %     model - cThermoeconomicModel object
 %     filename - Name of the file (with extension) to save the table data
+%       array char | string
 %
 %   Example
 %     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
 %
-%   See also cThermoeconomicModel, cModelSummary
+%   See also cThermoeconomicModel, cSummaryResults
 %
     log=cMessageLogger();
     % Check Input parameters

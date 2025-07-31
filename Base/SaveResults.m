@@ -9,7 +9,7 @@ function SaveResults(arg,filename)
 %
 %   Input Arguments
 %     arg - cResultSet object
-%     filename - name of the output file (with extension)
+%     filename - Name of the output file (with extension)
 %       char array | string
 %
 %   Example

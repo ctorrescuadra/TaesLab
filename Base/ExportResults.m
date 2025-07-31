@@ -9,8 +9,7 @@ function res = ExportResults(arg,varargin)
 %     arg - cResultSet object
 %
 %   Name-Value Arguments
-%     Table: Name of the table to export.
-%      If it is not selected, a structure with all result tables is created
+%     Table: Name of the table to export. If it is not selected, a structure with all result tables is created
 %       char array
 %     ExportAs: Select the output VarMode of the table/s.
 %       'NONE' - returns the cTable object (default).

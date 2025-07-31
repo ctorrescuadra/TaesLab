@@ -474,7 +474,7 @@
         "exergy": [
           {
             "key": "NG",
-            "value": 97.896
+            "value": 109.913
           },
           {
             "key": "B1",
@@ -482,31 +482,31 @@
           },
           {
             "key": "B2",
-            "value": 25.141
+            "value": 28.228
           },
           {
             "key": "B3",
-            "value": 25.141
+            "value": 28.228
           },
           {
             "key": "B4",
-            "value": 91.046
+            "value": 101.759
           },
           {
             "key": "B5",
-            "value": 31.211
+            "value": 38.518
           },
           {
             "key": "B6",
-            "value": 31.211
+            "value": 38.518
           },
           {
             "key": "B7",
-            "value": 1.429
+            "value": 1.668
           },
           {
             "key": "WC",
-            "value": 27.294
+            "value": 30.645
           },
           {
             "key": "WN",
@@ -514,11 +514,11 @@
           },
           {
             "key": "QV",
-            "value": 22.392
+            "value": 22.213
           },
           {
             "key": "QG",
-            "value": 1.429
+            "value": 1.668
           }
         ]
       }
@@ -547,13 +547,13 @@
       {
         "key": "GENERALIZED_COST",
         "width": 12,
-        "precision": 3,
+        "precision": 2,
         "unit": "($/h)"
       },
       {
         "key": "GENERALIZED_UNIT_COST",
         "width": 11,
-        "precision": 4,
+        "precision": 3,
         "unit": "($/MWh)"
       },
       {

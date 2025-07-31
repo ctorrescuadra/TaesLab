@@ -2,7 +2,7 @@ function res=ShowTable(tbl,varargin)
 %ShowTable - Display, export, or save a table object.
 %  Depending on the “View” option, a table can be displayed in different ways: 
 %  in the console, in a web browser, or in a GUI table.
-%  Tables can be exported or saved to a file using the 'ExportAs' and 'SaveAs' options.
+%  Tables can be exported or saved into a file using the 'ExportAs' and 'SaveAs' options.
 %
 %   Syntax
 %     res=ShowTable(tbl,Name,Value)
@@ -19,13 +19,13 @@ function res=ShowTable(tbl,varargin)
 %      'CELL'   - return the table as cell array
 %      'STRUCT' - return the table as structured array
 %      'TABLE'  - return a matlab table
-%   SaveAs: Save the table in an external file. 
+%     SaveAs: Name of the file wheSave the table in an external file. 
 %   
 %   Output Arguments
 %     res - table object in the format specified in ExportAs
 %
 %   Example
-%       <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
+%     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 % 
 %   See also cTable
 %

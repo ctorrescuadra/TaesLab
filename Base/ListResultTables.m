@@ -19,18 +19,19 @@ function res=ListResultTables(varargin)
 %       'RESULT_CODE' - Text of the code for cType.ResultId
 %       If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
 %     View: Selects how to show the table
-%       'CONSOLE' display in the console (default)
-%       'GUI'  use a GUI table
-%       'HTML' use a web browser
+%       'CONSOLE' - display in the console (default)
+%       'GUI' - use a GUI table
+%       'HTML' - use a web browser
 %     ExportAs: Select the VarMode to get the table
-%       'NONE' return the cTable object (default)
-%       'CELL' return the table as array of cells
-%       'STRUCT' returns the table as a structured array
-%       'TABLE' returns a matlab table
-%   SaveAs: Indicates the name of the file where the table will be saved.
+%       'NONE' - return the cTable object (default)
+%       'CELL' - return the table as array of cells
+%       'STRUCT' - returns the table as a structured array
+%       'TABLE' - returns a matlab table
+%     SaveAs: Name of the file where the table will be saved.
+%       array char | string
 %
 %   Output Arguments
-%     res - table object in the format specified in ExportAs, with the selected columns
+%     res - Table object in the format specified in ExportAs, with the selected columns
 %
 %   Example
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>

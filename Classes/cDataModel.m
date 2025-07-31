@@ -132,6 +132,7 @@ classdef cDataModel < cResultSet
                 obj.messageLog(cType.ERROR,cMessages.InvalidStateList);
                 return
             end
+            snames=obj.StateNames;
             for i=1:obj.NrOfStates
                 exs=dm.ExergyStates.States(i);
                 rex=cExergyData(ps,exs);
@@ -140,7 +141,7 @@ classdef cDataModel < cResultSet
                 if rex.status
 					obj.messageLog(cType.INFO,cMessages.ValidExergyData,obj.StateNames{i});
 				else
-					obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,obj.StateNames{i});
+					obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,snames{i});
                 end
                 status = rex.status & status;
             end
@@ -180,6 +181,7 @@ classdef cDataModel < cResultSet
                     obj.messageLog(cType.ERROR,cMessages.InvalidSampleList);
                     return
                 end
+                snames=obj.SampleNames;
                 for i=1:obj.NrOfSamples
                     dmr=dm.ResourcesCost.Samples(i);
                     rsc=cResourceData(ps,dmr);
@@ -188,7 +190,7 @@ classdef cDataModel < cResultSet
                         setValues(obj.ResourceData,i,rsc);
 						obj.messageLog(cType.INFO,cMessages.ValidResourceCost,obj.SampleNames{i});
                     else
-						obj.messageLog(cType.ERROR,cMessages.InvalidResourceData,obj.SampleNames{i});
+						obj.messageLog(cType.ERROR,cMessages.InvalidResourceData,snames{i});
                     end
                     status=rsc.status & status;
                 end
@@ -290,12 +292,18 @@ classdef cDataModel < cResultSet
 
         function res=get.isDiagnosis(obj)
         % Check if diagnosis data is available
-			res=(obj.NrOfStates>1);
+            res = false;
+            if obj.status
+			    res=(obj.NrOfStates>1);
+            end
         end
 
         function res=get.isSummary(obj)
         % Check if summary data is available
-            res= (obj.NrOfStates>1) || (obj.NrOfSamples>1);
+            res = false;
+            if obj.status
+                res= (obj.NrOfStates>1) || (obj.NrOfSamples>1);
+            end
         end
 
         function res=get.WasteFlows(obj)

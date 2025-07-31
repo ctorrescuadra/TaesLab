@@ -154,6 +154,10 @@ classdef (Abstract) cTable < cMessageLogger
 
         function res=isGraph(obj)
         %isGraph - Check if the table has a graph associated
+        %   Syntax:
+        %     res=obj.isGraph
+        %   Output Argument:
+        %     res - true | false
             res=(obj.GraphType ~= cType.GraphType.NONE);
         end
 
