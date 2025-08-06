@@ -20,6 +20,6 @@ function fdisplay(A,fmt,label)
         fprintf('%s\n',label);
     end
     lfmt=[repmat(fmt,1,size(A,2)) '\n'];
-    fprintf(lfmt,transpose(A));
+    fprintf(lfmt,transpose(zerotol(A)));
     fprintf('\n');
 end

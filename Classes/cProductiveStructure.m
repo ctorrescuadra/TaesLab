@@ -277,18 +277,22 @@ classdef cProductiveStructure < cResultId
 			end
 		end
 
-		function res=StreamMatrix(obj)
+		function [internal,source,output]=StreamMatrix(obj)
 		%StreamMatrix - Get the Streams graph adjacency matrix
 		%   Syntax:
-		%     res = obj.StructuralMatrix
+		%     res = obj.StreamMatrix
 		%   Output Argument
 		%     res - logical matrix
 		%
 			x=obj.AdjacencyMatrix;
-			res=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
+			internal=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
+			if nargout>1
+				source=x.AP(end,:);
+				output=x.AF(:,end);
+			end
         end
 	
-		function res=StructuralMatrix(obj)
+		function [internal,source,output]=StructuralMatrix(obj)
 		%StructuralMatrix - Get the Structural Theory Flows Adjacency Matrix
 		%   Syntax:
 		%     res = obj.StructuralMatrix
@@ -297,7 +301,11 @@ classdef cProductiveStructure < cResultId
 		%
 			x=obj.AdjacencyMatrix;
 			mI=eye(obj.NrOfStreams,"logical");
-			res=x.AE*(mI+x.AF(:,1:end-1)*x.AP(1:end-1,:))*x.AS;
+			internal=x.AE*(mI+x.AF(:,1:end-1)*x.AP(1:end-1,:))*x.AS;
+			if nargout>1
+				source=x.AP(end,:)*x.AS;
+				output=x.AE*x.AF(:,end);
+			end
         end	
         
         function res=ProductiveMatrix(obj)

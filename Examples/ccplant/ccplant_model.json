@@ -713,13 +713,13 @@
         "key": "GENERALIZED_COST",
         "width": 10,
         "precision": 1,
-        "unit": "(c/h)"
+        "unit": "kW"
       },
       {
         "key": "GENERALIZED_UNIT_COST",
         "width": 10,
         "precision": 4,
-        "unit": "(c/kWh)"
+        "unit": "(J/J)"
       },
       {
         "key": "DIAGNOSIS",
