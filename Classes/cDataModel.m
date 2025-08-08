@@ -262,6 +262,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=get.StateNames(obj)
+        % Get the name of the states
             res=cType.EMPTY_CELL;
             if obj.status
                 res=obj.ExergyData.Keys;
@@ -269,6 +270,8 @@ classdef cDataModel < cResultSet
         end
 
         function res=get.SampleNames(obj)
+        % Get the name of the samples
+            res=cType.EMPTY_CELL;
             if obj.isResourceCost && obj.status
                 res=obj.ResourceData.Keys;
             end
@@ -285,7 +288,7 @@ classdef cDataModel < cResultSet
         function res=get.NrOfSamples(obj)
         % Get the number of resources samples
             res=0;
-            if obj.status
+            if obj.isResourceCost && obj.status
                 res=numel(obj.SampleNames);
             end
         end

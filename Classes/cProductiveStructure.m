@@ -23,18 +23,17 @@ classdef cProductiveStructure < cResultId
 %     FlowKeys          - Cell array of Flows Names (keys)
 %     ProcessKeys       - Cell array of Processes Names (keys)
 %     StreamKeys        - Cell array of Streams Names (keys)
-%     AdjacencyMatrix   - Adjacency Matrix of the productive structure graph
-%     ProcessMatrix     - Adjacency Matrix of Processes (logical Table FP)
+%     ProductiveTable   - Adjacency Matrix of the productive structure graph
 %
 %   cProductiveStructure methods:
 %     buildResultInfo   - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
 %     WasteData         - Get the default waste data
 %     IncidenceMatrix   - Get the incidence matrices
 %     StreamMatrix      - Get the productive groups adjacency matrix 
-%     StructuralMatrix  - Get the flows adjacency matrix
+%     FlowMatrix        - Get the flows adjacency matrix
+%     ProcessMatrix     - Get the process matrix (Logical FP matrix)
 %     ProductiveMatrix  - Get the productive adjacency matrix
 %     FlowProcessMatrix - Get the flow-process adjacency matrix
-%     ProcessMatrix     - Get the process matrix (Logical FP matrix)
 %     FlowEdges         - Get the flow edges definition names 
 %     FuelStreams       - Get the Fuel streams ids
 %     ProductStreams    - Get the Product streams ids
@@ -71,8 +70,7 @@ classdef cProductiveStructure < cResultId
         FlowKeys          % Cell array of Flows Names (keys)
         ProcessKeys       % Cell array of Processes Names (keys)
         StreamKeys        % Cell array of Streams Names (keys)
-		AdjacencyMatrix   % Adjacency Matrix of Productive Structure
-		ProcessMatrix     % Adjacency Matrix of Processes
+		ProductiveTable   % Adjacency Matrix of Productive Structure
 	end
 
 	properties(Access=protected)
@@ -196,7 +194,7 @@ classdef cProductiveStructure < cResultId
 			mAS=sparse(ffrom,1:M,true(1,M),NS,M);
 			mAF=sparse(fstreams,fprocesses,true(size(fstreams)),NS,N1);
 			mAP=sparse(pprocesses,pstreams,true(size(pstreams)),N1,NS);
-            obj.AdjacencyMatrix=struct('AE',mAE,'AS',mAS,'AF',mAF,'AP',mAP);
+            obj.ProductiveTable=struct('AE',mAE,'AS',mAS,'AF',mAF,'AP',mAP);
 			if ~checkGraphConnectivity(obj)
 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveGraph);
 				return
@@ -264,10 +262,10 @@ classdef cProductiveStructure < cResultId
 		%     if output argument is 1
 		%       res1 - Incidence Matrix 
 		%
-			aE=obj.AdjacencyMatrix.AE';
-			aS=obj.AdjacencyMatrix.AS;
-			aF=obj.AdjacencyMatrix.AF';
-			aP=obj.AdjacencyMatrix.AP;
+			aE=obj.ProductiveTable.AE';
+			aS=obj.ProductiveTable.AS;
+			aF=obj.ProductiveTable.AF';
+			aP=obj.ProductiveTable.AP;
 			iAF=aF(1:end-1,:)*(aE-aS);
 			iAP=aP(1:end-1,:)*(aS-aE);
 			if nargout<2
@@ -277,36 +275,60 @@ classdef cProductiveStructure < cResultId
 			end
 		end
 
-		function [internal,source,output]=StreamMatrix(obj)
+		function [res,src,out]=StreamMatrix(obj)
 		%StreamMatrix - Get the Streams graph adjacency matrix
 		%   Syntax:
 		%     res = obj.StreamMatrix
 		%   Output Argument
-		%     res - logical matrix
+		%     res - streams adjacency matrix
+		%     src - external resources adjacency matrix
+		%     out - output streams adjacency matrix
 		%
-			x=obj.AdjacencyMatrix;
-			internal=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
+			x=obj.ProductiveTable;
+			res=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
 			if nargout>1
-				source=x.AP(end,:);
-				output=x.AF(:,end);
+				src=x.AP(end,:);
+				out=x.AF(:,end);
 			end
         end
 	
-		function [internal,source,output]=StructuralMatrix(obj)
+		function [res,src,out]=FlowMatrix(obj)
 		%StructuralMatrix - Get the Structural Theory Flows Adjacency Matrix
 		%   Syntax:
 		%     res = obj.StructuralMatrix
 		%   Output Argument
-		%     res - logical matrix
+		%     res - flows adjacency matrix 
+		%     src - external resources adjacency matrix
+		%     out - output streams adjacency matrix
 		%
-			x=obj.AdjacencyMatrix;
-			mI=eye(obj.NrOfStreams,"logical");
-			internal=x.AE*(mI+x.AF(:,1:end-1)*x.AP(1:end-1,:))*x.AS;
+			x=obj.ProductiveTable;
+			xAP=x.AP*x.AS; xAF=x.AE*x.AF;
+			res=x.AE*x.AS+xAF(:,1:end-1)*xAP(1:end-1,:);
 			if nargout>1
-				source=x.AP(end,:)*x.AS;
-				output=x.AE*x.AF(:,end);
+				src=xAP(end,:);
+				out=xAF(:,end);
 			end
-        end	
+        end
+		
+		function [res,src,out]=ProcessMatrix(obj)
+		%ProcessMatrix - Get the Process Adjacency Matrix (logical FP table)
+		%   Syntax:
+		%     res = obj.ProcessMatrix
+		%   Output Argument:
+		%     res - process adjacency matrix 
+		%     src - external resources adjacency matrix
+		%     out - output streams adjacency matrix
+		%
+			x=obj.ProductiveTable;
+			tmp=x.AS*x.AE;
+			tc=transitiveClosure(tmp);
+			res=logical(x.AP*tc*x.AF);
+			if nargout>1
+				src=res(end,1:end-1);
+				out=res(1:end-1,end);
+				res=res(1:end-1,1:end-1);
+			end
+		end
         
         function res=ProductiveMatrix(obj)
 		%ProductiveMatrix - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
@@ -314,7 +336,7 @@ classdef cProductiveStructure < cResultId
 		%     res = obj.ProductiveMatrix
 		%   Output Argument:
 		%     res - logical matrix
-			x=obj.AdjacencyMatrix;
+			x=obj.ProductiveTable;
 			N=obj.NrOfProcesses;
 			M=obj.NrOfFlows;
 			NS=obj.NrOfStreams;
@@ -329,10 +351,62 @@ classdef cProductiveStructure < cResultId
 		%     res = obj.FlowProcessMatrix
 		%   Output Argument:
 		%     res - logical matrix
-			x=obj.AdjacencyMatrix;
+			x=obj.ProductiveTable;
 			N=obj.NrOfProcesses;
 			res=[x.AE*x.AS,x.AE*x.AF(:,1:end-1);...
 			x.AP(1:end-1,:)*x.AS,zeros(N,N)];
+		end
+
+		function res=buildAdjacencyMatrix(obj,type)
+		%buildAdjacencyMatrix - Build the adjacency matrix depending of node type
+		%   Syntax: 
+		%     res = obj.buildAdjacencyMatrix(nodeType)
+		%   Input Argument:
+		%     type - type of node
+		%      cType.NodeType.PROCESS
+		%      cType.NodeType.STREAM
+        %      cType.NodeType.FLOW
+		%   Output Argument:
+		%     res - logical adjacency matrix of the required type.
+		%
+            res=false;
+			switch type
+				case cType.NodeType.PROCESS
+					N=obj.NrOfProcesses;
+					[A,src,out]=obj.ProcessMatrix;
+				case cType.NodeType.STREAM
+					N=obj.NrOfStreams;
+					[A,src,out]=obj.StreamMatrix;
+				case cType.NodeType.FLOW
+					N=obj.NrOfFlows;
+					[A,src,out]=obj.FlowMatrix;
+                otherwise
+                    return
+			end
+			res=[0 src 0; zeros(N,1) A out; 0 zeros(1,N) 0];
+		end
+
+		function [log,idx,jdx]=checkProductiveGraph(obj,type)
+		%checkAdjacencyMatrix - Check if the graph is productive
+		%   Syntax:
+		%     [log,idx,jdx]=obj.checkProductiveGraph(type)
+		%   Input Argument:
+		%     type - type of node
+		%      cType.NodeType.PROCESS
+		%      cType.NodeType.STREAM
+        %      cType.NodeType.FLOW
+		%   Output Argument:
+		%     log - logical true | false
+		%     src - if the graph is not productive it contains:
+		%           the index of the nodes not reached by src node
+		%     out - if the graph is not productive it contains:
+		%           the index of the nodes don't reach the out node
+		%
+			res=obj.buildAdjacencyMatrix(type);
+			tc=transitiveClosure(res);
+			idx=find(~tc(1,2:end-1));
+			jdx=find(~tc(2:end-1,end))';
+			log=isempty(idx) && isempty(jdx);
 		end
 
 		function res=FlowEdges(obj)
@@ -541,7 +615,7 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments
 		%     E  - exergy/cost of streams
 		%     ET - Total exergy of streams
-			tbl=obj.AdjacencyMatrix;
+			tbl=obj.ProductiveTable;
 			BE=val*tbl.AE;
 			BS=val*tbl.AS';
 			fstreams=obj.FuelStreams;
@@ -554,7 +628,8 @@ classdef cProductiveStructure < cResultId
 				ET(fstreams)=BE(fstreams);
 				ET(pstreams)=BS(pstreams);
 			end
-		end	
+		end
+		
 	end
 
     methods(Access=private)
@@ -815,40 +890,17 @@ classdef cProductiveStructure < cResultId
 		%   of the the processes
 		%   Output Arguments:
 		%     res - true | false
-			tmp=getProcessMatrix(obj);
-			A=tmp(1:end-1,1:end-1);
-			v=tmp(end,1:end-1);
-			w=tmp(1:end-1,end);
-			E=transitiveClosure(A);
-	        s=v*E; t=E*w;
-			res=all(s) && all(t);
+			[res,idx,jdx]=obj.checkProductiveGraph(cType.NodeType.PROCESS);
 			%Check the results
-			if res
-				obj.ProcessMatrix=tmp;
-			else % log errors
-                ier=find(~s,1);
-				for i=1:ier
+			if ~res
+				for i=idx
 					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 				end
-				ier=transpose(find(~t));
-            	for i=ier
+            	for i=jdx
 					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
             	end
 			end
 		end
-
-		function res=getProcessMatrix(obj)
-		%ProcessMatrix - Get the Process Adjacency Matrix (logical FP table)
-		%   Syntax:
-		%     res = obj.ProcessMatrix
-		%   Output Argument:
-		%     res - logical matrix
-			x=obj.AdjacencyMatrix;
-			tmp=x.AS*x.AE;
-			tc=transitiveClosure(tmp);
-			res=logical(x.AP*tc*x.AF);
-		end
-
     end
 
 end

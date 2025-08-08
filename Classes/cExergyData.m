@@ -91,7 +91,7 @@ classdef cExergyData < cMessageLogger
 				end
 			end
 			% Compute and check Process Fuel and Product Exergy
-            tbl=ps.AdjacencyMatrix;
+            tbl=ps.ProductiveTable;
 			eF=E*tbl.AF;
 			eP=E*tbl.AP';
 			% Compute global plant resources and production 
@@ -132,7 +132,7 @@ classdef cExergyData < cMessageLogger
 			vEf(bypass)=100;
 			if ~obj.status, return; end
 			% Build Exergy Adjacency Table
-			tbl=ps.AdjacencyMatrix;
+			tbl=ps.ProductiveTable;
 			tAE=scaleRow(tbl.AE,B);
 			tAS=scaleCol(tbl.AS,B);
 			tAF=scaleRow(tbl.AF,E);

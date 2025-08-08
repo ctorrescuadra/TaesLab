@@ -49,7 +49,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
             end
             % Get Flows (FAT) info  
             nodenames=[ps.FlowKeys];
-            flowMatrix=ps.StructuralMatrix;
+            flowMatrix=ps.FlowMatrix;
             nodetypes=repmat({cType.NodeType.FLOW},1,ps.NrOfFlows);
             obj.NodesFAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesFAT=cProductiveDiagram.edgesTable(flowMatrix,nodenames);
