@@ -25,6 +25,7 @@
 %  isOctave                   - Identifies if the funcion has been executed in Octave.
 %  isObject                   - Check is a cTaesLab object belongs  to a specific class.                  
 %  isValid                    - Check if it is a valid TaesLab object.
+%  isSquareMatrix             - Check if the matrix is square.
 %  isNonNegativeMatrix        - Check if the matrix is non-negative.
 %  isNonSingularMatrix        - Check if the matrix i-A is non-singular.
 %

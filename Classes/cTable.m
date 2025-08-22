@@ -349,6 +349,17 @@ classdef (Abstract) cTable < cMessageLogger
             end
         end
 
+        function setDescription(obj,descr)
+        %setDescription. Set Table Header or Description.
+        %   Internal Use. Permite to reuse a table format with other names
+        %   Syntax:
+        %     obj.setTableName(filename)
+        %   Input Argument:
+        %     description - Description/header of the table
+        %
+            obj.Description=descr;
+        end
+
         function res=formatData(obj)
         %formatData. Format data. Only numeric fields
             res=obj.Data;
@@ -370,7 +381,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   Input:
         %     filename - name of the output file
         %   Output:
-        %     log: cStatusLog class containing error messages and status
+        %     log: cMessageLogger class containing error messages and status
             log=exportCSV(obj.Values,filename);
         end
 
@@ -379,7 +390,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   Input:
         %     filename - name of the output file
         %   Output:
-        %     log: cStatusLog class containing error messages and status
+        %     log: cMessageLogger class containing error messages and status
             log=cMessageLogger();
             data=obj.Values;
             if isOctave
@@ -404,7 +415,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   Input:
         %     filename - name of the output file
         %   Output:
-        %     log: cStatusLog class containing error messages and status
+        %     log: cMessageLogger class containing error messages and status
             log=cMessageLogger();
             try
                 fId = fopen (filename, 'wt');
@@ -421,7 +432,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   Input:
         %     filename - name of the output file
         %   Output:
-        %     log: cStatusLog class containing error messages and status
+        %     log: cMessageLogger class containing error messages and status
             log=cMessageLogger();
             html=cBuildHTML(obj);
             if html.status
@@ -436,7 +447,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   Input:
         %     filename - name of the output file
         %   Output:
-        %     log: cStatusLog class containing error messages and status
+        %     log: cMessageLogger class containing error messages and status
             log=cMessageLogger();
             ltx=cBuildLaTeX(obj);
             if ltx.status
@@ -451,7 +462,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   Input:
         %     filename - name of the output file
         %   Output:
-        %     log: cStatusLog class containing error messages and status
+        %     log: cMessageLogger class containing error messages and status
             log=cMessageLogger(); 
             data=obj.getStructTable;
             try
@@ -470,7 +481,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   Input:
         %     filename - name of the output file
         %   Output:
-        %     log: cStatusLog class containing error messages ans status
+        %     log: cMessageLogger class containing error messages ans status
             log=cMessageLogger();
             data=obj.getStructTable;
             try

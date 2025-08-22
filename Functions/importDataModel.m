@@ -10,6 +10,7 @@ function obj = importDataModel(filename)
 %
 %   Output Argument
 %     obj - cDataModel object
+%	   	obj.printLogger cdisplay the status of the import and error messages
 %
     obj=cMessageLogger(cType.INVALID);
 	% Check input arguments

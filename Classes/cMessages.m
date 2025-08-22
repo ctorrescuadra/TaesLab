@@ -85,7 +85,7 @@ classdef cMessages
         InvalidOutputFlow='Invalid output flow %s definition'
         InvalidWasteFlow='Invalid waste flow %s definition'
         InvalidResourceFlow='Invalid resource flow %s definition'
-        InvalidFlowDefiniton='Flow %s do not exist'
+        InvalidFlowDefinition='Flow %s is no used'
         InvalidFlowLoop='Flow %s is defined as a LOOP'
         NoResources='Data Model has no resource flows defined'
         NoOutputs='Data Model has no final products defined'
@@ -185,6 +185,8 @@ classdef cMessages
         InvalidRowValues='Invalid cSparseRow arguments. Number of valus must agree'
         InvalidRowSize='Invalid cSparseRow arguments. Number of Rows must agree'
         InvalidSparseRow='Matrix dimensions must agree: %d %d'
+        InvalidNodeNames='Invalid number of nodes %d - %d';
+        NonSquareMatrix='Non square matrix [%d x %d]';
         % Dictionary messages
         ListNotCell='List must be a cell array'
         ListEmpty='List must NOT be empty'

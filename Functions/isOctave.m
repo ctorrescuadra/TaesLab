@@ -8,5 +8,10 @@ function res=isOctave()
 %	  res - logical result
 %		true | false
 %
+%	Example
+%     res = isOctave; %return true if executed in Octave
+%
+%	See also isMatlab, isdeployed
+%
 	[res,~]=license('checkout','octave');
 end

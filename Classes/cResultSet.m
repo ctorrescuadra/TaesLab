@@ -348,7 +348,7 @@ classdef(Abstract) cResultSet < cResultId
         %   Input Arguments:
         %     filename - name of the worksheet file
         %   Output Arguments:
-        %     log - cStatusLog object with error messages
+        %     log - cMessageLogger object with error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);
@@ -419,7 +419,7 @@ classdef(Abstract) cResultSet < cResultId
         %   Input Arguments:
         %     filename - Name of the index file
         %   Output Arguments:
-        %     log - cStatusLog object with error messages
+        %     log - cMessageLogger object with error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);
@@ -457,7 +457,7 @@ classdef(Abstract) cResultSet < cResultId
         %   Input Arguments:
         %     filename - name of the worksheet file
         %   Output Arguments:
-        %     log - cStatusLog object with save status and error messages
+        %     log - cMessageLogger object with save status and error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);
@@ -481,7 +481,7 @@ classdef(Abstract) cResultSet < cResultId
         %   Input Arguments:
         %     filename - name of the file
         %   Output Arguments:
-        %     log - cStatusLog object with save status and error messages
+        %     log - cMessageLogger object with save status and error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);

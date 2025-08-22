@@ -65,7 +65,7 @@ classdef (Sealed) cViewTable < cMessageLogger
 		% Shows the table values in a uitable object
 		%   Syntax:
 		%     obj.showTable
-		%   Example:
+		%   Example
 		%     vt = cViewTable(tbl)
 		%     vt.showTable;
 		%

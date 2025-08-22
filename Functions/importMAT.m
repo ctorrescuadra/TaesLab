@@ -5,21 +5,28 @@ function obj = importMAT(filename)
 %   Syntax
 %     obj=importMAT(matfile)
 %
-%   Input Argument
+%   Input Argument:
 %     filename - Existing MAT file containing a TaesLab object
 %       char array | string
 %
-%   Output Argument
-%     obj - cTaesLab object
+%   Output Argument:
+%     obj - cTaesLab object containing the data from the MAT file		
 %
 %   See also exportMAT
 %
+%   Example
+%     obj = importMAT('data.mat')		
+%
     obj=cMessageLogger();
-	% Check input arguments
+	% Check input
     if isOctave
         obj.printError(cMessages.NoReadFiles,'MAT');
 		return
     end
+	if (nargin~=1) || ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.MAT)
+		obj.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
+		return
+	end
     % Load and check the model
 	try
         S=load(filename);

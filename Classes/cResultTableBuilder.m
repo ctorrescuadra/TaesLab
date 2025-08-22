@@ -296,6 +296,24 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             end
             res=cResultInfo(sr,tables);
         end
+
+        function res=getTableFP(obj,name,values,names)
+        % Get a cTableMatrix with the Fuel-Product table
+        %  Input:
+        %   name   - Table name
+        %   values - Table FP values
+        %  Output:
+        %   res - cTableMatrix object
+        %
+            if nargin==3
+                rowNames=obj.processKeys;
+            else
+                rowNames=names;
+            end
+            tp=obj.getMatrixTableProperties(name);
+            colNames=horzcat('Key',rowNames);
+            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+        end
     end
 
     methods(Access=private)    
@@ -389,20 +407,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             data(:,1)=num2cell(values.E);
             data(:,2)=num2cell(values.ET);
             res=obj.createCellTable(tp,data,rowNames,colNames);
-        end
-
-        function res=getTableFP(obj,name,values)
-        % Get a cTableMatrix with the Fuel-Product table
-        %  Input:
-        %   name   - Table name
-        %   values - Table FP values
-        %  Output:
-        %   res - cTableMatrix object
-        %
-            tp=obj.getMatrixTableProperties(name);
-            rowNames=obj.processKeys;
-            colNames=horzcat('Key',rowNames);
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
 
         function res=getAdjacencyTableFP(obj,name,val)

@@ -17,7 +17,7 @@ classdef cGraphDiagnosis < cGraphResults
         %     obj = cDigraph(tbl,info)
         %   Input Arguments:
         %     tbl    - cTable with the data to show graphically
-        %     info   - cProductiveDiagram object with additional info
+        %     info   - cGraphDiagnosis object with additional info
         %     option - (true/false) plot last bar (Demand Variation)
             if nargin==2
 				option=true;

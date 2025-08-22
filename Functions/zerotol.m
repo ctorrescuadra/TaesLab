@@ -13,8 +13,19 @@ function A=zerotol(A,eps)
 %	Output Arguments
 %	  B - modified matrix
 %
-	if nargin==1
+%	Example
+%     A = [0.1, 0.2; 0.00001, 0.3];
+%     B = zerotol(A, 0.0001); %B = [0.1, 0.2; 0, 0.3]
+%
+%	See also logicalMatrix, scaleCol, scaleRow
+%
+	% Check Input
+	if nargin < 1 || ~ismatrix(A) || ~isnumeric(A)
+		error('ERROR: zerotol. First argument must be a numeric matrix');
+	end
+	if nargin==1 || isempty(eps) || ~isscalar(eps) || eps < 0
 		eps=cType.EPS;
-	end 
+	end
+	% Set to zero values near to zero
 	A(abs(A)<eps)=0;
 end

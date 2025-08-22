@@ -1,7 +1,7 @@
 function log=exportCSV(values,filename)
-%exportCSV - Save a cell array as CSV file.
+%exportCSV - Saves a cell array as CSV file.
 %   Octave/Matlab compatibility
-%
+%   
 %   Syntax
 %     log=exportCSV(values, filename)
 %
@@ -13,7 +13,17 @@ function log=exportCSV(values,filename)
 %    Output Arguments
 %      log - cMessageLogger containing the status of the save and error messages
 %
+%   Example
+%     values = {'Name', 'Age'; 'Alice', 30; 'Bob', 25};
+%     filename = 'data.csv';                            
+%     log = exportCSV(values, filename);
+%
     log=cMessageLogger();
+    if nargin~=2 || ~iscell(values) || ... 
+        ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.CSV)     
+        log.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
+        return
+    end
     try
         if isOctave
             cell2csv(filename,values);

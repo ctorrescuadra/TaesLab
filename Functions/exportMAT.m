@@ -13,25 +13,23 @@ function log=exportMAT(obj,filename)
 %   Output Arguments
 %     log - cMessageLogger containing the status of the save and error messages
 %
-%   See also cDataModel, cResultInfo, cTable, importMAT
+%   Example
+%     log=exportMAT(obj, 'results.mat');
+%
+%   See also importMAT
 %
     log=cMessageLogger();
+    % Check input arguments
+    if nargin~=2 || ~isObject(obj,'cTaesLab') || ... 
+        ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.MAT)
+        log.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
+        return
+    end   
     if isOctave
         log.messageLog(cType.ERROR,cMessages.NoSaveFiles,'MAT');
 		return
     end
-    if (nargin~=2) || (~isFilename(filename))
-        log.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
-        return
-    end
-    if ~cType.checkFileExt(filename,cType.FileExt.MAT)
-        log.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename)
-        return
-    end
-    if ~isValid(obj)
-        log.messageLog(cType.ERROR,cMessages.InvalidObject,class(obj));
-        return
-    end
+    % Save the object
     try
 	    save(filename,'obj');
     catch err

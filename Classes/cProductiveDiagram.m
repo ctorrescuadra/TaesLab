@@ -17,6 +17,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
 %     EdgesFPAT  - Flow-Process edges table
 %     NodesSFPAT - Productive table nodes
 %     EdgesSFAT  - Productive table edges
+%
 %   cProductiveDiagram Methods
 %     buildResultInfo - Build the cResultInfo for Productive Diagrams
 %     getNodeTable    - Get the nodes of the diagram
@@ -49,20 +50,20 @@ classdef (Sealed) cProductiveDiagram < cResultId
             end
             % Get Flows (FAT) info  
             nodenames=[ps.FlowKeys];
-            flowMatrix=ps.FlowMatrix;
+            flowMatrix=ps.getFlowMatrix;
             nodetypes=repmat({cType.NodeType.FLOW},1,ps.NrOfFlows);
             obj.NodesFAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesFAT=cProductiveDiagram.edgesTable(flowMatrix,nodenames);
             % Get Flow-Process node names
             nodenames=[ps.FlowKeys,ps.ProcessKeys(1:end-1)];
-            flowProcessMatrix=ps.FlowProcessMatrix;
+            flowProcessMatrix=ps.getFlowProcessMatrix;
             nodetypes=[repmat({cType.NodeType.FLOW},1,ps.NrOfFlows),...
                    repmat({cType.NodeType.PROCESS},1,ps.NrOfProcesses)];
             obj.NodesFPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesFPAT=cProductiveDiagram.edgesTable(flowProcessMatrix,nodenames);
             % Get Productive (PST) node names
             nodenames=[ps.StreamKeys,ps.FlowKeys,ps.ProcessKeys(1:end-1)];
-            productiveMatrix=ps.ProductiveMatrix;
+            productiveMatrix=ps.getProductiveMatrix;
             nodetypes=[repmat({cType.NodeType.STREAM},1,ps.NrOfStreams),...
                    repmat({cType.NodeType.FLOW},1,ps.NrOfFlows),...
                    repmat({cType.NodeType.PROCESS},1,ps.NrOfProcesses)];
@@ -70,7 +71,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.EdgesSFPAT=cProductiveDiagram.edgesTable(productiveMatrix,nodenames);
             % Get Process Diagram (FP Table)
             inodes=[ps.ProcessKeys(1:end-1)];
-            processMatrix=ps.ProcessMatrix;
+            processMatrix=ps.getProcessMatrix;
             [obj.EdgesPAT,nodenames]=cProductiveDiagram.edgesTableFP(processMatrix,inodes);
             nodetypes=[repmat({cType.NodeType.PROCESS},1,length(nodenames))];
             obj.NodesPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);

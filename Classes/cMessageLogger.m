@@ -1,5 +1,5 @@
 classdef cMessageLogger < cTaesLab
-%cStatusLogger - Create and manage a messages logger for cTaesLab objects.
+%cMessageLogger - Create and manage a messages logger for cTaesLab objects.
 %
 %   cMessageLogger constructor
 %     obj=cMessageLogger(status)
@@ -44,7 +44,7 @@ classdef cMessageLogger < cTaesLab
 		%   Input Argument:
 		%     text - text message, use fprintf syntax
 		%       varargin
-		%   Example:
+		%   Example
 		%	  obj.printError(cMessages.FileNotFound,filename)
 		%
 			printMessage(obj,cType.ERROR,varargin{:});
@@ -81,7 +81,7 @@ classdef cMessageLogger < cTaesLab
 		%       cType.ERROR | cType.WARNING | cType.INFO
 		%     text - message text, use fprintf format
 		%       varargin
-		% Example:
+		% Example
 		%   obj.messageLog(cType.ERROR,'Invalid file name %s',filename)
 		%
 			message=obj.createMessage(error,varargin{:});

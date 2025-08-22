@@ -141,7 +141,7 @@ classdef (Sealed) cModelData < cMessageLogger
         %   Input Arguments:
         %     filename - name of the output file
         %   Output Arguments:
-        %     log: cStatusLog class containing error messages ans status
+        %     log: cMessageLogger class containing error messages ans status
             log=cMessageLogger();
             try
                 writestruct(obj.dm,filename,'StructNodeName','root','AttributeSuffix','Id');
@@ -156,7 +156,7 @@ classdef (Sealed) cModelData < cMessageLogger
         %   Input Arguments:
         %     filename - name of the output file
         %   Output Arguments:
-        %     log: cStatusLog class containing error messages and status
+        %     log: cMessageLogger class containing error messages and status
             log=cMessageLogger();
             try
                 text=jsonencode(obj.dm,'PrettyPrint',true);

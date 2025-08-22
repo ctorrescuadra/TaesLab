@@ -11,5 +11,14 @@ function res=isInteger(val)
 %     res - Logical check
 %       true | false
 % 
+%   Example
+%     res = isInteger(5); %return true
+%
+%   See also isscalar, isnumeric
+%    
+    res=false;
+    if nargin~=1
+        return
+    end
     res=isscalar(val) && isnumeric(val) && (mod(val,1)==0);
 end
