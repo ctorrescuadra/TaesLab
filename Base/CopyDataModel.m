@@ -18,10 +18,12 @@ function CopyDataModel(inputFile, outputFile)
 %   See also cDataModel, cReadModel
 %
     log=cMessageLogger();
+    % Check arguments
     if (nargin~=2) || ~isFilename(inputFile) || ~isFilename(outputFile)
         log.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
         return
     end
+    % Read data model
     data=readModel(inputFile);
     if data.status
         SaveDataModel(data,outputFile);

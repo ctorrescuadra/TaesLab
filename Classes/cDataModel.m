@@ -139,7 +139,7 @@ classdef cDataModel < cResultSet
                 setValues(obj.ExergyData,i,rex);
                 obj.addLogger(rex)
                 if rex.status
-					obj.messageLog(cType.INFO,cMessages.ValidExergyData,obj.StateNames{i});
+					obj.messageLog(cType.INFO,cMessages.ValidExergyData,snames{i});
 				else
 					obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,snames{i});
                 end

@@ -18,8 +18,8 @@ function B=scaleRow(A,x)
 %     B = scaleRow(A, x); %B = [0.5, 1; 6, 8]
 %
     % Check Input
-    if nargin < 2 || ~ismatrix(A) || ~isnumeric(A)
-        error('ERROR: scaleCol. First argument must be a numeric matrix');
+    if nargin < 2 || ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
+        error('ERROR: scaleCol. First argument must be a numeric/logical matrix');
     end    
     N=size(A,1);
     if ~isvector(x) || (N~=length(x))

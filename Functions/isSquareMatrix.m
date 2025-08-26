@@ -16,5 +16,5 @@ function res = isSquareMatrix(A)
 %
 %   See also ismatrix, isnumeric
 %
-    res = isnumeric(A) && ismatrix(A) && (size(A,1) == size(A,2));
+    res = (isnumeric(A) || islogical(A)) && ismatrix(A) && (size(A,1) == size(A,2));
 end

@@ -142,9 +142,9 @@ classdef cExergyData < cMessageLogger
 			mbP=divideCol(tAP,ET);
 			mbE=divideCol(tAE,ET);
             mbS=divideCol(tAS,B);
-			A=mbS*mbE+mbF(:,1:end-1)*mbP(1:end-1,:);
+			opE=mbS*mbE+mbF(:,1:end-1)*mbP(1:end-1,:);
 			% Validate Productive Graph and log errors if apply
-			if isNonSingularMatrix(A)
+			if isNonSingularMatrix(opE)
 				obj.ps=ps;
 				obj.FlowsExergy=B;
 				obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);
@@ -152,17 +152,19 @@ classdef cExergyData < cMessageLogger
 				obj.AdjacencyTable=struct('AF',tAF,'AP',tAP,'AE',tAE,'AS',tAS);
 				obj.AdjacencyMatrix=struct('AF',mbF,'AP',mbP,'AE',mbE,'AS',mbS);
 				obj.ActiveProcesses= logical(~bypass);
-			else
+			else % Compute the transitive closure of the processes graph
 				E = eye(N+1) | logicalMatrix(mbP) * transitiveClosure(A) * logicalMatrix(mbF);
                 s=E(end,:);t=E(:,end);
-				% Log errors
-            	ier=find(~s,1);
-            	for i=ier
-					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,ps.ProcessKeys{i});
-            	end
-				ier=transpose(find(~t));
-            	for i=ier
-					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,ps.ProcessKeys{i});
+				% Log non-SSR process nodes
+				for i=find(~s)
+					if ~bypass(i)
+						obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,ps.ProcessKeys{i});
+					end
+				end
+            	for i=transpose(find(~t))
+					if ~bypass(i)
+						obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,ps.ProcessKeys{i});
+					end
             	end
 				obj.messageLog(cType.ERROR,cMessages.NoProductiveState,obj.State);
 			end

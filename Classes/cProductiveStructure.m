@@ -865,7 +865,7 @@ classdef cProductiveStructure < cResultId
 			idx=find(~tc(1,2:end-1)); 
 			jdx=find(~tc(2:end-1,end));
 			res=isempty(idx) && isempty(jdx);
-			% Log invalid connectivity 
+			% Log non-SSR nodes
 			if ~res
 				for i=idx
 					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});

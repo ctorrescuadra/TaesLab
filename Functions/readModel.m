@@ -18,7 +18,7 @@ function res=readModel(filename)
 %   
     %Check input arguments
     res=cMessageLogger(cType.INVALID);
-    if nargin~=1 || isempty(filename) || ~isFileName(filename)
+    if nargin~=1 || isempty(filename) || ~isFilename(filename)
         res.messageLog(cType.ERROR,cMessages.InvalidFileName);
         return
     end

@@ -25,7 +25,7 @@ function res=transitiveClosure(A)
     if nargin ~= 1
         error('ERROR: transitiveClosure. Requires one input argument');
     end
-    if ~isSquareMatrix
+    if ~isSquareMatrix(A)
         error('ERROR: transitiveClosure. Input must be a square matrix');
     end
     if issparse(A)

@@ -66,7 +66,6 @@ function fdisplay(A,fmt,label)
         fprintf('%s=\n',label);
     end
     % Display the matrix with the specified format
-    fprintf('%s\n', label);
     lfmt=[repmat(fmt,1,size(A,2)) '\n'];
     fprintf(lfmt,transpose(zerotol(A)));
     fprintf('\n');

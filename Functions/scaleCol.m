@@ -18,8 +18,8 @@ function B=scaleCol(A,x)
 %     B = scaleCol(A, x); %B = [0.5, 4; 1.5, 8]
 %
     % Check Input
-    if nargin < 2 || ~ismatrix(A) || ~isnumeric(A)
-        error('ERROR: scaleCol. First argument must be a numeric matrix');
+    if nargin < 2 || ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
+        error('ERROR: scaleCol. First argument must be a numeric/logic matrix');
     end
     [~,M]=size(A);
     if ~isvector(x) || (M~=length(x))
