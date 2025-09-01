@@ -19,9 +19,11 @@ function res=ProductiveDiagram(data,varargin)
 %   Output Arguments
 %     res - cResultsInfo object contains the productive structure information
 %     The following tables are obtained:
-%       fat - Flow adjacency matrix
-%       pat - Productive adjacency matrix
-%       fpat - Flow-Process adjacency matrix
+%       sfpat - Productive (Stream-Flow-Process) adjacency table
+%       fpat  - Flow-Process adjacency table
+%       fat   - Flow adjacency table
+%       pat   - Process adjacency table
+%       kpat  - Kernel adjacency table
 %
 %   Example
 %     <a href="matlab:open ProductiveStructureDemo.mlx">Productive Structure Demo</a>

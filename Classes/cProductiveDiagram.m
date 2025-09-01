@@ -25,15 +25,18 @@ classdef (Sealed) cProductiveDiagram < cResultId
 %
 %   See also cResultId, cProductiveStructure
 %
-    properties(Access=private)
+    properties(Access=public)
         EdgesFAT          % Flow edges table
         EdgesFPAT         % Flow-Process edges table
-        EdgesPAT          % Process edges table
         EdgesSFPAT        % Productive (SFP) edges table
+        EdgesPAT          % Process edges table
+        EdgesKPAT         % Kernel Process edges table
         NodesFAT          % Flow nodes table
         NodesFPAT         % Flow-Process nodes table
-        NodesPAT          % Process nodes table
         NodesSFPAT        % Productive (SFP) table
+        NodesPAT          % Process nodes table
+        NodesKPAT         % Kernel Process nodes table
+        GroupsTable       % Graph groups table
     end
 
     methods
@@ -70,11 +73,18 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.NodesSFPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesSFPAT=cProductiveDiagram.edgesTable(productiveMatrix,nodenames);
             % Get Process Diagram (FP Table)
-            inodes=[ps.ProcessKeys(1:end-1)];
+            nodes=ps.ProcessKeys;
             processMatrix=ps.getProcessMatrix;
-            [obj.EdgesPAT,nodenames]=cProductiveDiagram.edgesTableFP(processMatrix,inodes);
-            nodetypes=[repmat({cType.NodeType.PROCESS},1,length(nodenames))];
-            obj.NodesPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
+            da=cDigraphAnalysis(processMatrix,nodes);
+            if ~isValid(da)
+                obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
+                return
+            end
+            obj.EdgesPAT=da.GraphEdges;
+            obj.NodesPAT=da.GraphNodes;
+            obj.EdgesKPAT=da.KernelEdges;
+            obj.NodesKPAT=da.KernelNodes;
+            obj.GroupsTable=da.getGroupsTable;
             % Set ResultId properties
             obj.ResultId=cType.ResultId.PRODUCTIVE_DIAGRAM;
             obj.DefaultGraph=cType.Tables.FLOW_DIAGRAM;
@@ -83,13 +93,16 @@ classdef (Sealed) cProductiveDiagram < cResultId
         end
 
         function res = getNodeTable(obj,name)
-        %getNodeTable - Get the nodes table of a productive diagram
+        %getNodeTable - Get the nodes  of a  diagram
         %   Syntax:
         %     res = obj.getNodeTable(name)
         %   Input Parameter:
         %     name - Name of the diagram
         %   Output Parameter:
-        %     res - Nodes table of the diagram
+        %     res - structure with the properties of nodes of the diagram
+        %      The struct has the following fields:
+        %        Name  - name of the node
+        %        Group - group of the node (colouring)
         %
             switch name
                 case cType.Tables.FLOW_DIAGRAM
@@ -100,27 +113,34 @@ classdef (Sealed) cProductiveDiagram < cResultId
                     res=obj.NodesSFPAT;
                 case cType.Tables.PROCESS_DIAGRAM
                     res=obj.NodesPAT;
+                case cType.Tables.KPROCESS_DIAGRAM
+                    res=obj.NodesKPAT;
             end 
         end
 
         function res = getEdgeTable(obj,name)
-        %getEdgeTable - Get the edges table of a productive diagram
+        %getEdgeTable - Get the edges info of a diagram
         %   Syntax:
         %     res = obj.getEdgeTable(name)
         %   Input Parameter:
         %     name - Name of the diagram
         %   Output Parameter:
-        %     res - Edges table of the diagram
+        %     res - structure of the diagram edges
+        %      The struct has the following fields:
+        %        source - source node of the edge
+        %        target - target node of the edge
         %
             switch name
                 case cType.Tables.FLOW_DIAGRAM
                     res=obj.EdgesFAT;
-                case cType.Tables.PROCESS_DIAGRAM
-                    res=obj.EdgesPAT;
                 case cType.Tables.FLOW_PROCESS_DIAGRAM
                     res=obj.EdgesFPAT;
                 case cType.Tables.PRODUCTIVE_DIAGRAM
                     res=obj.EdgesSFPAT;
+                case cType.Tables.PROCESS_DIAGRAM
+                    res=obj.EdgesPAT;
+                case cType.Tables.KPROCESS_DIAGRAM
+                    res=obj.EdgesKPAT;
             end
         end 
 
@@ -139,41 +159,40 @@ classdef (Sealed) cProductiveDiagram < cResultId
 
     methods(Static,Access=private)
         function res=edgesTable(A,nodes)
-        % Get the edges table of a matrix
+        %edgesTable - Get the edges struct of an adjacency matrix
+        %   Syntax:
+        %     res=cDiagramFP.edgesTable(A,nodes);
+        %   Input Argument:
+        %     A - Adjacency matrix
+        %     nodes - Cell Array with the node names
+        %   Output Argument:
+        %     res - Struct Array containing the edges info of the diagram
+        %      The struct has the following fields
+        %        source - source node of the edge
+        %        target - target node of the edge
+        %
             fields={'source','target'};
             [idx,jdx,~]=find(A);
             source=nodes(idx);
             target=nodes(jdx);
-            tmp=[source', target'];
-            res=cell2struct(tmp,fields,2);
-        end
-
-        function [edges,nodes]=edgesTableFP(A,inodes)
-        % Get the edges tables of a matrix including environment
-            fields={'source','target'};
-            % Build Internal Edges
-            [idx,jdx,~]=find(A(1:end-1,1:end-1));
-            isource=inodes(idx);
-            itarget=inodes(jdx);
-            % Build Resources Edges
-            [~,jdx]=find(A(end,1:end-1));
-            vsource=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
-            vtarget=inodes(jdx);
-            % Build Output Edges
-            [idx,~]=find(A(1:end-1,end));
-            wtarget=arrayfun(@(x) sprintf('OUT%d',x),1:numel(idx),'UniformOutput',false);
-            wsource=inodes(idx);
-            % Build nodes
-            nodes=[vsource,inodes,wtarget];
-            % Build Edges
-            source=[vsource,isource,wsource];
-            target=[vtarget,itarget,wtarget];
-            tmp=[source', target'];
-            edges=cell2struct(tmp,fields,2);           
+            tmp=[source;target];
+            res=cell2struct(tmp,fields,1);
         end
 
         function res=nodesTable(nodenames,nodetypes)
-            fields={'Name','Type'};
+        %nodesTable - Get a struct with the nodes info of a diagram
+        %   Syntax:
+        %     res=cDiagramFP.nodesTable(nodenames,nodetypes);
+        %   Input Argument:
+        %     nodenames - Cell Array with the node names
+        %     nodetypes - Cell Array with the node types
+        %   Output Argument:
+        %     res - Struct Array containing the nodes info of the diagram
+        %      The struct has the following fields
+        %        Name  - name of the node
+        %        Group - group of the node (colouring)
+        %
+            fields={'Name','Group'};
             res=cell2struct([nodenames;nodetypes],fields,1);
         end
     end

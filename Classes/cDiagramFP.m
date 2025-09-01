@@ -7,18 +7,33 @@ classdef (Sealed) cDiagramFP < cResultId
 %   cDiagramFP properties
 %     EdgesFP  - Edges struct of the exergy adjacency table FP
 %     EdgesCFP - Edges struct of the exergy cost adjacency table FP
+%     EdgesKFP - Edges struct of the exergy kernel table FP
+%     EdgesKCFP- Edges struct of the exergy cost kernel table FP
+%     NodesFP  - Nodes struct Table FP
+%     NodesKFP - Nodes struct Kernel Table FP
+%     GroupsTable - Group table struct
 %
 %   cDiagramFP methods:
 %     buildResultInfo - Build the cResultInfo object of the diagram FP
-%     adjacencyTable  - get the adjacency table
-%
+%     getNodeInfo     - get the adjacency table
 %
 %   See also cExergyCost, cResultId
 %
     properties (GetAccess=public,SetAccess=private)
-        EdgesFP     % Edges struct of the exergy FP adjacency table
-        EdgesCFP    % Edges struct of the exergy cost FP adjacency table
+        EdgesFP      % Edges struct of the exergy FP adjacency table
+        EdgesCFP     % Edges struct of the exergy cost FP adjacency table
+        EdgesKFP     % Edges struct of the exergy FP kernel table
+        EdgesKCFP    % Edges struct of the exergy cost FP kernel table
+        NodesFP      % Nodes struct Table FP
+        NodesKFP     % Nodes struct Kernel Table FP
+        GroupsTable  % Group table struct
     end
+
+    properties (Access=private)
+        tfpda
+        cfpda
+    end
+
     methods
         function obj = cDiagramFP(exc)
         %cDiagramFP - Construct an instance of this class
@@ -31,12 +46,20 @@ classdef (Sealed) cDiagramFP < cResultId
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exc));
                 return
             end
-            % Create the edges of the tables
-            nodes=exc.ps.ProcessKeys;
-            values=exc.TableFP;
-            obj.EdgesFP=cDiagramFP.adjacencyTable(values,nodes);
-            values=exc.getCostTableFP;
-            obj.EdgesCFP=cDiagramFP.adjacencyTable(values,nodes);
+            % Create the graph edges of the TableFP
+            da = cDigraphAnalysis(exc.TableFP,exc.ps.ProcessKeys);
+            obj.EdgesFP=da.GraphEdges;
+            obj.EdgesKFP=da.KernelEdges;
+            obj.tfpda=da;
+            % Create the graph edges of the Cost Table FP
+            da = cDigraphAnalysis(exc.getCostTableFP,exc.ps.ProcessKeys);
+            obj.EdgesCFP=da.GraphEdges;
+            obj.EdgesKCFP=da.KernelEdges;
+            obj.cfpda=da;
+            % Create the graph nodes properties and group tables
+            obj.NodesFP=da.GraphNodes;
+            obj.NodesKFP=da.KernelNodes;
+            obj.GroupsTable=da.getGroupsTable;
             % cResultId properties
             obj.ResultId=cType.ResultId.DIAGRAM_FP;
             obj.DefaultGraph=cType.Tables.DIAGRAM_FP;
@@ -54,42 +77,32 @@ classdef (Sealed) cDiagramFP < cResultId
         %     res - cResultInfo object
             res=fmt.getDiagramFP(obj);
         end
-    end
 
-    methods(Static)
-        function res=adjacencyTable(mFP,nodes)
-        %adjacencyTable - Get a struct with the Adjacency Table FP
+        function res=getNodeInfo(obj,gtype)
+        %getNodeInfo - Get the node tables depending of the graph type
         %   Syntax:
-        %     res=cDiagramFP.adjacencyTables(mFP,nodes);
+        %     res = obj.getNodeInfo(gtype)
         %   Input Argument:
-        %     mFP - FP matrix values
-        %     nodes - Cell Array with the process node names
+        %     gtype - boolean, true for kernel graph, false for full graph
         %   Output Argument:
-        %     res - Struct Array containing the adjacency matrix
-        %      The struct has the following fields
-        %        source - source node of the edge
-        %        target - target node of the edge
-        %        value  - value of the edge
-        %
-            % Build Internal Edges
-            fields={'source','target','value'};
-            [idx,jdx,ival]=find(mFP(1:end-1,1:end-1));
-            isource=nodes(idx);
-            itarget=nodes(jdx);
-            % Build Resources Edges
-            [~,jdx,vval]=find(mFP(end,1:end-1));
-            vsource=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
-            vtarget=nodes(jdx);
-            % Build Output edges
-            [idx,~,wval]=find(mFP(1:end-1,end));
-            wtarget=arrayfun(@(x) sprintf('OUT%d',x),1:numel(idx),'UniformOutput',false);
-            wsource=nodes(idx);
-            % Build the Adjacency Matrix
-            source=[vsource,isource,wsource];
-            target=[vtarget,itarget,wtarget];
-            values=[vval';ival;wval];
-            tmp=[source', target', num2cell(values)];
-            res=cell2struct(tmp,fields,2);
+        %     res - struct array with the node information
+            if gtype
+                res=obj.NodesKFP;
+            else
+                res=obj.NodesFP;
+            end
+        end
+
+        function res=getDigraphAnalysis(obj,tableName)
+            res=cMessageLogger();
+            switch tableName
+                case cType.Tables.TABLE_FP
+                    res=obj.tfpda;
+                case cType.Tables.COST_TABLE_FP
+                    res=obj.cfpda;
+                otherwise
+                    res.messageLog(cType.ERROR,cMessages.TableNotAvailable,tableName)
+            end
         end
     end
 end

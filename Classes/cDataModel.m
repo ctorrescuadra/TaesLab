@@ -188,7 +188,7 @@ classdef cDataModel < cResultSet
                     obj.addLogger(rsc);
                     if rsc.status
                         setValues(obj.ResourceData,i,rsc);
-						obj.messageLog(cType.INFO,cMessages.ValidResourceCost,obj.SampleNames{i});
+						obj.messageLog(cType.INFO,cMessages.ValidResourceCost,snames{i});
                     else
 						obj.messageLog(cType.ERROR,cMessages.InvalidResourceData,snames{i});
                     end
@@ -798,7 +798,7 @@ classdef cDataModel < cResultSet
 
     methods(Access=private)
         function buildResultInfo(obj)
-        % Get the cResultInfo with the data model tables
+        %buildResultInfo - Get the cResultInfo with the data model tables
             ps=obj.ProductiveStructure;
             p=struct('Name','','Description','');
 			% Flows Table

@@ -22,6 +22,9 @@ classdef (Sealed) cTableMatrix < cTableResult
 %     isTotalMalfunctionCost - Check if it's Total Malfunction Cost Table (GraphOptions)
 %
 %   cTable methods
+%     getProperties   - Get table properties
+%     setStudyCase    - Set state and sample values
+%     setDescription  - Set Table Header or Description
 %     showTable       - Show the tables in diferent interfaces
 %     exportTable     - Export table in diferent formats
 %     saveTable       - Save a table into a file in diferent formats
@@ -53,25 +56,25 @@ classdef (Sealed) cTableMatrix < cTableResult
         %     rowNames - Cell Array containing the row's names
         %     colNames - Cell Array containing the column's names
         %     props - additional properties
-        %      rowTotal: true/false row total sum
-        %      colTotal: true/false column total sum
+        %      RowTotal: true/false row total sum
+        %      ColTotal: true/false column total sum
         %      Name: Name of the table
         %      Description: table description
         %      Unit: unit name of the data
         %      Format: format of the data
         %      GraphType: type of graph asociated
         %      GraphOptions: options of the graph            
-            if props.rowTotal
+            if props.RowTotal
 				nrows=length(rowNames)+1;
 				rowNames{nrows}='Total';
                 data=[data;zerotol(sum(data))];
             end
-            if props.colTotal
+            if props.ColTotal
 				ncols=length(colNames)+1;
                 colNames{ncols}='Total';
                 data=[data,zerotol(sum(data,2))];
             end
-            if props.colTotal && props.rowTotal
+            if props.ColTotal && props.RowTotal
                 data(end,end)=0.0;
             end
             obj.Data=num2cell(zerotol(data));
@@ -84,6 +87,20 @@ classdef (Sealed) cTableMatrix < cTableResult
             else
                 obj.messageLog(cType.ERROR,cMessages.InvalidTableSize,size(data));
             end
+        end
+
+        function res=getProperties(obj)
+        %getProperties - Get table properties
+        %   Syntax:
+        %     res=obj.getProperties
+        %   Output Arguments:
+        %     res - structure with table properties
+        %
+            res=getProperties@cTableResult(obj);
+            res.SummaryType=obj.SummaryType;
+            res.GraphOptions=obj.GraphOptions;
+            res.RowTotal=obj.RowTotal;
+            res.ColTotal=obj.ColTotal;
         end
         
         function res=getMatrixValues(obj)
@@ -277,8 +294,8 @@ classdef (Sealed) cTableMatrix < cTableResult
                 obj.Resources=p.Resources;
                 obj.GraphOptions=p.GraphOptions;
                 obj.SummaryType=p.SummaryType;
-                obj.RowTotal=p.rowTotal;
-                obj.ColTotal=p.colTotal;
+                obj.RowTotal=p.RowTotal;
+                obj.ColTotal=p.ColTotal;
                 obj.setColumnFormat;
                 obj.setColumnWidth;
             catch err

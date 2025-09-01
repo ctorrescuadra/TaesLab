@@ -14,19 +14,19 @@ classdef(Abstract) cResultSet < cResultId
 %       cTtpe.ClassId.RESULT_MODEL
 % 
 %   cResultSet Methods:
-%     StudyCase      - Get the study case value names
-%     ListOfTables   - Get the table names from a result set
-%     LIstOfGraphs   - Get the graphic table names from a result set
-%     getTableIndex  - Get the table index from a result set
-%     printResults   - Print results on console
-%     showResults    - Show results in different interfaces
-%     showGraph      - Show the graph associated to a table
-%     showTableIndex - Show the table index in different interfaces
-%     exportResults  - Export all the result Tables to another format
-%     saveResults    - Save all the result tables in an external file
-%     getTable       - Get a table of the result set by name
-%     saveTable      - Save the results in an external file 
-%     exportTable    - Export a table to another format
+%     StudyCase        - Get the study case value names
+%     ListOfTables     - Get the table names from a result set
+%     LIstOfGraphs     - Get the graphic table names from a result set
+%     getTableIndex    - Get the table index from a result set
+%     printResults     - Print results on console
+%     showResults      - Show results in different interfaces
+%     showGraph        - Show the graph associated to a table
+%     showTableIndex   - Show the table index in different interfaces
+%     exportResults    - Export all the result Tables to another format
+%     saveResults      - Save all the result tables in an external file
+%     getTable         - Get a table of the result set by name
+%     saveTable        - Save the results in an external file 
+%     exportTable      - Export a table to another format
 %
 %   See also cResultInfo, cThermoeconomicModel, cDataModel
 %
@@ -284,6 +284,22 @@ classdef(Abstract) cResultSet < cResultId
             else
                 res.messageLog(cType.ERROR,cMessages.TableNotFound,tname);
             end
+        end
+
+        function res=getGroupsTable(obj)           
+        %getDigraphGroups - Get the Diagraph groups table of a process diagram
+        %   Syntax:
+        %     obj.getDigraphGroups
+        %   Output Arguments:
+        %     res - cTable object with the groups of the diagram
+        %
+            res=[];
+            if (obj.ResultId~=cType.ResultId.DIAGRAM_FP) && ...
+                (obj.ResultId~=cType.ResultId.PRODUCTIVE_DIAGRAM)
+                return
+            end                   
+            res=obj.Info.GroupsTable;
+            res.setStudyCase(obj.StudyCase);
         end
     end
 

@@ -12,7 +12,19 @@ classdef (Abstract) cTableResult < cTable
         Unit      % Units of the table cell
     end
 
-    methods      
+    methods
+        function res=getProperties(obj)
+        %getProperties - Get table properties
+        %   Syntax:
+        %     res=obj.getProperties
+        %   Output Arguments:
+        %     res - structure with table properties
+        %
+            res=getProperties@cTable(obj);
+            res.Format=obj.Format;
+            res.Unit=obj.Unit;
+        end
+
         function res=exportTable(obj,varmode,fmt)
         %exportTable - Get cTable info in diferent types of variables
         %   Syntax:

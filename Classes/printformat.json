@@ -880,6 +880,100 @@
 					"type": 2
 				}
 			]
+		},
+		{
+			"id": 23,
+			"key": "kpat",
+			"number": false,
+			"description": "Kernel Processes Diagram",
+			"resultId": 6,
+			"graph": 7,
+			"columns": 3,
+			"node": 0,
+			"rsc": false,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				}
+			]
+		},
+		{
+			"id": 24,
+			"key": "ktfp",
+			"number": false,
+			"description": "Kernel Diagram FP",
+			"resultId": 7,
+			"graph": 3,
+			"columns": 4,
+			"node": 1,
+			"rsc": false,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				},
+				{
+					"name": "value",
+					"header": "Value",
+					"type": 3
+				}
+			]
+		},
+		{
+			"id": 25,
+			"key": "ktcfp",
+			"number": false,
+			"description": "Kernel Cost Diagram FP",
+			"resultId": 7,
+			"graph": 3,
+			"columns": 4,
+			"node": 1,
+			"rsc": false,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				},
+				{
+					"name": "value",
+					"header": "Value",
+					"type": 3
+				}
+			]
 		}
 	],
 	"matrices": [

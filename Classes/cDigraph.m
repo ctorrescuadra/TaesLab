@@ -23,18 +23,32 @@ classdef cDigraph < cGraphResults
 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
 				return
 			end
+			if ~isObject(tbl,'cTableCell') || ~isObject(info,'cProductiveDiagram')
+				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(tbl));
+				return
+			end
+			% Get the nodes table and build the digraph
 			nodes=info.getNodeTable(tbl.Name);
 			obj.Name=tbl.Description;
 			obj.Title=tbl.Description;
 			tnodes=struct2table(nodes);
 			edges=table(tbl.Data,'VariableNames',{'EndNodes'});
 			obj.xValues=digraph(edges,tnodes,"omitselfloops");
-            obj.Legend=cType.EMPTY_CELL;
-			obj.yValues=cType.EMPTY;
+			% Color by groups
+			grps=obj.xValues.Nodes.Group;
+			ng=max([grps;3]);
+			colors=hsv(ng);
+			obj.Categories=colors(grps,:);
+			if strcmp(tbl.Name,cType.Tables.KPROCESS_DIAGRAM)
+				obj.yValues=7;
+			else
+				obj.yValues=5;
+			end
+			% Unused properties
+			obj.Legend=cType.EMPTY_CELL;
 			obj.xLabel=cType.EMPTY_CHAR;
 			obj.yLabel=cType.EMPTY_CHAR;
 			obj.BaseLine=0.0;
-            obj.Categories=cType.EMPTY_CELL;
         end
 
         function showGraph(obj)
@@ -49,11 +63,7 @@ classdef cDigraph < cGraphResults
 				'color',[1 1 1]); 
 			ax=axes(f);    
 			% Plot the digraph
-            colors=eye(3);
-            nodetable=obj.xValues.Nodes;
-            nodecolors=colors(nodetable.Type,:);
-            nodenames=nodetable.Name;
-            plot(ax,obj.xValues,'Layout','auto','NodeLabel',nodenames,'NodeColor',nodecolors,'Interpreter','none');
+            plot(ax,obj.xValues,'Layout','auto','NodeColor',obj.Categories,'MarkerSize',obj.yValues,'Interpreter','none');
             title(obj.Title,'fontsize',14);
         end
 
@@ -67,11 +77,8 @@ classdef cDigraph < cGraphResults
 			if app.isColorbar
 				delete(app.Colorbar);
 			end
-			colors=eye(3);
-			nodetable=obj.xValues.Nodes;
-			nodecolors=colors(nodetable.Type,:);
-			nodenames=nodetable.Name;
-			plot(app.UIAxes,obj.xValues,'Layout','auto','NodeLabel',nodenames,'NodeColor',nodecolors,'Interpreter','none');         
+			% Plot the digraph
+			plot(app.UIAxes,obj.xValues,'Layout','auto','NodeColor',obj.Categories,'Interpreter','none');         
 			app.UIAxes.Title.String=obj.Title;
 			app.UIAxes.XLabel.String=cType.EMPTY_CHAR;
 			app.UIAxes.YLabel.String=cType.EMPTY_CHAR;

@@ -73,6 +73,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     getTablesDirectory  - Get the tables directory
 %     getTableInfo        - Get Information of a table
 %
+%    Diagram Info Methods
+%     getGroupsTable   - Get the groups of a process diagram
+%     getKernelTable   - Get the kernel tables associated to a FP table
+%
 %    ResultSet Methods
 %     getResultInfo         - Get cResultInfo objects
 %     ListOfTables          - Get the list of available tables
@@ -82,7 +86,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     exportTable           - Export a table to another format
 %     printResults          - Print results on console
 %     showResults           - Show results in different interfaces
-%     showGraph             - Show the graph associated to a t able
+%     showGraph             - Show the graph associated to a table
 %     showDataModel         - Show the data model tables
 %     showSummary           - Show the summary tables
 %     showTablesDirectory   - Show the tables directory
@@ -977,6 +981,51 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             showTable(tbl,varargin{:})
         end
 
+        function res=getGroupsTable(obj)           
+        %getDigraphGroups - Get Groups of a process diagram
+        %   Syntax:
+        %     obj.getDigraphGroups
+        %   Output Arguments:
+        %     res - struct with the groups of the diagram
+        %
+            res=getGroupsTable(obj.diagramFP);
+        end
+
+        function res=getKernelTable(obj,tableName)
+        %getKernelTables - Get the kernel table associated to a FP table
+        %   Syntax:
+        %     res=obj.getKernelTables(tableName) 
+        %   Input Arguments:
+        %     tableName - Name of the FP table
+        %       'tfp' | 'dcfp'
+        %   Output Arguments:
+        %     res - cTable object with the kernel table
+        %
+            res=cMessageLogger();
+            % Check Input
+            if nargin<2 || ~ischar(tableName) || isempty(tableName)
+                res.printError(cMessages.TableNotAvailable,tableName);
+                return
+            end
+            % Create Digraph Analysis
+            res=obj.diagramFP.Info;
+            sc=res.getDigraphAnalysis(tableName);
+            if ~isValid(sc)
+                printLogger(sc);
+                res.printError(cMessages.InvalidDigraph)
+                return
+            end
+            % Get Kernel Table
+            [kA,kNodes]=getKernelTable(sc);
+            tbl=obj.fmt.getTableFP(tableName,kA,kNodes);
+            p=tbl.getProperties;
+            p.Name=['k' tbl.Name];
+            p.Description=['Kernel ' tbl.Description];
+            colNames=['Key',kNodes];
+            res=cTableMatrix(kA,kNodes,colNames,p);
+            res.setStudyCase(obj.StudyCase);
+        end
+        
         %%%
         % Save Results methods
         %%%
@@ -1396,14 +1445,14 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
     %%%%%%
     methods(Access=private)
         function printDebugInfo(obj,varargin)
-        % Print info messages if debug mode is activated
+        %printDebugInfo - Print info messages if debug mode is activated
             if obj.debug
                 obj.printInfo(varargin{:});
             end
         end
 
         function setStateInfo(obj)
-        % Trigger exergy analysis
+        %setStateInfo - Trigger exergy analysis
             if ~isValid(obj.fp1)
                 return
             end
@@ -1416,7 +1465,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setThermoeconomicAnalysis(obj)
-        % Trigger thermoeconomic analysis
+        %setThermoeconomicAnalysis - Trigger thermoeconomic analysis
             % Read resources
             options=struct('DirectCost',obj.isDirectCost,'GeneralCost',obj.isGeneralCost);
             if obj.isGeneralCost
@@ -1435,7 +1484,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setThermoeconomicDiagnosis(obj)
-        % Set thermoeconomic diagnosis computation
+        %setThermoeconomicDiagnosis - Set thermoeconomic diagnosis computation
             id=cType.ResultId.THERMOECONOMIC_DIAGNOSIS;
             if ~obj.isDiagnosis
                 obj.clearResults(id);
@@ -1458,7 +1507,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setSummaryResults(obj)
-        % Set Summary Results
+        %setSummaryResults - Set Summary Results
             id=cType.ResultId.SUMMARY_RESULTS;
             if ~obj.isSummaryActive
                 obj.clearResults(id)
@@ -1476,7 +1525,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setSummaryTables(obj,option)
-        % Set summary tables
+        %setSummaryTables - Set summary tables
             if ~obj.isSummaryActive
                 return
             end
@@ -1495,7 +1544,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setRecyclingResults(obj)
-        % Set Recycling Analysis Results
+        %setRecyclingResults - Set Recycling Analysis Results
             if ~obj.isWaste
                 return
             end
@@ -1519,7 +1568,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setDiagramFP(obj)
-        % Set the Diagram FP cResultInfo object
+        %setDiagramFP - Set the Diagram FP cResultInfo object
             dfp=cDiagramFP(obj.fp1);
             if dfp.status
                 res=getDiagramFP(obj.fmt,dfp);
@@ -1531,10 +1580,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setProductiveStructure(obj)
-        % Set the productive structure cResultInfo objects
+        %setProductiveStructure - Set the productive structure cResultInfo objects
             ps=obj.DataModel.ProductiveStructure;
             res=getProductiveStructure(obj.fmt,ps);
             obj.setResults(res)
+            % set productive diagrams results
             pd=cProductiveDiagram(ps);
             if pd.status
                 res=getProductiveDiagram(obj.fmt,pd);
@@ -1548,7 +1598,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Internal set methods
         %%%
         function res=checkState(obj,state)
-        % Ckeck the state information
+        %checkState - Ckeck the state information
             res=false;
             if ~obj.DataModel.existState(state)
                 obj.printWarning(cMessages.InvalidStateName,state);
@@ -1568,7 +1618,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function triggerStateChange(obj)
-        % Trigger State Change
+        %triggerStateChange - Trigger State Change
             obj.setStateInfo;
             obj.setThermoeconomicAnalysis;
             obj.setThermoeconomicDiagnosis;
@@ -1578,7 +1628,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=checkReferenceState(obj,state)
-        % Check the reference state value
+        %checkReferenceState - Check the reference state value
             res=false;
             if ~obj.DataModel.existState(state)
                 obj.printWarning(cMessages.InvalidStateName,state);
@@ -1593,7 +1643,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
  
         function res=checkResourceSample(obj,sample)
-        % Check the resource sample value
+        %checkResourceSample - Check the resource sample value
             res=false;
             if ~obj.DataModel.existSample(sample)
                 obj.printWarning(cMessages.InvalidResourceName,sample);
@@ -1609,7 +1659,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function triggerResourceSampleChange(obj)
-        % trigger ResourceSample parameter change
+        %triggerResourceSampleChange - Trigger ResourceSample parameter change
             if obj.isGeneralCost
                 obj.setThermoeconomicAnalysis;
             end
@@ -1619,7 +1669,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
         
         function res=checkCostTables(obj,value)
-        % check CostTables parameter
+        %checkCostTables - Check CostTables parameter
             res=false;
             pct=cType.getCostTables(value);
             if isempty(pct)
@@ -1638,12 +1688,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end 
     
         function triggerCostTablesChange(obj)
-        % Set cost tables method and trigger thermoeconomic analysis
+        %triggerCostTablesChange - Set cost tables method and trigger thermoeconomic analysis
             obj.setThermoeconomicAnalysis;
         end
 
         function res=checkDiagnosisMethod(obj,value)
-        % Check Diagnosis Method parameter
+        %checkDiagnosisMethod - Check Diagnosis Method parameter
             res=false;
             if ~cType.checkDiagnosisMethod(value)
                 obj.printWarning(cMessages.InvalidDiagnosisMethod,value);
@@ -1657,7 +1707,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=checkActiveWaste(obj,value)
-        % Check Active Waste Parameter
+        %checkActiveWaste - Check Active Waste Parameter
             res=false;
             if ~obj.wd.existWaste(value)
                 obj.printWarning(cMessages.InvalidWasteKey,value);
@@ -1671,7 +1721,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=checkSummary(obj,value)
-        % Ckeck Summary parameter
+        %checkSummary - Ckeck Summary parameter
             res=false;
             if ~checkSummaryOption(obj,value)
                 obj.printDebugInfo(cMessages.InvalidSummaryOption,value);
@@ -1685,12 +1735,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=checkSummaryOption(obj,value)
-        % Check if if the summary option is valid
+        %checkSummaryOption - Check if if the summary option is valid
             res=obj.DataModel.SummaryOptions.checkName(value);
         end
 
         function res=checkRecycling(obj,value)
-        % Ckeck Summary parameter
+        %checkRecycling - Ckeck Recycling parameter
             res=false;
             if ~islogical(value)
                 obj.printDebugInfo(cMessages.InvalidArgument);
@@ -1711,7 +1761,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % cModelResults methods
         %%%
         function res=getResults(obj,index)
-        % Get the cResultInfo given the resultId
+        %getResults - Get the cResultInfo given the resultId
             if index<cType.MAX_RESULT_INFO
                 res=getResults(obj.results,index);
             else
@@ -1723,7 +1773,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
         
         function res=getResultTable(obj,table)
-        % Get the cResultInfo object associated to a table
+        %getResultTable - Get the cResultInfo object associated to a table
             res=cMessageLogger();
             tinfo=obj.getTableInfo(table);
             if isempty(tinfo)
@@ -1739,7 +1789,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=buildResultInfo(obj)
-        % Get a cResultInfo object with all tables of the active model
+        %buildResultInfo - Get a cResultInfo object with all tables of the active model
             res=getResults(obj.results,cType.ResultId.RESULT_MODEL);
             if ~isempty(res)
                 return
@@ -1758,12 +1808,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function clearResults(obj,index)
-        % Clear the result info
+        %clearResults - Clear the result info
             clearResults(obj.results,index);
         end
 
         function setResults(obj,res,varargin)
-        % Set the result info
+        %setResults - Set the result info
             setResults(obj.results,res,varargin{:});
         end
     end

@@ -76,7 +76,7 @@ classdef ViewResults < matlab.apps.AppBase
                 case cType.GraphType.SUMMARY
                     gr=cGraphSummary(tbl,info);
                 case cType.GraphType.DIAGRAM_FP
-                    gr=cGraphDiagramFP(tbl);
+                    gr=cGraphDiagramFP(tbl,info);
                 case cType.GraphType.DIGRAPH
                     gr=cDigraph(tbl,info);
                 case cType.GraphType.RECYCLING

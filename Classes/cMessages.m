@@ -192,6 +192,9 @@ classdef cMessages
         ListEmpty='List must NOT be empty'
         ListNotUnique='List values must be unique'
         ListNotValid='List values are invalid'
+        % Digraph analysis
+        InvalidDigraph='Invalid Digraph Analysis'
+        NoTableFP='The table %s is not a FP-Table';
     end
 
     methods(Static)

@@ -21,8 +21,10 @@ function res=DiagramFP(data,varargin)
 %   Output Arguments
 %     res - cResultInfo object contains the FP diagram tables
 %      The following tables are obtained:
-%       atfp - Diagram FP adjacency matrix                                     
-%       atcfp - Cost Diagram FP adjacency matrix
+%       atfp  - Diagram FP adjacency table                                     
+%       atcfp - Cost Diagram FP adjacency table
+%       ktfp  - Kernel Diagram FP adjacency table
+%       ktcfp - Kernel Cost Diagram FP adjacency table
 %   
 %   Examples
 %     <a href="matlab:open DiagramFpDemo.mlx">Diagram FP Demo</a>

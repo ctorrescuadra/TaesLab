@@ -16,6 +16,9 @@ classdef (Sealed) cTableCell < cTableResult
 %     getColumnValues      - Get the values of a column (using FieldNames)
 %
 %   cTable Methods
+%     getProperties   - Get table properties
+%     setStudyCase    - Set state and sample values
+%     setDescription  - Set Table Header or Description
 %     showTable       - Show the tables in diferent interfaces
 %     exportTable     - Export table in diferent formats
 %     saveTable       - Save a table into a file in diferent formats
@@ -65,6 +68,19 @@ classdef (Sealed) cTableCell < cTableResult
             else
                 obj.messageLog(cType.ERROR,cMessages.InvalidTableSize,size(data));
             end
+        end
+
+        function res=getProperties(obj)
+        % getProperties - Get table properties
+        % Syntax:
+        %   res=obj.getProperties
+        % Output Results:
+        %   res - structure with table properties
+        %
+            res=getProperties@cTableResults(obj);
+            res.FieldNames=obj.FieldNames;
+            res.ShowNumber=obj.ShowNumber;
+            res.NodeType=obj.NodeType;
         end
 
         function res=formatData(obj)
@@ -257,6 +273,7 @@ classdef (Sealed) cTableCell < cTableResult
             end
         end
     end
+
     methods(Access=private)
         function setProperties(obj,p)
         % Set table properties: Description, Unit, Format, FieldNames, ...

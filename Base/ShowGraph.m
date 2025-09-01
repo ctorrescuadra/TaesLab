@@ -79,8 +79,8 @@ function ShowGraph(arg,varargin)
             gr=cGraphRecycling(tbl);
 		case cType.GraphType.DIGRAPH
 			gr=cDigraph(tbl,res.Info);
-		case cType.GraphType.DIAGRAM_FP
-			gr=cGraphDiagramFP(tbl);
+		case cType.GraphType.DIAGRAM_FP	
+			gr=cGraphDiagramFP(tbl,res.Info);
 		case cType.GraphType.SUMMARY
 			gr=cGraphSummary(tbl,res.Info,param);
 	end

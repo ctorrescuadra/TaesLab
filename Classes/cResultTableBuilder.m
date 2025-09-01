@@ -234,6 +234,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             % Get FP adjacency tables
             tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,dfp.EdgesFP);
             tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,dfp.EdgesCFP);
+            tbl.ktfp=obj.getAdjacencyTableFP(cType.Tables.KDIAGRAM_FP,dfp.EdgesKFP);
+            tbl.ktcfp=obj.getAdjacencyTableFP(cType.Tables.KDIAGRAM_COST_FP,dfp.EdgesKCFP);
             % Build the cResultInfo
             res=cResultInfo(dfp,tbl);
         end
@@ -439,7 +441,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
             colNames=obj.getTableHeader(tp);
             data=struct2cell(val)';
-			res=obj.createCellTable(tp,data,rowNames,colNames);
+			res=obj.createCellTable(tp,data(:,1:2),rowNames,colNames);
         end
 
         function res=getWasteDefinition(obj,wt)
@@ -673,8 +675,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             p.GraphOptions=props.options;
             p.Resources=props.rsc;
             p.SummaryType=cType.SummaryId.NONE;
-            p.rowTotal=props.rowTotal;
-            p.colTotal=props.colTotal;
+            p.RowTotal=props.rowTotal;
+            p.ColTotal=props.colTotal;
             res=cTableMatrix(data,rowNames,colNames,p);
         end
 
@@ -693,8 +695,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             p.GraphOptions=props.options;
             p.Resources=props.rsc;
             p.SummaryType=props.table;
-            p.rowTotal=false;
-            p.colTotal=false;
+            p.RowTotal=false;
+            p.ColTotal=false;
             res=cTableMatrix(data,rowNames,colNames,p);
         end
     end

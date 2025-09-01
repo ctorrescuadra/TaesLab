@@ -168,7 +168,7 @@ classdef cResultInfo < cResultSet
                 case cType.GraphType.DIGRAPH
                     gr=cDigraph(tbl,obj.Info);
                 case cType.GraphType.DIAGRAM_FP
-                    gr=cGraphDiagramFP(tbl);
+                    gr=cGraphDiagramFP(tbl,obj.Info);
                 case cType.GraphType.SUMMARY
                     gr=cGraphSummary(tbl,obj.Info);
             end

@@ -17,6 +17,9 @@ classdef (Abstract) cTable < cMessageLogger
 %     GraphType    - Graph Type associated to table
 %
 %   cTable Methods:
+%     getProperties   - Get table properties
+%     setStudyCase    - Set state and sample values
+%     setDescription  - Set Table Header or Description 
 %     showTable       - show the tables in diferent interfaces
 %     exportTable     - export table in diferent formats
 %     saveTable       - save a table into a file in diferent formats
@@ -60,7 +63,45 @@ classdef (Abstract) cTable < cMessageLogger
             if obj.status
                 res=[obj.ColNames;[obj.RowNames',obj.Data]];
             end
-        end 
+        end
+
+        function res=getProperties(obj)
+        %getProperties - Get table properties
+        %   Syntax:
+        %     res=obj.getProperties
+        %   Output Arguments:
+        %     res - structure with table properties
+        %
+            res=struct('Name',obj.Name,'Description',obj.Description,...
+                'State',obj.State,'Sample',obj.Sample,'Resources',obj.Resources,...
+                'GraphType',obj.GraphType);
+        end
+
+        function setStudyCase(obj,info)
+        %setStudyCase. Set state and sample values. Internal function
+        %   Syntax:
+        %     obj.setStudyCase(filename)
+        %   Input Argument:
+        %     info - Struct with state and sample names
+        %   
+            obj.State=info.State;
+            if obj.Resources && isfield(info,'Sample')
+                obj.Sample=info.Sample;
+            else
+                obj.Sample=cType.EMPTY_CHAR;
+            end
+        end
+
+        function setDescription(obj,descr)
+        %setDescription. Set Table Header or Description.
+        %   Internal Use. Permite to reuse a table format with other names
+        %   Syntax:
+        %     obj.setTableName(filename)
+        %   Input Argument:
+        %     description - Description/header of the table
+        %
+            obj.Description=descr;
+        end
 
         function showTable(obj,option)
         %showTable - View Table in console GUI or HTML
@@ -334,31 +375,6 @@ classdef (Abstract) cTable < cMessageLogger
             end
         end
     
-        function setStudyCase(obj,info)
-        %setStudyCase. Set state and sample values. Internal function
-        %   Syntax:
-        %     obj.setStudyCase(filename)
-        %   Input Argument:
-        %     info - Struct with state and sample names
-        %   
-            obj.State=info.State;
-            if obj.Resources && isfield(info,'Sample')
-                obj.Sample=info.Sample;
-            else
-                obj.Sample=cType.EMPTY_CHAR;
-            end
-        end
-
-        function setDescription(obj,descr)
-        %setDescription. Set Table Header or Description.
-        %   Internal Use. Permite to reuse a table format with other names
-        %   Syntax:
-        %     obj.setTableName(filename)
-        %   Input Argument:
-        %     description - Description/header of the table
-        %
-            obj.Description=descr;
-        end
 
         function res=formatData(obj)
         %formatData. Format data. Only numeric fields
@@ -514,8 +530,6 @@ classdef (Abstract) cTable < cMessageLogger
 
         function status = checkTableSize(obj)
         %checkTableSize - Check the size of the table
-        %   Output Argument.
-        %     status true | false
             status = (size(obj.Data,1)==obj.NrOfRows) && (size(obj.Data,2)==obj.NrOfCols-1);
         end  
     end

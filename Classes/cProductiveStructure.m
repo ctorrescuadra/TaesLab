@@ -1,9 +1,12 @@
 classdef cProductiveStructure < cResultId
 %cProductiveStructure - Build the productive structure of a plant.
-%   Check the data model and build the productive structure, which
-%   include information about:
+%   Create the cProductiveStructure object a cModelData object.
+%   The productive structure includes information about:
 %   - Flows, Processes and Productive Groups (Streams)
 %   - The adjacency matrix of the productive graph
+%   The constructor checks the data model and build the productive structure.
+%   If the data model is not valid, the object status is set to false and
+%   the message log contains the errors found.	
 %
 %   cProductiveStructure constructor:
 %     obj = cProductiveStructure(dm)
@@ -25,16 +28,15 @@ classdef cProductiveStructure < cResultId
 %     StreamKeys        - Cell array of Streams Names (keys)
 %     ProductiveTable   - Adjacency Matrix of the productive structure graph
 %     
-%
 %   cProductiveStructure methods:
 %     buildResultInfo   - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
 %     WasteData         - Get the default waste data
 %     IncidenceMatrix   - Get the incidence matrices
-%     StreamMatrix      - Get the productive groups adjacency matrix 
-%     FlowMatrix        - Get the flows adjacency matrix
-%     ProcessMatrix     - Get the process matrix (Logical FP matrix)
-%     ProductiveMatrix  - Get the productive adjacency matrix
-%     FlowProcessMatrix - Get the flow-process adjacency matrix
+%     getStreamMatrix      - Get the productive groups adjacency matrix 
+%     getFlowMatrix        - Get the flows adjacency matrix
+%     getProcessMatrix     - Get the process matrix (Logical FP matrix)
+%     getProductiveMatrix  - Get the productive adjacency matrix
+%     getFlowProcessMatrix - Get the flow-process adjacency matrix
 %     FlowEdges         - Get the flow edges definition names 
 %     FuelStreams       - Get the Fuel streams ids
 %     ProductStreams    - Get the Product streams ids
@@ -53,7 +55,6 @@ classdef cProductiveStructure < cResultId
 %     getProductNames   - Get the final product flow names
 %     getWasteNames     - Get the waste flow names
 %     flows2streams     - Compute the exergy or cost of streams from flow values
-%     buildAdjacencyMatrix - Build the SSR adjacency matrix
 %
 %   See also cDataModel, cResultId
 %
@@ -73,6 +74,7 @@ classdef cProductiveStructure < cResultId
         ProcessKeys       % Cell array of Processes Names (keys)
         StreamKeys        % Cell array of Streams Names (keys)
 		ProductiveTable   % Adjacency Matrix of Productive Structure
+		ProcessMatrix	  % Process Matrix (Logical FP matrix)	
 	end
 
 	properties(Access=protected)
@@ -81,11 +83,7 @@ classdef cProductiveStructure < cResultId
     end
 
     properties(Access=private)
-		cflw			% Internal flows cell array
 		cstr            % Internal streams cell array
-		cprc            % Internal processes cell array
-        ftypes          % Internal flow types
-		tfp             % Processes Matrix
     end
 
     methods
@@ -93,8 +91,10 @@ classdef cProductiveStructure < cResultId
 		%cProductiveStructure - Creates an instance of the class
 		%   Syntax:
 		%     obj = cProductiveStructure(dm)
-		%   Input argument:
-        %     dm - cModelData object
+		% 	Input Arguments:
+		%     dm - cModelData object	
+		%   Output Arguments:
+		%     obj - cProductiveStructure object
 		%
 			% Check/validate file content
             if ~isObject(dm,'cModelData')
@@ -124,23 +124,19 @@ classdef cProductiveStructure < cResultId
 			if M < N1
 				obj.messageLog(cType.ERROR,cMessages.InvalidDataModel);
 				return
+			end			
+            % Create flows structure and dictionary
+			success = obj.createFlowsStructure(data.flows);
+			if ~success
+				return
 			end
-			obj.cflw=cell(M,1);
-			obj.cprc=cell(N1,1);
-			obj.cstr=cell(2*N1,1);
-			obj.ftypes=zeros(1,M);
-            % Create flows structure
-            fdata=data.flows;
-			arrayfun(@(i) obj.createFlow(i,fdata(i)), 1:obj.NrOfFlows);
-            if ~obj.status
-                return
-            end
-            obj.fDict=cDictionary({fdata.key});
+			obj.fDict=cDictionary({data.flows.key});
 			if ~isValid(obj.fDict)
 				obj.addLogger(obj.fDict);
 				obj.messageLog(cType.ERROR,cMessages.DuplicatedFlow);
 				return
 			end
+			% Check if there are resources and final products
 			if isempty(obj.ResourceFlows)
 				obj.messageLog(cType.ERROR,cMessages.NoResources);
 				return
@@ -149,19 +145,19 @@ classdef cProductiveStructure < cResultId
 				obj.messageLog(cType.ERROR,cMessages.NoOutputs);
 				return
 			end
-            % Create processes structure
-            pdata=data.processes;
-			arrayfun(@(i) obj.createProcess(i,pdata(i)), 1:obj.NrOfProcesses);
-            if ~obj.status
+            % Create processes structure and dictionary
+			success=obj.createProcessesStructure(data.processes);
+            if ~success
                 return
             end
-			obj.pDict=cDictionary({pdata.key});
+			obj.pDict=cDictionary({data.processes.key});
 			if ~isValid(obj.pDict)
 				obj.addLogger(obj.pDict);
 				obj.messageLog(cType.ERROR,cMessages.DuplicatedProcess);
 				return
 			end
             % Create productive groups (streams)
+			obj.cstr=cell(1,2*N1);
             for i=1:obj.NrOfProcesses
   				obj.createProcessStreams(i,cType.Stream.FUEL);
 				obj.createProcessStreams(i,cType.Stream.PRODUCT);
@@ -173,13 +169,11 @@ classdef cProductiveStructure < cResultId
 			if ~obj.buildEnvironment
 				return
 			end
-			% Check Graph Connectivity
+			% Check Flows connectivity
             if ~obj.checkFlowsConnectivity
 				return
             end
             % Set properties 
-			obj.Flows=cell2mat(obj.cflw);
-			obj.Processes=cell2mat(obj.cprc);
             obj.Streams=cell2mat(obj.cstr);
             obj.FlowKeys={obj.Flows.key};
             obj.ProcessKeys={obj.Processes.key};
@@ -191,20 +185,18 @@ classdef cProductiveStructure < cResultId
 			pstreams=obj.ProductStreams;
 			pprocesses=[obj.Streams(pstreams).process];
 			fstreams=obj.FuelStreams;
-			fprocesses=[obj.Streams(fstreams).process];
-		
+			fprocesses=[obj.Streams(fstreams).process];		
             mAE=sparse(1:M,fto,true(1,M),M,NS);
 			mAS=sparse(ffrom,1:M,true(1,M),NS,M);
 			mAF=sparse(fstreams,fprocesses,true(size(fstreams)),NS,N1);
 			mAP=sparse(pprocesses,pstreams,true(size(pstreams)),N1,NS);
             obj.ProductiveTable=struct('AE',mAE,'AS',mAS,'AF',mAF,'AP',mAP);
-			% Check graph connectivity
-			obj.tfp=obj.getProcessMatrix;
+			% Check digraph connectivity
 			if ~checkGraphConnectivity(obj)
 				obj.messageLog(cType.ERROR,cMessages.InvalidProductiveGraph);
 				return
 			end
-
+			% Set object variables
 			obj.ResultId=cType.ResultId.PRODUCTIVE_STRUCTURE;
 			obj.ModelName=data.name;
 			obj.State='SUMMARY';
@@ -364,7 +356,7 @@ classdef cProductiveStructure < cResultId
 		end
 
 		function res=FlowEdges(obj)
-		%FlowEdges - Get a structure array with the stream edges names of the flows
+		%FlowEdges - Get a structure array with the stream node names of the flow edges
 		%   Syntax:
 		%     res = obj.FlowEdges
 		%   Output Argument:
@@ -434,7 +426,7 @@ classdef cProductiveStructure < cResultId
 		%     res = ResourceProcesses(obj)
 		%   Output Arguments:
 		%     res - Array with the resource processes id
-			res=find(obj.tfp(end,1:end-1));
+			res=find(obj.ProcessMatrix(end,1:end-1));
 		end
 
 		function res=OutputProcesses(obj)
@@ -443,7 +435,7 @@ classdef cProductiveStructure < cResultId
 		%     res = OutputProcesses(obj)
 		%   Output Arguments:
 		%     res - Array with the system output processes id
-			res=transpose(find(obj.tfp(1:end-1,end)));
+			res=transpose(find(obj.ProcessMatrix(1:end-1,end)));
 		end
 
 		function res=isModelIO(obj)
@@ -506,7 +498,8 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments:  
 		%     res - Array with the ids of the flows of this type
 		%
-			res=find(obj.ftypes==typeId);
+            ftypes=[obj.Flows.typeId];
+			res=find(ftypes==typeId);
 		end
 	
 		function res=getProcessTypes(obj,typeId)
@@ -518,7 +511,8 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments:
 		%     res - Array with the ids of the processes of this type
 		%
-			res=find(obj.Processes.typeId==typeId);
+            ptypes=[obj.Processes.typeId];
+			res=find(ptypes==typeId);
 		end
 	
 		function res=getStreamTypes(obj,typeId)
@@ -530,7 +524,8 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments:
 		%     res - Array with the ids of the processes of this type
 		%
-			res=find(obj.Streams.typeId==typeId);
+            stypes=obj.Streams.typeId;
+			res=find(stypes==typeId);
 		end
 
 		function res=getResourceNames(obj)
@@ -583,102 +578,143 @@ classdef cProductiveStructure < cResultId
 				ET(pstreams)=BS(pstreams);
 			end
 		end
-		
 	end
 
-    methods(Access=private)
-        function createFlow(obj,id,data)
-		% Check and create flow data
-		% Input Arguments:
-		%   id - Flow Id
-		%   data - flows data
+	methods(Access=private)
+		function log = createFlowsStructure(obj, data)
+		%CreateFlowsStructure - Check and create the flows structure array
+		%   Syntax:
+		%     log = obj.createFlowsStructure(data)
+		%   Input Arguments:
+		%     data - Flows data strcture array
+		%   Output Arguments:
+		%     log - Result of the check true|false
 		%
-			if ~ischar(data.key) % Check flow key
-				obj.messageLog(cType.ERROR,cMessages.InvalidFlowId,id);
-				return
+			% Initialize
+			log = false;
+			M = length(data);
+			ftypes = zeros(1, M);
+			% Check flows data
+			for i = 1:M
+                flw=data(i);
+				if ~ischar(flw.key) % Check flow key
+					obj.messageLog(cType.ERROR, cMessages.InvalidFlowId, i);
+					return
+				end
+				if ~cParseStream.checkTextKey(flw.key)
+					obj.messageLog(cType.ERROR, cMessages.InvalidTextKey, flw.key);
+					return
+				end
+				% Check flow Type
+				typeId = cType.getFlowId(flw.type);
+				if isempty(typeId)
+					obj.messageLog(cType.ERROR, cMessages.InvalidFlowType, flw.type, flw.key);
+					return
+				end
+				ftypes(i) = typeId;
 			end
-			if ~cParseStream.checkTextKey(data.key)
-				obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,data.key);
-				return
-			end
-            % Check flow Type
-			typeId=cType.getFlowId(data.type);
-            if isempty(typeId)
-				obj.messageLog(cType.ERROR,cMessages.InvalidFlowType,data.type,data.key);
-                return
-            end
-            % Create flow structure
-            obj.cflw{id}=struct('id',id,'key',data.key,'type',data.type,...
-                'typeId',typeId,'from',0,'to',0);
-			obj.ftypes(id)=typeId;
+			% Create Flows structure array
+			obj.Flows= struct('id', num2cell(1:M), ...
+				'key', {data.key}, ...
+				'type', {data.type}, ...
+				'typeId', num2cell(ftypes), ...
+				'from', 0, 'to', 0);
+			log = obj.status;
         end
 
-        function createProcess(obj,id,data)
-		% Check and create process data
-		% Input Arguments:
-		%   id - Process Id
-		%   data - Process data
+        function log=createProcessesStructure(obj,data)
+		%CreateProcessesStructure - Check and create the processes structure array
+		%   Syntax:
+		%	  log = obj.createProcessesStructure(data)
+		%   Input Arguments:
+		%	 data - Processes data structure array
+		%   Output Arguments:
+		%    log - Result of the check true|false
 		%
-			if ~ischar(data.key) % Check Process Key
-				obj.messageLog(cType.ERROR,cMessages.InvalidProcessId,id);
-				return
-			end
-			if ~cParseStream.checkTextKey(data.key)
-				obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,data.key);
-				return
-			end
-			ptype=cType.getProcessId(data.type); %Check Process Type
-			if isempty(ptype)	        
-				obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,data.type,data.key);
-			end
-			% Check Fuel stream
-			data.fuel=regexprep(data.fuel,cType.SPACES,cType.EMPTY_CHAR);
-			if ~cParseStream.checkDefinitionFP(data.fuel)
-				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
-			end
-			fl=cParseStream.getFlowsList(data.fuel);
-			if ~obj.fDict.existsKey(fl)
-				obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,data.fuel,data.key);
-			end
-			% Check Product stream
-			data.product=regexprep(data.product,cType.SPACES,cType.EMPTY_CHAR);
-			if ~cParseStream.checkDefinitionFP(data.product) 
-				obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,data.product,data.key);
-			end
-			fl=cParseStream.getFlowsList(data.product);
-			if ~obj.fDict.existsKey(fl)
-				obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,data.product,data.key);
-			elseif ptype==cType.Process.DISSIPATIVE % Check disipative processes and waste flows
-                for j=1:numel(fl)
-					jkey=obj.fDict.getIndex(fl{j});
-                    if obj.cflw{jkey}.typeId ~= cType.Flow.WASTE
-				        obj.messageLog(cType.ERROR,cMessages.InvalidDissipative,obj.cflw{jkey}.key,data.key);
-                    end
-                end
-			end             
-            % Create process struct
-            obj.cprc{id}=struct('id',id,'key',data.key,'type',data.type,'typeId',ptype,...
-				'fuel',data.fuel,'product',data.product,...
-                'fuelStreams',cType.EMPTY,'productStreams',cType.EMPTY);
+			% Initialize
+			log=false;
+			N=length(data);
+			ptypes=zeros(1,N+1);
+			% Check processes data
+			for i=1:N
+                prc=data(i);
+				if ~ischar(prc.key) % Check Process Key
+					obj.messageLog(cType.ERROR,cMessages.InvalidProcessId,i);
+					return
+				end
+				if ~cParseStream.checkTextKey(prc.key)
+					obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,prc.key);
+					return
+				end
+				ptype=cType.getProcessId(prc.type); %Check Process Type
+				if isempty(ptype)	        
+					obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,prc.type,prc.key);
+				end
+				% Check Fuel stream
+				prc.fuel=regexprep(prc.fuel,cType.SPACES,cType.EMPTY_CHAR);
+				if ~cParseStream.checkDefinitionFP(prc.fuel)
+					obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,prc.fuel,prc.key);
+				end
+				fl=cParseStream.getFlowsList(prc.fuel);
+				if ~obj.fDict.existsKey(fl)
+					obj.messageLog(cType.ERROR,cMessages.InvalidFuelStream,prc.fuel,prc.key);
+				end
+				% Check Product stream
+				prc.product=regexprep(prc.product,cType.SPACES,cType.EMPTY_CHAR);
+				if ~cParseStream.checkDefinitionFP(prc.product) 
+					obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,prc.product,prc.key);
+				end
+				fl=cParseStream.getFlowsList(prc.product);
+				if ~obj.fDict.existsKey(fl)
+					obj.messageLog(cType.ERROR,cMessages.InvalidProductStream,prc.product,prc.key);
+				elseif ptype==cType.Process.DISSIPATIVE % Check disipative processes and waste flows
+                	for j=1:numel(fl)
+						jkey=obj.fDict.getIndex(fl{j});
+                    	if obj.Flows(jkey).typeId ~= cType.Flow.WASTE
+				        	obj.messageLog(cType.ERROR,cMessages.InvalidDissipative,obj.Flows(jkey).key,prc.key);
+                    	end
+                	end
+				end
+				ptypes(i)=ptype;
+			end           
+            % Create process struct (including ENV)
+			ids=1:N+1;
+			keys=[{data.key} 'ENV'];
+			types=[{data.type} 'ENVIRONMENT'];
+			ptypes(N+1)=cType.Process.ENVIRONMENT;
+			fuels=[{data.fuel},' '];
+			products=[{data.product},' '];
+            obj.Processes=struct('id',num2cell(ids),...
+				'key',keys,...
+				'type',types,...
+				'typeId',num2cell(ptypes),...
+				'fuel',fuels,...
+				'product',products,...
+                'fuelStreams',0,'productStreams',0);
+			log = obj.status;
         end
 
         function createProcessStreams(obj,id,fp)
-	    % Create the the streams of a process
-		% Input Arguments
-        %   id - Process id
-        %   fp - Indicates if stream is fuel or product
+		%CreateProcessStreams - Create the streams of a process
+		%   Syntax:
+		%     obj.createProcessStreams(id,fp)
+		%   Input Arguments:
+		%     id - Process Id
+		%     fp - Stream type (cType.Stream.FUEL | cType.Stream.PRODUCT)
+		%	 Output Arguments:
+		%	   none
 			order=0;
 			ns=obj.NrOfStreams;     
             % Generate stream key
-			pkey=obj.cprc{id}.key;
+			pkey=obj.Processes(id).key;
             switch fp
 				case cType.Stream.FUEL
                     stype=cType.FUEL;
-					descr=obj.cprc{id}.fuel;
+					descr=obj.Processes(id).fuel;
 					scode=strcat(pkey,'_F');
 				case cType.Stream.PRODUCT
                     stype=cType.PRODUCT;
-					descr=obj.cprc{id}.product;
+					descr=obj.Processes(id).product;
 					scode=strcat(pkey,'_P');
             end
             % Get the streams of a process
@@ -698,20 +734,22 @@ classdef cProductiveStructure < cResultId
 			% Set the Fuel/Product streams to the processes
             switch fp
 				case cType.Stream.FUEL
-					obj.cprc{id}.fuelStreams=order;
+					obj.Processes(id).fuelStreams=order;
 				case cType.Stream.PRODUCT
-					obj.cprc{id}.productStreams=order;
+					obj.Processes(id).productStreams=order;
             end
         end
 
         function status=checkStreamFlows(obj,sid,expr,fp)
-        % Assing the from/to stream of the flows
-		% Input Arguments:
-		%	sid - Stream Id
-		%	expr - Stream definition
-		%	fp - Stream type
-		% Output Arguments:
-		%   status - Result of the check true|false
+		%CheckStreamFlows - Check and set the flows of a stream
+		%   Syntax:
+		%     status = obj.checkStreamFlows(sid,expr,fp)
+		%   Input Arguments:
+		%     sid  - Stream Id
+		%     expr - Stream definition expression
+		%     fp   - Stream type (cType.Stream.FUEL | cType.Stream.PRODUCT)
+		%   Output Arguments:
+		%     status - true | false indicating if the stream flows are ok
 		%
             [fe,fs]=cParseStream.getStreamFlows(expr,fp);
             % set input flows of the stream          
@@ -719,10 +757,10 @@ classdef cProductiveStructure < cResultId
 			    in=fe{i};
 				idx=obj.fDict.getIndex(in);
                 if idx
-					if ~obj.cflw{idx}.to
-					    obj.cflw{idx}.to=sid;
+					if ~obj.Flows(idx).to
+					    obj.Flows(idx).to=sid;
 				    else
-						obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.cflw{idx}.key);
+						obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.Flows(idx).key);
 					end
 			    else
 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,in);
@@ -733,10 +771,10 @@ classdef cProductiveStructure < cResultId
 			    out=fs{i};
 				idx=obj.fDict.getIndex(out);
                 if idx
-					if ~obj.cflw{idx}.from
-					    obj.cflw{idx}.from=sid;
+					if ~obj.Flows(idx).from
+					    obj.Flows(idx).from=sid;
 				    else
-						obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.cflw{idx}.key);
+						obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.Flows(idx).key);
 					end
 			    else
 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,out);
@@ -746,20 +784,26 @@ classdef cProductiveStructure < cResultId
         end
 
         function res=buildEnvironment(obj)
-        % Create de environment entries for processes and streams
+		%buildEnvironment - Create the environment streams and update flows and processes info
+		%   Syntax:
+		%     res = obj.buildEnvironment
+		%   Output Arguments:
+		%     res - true | false indicating if the environment was built ok
+		%
+			% Initialize
 			iout=0;ires=0;iwst=0;            % Counters
 			fdesc=cType.EMPTY_CHAR;
 			pdesc=cType.EMPTY_CHAR;          % Stream Definition
 			ns=obj.NrOfStreams;              % Number of streams global counter
             N1=obj.NrOfProcesses+1;          % Environment process Id
-			env=find(obj.ftypes);            % Environment flows (OUTPUT, WASTE, RESOURCES)
+			env=find([obj.Flows.typeId]);    % Environment flows (OUTPUT, WASTE, RESOURCES)
             % Loop over Environment flows
 			for i=env
-				ftype=obj.cflw{i}.typeId;
-                stype=obj.cflw{i}.type;
-				descr=obj.cflw{i}.key;
-				jt=obj.cflw{i}.to;
-				jf=obj.cflw{i}.from;
+				ftype=obj.Flows(i).typeId;
+                stype=obj.Flows(i).type;
+				descr=obj.Flows(i).key;
+				jt=obj.Flows(i).to;
+				jf=obj.Flows(i).from;
 				ns=ns+1;
 				switch ftype
     				case cType.Flow.OUTPUT % System Output Flows
@@ -767,14 +811,14 @@ classdef cProductiveStructure < cResultId
 					    scode=sprintf('ENV_O%d', iout);
 					    fdesc=strcat(fdesc,'+',descr);
                         if ~jt % Check if flow is OUTPUT
-						    obj.cflw{i}.to=ns;
+						    obj.Flows(i).to=ns;
 				        else
-					        obj.messageLog(cType.ERROR,cMessages.InvalidOutputFlow,obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,cMessages.InvalidOutputFlow,obj.Flows(i).key);
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
-                            if (obj.cprc{k}.typeId == cType.Process.DISSIPATIVE)
-					    	    obj.messageLog(cType.ERROR,cMessages.InvalidOutputFlow,obj.cflw{i}.key);
+                            if (obj.Processes(k).typeId == cType.Process.DISSIPATIVE)
+					    	    obj.messageLog(cType.ERROR,cMessages.InvalidOutputFlow,obj.Flows(i).key);
                             end
                         end		
                     case cType.Flow.WASTE %Waste flows
@@ -782,26 +826,27 @@ classdef cProductiveStructure < cResultId
 					    scode=sprintf('ENV_W%d', iwst);
 					    fdesc=strcat(fdesc,'+',descr);
                         if ~jt % Check if flow is WASTE
-						    obj.cflw{i}.to=ns;	
+						    obj.Flows(i).to=ns;	
 					    else
-					        obj.messageLog(cType.ERROR,cMessages.InvalidWasteFlow,obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,cMessages.InvalidWasteFlow,obj.Flows(i).key);
                         end
                         if jf
 						    k=obj.cstr{jf}.process;
-                            if (obj.cprc{k}.typeId == cType.Process.PRODUCTIVE)
-					    	    obj.messageLog(cType.ERROR,cMessages.InvalidWasteFlow,obj.cflw{i}.key);
+                            if (obj.Processes(k).typeId == cType.Process.PRODUCTIVE)
+					    	    obj.messageLog(cType.ERROR,cMessages.InvalidWasteFlow,obj.Flows(i).key);
                             end
                         end
-				    case cType.Flow.RESOURCE
+				    case cType.Flow.RESOURCE % Resource flows
 					    ires=ires+1;
 					    scode=sprintf('ENV_R%d', ires);
 					    pdesc=strcat(pdesc,'+',descr);
                         if ~jf % Check if flow is a resource
-						    obj.cflw{i}.from=ns;				
+						    obj.Flows(i).from=ns;				
 					    else
-					        obj.messageLog(cType.ERROR,cMessages.InvalidResourceFlow,obj.cflw{i}.key);
+					        obj.messageLog(cType.ERROR,cMessages.InvalidResourceFlow,obj.Flows(i).key);
                         end
 				end
+				% Create environment stream structure
 				obj.cstr{ns}=struct('id',ns,'key',scode,'definition',descr,'type',stype,'typeId',ftype,'process',N1);
 			end
             % Update number of streams and wastes
@@ -810,55 +855,59 @@ classdef cProductiveStructure < cResultId
 			obj.NrOfResources=ires;
 			obj.NrOfFinalProducts=iout;
 			obj.NrOfSystemOutputs=iwst+iout;
-			% Create environment process record
-            obj.cprc{N1}=struct('id',N1,'key','ENV','type','ENVIRONMENT','typeId',cType.Process.ENVIRONMENT,...
-				'fuel',fdesc(2:end),'product',pdesc(2:end), ...
-                'fuelStreams',obj.NrOfSystemOutputs,'productStreams',obj.NrOfResources);
+			% Update environment process record
+			obj.Processes(N1).fuel=fdesc(2:end);
+			obj.Processes(N1).product=pdesc(2:end);
+			obj.Processes(N1).fuelStreams=obj.NrOfSystemOutputs;
+			obj.Processes(N1).productStreams=obj.NrOfResources;
 			res=obj.status;
         end
 
         function res=checkFlowsConnectivity(obj)
-        %checkFlowsConectivity - Check the connectivity of flows
-		%   Check that each flow connects two different streams
+		%checkFlowsConnectivity - Check the connectivity of the flows
+		%   Syntax:
+		%     res = obj.checkFlowsConnectivity
 		%   Output Arguments:
-		%     res - true | false indicating is the flow edges are well defined
-		%   
-			flows=[obj.cflw{:}];
-			from=[flows.from]; to=[flows.to];
-            % Check loops and not defined frlow flows
+		%     res - true | false indicating if the flows are ok
+		%	
+			% Get the from and to of the flows
+			from=[obj.Flows.from]; to=[obj.Flows.to];
+            % Check loops and not defined from/to flows
 			idx=find(from==to);
 			for i=idx
 				if from(i) %Check if there is a loop
-					obj.messageLog(cType.ERROR,cMessages.InvalidFlowLoop,obj.cflw{i}.key);
+					obj.messageLog(cType.ERROR,cMessages.InvalidFlowLoop,obj.Flows(i).key);
 				else %Check if is a no defined flow
-					obj.messageLog(cType.ERROR,cMessages.InvalidFlowDefinition,obj.cflw{i}.key);
+					obj.messageLog(cType.ERROR,cMessages.InvalidFlowDefinition,obj.Flows(i).key);
 				end
 			end
             % Check invalid FROM definition
 			jdx=setdiff(find(~from),idx);
             for i=jdx
-				obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.cflw{i}.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.Flows(i).key);
             end
             % Check invalid TO definition
 			jdx=setdiff(find(~to),idx); 
             for i=jdx
-				obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.cflw{i}.key);
+				obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.Flows(i).key);
             end
 			res=obj.status;
         end
 
         function res=checkGraphConnectivity(obj)
-		%checkGraphConnectivity - Check the productive graph connectivity
-		%   The algorithm calculates the transitive closure of the SSR graph
-		%   Determine if all processes are reached from source and output if
-		%   reach from all processes.
-		%   Output Arguments:
-		%     res - true | false
+		%checkGraphConnectivity - Check the productive graph connectivity.
+		%   The function checks that all nodes are connected from the source (resources)
+		%   and	 that all nodes can reach the sink (final products).	
+		%   Syntax:	
+		%     res = obj.checkGraphConnectivity	
+		%   Output Arguments:		
+		%     res - true | false indicating if the graph is ok
 		%
 			% Build the SSR graph adjacency matrix
     		N=obj.NrOfProcesses;
-			A=[0 obj.tfp(N+1,:);...
-			   zeros(N,1) obj.tfp(1:N,:);...
+			tfp=obj.getProcessMatrix;
+			A=[0 tfp(N+1,:);...
+			   zeros(N,1) tfp(1:N,:);...
 			   0 zeros(1,N+1)];
 			% Compute the transitive closure
 			tc=transitiveClosure(A);
@@ -866,7 +915,9 @@ classdef cProductiveStructure < cResultId
 			jdx=find(~tc(2:end-1,end));
 			res=isempty(idx) && isempty(jdx);
 			% Log non-SSR nodes
-			if ~res
+			if res
+				obj.ProcessMatrix=tfp;
+			else
 				for i=idx
 					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 				end
@@ -876,5 +927,4 @@ classdef cProductiveStructure < cResultId
 			end
 		end
     end
-
 end
