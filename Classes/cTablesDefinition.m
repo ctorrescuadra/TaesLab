@@ -253,6 +253,10 @@ classdef cTablesDefinition < cMessageLogger
             for i=1:NT
                 key=obj.cfgTables(i).key;
                 idx=td.getIndex(key);
+                if ~idx
+                    obj.printError(cMessages.TableNotAvailable,key);
+                    return
+                end
                 tIndex(idx).name=key;
                 tIndex(idx).description=obj.cfgTables(i).description;
                 tIndex(idx).code=tCodes{idx};

@@ -24,6 +24,7 @@ function res=ExergyAnalysis(data,varargin)
 %     estreams - exergy of the streams
 %     eprocesses - exergy balance of the processes
 %     tfp - Exergy Fuel-Product table
+%     ktfp - Kernel Fuel-Product table
 %
 %   Example
 %     <a href="matlab:open ExergyAnalysisDemo.mlx">Exergy Analysis Demo</a>

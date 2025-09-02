@@ -23,10 +23,11 @@ classdef cProductiveStructure < cResultId
 %     Flows             - Flows info
 %     Streams           - Streams info
 %     Waste             - Waste array structure (flow, stream, process) index
-%     FlowKeys          - Cell array of Flows Names (keys)
-%     ProcessKeys       - Cell array of Processes Names (keys)
-%     StreamKeys        - Cell array of Streams Names (keys)
-%     ProductiveTable   - Adjacency Matrix of the productive structure graph
+%     FlowKeys          - Cell array of Flows names (keys)
+%     ProcessKeys       - Cell array of Processes names (keys)
+%     StreamKeys        - Cell array of Streams names (keys)
+%     ProductiveTable   - Adjacency matrix of the productive structure graph
+%     ProcessDigraph    - Process digraph info
 %     
 %   cProductiveStructure methods:
 %     buildResultInfo   - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
@@ -74,7 +75,7 @@ classdef cProductiveStructure < cResultId
         ProcessKeys       % Cell array of Processes Names (keys)
         StreamKeys        % Cell array of Streams Names (keys)
 		ProductiveTable   % Adjacency Matrix of Productive Structure
-		ProcessMatrix	  % Process Matrix (Logical FP matrix)	
+		ProcessDigraph	  % Process Digraph info
 	end
 
 	properties(Access=protected)
@@ -904,25 +905,20 @@ classdef cProductiveStructure < cResultId
 		%     res - true | false indicating if the graph is ok
 		%
 			% Build the SSR graph adjacency matrix
-    		N=obj.NrOfProcesses;
 			tfp=obj.getProcessMatrix;
-			A=[0 tfp(N+1,:);...
-			   zeros(N,1) tfp(1:N,:);...
-			   0 zeros(1,N+1)];
+			nodes=obj.ProcessKeys;
+			sc=cDigraphAnalysis(tfp,nodes);
+			[res,src,out]=sc.isProductive;
 			% Compute the transitive closure
-			tc=transitiveClosure(A);
-			idx=find(~tc(1,2:end-1)); 
-			jdx=find(~tc(2:end-1,end));
-			res=isempty(idx) && isempty(jdx);
 			% Log non-SSR nodes
 			if res
-				obj.ProcessMatrix=tfp;
+				obj.ProcessDigraph=sc;
 			else
-				for i=idx
-					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
+				for i=1:numel(src)
+					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,src{i});
 				end
-            	for i=transpose(jdx)
-					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
+            	for i=1:numel(out)
+					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,out{i});
             	end
 			end
 		end

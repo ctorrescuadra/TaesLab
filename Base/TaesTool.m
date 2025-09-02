@@ -108,7 +108,6 @@ classdef (Sealed) TaesTool < handle
 				app.enableResults(cType.ResultId.THERMOECONOMIC_STATE);
 				app.enableResults(cType.ResultId.THERMOECONOMIC_ANALYSIS);
                 app.enableResults(cType.ResultId.WASTE_ANALYSIS);
-                app.enableResults(cType.ResultId.DIAGRAM_FP);
                 app.enableResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
                 app.enableResults(cType.ResultId.DATA_MODEL);
                 app.enableResults(cType.ResultId.RESULT_MODEL);
