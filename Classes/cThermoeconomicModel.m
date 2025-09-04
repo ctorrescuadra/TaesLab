@@ -72,7 +72,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %    Tables Info Methods
 %     getTablesDirectory  - Get the tables directory
 %     getTableInfo        - Get Information of a table
-%     getGroupsTable      - Get the groups of a process diagram
+%
+%    Diagram Info Methods
+%     getGroupsTable   - Get the groups of a process diagram
+%     getKernelTable   - Get the kernel tables associated to a FP table
 %
 %    ResultSet Methods
 %     getResultInfo         - Get cResultInfo objects
@@ -498,6 +501,15 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Output Argument:
         %   res - cResultInfo with productive diagram        
             res=obj.getResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
+        end
+    
+        function res=diagramFP(obj)
+        %diagramFP - Get the diagram FP cResultInfo object
+        % Syntax:
+        %   res = obj.diagramFP
+        % Output Argument:
+        %   res - cResultInfo with diagram FP    
+                res=obj.getResults(cType.ResultId.DIAGRAM_FP);
         end
 
         function res=summaryResults(obj)
@@ -976,7 +988,42 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Output Arguments:
         %     res - struct with the groups of the diagram
         %
-            res=getGroupsTable(obj.exergyAnalysis);
+            res=getGroupsTable(obj.diagramFP);
+        end
+
+        function res=getKernelTable(obj,tableName)
+        %getKernelTables - Get the kernel table associated to a FP table
+        %   Syntax:
+        %     res=obj.getKernelTables(tableName) 
+        %   Input Arguments:
+        %     tableName - Name of the FP table
+        %       'tfp' | 'dcfp'
+        %   Output Arguments:
+        %     res - cTable object with the kernel table
+        %
+            res=cMessageLogger();
+            % Check Input
+            if nargin<2 || ~ischar(tableName) || isempty(tableName)
+                res.printError(cMessages.TableNotAvailable,tableName);
+                return
+            end
+            % Create Digraph Analysis
+            res=obj.diagramFP.Info;
+            sc=res.getDigraphAnalysis(tableName);
+            if ~isValid(sc)
+                printLogger(sc);
+                res.printError(cMessages.InvalidDigraph)
+                return
+            end
+            % Get Kernel Table
+            [kA,kNodes]=getKernelTable(sc);
+            tbl=obj.fmt.getTableFP(tableName,kA,kNodes);
+            p=tbl.getProperties;
+            p.Name=['k' tbl.Name];
+            p.Description=['Kernel ' tbl.Description];
+            colNames=['Key',kNodes];
+            res=cTableMatrix(kA,kNodes,colNames,p);
+            res.setStudyCase(obj.StudyCase);
         end
         
         %%%
@@ -1413,6 +1460,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if res.status
                 obj.setResults(res);
                 obj.printDebugInfo(cMessages.SetState,obj.State);
+                obj.setDiagramFP;
             end           
         end
 
@@ -1516,6 +1564,18 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 obj.setResults(res);
             else
                 ra.printLogger;
+            end
+        end
+
+        function setDiagramFP(obj)
+        %setDiagramFP - Set the Diagram FP cResultInfo object
+            dfp=cDiagramFP(obj.fp1);
+            if dfp.status
+                res=getDiagramFP(obj.fmt,dfp);
+                obj.setResults(res);
+                obj.printDebugInfo(cMessages.ComputeDiagramFP)
+            else
+                dfp.printLogger;
             end
         end
 

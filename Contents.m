@@ -1,5 +1,5 @@
 % Thermoeconomic Analysis Toolbox
-%   Version 1.8 (R2024b) 01-Sep-2025
+%   Version 1.7 (R2024b) 03-Jun-2025
 %
 % Apps
 %   TaesApp                 - TaesLab application.
@@ -18,6 +18,7 @@
 %   ThermoeconomicAnalysis  - Perform the termoeconomic analysis of a plant state.
 %   ThermoeconomicDiagnosis - Compare two states of the plant and make a thermoeconomic diagnosis
 %   WasteAnalysis           - Waste recycling analysis of one state of the plant. 
+%   DiagramFP               - Get the FP diagrams for a plant state.
 %   SummaryResults          - Get the summary results of the plant.
 %
 % Save Results Tables 

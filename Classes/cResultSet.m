@@ -294,11 +294,11 @@ classdef(Abstract) cResultSet < cResultId
         %     res - cTable object with the groups of the diagram
         %
             res=[];
-            if (obj.ResultId~=cType.ResultId.THERMOECONOMIC_STATE) && ...
+            if (obj.ResultId~=cType.ResultId.DIAGRAM_FP) && ...
                 (obj.ResultId~=cType.ResultId.PRODUCTIVE_DIAGRAM)
                 return
             end                   
-            res=obj.Info.ProcessDigraph.getGroupsTable;
+            res=obj.Info.GroupsTable;
             res.setStudyCase(obj.StudyCase);
         end
     end

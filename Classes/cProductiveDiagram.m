@@ -36,7 +36,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
         NodesSFPAT        % Productive (SFP) table
         NodesPAT          % Process nodes table
         NodesKPAT         % Kernel Process nodes table
-        ProcessDigraph    % Process Digraph
+        GroupsTable       % Graph groups table
     end
 
     methods
@@ -72,8 +72,10 @@ classdef (Sealed) cProductiveDiagram < cResultId
                    repmat({cType.NodeType.PROCESS},1,ps.NrOfProcesses)];
             obj.NodesSFPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesSFPAT=cProductiveDiagram.edgesTable(productiveMatrix,nodenames);
-            % Get Process Diagram
-            da=ps.ProcessDigraph;
+            % Get Process Diagram (FP Table)
+            nodes=ps.ProcessKeys;
+            processMatrix=ps.getProcessMatrix;
+            da=cDigraphAnalysis(processMatrix,nodes);
             if ~isValid(da)
                 obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
                 return
@@ -82,7 +84,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.NodesPAT=da.GraphNodes;
             obj.EdgesKPAT=da.KernelEdges;
             obj.NodesKPAT=da.KernelNodes;
-            obj.ProcessDigraph=da;
+            obj.GroupsTable=da.getGroupsTable;
             % Set ResultId properties
             obj.ResultId=cType.ResultId.PRODUCTIVE_DIAGRAM;
             obj.DefaultGraph=cType.Tables.FLOW_DIAGRAM;

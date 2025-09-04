@@ -47,7 +47,7 @@ classdef cExergyModel < cResultId
 		StreamsExergy    	  % Exergy values of streams
 		FlowProcessModel      % Flow Process Model matrices
         AdjacencyTable        % SFP Adjacency Table (sfp)
-        TableFP               % Table FP         
+        TableFP               % Table FP
 		FuelExergy            % Fuel Exergy
 		ProductExergy         % Product Exergy
 		Irreversibility       % Irreversibility
@@ -55,11 +55,10 @@ classdef cExergyModel < cResultId
         Efficiency            % Process Efficiency
 		TotalResources		  % Total Resources
 		FinalProducts         % Final Products
-		TotalOutput           % Total Output
+		TotalOutput
 		TotalIrreversibility  % Total Irreversibility
 		TotalUnitConsumption  % Total Unit Consumption
         ActiveProcesses       % Active Processes (not bypass)
-        ProcessDigraph        % Process Digraph
 	    ps					  % Productive Structure
     end
 
@@ -101,7 +100,6 @@ classdef cExergyModel < cResultId
 			% Build the object
 			obj.FlowProcessModel=struct('mV',mgV,'mF',mgF,'mF0',mgF0,'mP',mgP,'mL',mgL);
 			obj.TableFP=full(tfp);
-			obj.ProcessDigraph=cDigraphAnalysis(tfp,exd.ps.ProcessKeys);
             obj.ps=exd.ps;
             obj.NrOfFlows=exd.ps.NrOfFlows;
 			obj.NrOfProcesses=exd.ps.NrOfProcesses;

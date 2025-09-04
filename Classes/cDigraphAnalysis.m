@@ -164,19 +164,6 @@ classdef cDigraphAnalysis < cMessageLogger
             end
         end
 
-        function [kTable,kNodes]=getKernelTable(obj)
-        %getKernelTable - Get the kernel matrix in IO-Table format
-        %   Usage:
-        %     tbl = obj.getKernelTable()
-        %   Output Arguments:
-        %     kTable - kernel table array
-        %     kNodes - cell array with the name of the kernel nodes
-        %
-            kTable=full([obj.kG(2:end-1,2:end);...
-                     obj.kG(1,2:end)]);
-            kNodes=[obj.knodes(2:end-1),'ENV'];
-        end
-
         function res=getGroupsTable(obj)
         %buildGroupsTable - Build the Node Groups table
         %   Output Argument:
@@ -193,6 +180,19 @@ classdef cDigraphAnalysis < cMessageLogger
             res=cTableData(values,rowNames,colNames,props);
         end
 
+        function [kTable,kNodes]=getKernelTable(obj)
+        %getKernelTable - Get the kernel matrix in IO-Table format
+        %   Usage:
+        %     tbl = obj.getKernelTable()
+        %   Output Arguments:
+        %     kTable - kernel table array
+        %     kNodes - cell array with the name of the kernel nodes
+        %
+            kTable=full([obj.kG(2:end-1,2:end);...
+                     obj.kG(1,2:end)]);
+            kNodes=[obj.knodes(2:end-1),'ENV'];
+        end
+
         %%%
         % Display functions
         %%%
@@ -206,6 +206,33 @@ classdef cDigraphAnalysis < cMessageLogger
             cDigraphAnalysis.plot(obj.KernelNodes,obj.KernelEdges,true);
         end
 
+        function showGroupsTable(obj)
+        %showGroupsTable - Display the Node Groups table
+            tbl=getGroupsTable(obj);
+            printTable(tbl);
+        end
+
+        function showKernelTable(obj,fmt,StudyCase)
+        %showKernelTable - Display the Kernel IO-Table
+        %   Usage:
+        %     obj.showKernelTable(fmt,StudyCase)
+        %   Input Arguments:
+        %     fmt - cTableFormat object defining the table format
+        %     StudyCase - Struct with fields State and Sample (optional)
+        %
+            if nargin<2 || isempty(fmt) || ~isObject(fmt,'cFormatData')
+                return
+            end
+            if nargin<3
+                StudyCase.State=cType.EMPTY_STRING;
+                StudyCase.Sample=cType.EMPTY_STRING;
+            end
+            [kTable,kNodes]=obj.getKernelTable();
+            tbl=fmt.getTableFP('tfp',kTable,kNodes);
+            tbl.setDescription('Kernel FP Table');
+            tbl.setStudyCase(StudyCase);
+            printTable(tbl);
+        end
     end
 
     methods(Access=private)

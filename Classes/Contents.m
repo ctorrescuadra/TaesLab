@@ -1,5 +1,5 @@
 % Thermoeconomic Analysis Toolbox
-%   Version 1.8 (R2024b) 01-Sep-2025
+%   Version 1.7 (R2024b) 03-Jun-2025
 %
 % Classes
 %
@@ -37,6 +37,7 @@
 %  cExergyCost.m             - Calculate the exergy cost of flows and processes.
 %  cDiagnosis.m              - Make a thermoeconomic diagnosis analysis.
 %  cWasteAnalysis.m          - Analyze the potential cost saving of waste recycling.
+%  cDiagramFP.m              - Build the adjacency tables of the Diagram FP.
 %  cProductiveDiagram.m      - Build the productive diagrams' adjacency tables.
 %  cSummaryResults.m         - Gets the summary results tables of the model.
 %  cSummaryOptions.m         - Determine the summary options depending on the data model.
@@ -58,7 +59,6 @@
 %  cGraphSummary.m           - Plot the summary graphs for selecting flows or processes.
 %  cGraphWaste.m             - Plot the waste allocation graph.
 %  cDigraph.m                - Plot the productive structure digraphs.
-%  cDigraphAnalysis          - Analize de digraph connectivity
 %
 %  cBuildHTML.m              - Convert a cTable object into HTML files.
 %  cBuildLaTeX.m             - Convert a cTable object into a LaTeX code table.

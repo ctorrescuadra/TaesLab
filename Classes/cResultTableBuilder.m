@@ -83,9 +83,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.estreams=obj.getStreamExergy(pm.StreamsExergy);
             tbl.eprocesses=obj.getTableCell(cType.Tables.PROCESS_EXERGY,pm.ProcessesExergy);
             tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,pm.TableFP);
-            [kTable,kNodes]=getKernelTable(pm.ProcessDigraph);
-            tbl.ktfp=obj.getTableFP(cType.Tables.KTABLE_FP,kTable,kNodes);
-            % Create Result Info
             res=cResultInfo(pm,tbl);
             res.setResultId(cType.ResultId.THERMOECONOMIC_STATE);
             res.setDefaultGraph(cType.Tables.TABLE_FP);
@@ -223,6 +220,26 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=cResultInfo(ra,tbl);
         end
 
+        function res=getDiagramFP(obj,dfp)
+        %getDiagramFP - Get the diagram FP adjacency results
+        %   Syntax:
+        %     res = obj.getDiagramFP(dfp) 
+        %   Input Arguments:
+        %     dfp - cDiagramFP object
+        %   Output Arguments:
+        %     res - cResultInfo object (DIAGRAM_FP) with the diagram FP tables
+        %       atfp - FP adjacency table
+        %       atcfp - FP cost adjacency table
+        %
+            % Get FP adjacency tables
+            tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,dfp.EdgesFP);
+            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,dfp.EdgesCFP);
+            tbl.ktfp=obj.getAdjacencyTableFP(cType.Tables.KDIAGRAM_FP,dfp.EdgesKFP);
+            tbl.ktcfp=obj.getAdjacencyTableFP(cType.Tables.KDIAGRAM_COST_FP,dfp.EdgesKCFP);
+            % Build the cResultInfo
+            res=cResultInfo(dfp,tbl);
+        end
+
         function res=getProductiveDiagram(obj,pd)
         %getProductiveDiagram - Get the productive diagram tables
         %   Syntax:
@@ -280,6 +297,24 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tables.(tbl)=createSummaryTable(obj,tp,data,rowNames,colNames);
             end
             res=cResultInfo(sr,tables);
+        end
+
+        function res=getTableFP(obj,name,values,names)
+        % Get a cTableMatrix with the Fuel-Product table
+        %  Input:
+        %   name   - Table name
+        %   values - Table FP values
+        %  Output:
+        %   res - cTableMatrix object
+        %
+            if nargin==3
+                rowNames=obj.processKeys;
+            else
+                rowNames=names;
+            end
+            tp=obj.getMatrixTableProperties(name);
+            colNames=horzcat('Key',rowNames);
+            res=obj.createMatrixTable(tp,values,rowNames,colNames);
         end
     end
 
@@ -376,23 +411,21 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
 
-        function res=getTableFP(obj,name,values,names)
-        % Get a cTableMatrix with the Fuel-Product table
+        function res=getAdjacencyTableFP(obj,name,val)
+        % Generate the FP adjacency matrix
         %  Input:
-        %   name   - Table name
-        %   values - Table FP values
+        %   name - Table name
+        %   val - Adjacency Table FP 
         %  Output:
-        %   res - cTableMatrix object
-        %
-            if nargin==3
-                rowNames=obj.processKeys;
-            else
-                rowNames=names;
-            end
-            tp=obj.getMatrixTableProperties(name);
-            colNames=horzcat('Key',rowNames);
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
-        end
+        %   res - cTableCell object
+        %   
+            tp=obj.getCellTableProperties(name);
+            M=size(val,1);
+            rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
+            colNames=obj.getTableHeader(tp);
+            data=struct2cell(val)';
+			res=obj.createCellTable(tp,data,rowNames,colNames);
+		end
 
         function res=getProductiveTable(obj,pd,name)
         % Get the productive tables
