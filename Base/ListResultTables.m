@@ -79,7 +79,13 @@ function res=ListResultTables(varargin)
         end
     else
         ctd=cTablesDefinition;
-        tbl=ctd.getTablesDirectory(param.Columns);
+        if ctd.status
+            tbl=ctd.getTablesDirectory(param.Columns);
+        else
+            printLogger(ctd);
+            res.printError(cType.InvalidTableDefinition)
+            return
+        end
     end
     if ~tbl.status
         printLogger(tbl);

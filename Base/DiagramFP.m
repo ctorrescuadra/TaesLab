@@ -21,15 +21,20 @@ function res=DiagramFP(data,varargin)
 %   Output Arguments
 %     res - cResultInfo object contains the FP diagram tables
 %      The following tables are obtained:
-%       atfp  - Diagram FP adjacency table                                     
-%       atcfp - Cost Diagram FP adjacency table
-%       ktfp  - Kernel Diagram FP adjacency table
-%       ktcfp - Kernel Cost Diagram FP adjacency table
-%   
+%       atfp   - Diagram FP adjacency table (DIGRAPH_FP)                                    
+%       atcfp  - Cost Diagram FP adjacency table (DIGRAPH_COST_FP)
+%       katfp  - Kernel Diagram FP adjacency table (KDIGRAPH_FP) 
+%       katcfp - Kernel Cost Diagram FP adjacency table (KDIGRAPH_COST_FP)
+%		tfp    - Table FP (TABLE_FP)
+%       ktfp   - Kernel Table FP (KTABLE_FP)
+%       dcfp   - Direct Cost Table FP (COST_TABLE_FP)
+%       kdcfp  - Kernel Direct Cost Table FP (KTABLE_COST_FP)
+%       grps   - Process Groups table (PROCESS_GROUP)
+%
 %   Examples
 %     <a href="matlab:open DiagramFpDemo.mlx">Diagram FP Demo</a>
 %    
-%   See also cDataModel, cExergyCost, cResultInfo
+%   See also cDiagramFP, cDataModel, cExergyCost, cResultInfo
 %
 	res=cMessageLogger();
 	if nargin<1 || ~isObject(data,'cDataModel')

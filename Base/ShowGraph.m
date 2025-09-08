@@ -80,7 +80,7 @@ function ShowGraph(arg,varargin)
 		case cType.GraphType.DIGRAPH
 			gr=cDigraph(tbl,res.Info);
 		case cType.GraphType.DIAGRAM_FP	
-			gr=cGraphDiagramFP(tbl,res.Info);
+			gr=cGraphDiagramFP(tbl);
 		case cType.GraphType.SUMMARY
 			gr=cGraphSummary(tbl,res.Info,param);
 	end

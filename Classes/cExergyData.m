@@ -153,6 +153,7 @@ classdef cExergyData < cMessageLogger
 				obj.AdjacencyMatrix=struct('AF',mbF,'AP',mbP,'AE',mbE,'AS',mbS);
 				obj.ActiveProcesses= logical(~bypass);
 			else % Compute the transitive closure of the processes graph
+				A = mbS * mbE + mbF(:,1:end-1) * mbP(1:end-1,:);
 				E = eye(N+1) | logicalMatrix(mbP) * transitiveClosure(A) * logicalMatrix(mbF);
                 s=E(end,:);t=E(:,end);
 				% Log non-SSR process nodes

@@ -20,18 +20,19 @@ classdef (Sealed) cDiagramFP < cResultId
 %   See also cExergyCost, cResultId
 %
     properties (GetAccess=public,SetAccess=private)
+        Names        % Process Names
+        kNames       % Kernel Process Names
         EdgesFP      % Edges struct of the exergy FP adjacency table
         EdgesCFP     % Edges struct of the exergy cost FP adjacency table
         EdgesKFP     % Edges struct of the exergy FP kernel table
         EdgesKCFP    % Edges struct of the exergy cost FP kernel table
         NodesFP      % Nodes struct Table FP
         NodesKFP     % Nodes struct Kernel Table FP
-        GroupsTable  % Group table struct
-    end
-
-    properties (Access=private)
-        tfpda
-        cfpda
+        TableFP      % Table FP
+        TableCFP     % Cost Table FP
+        TableKFP     % Kernel Table FP
+        TableKCFP    % Kernel Cost Table FP
+        GroupsTable  % Graph Components table
     end
 
     methods
@@ -41,28 +42,33 @@ classdef (Sealed) cDiagramFP < cResultId
         %     obj = cDiagramFP(mfp)
         %   Input Argument:
         %     exc - cExergyCost object
+        %   Output Argument
+        %     obj - cDigramFP object
         %
             if ~isObject(exc,'cExergyCost')
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exc));
                 return
             end
-            % Create the graph edges of the TableFP
-            da = cDigraphAnalysis(exc.TableFP,exc.ps.ProcessKeys);
-            obj.EdgesFP=da.GraphEdges;
-            obj.EdgesKFP=da.KernelEdges;
-            obj.tfpda=da;
-            % Create the graph edges of the Cost Table FP
-            da = cDigraphAnalysis(exc.getCostTableFP,exc.ps.ProcessKeys);
-            obj.EdgesCFP=da.GraphEdges;
-            obj.EdgesKCFP=da.KernelEdges;
-            obj.cfpda=da;
+            % Create the Table FP properties
+            obj.Names=exc.ps.ProcessKeys;
+            obj.TableFP=exc.TableFP;
+            eda = cDigraphAnalysis(exc.TableFP,obj.Names);
+            obj.EdgesFP=eda.GraphEdges;
+            obj.EdgesKFP=eda.KernelEdges;
+            [obj.TableKFP,obj.kNames]=getKernelInfo(eda);
+            % Create the Cost Table FP properties
+            obj.TableCFP=exc.getCostTableFP;
+            cda = cDigraphAnalysis(obj.TableCFP,obj.Names);
+            obj.EdgesCFP=cda.GraphEdges;
+            obj.EdgesKCFP=cda.KernelEdges;
+            obj.TableKCFP=getKernelInfo(cda);
             % Create the graph nodes properties and group tables
-            obj.NodesFP=da.GraphNodes;
-            obj.NodesKFP=da.KernelNodes;
-            obj.GroupsTable=da.getGroupsTable;
+            obj.NodesFP=eda.GraphNodes;
+            obj.NodesKFP=eda.KernelNodes;
+            obj.GroupsTable=eda.getGroupsInfo;
             % cResultId properties
             obj.ResultId=cType.ResultId.DIAGRAM_FP;
-            obj.DefaultGraph=cType.Tables.DIAGRAM_FP;
+            obj.DefaultGraph=cType.Tables.DIGRAPH_FP;
             obj.ModelName=exc.ModelName;
             obj.State=exc.State;
         end
@@ -78,31 +84,29 @@ classdef (Sealed) cDiagramFP < cResultId
             res=fmt.getDiagramFP(obj);
         end
 
-        function res=getNodeInfo(obj,gtype)
-        %getNodeInfo - Get the node tables depending of the graph type
+        function res = getNodesTable(obj,name)
+        %getNodesTable - Get the nodes  of a  diagram
         %   Syntax:
-        %     res = obj.getNodeInfo(gtype)
-        %   Input Argument:
-        %     gtype - boolean, true for kernel graph, false for full graph
-        %   Output Argument:
-        %     res - struct array with the node information
-            if gtype
-                res=obj.NodesKFP;
-            else
-                res=obj.NodesFP;
-            end
-        end
-
-        function res=getDigraphAnalysis(obj,tableName)
-            res=cMessageLogger();
-            switch tableName
-                case cType.Tables.TABLE_FP
-                    res=obj.tfpda;
-                case cType.Tables.COST_TABLE_FP
-                    res=obj.cfpda;
-                otherwise
-                    res.messageLog(cType.ERROR,cMessages.TableNotAvailable,tableName)
-            end
+        %     res = obj.getNodeTable(name)
+        %   Input Parameter:
+        %     name - Name of the diagram
+        %   Output Parameter:
+        %     res - structure with the properties of nodes of the diagram
+        %      The struct has the following fields:
+        %        Name  - name of the node
+        %        Group - group of the node (colouring)
+        %
+            res=[];
+            switch name
+                case cType.Tables.DIGRAPH_FP
+                    res=obj.NodesFP;
+                case cType.Tables.KDIGRAPH_FP
+                    res=obj.NodesKFP;
+                case cType.Tables.DIGRAPH_COST_FP
+                    res=obj.NodesFP;
+                case cType.Tables.KDIGRAPH_COST_FP
+                    res=obj.NodesKFP;
+            end 
         end
     end
 end

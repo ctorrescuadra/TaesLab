@@ -679,6 +679,11 @@ classdef (Sealed) TaesTool < handle
             cw=num2cell([0.21*psize 0.62*psize 0.145*psize]);
             format={'char','char','char'};
             td=cTablesDefinition;
+            if ~td.status
+                td.printLogger;
+                logtext=sprintf(' ERROR: Invalid Table Definition');
+                set(app.log,'string',logtext);
+            end 
             tbl=td.getTablesDirectory({'DESCRIPTION','GRAPH'});
             data=[tbl.RowNames',tbl.Data];
             app.table_control = uitable (app.ptindex,'Data',data,...

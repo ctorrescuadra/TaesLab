@@ -484,7 +484,7 @@
 			"description": "Processes Definition Table",
 			"resultId": 1,
 			"graph": 0,
-			"columns": 4,
+			"columns": 5,
 			"node": 4,
 			"rsc": false,
 			"fields": [
@@ -501,6 +501,11 @@
 				{
 					"name": "product",
 					"header": "Product",
+					"type": 2
+				},
+				{
+					"name": "group",
+					"header": "Group",
 					"type": 2
 				},
 				{
@@ -677,72 +682,6 @@
 		},
 		{
 			"id": 16,
-			"key": "atfp",
-			"number": false,
-			"description": "Diagram FP",
-			"resultId": 7,
-			"graph": 3,
-			"columns": 4,
-			"node": 0,
-			"rsc": false,
-			"fields": [
-				{
-					"name": "key",
-					"header": "Key",
-					"type": 2
-				},
-				{
-					"name": "source",
-					"header": "Source",
-					"type": 2
-				},
-				{
-					"name": "target",
-					"header": "Target",
-					"type": 2
-				},
-				{
-					"name": "value",
-					"header": "Value",
-					"type": 3
-				}
-			]
-		},
-		{
-			"id": 17,
-			"key": "atcfp",
-			"number": false,
-			"description": "Cost Diagram FP",
-			"resultId": 7,
-			"graph": 3,
-			"columns": 4,
-			"node": 0,
-			"rsc": false,
-			"fields": [
-				{
-					"name": "key",
-					"header": "Key",
-					"type": 2
-				},
-				{
-					"name": "source",
-					"header": "Source",
-					"type": 2
-				},
-				{
-					"name": "target",
-					"header": "Target",
-					"type": 2
-				},
-				{
-					"name": "value",
-					"header": "Value",
-					"type": 3
-				}
-			]
-		},		
-		{
-			"id": 18,
 			"key": "wd",
 			"number": false,
 			"description": "Waste Definition Table",
@@ -770,7 +709,7 @@
 			]
 		},
 		{
-			"id": 19,
+			"id": 17,
 			"key": "fat",
 			"number": false,
 			"description": "Flows Diagram",
@@ -798,7 +737,7 @@
 			]
 		},
 		{
-			"id": 20,
+			"id": 18,
 			"key": "fpat",
 			"number": false,
 			"description": "Flow-Process Diagram",
@@ -826,7 +765,7 @@
 			]
 		},
 		{
-			"id": 21,
+			"id": 19,
 			"key": "sfpat",
 			"number": false,
 			"description": "Productive Diagram",
@@ -854,7 +793,7 @@
 			]
 		},
 		{
-			"id": 22,
+			"id": 20,
 			"key": "pat",
 			"number": false,
 			"description": "Processes Diagram",
@@ -882,14 +821,14 @@
 			]
 		},
 		{
-			"id": 23,
+			"id": 21,
 			"key": "kpat",
 			"number": false,
 			"description": "Kernel Processes Diagram",
 			"resultId": 6,
 			"graph": 7,
 			"columns": 3,
-			"node": 0,
+			"node": 1,
 			"rsc": false,
 			"fields": [
 				{
@@ -910,12 +849,78 @@
 			]
 		},
 		{
+			"id": 22,
+			"key": "atfp",
+			"number": false,
+			"description": "Diagram FP",
+			"resultId": 7,
+			"graph": 7,
+			"columns": 4,
+			"node": 0,
+			"rsc": false,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				},
+				{
+					"name": "value",
+					"header": "Value",
+					"type": 3
+				}
+			]
+		},
+		{
+			"id": 23,
+			"key": "atcfp",
+			"number": false,
+			"description": "Cost Diagram FP",
+			"resultId": 7,
+			"graph": 7,
+			"columns": 4,
+			"node": 0,
+			"rsc": false,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "source",
+					"header": "Source",
+					"type": 2
+				},
+				{
+					"name": "target",
+					"header": "Target",
+					"type": 2
+				},
+				{
+					"name": "value",
+					"header": "Value",
+					"type": 3
+				}
+			]
+		},		
+		{
 			"id": 24,
-			"key": "ktfp",
+			"key": "katfp",
 			"number": false,
 			"description": "Kernel Diagram FP",
 			"resultId": 7,
-			"graph": 3,
+			"graph": 7,
 			"columns": 4,
 			"node": 1,
 			"rsc": false,
@@ -944,11 +949,11 @@
 		},
 		{
 			"id": 25,
-			"key": "ktcfp",
+			"key": "katcfp",
 			"number": false,
 			"description": "Kernel Cost Diagram FP",
 			"resultId": 7,
-			"graph": 3,
+			"graph": 7,
 			"columns": 4,
 			"node": 1,
 			"rsc": false,
@@ -972,6 +977,29 @@
 					"name": "value",
 					"header": "Value",
 					"type": 3
+				}
+			]
+		},
+		{
+			"id": 26,
+			"key": "grps",
+			"number": false,
+			"description": "Graph Components",
+			"resultId": 7,
+			"graph": 0,
+			"columns": 2,
+			"node": 0,
+			"rsc": false,
+			"fields": [
+				{
+					"name": "key",
+					"header": "Key",
+					"type": 2
+				},
+				{
+					"name": "group",
+					"header": "Group",
+					"type": 2
 				}
 			]
 		}
@@ -1168,6 +1196,30 @@
 			"rsc": true,
 			"rowTotal": false,
 			"colTotal": false
+		},
+		{
+			"id": 17,
+			"key": "ktfp",
+			"header": "Kernel FP Table",
+			"type": 3,
+			"graph": 3,
+			"options": 1,
+			"resultId": 7,
+			"rsc": false,
+			"rowTotal": true,
+			"colTotal": true
+		},
+		{
+			"id": 18,
+			"key": "kdcfp",
+			"header": "Kernel FP Exergy Cost Table",
+			"type": 4,
+			"graph": 3,
+			"options": 1,
+			"resultId": 7,
+			"rsc": false,
+			"rowTotal": true,
+			"colTotal": true
 		}
 	],
 	"summary": [

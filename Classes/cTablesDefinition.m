@@ -240,7 +240,7 @@ classdef cTablesDefinition < cMessageLogger
             td=cDictionary(tNames);
             if ~td.status
                 td.printLogger;
-                obj.printError(cMessages.InvalidTableDict);
+                obj.messageLog(cType.ERROR,cMessages.InvalidTableDict);
                 return
             end
             NT=numel(obj.cfgTables);
@@ -253,6 +253,10 @@ classdef cTablesDefinition < cMessageLogger
             for i=1:NT
                 key=obj.cfgTables(i).key;
                 idx=td.getIndex(key);
+                if ~idx
+                    obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
+                    return
+                end
                 tIndex(idx).name=key;
                 tIndex(idx).description=obj.cfgTables(i).description;
                 tIndex(idx).code=tCodes{idx};
@@ -265,6 +269,10 @@ classdef cTablesDefinition < cMessageLogger
             for i=1:NM
                 key=obj.cfgMatrices(i).key;
                 idx=td.getIndex(key);
+                if ~idx
+                    obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
+                    continue
+                end
                 tIndex(idx).name=key;
                 tIndex(idx).description=obj.cfgMatrices(i).header;
                 tIndex(idx).code=tCodes{idx};
@@ -277,6 +285,10 @@ classdef cTablesDefinition < cMessageLogger
             for i=1:NS
                 key=obj.cfgSummary(i).key;
                 idx=td.getIndex(key);
+                if ~idx
+                    obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
+                    continue
+                end
                 tIndex(idx).name=key;
                 tIndex(idx).description=obj.cfgSummary(i).header;
                 tIndex(idx).code=tCodes{idx};

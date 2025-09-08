@@ -142,17 +142,22 @@ classdef cResultInfo < cResultSet
         %     graph - graph table name [optional]
         %   See also cGraphResults
         %
+            tbl=cMessageLogger();
             res=getResultInfo(obj);
             if nargin==1
                 graph=res.Info.DefaultGraph;
             end
+            if isempty(graph) || ~ischar(graph)
+                tbl.printError(cMessages.InvalidArgument);
+                return;
+            end
             tbl=getTable(res,graph);
             if ~tbl.status
-                tbl.printError(cMessages.TableNotFound,graph);
+                tbl.printLogger;
                 return
             end
             if ~tbl.isGraph
-		        tbl.printError(cMessages.InvalidGraph,param.Graph);
+		        tbl.printError(cMessages.InvalidGraph,graph);
 		        return
             end
             % build graph using default parameters
@@ -168,7 +173,7 @@ classdef cResultInfo < cResultSet
                 case cType.GraphType.DIGRAPH
                     gr=cDigraph(tbl,obj.Info);
                 case cType.GraphType.DIAGRAM_FP
-                    gr=cGraphDiagramFP(tbl,obj.Info);
+                    gr=cGraphDiagramFP(tbl);
                 case cType.GraphType.SUMMARY
                     gr=cGraphSummary(tbl,obj.Info);
             end

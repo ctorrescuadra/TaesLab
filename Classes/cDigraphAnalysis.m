@@ -1,5 +1,5 @@
 classdef cDigraphAnalysis < cMessageLogger
-%cDigraphAnalysys - Analize the connectivity of a SSR Graph
+%cDigraphAnalysis - Analize the connectivity of a SSR Graph
 %   Calculate the transitive closure of the digraph,
 %   their strong conmponents and the Kernel DAG.
 %   The graph is represented by its adjacency matrix,
@@ -11,8 +11,6 @@ classdef cDigraphAnalysis < cMessageLogger
 %   cGraphAnalysis properties:
 %     NrOfNodes          - Number of nodes in the graph
 %     NrOfComponents     - Number of components
-%     Components         - Array indicating the component each node in the graph belongs to
-%     TransitiveClosure  - Transitive closure of graph
 %     GraphEdges         - Edges of the full graph
 %     GraphNodes         - Nodes of the full graph
 %     KernelNodes        - Nodes of the kernel DAG
@@ -23,18 +21,14 @@ classdef cDigraphAnalysis < cMessageLogger
 %     isProductive        - check if the SSR graph is productive
 %     isReachable         - check if two nodes are reacheable
 %     isStrongConnected   - chek if two nodes belong to the same component
-%     getGroupsTable      - get the node groups table
-%     getKernelTable      - get Kernel DAG taable and node names
-%     showGroupsTable     - show the components of the graph
-%     showKernelTable     - show the Kernel DAG table in IO-Table format
-%     plotGraph           - plot the digraph (colouring node groups)
-%     plotKernelGraph     - plot the kernel DAG
+%     getComponentNames   - get the processes groups names 
+%     getKernelInfo       - get Kernel DAG matrix and node names
+%     getGroupsInfo       - get the groups info structure
+%     plot                - plot the digraph info
 %
     properties(GetAccess=public,SetAccess=private)
       NrOfNodes          % Number of nodes in the graph
       NrOfComponents     % Number of components
-      Components         % Array indicating the component each node in the graph belongs to
-      TransitiveClosure  % Transitive closure of graph
       GraphEdges         % Edges of the graph
       GraphNodes         % Nodes of the graph      
       KernelNodes        % Nodes of the kernel DAG
@@ -45,13 +39,15 @@ classdef cDigraphAnalysis < cMessageLogger
     properties(Access=private)
         graph          % Adjacency of the graph
         nodes          % Node Names
-        knodes         % Kernel Names
+        kNodes         % Kernel Names
         kG             % Kernel Matrix
+        tc             % Transitive Closure
+        comps          % Graphs components
     end
 
     methods
         function obj = cDigraphAnalysis(A,names)
-        %cTransitiveClosure - Construct an instance of this class
+        %cDigraphAnalysis - Construct an instance of this class
         %   Usage:
         %     obj = cGraphAnalysis(G,names)
         %   Input Arguments :
@@ -72,29 +68,25 @@ classdef cDigraphAnalysis < cMessageLogger
                 obj.messageLog(cType.ERROR,cMessages.InvalidNodeNames,numel(names),size(A,1));
                 return
             end
-            % Build SSR Graph adjacency matrix
-            N=size(A,1);
-			G=[0 A(N,:);...
-			   zeros(N-1,1) A(1:N-1,:);...
-			   0 zeros(1,N)];
+
             % Initialize variables
-            obj.graph = G;
+            obj.graph = cDigraphAnalysis.tfp2ssr(A);
             obj.nodes = ['IN',names(1:end-1),'OUT'];
             obj.NrOfNodes = numel(obj.nodes);
             % Calculate properties
-	        obj.TransitiveClosure = transitiveClosure(G);
+	        obj.tc = transitiveClosure(obj.graph);
             obj.getStrongComponents;
-            obj.GraphEdges=cDigraphAnalysis.getEdgeTable(G,obj.nodes);
-            obj.GraphNodes=cDigraphAnalysis.getNodeTable(G,obj.nodes,obj.Components);
+            obj.GraphEdges=cDigraphAnalysis.getEdgesTable(obj.graph,obj.nodes);
+            obj.GraphNodes=cDigraphAnalysis.getNodesTable(obj.graph,obj.nodes,obj.comps);
             obj.isDAG=(obj.NrOfComponents == obj.NrOfNodes);
             if obj.isDAG
-                [obj.kG,obj.knodes] = deal(G,names);
+                [obj.kG,obj.kNodes] = deal(obj.graph,obj.nodes);
                 obj.KernelEdges=obj.GraphEdges;
                 obj.KernelNodes=obj.GraphNodes;
             else
-                obj.buildKernel;
-                obj.KernelEdges=cDigraphAnalysis.getEdgeTable(obj.kG,obj.knodes);
-                obj.KernelNodes=cDigraphAnalysis.getNodeTable(obj.kG,obj.knodes,1:obj.NrOfComponents);
+                obj.buildKernelMatrix;
+                obj.KernelEdges=cDigraphAnalysis.getEdgesTable(obj.kG,obj.kNodes);
+                obj.KernelNodes=cDigraphAnalysis.getNodesTable(obj.kG,obj.kNodes,1:obj.NrOfComponents);
             end
         end
 
@@ -112,9 +104,8 @@ classdef cDigraphAnalysis < cMessageLogger
             % Determine if the graph is productive
             src=cType.EMPTY_CELL;
             out=cType.EMPTY_CELL;
-            tc=obj.TransitiveClosure;
-            s=tc(1,:);
-            t=tc(:,end);            
+            s=obj.tc(1,:);
+            t=obj.tc(:,end);            
             res=all(s) && all(t);
             % Show the non-SSR nodes
             if nargout==3
@@ -143,7 +134,7 @@ classdef cDigraphAnalysis < cMessageLogger
             [~,udx]=ismember(u,obj.nodes);
             [~,vdx]=ismember(v,obj.nodes);
             if udx && vdx
-                res = obj.TransitiveClosure(vdx,udx);
+                res = obj.tc(vdx,udx);
             end
         end
 
@@ -160,78 +151,98 @@ classdef cDigraphAnalysis < cMessageLogger
             [~,udx]=ismember(u,obj.nodes);
             [~,vdx]=ismember(v,obj.nodes);
             if udx && vdx
-                res = (obj.Components(udx) == obj.Components(vdx));
+                res = (obj.comps(udx) == obj.comps(vdx));
             end
         end
 
-        function res=getGroupsTable(obj)
-        %buildGroupsTable - Build the Node Groups table
+        function [kA,kNames]=getKernelInfo(obj)
+        %getKernelInfo - Get the Kernel Table information
+        %   Syntax:
+        %     [kA,kNames] = obj.getKernelInfo()
+        %   Output Parameters:
+        %     kA - Kernel Table (FP Table format)
+        %     kNames - Kernel Names (FP table format)
+        % 
+            kA=cDigraphAnalysis.ssr2tfp(full(obj.kG));
+            kNames=[obj.kNodes(2:end-1) 'ENV'];
+        end
+
+        function res=getGroupsInfo(obj)
+        %getComponets - Build the Node Groups table
         %   Output Argument:
-        %     res - cTableData object with the node groups 
+        %     res - Node Name/Group strcture 
         %
             tmp=obj.GraphNodes;
-            names = {tmp.Name};
+            names={tmp.Name};
             idx=[tmp.Group];
-            comps=obj.knodes(idx);
-            rowNames=names;
-            colNames={'Name','Component'};
-            values=comps';
-            props=struct('Name','grps','Description','Graph Components');
-            res=cTableData(values,rowNames,colNames,props);
+            grps=obj.kNodes(idx);
+            res=struct('Name',names,'Group',grps);
         end
 
-        function [kTable,kNodes]=getKernelTable(obj)
-        %getKernelTable - Get the kernel matrix in IO-Table format
+        function res=getComponentNames(obj)
+        %getComponentNames
+            idx=obj.comps(2:end-1);
+            res=obj.kNodes(idx);
+        end
+
+        %%%%
+        % Plot function
+        %%%%
+        function plot(obj,option,text)
+        % plot - plot the digraph
         %   Usage:
-        %     tbl = obj.getKernelTable()
-        %   Output Arguments:
-        %     kTable - kernel table array
-        %     kNodes - cell array with the name of the kernel nodes
+        %     obj.plot(option,title)
+        %   Input Parameters
+        %     option - type of digraph
+        %      cType.DigraphType.GRAPH (Full graph without weigth)
+        %      cType.DigraphType.KERNEL (Kernel graph without weigth)
+        %      cType.DigraphType.GRAPH_WEIGHT (Full graph with weigth)
+        %      cType.DigraphType.KERNEL_WEIGHT (Kernel graph with weigth)
+        %     text - char array with the title of the digraph
         %
-            kTable=full([obj.kG(2:end-1,2:end);...
-                     obj.kG(1,2:end)]);
-            kNodes=[obj.knodes(2:end-1),'ENV'];
-        end
-
-        %%%
-        % Display functions
-        %%%
-        function plotGraph(obj)
-        %plotGraph - Plot the graph
-            cDigraphAnalysis.plot(obj.GraphNodes,obj.GraphEdges,false);
-        end
-
-        function plotKernelGraph(obj)
-        %plotKernelGraph - Plot the kernel DAG
-            cDigraphAnalysis.plot(obj.KernelNodes,obj.KernelEdges,true);
-        end
-
-        function showGroupsTable(obj)
-        %showGroupsTable - Display the Node Groups table
-            tbl=getGroupsTable(obj);
-            printTable(tbl);
-        end
-
-        function showKernelTable(obj,fmt,StudyCase)
-        %showKernelTable - Display the Kernel IO-Table
-        %   Usage:
-        %     obj.showKernelTable(fmt,StudyCase)
-        %   Input Arguments:
-        %     fmt - cTableFormat object defining the table format
-        %     StudyCase - Struct with fields State and Sample (optional)
-        %
-            if nargin<2 || isempty(fmt) || ~isObject(fmt,'cFormatData')
-                return
+            % Initialize variables
+            DEFAULT_TITLE='Digraph Analysis';
+            if nargin<2 || option<0
+                option=0;
+                text=DEFAULT_TITLE;
             end
             if nargin<3
-                StudyCase.State=cType.EMPTY_STRING;
-                StudyCase.Sample=cType.EMPTY_STRING;
+                text=DEFAULT_TITLE;
             end
-            [kTable,kNodes]=obj.getKernelTable();
-            tbl=fmt.getTableFP('tfp',kTable,kNodes);
-            tbl.setDescription('Kernel FP Table');
-            tbl.setStudyCase(StudyCase);
-            printTable(tbl);
+            isKernel=bitget(option,1);
+            isColorBar=bitget(option,2);
+            % Get Node and Edge info
+            if isKernel
+                markerSize=cType.KMARKER_SIZE;
+                Nodes=obj.KernelNodes;
+                Edges=obj.KernelEdges;
+            else
+                markerSize=cType.MARKER_SIZE;
+                Nodes=obj.GraphNodes;
+                Edges=obj.GraphEdges;
+            end
+            % Build the digraph
+            endNodes=[{Edges.Source};{Edges.Target}]';
+            values=[Edges.Value]';
+            EdgesTable=table(endNodes,values,'VariableNames',{'EndNodes','Weight'});
+            NodesTable=struct2table(Nodes);
+            dg=digraph(EdgesTable,NodesTable,'omitselfloops');
+            % Color by groups
+			grps=dg.Nodes.Group;
+			ng=max([grps;3]);
+			colors=lines(ng);
+			Categories=colors(grps,:);
+            % Plot the digraph
+            if isColorBar
+    			r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
+			    plot(dg,"EdgeCData",dg.Edges.Weight,"EdgeColor","flat","LineWidth",1.5,...
+                    'NodeColor',Categories,'MarkerSize',markerSize,'Interpreter','none');
+                colormap(red2blue);
+			    colorbar();
+            else
+                plot(dg,'NodeColor',Categories,'MarkerSize',markerSize,'Interpreter','none');
+            end
+            title(text,'fontsize',12);
         end
     end
 
@@ -239,56 +250,65 @@ classdef cDigraphAnalysis < cMessageLogger
         function getStrongComponents(obj)
         %getStrongComponents - Get the strong components of the graph
         %   The components are calculated using the transitive closure
-        %   The components are stored in obj.Components
-            obj.Components=[];   
+        %   The components are stored in obj.comps
+        %   The name of strong components are stores in kNodes
+        %
+            % Calculate Strong Components
             n=obj.NrOfNodes;
-            tc=obj.TransitiveClosure;
             res=zeros(1,n); cnt=0;
             for u=1:n
                 if ~res(u)
                     cnt=cnt+1;
-                    idx = tc(u,:) & tc(:,u)';  
+                    idx = obj.tc(u,:) & obj.tc(:,u)';  
                     res(idx)=cnt;
                 end
             end
-            obj.Components=res;
+            obj.comps=res;
             obj.NrOfComponents = max(res);
-        end
-
-        function buildKernel(obj)
-        %buildKernel - Get the kernel graph adjacency matrix
-        %   The kernel graph is obtained by collapsing each strongly connected component
-        %   into a single node. The kernel graph is a DAG.
-        %   The adjacency matrix of the kernel graph is stored in obj.kG
-        %   The names of the kernel nodes are stored in obj.knodes
-        %   The number of kernel nodes is equal to the number of components
-        %    
-            grps=obj.Components;
-            ng=obj.NrOfComponents;
-            [snodes,tnodes,vals]=find(obj.graph);
-            tmp1=grps(snodes);
-            tmp2=grps(tnodes);
-            sol=find(tmp2-tmp1);
-            obj.kG=sparse(tmp1(sol),tmp2(sol),vals(sol),ng,ng);
             % Get the names of the kernel nodes
-            [~,jdx,idx]=unique(grps);
+            [~,jdx,idx]=unique(obj.comps);
             cnames = obj.nodes(jdx);
             nrg = accumarray(idx,1);
             tmp = find(nrg>1);
             for i=1:length(tmp)
                 cnames{tmp(i)}=['SC',num2str(i)];
             end
-            obj.knodes=cnames;
+            obj.kNodes=cnames;
+        end
+
+        function buildKernelMatrix(obj)
+        %buildKernelMatrix - Get the kernel graph adjacency matrix
+        %   The kernel graph is obtained by collapsing each strongly connected component
+        %   into a single node. The kernel graph is a DAG.
+        %   The kernel graph adjacency matrix is stored in obj.kG
+        %   The output parameters are optional, if provided, Kernel matrix and nodes 
+        %   are obtained in FP Table format
+        %   Usage:
+        %     obj.getKernelTable()
+        %     [kA,kNames]=obj.getKernelTable
+        %   Output Arguments:
+        %     kA: Kernel Matrix in FP Table format
+        %     kNames: Names of the kernel processes (FP Table format)
+        %    
+            grps=obj.comps;
+            ng=obj.NrOfComponents;
+            [snodes,tnodes,vals]=find(obj.graph);
+            tmp1=grps(snodes);
+            tmp2=grps(tnodes);
+            sol=find(tmp2-tmp1);
+            obj.kG=sparse(tmp1(sol),tmp2(sol),vals(sol),ng,ng);
         end
     end
-        
+
     methods(Static,Access=private)
-        function res=getNodeTable(A,names,groups)
+        function res=getNodesTable(A,names,groups)
         %getNodeTable - Build Node Table from adjacency matrix and groups.
+        %   Usage:
+        %     res=cDigraphAnalysis.getNodeTable(A,names)
         %   Input Arguments:
-        %     A - Adjacency Matrix  
+        %     A - Adjacency Matrix in SSR format 
         %     names - Names of the internal nodes
-        %     groups - Array with the group of each internal node
+        %     groups - Array with the group of each node
         %   Output Argument:
         %     res - Struct with fields Name and Group, representing the node table
         %
@@ -313,10 +333,12 @@ classdef cDigraphAnalysis < cMessageLogger
             res=cell2struct(tmp,fields,1);
         end
 
-        function res=getEdgeTable(A,names)
-        %getEdgeTable - Build Edge Table from adjacency matrix
+        function res=getEdgesTable(A,names)
+        %getEdgesTable - Build Edge Table from adjacency matrix
+        %   Usage:
+        %     res=cDigraphAnalysis.getEdgesTable(A,names)
         %   Input Arguments:
-        %     A - Adjacency Matrix
+        %     A - Adjacency Matrix in SSR format
         %     names - Names of the internal nodes
         %   Output Argument:
         %     res - Struct with fields Source, Target and Value, representing the edge table
@@ -342,25 +364,32 @@ classdef cDigraphAnalysis < cMessageLogger
             res=cell2struct(tmp,fields,1);
         end
 
-        function plot(nodes,edges,type)
-        %plot - Plot a digraph from nodes and edges
-        %   Input Arguments:
-        %     nodes - Struct with fields Name and Group, representing the node table
-        %     edges - Struct with fields Source, Target and Value, representing the edge table
+        function G=tfp2ssr(A)
+        % Tranform a Table FP into a SSR adjacency Matrix
+        %   Usage:
+        %     G=tfp2ssr(A)
+        %   Input Argument:
+        %     A: Table FP
+        %   Output Argument
+        %     G: Incidence matrix in SSR format
         %
-            cmap = hsv(max([nodes.Group])); % Color Definition
-            endNodes=[{edges.Source};{edges.Target}]';
-            values=[edges.Value]';
-            TableNodes=struct2table(nodes);
-            TableEdges=table(endNodes,values,'VariableNames',{'EndNodes','Weight'});
-            colors=cmap(TableNodes.Group,:);
-            if type
-                msize=cType.KMARKER_SIZE; 
-            else
-                msize=cType.MARKER_SIZE;
-            end
-            dg=digraph(TableEdges,TableNodes);
-            plot(dg,'NodeColor',colors,'MarkerSize',msize);
+            N=size(A,1);
+			G=[0 A(end,:);...
+			   zeros(N-1,1) A(1:end-1,:);...
+			   0 zeros(1,N)];
+        end
+
+        function A=ssr2tfp(G)
+        % Transform a SSR adjacency matrix into Table FP
+        %   Usage:
+        %     G=tfp2ssr(A)
+        %   Input Argument:
+        %     G: Incidence matrix in SSR format        
+        %   Output Argument
+        %     A: Table FP
+        %
+            A=[G(2:end-1,2:end);...
+               G(1,2:end)];
         end
     end
 end

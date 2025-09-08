@@ -20,8 +20,8 @@ classdef (Sealed) cProductiveDiagram < cResultId
 %
 %   cProductiveDiagram Methods
 %     buildResultInfo - Build the cResultInfo for Productive Diagrams
-%     getNodeTable    - Get the nodes of the diagram
-%     getEdgeTable    - Get the edges of the diagram
+%     getNodesTable    - Get the nodes of the diagram
+%     getEdgesTable    - Get the edges of the diagram
 %
 %   See also cResultId, cProductiveStructure
 %
@@ -36,7 +36,6 @@ classdef (Sealed) cProductiveDiagram < cResultId
         NodesSFPAT        % Productive (SFP) table
         NodesPAT          % Process nodes table
         NodesKPAT         % Kernel Process nodes table
-        GroupsTable       % Graph groups table
     end
 
     methods
@@ -73,9 +72,8 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.NodesSFPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesSFPAT=cProductiveDiagram.edgesTable(productiveMatrix,nodenames);
             % Get Process Diagram (FP Table)
-            nodes=ps.ProcessKeys;
-            processMatrix=ps.getProcessMatrix;
-            da=cDigraphAnalysis(processMatrix,nodes);
+            % Get Process Diagram
+            da=ps.ProcessDigraph;
             if ~isValid(da)
                 obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
                 return
@@ -84,7 +82,6 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.NodesPAT=da.GraphNodes;
             obj.EdgesKPAT=da.KernelEdges;
             obj.NodesKPAT=da.KernelNodes;
-            obj.GroupsTable=da.getGroupsTable;
             % Set ResultId properties
             obj.ResultId=cType.ResultId.PRODUCTIVE_DIAGRAM;
             obj.DefaultGraph=cType.Tables.FLOW_DIAGRAM;
@@ -92,8 +89,8 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.State=ps.State;
         end
 
-        function res = getNodeTable(obj,name)
-        %getNodeTable - Get the nodes  of a  diagram
+        function res = getNodesTable(obj,name)
+        %getNodesTable - Get the nodes  of a  diagram
         %   Syntax:
         %     res = obj.getNodeTable(name)
         %   Input Parameter:
@@ -118,10 +115,10 @@ classdef (Sealed) cProductiveDiagram < cResultId
             end 
         end
 
-        function res = getEdgeTable(obj,name)
-        %getEdgeTable - Get the edges info of a diagram
+        function res = getEdgesTable(obj,name)
+        %getEdgesTable - Get the edges info of a diagram
         %   Syntax:
-        %     res = obj.getEdgeTable(name)
+        %     res = obj.getEdgesTable(name)
         %   Input Parameter:
         %     name - Name of the diagram
         %   Output Parameter:
@@ -130,6 +127,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
         %        source - source node of the edge
         %        target - target node of the edge
         %
+            res=cType.EMPTY;
             switch name
                 case cType.Tables.FLOW_DIAGRAM
                     res=obj.EdgesFAT;

@@ -12,11 +12,10 @@ classdef cGraphDiagramFP < cGraphResults
 %
     properties(Access=private)
         Unit         % Unit of the values
-        MarkerSize = cType.MARKER_SIZE;
     end
 
     methods
-        function obj=cGraphDiagramFP(tbl,info)
+        function obj=cGraphDiagramFP(tbl)
         %cGraphDiagramFP - Build an instance of the object
         %   Syntax:
         %     obj = cGraphDiagramFP(tbl,info)
@@ -29,16 +28,10 @@ classdef cGraphDiagramFP < cGraphResults
 				return
             end
             % Check input arguments
-            if  isObject(tbl,'cTableMatrix') && isObject(info,'cExergyModel')
+            if  isObject(tbl,'cTableMatrix')
                 mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
                 EdgesTable=cGraphDiagramFP.edgesTable(mFP,tbl.RowNames);
                 NodesTable=cGraphDiagramFP.nodesTable(mFP,tbl.RowNames);
-            elseif isObject(tbl,'cTableCell') && isObject(info,'cDiagramFP')
-                edges=tbl.Data(:,1:2);
-                values=cell2mat(tbl.Data(:,3));
-                EdgesTable=table(edges,values,'VariableNames',{'EndNodes','Weight'});
-                NodesTable=struct2table(info.getNodeInfo(tbl.NodeType));
-                if tbl.NodeType,obj.MarkerSize=cType.KMARKER_SIZE;end
             else
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
@@ -50,12 +43,8 @@ classdef cGraphDiagramFP < cGraphResults
             obj.Title=[tbl.Description ' [',tbl.State,']'];
             obj.Unit=tbl.Unit;
             obj.xLabel=['Exergy ' tbl.Unit];
-			% Color by groups
-			grps=obj.xValues.Nodes.Group;
-			ng=max([grps;3]);
-			colors=lines(ng);
-			obj.Categories=colors(grps,:);
             % Unused properties
+            obj.Categories=cType.EMPTY;
             obj.Legend=cType.EMPTY_CELL;
 			obj.yLabel=cType.EMPTY_CHAR;
 			obj.BaseLine=0.0;
@@ -74,8 +63,9 @@ classdef cGraphDiagramFP < cGraphResults
 			ax=axes(f);
 			r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
 			colormap(red2blue);
-			plot(ax,obj.xValues,"EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat","LineWidth",1.5,...
-            'NodeColor',obj.Categories,'MarkerSize',obj.MarkerSize,'Interpreter','none');
+			plot(ax,obj.xValues,"EdgeCData",obj.xValues.Edges.Weight,...
+                "EdgeColor","flat","LineWidth",1.5,...
+                "NodeColor","red","MarkerSize",cType.MARKER_SIZE,"Interpreter","none");
 			c=colorbar(ax);
 			c.Label.String=obj.xLabel;
 			c.Label.FontSize=12;
@@ -92,7 +82,9 @@ classdef cGraphDiagramFP < cGraphResults
             app.UIAxes.YLimMode="auto";
             r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
             app.UIAxes.Colormap=red2blue;
-            plot(app.UIAxes,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,"EdgeColor","flat");
+            plot(app.UIAxes,obj.xValues,"Layout","auto","EdgeCData",obj.xValues.Edges.Weight,...
+                "EdgeColor","flat","LineWidth",1.5,...
+                "NodeColor","red","MarkerSize",cType.MARKER_SIZE,"Interpreter","none");
             app.Colorbar=colorbar(app.UIAxes);
             app.Colorbar.Label.String=['Exergy ', obj.Unit];
             app.UIAxes.Title.String=obj.Title;
@@ -161,7 +153,7 @@ classdef cGraphDiagramFP < cGraphResults
             [~,jdx]=find(mFP(1:end-1,end));
             wnodes=arrayfun(@(x) sprintf('OUT%d',x),1:numel(jdx),'UniformOutput',false);
             nodes=[vnodes, inodes, wnodes];
-            groups=repmat(cType.NodeType.STREAM,1,length(nodes));
+            groups=repmat(cType.NodeType.PROCESS,1,length(nodes));
             res=table(nodes',groups','VariableNames',{'Name','Group'});
         end
     end

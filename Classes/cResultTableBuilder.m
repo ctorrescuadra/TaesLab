@@ -232,10 +232,15 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       atcfp - FP cost adjacency table
         %
             % Get FP adjacency tables
-            tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIAGRAM_FP,dfp.EdgesFP);
-            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.COST_DIAGRAM_FP,dfp.EdgesCFP);
-            tbl.ktfp=obj.getAdjacencyTableFP(cType.Tables.KDIAGRAM_FP,dfp.EdgesKFP);
-            tbl.ktcfp=obj.getAdjacencyTableFP(cType.Tables.KDIAGRAM_COST_FP,dfp.EdgesKCFP);
+            tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIGRAPH_FP,dfp.EdgesFP);
+            tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.DIGRAPH_COST_FP,dfp.EdgesCFP);
+            tbl.katfp=obj.getAdjacencyTableFP(cType.Tables.KDIGRAPH_FP,dfp.EdgesKFP);
+            tbl.katcfp=obj.getAdjacencyTableFP(cType.Tables.KDIGRAPH_COST_FP,dfp.EdgesKCFP);
+            tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,dfp.TableFP);
+            tbl.ktfp=obj.getTableFP(cType.Tables.KTABLE_FP,dfp.TableKFP,dfp.kNames);
+            tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dfp.TableCFP);
+            tbl.kdcfp=obj.getTableFP(cType.Tables.KTABLE_COST_FP,dfp.TableKCFP,dfp.kNames);
+            tbl.grps=obj.getGroupsTable(cType.Tables.PROCESS_GROUP,dfp.GroupsTable);
             % Build the cResultInfo
             res=cResultInfo(dfp,tbl);
         end
@@ -298,24 +303,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             end
             res=cResultInfo(sr,tables);
         end
-
-        function res=getTableFP(obj,name,values,names)
-        % Get a cTableMatrix with the Fuel-Product table
-        %  Input:
-        %   name   - Table name
-        %   values - Table FP values
-        %  Output:
-        %   res - cTableMatrix object
-        %
-            if nargin==3
-                rowNames=obj.processKeys;
-            else
-                rowNames=names;
-            end
-            tp=obj.getMatrixTableProperties(name);
-            colNames=horzcat('Key',rowNames);
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
-        end
     end
 
     methods(Access=private)    
@@ -369,9 +356,10 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             nrows=length(rowNames);
             ncols=tp.columns-1;
             data=cell(nrows,ncols);
-            data(:,1)={prc.fuel};
-            data(:,2)={prc.product};
-            data(:,3)={prc.type};
+            data(:,1)=ps.ProcessDigraph.getComponentNames;
+            data(:,2)={prc.fuel};
+            data(:,3)={prc.product};
+            data(:,4)={prc.type};
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
                
@@ -411,8 +399,28 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             res=obj.createCellTable(tp,data,rowNames,colNames);
         end
 
+        function res=getTableFP(obj,name,values,names)
+        % Get a cTableMatrix with the Fuel-Product table
+        %  Input:
+        %   name   - Table name
+        %   values - Table FP values
+        %  Output:
+        %   res - cTableMatrix object
+        %
+            if nargin==3
+                rowNames=obj.processKeys;
+            else
+                rowNames=names;
+            end
+            tp=obj.getMatrixTableProperties(name);
+            colNames=horzcat('Key',rowNames);
+            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+        end
+
+        %
+        %--- DiagramFP tables
         function res=getAdjacencyTableFP(obj,name,val)
-        % Generate the FP adjacency matrix
+        % Generate the FP adjacency tables
         %  Input:
         %   name - Table name
         %   val - Adjacency Table FP 
@@ -427,6 +435,25 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 			res=obj.createCellTable(tp,data,rowNames,colNames);
 		end
 
+        function res=getGroupsTable(obj,name,val)
+        %getGroupsTable - Generate the Process Groups tables
+        %   Syntax:
+        %     res = obj.getGroupsTable(name,val)
+        %   Input:
+        %     name - Table name
+        %     val - Group Table (Name,Group) struct
+        %   Output:
+        %   res - cTableCell object
+        %   
+            tp=obj.getCellTableProperties(name);
+            data={val.Group}';
+            rowNames={val.Name};
+            colNames=obj.getTableHeader(tp);
+            res=obj.createCellTable(tp,data,rowNames,colNames);
+        end
+
+        %
+        %--- ProductiveDiagram Tables 
         function res=getProductiveTable(obj,pd,name)
         % Get the productive tables
         %  Input:
@@ -436,7 +463,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   res - cTableCell object
         %
             tp=obj.getCellTableProperties(name);
-            val=pd.getEdgeTable(name);
+            val=pd.getEdgesTable(name);
             M=size(val,1);
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
             colNames=obj.getTableHeader(tp);

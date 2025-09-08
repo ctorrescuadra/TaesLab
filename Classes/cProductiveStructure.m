@@ -74,16 +74,13 @@ classdef cProductiveStructure < cResultId
         ProcessKeys       % Cell array of Processes Names (keys)
         StreamKeys        % Cell array of Streams Names (keys)
 		ProductiveTable   % Adjacency Matrix of Productive Structure
-		ProcessMatrix	  % Process Matrix (Logical FP matrix)	
+		ProcessDigraph	  % Process Digraph (cDigraphAnalysis)	
 	end
-
-	properties(Access=protected)
-		fDict           % Flows key dictionary
-		pDict           % Processes key dictionary
-    end
 
     properties(Access=private)
 		cstr            % Internal streams cell array
+		fDict           % Flows key dictionary
+		pDict           % Processes key dictionary
     end
 
     methods
@@ -904,25 +901,21 @@ classdef cProductiveStructure < cResultId
 		%     res - true | false indicating if the graph is ok
 		%
 			% Build the SSR graph adjacency matrix
-    		N=obj.NrOfProcesses;
+			% Build the SSR graph adjacency matrix
 			tfp=obj.getProcessMatrix;
-			A=[0 tfp(N+1,:);...
-			   zeros(N,1) tfp(1:N,:);...
-			   0 zeros(1,N+1)];
+			nodes=obj.ProcessKeys;
+			sc=cDigraphAnalysis(tfp,nodes);
+			[res,src,out]=sc.isProductive;
 			% Compute the transitive closure
-			tc=transitiveClosure(A);
-			idx=find(~tc(1,2:end-1)); 
-			jdx=find(~tc(2:end-1,end));
-			res=isempty(idx) && isempty(jdx);
 			% Log non-SSR nodes
 			if res
-				obj.ProcessMatrix=tfp;
+				obj.ProcessDigraph=sc;
 			else
-				for i=idx
-					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
+				for i=1:numel(src)
+					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,src{i});
 				end
-            	for i=transpose(jdx)
-					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
+            	for i=1:numel(out)
+					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,out{i});
             	end
 			end
 		end
