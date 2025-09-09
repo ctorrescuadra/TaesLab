@@ -22,16 +22,16 @@ classdef cSummaryTable < cMessageLogger
     end
 
     methods
-        function obj = cSummaryTable(tp,size)
+        function obj = cSummaryTable(td,size)
         %cSummaryTable - Create an instance of the class
         %   Syntax
         %     obj = cSummaryTable(tp,size)
         %   Input Argument:
-        %     tp - table properties structure
+        %     td - table definition structure
         %     size - size of the table
-            obj.Name=tp.key;
-            obj.Type=tp.table;
-            obj.Node=tp.node;
+            obj.Name=td.key;
+            obj.Type=td.table;
+            obj.Node=td.node;
             obj.Values=zeros(size);
         end
 

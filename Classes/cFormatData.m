@@ -6,20 +6,24 @@ classdef cFormatData < cTablesDefinition
 %     obj = cFormatData(data)
 % 	
 %   cFormatData methods:
-%     getTableInfo - Get info about table properties
-%     getFormat    - Get the format of a data type
-%     getUnit      - Get the units of a data type
+%     getTableInfo       - Get info about the a table definition
+%     getFormat          - Get the format of a variable type
+%     getUnit            - Get the units of a variable type
+%     getTableProperties - Get the properties of a cTable
 %
 %   See also printformat.json, cTablesDefinition
 %	
 	methods
 		function obj=cFormatData(data)
-		% Create an instance of the object
+		%cFormatData - Create an instance of the object
 		%   Syntax:
 		%     obj = cFormatData(data)
 		%   Input Argument:
 		%	  data - Format struct from cModelData
+		%   Output Argument:
+		%     obj - cFormatData object
 		%
+			% Check input
 			if ~isstruct(data) || ~isfield(data,'definitions') 
 				obj.messageLog(cType.ERROR,cMessages.InvalidFormatDefinition);
 				return
@@ -51,13 +55,13 @@ classdef cFormatData < cTablesDefinition
 		end
 
 		function res=getTableInfo(obj,name)
-		% Get the properties of a table
-		% Syntax:
-		%   res = obj.getTableInfo(name)
-		% Input Arguments:
-		%   name - Name of the table
-		% Output Arguments:
-		%   res - Struct with the properties of the table
+		%getTableInfo - Get the properties of a table
+		%   Syntax:
+		%     res = obj.getTableInfo(name)
+		%   Input Arguments:
+		%     name - Name of the table
+		%   Output Arguments:
+		%     res - Struct with the properties of the table
 		%
 			res=cType.EMPTY;
 			idx=obj.getTableId(name);
@@ -67,52 +71,143 @@ classdef cFormatData < cTablesDefinition
 		end
 
 		function res=getFormat(obj,id)
-		% Get the format of a type of variable
-		% Syntax:
-		%  format = obj.getFormat(id)
-		% Input Argument:
-		%   id - Variable type, see cType.Format
-		% Output Argument:
-		%   res - char array with the C-like format of the variable
+		%getFormat - Get the format of a type of variable
+		%   Syntax:
+		%     format = obj.getFormat(id)
+		%   Input Argument:
+		%     id - Variable type, see cType.Format
+		%   Output Argument:
+		%     res - char array with the C-like format of the variable
+		%
 			res=obj.cfgTypes(id).format;
 		end
 				
 		function res=getUnit(obj,id)
-		% Get the format of a type of variable
+		%getUnit - Get the format of a type of variable
 		% Syntax:
 		%  format = obj.getUnit(id)
 		% Input Argument:
 		%   id - Variable type, see cType.Format
 		% Output Argument:
 		%   res - char array with unit of the variable
+		%
 			res=obj.cfgTypes(id).unit;
-		end		
+		end
+		
+		function [tdef,tprop]=getTableProperties(obj,name)
+		%getTableProperties - Get the properties of a cTable
+		% Syntax:
+		%   [tdef,tprop] = obj.getTableProperties(name)
+		% Input Argument:
+		%   name - name of the table
+		% Output Argument:
+		%   tdef  - definition strcut of the table
+		%   tprop - properties on the cTable
+		% 
+			[tdef,tdir]=getTableProperties@cTablesDefinition(obj,name);
+        	switch tdir.type
+            	case cType.TableType.TABLE
+                	tprop=obj.getCellTableProperties(tdef);
+            	case cType.TableType.MATRIX
+                	tprop=obj.getMatrixTableProperties(tdef);
+            	case cType.TableType.SUMMARY
+                	tprop=obj.getSummaryTableProperties(tdef);
+        	end
+		end
     end
 
     methods(Access=protected)						
-		function res=getTableHeader(obj,props)
-		% get the table header cell array
-		%  Input:
-		%   props - Table properties
-			units=obj.getTableUnits(props);
-			header={props.fields.header};
+		function res=getTableHeader(obj,tdef)
+		%getTableHeader - get the table header cell array
+		%   Input Argument:
+		%     tdef - Table properties
+		%   Output Argument:
+		%     res - cell array with the table header of each column
+			units=obj.getTableUnits(tdef);
+			header={tdef.fields.header};
 			res=cellfun(@strcat,header,units,'UniformOutput',false);
 		end
 			
-		function format=getTableFormat(obj,props)
-		% get an array cell with the format (C-like) of columns table
-		%  Input:
-		%   props - Table properties
-			idx=[props.fields.type];
+		function format=getTableFormat(obj,tdef)
+		%getTableFormat - get an array cell with the format (C-like) of columns table
+		%   Input Argument:
+		%     tdef - Table definition struct
+		%   Output Argument:
+		%     format - cell array with the format of the column table
+			idx=[tdef.fields.type];
 			format={obj.cfgTypes(idx).format};
         end
 	
-		function units=getTableUnits(obj,props)
-		% get a cell array with the units for each table column
-		%   Input:
-		%    id - Table properties
-			idx=[props.fields.type];
+		function units=getTableUnits(obj,tdef)
+		%getTableUnits - get a cell array with the units for each table column
+		%   Input Argument:
+		%     tdef - Table definition struct
+		%   Output Argument:
+		%     res - cell array with the units of each column
+			idx=[tdef.fields.type];
 			units={obj.cfgTypes(idx).unit};
-		end
+        end
+
+        function tp=getCellTableProperties(obj,td)
+		%getCellTableProperties - Get the cTableCell properties from table definition
+		%   Input Argument:
+		%     td - table definition strcuture
+		%   Output Argument:
+		%     tp - struct witc cTableCell properties
+		% 
+			tp=struct('Name',td.key,...
+				      'Description',td.description,...  
+                      'Unit',[],...
+            		  'Format',[],...
+            	      'FieldNames',[],...
+            		  'ShowNumber',td.number,...
+            		  'GraphType',td.graph,...
+                      'NodeType',td.node,...
+            		  'Resources',td.rsc);
+			% set cell array properties.
+			tp.Unit=obj.getTableUnits(td);
+			tp.Format=obj.getTableFormat(td);
+			tp.FieldNames={td.fields.name};
+        end
+
+        function tp=getMatrixTableProperties(obj,td)
+		%getMatrixTableProperties - Get the cTableMatrix properties from table definition
+		%   Input Argument:
+		%     td - table definition strcuture
+		%   Output Argument:
+		%     tp - struct witc cTableMatrix properties
+		% 
+			tp=struct('Name',td.key,...
+				      'Description',td.header,...  
+                      'Unit',obj.getUnit(td.type),...
+            		  'Format',obj.getFormat(td.type),...
+            		  'GraphType',td.graph,...
+					  'GraphOptions',td.options,...
+            		  'Resources',td.rsc,...
+   					  'SummaryType',cType.SummaryId.NONE,...
+					  'NodeType',td.node,...
+                      'RowTotal',td.rowTotal,...
+                      'ColTotal',td.colTotal);
+        end
+
+        function tp=getSummaryTableProperties(obj,td)
+		%getSummaryTableProperties - Get the cTableMatrix properties from summary table definition
+		%   Input Argument:
+		%     td - table definition structure
+		%   Output Argument:
+		%     tp - struct with cTableMatrix properties for summary table
+		% 
+			tp=struct('Name',td.key,...
+				      'Description',td.header,...  
+                      'Unit',obj.getUnit(td.type),...
+            		  'Format',obj.getFormat(td.type),...
+            		  'GraphType',td.graph,...
+					  'GraphOptions',td.options,...
+            		  'Resources',td.rsc,...
+   					  'SummaryType',td.table,...
+					  'NodeType',td.node,...
+                      'RowTotal',false,...
+                      'ColTotal',false);
+        end
 	end
 end

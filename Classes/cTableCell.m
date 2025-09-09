@@ -7,7 +7,6 @@ classdef (Sealed) cTableCell < cTableResult
 %   cTableCell properties
 %     FieldNames  - Cell array with field names 
 %     ShowNumber  - Logical variable indicating if line number is printed
-%     NodeType    - RowNames type indicator 
 %
 %   cTableCell methods
 %     printTable           - Print a table on console
@@ -36,7 +35,6 @@ classdef (Sealed) cTableCell < cTableResult
     properties (GetAccess=public,SetAccess=private)
         FieldNames  % Cell array with field names (optional)
         ShowNumber  % logical variable indicating if line number is printed
-        NodeType    % Row Names type indicator
     end
 	
     methods
@@ -68,19 +66,6 @@ classdef (Sealed) cTableCell < cTableResult
             else
                 obj.messageLog(cType.ERROR,cMessages.InvalidTableSize,size(data));
             end
-        end
-
-        function res=getProperties(obj)
-        % getProperties - Get table properties
-        % Syntax:
-        %   res=obj.getProperties
-        % Output Results:
-        %   res - structure with table properties
-        %
-            res=getProperties@cTableResults(obj);
-            res.FieldNames=obj.FieldNames;
-            res.ShowNumber=obj.ShowNumber;
-            res.NodeType=obj.NodeType;
         end
 
         function res=formatData(obj)
@@ -276,23 +261,21 @@ classdef (Sealed) cTableCell < cTableResult
 
     methods(Access=private)
         function setProperties(obj,p)
-        % Set table properties: Description, Unit, Format, FieldNames, ...
-            try
-                obj.Name=p.Name;
-                obj.Description=p.Description;
-                obj.Unit=p.Unit;
-                obj.Format=p.Format;
-                obj.FieldNames=p.FieldNames;
-                obj.ShowNumber=p.ShowNumber;
-                obj.GraphType=p.GraphType;
-                obj.NodeType=p.NodeType;
-                obj.Resources=p.Resources;
-                obj.setColumnFormat;
-                obj.setColumnWidth;
-            catch err
-                obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,cMessages.InvalidTableProp);
+        %setProperties - set the additional properties of the table
+        %   Syntax:
+        %     setProperties(obj,p)
+        %   Input Arguments:
+        %     p - struct with the cTableCell properties
+        %
+            list=cType.TableCellProps;
+            for i = 1:numel(list)
+                fname = list{i};
+                if isfield(p, fname)
+                    obj.(fname) = p.(fname);
+                end
             end
+            obj.setColumnFormat;
+            obj.setColumnWidth;
         end
 
         function setColumnWidth(obj)

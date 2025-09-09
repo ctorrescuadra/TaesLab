@@ -67,28 +67,30 @@ classdef cTablesDefinition < cMessageLogger
             end
         end
 
-        function res=getTableProperties(obj,name)
+        function [tdef,tdir]=getTableProperties(obj,name)
         %getTableProperties - Get the properties of a table
         %   Syntax:
         %     res = obj.getTableProperties(name)
         %   Input Argument:
         %     name - Name of the table
         %   Output Argument:
-        %     res - structure containing table properties
+        %     tdef - structure containing the table definition
+        %     tdir - structure containing the table directory info
         %
-            res=cType.EMPTY;
+            tdef=cType.EMPTY;
+            tdir=cType.EMPTY;
             idx=obj.getTableId(name);
             if isempty(idx)
                 return
             end
-            tIndex=obj.tableIndex(idx);
-            switch tIndex.type
+            tdir=obj.tableIndex(idx);
+            switch tdir.type
                 case cType.TableType.TABLE
-                    res=obj.cfgTables(tIndex.tableId);
+                    tdef=obj.cfgTables(tdir.tableId);
                 case cType.TableType.MATRIX
-                    res=obj.cfgMatrices(tIndex.tableId);
+                    tdef=obj.cfgMatrices(tdir.tableId);
                 case cType.TableType.SUMMARY
-                    res=obj.cfgSummary(tIndex.tableId);
+                    tdef=obj.cfgSummary(tdir.tableId);
             end
         end
 
@@ -128,7 +130,7 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getTableId(obj,name)
-        %gettableId - Get tableId from dictionary. Internal use
+        %getTableId - Get tableId from dictionary. Internal use
         %   Syntax:
         %     res = obj.getTableId(name)
         %   Input Argument:
@@ -187,47 +189,6 @@ classdef cTablesDefinition < cMessageLogger
                     end
                     res={obj.cfgSummary(idx).key};
             end
-        end
-    end
-
-    methods(Access=protected)
-        function res=getCellTableProperties(obj,name)
-        % Get the properties of a cell table
-        % Input:
-        %   name - table key name 
-            res=cType.EMPTY;
-            idx=getIndex(obj.tDictionary,name);
-            if isempty(idx)
-                return
-            end
-            tId=obj.tableIndex(idx).tableId;
-            res=obj.cfgTables(tId);
-        end
-    
-        function res=getMatrixTableProperties(obj,name)
-        % Get the properties of a matrix table
-        % Input:
-        %   name - table key name 
-            res=cType.EMPTY;
-            idx=getIndex(obj.tDictionary,name);
-            if isempty(idx)
-                return
-            end
-            tId=obj.tableIndex(idx).tableId;
-            res=obj.cfgMatrices(tId);
-        end    
-    
-        function res=getSummaryTableProperties(obj,name)
-        % Get the properties of a summary table
-        % Input:
-        %   name - table key name 
-            res=cType.EMPTY;
-            idx=getIndex(obj.tDictionary,name);
-            if isempty(idx)
-                return
-            end
-            tId=obj.tableIndex(idx).tableId;
-            res=obj.cfgSummary(tId);
         end
     end
 

@@ -170,7 +170,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       dit: Irreversibiliy Variation table
         %       dft: Total Fuel Impact
         %       tmfc: Total Malfunction Cost
-            tbl.dgn=obj.getSummaryDiagnosis(dgn);
+            tbl.dgn=obj.getTableCell(cType.Tables.DIAGNOSIS,dgn.getDiagnosisTable);
             tbl.mf=obj.getMalfunctionTable(dgn);
             tbl.mfc=obj.getMalfunctionCostTable(dgn);
             tbl.dit=obj.getIrreversibilityTable(dgn);
@@ -206,14 +206,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tmp=int8(100*ra.dValues(:,1));
                 rowNames=arrayfun(@(x) sprintf('%6d',x),tmp,'UniformOutput',false);
                 if param.DirectCost
-                    tp=obj.getMatrixTableProperties(cType.Tables.WASTE_RECYCLING_DIRECT);
+                    [~,tp]=obj.getTableProperties(cType.Tables.WASTE_RECYCLING_DIRECT);
                     data=ra.dValues(:,2:end);
-                    tbl.rad=obj.createMatrixTable(tp,data,rowNames',colNames);
+                    tbl.rad=cTableMatrix(data,rowNames',colNames,tp);
                 end
                 if param.GeneralCost
-                    tp=obj.getMatrixTableProperties(cType.Tables.WASTE_RECYCLING_GENERAL);
+                    [~,tp]=obj.getTableProperties(cType.Tables.WASTE_RECYCLING_GENERAL);
                     data=ra.gValues(:,2:end);
-                    tbl.rag=obj.createMatrixTable(tp,data,rowNames',colNames);
+                    tbl.rag=cTableMatrix(data,rowNames',colNames,tp);
                 end
             end
             % Build the cResultInfo Object
@@ -298,88 +298,99 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 rowNames=sr.getRowNames(tbl);
                 colNames=['key',sr.getColNames(tbl)];
                 data=tmp.Values;
-                tp=obj.getTableProperties(tbl);
-                tables.(tbl)=createSummaryTable(obj,tp,data,rowNames,colNames);
+                [~,tp]=obj.getTableProperties(tbl);
+                tables.(tbl)=cTableMatrix(data,rowNames,colNames,tp);
             end
             res=cResultInfo(sr,tables);
         end
     end
 
     methods(Access=private)    
-        %-- Productive Structure Tables
+        %--- Productive Structure Tables
         function res=getFlowsTable(obj,ps)
-        % Generates a cTableCell with the flows definition
-        % Input:
-        %   ps - cProductiveStructure
-        % Output:
-        %   res - flows cTableCell
-            tp=obj.getCellTableProperties(cType.Tables.FLOW_TABLE);
+        %getFlowsTable - Generates a cTableCell with the flows definition
+        %   Syntax:
+        %     res=obj.getFlowsTable(ps)
+        %   Input:
+        %     ps - cProductiveStructure
+        %   Output:
+        %     res - cTableCell object
+        %
+            [td,tp]=obj.getTableProperties(cType.Tables.FLOW_TABLE);
             rowNames=obj.flowKeys;
-            colNames=obj.getTableHeader(tp);
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
+            colNames=obj.getTableHeader(td);
+            nrows=numel(rowNames);
+            ncols=numel(colNames)-1;
             data=cell(nrows,ncols);
             % Fill columns
             data(:,1)={obj.flowEdges.from};
             data(:,2)={obj.flowEdges.to};
             data(:,3)={ps.Flows.type};
-            res=obj.createCellTable(tp,data,rowNames,colNames);
+            res=cTableCell(data,rowNames,colNames,tp);
         end     
             
         function res=getStreamsTable(obj,ps)
-        % Generates a cTableCell with the streams definition
-        % Input:
-        %   ps - cProductiveStructure
-        % Output:
-        %   res - streams cTableCell
-            tp=obj.getCellTableProperties(cType.Tables.STREAM_TABLE);
+        %getStreamsTable - Generates a cTableCell with the streams definition
+        %   Syntax:
+        %     res=obj.getStreamsTable(ps)
+        %   Input:
+        %     ps - cProductiveStructure
+        %   Output:
+        %     res - cTableCell object
+        %
+            [td,tp]=obj.getTableProperties(cType.Tables.STREAM_TABLE);
             rowNames=obj.streamKeys;
-            colNames=obj.getTableHeader(tp);
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
+            colNames=obj.getTableHeader(td);
+            nrows=numel(rowNames);
+            ncols=numel(colNames)-1;
             data=cell(nrows,ncols);
             data(:,1)={ps.Streams.definition};
             data(:,2)={ps.Streams.type};
-            res=obj.createCellTable(tp,data,rowNames,colNames);
+            res=cTableCell(data,rowNames,colNames,tp);
         end        
             
         function res=getProcessesTable(obj,ps)
-        % Generates a cTableCell with the processes definition
-        % Input:
-        %   ps - cProductiveStructure
-        % Output:
-        %   res - processes cTableCell
-            tp=obj.getCellTableProperties(cType.Tables.PROCESS_TABLE);
+        %getProcessesTable - Generates a cTableCell with the processes definition
+        %   Syntax:
+        %     res=obj.getProcessTable(ps)
+        %   Input:
+        %     ps - cProductiveStructure
+        %   Output:
+        %    res - cTableCell
+            [td,tp]=obj.getTableProperties(cType.Tables.PROCESS_TABLE);
             prc=ps.Processes(1:end-1);
             rowNames=obj.processKeys(1:end-1);
-            colNames=obj.getTableHeader(tp);
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
+            colNames=obj.getTableHeader(td);
+            nrows=numel(rowNames);
+            ncols=numel(colNames)-1;
             data=cell(nrows,ncols);
             data(:,1)=ps.ProcessDigraph.getComponentNames;
             data(:,2)={prc.fuel};
             data(:,3)={prc.product};
             data(:,4)={prc.type};
-            res=obj.createCellTable(tp,data,rowNames,colNames);
+            res=cTableCell(data,rowNames,colNames,tp);
         end
                
         %-- Exergy Analysis tables
         function res=getFlowExergy(obj,values)
-        % Generates a cTableCell with the exergy flows values
-        % Input:
-        %   pm - cExergyModel object
-        % Output:
-        %   res - eflows cTableCell
-            tp=obj.getCellTableProperties(cType.Tables.FLOW_EXERGY);
+        %getFlowExergy - Generates a cTableCell with the exergy flows values
+        %   Syntax:
+        %     res=obj.getProcessTable(ps)
+        %   Input:
+        %     pm - cExergyModel object
+        %   Output:
+        %     res - cTableCell object
+        %
+            [td,tp]=obj.getTableProperties(cType.Tables.FLOW_EXERGY);
             rowNames=obj.flowKeys;
-            colNames=obj.getTableHeader(tp);
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
+            colNames=obj.getTableHeader(td);
+            nrows=numel(rowNames);
+            ncols=numel(colNames)-1;
             data=cell(nrows,ncols);
             data(:,1)={obj.flowEdges.from};
             data(:,2)={obj.flowEdges.to};
             data(:,3)=num2cell(values);		
-            res=obj.createCellTable(tp,data,rowNames,colNames);
+            res=cTableCell(data,rowNames,colNames,tp);
         end	    		
             
         function res=getStreamExergy(obj,values)
@@ -388,33 +399,34 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   pm - cExergyModel object
         % Output:
         %   res - eStreams cTableCell
-            tp=obj.getCellTableProperties(cType.Tables.STREAM_EXERGY);
+            [td,tp]=obj.getTableProperties(cType.Tables.STREAM_EXERGY);
             rowNames=obj.streamKeys;
-            colNames=obj.getTableHeader(tp);
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
+            colNames=obj.getTableHeader(td);
+            nrows=numel(rowNames);
+            ncols=numel(colNames)-1;
             data=cell(nrows,ncols);
             data(:,1)=num2cell(values.E);
             data(:,2)=num2cell(values.ET);
-            res=obj.createCellTable(tp,data,rowNames,colNames);
+            res=cTableCell(data,rowNames,colNames,tp);
         end
 
-        function res=getTableFP(obj,name,values,names)
+        function res=getTableFP(obj,name,values,rows)
         % Get a cTableMatrix with the Fuel-Product table
         %  Input:
         %   name   - Table name
         %   values - Table FP values
+        %   rows   - Row names (optional)
         %  Output:
         %   res - cTableMatrix object
         %
             if nargin==3
                 rowNames=obj.processKeys;
             else
-                rowNames=names;
+                rowNames=rows;
             end
-            tp=obj.getMatrixTableProperties(name);
+            [~,tp]=obj.getTableProperties(name);
             colNames=horzcat('Key',rowNames);
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+            res=cTableMatrix(values,rowNames,colNames,tp);
         end
 
         %
@@ -427,12 +439,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  Output:
         %   res - cTableCell object
         %   
-            tp=obj.getCellTableProperties(name);
+            [td,tp]=obj.getTableProperties(name);
             M=size(val,1);
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
-            colNames=obj.getTableHeader(tp);
+            colNames=obj.getTableHeader(td);
             data=struct2cell(val)';
-			res=obj.createCellTable(tp,data,rowNames,colNames);
+			res=cTableCell(data,rowNames,colNames,tp);
 		end
 
         function res=getGroupsTable(obj,name,val)
@@ -445,11 +457,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   Output:
         %   res - cTableCell object
         %   
-            tp=obj.getCellTableProperties(name);
+            [td,tp]=obj.getTableProperties(name);
             data={val.Group}';
             rowNames={val.Name};
-            colNames=obj.getTableHeader(tp);
-            res=obj.createCellTable(tp,data,rowNames,colNames);
+            colNames=obj.getTableHeader(td);
+            res=cTableCell(data,rowNames,colNames,tp);
         end
 
         %
@@ -462,15 +474,17 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  Output:
         %   res - cTableCell object
         %
-            tp=obj.getCellTableProperties(name);
+            [td,tp]=obj.getTableProperties(name);
             val=pd.getEdgesTable(name);
             M=size(val,1);
             rowNames=arrayfun(@(x) sprintf('E%d',x),1:M,'UniformOutput',false);
-            colNames=obj.getTableHeader(tp);
+            colNames=obj.getTableHeader(td);
             data=struct2cell(val)';
-			res=obj.createCellTable(tp,data(:,1:2),rowNames,colNames);
+			res=cTableCell(data(:,1:2),rowNames,colNames,tp);
         end
 
+        %
+        %-- Waste and Recycling tables
         function res=getWasteDefinition(obj,wt)
         % Get the Waste Definition Table
         %  Input:
@@ -478,16 +492,16 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  Output:
         %   res - cTableCell wd
         %
-            tp=obj.getCellTableProperties(cType.Tables.WASTE_DEFINITION);
+            [td,tp]=obj.getTableProperties(cType.Tables.WASTE_DEFINITION);
             flw=obj.flowKeys;
             rowNames=flw(wt.Flows);
-            colNames=obj.getTableHeader(tp);
+            colNames=obj.getTableHeader(td);
             nrows=length(rowNames);
-            ncols=tp.columns-1;
+            ncols=numel(colNames)-1;
             data=cell(nrows,ncols);
             data(:,1)=wt.Type;
             data(:,2)=num2cell(100*wt.RecycleRatio);
-            res=obj.createCellTable(tp,data,rowNames,colNames);
+            res=cTableCell(data,rowNames,colNames,tp);
         end
 
         function res=getWasteAllocation(obj,wt)
@@ -496,7 +510,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   wt - cWasteTable object
         %  Output:
         %   res - cTableMatrix wa
-            tp=obj.getMatrixTableProperties(cType.Tables.WASTE_ALLOCATION);
+            [~,tp]=obj.getTableProperties(cType.Tables.WASTE_ALLOCATION);
             flw=obj.flowKeys;
             prc=obj.processKeys;
             colNames=['Key',flw(wt.Flows)];
@@ -505,7 +519,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             if ~isempty(idx)
                 rowNames=prc(idx);
                 values=tmp(idx,:);
-                res=obj.createMatrixTable(tp,values,rowNames,colNames);
+                res=cTableMatrix(values,rowNames,colNames,tp);
             else
                 res=cMessageLogger(cType.INVALID);
             end
@@ -519,10 +533,10 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  values - Flow ICT values
         % Output:
         %  res - cTableMatrix object
-            tp=obj.getMatrixTableProperties(name);
+            [~,tp]=obj.getTableProperties(name);
             rowNames=obj.processKeys;
             colNames=horzcat('Key',obj.flowKeys);
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+            res=cTableMatrix(values,rowNames,colNames,tp);
         end
          
         function res=getProcessICTable(obj,name,values)
@@ -532,34 +546,26 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  values - Processes ICT values
         % Output:
         %  res - cTableMatrix
-            tp=obj.getMatrixTableProperties(name);
+            [~,tp]=obj.getTableProperties(name);
             rowNames=obj.processKeys;
             colNames=horzcat('Key',obj.processKeys(1:end-1));
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+            res=cTableMatrix(values,rowNames,colNames,tp);
         end
             
-        %-- Diagnosis Tables
-        function res=getSummaryDiagnosis(obj,dgn)
-        % Get the Summary Diagnosis Tables
-        % Input:
-        %   dgn - cDiagnosis object
-        % Output:
-        %   res - Summary Diagnosis cTable
-            res=obj.getTableCell(cType.Tables.DIAGNOSIS,dgn.getDiagnosisTable);
-        end
-
+        %
+        %--- Diagnosis tables
         function res=getMalfunctionTable(obj,dgn)
         % Get a cTableMatrix with the mafunction table values
         % Input:
         %  values - Malfunction table values
         % Output:
         %  res - cTableMatrix object
-            tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION);
+            [~,tp]=obj.getTableProperties(cType.Tables.MALFUNCTION);
             rowNames=obj.processKeys;
             DPs=[cType.Symbols.delta,'Ps'];
             values=dgn.getMalfunctionTable;
             colNames=horzcat('key',rowNames(1:end-1),DPs);
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+            res=cTableMatrix(values,rowNames,colNames,tp);
         end
             
         function res=getMalfunctionCostTable(obj,dgn)
@@ -568,12 +574,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  values - Malfunction cost table values
         % Output:
         %  res - cTableMatrix object
-            tp=obj.getMatrixTableProperties(cType.Tables.MALFUNCTION_COST);
+            [~,tp]=obj.getTableProperties(cType.Tables.MALFUNCTION_COST);
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
             values=dgn.getMalfunctionCostTable;
             DPt=[cType.Symbols.delta,'Pt*'];
             colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+            res=cTableMatrix(values,rowNames,colNames,tp);
         end
             
         function res=getIrreversibilityTable(obj,dgn)
@@ -582,12 +588,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  values - Irreversibility table values
         % Output:
         %  res - cTableMatrix object
-            tp=obj.getMatrixTableProperties(cType.Tables.IRREVERSIBILITY_VARIATION);
+            [~,tp]=obj.getTableProperties(cType.Tables.IRREVERSIBILITY_VARIATION);
             rowNames=[obj.processKeys,'MF'];
             DPt=[cType.Symbols.delta,'Pt'];
             colNames=horzcat('key',obj.processKeys(1:end-1),DPt);
             values=dgn.getIrreversibilityTable;
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+            res=cTableMatrix(values,rowNames,colNames,tp);
         end
 
         function res=getTotalMalfunctionCost(obj,dgn)
@@ -598,14 +604,16 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  res - cTableMatrix object      
             M=3;
             N=dgn.NrOfProcesses+1;
+            [~,tp]=obj.getTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
+            % Set values
             values=zeros(N,M);
             values(:,1)=dgn.getMalfunctionCost';
             values(:,2)=dgn.getWasteMalfunctionCost';
             values(:,3)=dgn.getDemandCorrectionCost';
-            tp=obj.getMatrixTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
+              % Set row and col names
             rowNames=[obj.processKeys(1:end)];
             colNames={'key','MF*','MR*','MPt*'};
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+            res=cTableMatrix(values,rowNames,colNames,tp);
         end
 
         function res=getFuelImpactSummary(obj,dgn)
@@ -613,20 +621,39 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  Input:
         %   dgn - cDiagnosis object 
         % Output:
-        %  res - cTableMatrix object    
+        %  res - cTableMatrix object
+        %  
             M=3;
             N=dgn.NrOfProcesses+1;
+            [~,tp]=obj.getTableProperties(cType.Tables.FUEL_IMPACT);
+            % Set Values
             values=zeros(N,M);
             values(:,1)=dgn.getIrreversibilityVariation';
             values(:,2)=dgn.getWasteVariation';
             values(:,3)=dgn.getDemandVariation';
-            tp=obj.getMatrixTableProperties(cType.Tables.FUEL_IMPACT);
+            % Set row and col names
             rowNames=[obj.processKeys(1:end)];
             DI=[cType.Symbols.delta,'I'];
             DR=[cType.Symbols.delta,'R'];
             DPs=[cType.Symbols.delta,'Pt'];
             colNames={'key',DI,DR,DPs};
-            res=obj.createMatrixTable(tp,values,rowNames,colNames);
+            res=cTableMatrix(values,rowNames,colNames,tp);
+        end
+
+        function res=getTableCell(obj,name,data)
+        % Get the corresponding cTableCell object
+        % Input:
+        %   name - name of the table
+        %   data - table data structure
+            [td,tp]=obj.getTableProperties(name);
+            rowNames=obj.getNodeNames(td.node);
+            colNames=obj.getTableHeader(td);
+            fieldNames={td.fields.name};
+            nrows=length(rowNames);
+            ncols=numel(colNames)-1;
+            values=zeros(nrows,ncols);
+            for j=2:td.columns,values(:,j-1)=data.(fieldNames{j}); end
+            res=cTableCell(num2cell(values),rowNames,colNames,tp);
         end
 
         function res=getNodeNames(obj,type)
@@ -645,86 +672,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             case cType.NodeType.ENV
                 res=obj.processKeys;
             end
-        end
-
-        function res=getTableCell(obj,name,data)
-        % Get the corresponding cTableCell object
-        % Input:
-        %   name - name of the table
-        %   data - table data structure
-            tp=obj.getCellTableProperties(name);
-            rowNames=obj.getNodeNames(tp.node);
-            colNames=obj.getTableHeader(tp);
-            fieldNames={tp.fields.name};
-            nrows=length(rowNames);
-            ncols=tp.columns-1;
-            values=zeros(nrows,ncols);
-            for j=2:tp.columns,values(:,j-1)=data.(fieldNames{j}); end
-            res=obj.createCellTable(tp,num2cell(values),rowNames,colNames);
-        end
-
-        function res=createCellTable(obj,props,data,rowNames,colNames)
-        % Set parameters from cPrintConfig and create cTableCell
-        % Input:
-        %  props - Cell Table properties structure
-        %  data  - Cell Values
-        %  rowNames - Names of the rows
-        %  colNames - Names of the columns
-        % Output:
-        %  res - cTableCell object
-            p.Name=props.key;
-            p.Description=props.description;   
-            p.Unit=obj.getTableUnits(props);
-            p.Format=obj.getTableFormat(props);
-            p.FieldNames={props.fields.name};
-            p.ShowNumber=props.number;
-            p.GraphType=props.graph;
-            p.NodeType=props.node;
-            p.Resources=props.rsc;
-            res=cTableCell(data,rowNames,colNames,p);
-        end
-            
-        function res=createMatrixTable(obj,props,data,rowNames,colNames)
-        % Set parameters from cPrintConfig and create cTableMatrix
-        % Input:
-        %  props - Matrix Table properties structure
-        %  data  - Table Values
-        %  rowNames - Names of the rows
-        %  colNames - Names of the columns
-        % Output:
-        %  res - cTableCell object
-
-            p.Name=props.key;
-            p.Description=props.header;    
-            p.Unit=obj.getUnit(props.type);
-            p.Format=obj.getFormat(props.type);
-            p.GraphType=props.graph;
-            p.GraphOptions=props.options;
-            p.Resources=props.rsc;
-            p.SummaryType=cType.SummaryId.NONE;
-            p.RowTotal=props.rowTotal;
-            p.ColTotal=props.colTotal;
-            res=cTableMatrix(data,rowNames,colNames,p);
-        end
-
-        function res=createSummaryTable(obj,props,data,rowNames,colNames)
-        % Create a summary table (as cTableMatrix)
-        %  Input:
-        %   props - Summary Table properties structure
-        %   data  - Table Values
-        %   rowNames - Names of the rows
-        %   colNames - Names of the columns
-            p.Name=props.key;
-            p.Description=props.header;    
-            p.Unit=obj.getUnit(props.type);
-            p.Format=obj.getFormat(props.type);
-            p.GraphType=props.graph;
-            p.GraphOptions=props.options;
-            p.Resources=props.rsc;
-            p.SummaryType=props.table;
-            p.RowTotal=false;
-            p.ColTotal=false;
-            res=cTableMatrix(data,rowNames,colNames,p);
         end
     end
 end

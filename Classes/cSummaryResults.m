@@ -84,9 +84,9 @@ classdef (Sealed) cSummaryResults < cResultId
             % Initialize Dataset
             for i=1:obj.NrOfTables
                 tbl=obj.Tables{i};
-                tp=fmt.getTableProperties(tbl);
-                size=obj.getTableSize(tp);
-                tmp=cSummaryTable(tp,size);
+                td=fmt.getTableProperties(tbl);
+                size=obj.getTableSize(td);
+                tmp=cSummaryTable(td,size);
                 setValues(obj.ds,i,tmp);
             end          
             % Fill Dataset Tables
@@ -246,16 +246,16 @@ classdef (Sealed) cSummaryResults < cResultId
             setValues(tmp,jdx,val);
         end
             
-        function res=getTableSize(obj,tp)
+        function res=getTableSize(obj,td)
         % Get the table size.
         % Input Argument
-        %   tp - Table properties
-            if tp.table==cType.STATES
+        %   td - Table definition
+            if td.table==cType.STATES
                 NC=obj.dm.NrOfStates;
             else
                 NC=obj.dm.NrOfSamples;
             end
-            switch tp.node
+            switch td.node
                 case cType.NodeType.FLOW
                     NR=obj.dm.NrOfFlows;
                 case cType.NodeType.PROCESS

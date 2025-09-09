@@ -176,6 +176,11 @@ classdef cType
 		TABLE_INDEX='tindex';
         ResultIndex={'psindex','eaindex','taindex','waindex','tdindex','pdindex','fpindex','srindex',...
             'dmindex','rmindex'};
+		% Result Tables Properties
+		TableMatrixProps={'Name','Description','Resources','GraphType','Format','Unit','NodeType',...
+			       'SummaryType','GraphOptions','RowTotal','ColTotal'};
+		TableCellProps={'Name','Description','Resources','GraphType','Format','Unit','NodeType',...
+			       'FieldNames','ShowNumber'}; 
 		% Save extensions
 		SAVE_RESULTS={'*.xlsx','XLSX Files';'*.txt','TXT Files'; '*.csv','CSV Files'; ...
 		              '*.html','HTML Files';'*.tex','LaTeX Files';'*.mat','MAT Files'};
@@ -552,6 +557,17 @@ classdef cType
 		%VarModeOptions - Get a cell array with the VarMode Type options
 			res=fieldnames(cType.VarMode);
 		end
+
+		function res=getPropertiesList(tobj)
+		%getPropertiesList - Get the list of additional properties of cResultTables
+			res=cType.EMPTY_CELL;
+			if isa(tobj,'cTableMatrix')
+				res=cType.TableMatrixProps;
+			elseif isa(tobj,'cTableCell')
+				res=cType.TableCellProps;
+			end
+		end
+
 
 		%%%%
 		% File Functions

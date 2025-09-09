@@ -88,20 +88,6 @@ classdef (Sealed) cTableMatrix < cTableResult
                 obj.messageLog(cType.ERROR,cMessages.InvalidTableSize,size(data));
             end
         end
-
-        function res=getProperties(obj)
-        %getProperties - Get table properties
-        %   Syntax:
-        %     res=obj.getProperties
-        %   Output Arguments:
-        %     res - structure with table properties
-        %
-            res=getProperties@cTableResult(obj);
-            res.SummaryType=obj.SummaryType;
-            res.GraphOptions=obj.GraphOptions;
-            res.RowTotal=obj.RowTotal;
-            res.ColTotal=obj.ColTotal;
-        end
         
         function res=getMatrixValues(obj)
         %getMatrixValues - Get the table data as Array
@@ -284,24 +270,21 @@ classdef (Sealed) cTableMatrix < cTableResult
 
     methods(Access=private)
         function setProperties(obj,p)
-         % Set the table properties: Description, Unit, Format, GraphType
-            try
-                obj.Name=p.Name;
-                obj.Description=p.Description;
-                obj.Unit=p.Unit;
-                obj.Format=p.Format;
-                obj.GraphType=p.GraphType;
-                obj.Resources=p.Resources;
-                obj.GraphOptions=p.GraphOptions;
-                obj.SummaryType=p.SummaryType;
-                obj.RowTotal=p.RowTotal;
-                obj.ColTotal=p.ColTotal;
-                obj.setColumnFormat;
-                obj.setColumnWidth;
-            catch err
-                obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,cMessages.InvalidTableProp);
+        %setProperties - set the additional properties of the table
+        %   Syntax:
+        %     setProperties(obj,p)
+        %   Input Arguments:
+        %     p - struct with the cTableCell properties
+        %
+            list=cType.TableMatrixProps;
+            for i = 1:numel(list)
+                fname = list{i};
+                if isfield(p, fname)
+                    obj.(fname) = p.(fname);
+                end
             end
+            obj.setColumnFormat;
+            obj.setColumnWidth;
         end
 
         function setColumnFormat(obj)

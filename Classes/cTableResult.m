@@ -2,28 +2,19 @@ classdef (Abstract) cTableResult < cTable
 %cTableResult - Abstrat class to store results into a cTable.
 %
 %   cTableResults Properties
-%     Format - Format of the table columns
-%     Unit   - Units of the table columns
+%     Format   - Format of the table columns
+%     Unit     - Units of the table columns
+%     NodeType - Type of row key (see cType.NodeType)
 %
 %   See also cTable, cTableMatrix, cTableCell
 %
     properties (GetAccess=public, SetAccess=protected)
         Format    % Format of the table cells
         Unit      % Units of the table cell
+        NodeType  % Type of Row key
     end
 
     methods
-        function res=getProperties(obj)
-        %getProperties - Get table properties
-        %   Syntax:
-        %     res=obj.getProperties
-        %   Output Arguments:
-        %     res - structure with table properties
-        %
-            res=getProperties@cTable(obj);
-            res.Format=obj.Format;
-            res.Unit=obj.Unit;
-        end
 
         function res=exportTable(obj,varmode,fmt)
         %exportTable - Get cTable info in diferent types of variables
@@ -71,6 +62,24 @@ classdef (Abstract) cTableResult < cTable
             else    
                 res=obj.Values;
             end
+        end
+
+        function res = getProperties(obj)
+        %getProperties - get the additional properties of a cTableResults
+        %   Syntax:
+        %     obj.getProperties();
+        %   Output Arguments:
+        %     res - struct with the additional properties of the table
+            res = struct();
+            list=cType.getPropertiesList(obj);   
+            for i = 1:numel(list)
+                fname = list{i};
+                if isprop(obj, fname)
+                    res.(fname) = obj.(fname);
+                end
+            end
+            res.State=obj.State;
+            res.Sample=obj.Sample;
         end
     end
 end

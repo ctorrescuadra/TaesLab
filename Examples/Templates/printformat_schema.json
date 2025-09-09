@@ -120,6 +120,9 @@
                 "rsc": {
                     "type": "boolean"
                 },
+                "node": {
+                    "$ref": "#/definitions/typeNode"
+                },
                 "rowTotal": {
                     "type": "boolean"
                 },
