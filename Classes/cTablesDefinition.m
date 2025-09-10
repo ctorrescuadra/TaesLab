@@ -36,6 +36,8 @@ classdef cTablesDefinition < cMessageLogger
         %cTablesDefinition - Create an instance of the object
         % Syntax:
         %   obj = cTablesDefinition();
+        % Output Argument:
+        %   obj - cTableDefinition object
         %      
 			% load default configuration filename			
 			path=fileparts(mfilename('fullpath'));
@@ -70,7 +72,7 @@ classdef cTablesDefinition < cMessageLogger
         function [tdef,tdir]=getTableProperties(obj,name)
         %getTableProperties - Get the properties of a table
         %   Syntax:
-        %     res = obj.getTableProperties(name)
+        %     [tdef,tdir] = obj.getTableProperties(name)
         %   Input Argument:
         %     name - Name of the table
         %   Output Argument:
@@ -156,14 +158,16 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getSummaryTables(obj,option,rsc)
-        %getSummaryTables - Get Summary Tables
+        %getSummaryTables - Get Summary Tables properties
         %   Syntax: 
-        %     res=obj.getSummaryTables(option,rec)
+        %     res=obj.getSummaryTables(option,rsc)
         %   Input Arguments:
         %     option - type of summary tables
         %     rsc    - Resource tables (true/false)
         %   Output Arguments:
-        %     res - cell array with the names of the selected summary tables 
+        %     res - struct array with the tables properties
+        %   
+            % Get optional arguments
             res=cType.EMPTY_CELL;
             switch nargin
                 case 1
@@ -172,29 +176,35 @@ classdef cTablesDefinition < cMessageLogger
                 case 2
                     rsc=false;
             end
-            tsummary={obj.cfgSummary.key};
+            % Get summary properties
+            tsummary=obj.cfgSummary;
             tbl=[obj.cfgSummary.table];
             drt=~[obj.cfgSummary.rsc];
+            % Select tables depending of option
             switch option
                 case cType.SummaryId.ALL
                     res=tsummary;
                 case cType.SummaryId.RESOURCES
                     idx=find(tbl==cType.RESOURCES);
-                    res={obj.cfgSummary(idx).key};
+                    res=obj.cfgSummary(idx);
                 case cType.SummaryId.STATES
                     if rsc
                         idx=find(tbl==cType.STATES);
                     else
                         idx=find(drt);
                     end
-                    res={obj.cfgSummary(idx).key};
+                    res=obj.cfgSummary(idx);
             end
         end
     end
 
     methods(Access=private)
 		function buildTablesDictionary(obj)
-        % Build the table dictionary
+        %buildTablesDictionary - build the tables dictionary
+        %   Tables dictionary is stored in obj.tDictionary
+        %   Syntax:
+        %     obj.buildTablesDictionary
+        %
             % Create the index dictionary
             tCodes=fieldnames(cType.Tables);
             tNames=struct2cell(cType.Tables);
@@ -264,7 +274,15 @@ classdef cTablesDefinition < cMessageLogger
         end
  
         function res=buildTablesDirectory(obj,cols)
-        % Get the tables directory as cTableData
+        %buildTablesDirectory - Get the tables directory as cTableData
+        %   Syntax:
+        %     res = obj.buildTablesDirectory(col)
+        %   Input Argument:
+        %     col - Columns names of the table (optional)
+        %     If missing default columns cType.DIR_COLS_DEFAULT is used
+        %   Output Argument:
+        %     res - cTableData object
+        %
             res=cMessageLogger;
             if nargin==1
                 cols=cType.DIR_COLS_DEFAULT;

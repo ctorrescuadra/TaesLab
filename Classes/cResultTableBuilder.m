@@ -28,7 +28,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %cResultTableBuilder - Create and instance of the class
         %   Syntax:
         %     obj = cResultTableBuilder(ps,data)
-        %   Input:
+        %   Input Argument:
         %     ps - cProductiveStructure object
         %     data - cModelData object
         %  
@@ -72,7 +72,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %     res = obj.getExergyResults(pm)
         %   Input :
         %     pm - cExergyModel object
-        %   Output:
+        %   Output Argument:
         %     res - cResultInfo object (THERMOECONOMIC_STATE) with the result tables:
         %       eflows: Exergy values of the flows
         %       estreams: Exergy values of the productive groups
@@ -89,7 +89,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
                   
         function res=getCostResults(obj,mfp,options)
-        % Get the thermoeconomic analysis result 
+        %getCostResults - Get the thermoeconomic analysis result 
         %   Syntax:
         %     res = obj.getCostResults(exc,options)
         %   Input Arguments:
@@ -117,6 +117,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       gfict: Flows Irreversibility generalized cost table
         %
             tbl=struct();
+            % Direct Cost Tables
             if options.DirectCost
                 dcost=mfp.getProcessCost;
                 ducost=mfp.getProcessUnitCost;
@@ -136,6 +137,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                     tbl.dcfpr=obj.getTableFP(cType.Tables.COST_TABLE_FPR,dcfpr);
                 end
             end
+            % Generalized Cost Tables
             if options.GeneralCost
                 cz=options.ResourcesCost;
                 mfp.setSample(cz.sample);
@@ -252,11 +254,12 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   Input Arguments:
         %     pd - cProductiveDiagram object
         %   Output Arguments:
-        %     res - cResultInfo object (PRODUCTIVE_DIAGRAM) with the tables
-        %       fat  - Flow diagram adjacency table
-        %       fpat - Flow-Process diagram adjacency table
-        %       pat  - Process diagram adjacency table
-        %       sfpat - Productive diagram adjacency table
+        %     res    - cResultInfo object (PRODUCTIVE_DIAGRAM) with the tables
+        %      fat   - Flow diagram adjacency table
+        %      fpat  - Flow-Process diagram adjacency table
+        %      sfpat - Productive diagram adjacency table
+        %      pat   - Process diagram adjacency table
+        %      kpat  - Kernel Process diagram adjacency table 
             tbl=struct();
             tnames=obj.getResultIdTables(cType.ResultId.PRODUCTIVE_DIAGRAM);
             for i=1:length(tnames)
@@ -290,15 +293,16 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %       rgpc - Generalized cost of processes
         %       rgpuc - Generalized unit cost of processes
         %       rgfc - Generalized cost of flows
-        %       rgfuc - Generalized unit cost of flows     
+        %       rgfuc - Generalized unit cost of flows 
+        %    
             tables=struct();
             for i=1:sr.NrOfTables
-                tmp=sr.getValues(i);
-                tbl=tmp.Name;
-                rowNames=sr.getRowNames(tbl);
-                colNames=['key',sr.getColNames(tbl)];
-                data=tmp.Values;
-                [~,tp]=obj.getTableProperties(tbl);
+                ds=sr.getValues(i);
+                tbl=ds.Name;
+                rowNames=obj.getNodeNames(ds.Node);
+                colNames=['key',sr.getSummaryColumns(ds.Type)];
+                data=ds.Values;
+                tp=obj.getSummaryTableProperties(ds.TableDefinition);
                 tables.(tbl)=cTableMatrix(data,rowNames,colNames,tp);
             end
             res=cResultInfo(sr,tables);
@@ -311,9 +315,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %getFlowsTable - Generates a cTableCell with the flows definition
         %   Syntax:
         %     res=obj.getFlowsTable(ps)
-        %   Input:
+        %   Input Arguments:
         %     ps - cProductiveStructure
-        %   Output:
+        %   Output Argument:
         %     res - cTableCell object
         %
             [td,tp]=obj.getTableProperties(cType.Tables.FLOW_TABLE);
@@ -321,8 +325,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             colNames=obj.getTableHeader(td);
             nrows=numel(rowNames);
             ncols=numel(colNames)-1;
-            data=cell(nrows,ncols);
             % Fill columns
+            data=cell(nrows,ncols);
             data(:,1)={obj.flowEdges.from};
             data(:,2)={obj.flowEdges.to};
             data(:,3)={ps.Flows.type};
@@ -333,9 +337,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %getStreamsTable - Generates a cTableCell with the streams definition
         %   Syntax:
         %     res=obj.getStreamsTable(ps)
-        %   Input:
+        %   Input Argument:
         %     ps - cProductiveStructure
-        %   Output:
+        %   Output Argument:
         %     res - cTableCell object
         %
             [td,tp]=obj.getTableProperties(cType.Tables.STREAM_TABLE);
@@ -343,6 +347,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             colNames=obj.getTableHeader(td);
             nrows=numel(rowNames);
             ncols=numel(colNames)-1;
+            % Fill Columns
             data=cell(nrows,ncols);
             data(:,1)={ps.Streams.definition};
             data(:,2)={ps.Streams.type};
@@ -353,16 +358,17 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %getProcessesTable - Generates a cTableCell with the processes definition
         %   Syntax:
         %     res=obj.getProcessTable(ps)
-        %   Input:
+        %   Input Argument:
         %     ps - cProductiveStructure
-        %   Output:
+        %   Output Argument:
         %    res - cTableCell
             [td,tp]=obj.getTableProperties(cType.Tables.PROCESS_TABLE);
             prc=ps.Processes(1:end-1);
-            rowNames=obj.processKeys(1:end-1);
+            rowNames=obj.getNodeType(td.node);
             colNames=obj.getTableHeader(td);
             nrows=numel(rowNames);
             ncols=numel(colNames)-1;
+            % Fill Columns
             data=cell(nrows,ncols);
             data(:,1)=ps.ProcessDigraph.getComponentNames;
             data(:,2)={prc.fuel};
@@ -376,9 +382,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %getFlowExergy - Generates a cTableCell with the exergy flows values
         %   Syntax:
         %     res=obj.getProcessTable(ps)
-        %   Input:
+        %   Input Argument:
         %     pm - cExergyModel object
-        %   Output:
+        %   Output Argument:
         %     res - cTableCell object
         %
             [td,tp]=obj.getTableProperties(cType.Tables.FLOW_EXERGY);
@@ -386,6 +392,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             colNames=obj.getTableHeader(td);
             nrows=numel(rowNames);
             ncols=numel(colNames)-1;
+            % Fill Columns
             data=cell(nrows,ncols);
             data(:,1)={obj.flowEdges.from};
             data(:,2)={obj.flowEdges.to};
@@ -395,15 +402,16 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             
         function res=getStreamExergy(obj,values)
         % Generates a cTableCell with stream exergy values
-        % Input:
+        % Input Argument:
         %   pm - cExergyModel object
-        % Output:
+        % Output Argument:
         %   res - eStreams cTableCell
             [td,tp]=obj.getTableProperties(cType.Tables.STREAM_EXERGY);
             rowNames=obj.streamKeys;
             colNames=obj.getTableHeader(td);
             nrows=numel(rowNames);
             ncols=numel(colNames)-1;
+            % Fill Columns
             data=cell(nrows,ncols);
             data(:,1)=num2cell(values.E);
             data(:,2)=num2cell(values.ET);
@@ -412,11 +420,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 
         function res=getTableFP(obj,name,values,rows)
         % Get a cTableMatrix with the Fuel-Product table
-        %  Input:
+        %  Input Argument:
         %   name   - Table name
         %   values - Table FP values
         %   rows   - Row names (optional)
-        %  Output:
+        %  Output Argument:
         %   res - cTableMatrix object
         %
             if nargin==3
@@ -433,10 +441,10 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %--- DiagramFP tables
         function res=getAdjacencyTableFP(obj,name,val)
         % Generate the FP adjacency tables
-        %  Input:
+        %  Input Argument:
         %   name - Table name
         %   val - Adjacency Table FP 
-        %  Output:
+        %  Output Argument:
         %   res - cTableCell object
         %   
             [td,tp]=obj.getTableProperties(name);
@@ -451,10 +459,10 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %getGroupsTable - Generate the Process Groups tables
         %   Syntax:
         %     res = obj.getGroupsTable(name,val)
-        %   Input:
+        %   Input Argument:
         %     name - Table name
         %     val - Group Table (Name,Group) struct
-        %   Output:
+        %   Output Argument:
         %   res - cTableCell object
         %   
             [td,tp]=obj.getTableProperties(name);
@@ -467,12 +475,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %
         %--- ProductiveDiagram Tables 
         function res=getProductiveTable(obj,pd,name)
-        % Get the productive tables
-        %  Input:
-        %   pd   - cProductiveDiagram object
-        %   name - name of the table
-        %  Output:
-        %   res - cTableCell object
+        %getProductiveDiagram - Get the productive tables
+        %   Syntax:
+        %    res=obj.getProductiveTable(pd,name)
+        %   Input Argument:
+        %     pd   - cProductiveDiagram object
+        %     name - name of the table
+        %   Output Argument:
+        %     res - cTableCell object
         %
             [td,tp]=obj.getTableProperties(name);
             val=pd.getEdgesTable(name);
@@ -486,11 +496,13 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %
         %-- Waste and Recycling tables
         function res=getWasteDefinition(obj,wt)
-        % Get the Waste Definition Table
-        %  Input:
-        %   wt - cWasteTable object
-        %  Output:
-        %   res - cTableCell wd
+        %getWasteDefinition - Get the Waste Definition Table
+        %   Syntax:
+        %     res = obj.getWasteDefinition
+        %   Input Argument:
+        %     wt - cWasteTable object
+        %   Output Argument:
+        %     res - cTableCell object
         %
             [td,tp]=obj.getTableProperties(cType.Tables.WASTE_DEFINITION);
             flw=obj.flowKeys;
@@ -498,6 +510,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             colNames=obj.getTableHeader(td);
             nrows=length(rowNames);
             ncols=numel(colNames)-1;
+            % Fill columns
             data=cell(nrows,ncols);
             data(:,1)=wt.Type;
             data(:,2)=num2cell(100*wt.RecycleRatio);
@@ -505,11 +518,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getWasteAllocation(obj,wt)
-        % Get the Waste Allocation Table
-        %  Input:
-        %   wt - cWasteTable object
-        %  Output:
-        %   res - cTableMatrix wa
+        %getWasteAllocation - Get the Waste Allocation Table
+        %   Syntax:
+        %     res = obj.WasteAllocation(wt)
+        %   Input Argument:
+        %     wt - cWasteTable object
+        %   Output Argument:
+        %   res - cTableMatrix object
+        %
             [~,tp]=obj.getTableProperties(cType.Tables.WASTE_ALLOCATION);
             flw=obj.flowKeys;
             prc=obj.processKeys;
@@ -527,12 +543,15 @@ classdef (Sealed) cResultTableBuilder < cFormatData
 
         %-- Thermoeconomic Analysis Tables    
         function res=getFlowICTable(obj,name,values)
-        % Get a cTableMatrix with the flows ICT (Irrreversibility Cost Tables)
-        % Input:
-        %  name - table name
-        %  values - Flow ICT values
-        % Output:
-        %  res - cTableMatrix object
+        %getFlowICTable - Get a cTableMatrix with the flows ICT (Irrreversibility Cost Tables)
+        %   Syntax:
+        %     res = obj.getFlowICTable(name,values)
+        %   Input Argument:
+        %     name - table name
+        %     values - Flow ICT values
+        %   Output Argument:
+        %     res - cTableMatrix object
+        %
             [~,tp]=obj.getTableProperties(name);
             rowNames=obj.processKeys;
             colNames=horzcat('Key',obj.flowKeys);
@@ -540,12 +559,15 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
          
         function res=getProcessICTable(obj,name,values)
-        % Get a cTableMatrix with the  processes ICT
-        % Input:
-        %  name - table id
-        %  values - Processes ICT values
-        % Output:
-        %  res - cTableMatrix
+        %getProcessICTable - Get a cTableMatrix with the  processes ICT
+        %   Syntax:
+        %     res = obj.getProcessICTable(name,values)
+        %   Input Argument:
+        %     name - table id
+        %     values - Processes ICT values
+        %   Output Argument:
+        %     res - cTableMatrix object
+        %
             [~,tp]=obj.getTableProperties(name);
             rowNames=obj.processKeys;
             colNames=horzcat('Key',obj.processKeys(1:end-1));
@@ -555,11 +577,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %
         %--- Diagnosis tables
         function res=getMalfunctionTable(obj,dgn)
-        % Get a cTableMatrix with the mafunction table values
-        % Input:
-        %  values - Malfunction table values
-        % Output:
-        %  res - cTableMatrix object
+        %getMalfunctionTable - Get a cTableMatrix with the mafunction table values
+        %   Syntax:
+        %     res = obj.getMalfunctionTable(dgn)
+        %   Input Argument:
+        %     dg - cDiagnosis object
+        %   Output Argument:
+        %     res - cTableMatrix object
+        %
             [~,tp]=obj.getTableProperties(cType.Tables.MALFUNCTION);
             rowNames=obj.processKeys;
             DPs=[cType.Symbols.delta,'Ps'];
@@ -569,11 +594,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
             
         function res=getMalfunctionCostTable(obj,dgn)
-        % Get a cTableMatrix with the mafunction cost table values
-        % Input:
-        %  values - Malfunction cost table values
-        % Output:
-        %  res - cTableMatrix object
+        %getMalfunctionCostTable - Get a cTableMatrix with the mafunction cost table values
+        %   Syntax:
+        %     res = obj.getMalfunctionCostTable(dgn)
+        %   Input Argument:
+        %     dgn - cDiagnosis object
+        %   Output Argument:
+        %     res - cTableMatrix object
+        %
             [~,tp]=obj.getTableProperties(cType.Tables.MALFUNCTION_COST);
             rowNames=horzcat(obj.processKeys(1:end-1),'MF');
             values=dgn.getMalfunctionCostTable;
@@ -583,11 +611,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
             
         function res=getIrreversibilityTable(obj,dgn)
-        % Get a cTableMatrix with the irreversibility table values
-        % Input:
-        %  values - Irreversibility table values
-        % Output:
-        %  res - cTableMatrix object
+        %getIrreversibilityTable - Get a cTableMatrix with the irreversibility table values
+        %   Syntax:
+        %     res = obj.getIrreversibilityTable(dgn)
+        %   Input Argument:
+        %     dgn - cDiagnosis object
+        %   Output Argument:
+        %     res - cTableMatrix object
+        %
             [~,tp]=obj.getTableProperties(cType.Tables.IRREVERSIBILITY_VARIATION);
             rowNames=[obj.processKeys,'MF'];
             DPt=[cType.Symbols.delta,'Pt'];
@@ -597,42 +628,46 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getTotalMalfunctionCost(obj,dgn)
-        % Get a cTableMatrix with the total malfunction cost values
-        %  Input:
-        %   dgn - cDiagnosis object
-        % Output:
-        %  res - cTableMatrix object      
+        %getTotalMalfunctionCost - Get a cTableMatrix with the total malfunction cost values
+        %   Syntax:
+        %     res = obj.getTotalMalfunctionCost(dgn)
+        %   Input Argument:
+        %     dgn - cDiagnosis object
+        %   Output Argument:
+        %     res - cTableMatrix object      
             M=3;
             N=dgn.NrOfProcesses+1;
-            [~,tp]=obj.getTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
+            [td,tp]=obj.getTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
             % Set values
             values=zeros(N,M);
             values(:,1)=dgn.getMalfunctionCost';
             values(:,2)=dgn.getWasteMalfunctionCost';
             values(:,3)=dgn.getDemandCorrectionCost';
               % Set row and col names
-            rowNames=[obj.processKeys(1:end)];
+            rowNames=getNodeNames(td.node);
             colNames={'key','MF*','MR*','MPt*'};
             res=cTableMatrix(values,rowNames,colNames,tp);
         end
 
         function res=getFuelImpactSummary(obj,dgn)
-        % Get a cTableMatrix with the fuel impact values
-        %  Input:
-        %   dgn - cDiagnosis object 
-        % Output:
-        %  res - cTableMatrix object
+        %getFuelImpactSummary - Get a cTableMatrix with the fuel impact values
+        %   Syntax:
+        %     res=obj.getFuelImpactSummary(dgn)
+        %  Input Argument:
+        %     dgn - cDiagnosis object 
+        %  Output Argument:
+        %    res - cTableMatrix object
         %  
             M=3;
             N=dgn.NrOfProcesses+1;
-            [~,tp]=obj.getTableProperties(cType.Tables.FUEL_IMPACT);
+            [td,tp]=obj.getTableProperties(cType.Tables.FUEL_IMPACT);
             % Set Values
             values=zeros(N,M);
             values(:,1)=dgn.getIrreversibilityVariation';
             values(:,2)=dgn.getWasteVariation';
             values(:,3)=dgn.getDemandVariation';
             % Set row and col names
-            rowNames=[obj.processKeys(1:end)];
+            rowNames=getNodeNames(td.node);
             DI=[cType.Symbols.delta,'I'];
             DR=[cType.Symbols.delta,'R'];
             DPs=[cType.Symbols.delta,'Pt'];
@@ -641,10 +676,15 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getTableCell(obj,name,data)
-        % Get the corresponding cTableCell object
-        % Input:
-        %   name - name of the table
-        %   data - table data structure
+        %getTableCell - Get the corresponding cTableCell object of a table dataset
+        %   Syntax:
+        %     res=obj.getTableCell(name,data)
+        %   Input Arguments:
+        %     name - name of the table
+        %     data - table data structure
+        %   Output Argument:
+        %     res - cTableCell object
+        %
             [td,tp]=obj.getTableProperties(name);
             rowNames=obj.getNodeNames(td.node);
             colNames=obj.getTableHeader(td);
@@ -657,11 +697,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getNodeNames(obj,type)
-        % Get the row names of the table
-        % Input:
-        %   type - type of node
-        % Output:
-        %   res - Cell array with the names of row names
+        %getNodeNames - Get the row names of the table using node type
+        %   Syntax:
+        %     res=obj.getNodeNames(type)
+        %   Input Argument:
+        %     type - type of node
+        %   Output Argument:
+        %     res - Cell array with the names of the rows
+        %
             switch type
             case cType.NodeType.FLOW
                 res=obj.flowKeys;

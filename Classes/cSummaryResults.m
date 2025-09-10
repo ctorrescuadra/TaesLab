@@ -43,8 +43,11 @@ classdef (Sealed) cSummaryResults < cResultId
         %     obj = cSummaryResults(model,option)
         %   Input Arguments:
         %     model - cThermoeconomicModel object
-        %     option - Type of summary results to obtain
-        %       If it is missing is determined by the model (cSummaryOptions)
+        %     option - Type of summary results to obtain (see cType.SummaryId)
+        %       STATES: State summary tables are obtained
+        %       RESOURCES: Resource summary table are obtained
+        %       ALL: Both type of tables are obtained
+        %       If it is missing is determined by the model.
         %
             % Check Input Arguments
             if ~isObject(model,'cThermoeconomicModel')
@@ -68,40 +71,41 @@ classdef (Sealed) cSummaryResults < cResultId
                 obj.messageLog(cType.ERROR,cMessages.InvalidSummaryOption);
                 return
             end
+            % Option NONE is provided
             if ~obj.option
                 obj.messageLog(cType.ERROR,cMessages.InvalidSummaryOption);
                 return
             end
-            % Get summary tables properties and create dataset
+            % Get summary tables properties
             fmt=obj.dm.FormatData;
-            list=fmt.getSummaryTables(obj.option,obj.rsd);
-            obj.ds=cDataset(list);
+            tdlist=fmt.getSummaryTables(obj.option,obj.rsd);
+            % Create dataset using table name as key
+            tname={tdlist.key};
+            obj.ds=cDataset(tname);
             if obj.ds.status
-                obj.Tables=list;
+                obj.Tables=tname;
             else
                 obj.messageLog(cType.ERROR,cMessages.InvalidSummaryData);
             end
-            % Initialize Dataset
-            for i=1:obj.NrOfTables
-                tbl=obj.Tables{i};
-                td=fmt.getTableProperties(tbl);
-                size=obj.getTableSize(td);
-                tmp=cSummaryTable(td,size);
-                setValues(obj.ds,i,tmp);
+            % Initialize Dataset with cSummaryTable objects
+            for idx=1:obj.NrOfTables
+                td=tdlist(idx);
+                tmp=cSummaryTable(obj.dm,td);
+                setValues(obj.ds,idx,tmp);
             end          
             % Fill Dataset Tables
             obj.setSummaryTables(model);
             % cResultId properties
             obj.sopt=sopt;
             obj.ResultId=cType.ResultId.SUMMARY_RESULTS;
-            obj.DefaultGraph=obj.setDefaultSummaryGraph;
+            obj.DefaultGraph=obj.getDefaultSummaryGraph;
             obj.ModelName=model.ModelName;
             obj.State=model.State;
             obj.Sample=model.Sample;
         end
 
         function res=get.NrOfTables(obj)
-        % Get Number of tables
+        % Get Number of Tables
             res=length(obj.ds);
         end
 
@@ -123,69 +127,52 @@ classdef (Sealed) cSummaryResults < cResultId
         %     res=obj.defaultSummaryTable
         %   Output Argument:
         %     res - Get the default summary option name
+        %
             res=obj.sopt.defaultOption;
         end
         
         function setSummaryTables(obj,model,option)
         %setSummaryTables - Fill the values of the summary tables with the values of the model
-        % Syntax:
-        %   obj.setSummaryTables(model,option)
-        % Input Argument:
-        %   model - cThermoeconomicModel object
-        %   option - Type of summary result
+        %   Syntax:
+        %     obj.setSummaryTables(model,option)
+        %   Input Argument:
+        %     model - cThermoeconomicModel object
+        %     option - Type of summary result
         %
             if nargin==2
                 option=obj.option;
             end
+            % Set state tables values
             if bitget(option,cType.STATES)
                 obj.setStateTables(model)
-            end
+            end % Set resource tables values
             if bitget(option,cType.RESOURCES)
                 obj.setResourceTables(model)
             end
         end
     
         function res=getValues(obj,id)
-        % Get dataset tables
-        % Syntax:
-        %   res = obj.getValues(id)
-        % Input Argument
-        %   id - Id/Name of the table
+        %getValues - Get dataset tables
+        %   Syntax:
+        %     res = obj.getValues(id)
+        %   Input Argument
+        %     id - Id/Name of the table
         % Output Argument
-        %   res - cSummaryTable 
+        %     res - cSummaryTable
+        %
             res=getValues(obj.ds,id);
         end
 
-        function res=getRowNames(obj,key)
-        % Get the row names of the table
-        % Syntax:
-        %   res = obj.getRowNames(id)
-        % Input Argument
-        %   key - Id/Name of the table
-        % Output Argument
-        %   res - cell array with the row names of the table
-            ps=obj.dm.ProductiveStructure;
-            tbl=obj.getValues(key);
-            switch tbl.Node
-                case cType.NodeType.FLOW
-                    res=ps.FlowKeys;
-                case cType.NodeType.PROCESS
-                    res=ps.ProcessKeys(1:end-1);
-                case cType.NodeType.ENV
-                    res=ps.ProcessKeys;
-            end
-        end
-
-        function res=getColNames(obj,key)
-        % Get the column names of the tables
-        % Syntax:
-        %   res = obj.getColNames(id)
-        % Input Argument
-        %   key - Id/Name of the table
-        % Output Argument
-        %   res - cell array with the row names of the table
-            tbl=obj.getValues(key);
-            switch tbl.Type
+        function res=getSummaryColumns(obj,type)
+        %getSummaryColumns - Get the column names of the summary tables
+        %   Syntax:
+        %     res = obj.getSummaryColumns(id)
+        %   Input Argument
+        %     type - Type of Summary Table (STATES/RESOURCES)
+        %   Output Argument
+        %     res - cell array with the columns names of the table
+        %
+            switch type
                 case cType.SummaryId.STATES
                     res=obj.dm.StateNames;
                 case cType.SummaryId.RESOURCES
@@ -194,42 +181,46 @@ classdef (Sealed) cSummaryResults < cResultId
         end
     
         function res=getDefaultFlowVariables(obj)
-        % Get the output flows keys
-        % Syntax:
-        %   res = obj.getDefaultFlowVariables
-        % Output Argument
-        %   res - cell array with system output flows names
+        %getDefaultFlowVariables - Get the output flows keys
+        %   Syntax:
+        %     res = obj.getDefaultFlowVariables
+        %   Output Argument
+        %     res - cell array with system output flows names
+        %
             ps=obj.dm.ProductiveStructure;
             id=ps.SystemOutputFlows;
             res=ps.FlowKeys(id);
         end
     
         function res=getDefaultProcessVariables(obj)
-        % Get the output processes keys
-        % Syntax:
-        %   res = obj.getDefaultFlowVariables
-        % Output Argument
-        %   res - cell array with system output processes names
+        %getDeafaultOrocessVariables Get the output processes keys
+        %   Syntax:
+        %     res = obj.getDefaultFlowVariables
+        %   Output Argument
+        %     res - cell array with system output processes names
+        %
             ps=obj.dm.ProductiveStructure;
             id=ps.OutputProcesses;
             res=ps.ProcessKeys(id);
         end
 
         function res=isStateSummary(obj)
-        % Check if States Summary results are available
-        % Syntax:
-        %   res = obj.isStateSummary
-        % Output Argument
-        %   res - true | false
+        %isStateSummary - Check if States Summary results are available
+        %   Syntax:
+        %     res = obj.isStateSummary
+        %   Output Argument
+        %     res - true | false
+        %
             res=logical(bitget(obj.option,cType.STATES));
         end
 
         function res=isSampleSummary(obj)
-        % Check if Samples Summary results are available
-        % Syntax:
-        %   res = obj.isStateSummary
-        % Output Argument
-        %   res - true | false
+        %isSampleSummary - Check if Samples Summary results are available
+        %   Syntax:
+        %     res = obj.isStateSummary
+        %   Output Argument
+        %     res - true | false
+        %
             res=logical(bitget(obj.option,cType.RESOURCES));
         end
             
@@ -237,37 +228,20 @@ classdef (Sealed) cSummaryResults < cResultId
     
     methods(Access=private)
         function setValues(obj,id,jdx,val)
-        % Set the table values
-        % Input Arguments:
-        %   id - Name/Key of the summary table
-        %   jdx - Column (State/sample) to update
-        %   val - Vector with the cost values to updat
+        %setValues - Set the dataset table values
+        %   Syntax:
+        %     obj.setValues(id,jdx,val)
+        %   Input Arguments:
+        %     id - Name/Key of the summary table
+        %     jdx - Column (State/sample) to update
+        %     val - Vector with the cost values to update
+        %
             tmp=getValues(obj.ds,id);
             setValues(tmp,jdx,val);
         end
-            
-        function res=getTableSize(obj,td)
-        % Get the table size.
-        % Input Argument
-        %   td - Table definition
-            if td.table==cType.STATES
-                NC=obj.dm.NrOfStates;
-            else
-                NC=obj.dm.NrOfSamples;
-            end
-            switch td.node
-                case cType.NodeType.FLOW
-                    NR=obj.dm.NrOfFlows;
-                case cType.NodeType.PROCESS
-                    NR=obj.dm.NrOfProcesses;
-                case cType.NodeType.ENV
-                    NR=obj.dm.NrOfProcesses+1;
-            end
-            res=[NR,NC];
-        end
 
-        function res=setDefaultSummaryGraph(obj)
-        % Get default summary graph
+        function res=getDefaultSummaryGraph(obj)
+        %getDefaultSummaryGraph - Get default summary graph
             if bitget(obj.option,cType.STATES)
                 res=cType.Tables.SUMMARY_FLOW_UNIT_COST;
             else
@@ -276,9 +250,12 @@ classdef (Sealed) cSummaryResults < cResultId
         end
         
         function setStateTables(obj,model)
-        % Fill State Tables
-        % Input Argument:
-        %   model - cThermoeconomicModel
+        %setStateTable - set the values of the state dataset tables
+        %   Syntax:
+        %     obj.setStates(model)  
+        %   Input Argument:
+        %     model - cThermoeconomicModel object
+        %
             if model.isResourceCost
                 rd=model.ResourceData;
             end
@@ -332,9 +309,12 @@ classdef (Sealed) cSummaryResults < cResultId
         end
 
         function setResourceTables(obj,model)
-        % Fill Resource Tables
-        % Input Argument
-        %   model - cThermoeconomicModel
+        %setStateTable - set the values of the resource dataset tables
+        %   Syntax:
+        %     obj.setResourceTables(model)  
+        %   Input Argument:
+        %     model - cThermoeconomicModel object
+        %
             rstate=model.getResultState;
             for j=1:model.DataModel.NrOfSamples
                 rd=obj.dm.getResourceData(j);

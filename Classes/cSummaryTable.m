@@ -1,38 +1,71 @@
 classdef cSummaryTable < cMessageLogger
 %cSummaryTable - Store the properties and values of each summary table.
-%   Each cSummaryTable is stores in a dataset element using 'Name' as key
+%   Each cSummaryTable is stored in a dataset element using 'Name' as key
 %   It is an internal class of cSummaryResults
 %
-%   cSummaryTable Properties
-%     Name   - Name of the summary table
-%     Type   - Type of summary table (STATES/RESOURCES)
-%     Node   - Type of nodes (row names) of the table
-%     Values - Values of the table
+%   cSummaryTable Properties:
+%     TableDefinition - Table Definition
+%     Values          - Values of the table
+%     Name            - Name of the summary table
+%     Type            - Type of summary table (STATES/RESOURCES)
+%     Node            - Type of row names of the table (see cType.NODE_TYPE)
 %
-%   cSummaryTable Methods
+%   cSummaryTable Methods:
 %     setValues - Set the values of the summary table for each state or resource
 %
 %   See also cSummaryResults
 %
     properties(GetAccess=public,SetAccess=private)
-        Name     % Name of the summary table
-        Type     % Type of summary table (STATES/RESOURCES)
-        Node     % Type of nodes (row names) of the table
-        Values   % Values of the table
+        TableDefinition   % Table Definition
+        Values            % Values of the table
+        Name              % Name of the summary table
+        Type              % Type of summary table (STATES/RESOURCES)
+        Node              % Type of nodes (row names) of the table
     end
 
     methods
-        function obj = cSummaryTable(td,size)
+        function obj = cSummaryTable(dm,td)
         %cSummaryTable - Create an instance of the class
         %   Syntax
-        %     obj = cSummaryTable(tp,size)
+        %     obj = cSummaryTable(dm,td)
         %   Input Argument:
-        %     td - table definition structure
-        %     size - size of the table
-            obj.Name=td.key;
-            obj.Type=td.table;
-            obj.Node=td.node;
-            obj.Values=zeros(size);
+        %     dm - cDataModel object
+        %     td - Table definition structure
+        %
+            % Determine the size of the table
+            % Number of Columns
+            if td.table==cType.STATES
+                NC=dm.NrOfStates;
+            else
+                NC=dm.NrOfSamples;
+            end
+            % Number of rows
+            switch td.node
+                case cType.NodeType.FLOW
+                    NR=dm.NrOfFlows;
+                case cType.NodeType.PROCESS
+                    NR=dm.NrOfProcesses;
+                case cType.NodeType.ENV
+                    NR=dm.NrOfProcesses+1;
+            end
+            % Set the class properties
+            obj.TableDefinition=td;
+            obj.Values=zeros(NR,NC);
+        end
+
+        function res=get.Name(obj)
+        % Get Name property
+            res=obj.TableDefinition.key;
+        end
+
+        function res=get.Type(obj)
+        % Get Type property
+            res=obj.TableDefinition.table;
+        end
+
+        function res=get.Node(obj)
+        % Get Node property
+            res=obj.TableDefinition.node;
         end
 
         function setValues(obj,idx,val)
@@ -42,7 +75,9 @@ classdef cSummaryTable < cMessageLogger
         %   Input Arguments
         %     idx - Number of column (STATE/RESOURCE) to update
         %     val - Array with the values
+        %
             obj.Values(:,idx)=val;
         end
     end
+
 end

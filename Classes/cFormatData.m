@@ -27,8 +27,7 @@ classdef cFormatData < cTablesDefinition
 			if ~isstruct(data) || ~isfield(data,'definitions') 
 				obj.messageLog(cType.ERROR,cMessages.InvalidFormatDefinition);
 				return
-			end
-			
+			end		
             format=data.definitions;
             if ~all(isfield(format,{'key','width','precision','unit'}))
                 obj.messageLog(cType.ERROR,cMessages.InvalidFormatDefinition);
@@ -96,15 +95,21 @@ classdef cFormatData < cTablesDefinition
 		
 		function [tdef,tprop]=getTableProperties(obj,name)
 		%getTableProperties - Get the properties of a cTable
-		% Syntax:
-		%   [tdef,tprop] = obj.getTableProperties(name)
-		% Input Argument:
-		%   name - name of the table
-		% Output Argument:
-		%   tdef  - definition strcut of the table
-		%   tprop - properties on the cTable
-		% 
+		%   Syntax:
+		%     [tdef,tprop] = obj.getTableProperties(name)
+		%   Input Argument:
+		%     name - name of the table
+		%   Output Argument:
+		%     tdef  - definition strcut of the table
+		%     tprop - properties on the cTable
+		%
+			tprop=cType.EMPTY;
+			% Get table definition
 			[tdef,tdir]=getTableProperties@cTablesDefinition(obj,name);
+			if nargout<2
+				return
+			end
+			% Get table properties if required
         	switch tdir.type
             	case cType.TableType.TABLE
                 	tprop=obj.getCellTableProperties(tdef);

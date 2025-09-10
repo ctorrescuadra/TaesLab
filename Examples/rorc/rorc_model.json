@@ -437,7 +437,7 @@
         "sampleId": "Internal",
         "flows": {
           "key": "QBLR",
-          "value": 0
+          "value": 0.01
         },
         "processes": [
           {
