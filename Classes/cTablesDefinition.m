@@ -9,19 +9,15 @@ classdef cTablesDefinition < cMessageLogger
 
 %   cTablesDefinition Methods:
 %     getTableProperties  - Get the properties of a table
-%     getTablesDirectory  - Get the a cTableData ata with the tables directory
+%     getTablesDirectory  - Get the a cTableData with the tables index
 %     showTablesDirectory - Show the Table Directory
 %     saveTablesDirectory - Save the Table Directory into a file
 %     getTableId          - Get the TableId of a table
 %     getResultIdTables   - Get the Tables of a ResultId
 %     getSummaryTables    - Get the Summary Tables Info
 %
-%   See also cFormatData
+%   See also cFormatData, printconfig.json
 %
-    properties(GetAccess=public,SetAccess=private)
-        TablesDefinition  % Tables properties struct
-    end
-
     properties (Access=protected)
         cfgTables 	    % Cell tables configuration
         cfgMatrices     % Matrix tables configuration
@@ -60,46 +56,22 @@ classdef cTablesDefinition < cMessageLogger
             end
         end
 
-        function res=get.TablesDefinition(obj)
-        % Get a struct with the tables properties
-            res=struct();
-            if obj.status
-                res=struct('CellTables',obj.cfgTables,'MatrixTables',obj.cfgMatrices,...
-                    'SummaryTables',obj.cfgSummary,'Format',obj.cfgTypes);
-            end
-        end
-
-        function [tdef,tdir]=getTableProperties(obj,name)
-        %getTableProperties - Get the properties of a table
+        function res=getTableDefinition(obj,name)
+        %getTableDefinition - Get the properties of a table
         %   Syntax:
-        %     [tdef,tdir] = obj.getTableProperties(name)
+        %     res = obj.getTableProperties(name)
         %   Input Argument:
         %     name - Name of the table
         %   Output Argument:
-        %     tdef - structure containing the table definition
-        %     tdir - structure containing the table directory info
+        %     res - structure containing the table definition
         %
-            tdef=cType.EMPTY;
-            tdir=cType.EMPTY;
-            idx=obj.getTableId(name);
-            if isempty(idx)
-                return
-            end
-            tdir=obj.tableIndex(idx);
-            switch tdir.type
-                case cType.TableType.TABLE
-                    tdef=obj.cfgTables(tdir.tableId);
-                case cType.TableType.MATRIX
-                    tdef=obj.cfgMatrices(tdir.tableId);
-                case cType.TableType.SUMMARY
-                    tdef=obj.cfgSummary(tdir.tableId);
-            end
+            res=obj.tDictionary.getValues(name);   
         end
 
-        function res=getTablesDirectory(obj,varargin)
+        function res=getTablesDirectory(obj,cols)
         %getTablesDirectory - Get the tables directory
         %   Syntax: 
-        %     res=getTablesDirectory(cols)
+        %     res=obj.getTablesDirectory(cols)
         %   Input Arguments
         %     cols - cell array with the column names to show
         %       'DESCRIPTION': Table Description
@@ -108,18 +80,31 @@ classdef cTablesDefinition < cMessageLogger
         %       'TYPE':  type of table
         %       'CODE':  table code name
         %       'RESULT_CODE': Result Info code name
+        %     if cols parameter is missing cType.DIR_COLS_DEFAULT is used
         %   Output Arguments:
         %     res - cTableData containing the tables directory
         %
+            res=cMessageLogger();
             if nargin==1
-                res=obj.tDirectory;
-            else
-                res=obj.buildTablesDirectory(varargin{:});
+                cols=cType.DIR_COLS_DEFAULT;
             end
+            [idx,missing]=cType.checkDirColumns(cols);
+            if isempty(idx)
+                res.messageLog(cType.ERROR,cMessages.InvalidColumnNames,strjoin(missing,', '));
+                return
+            end
+            data=obj.tDirectory(:,idx);
+            tI=obj.tableIndex;
+            rowNames={tI.name};
+            colNames=['Table',cols];
+            props.Name='tdir';props.Description='Tables Directory';
+            props.State='SUMMARY';props.Sample=cType.EMPTY_CHAR;
+            res=cTableData(data,rowNames,colNames,props);
+            res.setStudyCase(props);
         end
 
         function saveTablesDirectory(obj,filename)
-        %saveTablesDirectory - Save result tables in different file formats depending on file extension
+        %saveTablesDirectory - Save the full tables directory in different file formats depending on file extension
         %   Valid extension are: *.json, *.xml, *.csx, *.xlsx, *.txt, *.html, *.tex
         %   Syntax:
         %     log=obj.saveTablesDirectory(filename)
@@ -127,7 +112,9 @@ classdef cTablesDefinition < cMessageLogger
         %     filename - File name with extension
         %   Output Arguments:
         %     log - cMessageLogger object with error messages
-            log=saveTable(obj.tDirectory,filename);
+            fullcols=fieldnames(cType.DirCols);
+            tbl=obj.getTablesDirectory(fullcols);
+            log=saveTable(tbl,filename);
             log.printLogger;
         end
 
@@ -178,18 +165,18 @@ classdef cTablesDefinition < cMessageLogger
             end
             % Get summary properties
             tsummary=obj.cfgSummary;
-            tbl=[obj.cfgSummary.table];
+            stbl=[obj.cfgSummary.stable];
             drt=~[obj.cfgSummary.rsc];
             % Select tables depending of option
             switch option
                 case cType.SummaryId.ALL
                     res=tsummary;
                 case cType.SummaryId.RESOURCES
-                    idx=find(tbl==cType.RESOURCES);
+                    idx=find(stbl==cType.RESOURCES);
                     res=obj.cfgSummary(idx);
                 case cType.SummaryId.STATES
                     if rsc
-                        idx=find(tbl==cType.STATES);
+                        idx=find(stbl==cType.STATES);
                     else
                         idx=find(drt);
                     end
@@ -205,10 +192,10 @@ classdef cTablesDefinition < cMessageLogger
         %   Syntax:
         %     obj.buildTablesDictionary
         %
-            % Create the index dictionary
+            % Create the index dataset
             tCodes=fieldnames(cType.Tables);
             tNames=struct2cell(cType.Tables);
-            td=cDictionary(tNames);
+            td=cDataset(tNames);
             if ~td.status
                 td.printLogger;
                 obj.messageLog(cType.ERROR,cMessages.InvalidTableDict);
@@ -218,112 +205,84 @@ classdef cTablesDefinition < cMessageLogger
             NM=numel(obj.cfgMatrices);
             NS=numel(obj.cfgSummary);
             N=NT+NM+NS;
-            tIndex(N)=struct('name',cType.EMPTY_CHAR,'description',cType.EMPTY_CHAR,'code',cType.EMPTY_CHAR,...
-                'resultId',0,'graph',0,'type',0,'tableId',0);
+            cIndex=cell(N,1);
             % Retrieve information for cell tables
             for i=1:NT
-                key=obj.cfgTables(i).key;
-                idx=td.getIndex(key);
+                val=obj.cfgTables(i);
+                idx=td.getIndex(val.key);
                 if ~idx
                     obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
                     return
                 end
-                tIndex(idx).name=key;
-                tIndex(idx).description=obj.cfgTables(i).description;
-                tIndex(idx).code=tCodes{idx};
-                tIndex(idx).resultId=obj.cfgTables(i).resultId;
-                tIndex(idx).graph=obj.cfgTables(i).graph;
-                tIndex(idx).type=cType.TableType.TABLE;
-                tIndex(idx).tableId=i;
+                td.setValues(idx,val);
+                cIndex{idx}=struct('name',val.key,...
+                            'description',val.description,...
+                            'code',tCodes{idx},...
+                            'resultId',val.resultId,...
+                            'graph',val.graph,...
+                            'type',cType.TableType.TABLE,...
+                            'tableId',i);
             end
             % Retrive information for matrix tables
             for i=1:NM
-                key=obj.cfgMatrices(i).key;
-                idx=td.getIndex(key);
+                val=obj.cfgMatrices(i);
+                idx=td.getIndex(val.key);
                 if ~idx
                     obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
                     continue
                 end
-                tIndex(idx).name=key;
-                tIndex(idx).description=obj.cfgMatrices(i).header;
-                tIndex(idx).code=tCodes{idx};
-                tIndex(idx).resultId=obj.cfgMatrices(i).resultId;
-                tIndex(idx).graph=obj.cfgMatrices(i).graph;
-                tIndex(idx).type=cType.TableType.MATRIX;
-                tIndex(idx).tableId=i;
+                td.setValues(idx,val);
+                cIndex{idx}=struct('name',val.key,...
+                            'description',val.header,...
+                            'code',tCodes{idx},...
+                            'resultId',val.resultId,...
+                            'graph',val.graph,...
+                            'type',cType.TableType.MATRIX,...
+                            'tableId',i);  
             end
             % Retrieve information for summary tables
             for i=1:NS
-                key=obj.cfgSummary(i).key;
-                idx=td.getIndex(key);
+                val=obj.cfgSummary(i);
+                idx=td.getIndex(val.key);
                 if ~idx
                     obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
                     continue
                 end
-                tIndex(idx).name=key;
-                tIndex(idx).description=obj.cfgSummary(i).header;
-                tIndex(idx).code=tCodes{idx};
-                tIndex(idx).resultId=cType.ResultId.SUMMARY_RESULTS;
-                tIndex(idx).graph=obj.cfgSummary(i).graph;
-                tIndex(idx).type=cType.TableType.SUMMARY;
-                tIndex(idx).tableId=i;
+                td.setValues(idx,val);
+                cIndex{idx}=struct('name',val.key,...
+                            'description',val.header,...
+                            'code',tCodes{idx},...
+                            'resultId',val.resultId,...
+                            'graph',val.graph,...
+                            'type',cType.TableType.SUMMARY,...
+                            'tableId',i); 
             end
-            % Create the dictionary (name,id)
+            % Assign class properties
             obj.tDictionary=td;
-            obj.tableIndex=tIndex;
+            obj.tableIndex=cell2mat(cIndex);
         end
  
-        function res=buildTablesDirectory(obj,cols)
-        %buildTablesDirectory - Get the tables directory as cTableData
+        function buildTablesDirectory(obj)
+        %buildTablesDirectory - Store the tables index data info in a cell array
+        %   Tables index data info is stored in obj.tDirectory
+        %   This info is used to build the Tables Directory
+        %   
         %   Syntax:
         %     res = obj.buildTablesDirectory(col)
-        %   Input Argument:
-        %     col - Columns names of the table (optional)
-        %     If missing default columns cType.DIR_COLS_DEFAULT is used
-        %   Output Argument:
-        %     res - cTableData object
-        %
-            res=cMessageLogger;
-            if nargin==1
-                cols=cType.DIR_COLS_DEFAULT;
-            end
-            tI=obj.tableIndex;
-            N=numel(tI);
-            M=numel(cols);
-            rowNames={tI.name};
-            colNames=cell(1,M+1);
-            colNames{1}='Table';
+        %   
+            N=numel(obj.tableIndex);
+            M=numel(cType.DirColNames);
+            % fill table data
             data=cell(N,M);
+            tI=obj.tableIndex;
             resultCode=fieldnames(cType.ResultId);
-            for i=1:M
-                colId=cType.getDirColumns(cols{i});
-                if isempty(colId)
-                    res.messageLog(cType.ERROR,cMessages.InvalidArgument,cols{i});
-                    return
-                end
-                colNames{i+1}=cType.DirColNames{colId};
-                switch colId
-                    case cType.DirCols.DESCRIPTION
-                        data(:,i)={tI.description};
-                    case cType.DirCols.RESULT_NAME
-                        data(:,i)=[cType.Results([tI.resultId])];
-                    case  cType.DirCols.GRAPH
-                        data(:,i)=arrayfun(@(x) mat2str(logical(x)),[tI.graph],'UniformOutput',false);
-                    case  cType.DirCols.TYPE
-                        data(:,i)=[cType.TypeTables([tI.type])];
-                    case cType.DirCols.CODE
-                        data(:,i)={tI.code};
-                    case cType.DirCols.RESULT_CODE
-                        data(:,i)=[resultCode([tI.resultId])];
-                end
-            end
-            props.Name='tdir';props.Description='Tables Directory';
-            props.State='SUMMARY';props.Sample=cType.EMPTY_CHAR;
-            res=cTableData(data,rowNames,colNames,props);
-            res.setStudyCase(props);
-            if isempty(obj.tDirectory)
-                obj.tDirectory=res;
-            end
+            data(:,cType.DirCols.DESCRIPTION)={tI.description};
+            data(:,cType.DirCols.RESULT_NAME)=[cType.Results([tI.resultId])];
+            data(:,cType.DirCols.GRAPH)=arrayfun(@(x) mat2str(logical(x)),[tI.graph],'UniformOutput',false);
+            data(:,cType.DirCols.TYPE)=[cType.TypeTables([tI.type])];
+            data(:,cType.DirCols.CODE)={tI.code};
+            data(:,cType.DirCols.RESULT_CODE)=[resultCode([tI.resultId])];
+            obj.tDirectory=data;
         end
 	end
 end

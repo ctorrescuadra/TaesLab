@@ -105,12 +105,12 @@ classdef cFormatData < cTablesDefinition
 		%
 			tprop=cType.EMPTY;
 			% Get table definition
-			[tdef,tdir]=getTableProperties@cTablesDefinition(obj,name);
+			tdef=getTableDefinition(obj,name);
 			if nargout<2
 				return
 			end
 			% Get table properties if required
-        	switch tdir.type
+        	switch tdef.ttable
             	case cType.TableType.TABLE
                 	tprop=obj.getCellTableProperties(tdef);
             	case cType.TableType.MATRIX
@@ -209,7 +209,7 @@ classdef cFormatData < cTablesDefinition
             		  'GraphType',td.graph,...
 					  'GraphOptions',td.options,...
             		  'Resources',td.rsc,...
-   					  'SummaryType',td.table,...
+   					  'SummaryType',td.stable,...
 					  'NodeType',td.node,...
                       'RowTotal',false,...
                       'ColTotal',false);

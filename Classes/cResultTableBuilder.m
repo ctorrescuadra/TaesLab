@@ -364,7 +364,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %    res - cTableCell
             [td,tp]=obj.getTableProperties(cType.Tables.PROCESS_TABLE);
             prc=ps.Processes(1:end-1);
-            rowNames=obj.getNodeType(td.node);
+            rowNames=obj.getNodeNames(td.node);
             colNames=obj.getTableHeader(td);
             nrows=numel(rowNames);
             ncols=numel(colNames)-1;
@@ -637,14 +637,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %     res - cTableMatrix object      
             M=3;
             N=dgn.NrOfProcesses+1;
-            [td,tp]=obj.getTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
+            [~,tp]=obj.getTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
             % Set values
             values=zeros(N,M);
             values(:,1)=dgn.getMalfunctionCost';
             values(:,2)=dgn.getWasteMalfunctionCost';
             values(:,3)=dgn.getDemandCorrectionCost';
               % Set row and col names
-            rowNames=getNodeNames(td.node);
+            rowNames=obj.processKeys;
             colNames={'key','MF*','MR*','MPt*'};
             res=cTableMatrix(values,rowNames,colNames,tp);
         end
@@ -660,14 +660,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %  
             M=3;
             N=dgn.NrOfProcesses+1;
-            [td,tp]=obj.getTableProperties(cType.Tables.FUEL_IMPACT);
+            [~,tp]=obj.getTableProperties(cType.Tables.FUEL_IMPACT);
             % Set Values
             values=zeros(N,M);
             values(:,1)=dgn.getIrreversibilityVariation';
             values(:,2)=dgn.getWasteVariation';
             values(:,3)=dgn.getDemandVariation';
             % Set row and col names
-            rowNames=getNodeNames(td.node);
+            rowNames=obj.processKeys;
             DI=[cType.Symbols.delta,'I'];
             DR=[cType.Symbols.delta,'R'];
             DPs=[cType.Symbols.delta,'Pt'];

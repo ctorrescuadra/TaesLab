@@ -50,23 +50,6 @@ classdef cTableData < cTable
             end
         end
 
-        function setProperties(obj,props)
-        % Set Table properties
-        % Input Arguments:
-        %   props - Table Properties
-        %     Name: Name of the table
-        %     Description: Description of the table
-            try
-                obj.Name=props.Name;
-                obj.Description=props.Description;
-                obj.setColumnFormat;
-                obj.setColumnWidth;
-            catch err
-                obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,cMessages.InvalidTableProp);
-            end
-        end
-
         function res=getStructTable(obj)
         % Get table as a struct
         % Syntax:
@@ -147,6 +130,18 @@ classdef cTableData < cTable
     end
 
     methods(Access=private)
+        function setProperties(obj,p)
+        %setProperties - set the additional properties of the table
+        %   Syntax:
+        %     setProperties(obj,p)
+        %   Input Arguments:
+        %     p - struct with the cTableCell properties
+        %
+            obj.Name=p.name;
+            obj.Description=p.Description;
+            obj.setColumnFormat;
+            obj.setColumnWidth;
+        end
 
         function setColumnWidth(obj)
         % Define the width of the columns

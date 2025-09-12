@@ -180,7 +180,7 @@ classdef cType
 		TableMatrixProps={'Name','Description','Resources','GraphType','Format','Unit','NodeType',...
 			       'SummaryType','GraphOptions','RowTotal','ColTotal'};
 		TableCellProps={'Name','Description','Resources','GraphType','Format','Unit','NodeType',...
-			       'FieldNames','ShowNumber'}; 
+			       'FieldNames','ShowNumber'};
 		% Save extensions
 		SAVE_RESULTS={'*.xlsx','XLSX Files';'*.txt','TXT Files'; '*.csv','CSV Files'; ...
 		              '*.html','HTML Files';'*.tex','LaTeX Files';'*.mat','MAT Files'};
@@ -506,7 +506,7 @@ classdef cType
 			res=cType.checkTypeKey(cType.TableView,text);
 		end
 
-		function res=checkDirColumns(text)
+		function [idx,missing]=checkDirColumns(fields)
 		%checkDirColums - Check Table Directory Columns names
 		%   Syntax
         %     res=cType.checkDirColumns(text)
@@ -515,8 +515,15 @@ classdef cType
         %   Output Arguments
         %     res - true/false
         %
-			res=cType.checkTypeKey(cType.DirCols,text);
-		end
+			missing=cType.EMPTY_CELL;
+    		sKeys = fieldnames(cType.DirCols);
+    		% Comprobar que todos los campos pedidos existen
+    		[tf,idx] = ismember(fields, sKeys);
+			if ~all(tf)
+        		idx=cType.EMPTY;
+        		missing = fields(~tf);
+			end
+    	end
 
 		function res=WasteTypeOptions()
 		%WasteTypeOptions - Get a cell array with the Waste Allocation Type options

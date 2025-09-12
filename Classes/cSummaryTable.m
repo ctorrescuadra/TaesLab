@@ -34,7 +34,7 @@ classdef cSummaryTable < cMessageLogger
         %
             % Determine the size of the table
             % Number of Columns
-            if td.table==cType.STATES
+            if td.stable==cType.STATES
                 NC=dm.NrOfStates;
             else
                 NC=dm.NrOfSamples;
@@ -60,7 +60,7 @@ classdef cSummaryTable < cMessageLogger
 
         function res=get.Type(obj)
         % Get Type property
-            res=obj.TableDefinition.table;
+            res=obj.TableDefinition.stable;
         end
 
         function res=get.Node(obj)

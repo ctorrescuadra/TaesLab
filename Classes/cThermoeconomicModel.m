@@ -806,7 +806,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %%%
         % Tables Directory methods
         %%%
-        function res=getTablesDirectory(obj,columns)
+        function res=getTablesDirectory(obj,cols)
         %getTablesDirectory - Create the tables directory of the active model
         % Syntax:
         %   res=obj.getTablesDirectory(columns)
@@ -817,12 +817,22 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   res - cTable with the active tables of the model and its
         %    properties defined by columns parameters 
         % See also ListResultTables
+        %          
+            % Check Parameters
+            res=cMessageLogger();
             if nargin==1
-                columns=cType.DIR_COLS_DEFAULT;
+                cols=cType.DIR_COLS_DEFAULT;
             end
-            tbl=obj.fmt.getTablesDirectory(columns);
+            % Check and get selected columns
+            [idx,missing]=cType.checkDirColumns(cols);
+            if isempty(idx)
+                res.messageLog(cType.ERROR,cMessages.InvalidColumnNames,strjoin(missing,', '));
+                return
+            end
+            tI=obj.fmt.tableIndex;
+            tnames={tI.name};       
+            % Get the active tables
             atm=zeros(tbl.NrOfRows,1);
-            % Get the initial state of the table
             for i=1:cType.ResultId.SUMMARY_RESULTS
                 rid=obj.getResults(i);
                 if isValid(rid)
@@ -833,11 +843,13 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
             % Create the table
             rows=find(atm);
-            data=tbl.Data(rows,:);
-            rowNames=tbl.RowNames(rows);
-            colNames=tbl.ColNames;
-            props.Name='tdir'; props.Description='Tables Directory';
+            data=obj.fmt.tDirectory(rows,idx);
+            rowNames=tnames(rows);
+            colNames=['Table',cols];
+            props.Name='tdir';props.Description='Tables Directory';
+            props.State='SUMMARY';props.Sample=cType.EMPTY_CHAR;
             res=cTableData(data,rowNames,colNames,props);
+            res.setStudyCase(props);
         end
 
         function res=getTableInfo(obj,name)
@@ -976,7 +988,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Syntax:
         %   obj.showTablesDirectory(options)
         % Input Arguments:
-        %   options - show results options
+        %   options - show table options
             tbl=obj.getTablesDirectory;
             showTable(tbl,varargin{:})
         end

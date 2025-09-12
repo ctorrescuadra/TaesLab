@@ -152,6 +152,7 @@ classdef cMessages
         InvalidTableDict='Invalid tables dictionary'
         InvalidTableDefinition='Invalid tables definition'
         NoValuesAvailable='No values available %s'
+        InvalidColumnNames='Columns %s are invalid'
         % Graph messages
         GraphNotImplemented='Graph function NOT implemented in Octave'
         InvalidGraph='Invalid graph %s'
