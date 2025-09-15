@@ -63,7 +63,9 @@ classdef (Sealed) cTableMatrix < cTableResult
         %      Unit: unit name of the data
         %      Format: format of the data
         %      GraphType: type of graph asociated
-        %      GraphOptions: options of the graph            
+        %      GraphOptions: options of the graph
+        %
+            % Compute Totals if is required          
             if props.RowTotal
 				nrows=length(rowNames)+1;
 				rowNames{nrows}='Total';
@@ -77,9 +79,18 @@ classdef (Sealed) cTableMatrix < cTableResult
             if props.ColTotal && props.RowTotal
                 data(end,end)=0.0;
             end
+            % Assign properties
+            if iscolumn(rowNames)
+                obj.RowNames=transpose(rowNames);
+            else
+                obj.RowNames=rowNames;
+            end
+            if iscolumn(colNames)
+                obj.ColNames=transpose(colNames);
+            else
+                obj.ColNames=colNames;
+            end
             obj.Data=num2cell(zerotol(data));
-            obj.RowNames=rowNames;
-            obj.ColNames=colNames;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames);
             if obj.checkTableSize

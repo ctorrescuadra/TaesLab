@@ -37,9 +37,17 @@ classdef cTableData < cTable
         %     Name - name of the table
         %     Description - table description
         %
+            if iscolumn(rowNames)
+                obj.RowNames=transpose(rowNames);
+            else
+                obj.RowNames=rowNames;
+            end
+            if iscolumn(colNames)
+                obj.ColNames=transpose(colNames);
+            else
+                obj.ColNames=colNames;
+            end
             obj.Data=data;
-            obj.RowNames=rowNames;
-            obj.ColNames=colNames;
             obj.NrOfCols=length(obj.ColNames);
             obj.NrOfRows=length(obj.RowNames);
             obj.State='DATA';
@@ -137,14 +145,16 @@ classdef cTableData < cTable
         %   Input Arguments:
         %     p - struct with the cTableCell properties
         %
-            obj.Name=p.name;
+            obj.Name=p.Name;
             obj.Description=p.Description;
             obj.setColumnFormat;
             obj.setColumnWidth;
         end
 
         function setColumnWidth(obj)
-        % Define the width of the columns
+        %setColumnWidth - Define the width of the columns
+        %   Syntax:
+        %     obj.setColumnWidth
             res=zeros(1,obj.NrOfCols);
             res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
             for j=1:obj.NrOfCols-1
@@ -161,7 +171,9 @@ classdef cTableData < cTable
         end
     
         function setColumnFormat(obj)
-        % Define the format of each column (TEXT or NUMERIC)
+        %setColumnFormat - Define the format of each column (TEXT or NUMERIC)
+        %   Syntax:
+        %     obj.setColumnFormat
             tmp=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
             obj.fcol=[cType.ColumnFormat.CHAR,tmp];
         end

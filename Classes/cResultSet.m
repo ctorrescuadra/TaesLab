@@ -82,7 +82,6 @@ classdef(Abstract) cResultSet < cResultId
             end
         end
 
-
         function res=getTableIndex(obj,varargin)
         %getTableIndex - Get the table index of the results set
         %   Syntax:
@@ -284,22 +283,6 @@ classdef(Abstract) cResultSet < cResultId
             else
                 res.messageLog(cType.ERROR,cMessages.TableNotFound,tname);
             end
-        end
-
-        function res=getGroupsTable(obj)           
-        %getDigraphGroups - Get the Diagraph groups table of a process diagram
-        %   Syntax:
-        %     obj.getDigraphGroups
-        %   Output Arguments:
-        %     res - cTable object with the groups of the diagram
-        %
-            res=[];
-            if (obj.ResultId~=cType.ResultId.DIAGRAM_FP) && ...
-                (obj.ResultId~=cType.ResultId.PRODUCTIVE_DIAGRAM)
-                return
-            end                   
-            res=obj.Info.GroupsTable;
-            res.setStudyCase(obj.StudyCase);
         end
     end
 

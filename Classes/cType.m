@@ -77,6 +77,7 @@ classdef cType
 		PRODUCT='PRODUCT'         % Product type option text
 		FORMAT_ID='%3d'           % Line number format
 		SPACES='\s+'              % Spaces Regular Expresion
+		BLANK=char(32)            % Blank character
 		DEBUG_MODE=false
 		% Node types
 		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3,'ENV',4);
@@ -262,6 +263,28 @@ classdef cType
 				end
 			end
 		end
+
+		function [res,missing]=checkTypeKeys(s,keys)
+		%checkTypeKeys - Check Table Directory Columns names
+		%   Syntax
+        %     res=cType.checkDirColumns(text)
+        %   Input Arguments
+        %     keys - cell array of keys to check
+        %   Output Arguments
+        %     res - array with the keys id (or empty if it fails)
+        %
+			res=cType.EMPTY;
+			missing=cType.EMPTY_CELL;
+    		sKeys = fieldnames(s);
+			val=cellfun(@(f) s.(f), sKeys);
+    		% Comprobar que todos los campos pedidos existen
+    		[tf,idx] = ismember(keys, sKeys);
+			if ~all(tf)
+        		missing = keys(~tf);
+				return
+			end
+			res = val(idx);
+    	end
 	end
 
 	methods (Static)	
@@ -506,7 +529,7 @@ classdef cType
 			res=cType.checkTypeKey(cType.TableView,text);
 		end
 
-		function [idx,missing]=checkDirColumns(fields)
+		function [res,missing]=checkDirColumns(fields)
 		%checkDirColums - Check Table Directory Columns names
 		%   Syntax
         %     res=cType.checkDirColumns(text)
@@ -515,14 +538,7 @@ classdef cType
         %   Output Arguments
         %     res - true/false
         %
-			missing=cType.EMPTY_CELL;
-    		sKeys = fieldnames(cType.DirCols);
-    		% Comprobar que todos los campos pedidos existen
-    		[tf,idx] = ismember(fields, sKeys);
-			if ~all(tf)
-        		idx=cType.EMPTY;
-        		missing = fields(~tf);
-			end
+			[res,missing]=cType.checkTypeKeys(cType.DirCols,fields);
     	end
 
 		function res=WasteTypeOptions()

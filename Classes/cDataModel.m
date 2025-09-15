@@ -708,6 +708,9 @@ classdef cDataModel < cResultSet
         %   See also ListResultTables
         %
             res=getTablesDirectory(obj.FormatData,varargin{:});
+            if nargout==0
+                printTable(res);
+            end
         end
 
         function res=getTableInfo(obj,name)
@@ -720,6 +723,10 @@ classdef cDataModel < cResultSet
         %     res - struct with table properties
         %
             res=getTableInfo(obj.FormatData,name);
+            if nargout==0
+                disp(cType.BLANK)
+                disp(res);
+            end
         end
 
         %%%

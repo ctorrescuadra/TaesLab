@@ -1,6 +1,5 @@
 classdef cTableIndex < cTable
 %cTableIndex - Create a cTable with the index table of a cResultInfo.
-%   The table index is a property of the cResultInfo object
 %   
 %   cTableIndex constructor:
 %     obj = cTableIndex(res)
@@ -37,9 +36,11 @@ classdef cTableIndex < cTable
         %cTableIndex - create a instance of the class
         %   Syntax:
         %     obj = cTableIndex(res)
-        %   Input:
+        %   Input Arguments
         %     res - cResultInfo object
-        %
+        %   Output Argument:
+        %     obj - cTableIndex object
+        % 
             % Check input parameters
             if ~isObject(res,'cResultInfo')
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(res))

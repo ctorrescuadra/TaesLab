@@ -204,7 +204,7 @@ classdef cResultInfo < cResultSet
                 tfmt=['Technical Saving:',format,' ',unit];
                 res.TechnicalSaving=sprintf(tfmt,obj.Info.TechnicalSaving);
                 if nargout==0
-                    fprintf('%s\n%s\n\n',res.FuelImpact,res.TechnicalSaving);
+                    fprintf('\n%s\n%s\n\n',res.FuelImpact,res.TechnicalSaving);
                 end
             end
         end

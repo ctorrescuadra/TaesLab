@@ -1,20 +1,20 @@
 classdef cTablesDefinition < cMessageLogger
-%cTablesDefinition - Read and store the tables format configuration file. 
-%   This class is use for two purposes:
-%   - This class is defined as base class of cFormatData reading the printformat.json
-%   - Provide information of the result tables of the application (TablesDirectory)
+%cTablesDefinition - Get the results tables properties. 
+%   The printformat.json file, contains the results tables properties
+%   This function reads the file and provides information about it.
 %
-%   cTableDefinition Constructor
-%     obj = cTablesDefinition
-
-%   cTablesDefinition Methods:
-%     getTableProperties  - Get the properties of a table
-%     getTablesDirectory  - Get the a cTableData with the tables index
-%     showTablesDirectory - Show the Table Directory
-%     saveTablesDirectory - Save the Table Directory into a file
-%     getTableId          - Get the TableId of a table
-%     getResultIdTables   - Get the Tables of a ResultId
-%     getSummaryTables    - Get the Summary Tables Info
+%   cTablesDefinition constructor:
+%     obj = cTablesDefinition()
+%
+%   cTablesDefinition methods:
+%     getTablesDirectory - Get the a cTableData with the tables index
+%     getTableDefinition - Get configurarion properties of a table
+%     getTableInfo       - Get info about the a table definition
+%     getTableId         - Get the TableId of a table
+%     getResultIdTables  - Get the tables configuration of a ResultId
+%     getCellTables      - Get the Cell tables configuration
+%     getMatrixTables    - Get the Matrix tables configuration     
+%     getSummaryTables   - Get the Summary tables configuration
 %
 %   See also cFormatData, printconfig.json
 %
@@ -23,10 +23,12 @@ classdef cTablesDefinition < cMessageLogger
         cfgMatrices     % Matrix tables configuration
         cfgSummary      % Summary tables configuration
         cfgTypes        % Format types configuration
-        tDictionary     % Tables dictionary
-        tDirectory      % cTableData containig the tables directory info
-        tableIndex      % Tables index
+        tDictionary     % Tables dataset
+        tableIndex      % Tables index struct
+        tableNames      % Names of the tables
+        tDirectory      % Tables data info
     end
+
     methods
         function obj=cTablesDefinition()
         %cTablesDefinition - Create an instance of the object
@@ -54,18 +56,6 @@ classdef cTablesDefinition < cMessageLogger
             if obj.status
                 obj.buildTablesDirectory;
             end
-        end
-
-        function res=getTableDefinition(obj,name)
-        %getTableDefinition - Get the properties of a table
-        %   Syntax:
-        %     res = obj.getTableProperties(name)
-        %   Input Argument:
-        %     name - Name of the table
-        %   Output Argument:
-        %     res - structure containing the table definition
-        %
-            res=obj.tDictionary.getValues(name);   
         end
 
         function res=getTablesDirectory(obj,cols)
@@ -101,21 +91,48 @@ classdef cTablesDefinition < cMessageLogger
             props.State='SUMMARY';props.Sample=cType.EMPTY_CHAR;
             res=cTableData(data,rowNames,colNames,props);
             res.setStudyCase(props);
+            if nargout==0
+                printTable(res);
+            end
         end
+ 
+        function res=getTableInfo(obj,name)
+		%getTableInfo - Get the properties of a table
+		%   Syntax:
+		%     res = obj.getTableInfo(name)
+		%   Input Arguments:
+		%     name - Name of the table
+		%   Output Arguments:
+		%     res - Struct with the properties of the table
+		%
+			res=cType.EMPTY;
+			idx=obj.getTableId(name);
+            if idx
+			    td=obj.tDirectory(idx,:);
+				res=struct();
+				res.Name=obj.tableNames{idx};
+				res.Description=td{cType.DirCols.DESCRIPTION};
+				res.TableCode=td{cType.DirCols.CODE};
+				res.ResultId=td{cType.DirCols.RESULT_CODE};
+				res.TableType=td{cType.DirCols.TYPE};
+				res.Graph=td{cType.DirCols.GRAPH};
+                if nargout==0
+                    disp(cType.BLANK)
+                    disp(res)
+                end
+            end 
+		end
 
-        function saveTablesDirectory(obj,filename)
-        %saveTablesDirectory - Save the full tables directory in different file formats depending on file extension
-        %   Valid extension are: *.json, *.xml, *.csx, *.xlsx, *.txt, *.html, *.tex
+        function res=getTableDefinition(obj,name)
+        %getTableDefinition - Get the properties of a table
         %   Syntax:
-        %     log=obj.saveTablesDirectory(filename)
+        %     res = obj.getTableProperties(name)
         %   Input Argument:
-        %     filename - File name with extension
-        %   Output Arguments:
-        %     log - cMessageLogger object with error messages
-            fullcols=fieldnames(cType.DirCols);
-            tbl=obj.getTablesDirectory(fullcols);
-            log=saveTable(tbl,filename);
-            log.printLogger;
+        %     name - Name of the table
+        %   Output Argument:
+        %     res - structure containing the table definition
+        %
+            res=obj.tDictionary.getValues(name);   
         end
 
         function res=getTableId(obj,name)
@@ -144,15 +161,35 @@ classdef cTablesDefinition < cMessageLogger
             res={obj.tableIndex(idx).name};
         end
 
+        function res=getMatrixTables(obj)
+        %getMatrixTables - Get the matrix tables configuration
+        %   Syntax:
+        %     res = obj.getMatrixTables();
+        %   Output Argument
+        %     res - structed array with the configuration
+        %
+            res=obj.cfgMatrices;
+        end
+
+        function res=getCellTables(obj)
+        %getMatrixTables - Get the matrix tables configuration
+        %   Syntax:
+        %     res = obj.getCellTables();
+        %   Output Argument
+        %     res - structed array with the tables configuration
+        %
+            res=obj.cfgTables;
+        end
+
         function res=getSummaryTables(obj,option,rsc)
-        %getSummaryTables - Get Summary Tables properties
+        %getSummaryTables - Get the summary tables configuration
         %   Syntax: 
         %     res=obj.getSummaryTables(option,rsc)
         %   Input Arguments:
         %     option - type of summary tables
         %     rsc    - Resource tables (true/false)
         %   Output Arguments:
-        %     res - struct array with the tables properties
+        %     res - struct array with the tables configuration
         %   
             % Get optional arguments
             res=cType.EMPTY_CELL;
@@ -165,8 +202,8 @@ classdef cTablesDefinition < cMessageLogger
             end
             % Get summary properties
             tsummary=obj.cfgSummary;
-            stbl=[obj.cfgSummary.stable];
-            drt=~[obj.cfgSummary.rsc];
+            stbl=[tsummary.stable];
+            drt=~[tsummary.rsc];
             % Select tables depending of option
             switch option
                 case cType.SummaryId.ALL
@@ -258,6 +295,7 @@ classdef cTablesDefinition < cMessageLogger
                             'tableId',i); 
             end
             % Assign class properties
+            obj.tableNames=tNames;
             obj.tDictionary=td;
             obj.tableIndex=cell2mat(cIndex);
         end
@@ -265,12 +303,12 @@ classdef cTablesDefinition < cMessageLogger
         function buildTablesDirectory(obj)
         %buildTablesDirectory - Store the tables index data info in a cell array
         %   Tables index data info is stored in obj.tDirectory
-        %   This info is used to build the Tables Directory
+        %   This info is used to build the Tables Directory cTable
         %   
         %   Syntax:
         %     res = obj.buildTablesDirectory(col)
         %   
-            N=numel(obj.tableIndex);
+            N=numel(obj.tableNames);
             M=numel(cType.DirColNames);
             % fill table data
             data=cell(N,M);

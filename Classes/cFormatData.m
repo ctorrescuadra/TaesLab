@@ -51,23 +51,7 @@ classdef cFormatData < cTablesDefinition
                     obj.messageLog(cType.ERROR,cMessages.BadFormatDefinition,fmt.key);
                 end
             end
-		end
-
-		function res=getTableInfo(obj,name)
-		%getTableInfo - Get the properties of a table
-		%   Syntax:
-		%     res = obj.getTableInfo(name)
-		%   Input Arguments:
-		%     name - Name of the table
-		%   Output Arguments:
-		%     res - Struct with the properties of the table
-		%
-			res=cType.EMPTY;
-			idx=obj.getTableId(name);
-            if idx
-			    res=obj.tableIndex(idx);
-            end
-		end
+        end
 
 		function res=getFormat(obj,id)
 		%getFormat - Get the format of a type of variable
@@ -100,7 +84,7 @@ classdef cFormatData < cTablesDefinition
 		%   Input Argument:
 		%     name - name of the table
 		%   Output Argument:
-		%     tdef  - definition strcut of the table
+		%     tdef  - definition struct of the table
 		%     tprop - properties on the cTable
 		%
 			tprop=cType.EMPTY;

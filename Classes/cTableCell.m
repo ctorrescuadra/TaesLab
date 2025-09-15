@@ -56,9 +56,18 @@ classdef (Sealed) cTableCell < cTableResult
         %       ShowNumber: true/false show column number option
         %       NodeType: Type of node (flow, process, stream)
         %
+            % Assign properties
+            if iscolumn(rowNames)
+                obj.RowNames=transpose(rowNames);
+            else
+                obj.RowNames=rowNames;
+            end
+            if iscolumn(colNames)
+                obj.ColNames=transpose(colNames);
+            else
+                obj.ColNames=colNames;
+            end
             obj.Data=data;
-            obj.RowNames=rowNames;
-            obj.ColNames=colNames;
             obj.NrOfRows=length(rowNames);
             obj.NrOfCols=length(colNames);
             if obj.checkTableSize
