@@ -1,0 +1,1731 @@
+{
+  "ProductiveStructure": {
+    "name": "model_lithiumS",
+    "flows": [
+      {
+        "key": "P1S1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S2",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S5",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S8",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S13",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S14",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S16",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S17",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S19",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S20",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S21",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S22",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S24",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S25",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S27",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S28",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S30",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S31",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S32",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S36",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S38",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S39",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P1S40",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P1S45",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S2",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S3",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S6",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S7",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S16",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S17",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S18",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S20",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S22",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S24",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S25",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S26",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S28",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S29",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S30",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S31",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S32",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S35",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S36",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S37",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S39",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S40",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S41",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S44",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S45",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S48",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S49",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S52",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S53",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S55",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S56",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S57",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S59",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S60",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S62",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S63",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S65",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S66",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S67",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S68",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S69",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S71",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2S72",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S74",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2S3100",
+        "type": "WASTE"
+      },
+      {
+        "key": "P2S3200",
+        "type": "WASTE"
+      },
+      {
+        "key": "P2S6700",
+        "type": "WASTE"
+      },
+      {
+        "key": "P2P3S1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2P3S2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2P3S3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2P3S4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P2P3S5",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P2P3S6",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S7",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S8",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S11",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S12",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S14",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S15",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S16",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S17",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S18",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S21",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S22",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S24",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S25",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S28",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S29",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S31",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S32",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S34",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S37",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S40",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S41",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S43",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S44",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S46",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P3S47",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S49",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P3S50",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "P3S200",
+        "type": "WASTE"
+      },
+      {
+        "key": "P3S600",
+        "type": "WASTE"
+      },
+      {
+        "key": "P3S1500",
+        "type": "WASTE"
+      },
+      {
+        "key": "P3S2200",
+        "type": "WASTE"
+      },
+      {
+        "key": "P3S3100",
+        "type": "WASTE"
+      },
+      {
+        "key": "P3S4400",
+        "type": "WASTE"
+      },
+      {
+        "key": "P3S4700",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "FJC",
+        "fuel": "P1S1+P1S2",
+        "product": "P1S4",
+        "type": "PRODUCTIVE",
+        "description": "Feeder Jaw Crusher"
+      },
+      {
+        "key": "JC",
+        "fuel": "P1S4+P1S5",
+        "product": "P1S6",
+        "type": "PRODUCTIVE",
+        "description": "Jaw Crusher"
+      },
+      {
+        "key": "CBOS",
+        "fuel": "P1S6+P1S8",
+        "product": "P1S9",
+        "type": "PRODUCTIVE",
+        "description": "Conveyor belt to Ore Storage"
+      },
+      {
+        "key": "OS",
+        "fuel": "P1S9",
+        "product": "P1S11",
+        "type": "PRODUCTIVE",
+        "description": "Ore Storage"
+      },
+      {
+        "key": "FOS",
+        "fuel": "P1S11+P1S13",
+        "product": "P1S14",
+        "type": "PRODUCTIVE",
+        "description": "Feeder Ore Storage"
+      },
+      {
+        "key": "CBSAG",
+        "fuel": "P1S14+P1S16",
+        "product": "P1S17",
+        "type": "PRODUCTIVE",
+        "description": "Conveyor Belt to SAG"
+      },
+      {
+        "key": "SAGM",
+        "fuel": "P1S17+P1S19+P1S20+P1S21",
+        "product": "P1S22",
+        "type": "PRODUCTIVE",
+        "description": "SAG Mill"
+      },
+      {
+        "key": "VSSAGM",
+        "fuel": "P1S22+P1S24",
+        "product": "P1S25+P1S27",
+        "type": "PRODUCTIVE",
+        "description": "CB to SAG from Screen"
+      },
+      {
+        "key": "CBSAGS",
+        "fuel": "P1S27+P1S28",
+        "product": "P1S19",
+        "type": "PRODUCTIVE",
+        "description": "Pumps"
+      },
+      {
+        "key": "PUMP",
+        "fuel": "P1S25+P1S30+P1S31",
+        "product": "P1S32",
+        "type": "PRODUCTIVE",
+        "description": "Hydrocyclone"
+      },
+      {
+        "key": "HC",
+        "fuel": "P1S32",
+        "product": "P1S36+P1S38",
+        "type": "PRODUCTIVE",
+        "description": "Ball Mill"
+      },
+      {
+        "key": "BM",
+        "fuel": "P1S38+P1S39+P1S40",
+        "product": "P1S30",
+        "type": "PRODUCTIVE",
+        "description": "Spiral Classifier"
+      },
+      {
+        "key": "SC",
+        "fuel": "P1S36",
+        "product": "P1S45",
+        "type": "PRODUCTIVE",
+        "description": "Connection Comminution-Flotation"
+      },
+      {
+        "key": "CONN1",
+        "fuel": "P1S45",
+        "product": "P2S1",
+        "type": "PRODUCTIVE",
+        "description": "Connection Water Flotation-Connection"
+      },
+      {
+        "key": "CONN2",
+        "fuel": "P2S66",
+        "product": "P1S40",
+        "type": "PRODUCTIVE",
+        "description": "CT-R"
+      },
+      {
+        "key": "CTR",
+        "fuel": "P2S1+P2S2+P2S3",
+        "product": "P2S4",
+        "type": "PRODUCTIVE",
+        "description": "Rougher Cell"
+      },
+      {
+        "key": "RC",
+        "fuel": "P2S4+P2S6+P2S7",
+        "product": "P2S8+P2S9",
+        "type": "PRODUCTIVE",
+        "description": "CT-RC CIC"
+      },
+      {
+        "key": "CTRCClC",
+        "fuel": "P2S8",
+        "product": "P2S13",
+        "type": "PRODUCTIVE",
+        "description": "Rougher CClC"
+      },
+      {
+        "key": "RCClC",
+        "fuel": "P2S13+P2S16",
+        "product": "P2S17+P2S18",
+        "type": "PRODUCTIVE",
+        "description": "CT - SsC 1"
+      },
+      {
+        "key": "CTSsC1",
+        "fuel": "P2S9+P2S18+P2S20",
+        "product": "P2S22",
+        "type": "PRODUCTIVE",
+        "description": "Scavenger Cell 1"
+      },
+      {
+        "key": "SC1",
+        "fuel": "P2S22+P2S24+P2S25",
+        "product": "P2S26+P2S28",
+        "type": "PRODUCTIVE",
+        "description": "Tailing dam"
+      },
+      {
+        "key": "TD",
+        "fuel": "P2S26+P2S29+P2S30",
+        "product": "P2S31+P2S32",
+        "type": "PRODUCTIVE",
+        "description": "CT - SsC 2"
+      },
+      {
+        "key": "CTSsC2",
+        "fuel": "P2S28+P2S35+P2S36",
+        "product": "P2S37",
+        "type": "PRODUCTIVE",
+        "description": "Scavenger Cell 2"
+      },
+      {
+        "key": "SC2",
+        "fuel": "P2S37+P2S39+P2S40",
+        "product": "P2S30+P2S41",
+        "type": "PRODUCTIVE",
+        "description": "CT - SsC 3"
+      },
+      {
+        "key": "CTSsC3",
+        "fuel": "P2S41+P2S44+P2S74",
+        "product": "P2S45",
+        "type": "PRODUCTIVE",
+        "description": "Scavenger Cell 3"
+      },
+      {
+        "key": "SC3",
+        "fuel": "P2S45+P2S48",
+        "product": "P2S36+P2S49",
+        "type": "PRODUCTIVE",
+        "description": "CT - SsC 4"
+      },
+      {
+        "key": "CTSsC4",
+        "fuel": "P2S49+P2S52",
+        "product": "P2S53",
+        "type": "PRODUCTIVE",
+        "description": "Scavenger Cell 4"
+      },
+      {
+        "key": "SC4",
+        "fuel": "P2S53+P2S55+P2S56",
+        "product": "P2S57+P2S74",
+        "type": "PRODUCTIVE",
+        "description": "Concentrate"
+      },
+      {
+        "key": "CONC",
+        "fuel": "P2S17+P2S57+P2S59",
+        "product": "P2S60",
+        "type": "PRODUCTIVE",
+        "description": "Thickener"
+      },
+      {
+        "key": "THICK",
+        "fuel": "P2S60+P2S62",
+        "product": "P2S63+P2S65",
+        "type": "PRODUCTIVE",
+        "description": "Pump Water"
+      },
+      {
+        "key": "PW",
+        "fuel": "P2S65",
+        "product": "P2S66+P2S67",
+        "type": "PRODUCTIVE",
+        "description": "FilterPress"
+      },
+      {
+        "key": "FP",
+        "fuel": "P2S63+P2S68",
+        "product": "P2S69",
+        "type": "PRODUCTIVE",
+        "description": "Concentrate Storage 2"
+      },
+      {
+        "key": "CS2",
+        "fuel": "P2S69+P2S71",
+        "product": "P2S72",
+        "type": "PRODUCTIVE",
+        "description": "Waste 2.1"
+      },
+      {
+        "key": "P2W1",
+        "fuel": "P2S31",
+        "product": "P2S3100",
+        "type": "DISSIPATIVE",
+        "description": "Waste 2.2"
+      },
+      {
+        "key": "P2W2",
+        "fuel": "P2S32",
+        "product": "P2S3200",
+        "type": "DISSIPATIVE",
+        "description": "Waste 2.4"
+      },
+      {
+        "key": "P2W4",
+        "fuel": "P2S67",
+        "product": "P2S6700",
+        "type": "DISSIPATIVE",
+        "description": "Connection Flotation-Scaling Drying"
+      },
+      {
+        "key": "CONN3",
+        "fuel": "P2S72",
+        "product": "P2P3S1",
+        "type": "PRODUCTIVE",
+        "description": "Scaling Oxidation"
+      },
+      {
+        "key": "CONN4",
+        "fuel": "P2P3S1+P2P3S5",
+        "product": "P2P3S2",
+        "type": "PRODUCTIVE",
+        "description": "Scaling Impurities"
+      },
+      {
+        "key": "CONN5",
+        "fuel": "P2P3S2",
+        "product": "P2P3S3",
+        "type": "PRODUCTIVE",
+        "description": "Scaling factor"
+      },
+      {
+        "key": "CONN6",
+        "fuel": "P2P3S3+P2P3S6",
+        "product": "P2P3S4",
+        "type": "PRODUCTIVE",
+        "description": "Connection Scaling-Refining"
+      },
+      {
+        "key": "CONN7",
+        "fuel": "P2P3S4",
+        "product": "P3S1",
+        "type": "PRODUCTIVE",
+        "description": "Connection"
+      },
+      {
+        "key": "RDC",
+        "fuel": "P3S1+P3S3",
+        "product": "P3S4+P3S6",
+        "type": "PRODUCTIVE",
+        "description": "Rotary Decrepitation Kiln"
+      },
+      {
+        "key": "BURN",
+        "fuel": "P3S7+P3S8",
+        "product": "P3S2+P3S3",
+        "type": "PRODUCTIVE",
+        "description": "Burner"
+      },
+      {
+        "key": "COOL",
+        "fuel": "P3S4",
+        "product": "P3S9",
+        "type": "PRODUCTIVE",
+        "description": "Cooling"
+      },
+      {
+        "key": "AR",
+        "fuel": "P3S9+P3S11+P3S12",
+        "product": "P3S14+P3S15",
+        "type": "PRODUCTIVE",
+        "description": "AcidRoasting"
+      },
+      {
+        "key": "LEACH",
+        "fuel": "P3S14+P3S16+P3S17+P3S18",
+        "product": "P3S21",
+        "type": "PRODUCTIVE",
+        "description": "Leaching"
+      },
+      {
+        "key": "F1",
+        "fuel": "P3S21",
+        "product": "P3S24+P3S22",
+        "type": "PRODUCTIVE",
+        "description": "Filtration 1"
+      },
+      {
+        "key": "PURI",
+        "fuel": "P3S24+P3S25",
+        "product": "P3S28",
+        "type": "PRODUCTIVE",
+        "description": "Purification"
+      },
+      {
+        "key": "F2",
+        "fuel": "P3S28",
+        "product": "P3S29+P3S31",
+        "type": "PRODUCTIVE",
+        "description": "Filtration 2"
+      },
+      {
+        "key": "EVAP",
+        "fuel": "P3S29+P3S32",
+        "product": "P3S34",
+        "type": "PRODUCTIVE",
+        "description": "Evaporation"
+      },
+      {
+        "key": "CARBO",
+        "fuel": "P3S34+P3S37",
+        "product": "P3S40",
+        "type": "PRODUCTIVE",
+        "description": "Carbonation"
+      },
+      {
+        "key": "F3",
+        "fuel": "P3S40",
+        "product": "P3S41+P3S43",
+        "type": "PRODUCTIVE",
+        "description": "Filtration 3"
+      },
+      {
+        "key": "RT",
+        "fuel": "P3S43",
+        "product": "P3S18+P3S44",
+        "type": "PRODUCTIVE",
+        "description": "RecyclingTank"
+      },
+      {
+        "key": "DRY",
+        "fuel": "P3S41+P3S46",
+        "product": "P3S49+P3S47",
+        "type": "PRODUCTIVE",
+        "description": "Drying"
+      },
+      {
+        "key": "FC",
+        "fuel": "P3S49",
+        "product": "P3S50",
+        "type": "PRODUCTIVE",
+        "description": "Final Cooling"
+      },
+      {
+        "key": "P3W1",
+        "fuel": "P3S2",
+        "product": "P3S200",
+        "type": "DISSIPATIVE",
+        "description": "Waste 3.1"
+      },
+      {
+        "key": "P3W2",
+        "fuel": "P3S6",
+        "product": "P3S600",
+        "type": "DISSIPATIVE",
+        "description": "Waste 3.2"
+      },
+      {
+        "key": "P3W4",
+        "fuel": "P3S15",
+        "product": "P3S1500",
+        "type": "DISSIPATIVE",
+        "description": "Waste 3.4"
+      },
+      {
+        "key": "P3W6",
+        "fuel": "P3S22",
+        "product": "P3S2200",
+        "type": "DISSIPATIVE",
+        "description": "Waste 3.6"
+      },
+      {
+        "key": "P3W10",
+        "fuel": "P3S31",
+        "product": "P3S3100",
+        "type": "DISSIPATIVE",
+        "description": "Waste 3.10"
+      },
+      {
+        "key": "P3W14",
+        "fuel": "P3S44",
+        "product": "P3S4400",
+        "type": "DISSIPATIVE",
+        "description": "Waste 3.14"
+      },
+      {
+        "key": "P3W16",
+        "fuel": "P3S47",
+        "product": "P3S4700",
+        "type": "DISSIPATIVE",
+        "description": "Waste 3.16"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Spodu",
+      "exergy": [
+        {
+          "key": "P1S1",
+          "value": 829.74295508444266
+        },
+        {
+          "key": "P1S2",
+          "value": 3.3525
+        },
+        {
+          "key": "P1S4",
+          "value": 829.74295508444266
+        },
+        {
+          "key": "P1S5",
+          "value": 16.7625
+        },
+        {
+          "key": "P1S6",
+          "value": 829.74295508444266
+        },
+        {
+          "key": "P1S8",
+          "value": 5.5875
+        },
+        {
+          "key": "P1S9",
+          "value": 829.74295508444266
+        },
+        {
+          "key": "P1S11",
+          "value": 829.74295508444266
+        },
+        {
+          "key": "P1S13",
+          "value": 13.41
+        },
+        {
+          "key": "P1S14",
+          "value": 829.74295508444266
+        },
+        {
+          "key": "P1S16",
+          "value": 3.91125
+        },
+        {
+          "key": "P1S17",
+          "value": 829.74295508444266
+        },
+        {
+          "key": "P1S19",
+          "value": 175.62063004383461
+        },
+        {
+          "key": "P1S20",
+          "value": 213.64357203340694
+        },
+        {
+          "key": "P1S21",
+          "value": 224.62228626334971
+        },
+        {
+          "key": "P1S22",
+          "value": 1219.0071571616843
+        },
+        {
+          "key": "P1S24",
+          "value": 4.4700952490218855
+        },
+        {
+          "key": "P1S25",
+          "value": 1043.3865271178497
+        },
+        {
+          "key": "P1S27",
+          "value": 175.62063004383461
+        },
+        {
+          "key": "P1S28",
+          "value": 3.352928620598485
+        },
+        {
+          "key": "P1S30",
+          "value": 3792.0186645448734
+        },
+        {
+          "key": "P1S31",
+          "value": 39.112147980049471
+        },
+        {
+          "key": "P1S32",
+          "value": 4835.4051916627232
+        },
+        {
+          "key": "P1S36",
+          "value": 1843.3362518573938
+        },
+        {
+          "key": "P1S38",
+          "value": 2992.06893980533
+        },
+        {
+          "key": "P1S39",
+          "value": 336.92295679042508
+        },
+        {
+          "key": "P1S40",
+          "value": 799.97141026103191
+        },
+        {
+          "key": "P1S45",
+          "value": 1843.33625185739
+        },
+        {
+          "key": "P2S1",
+          "value": 1843.33625185739
+        },
+        {
+          "key": "P2S2",
+          "value": 0.004175575853165101
+        },
+        {
+          "key": "P2S3",
+          "value": 3.3528773537535366
+        },
+        {
+          "key": "P2S4",
+          "value": 1843.3404274332465
+        },
+        {
+          "key": "P2S6",
+          "value": 681.30894012881356
+        },
+        {
+          "key": "P2S7",
+          "value": 55.200565346210929
+        },
+        {
+          "key": "P2S8",
+          "value": 1588.2921962745418
+        },
+        {
+          "key": "P2S9",
+          "value": 936.35717128751855
+        },
+        {
+          "key": "P2S13",
+          "value": 1588.2921962745415
+        },
+        {
+          "key": "P2S16",
+          "value": 43.811339252389416
+        },
+        {
+          "key": "P2S17",
+          "value": 1221.6738019896827
+        },
+        {
+          "key": "P2S18",
+          "value": 366.61839428485843
+        },
+        {
+          "key": "P2S20",
+          "value": 2.8974780107799067
+        },
+        {
+          "key": "P2S22",
+          "value": 1302.975565572377
+        },
+        {
+          "key": "P2S24",
+          "value": 47.437252854637066
+        },
+        {
+          "key": "P2S25",
+          "value": 157.22749576169309
+        },
+        {
+          "key": "P2S26",
+          "value": 676.39845044542494
+        },
+        {
+          "key": "P2S28",
+          "value": 783.804610888645
+        },
+        {
+          "key": "P2S29",
+          "value": 28.090422875320911
+        },
+        {
+          "key": "P2S30",
+          "value": 1047.1979569276075
+        },
+        {
+          "key": "P2S31",
+          "value": 1194.6602767795246
+        },
+        {
+          "key": "P2S32",
+          "value": 528.93613059350787
+        },
+        {
+          "key": "P2S35",
+          "value": 5.1349248913149266
+        },
+        {
+          "key": "P2S36",
+          "value": 563.80680495543015
+        },
+        {
+          "key": "P2S37",
+          "value": 1347.6114158440755
+        },
+        {
+          "key": "P2S39",
+          "value": 501.89463872445691
+        },
+        {
+          "key": "P2S40",
+          "value": 49.465305416019653
+        },
+        {
+          "key": "P2S41",
+          "value": 802.30809764092464
+        },
+        {
+          "key": "P2S44",
+          "value": 7.57454295316745
+        },
+        {
+          "key": "P2S45",
+          "value": 1069.0899900088102
+        },
+        {
+          "key": "P2S48",
+          "value": 44.817018397785823
+        },
+        {
+          "key": "P2S49",
+          "value": 505.27827315454846
+        },
+        {
+          "key": "P2S52",
+          "value": 3.09650069718939
+        },
+        {
+          "key": "P2S53",
+          "value": 505.27827315454846
+        },
+        {
+          "key": "P2S55",
+          "value": 206.99175839979782
+        },
+        {
+          "key": "P2S56",
+          "value": 29.810790320800265
+        },
+        {
+          "key": "P2S57",
+          "value": 445.48514458090438
+        },
+        {
+          "key": "P2S59",
+          "value": 7.6354244633804633
+        },
+        {
+          "key": "P2S60",
+          "value": 1667.1589465705874
+        },
+        {
+          "key": "P2S62",
+          "value": 0.19088561158451153
+        },
+        {
+          "key": "P2S63",
+          "value": 495.20536519838197
+        },
+        {
+          "key": "P2S65",
+          "value": 1171.9535813722055
+        },
+        {
+          "key": "P2S66",
+          "value": 799.97141026103156
+        },
+        {
+          "key": "P2S67",
+          "value": 371.98217111117395
+        },
+        {
+          "key": "P2S68",
+          "value": 0.14714773692871028
+        },
+        {
+          "key": "P2S69",
+          "value": 495.20536519838197
+        },
+        {
+          "key": "P2S71",
+          "value": 17.801026465418623
+        },
+        {
+          "key": "P2S72",
+          "value": 495.20536519838197
+        },
+        {
+          "key": "P2S74",
+          "value": 266.78189236788558
+        },
+        {
+          "key": "P2S3100",
+          "value": 1194.6602767795246
+        },
+        {
+          "key": "P2S3200",
+          "value": 528.93613059350787
+        },
+        {
+          "key": "P2S6700",
+          "value": 371.98217111117395
+        },
+        {
+          "key": "P2P3S1",
+          "value": 433.625365198382
+        },
+        {
+          "key": "P2P3S2",
+          "value": 1942.875365198382
+        },
+        {
+          "key": "P2P3S3",
+          "value": 1921.7753651983821
+        },
+        {
+          "key": "P2P3S4",
+          "value": 2174.681003258489
+        },
+        {
+          "key": "P2P3S5",
+          "value": 1509.25
+        },
+        {
+          "key": "P2P3S6",
+          "value": 252.90563806010687
+        },
+        {
+          "key": "P3S1",
+          "value": 2174.67539010886
+        },
+        {
+          "key": "P3S2",
+          "value": 482.90281984058061
+        },
+        {
+          "key": "P3S3",
+          "value": 4001.2279406110938
+        },
+        {
+          "key": "P3S4",
+          "value": 4723.1702481525426
+        },
+        {
+          "key": "P3S6",
+          "value": 768.23392422751442
+        },
+        {
+          "key": "P3S7",
+          "value": 6251.3962801573689
+        },
+        {
+          "key": "P3S8",
+          "value": 127.81764523015754
+        },
+        {
+          "key": "P3S9",
+          "value": 2188.3166354403083
+        },
+        {
+          "key": "P3S11",
+          "value": 7444.7732850171806
+        },
+        {
+          "key": "P3S12",
+          "value": 3073.37110508433
+        },
+        {
+          "key": "P3S14",
+          "value": 6137.9450598685989
+        },
+        {
+          "key": "P3S15",
+          "value": 4074.33171022558
+        },
+        {
+          "key": "P3S16",
+          "value": 39.488216199998817
+        },
+        {
+          "key": "P3S17",
+          "value": 840.11959112180625
+        },
+        {
+          "key": "P3S18",
+          "value": 485.50749985365263
+        },
+        {
+          "key": "P3S21",
+          "value": 3646.2024803588856
+        },
+        {
+          "key": "P3S22",
+          "value": 594.0436473542527
+        },
+        {
+          "key": "P3S24",
+          "value": 3039.0373289153445
+        },
+        {
+          "key": "P3S25",
+          "value": 1794.6436868755368
+        },
+        {
+          "key": "P3S28",
+          "value": 2032.4907490466492
+        },
+        {
+          "key": "P3S29",
+          "value": 1140.5333619750927
+        },
+        {
+          "key": "P3S31",
+          "value": 860.15804286039554
+        },
+        {
+          "key": "P3S32",
+          "value": 431.947166042471
+        },
+        {
+          "key": "P3S34",
+          "value": 1131.6655761744491
+        },
+        {
+          "key": "P3S37",
+          "value": 1316.7003060329921
+        },
+        {
+          "key": "P3S40",
+          "value": 2146.9613408196615
+        },
+        {
+          "key": "P3S41",
+          "value": 521.12964575729291
+        },
+        {
+          "key": "P3S43",
+          "value": 1619.2591339930384
+        },
+        {
+          "key": "P3S44",
+          "value": 1132.8508329918552
+        },
+        {
+          "key": "P3S46",
+          "value": 57.2861804544402
+        },
+        {
+          "key": "P3S47",
+          "value": 44.722228349065041
+        },
+        {
+          "key": "P3S49",
+          "value": 523.34756634943312
+        },
+        {
+          "key": "P3S50",
+          "value": 513.81055882416376
+        },
+        {
+          "key": "P3S200",
+          "value": 482.90281984058061
+        },
+        {
+          "key": "P3S600",
+          "value": 768.23392422751442
+        },
+        {
+          "key": "P3S1500",
+          "value": 4074.33171022558
+        },
+        {
+          "key": "P3S2200",
+          "value": 594.0436473542527
+        },
+        {
+          "key": "P3S3100",
+          "value": 860.15804286039554
+        },
+        {
+          "key": "P3S4400",
+          "value": 1132.8508329918552
+        },
+        {
+          "key": "P3S4700",
+          "value": 44.722228349065041
+        }
+      ]
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kJ/kJ)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kJ)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kJ/kJ)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "P2S3100",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P2S3200",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P2S6700",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P3S200",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P3S600",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P3S1500",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P3S2200",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P3S3100",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P3S4400",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P3S4700",
+        "type": "RESOURCES",
+        "recycle": 0
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": {
+      "sampleId": "Case1",
+      "flows": [
+        {
+          "key": "P1S1",
+          "value": 1
+        },
+        {
+          "key": "P1S2",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S5",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S8",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S13",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S16",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S20",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S21",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S24",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S28",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S31",
+          "value": 1.9399
+        },
+        {
+          "key": "P1S39",
+          "value": 1.98
+        },
+        {
+          "key": "P2S2",
+          "value": 2.0008
+        },
+        {
+          "key": "P2S3",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S6",
+          "value": 2.0008
+        },
+        {
+          "key": "P2S7",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S16",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S20",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S24",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S25",
+          "value": 2.0008
+        },
+        {
+          "key": "P2S29",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S35",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S39",
+          "value": 2.0008
+        },
+        {
+          "key": "P2S40",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S44",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S48",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S52",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S55",
+          "value": 2.0008
+        },
+        {
+          "key": "P2S56",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S59",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S62",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S68",
+          "value": 1.9399
+        },
+        {
+          "key": "P2S71",
+          "value": 1.9399
+        },
+        {
+          "key": "P3S7",
+          "value": 1.0615
+        },
+        {
+          "key": "P3S8",
+          "value": 2.7713
+        },
+        {
+          "key": "P3S11",
+          "value": 1.5335
+        },
+        {
+          "key": "P3S12",
+          "value": 2.4376
+        },
+        {
+          "key": "P3S16",
+          "value": 1.9399
+        },
+        {
+          "key": "P3S17",
+          "value": 1.5998
+        },
+        {
+          "key": "P3S25",
+          "value": 1.5998
+        },
+        {
+          "key": "P3S32",
+          "value": 4.2265
+        },
+        {
+          "key": "P3S37",
+          "value": 33.2533
+        },
+        {
+          "key": "P3S46",
+          "value": 4.2265
+        }
+      ]
+    }
+  }
+}

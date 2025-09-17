@@ -1,0 +1,998 @@
+{
+  "ProductiveStructure": {
+    "name": "model_lithiumB",
+    "flows": [
+      {
+        "key": "P4S1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S2",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S5",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S6",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S10",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S14",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S15",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S16",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S17",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S18",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S19",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S21",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S22",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S23",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S24",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S26",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S27",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S28",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S29",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S30",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S31",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "P4S33",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S34",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S35",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S36",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S38",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S40",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S41",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S42",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S43",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S44",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S46",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S47",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S48",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S49",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S50",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S51",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S52",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S54",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "P4S55",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S56",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S58",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "P4S59",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "P4S700",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S800",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S1100",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S1200",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S1500",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S1600",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S1900",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S3000",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S4000",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S4700",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S5000",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S5500",
+        "type": "WASTE"
+      },
+      {
+        "key": "P4S5900",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "PUMP",
+        "fuel": "P4S2",
+        "product": "(P4S3-P4S1)",
+        "type": "PRODUCTIVE",
+        "description": "Pumping"
+      },
+      {
+        "key": "P1HP",
+        "fuel": "P4S5+P4S6",
+        "product": "(P4S9-P4S3)+P4S7+P4S8",
+        "type": "PRODUCTIVE",
+        "description": "Pond 1 - Halite Precipitation"
+      },
+      {
+        "key": "P2SP",
+        "fuel": "P4S9+P4S10",
+        "product": "P4S13+P4S11+P4S12",
+        "type": "PRODUCTIVE",
+        "description": "Pond 2 - Sylvite Precipitation"
+      },
+      {
+        "key": "P3C",
+        "fuel": "P4S13+P4S14",
+        "product": "P4S17+P4S15+P4S16",
+        "type": "PRODUCTIVE",
+        "description": "Pond 3 - Carnallite"
+      },
+      {
+        "key": "LP",
+        "fuel": "P4S17+P4S18",
+        "product": "P4S21+P4S19",
+        "type": "PRODUCTIVE",
+        "description": "Lithium Pond"
+      },
+      {
+        "key": "PREP",
+        "fuel": "P4S21+P4S22+P4S23+P4S24",
+        "product": "P4S26",
+        "type": "PRODUCTIVE",
+        "description": "Preparation"
+      },
+      {
+        "key": "SEB",
+        "fuel": "P4S26+P4S27+P4S28",
+        "product": "P4S29+P4S33",
+        "type": "PRODUCTIVE",
+        "description": "Solvent Extraction"
+      },
+      {
+        "key": "STRIP",
+        "fuel": "P4S29",
+        "product": "P4S31+P4S30",
+        "type": "PRODUCTIVE",
+        "description": "Stripping"
+      },
+      {
+        "key": "MgR1",
+        "fuel": "P4S33+P4S34+P4S35+P4S36",
+        "product": "P4S38",
+        "type": "PRODUCTIVE",
+        "description": "Mg Renoval 1"
+      },
+      {
+        "key": "F1",
+        "fuel": "P4S38",
+        "product": "P4S41+P4S40",
+        "type": "PRODUCTIVE",
+        "description": "Filtration 1"
+      },
+      {
+        "key": "MgR2",
+        "fuel": "P4S41+P4S42+P4S43",
+        "product": "P4S44",
+        "type": "PRODUCTIVE",
+        "description": "Mg Renoval 2"
+      },
+      {
+        "key": "F2",
+        "fuel": "P4S44",
+        "product": "P4S46+P4S47",
+        "type": "PRODUCTIVE",
+        "description": "Filtration 2"
+      },
+      {
+        "key": "CARBO",
+        "fuel": "P4S46+P4S48+P4S49",
+        "product": "P4S51+P4S50",
+        "type": "PRODUCTIVE",
+        "description": "Carbonation"
+      },
+      {
+        "key": "SEP",
+        "fuel": "P4S51",
+        "product": "P4S34+P4S52",
+        "type": "PRODUCTIVE",
+        "description": "Separation"
+      },
+      {
+        "key": "DRY",
+        "fuel": "P4S52+P4S54",
+        "product": "P4S56+P4S55",
+        "type": "PRODUCTIVE",
+        "description": "Drying"
+      },
+      {
+        "key": "C2",
+        "fuel": "P4S56",
+        "product": "P4S58+P4S59",
+        "type": "PRODUCTIVE",
+        "description": "Cooling 2"
+      },
+      {
+        "key": "W1",
+        "fuel": "P4S7",
+        "product": "P4S700",
+        "type": "DISSIPATIVE",
+        "description": "Waste 1"
+      },
+      {
+        "key": "W2",
+        "fuel": "P4S8",
+        "product": "P4S800",
+        "type": "DISSIPATIVE",
+        "description": "Waste 2"
+      },
+      {
+        "key": "W3",
+        "fuel": "P4S11",
+        "product": "P4S1100",
+        "type": "DISSIPATIVE",
+        "description": "Waste 3"
+      },
+      {
+        "key": "W4",
+        "fuel": "P4S12",
+        "product": "P4S1200",
+        "type": "DISSIPATIVE",
+        "description": "Waste 4"
+      },
+      {
+        "key": "W5",
+        "fuel": "P4S15",
+        "product": "P4S1500",
+        "type": "DISSIPATIVE",
+        "description": "Waste 5"
+      },
+      {
+        "key": "W6",
+        "fuel": "P4S16",
+        "product": "P4S1600",
+        "type": "DISSIPATIVE",
+        "description": "Waste 6"
+      },
+      {
+        "key": "W7",
+        "fuel": "P4S19",
+        "product": "P4S1900",
+        "type": "DISSIPATIVE",
+        "description": "Waste 7"
+      },
+      {
+        "key": "W8",
+        "fuel": "P4S30",
+        "product": "P4S3000",
+        "type": "DISSIPATIVE",
+        "description": "Waste 8"
+      },
+      {
+        "key": "W10",
+        "fuel": "P4S40",
+        "product": "P4S4000",
+        "type": "DISSIPATIVE",
+        "description": "Waste 10"
+      },
+      {
+        "key": "W12",
+        "fuel": "P4S47",
+        "product": "P4S4700",
+        "type": "DISSIPATIVE",
+        "description": "Waste 12"
+      },
+      {
+        "key": "W13",
+        "fuel": "P4S50",
+        "product": "P4S5000",
+        "type": "DISSIPATIVE",
+        "description": "Waste 13"
+      },
+      {
+        "key": "W15",
+        "fuel": "P4S55",
+        "product": "P4S5500",
+        "type": "DISSIPATIVE",
+        "description": "Waste 15"
+      },
+      {
+        "key": "W16",
+        "fuel": "P4S59",
+        "product": "P4S5900",
+        "type": "DISSIPATIVE",
+        "description": "Waste 16"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Brines",
+      "exergy": [
+        {
+          "key": "P4S1",
+          "value": 12.959795515841542
+        },
+        {
+          "key": "P4S2",
+          "value": 0.398981769186742
+        },
+        {
+          "key": "P4S3",
+          "value": 13.354840406006867
+        },
+        {
+          "key": "P4S5",
+          "value": 5484.3206443391482
+        },
+        {
+          "key": "P4S6",
+          "value": 20099.1558354549
+        },
+        {
+          "key": "P4S7",
+          "value": 22234.093834296607
+        },
+        {
+          "key": "P4S8",
+          "value": 2.1691834008510713
+        },
+        {
+          "key": "P4S9",
+          "value": 3341.9681801439197
+        },
+        {
+          "key": "P4S10",
+          "value": 12297.2174925117
+        },
+        {
+          "key": "P4S11",
+          "value": 13340.456300577966
+        },
+        {
+          "key": "P4S12",
+          "value": 0.620765734980584
+        },
+        {
+          "key": "P4S13",
+          "value": 2005.7720281754316
+        },
+        {
+          "key": "P4S14",
+          "value": 7379.96143455635
+        },
+        {
+          "key": "P4S15",
+          "value": 8004.2737803467762
+        },
+        {
+          "key": "P4S16",
+          "value": 7.2256095647631939
+        },
+        {
+          "key": "P4S17",
+          "value": 1203.103660127879
+        },
+        {
+          "key": "P4S18",
+          "value": 11067.2610255889
+        },
+        {
+          "key": "P4S19",
+          "value": 12005.928979882556
+        },
+        {
+          "key": "P4S21",
+          "value": 1.3947875560607936
+        },
+        {
+          "key": "P4S22",
+          "value": 0.0037590998321053166
+        },
+        {
+          "key": "P4S23",
+          "value": 0.0421917007343748
+        },
+        {
+          "key": "P4S24",
+          "value": 1.6282397913820053
+        },
+        {
+          "key": "P4S26",
+          "value": 3.0549294520210042
+        },
+        {
+          "key": "P4S27",
+          "value": 5758.8897994704339
+        },
+        {
+          "key": "P4S28",
+          "value": 0.00307371384155089
+        },
+        {
+          "key": "P4S29",
+          "value": 5759.0534673924794
+        },
+        {
+          "key": "P4S30",
+          "value": 5758.8897994704339
+        },
+        {
+          "key": "P4S31",
+          "value": 0.16116116320495594
+        },
+        {
+          "key": "P4S33",
+          "value": 2.8769393835520258
+        },
+        {
+          "key": "P4S34",
+          "value": 33.346929461019187
+        },
+        {
+          "key": "P4S35",
+          "value": 3.15081461791035
+        },
+        {
+          "key": "P4S36",
+          "value": 0.10708985577611217
+        },
+        {
+          "key": "P4S38",
+          "value": 38.370254318870352
+        },
+        {
+          "key": "P4S40",
+          "value": 0.055336614014444931
+        },
+        {
+          "key": "P4S41",
+          "value": 36.705261250184137
+        },
+        {
+          "key": "P4S42",
+          "value": 0.047707670628470672
+        },
+        {
+          "key": "P4S43",
+          "value": 1.94654101169853
+        },
+        {
+          "key": "P4S44",
+          "value": 38.5447584938264
+        },
+        {
+          "key": "P4S46",
+          "value": 36.796620470615373
+        },
+        {
+          "key": "P4S47",
+          "value": 0.57585472407405414
+        },
+        {
+          "key": "P4S48",
+          "value": 6.62514783559291
+        },
+        {
+          "key": "P4S49",
+          "value": 0.810793230328962
+        },
+        {
+          "key": "P4S50",
+          "value": 5.0640071838120226
+        },
+        {
+          "key": "P4S51",
+          "value": 38.409512139563148
+        },
+        {
+          "key": "P4S52",
+          "value": 2.5960477929057468
+        },
+        {
+          "key": "P4S54",
+          "value": 76.9409208825905
+        },
+        {
+          "key": "P4S55",
+          "value": 35.40730407330873
+        },
+        {
+          "key": "P4S56",
+          "value": 1.6263984420412236
+        },
+        {
+          "key": "P4S58",
+          "value": 0.93770763427824211
+        },
+        {
+          "key": "P4S59",
+          "value": 0.685566869399478
+        },
+        {
+          "key": "P4S700",
+          "value": 22234.093834296607
+        },
+        {
+          "key": "P4S800",
+          "value": 2.1691834008510713
+        },
+        {
+          "key": "P4S1100",
+          "value": 13340.456300577966
+        },
+        {
+          "key": "P4S1200",
+          "value": 0.620765734980584
+        },
+        {
+          "key": "P4S1500",
+          "value": 8004.2737803467762
+        },
+        {
+          "key": "P4S1600",
+          "value": 7.2256095647631939
+        },
+        {
+          "key": "P4S1900",
+          "value": 12005.928979882556
+        },
+        {
+          "key": "P4S3000",
+          "value": 5758.8897994704339
+        },
+        {
+          "key": "P4S4000",
+          "value": 0.055336614014444931
+        },
+        {
+          "key": "P4S4700",
+          "value": 0.57585472407405414
+        },
+        {
+          "key": "P4S5000",
+          "value": 5.0640071838120226
+        },
+        {
+          "key": "P4S5500",
+          "value": 35.40730407330873
+        },
+        {
+          "key": "P4S5900",
+          "value": 0.685566869399478
+        }
+      ]
+    }
+  },
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kJ/kJ)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kJ)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kJ/kJ)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kJ)"
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "P4S700",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S800",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S1100",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S1200",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S1500",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S1600",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S1900",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S3000",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S4000",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S4700",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S5000",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S5500",
+        "type": "RESOURCES",
+        "recycle": 0
+      },
+      {
+        "flow": "P4S5900",
+        "type": "RESOURCES",
+        "recycle": 0
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": [
+      {
+        "sampleId": "Case1",
+        "flows": [
+          {
+            "key": "P4S1",
+            "value": 1
+          },
+          {
+            "key": "P4S2",
+            "value": 1.9399
+          },
+          {
+            "key": "P4S5",
+            "value": 1.9399
+          },
+          {
+            "key": "P4S6",
+            "value": 1
+          },
+          {
+            "key": "P4S10",
+            "value": 1
+          },
+          {
+            "key": "P4S14",
+            "value": 1
+          },
+          {
+            "key": "P4S18",
+            "value": 1
+          },
+          {
+            "key": "P4S22",
+            "value": 164.5884
+          },
+          {
+            "key": "P4S23",
+            "value": 1.9399
+          },
+          {
+            "key": "P4S24",
+            "value": 2.1831
+          },
+          {
+            "key": "P4S27",
+            "value": 1
+          },
+          {
+            "key": "P4S28",
+            "value": 64.3611
+          },
+          {
+            "key": "P4S35",
+            "value": 5.9307
+          },
+          {
+            "key": "P4S36",
+            "value": 115.4776
+          },
+          {
+            "key": "P4S42",
+            "value": 2.774
+          },
+          {
+            "key": "P4S43",
+            "value": 5.9307
+          },
+          {
+            "key": "P4S48",
+            "value": 5.3971
+          },
+          {
+            "key": "P4S49",
+            "value": 115.4776
+          },
+          {
+            "key": "P4S54",
+            "value": 1.5304
+          }
+        ]
+      },
+      {
+        "sampleId": "NR",
+        "flows": [
+          {
+            "key": "P4S1",
+            "value": 0
+          },
+          {
+            "key": "P4S2",
+            "value": 1.9399
+          },
+          {
+            "key": "P4S5",
+            "value": 1.9399
+          },
+          {
+            "key": "P4S6",
+            "value": 0
+          },
+          {
+            "key": "P4S10",
+            "value": 0
+          },
+          {
+            "key": "P4S14",
+            "value": 0
+          },
+          {
+            "key": "P4S18",
+            "value": 1
+          },
+          {
+            "key": "P4S22",
+            "value": 164.5884
+          },
+          {
+            "key": "P4S23",
+            "value": 1.9399
+          },
+          {
+            "key": "P4S24",
+            "value": 2.1831
+          },
+          {
+            "key": "P4S27",
+            "value": 1
+          },
+          {
+            "key": "P4S28",
+            "value": 64.3611
+          },
+          {
+            "key": "P4S35",
+            "value": 5.9307
+          },
+          {
+            "key": "P4S36",
+            "value": 115.4776
+          },
+          {
+            "key": "P4S42",
+            "value": 2.774
+          },
+          {
+            "key": "P4S43",
+            "value": 5.9307
+          },
+          {
+            "key": "P4S48",
+            "value": 5.3971
+          },
+          {
+            "key": "P4S49",
+            "value": 115.4776
+          },
+          {
+            "key": "P4S54",
+            "value": 1.5304
+          }
+        ]
+      }
+    ]
+  }
+}

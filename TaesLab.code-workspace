@@ -8,7 +8,6 @@
 		"csv-preview.numberFormat": "F4",
 		"data.preview.charts.plugin": "highcharts",
 		"json.schemas": [
-
 			{
 				"fileMatch": [
 					"*_model.json"
@@ -20,7 +19,14 @@
 					"printformat.json"
 				],
 				"url": "./Examples/Templates/printformat_schema.json"
+			},
+			{
+				"fileMatch": [
+					"datamodel_config.json"
+				],
+				"url": "./Examples/Templates/datamodel_schema.json"
 			}
 		],
+		"editor.indentSize": "tabSize",
 	}
 }
