@@ -13,7 +13,7 @@
                 {
                     "id": 2,
                     "name": "type",
-                    "datatype": 1
+                    "datatype": 2
                 }
             ]
         },
@@ -30,16 +30,16 @@
                 {
                     "id": 2,
                     "name": "type",
-                    "datatype": 1
+                    "datatype": 2
                 },                              
                 {
                     "id": 3,
                     "name": "fuel",
-                    "datatype": 1
+                    "datatype": 2
                 },
                 {   "id": 4,
                     "name": "product",
-                    "datatype": 1
+                    "datatype": 2
                 }
             ]
         },
@@ -56,7 +56,7 @@
                 {
                     "id": 2,
                     "name": "state",
-                    "datatype": 3
+                    "datatype": 4
                 }                              
             ]
         },
@@ -68,22 +68,22 @@
                 {
                     "id": 1,
                     "name": "key",
-                    "datatype": 1
+                    "datatype": 2
                 },
                 {
                     "id": 2,
                     "name": "width",
-                    "datatype": 2
+                    "datatype": 3
                 },                              
                 {
                     "id": 3,
                     "name": "precision",
-                    "datatype": 2
+                    "datatype": 3
                 },
                 {
                     "id": 4,
                     "name": "unit",
-                    "datatype": 1
+                    "datatype": 2
                 }
             ]
         },
@@ -100,12 +100,12 @@
                 {
                     "id": 2,
                     "name": "type",
-                    "datatype": 1
+                    "datatype": 2
                 },                              
                 {
                     "id": 3,
                     "name": "recycle",
-                    "datatype": 2
+                    "datatype": 3
                 }
             ]
         },
@@ -122,7 +122,7 @@
                 {
                     "id": 2,
                     "name": "flow",
-                    "datatype": 3
+                    "datatype": 4
                 }                              
             ]
         },
@@ -139,12 +139,12 @@
                 {
                     "id": 2,
                     "name": "type",
-                    "datatype": 1
+                    "datatype": 2
                 },
                 {
                     "id": 3,
                     "name": "sample",
-                    "datatype": 3
+                    "datatype": 4
                 }                              
             ]
         }

@@ -112,18 +112,10 @@ classdef cParseStream
         %     name: char array to check
         %   Output Argument:
         %     res - true/false
-            res=~isempty(regexp(name,cParseStream.NAME_PATTERN,'once'));
-        end
-        
-        function res=checkListNames(list)
-        %checkListNames - Check if a list of names is valid
-        %   Syntax:
-        %     res=checkListNames(name)
-        %   Input Argument:
-        %     list: cell array of text
-        %   Output Argument:
-        %     res - true/false
-            res=all(cellfun(@(x) cParseStream.checkName(x),list));
+            res=false;
+            if ischar(name)
+                res=~isempty(regexp(name,cParseStream.NAME_PATTERN,'once'));
+            end
         end
 
         function res=checkTextKey(key)
@@ -134,11 +126,34 @@ classdef cParseStream
         %     key: char array to text
         %   Output Argument:
         %     res - true/false
-            res=true;
-            if isempty(regexp(key,cParseStream.KEY_CHECK,'once'))
-                res=false;
+            res=false;
+            if ischar(key)
+                res = ~isempty(regexp(key,cParseStream.KEY_CHECK,'once'));
             end
         end
+        
+        function res=checkListNames(list)
+        %checkListNames - Check if a list of names is valid
+        %   Syntax:
+        %     res=checkListNames(name)
+        %   Input Argument:
+        %     list: cell array of text
+        %   Output Argument:
+        %     res - true | false
+            res=all(cellfun(@(x) cParseStream.checkName(x),list));
+        end
+
+        function res=checkListKeys(list)
+        %checkListKeys - Check if a list of keys is valid
+        %   Syntax:
+        %     res=checkListKeys(name)
+        %   Input Argument:
+        %     list: cell array of text
+        %   Output Argument:
+        %     res - true | false
+            res=all(cellfun(@(x) cParseStream.checkTextKey(x),list));
+        end
+
     end
     
     methods(Static,Access=private)	

@@ -78,8 +78,9 @@ classdef cTablesDefinition < cMessageLogger
             if nargin==1
                 cols=cType.DIR_COLS_DEFAULT;
             end
-            [idx,missing]=cType.checkDirColumns(cols);
-            if isempty(idx)
+            [tf,idx]=cType.checkDirColumns(cols);
+            if ~tf
+                missing=cols(idx);
                 res.messageLog(cType.ERROR,cMessages.InvalidColumnNames,strjoin(missing,', '));
                 return
             end

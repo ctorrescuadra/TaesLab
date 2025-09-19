@@ -112,6 +112,8 @@ classdef cType
 		TableView=struct('NONE',0,'CONSOLE',1,'HTML',2,'GUI',3);
 		DEFAULT_TABLEVIEW='CONSOLE';
 		% Input Tables
+		TABLE_MODEL_SCHEMA='datamodel_config.json';
+		TableDataType=struct('KEY',1,'CHAR',2,'NUMERIC',3,'SAMPLE',4);
 		TableData=struct('FLOWS','Flows','PROCESSES','Processes','EXERGY','Exergy',...
 			'WASTE_DEFINITION','WasteDefinition','WASTE_ALLOCATION','WasteAllocaion');
 		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...
@@ -264,30 +266,34 @@ classdef cType
 			end
 		end
 
-		function [res,missing]=checkTypeKeys(s,keys)
-		%checkTypeKeys - Check Table Directory Columns names
-		%   Syntax
-        %     res=cType.checkDirColumns(text)
-        %   Input Arguments
-        %     keys - cell array of keys to check
-        %   Output Arguments
-        %     res - array with the keys id (or empty if it fails)
-        %
-			res=cType.EMPTY;
-			missing=cType.EMPTY_CELL;
+		function [tf,loc]=checkTypeList(s,keys)
+		%checkTypeList - Check if all element of keys are in the type list
+		%   Syntax:
+		%     [tf,loc] = cType.checkTypeList
+		%   Input Arguments:
+		%        s - type struct
+		%     keys - cell array of keys to check
+		%   Output Arguments:
+		%       tf - true | false
+		%      loc - If true contains the typeId of the keys
+		%            If false contains the position of the missing keys
+		% 
     		sKeys = fieldnames(s);
-			val=cellfun(@(f) s.(f), sKeys);
-    		% Comprobar que todos los campos pedidos existen
-    		[tf,idx] = ismember(keys, sKeys);
-			if ~all(tf)
-        		missing = keys(~tf);
-				return
+			vals=struct2cell(s);
+    		% 
+    		[res,idx] = ismember(keys, sKeys);
+			if all(res)
+				tf=true;
+				loc = cell2mat(vals(idx));
+        	else
+				tf=false;
+				loc=find(~res);
 			end
-			res = val(idx);
     	end
 	end
 
-	methods (Static)	
+	methods (Static)
+
 		function res=getProcessId(text)
 		%getProcessId - Get the internal code of a process type text
         %
@@ -409,19 +415,7 @@ classdef cType
 			res=cType.getTypeId(cType.TableView,text);
 		end
 
-		function res=getDirColumns(text)
-		%getDirColumns - Get id for Directory Table Columns option
-		%   Syntax
-        %     res=cType.getDirColumns(text)
-        %   Input Arguments
-        %     text - Directory table columns names.
-        %   Output Arguments
-        %     res - Directory table columns Id (empty if it doesn't exist)
-        %
-			res=cType.getTypeId(cType.DirCols,text);
-		end
-
-		function res=checkProcessKey(text)
+				function res=checkProcessKey(text)
 		%checkProcessKey - Check if Process Type is correct
 		%   Syntax
         %     res=cType.checkProcessKey(text)
@@ -467,6 +461,59 @@ classdef cType
         %     res - true/false
         %
         	res=cType.checkTypeKey(cType.Resources,text);
+		end
+
+
+		function [res,idx]=checkProcessTypes(list)
+		%checkProcessTypes - Check if the Process Type list is correct
+		%   Syntax
+        %     res=cType.checkProcessTypes(list)
+        %   Input Arguments
+        %     text - Process type list.
+        %   Output Arguments
+        %     res - true| false
+		%     idx - if true type Id list, else pos of missing types
+        %
+			[res,idx]=cType.checkTypeList(cType.Process,list);
+		end
+
+		function [res,idx]=checkFlowTypes(list)
+		%checkFlowTypes - Check if the Flows Type list is correct
+		%   Syntax
+        %     res=cType.checkFlowTypes(list)
+        %   Input Arguments
+        %     list - Flow type list.
+        %   Output Arguments
+        %     res - true| false
+		%     idx - if true type Id list, else pos of missing types
+        %
+			[res,idx]=cType.checkTypeList(cType.Flow,list);
+		end
+
+		function [res,idx]=checkWasteTypes(list)
+		%checkFlowTypes - Check if the Flows Type list is correct
+		%   Syntax
+        %     res=cType.checkWasteTypes(list)
+        %   Input Arguments
+        %     list - Waste type list.
+        %   Output Arguments
+        %     res - true | false
+		%     idx - if true type Id list, else pos of missing types
+        %
+			[res,idx]=cType.checkTypeList(cType.WasteAllocation,list);
+		end
+
+		function [res,idx]=checkResourceTypes(list)
+		%checkResourceTypes - Check if the Flows Type list is correct
+		%   Syntax
+        %     res=cType.checkResourceTypes(list)
+        %   Input Arguments
+        %     list - Resource type list.
+        %   Output Arguments
+        %     res - true | false
+		%     idx - if true type Id list, else pos of missing types
+        %
+			[res,idx]=cType.checkTypeList(cType.Resource,list);
 		end
 
 		function res=checkCostTables(text)
@@ -538,7 +585,7 @@ classdef cType
         %   Output Arguments
         %     res - true/false
         %
-			[res,missing]=cType.checkTypeKeys(cType.DirCols,fields);
+			[res,missing]=cType.checkTypeList(cType.DirCols,fields);
     	end
 
 		function res=WasteTypeOptions()
@@ -590,7 +637,6 @@ classdef cType
 				res=cType.TableCellProps;
 			end
 		end
-
 
 		%%%%
 		% File Functions

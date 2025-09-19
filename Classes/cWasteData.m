@@ -81,12 +81,13 @@ classdef cWasteData < cMessageLogger
 					obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,wd(i).flow);
 					continue
 				end 
-				% Check waste type		
-                if cType.checkWasteKey(wd(i).type)
-					wasteType(i)=cType.getWasteId(wd(i).type);
+				% Get waste type	
+				wid=cType.getWasteId(wd(i).type);
+				if ~isempty(wid)
+					wasteType(i)=wid;
                 else
                     obj.messageLog(cType.ERROR,cMessages.InvalidWasteAllocation,wd(i).type,wd(i).flow);
-                end 
+				end 
 				if ~ps.Flows(id).type == cType.Flow.WASTE
 					obj.messageLog(cType.ERROR,cMessages.NoWasteFlow,wd(i).flow);
 				end
