@@ -5,7 +5,13 @@
         "PrintFormat": {
             "type": "object",
             "additionalProperties": false,
-            "properties": {
+            "properties": {               
+                "datamodel": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DataModel"
+                    }
+                },
                 "tables": {
                     "type": "array",
                     "items": {
@@ -32,12 +38,41 @@
                 }
             },
             "required": [
+                "datamodel",
                 "tables",
                 "matrices",
                 "summary",
                 "format"
             ],
             "title": "PrintFormat"
+        },
+        "DataModel": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "optional": {
+                    "type": "boolean"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dmField"
+                    }
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "optional",
+                "fields"
+            ],
+            "title": "DataModel"
         },
         "Table": {
             "type": "object",
@@ -76,7 +111,7 @@
                 "fields": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/Field"
+                        "$ref": "#/definitions/tField"
                     }
                 }
             },
@@ -233,7 +268,28 @@
             ],
             "title": "Format"
         },
-        "Field": {
+        "dmField": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "datatype": {
+                    "$ref": "#/definitions/typeData"
+                }
+            },
+            "required": [
+                "id",
+                "name",
+                "datatype"
+            ],
+            "title": "DataModelField"
+        },
+        "tField": {
             "type": "object",
             "additionalProperties": false,
             "properties": {
@@ -252,7 +308,12 @@
                 "name",
                 "type"
             ],
-            "title": "Field"
+            "title": "TableField"
+        },
+        "typeData": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
         },
         "typeFormat": {
             "type": "integer",

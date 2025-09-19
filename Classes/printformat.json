@@ -1,4 +1,154 @@
 {
+    "datamodel": [
+        {
+            "id": 1,
+            "name": "Flows",
+            "optional": false,
+            "fields": [
+                {
+                    "id": 1,
+                    "name": "key",
+                    "datatype": 1
+                },
+                {
+                    "id": 2,
+                    "name": "type",
+                    "datatype": 2
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Processes",
+            "optional": false,
+            "fields": [
+                {
+                    "id": 1,
+                    "name": "key",
+                    "datatype": 1
+                },
+                {
+                    "id": 2,
+                    "name": "type",
+                    "datatype": 2
+                },                              
+                {
+                    "id": 3,
+                    "name": "fuel",
+                    "datatype": 2
+                },
+                {   "id": 4,
+                    "name": "product",
+                    "datatype": 2
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Exergy",
+            "optional": false,
+            "fields": [
+                {
+                    "id": 1,
+                    "name": "key",
+                    "datatype": 1
+                },
+                {
+                    "id": 2,
+                    "name": "state",
+                    "datatype": 4
+                }                              
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Format",
+            "optional": false,
+            "fields": [
+                {
+                    "id": 1,
+                    "name": "key",
+                    "datatype": 2
+                },
+                {
+                    "id": 2,
+                    "name": "width",
+                    "datatype": 3
+                },                              
+                {
+                    "id": 3,
+                    "name": "precision",
+                    "datatype": 3
+                },
+                {
+                    "id": 4,
+                    "name": "unit",
+                    "datatype": 2
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "name": "WasteDefinition",
+            "optional": true,
+            "fields": [
+                {
+                    "id": 1,
+                    "name": "key",
+                    "datatype": 1
+                },
+                {
+                    "id": 2,
+                    "name": "type",
+                    "datatype": 2
+                },                              
+                {
+                    "id": 3,
+                    "name": "recycle",
+                    "datatype": 3
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "name": "WasteAllocation",
+            "optional": true,
+            "fields": [
+                {
+                    "id": 1,
+                    "name": "key",
+                    "datatype": 1
+                },
+                {
+                    "id": 2,
+                    "name": "flow",
+                    "datatype": 4
+                }                              
+            ]
+        },
+        {
+            "id": 7,
+            "name": "ResourcesCost",
+            "optional": true,
+            "fields": [
+                {
+                    "id": 1,
+                    "name": "key",
+                    "datatype": 1
+                },
+                {
+                    "id": 2,
+                    "name": "type",
+                    "datatype": 2
+                },
+                {
+                    "id": 3,
+                    "name": "sample",
+                    "datatype": 4
+                }                              
+            ]
+        }
+    ],
 	"tables": [
 		{
 			"id": 1,

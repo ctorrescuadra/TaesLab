@@ -5,10 +5,10 @@ classdef cType
 %
 %   cType methods:
 %    Check data types methods:
-%  	  res=cType.checkFlowKey
-%  	  res=cType.checkProcessKey(text)
-%  	  res=cType.checkResourcesKey(text)
-%  	  res=cType.checkWasteKey(text)
+%  	  res=cType.checkFlowTypes(list)
+%  	  res=cType.checkProcessTypes(list))
+%  	  res=cType.checkResourcesTypes(list)
+%  	  res=cType.checkWasteTypes(list)
 %    Check option methods
 %     res=cType.checkCostTables(option)
 %     res=cType.checkSummaryOption(option)
@@ -413,56 +413,7 @@ classdef cType
         %     res - TableView ype Id (empty if it doesn't exist)
         %
 			res=cType.getTypeId(cType.TableView,text);
-		end
-
-				function res=checkProcessKey(text)
-		%checkProcessKey - Check if Process Type is correct
-		%   Syntax
-        %     res=cType.checkProcessKey(text)
-        %   Input Arguments
-        %     text - Process type text.
-        %   Output Arguments
-        %     res - true/false
-        %
-			res=cType.checkTypeKey(cType.Process,text);
-		end
-
-		function res=checkFlowKey(text)
-		%checkFlowKey - Check if flow type text is valid
-		%   Syntax
-        %     res=cType.checkFlowKey(text)
-        %   Input Arguments
-        %     text - Flow type text.
-        %   Output Arguments
-        %     res - true/false
-        %
-        	res=cType.checkTypeKey(cType.Flow,text);
-		end
-
-		function res=checkWasteKey(text)
-		%checkWasteKey - Check if waste allocation type text is valid
-		%   Syntax
-        %     res=cType.checkWasteKey(text)
-        %   Input Arguments
-        %     text - Process type text.
-        %   Output Arguments
-        %     res - true/false
-        %
-        	res=cType.checkTypeKey(cType.WasteAllocation,text);
-		end
-
-		function res=checkResourcesKey(text)
-		%checkResourcesKey - Check if resources cost type text is valid
-		%   Syntax
-        %     res=cType.checkWasteKey(text)
-        %   Input Arguments
-        %     text - Process type text.
-        %   Output Arguments
-        %     res - true/false
-        %
-        	res=cType.checkTypeKey(cType.Resources,text);
-		end
-
+        end
 
 		function [res,idx]=checkProcessTypes(list)
 		%checkProcessTypes - Check if the Process Type list is correct
@@ -513,7 +464,7 @@ classdef cType
         %     res - true | false
 		%     idx - if true type Id list, else pos of missing types
         %
-			[res,idx]=cType.checkTypeList(cType.Resource,list);
+			[res,idx]=cType.checkTypeList(cType.Resources,list);
 		end
 
 		function res=checkCostTables(text)
