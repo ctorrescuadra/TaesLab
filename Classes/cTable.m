@@ -178,7 +178,7 @@ classdef (Abstract) cTable < cMessageLogger
         %     res = obj.isNumericTable
         %   Output arguments:
         %     res - true | false
-            res=all(cellfun(@isnumeric,obj.Data(:)));
+            res=all(obj.fcol(2:end)-1);
         end
         
         function res = isNumericColumn(obj,idx)
@@ -189,8 +189,7 @@ classdef (Abstract) cTable < cMessageLogger
         %     idx - data column number
         %   Output arguments:
         %     res - true | false
-            tmp=cellfun(@isnumeric,obj.Data(:,idx));
-            res=all(tmp(:));
+            res=(obj.fcol(idx)==cType.ColumnFormat.NUMERIC);
         end
 
         function res=isGraph(obj)

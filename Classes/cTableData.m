@@ -2,7 +2,7 @@ classdef cTableData < cTable
 %cTableData - Implement cTable to store data model tables.
 % 
 %   cTableData Methods:
-%     cTableData.create    - Create table from cell array
+%     getStructTable       - Get a table as struct
 %     printTable           - Print a table on console
 %     formatData           - Get formatted data
 %     getDescriptionLabel  - Get the title label for GUI presentation
@@ -18,7 +18,6 @@ classdef cTableData < cTable
 %     getColumnWidth  - get the width of the columns
 %     getStructData   - get data as struct array
 %     getMatlabTable  - get data as MATLAB table
-%     getStructTable  - get a structure with the table info
 %     setColumnValues - set the values of a column
 %     setRowValues    - set the values of a row
 %
@@ -84,7 +83,7 @@ classdef cTableData < cTable
             res=obj.Data;
             cw=obj.getColumnWidth;
             for j=1:obj.NrOfCols-1
-                if isNumericColumn(obj,j)
+                if isNumericColumn(obj,j+1)
                     data=cellfun(@num2str,obj.Data(:,j),'UniformOutput',false);
                     fmt=['%',num2str(cw(j+1)),'s'];
                     res(:,j)=cellfun(@(x) sprintf(fmt,x),data,'UniformOutput',false);
@@ -151,32 +150,36 @@ classdef cTableData < cTable
             obj.setColumnWidth;
         end
 
+        function setColumnFormat(obj)
+        %setColumnFormat - Define the format of each column (TEXT or NUMERIC)
+        %   Syntax:
+        %     obj.setColumnFormat
+            tmp=cellfun(@isnumeric,obj.Values(2:end,:));
+            if isrow(tmp)
+                obj.fcol=tmp+1;
+            else
+                obj.fcol=all(tmp)+1;
+            end
+        end
+
         function setColumnWidth(obj)
         %setColumnWidth - Define the width of the columns
         %   Syntax:
         %     obj.setColumnWidth
             res=zeros(1,obj.NrOfCols);
-            res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
-            for j=1:obj.NrOfCols-1
+            for j=1:obj.NrOfCols
                 if isNumericColumn(obj,j)
-                    data=cellfun(@num2str,obj.Data(:,j),'UniformOutput',false);
+                    data=cellfun(@num2str,obj.Values(2:end,j),'UniformOutput',false);
                     dl=max(cellfun(@length,data));
                     cw=max([dl,length(obj.ColNames{j}),cType.DEFAULT_NUM_LENGHT]);
-                    res(j+1)=cw+1;
+                    res(j)=cw+1;
                 else
-                    res(j+1)=max(cellfun(@length,obj.Values(:,j+1)))+2;
+                    res(j)=max(cellfun(@length,obj.Values(:,j)))+2;
                 end
             end
             obj.wcol=res;
         end
-    
-        function setColumnFormat(obj)
-        %setColumnFormat - Define the format of each column (TEXT or NUMERIC)
-        %   Syntax:
-        %     obj.setColumnFormat
-            tmp=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
-            obj.fcol=[cType.ColumnFormat.CHAR,tmp];
-        end
+
 
     end
     

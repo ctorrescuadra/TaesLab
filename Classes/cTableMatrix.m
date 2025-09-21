@@ -16,6 +16,9 @@ classdef (Sealed) cTableMatrix < cTableResult
 %     formatData             - Get formatted data
 %     getDescriptionLabel    - Get the title label for GUI presentation
 %     getMatrixValues        - Get the matrix values
+%     getStructData          - Get data as struct array
+%     getMatlabTable         - Get data as MATLAB table
+%     getStructTable         - Get a structure with the table info
 %     isUnitCostTable        - Check if it's a unit cost table (GraphOptions)
 %     isFlowsTable           - Check if it's a flows table (GraphOptions)
 %     isGeneralCostTable     - Check if it's a general cost table (GraphOptions)
@@ -33,9 +36,6 @@ classdef (Sealed) cTableMatrix < cTableResult
 %     isGraph         - Check if the table has a graph associated
 %     getColumnFormat - Get the format of the columns
 %     getColumnWidth  - Get the width of the columns
-%     getStructData   - Get data as struct array
-%     getMatlabTable  - Get data as MATLAB table
-%     getStructTable  - Get a structure with the table info
 %
 %   See also cTableResult, cTable, cGraphResults
 %
@@ -167,18 +167,6 @@ classdef (Sealed) cTableMatrix < cTableResult
             data=getStructData(obj);
             res=struct('Name',obj.Name,'Description',obj.Description,...
                     'State',obj.State,'Unit',obj.Unit,'Format',obj.Format,'Data',data);
-        end
-
-        function res = isNumericColumn(obj,idx)
-        %isNumaricColumn - Check if the column is numeric.  
-        %   Syntax:
-        %     res = obj.isNumericColumn(idx)
-        %   Input Arguments:
-        %     idx - Column index
-        %   Output Arguments:
-        %     res - true | false
-        %
-            res=(idx>0) && (idx<obj.NrOfCols);
         end
 
         function res=getDescriptionLabel(obj)

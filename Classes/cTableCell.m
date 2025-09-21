@@ -5,6 +5,7 @@ classdef (Sealed) cTableCell < cTableResult
 %     obj = cTableCell(data,rowNames,colNames,props)
 %
 %   cTableCell properties
+%     DataType    - Array with the type of data of each column
 %     FieldNames  - Cell array with field names 
 %     ShowNumber  - Logical variable indicating if line number is printed
 %
@@ -13,6 +14,9 @@ classdef (Sealed) cTableCell < cTableResult
 %     formatData           - Get formatted data
 %     getDescriptionLabel  - Get the title label for GUI presentation
 %     getColumnValues      - Get the values of a column (using FieldNames)
+%     getMatlabTable       - Get data as MATLAB table
+%     getStructTable       - Get table as struct
+%     getStructData        - Get data as struct array
 %
 %   cTable Methods
 %     getProperties   - Get table properties
@@ -26,13 +30,12 @@ classdef (Sealed) cTableCell < cTableResult
 %     isGraph         - Check if the table has a graph associated
 %     getColumnFormat - Get the format of the columns
 %     getColumnWidth  - Get the width of the columns
-%     getStructData   - Get data as struct array
-%     getMatlabTable  - Get data as MATLAB table
 %     getStructTable  - Get a structure with the table info
 %
 %   See also cTableResult, cTable
 %
     properties (GetAccess=public,SetAccess=private)
+        DataType    % Array with the type of data of each column
         FieldNames  % Cell array with field names (optional)
         ShowNumber  % logical variable indicating if line number is printed
     end
@@ -49,6 +52,7 @@ classdef (Sealed) cTableCell < cTableResult
         %     props - additional properties:
         %       Name: Name of the table
         %       Description: table description
+        %       DataType: array with the type of data of the columns
         %       Unit: cell array with the unit name of the data columns
         %       Format: cell array with the format of the data columns
         %       GraphType: type of graph asociated
@@ -158,18 +162,6 @@ classdef (Sealed) cTableCell < cTableResult
             end
             res=struct('Name',obj.Name,'Description',obj.Description,...
             'State',obj.State,'Fields',fields,'Data',data);
-        end
-		
-        function res=isNumericColumn(obj,idx)
-        % isNumericColumn - Determine if the column 'idx' is numeric. Internal use
-        % Syntax:
-        %   res=obj.isNumerisColumn(idx)
-        % Input Argument:
-        %   idx - Column number
-        % Output Argument:
-        %   res - true | false
-            res=(idx>0) && (idx<obj.NrOfCols);
-            res= res && ismember('f',obj.Format{idx+1});
         end
 
         function res=getDescriptionLabel(obj)
@@ -287,13 +279,17 @@ classdef (Sealed) cTableCell < cTableResult
             obj.setColumnWidth;
         end
 
+        function setColumnFormat(obj)
+        % Define the format of each column (CHAR or NUMERIC)
+            obj.fcol=(obj.DataType>cType.Format.TEXT)+1;
+        end
+
         function setColumnWidth(obj)
         % define the width of the columns
             M=obj.NrOfCols;
             res=zeros(1,M);
-            res(1)=max(cellfun(@length,obj.Values(:,1)))+2;
-            for j=2:M
-                if isNumericColumn(obj,j-1)
+            for j=1:M
+                if isNumericColumn(obj,j)
                     tmp=regexp(obj.Format{j},'[0-9]+','match','once');
                     res(j)=str2double(tmp);
                 else
@@ -301,12 +297,6 @@ classdef (Sealed) cTableCell < cTableResult
                 end
             end
             obj.wcol=res;
-        end
-
-        function setColumnFormat(obj)
-        % Define the format of each column (TEXT or NUMERIC)
-            tmp=arrayfun(@(x) isNumericColumn(obj,x),1:obj.NrOfCols-1)+1;
-            obj.fcol=[cType.ColumnFormat.CHAR,tmp];
         end
     end
 end
