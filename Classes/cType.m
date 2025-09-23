@@ -199,6 +199,7 @@ classdef cType
         ACTIVE_TABLE_COLUMN=4;
 		GRAPH_COLUMN=3;
 		% Type of columns for uitables
+		DataType=struct('KEY',1,'CHAR',2,'NUMERIC',3,'SAMPLE',4)
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
 		% Digraph types

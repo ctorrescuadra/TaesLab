@@ -565,7 +565,7 @@
     ]
   },
   "WasteDefinition": {
-    "wastes": {
+    "wastes": [{
       "flow": "QG",
       "type": "MANUAL",
       "recycle": 0,
@@ -586,17 +586,17 @@
           "process": "APH",
           "value": 0.089
         }
-      ]
-    }
+      ]}
+    ]
   },
   "ResourcesCost": {
     "Samples": [
       {
         "sampleId": "Base",
-        "flows": {
+        "flows": [{
           "key": "NG",
           "value": 30
-        },
+        }],
         "processes": [
           {
             "key": "COMB",
@@ -622,10 +622,10 @@
       },
       {
         "sampleId": "CGAMR",
-        "flows": {
+        "flows": [{
           "key": "NG",
           "value": 30
-        },
+        }],
         "processes": [
           {
             "key": "COMB",

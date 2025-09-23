@@ -1,6 +1,21 @@
 classdef cModelTable < cMessageLogger
-%cModelTable - Utility class to validate and store model tables values from cReadModelTable
-
+%cModelTable - Class container for the values read by cReadModelTable
+%   This class validate and store the data model values
+%
+%   cModelTable constructor:
+%     obj = cModelResults(table,props)
+%
+%   cModelTable properties:
+%     Values - Table data values
+%     Fields - Fields of the table
+%     Data   - Data of the table (without fields)
+%     Keys   - Keys or row names of the table data
+%   
+%   cModelTable methods:
+%     getStructData   - Get the table values as struct
+%
+%   See cReadModelTables, printconfig.json
+%   
     properties(GetAccess=public,SetAccess=private)
         Values  % Values read from table data
         Fields  % Fields of the table
@@ -10,7 +25,17 @@ classdef cModelTable < cMessageLogger
 
     methods
         function obj=cModelTable(table,props)
-            if ~iscell(tables) || ~isstruct(props)
+        %cModelTable - Construct an instance of this class
+        %   Validate the table data
+        %
+        %   Syntax:
+        %     obj = cModelTable(table,props)
+        %   Input Arguments:
+        %     table - cell array with the table data
+        %     props - struct with the data model definition
+        %
+            % Check Input
+            if ~iscell(table) || ~isstruct(props)
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessage.ShowHelp);
                 return
             end
@@ -18,57 +43,172 @@ classdef cModelTable < cMessageLogger
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
+            % Validate Table
             obj.Values=table;
-            log=obj.ValidateTable(props);
+            log=obj.validateTable(props);
             if ~log.status
                 obj.addLogger(log);
             end
         end
 
         function res=get.Fields(obj)
+        %Get Fields property
             res = obj.Values(1,:);
         end
 
         function res=get.Data(obj)
+        %Get Data property
             res = obj.Values(2:end,:);
         end
 
         function res=get.Keys(obj)
+        %Get Keys property
             res = obj.Values(:,1);
         end
 
         function res=getStructData(obj)
+        %getStructData - Get a struct with the table values
+        %   Syntax:
+        %     res = obj.getStructData();
+        %   Output parameter:
+        %     res - struct with the columns data
             res=cell2struct(obj.Data,obj.Fields,2);
         end
     end
 
     methods(Access=private)
-        function log=validateTable(p)
-            log=cMessageLog();
+        function log=validateTable(obj,p)
+        %validateTable - Check the table values
+        %   Syntax:
+        %     log = obj.validateTable(p)
+        %   Input Arguments
+        %     props - table properties
+        %   Output Arguments:
+        %     log - cMessageLog with the validation status and error messages
+        %
+            % Initilize variables            
+            log=cMessageLogger();
             N=numel(p.fields);
             if numel(obj.Fields) < N
                 log.messageLog(cType.ERROR,'Invalid number of fields %d in table %s',numel(obj.Fields),p.name);
                 return
             end
-            for i=1:numel(p)
+            % Loop over the fields definition
+            for i=1:N
                 dt=p.fields(i).datatype;
-                if ~strcmpi(obj.Fields{i},p.fields{i}) && (dt ~= cType.DataType.SAMPLE)
-                    log.messageLog(cType.ERROR,'Invalid field %s in table %s',obj.Fields{i},p.name);
+                fld=obj.Fields{i};
+                pfld=p.fields(i).name;
+                if ~strcmpi(fld,pfld) && (dt ~= cType.DataType.SAMPLE)
+                    log.messageLog(cType.ERROR,'Invalid field %s in table %s',fld,p.name);
                     continue
                 end
                 colData=obj.Data(:,i);
                 sampleData=obj.Values(:,i:end);
+                % Validate each field depending on datatype
                 switch dt
                     case cType.DataType.KEY
-                        cModelTable.validateKey(log,colData)
+                        tst=cModelTable.validateKey(log,colData);
                     case cType.DataType.CHAR
-                        cModelTable.validateString(log,colData);
+                        tst=all(cellfun(@ischar,colData));
                     case cType.DataType.NUMERIC
-                        cModelTable.validateNumeric(log,colData);
+                        tst=cModelTable.validateNumeric(colData);
                     case cType.DataType.SAMPLE
-                        cModelTable.validateSample(log,sampleData);
+                        tst=cModelTable.validateSample(log,sampleData);
+                end
+                if ~tst
+                    log.messageLog(cType.ERROR,'Invalid data type for column %s in sheet %s',fld,p.name);
+                    continue
                 end
             end
+        end
+    end
+
+    methods(Static,Access=private)
+        function tst=validateKey(log,data)
+        %validateKey - Validate key data
+        %   Syntax:
+        %     test = cModelTable.validateKey(log,data)
+        %   Input Arguments
+        %     log   - logger to store messages
+        %     data  - field data
+        %   Output Arguments:
+        %     tst - true | false
+        %
+            tst=true;
+            %Check if the keys has the correct pattern
+            ier=cParseStream.checkListKeys(data);
+            if ~isempty(ier)
+                tst=false;
+                for i=ier
+                    log.messageLog(cType.ERROR,'Key %s is invalid',data{i});
+                end
+            end
+            ier=cParseStream.checkDuplicates(data);
+            %Check if the keys has duplicates
+            if ~isempty(ier)
+                tst=false;
+                for i=ier
+                    log.messageLog(cType.ERROR,'Key %s is duplicate',data{i});
+                end
+            end
+        end
+
+        function tst=validateNumeric(data)
+        %validateNumeric - Validate numeric data
+        %   Syntax:
+        %     test = cModelTable.validateNumeric(data)
+        %   Input Arguments
+        %     data  - field data
+        %   Output Arguments:
+        %     tst - true | false
+        %
+            % Check if data column is mumeric
+            idx=cellfun(@isnumeric,data);
+            if ~all(idx)
+                tst=false;
+                return
+            end
+            % Check if values are non-negative
+            tst=all(cell2mat(data) >- cType.EPS);
+        end
+
+        function tst=validateSample(log,data)
+        %validateSample - Validate numeric data block
+        %   Syntax:
+        %     test = cModelTable.validateSample(log,data)
+        %   Input Arguments
+        %     data  - field data
+        %     log   - logger to store messages
+        %   Output Arguments:
+        %     tst - true | false
+        %
+            % Initialize data
+            tst=true;
+            samples=data(1,:);
+            % Check sample names
+            ier=cParseStream.checkListNames(samples);
+            if ~isempty(ier)
+                tst=false;
+                for i=ier
+                    log.messageLog(cType.ERROR,'Invalid sample name',samples{i});
+                end
+            end
+            % Check duplicate names
+            ier=cParseStream.checkDuplicates(samples);
+            if ~isempty(ier)
+                tst=false;
+                for i=ier
+                    log.messageLog(cType.ERROR,'Duplicate sample name',samples{i});
+                end
+            end
+            % Check if the block data is numeric and non-negative
+            try
+                A=cell2mat(data(2:end,:));
+            catch
+                tst=false;
+                return
+            end
+            tst = tst & all(A(:) > -cType.EPS);
         end
     end
 end

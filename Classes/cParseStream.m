@@ -107,7 +107,7 @@ classdef cParseStream
         function res=checkName(name)
         %checkName - Check if a name (state | sample) is valid
         %   Syntax:
-        %     res=checkName(name)
+        %     res=cParseStream.checkName(name)
         %   Input Argument:
         %     name: char array to check
         %   Output Argument:
@@ -121,7 +121,7 @@ classdef cParseStream
         function res=checkTextKey(key)
         %checkTextKey - Check if a text key is valid
         %   Syntax:
-        %     res=checkTextKey(name)
+        %     res=cParseStream.checkTextKey(name)
         %   Input Argument:
         %     key: char array to text
         %   Output Argument:
@@ -135,23 +135,41 @@ classdef cParseStream
         function res=checkListNames(list)
         %checkListNames - Check if a list of names is valid
         %   Syntax:
-        %     res=checkListNames(name)
+        %     res=cParseStream.checkListNames(name)
         %   Input Argument:
         %     list: cell array of text
         %   Output Argument:
-        %     res - true | false
-            res=all(cellfun(@(x) cParseStream.checkName(x),list));
+        %     res - array with the position of the invalid keys
+        %
+            tmp=cellfun(@(x) cParseStream.checkName(x),list);
+            res=find(~tmp);
         end
 
         function res=checkListKeys(list)
         %checkListKeys - Check if a list of keys is valid
         %   Syntax:
-        %     res=checkListKeys(name)
+        %     res=cParseStream.checkListKeys(name)
         %   Input Argument:
         %     list: cell array of text
         %   Output Argument:
-        %     res - true | false
-            res=all(cellfun(@(x) cParseStream.checkTextKey(x),list));
+        %     res - array with the position of the invalid keys
+        %
+            tmp=cellfun(@(x) cParseStream.checkTextKey(x),list);
+            res=find(~tmp);
+        end
+
+        function res=checkDuplicates(list)
+        %checkUniqueKeys - Check if the list has duplicate values
+        %   Syntax:
+        %     ier=cParseStream.checkUniqueKeys(keys)
+        %   Input Argument:
+        %     keys - cell array of text
+        %   Output Argument:
+        %     ier - Array with the position of the duplicate keys.
+        %
+            N=length(list);
+            [~,idx]=unique(list,'stable');
+            res=setdiff(1:N,idx);
         end
 
     end
