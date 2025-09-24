@@ -19,6 +19,7 @@ classdef cTablesDefinition < cMessageLogger
 %   See also cFormatData, printconfig.json
 %
     properties (Access=protected)
+        cfgDataModel    % Data model tables configurarion
         cfgTables 	    % Cell tables configuration
         cfgMatrices     % Matrix tables configuration
         cfgSummary      % Summary tables configuration
@@ -48,6 +49,7 @@ classdef cTablesDefinition < cMessageLogger
 				return
 			end
             % set the object properties
+            obj.cfgDataModel=config.datamodel;
             obj.cfgTables=config.tables;
             obj.cfgMatrices=config.matrices;
             obj.cfgSummary=config.summary;
@@ -162,24 +164,53 @@ classdef cTablesDefinition < cMessageLogger
             res={obj.tableIndex(idx).name};
         end
 
-        function res=getMatrixTables(obj)
+        function res=getDataModelProperties(obj,idx)
+        %getDataModelProperties - Get the data model properties
+        %   Syntax:
+        %     res = obj.getDataModelProperties()
+        %     res = obj.getDataModelProperties(idx)
+        %   Input Argument:
+        %     idx - Table index. Optional
+        %   Output Argument:
+        %     res - struct with the table(s) properties
+        %           If idx is not provided, get and array structure with all tables
+            if nargin==2
+                res=obj.cfgDataModel(idx);
+            else
+                res=obj.cfgDataModel;
+            end
+        end
+
+        function res=getMatrixTables(obj,idx)
         %getMatrixTables - Get the matrix tables configuration
         %   Syntax:
-        %     res = obj.getMatrixTables();
+        %     res = obj.getMatrixTables(idx);
+        %   Input Argument:
+        %     idx - Table index. Optional
         %   Output Argument
         %     res - structed array with the configuration
         %
-            res=obj.cfgMatrices;
+            if nargin==2
+                res=obj.cfgMatrices(idx);
+            else
+                res=obj.cfgMatrices;
+            end
         end
 
-        function res=getCellTables(obj)
+        function res=getCellTables(obj,idx)
         %getMatrixTables - Get the matrix tables configuration
         %   Syntax:
-        %     res = obj.getCellTables();
-        %   Output Argument
+        %     res = obj.getCellTables(idx);
+        %   Input Argument:
+        %     idx - Table index. Optional
+        %   Output Argument;
         %     res - structed array with the tables configuration
         %
-            res=obj.cfgTables;
+            if nargin==2
+                res=obj.cfgTables(idx);
+            else
+                res=obj.cfgTables;
+            end
         end
 
         function res=getSummaryTables(obj,option,rsc)

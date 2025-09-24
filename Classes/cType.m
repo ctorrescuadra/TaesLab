@@ -112,18 +112,9 @@ classdef cType
 		TableView=struct('NONE',0,'CONSOLE',1,'HTML',2,'GUI',3);
 		DEFAULT_TABLEVIEW='CONSOLE';
 		% Input Tables
-		TABLE_MODEL_SCHEMA='datamodel_config.json';
 		TableDataType=struct('KEY',1,'CHAR',2,'NUMERIC',3,'SAMPLE',4);
-		TableData=struct('FLOWS','Flows','PROCESSES','Processes','EXERGY','Exergy',...
-			'WASTE_DEFINITION','WasteDefinition','WASTE_ALLOCATION','WasteAllocaion');
 		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...
 			'WASTEDEF',5,'WASTEALLOC',6,'RESOURCES',7,'DIRECTORY',8);
-		TableDataName={'Flows','Processes','Exergy','Format',...
-					   'WasteDefinition','WasteAllocation','ResourcesCost','Directory'};
-		TableDataDescription={'Flows Data','Processes Data','Exergy Data','Format Data',...
-						'Waste Definition','Waste Allocation','Resources Cost','Tables Directory'}
-        MandatoryTables=1:4;
-		OptionalTables=5:7;
 		% Data Model
 		DataId=struct('PRODUCTIVE_STRUCTURE',1,'EXERGY_STATES',2,'FORMAT',3,'WASTE',4,'RESOURCES',5);
 		DataElements={'ProductiveStructure','ExergyStates','Format','WasteDefinition','ResourcesCost'};

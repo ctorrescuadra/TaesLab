@@ -41,9 +41,7 @@ classdef cFormatData < cTablesDefinition
 			        obj.messageLog(cType.ERROR,cMessages.InvalidFormatKey,fmt.key);
                     continue
                 end
-                val1=isfloat(fmt.width) && isfloat(fmt.precision);
-                val2=(fmt.width>1) && (fmt.precision>0) && (fmt.width > fmt.precision );
-                if val1 && val2
+                if (fmt.width>1) && (fmt.precision>0) && (fmt.width > fmt.precision )
                     cfmt=strcat('%',num2str(fmt.width),'.',num2str(fmt.precision),'f');
                     obj.cfgTypes(id).unit=fmt.unit;
                     obj.cfgTypes(id).format=cfmt;

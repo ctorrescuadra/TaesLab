@@ -4,84 +4,75 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 %   and build the data model
 %
 %   cReadModelCSV constructor
-%     obj=cReadModelCSV(cfgfile)
+%     obj=cReadModelCSV(filename)
 %
 %   See also cReadModel, cReadModelTable
 %
     methods
-        function obj = cReadModelXLS(cfgfile)
+        function obj = cReadModelXLS(filename)
         % Construct an instance of the class
 		%	cfgfile - xlsx file containig the model of the plant
 		%
             % Read configuration file
-            Sheets=cType.TableDataName;
+            config=loadDataModelConfig(obj);
+            if isempty(config)
+                return
+            end
+            opts=[config.optional];
+            wshts={config.name};
             if isOctave
 				try
-					xls=xlsopen(cfgfile);
-                	sht=xls.sheets.sh_names;
+					xls=xlsopen(filename);
+                	sheets=xls.sheets.sh_names;
 				catch err
                     obj.messageLog(cType.ERROR,err.message);
-					obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
+					obj.messageLog(cType.ERROR,cMessages.FileNotRead,filename);
 					return
 				end
             else %is Matlab interface
                 try
-				    sht=sheetnames(cfgfile);
-				    xls=cfgfile;
+				    sheets=sheetnames(filename);
+				    xls=filename;
                 catch err
                     obj.messageLog(cType.ERROR,err.message);
-					obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
+					obj.messageLog(cType.ERROR,cMessages.FileNotRead,filename);
 					return
                 end
             end
-            check=ismember(Sheets,sht);
-            % Read mandatory tables
             tables=struct();
-            p=struct('Name','','Description','');
-            for i=cType.MandatoryTables
-                wsht=Sheets{i};
-                p.Name=wsht;
-                p.Description=cType.TableDataDescription{i};
+            check=ismember(wshts,sheets);
+            % Read tables
+            for i=1:numel(config)
+                sht=wshts{i};
+                props=config(i);
                 if check(i)
-                    tbl=cReadModelXLS.importSheet(xls,wsht,p);
+                    tbl=cReadModelXLS.import(xls,sht,props);
                     if tbl.status
-                        tables.(wsht)=tbl;
+                        tables.(sht)=tbl;
                     else
                         obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,cMessages.SheetNotRead,wsht);
-                        return
+					    obj.messageLog(cType.ERROR,cMessages.SheetNotRead,sht);
+                        continue
                     end
+                elseif ~opts(i)
+					obj.messageLog(cType.INFO,'Optional Sheet %s is not available',sht);
+                    continue
                 else
-					obj.messageLog(cType.ERROR,cMessages.SheetNotExist,wsht);
-                    return
+                    obj.messageLog(cType.ERROR,cMessages.SheetNotExist);
                 end
             end
-            % Read optional tables 
-            for i=cType.OptionalTables
-                wsht=Sheets{i};
-                p.Name=wsht;
-                p.Description=cType.TableDataDescription{i};
-                if check(i)
-                    tbl=cReadModelXLS.importSheet(xls,wsht,p);
-                    if tbl.status
-                        tables.(wsht)=tbl;
-                    else
-                        obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,cMessages.SheetNotRead,wsht);
-                        return
-                    end
-                end  
-            end
             % Set Model properties
-            obj.modelTables=tables;
-            obj.setModelProperties(cfgfile);
-            obj.ModelData=obj.buildModelData(tables);
+            if isValid(obj)                   
+                obj.modelTables=tables;
+                obj.ModelData=obj.buildModelData(tables);
+                obj.setModelProperties(filename);
+            end
         end 
     end
 
     methods(Static,Access=private)
-        function tbl=importSheet(xls,wsht,props)
-        	% Read sheet and store into a cell array
+        function tbl=import(xls,wsht,props)
+        	% Read sheet and store into a cModelTable object
             tbl=cMessageLogger;
             if isOctave
 		        try
@@ -98,7 +89,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                     return
 		        end
             end
-            tbl=cTableData.create(values,props);
+            tbl=cModelTable(values,props);
         end
     end
 end

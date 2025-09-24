@@ -252,7 +252,6 @@ classdef cDataModel < cResultSet
             end
         end
 
-
         function res=get.NrOfFinalProducts(obj)
         % Get the number of system outputs
             res=0;
@@ -614,8 +613,11 @@ classdef cDataModel < cResultSet
         %
             res=obj.WasteData;
             if nargout==0
-                showResults(obj.modelInfo,cType.TableData.WASTE_DEFINITION);
-                tbl=getTable(obj.modelInfo,cType.TableData.WASTE_ALLOCATION);
+                tableData=obj.Format.getModelDataProperties;
+                wd=tableData(cType.TableDataIndex.WASTE_DEFINITION).name;
+                wa=tableData(cType.TableDataIndex.WASTE_ALLOCATION).name;
+                showResults(obj.modelInfo,wd);
+                tbl=getTable(obj.modelInfo,wa);
                 if tbl.status, printTable(tbl); end
             end
         end
@@ -808,13 +810,15 @@ classdef cDataModel < cResultSet
         %buildResultInfo - Get the cResultInfo with the data model tables
             ps=obj.ProductiveStructure;
             p=struct('Name','','Description','');
+            tableData=obj.FormatData.getDataModelProperties;
 			% Flows Table
             index=cType.TableDataIndex.FLOWS;
-            sheet=cType.TableDataName{index};
+            tp=tableData(index);
+            sheet=tp.name;
             p.Name=sheet;
-            p.Description=cType.TableDataDescription{index};
+            p.Description=tp.descr;
             fNames={ps.Flows.key};
-            colNames={'key','type'};
+            colNames={tp.fields.name};
             values={ps.Flows.type}';
             tbl=cTableData(values,fNames,colNames,p);
             if tbl.status
@@ -826,16 +830,17 @@ classdef cDataModel < cResultSet
             end
 			% Process Table
             index=cType.TableDataIndex.PROCESSES;
-            sheet=cType.TableDataName{index};
+            tp=tableData(index);
+            sheet=tp.name;
             p.Name=sheet;
-            p.Description=cType.TableDataDescription{index};
+            p.Description=tp.descr;
             prc=ps.Processes(1:end-1);
             pNames={prc.key};
-            colNames={'key','fuel','product','type'};
+            colNames={tp.fields.name};
             values=cell(obj.NrOfProcesses,3);
-            values(:,1)={prc.fuel}';
-            values(:,2)={prc.product}';
-            values(:,3)={prc.type}';
+            values(:,1)={prc.type}';
+            values(:,2)={prc.fuel}';
+            values(:,3)={prc.product}';
             tbl=cTableData(values,pNames,colNames,p);
             if tbl.status
                 tables.(sheet)=tbl;
@@ -846,9 +851,10 @@ classdef cDataModel < cResultSet
             end
             % Exergy Table
             index=cType.TableDataIndex.EXERGY;
-            sheet=cType.TableDataName{index};
+            tp=tableData(index);
+            sheet=tp.name;
             p.Name=sheet;
-            p.Description=cType.TableDataDescription{index};
+            p.Description=tp.descr;
 			colNames=['key',obj.StateNames];			
 			values=zeros(obj.NrOfFlows,obj.NrOfStates);
             for i=1:obj.NrOfStates
@@ -865,13 +871,15 @@ classdef cDataModel < cResultSet
             end
             % Format Table
             index=cType.TableDataIndex.FORMAT;
-            sheet=cType.TableDataName{index};
+            tp=tableData(index);
+            sheet=tp.name;
             p.Name=sheet;
-            p.Description=cType.TableDataDescription{index};
+            p.Description=tp.descr;
 			fmt=obj.ModelData.Format.definitions;
             rowNames={fmt(:).key};
+            colNames={tp.fields.name};
             val=struct2cell(fmt)';
-			tbl=cTableData(val(:,2:end),rowNames,fieldnames(fmt)',p);
+			tbl=cTableData(val(:,2:end),rowNames,colNames,p);
             if tbl.status
                 tables.(sheet)=tbl;
             else
@@ -881,11 +889,12 @@ classdef cDataModel < cResultSet
             end
             % Resources Cost tables
             index=cType.TableDataIndex.RESOURCES;
-            sheet=cType.TableDataName{index};
+            tp=tableData(index);
+            sheet=tp.name;
             p.Name=sheet;
-            p.Description=cType.TableDataDescription{index};
+            p.Description=tp.descr;
             if obj.isResourceCost
-				colNames=[{'Key','Type'},obj.SampleNames];
+				colNames=[{'key','type'},obj.SampleNames];
 				%Flows
                 fId=ps.ResourceFlows;
 				rNames=fNames(ps.ResourceFlows);
@@ -922,11 +931,12 @@ classdef cDataModel < cResultSet
                 wnames=obj.WasteFlows;
 				% Waste Definition
 				index=cType.TableDataIndex.WASTEDEF;
-                sheet=cType.TableDataName{index};
+                tp=tableData(index);
+                sheet=tp.name;
                 p.Name=sheet;
-                p.Description=cType.TableDataDescription{index};
+                p.Description=tp.descr;
                 rowNames=wnames;
-                colNames={'key','type','recycle'};
+                colNames={tp.fields.name};
                 values=cell(obj.NrOfWastes,2);
                 values(:,1)=wd.Type';
                 values(:,2)=num2cell(wd.RecycleRatio)';
@@ -942,9 +952,10 @@ classdef cDataModel < cResultSet
                 jdx=find(wd.TypeId==0);
                 if ~isempty(jdx)
                     index=cType.TableDataIndex.WASTEALLOC;
-				    sheet=cType.TableDataName{index};
+                    tp=tableData(index);
+                    sheet=tp.name;
                     p.Name=sheet;
-                    p.Description=cType.TableDataDescription{index};
+                    p.Description=tp.descr;
                     [~,idx]=find(wd.Values);idx=unique(idx);
                     colNames=['key',wnames(jdx)];
                     rowNames=pNames(idx);

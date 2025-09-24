@@ -17,10 +17,16 @@ classdef cModelTable < cMessageLogger
 %   See cReadModelTables, printconfig.json
 %   
     properties(GetAccess=public,SetAccess=private)
-        Values  % Values read from table data
-        Fields  % Fields of the table
-        Data    % Table Data
-        Keys    % Data keys 
+        NrOfRows % Number of Rows
+        NrOfCols % Number of Columns
+        Values   % Values read from table data
+        Fields   % Fields of the table
+        Data     % Table Data
+        Keys     % Data keys
+    end
+
+    properties(Access=private)
+        config  % Tables properties
     end
 
     methods
@@ -45,7 +51,8 @@ classdef cModelTable < cMessageLogger
             end
             % Validate Table
             obj.Values=table;
-            log=obj.validateTable(props);
+            obj.config=props;
+            log=obj.validateTable;
             if ~log.status
                 obj.addLogger(log);
             end
@@ -63,7 +70,15 @@ classdef cModelTable < cMessageLogger
 
         function res=get.Keys(obj)
         %Get Keys property
-            res = obj.Values(:,1);
+            res = obj.Values(2:end,1);
+        end
+
+        function res=get.NrOfRows(obj)
+            res = size(obj,1) - 1;
+        end
+
+        function res=get.NrOfCols(obj)
+            res = size(obj,2);
         end
 
         function res=getStructData(obj)
@@ -74,20 +89,37 @@ classdef cModelTable < cMessageLogger
         %     res - struct with the columns data
             res=cell2struct(obj.Data,obj.Fields,2);
         end
+
+        function res=getTableData(obj)
+            p=struct('Name',obj.config.name,...
+                'Description',obj.config.descr,...
+                'State','DATA');
+            res=cTableData(obj.Data(:,2:end),obj.Keys',obj.Fields,p);
+            res.setStudyCase(p);
+        end
+
+
+        function res=size(obj,dim)
+        %size - Overload size method
+            if nargin==1
+                res=size(obj.Values);
+            else
+                res=size(obj.Values,dim);
+            end
+        end
     end
 
     methods(Access=private)
-        function log=validateTable(obj,p)
+        function log=validateTable(obj)
         %validateTable - Check the table values
         %   Syntax:
         %     log = obj.validateTable(p)
-        %   Input Arguments
-        %     props - table properties
         %   Output Arguments:
         %     log - cMessageLog with the validation status and error messages
         %
             % Initilize variables            
             log=cMessageLogger();
+            p=obj.config;
             N=numel(p.fields);
             if numel(obj.Fields) < N
                 log.messageLog(cType.ERROR,'Invalid number of fields %d in table %s',numel(obj.Fields),p.name);

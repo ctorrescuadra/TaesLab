@@ -16,51 +16,40 @@ classdef cReadModelCSV < cReadModelTable
         %   Input Arguments:
 		%	  cfgfile - csv file containig the model of the plant
 		% 
-            % Read configuration file
+            % Read data file
 			folder=fileread(cfgfile);
             if ~exist(folder,'dir')
                 obj.messageLog(cType.ERROR,cMessages.CSVFolderNotExist,folder);
 				return
             end
+            % Read configuration file
+            config=loadDataModelConfig(obj);
+            if isempty(config)
+                return
+            end
             tables=struct();
-            Sheets=cType.TableDataName;
-            p=struct('Name','','Description','');
-            % Read Mandatory Tables
-            for i=cType.MandatoryTables
+            opts=[config.optional];
+            Sheets={config.name};
+            % Read Tables
+            for i=1:numel(config)
                 sname=Sheets{i};
-                p.Name=sname;
-                p.Description=cType.TableDataDescription{i};
                 fname=strcat(sname,cType.FileExt.CSV);
+                props=config(i);
                 filename=strcat(folder,cType.getPathDelimiter,fname);
                 if exist(filename,'file')
-                    tbl=cReadModelCSV.import(filename,p);
+                    tbl=cReadModelCSV.import(filename,props);
                     if tbl.status
                         tables.(sname)=tbl;
                     else
                         obj.addLogger(tbl);
 					    obj.messageLog(cType.ERROR,cMessages.FileNotRead,fname);
-                        return
-                    end
+                        continue
+                    end              
+                elseif opts(i)
+                    obj.messageLog(cType.INFO,'Optional Sheet %s is not available',sht);
+                    continue
                 else
 				    obj.messageLog(cType.ERROR,cMessages.FileNotFound,fname);
-                    return
-                end
-            end
-            % Read Optional Tables
-            for i=cType.OptionalTables
-                sname=Sheets{i};
-                p.Name=sname;
-                p.Description=cType.TableDataDescription{i};
-                fname=strcat(sname,cType.FileExt.CSV);
-                filename=strcat(folder,filesep,fname);
-                if exist(filename,'file')
-                    tbl=cReadModelCSV.import(filename,p);
-                    if tbl.status
-                        tables.(sname)=tbl;
-                    else
-                        obj.addLogger(tbl);
-					    obj.messageLog(cType.ERROR,cMessages.FileNotRead,fname);
-                    end
                 end
             end
             % Set Model properties
@@ -89,7 +78,7 @@ classdef cReadModelCSV < cReadModelTable
                     return
 		        end
             end
-            tbl=cTableData.create(values,props);
+            tbl=cModelTable(values,props);
         end
     end
 end

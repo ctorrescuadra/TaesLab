@@ -54,33 +54,20 @@ classdef cExergyData < cMessageLogger
 			end
 			% Check exergy data structure
 			obj.State=data.stateId;
-            if  all(isfield(data.exergy,{'key','value'}))
-				values=data.exergy;
-			else
-                obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);
-				return
-            end
-			M=length(values);
+			exergy=data.exergy;
+			M=length(exergy);
             if ps.NrOfFlows ~= M
                 obj.messageLog(cType.ERROR,cMessages.InvalidExergyDataSize,M);
                 return
             end
-            N=ps.NrOfProcesses;
-			% Check flow keys and get exergy values	
-            B=zeros(1,M);
-            for i=1:M
-				id=ps.getFlowId(values(i).key);
-                if ~id
-					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,values(i).key);
-					continue
-                end
-                if values(i).value < 0
-                    obj.messageLog(cType.ERROR,cMessages.NegativeExergyFlow,values(i).key,values(i).value);
-				else
-					B(id)=values(i).value;
-                end
+			% Load flow exergy values
+            if all(isfield(data.exergy,{'key','value'}))
+				B=[exergy.value];
+			else
+                obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);
+				return
             end
-			if ~obj.status, return; end
+            N=ps.NrOfProcesses;
 			% Calculate exergy of productive groups
 			[E,ET]=ps.flows2Streams(B);
             % Check streams are non negative

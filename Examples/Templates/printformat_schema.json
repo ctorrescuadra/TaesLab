@@ -56,6 +56,9 @@
                 "name": {
                     "type": "string"
                 },
+                "descr": {
+                    "type": "string"
+                },
                 "optional": {
                     "type": "boolean"
                 },
@@ -69,6 +72,7 @@
             "required": [
                 "id",
                 "name",
+                "descr",
                 "optional",
                 "fields"
             ],

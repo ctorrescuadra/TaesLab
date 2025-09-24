@@ -587,34 +587,16 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments:
 		%     log - Result of the check true|false
 		%
-			% Initialize
-			log = false;
-			M = length(data);
-			ftypes = zeros(1, M);
-			% Check flows data
-			for i = 1:M
-                flw=data(i);
-				if ~ischar(flw.key) % Check flow key
-					obj.messageLog(cType.ERROR, cMessages.InvalidFlowId, i);
-					return
-				end
-				if ~cParseStream.checkTextKey(flw.key)
-					obj.messageLog(cType.ERROR, cMessages.InvalidTextKey, flw.key);
-					return
-				end
-				% Check flow Type
-				typeId = cType.getFlowId(flw.type);
-				if isempty(typeId)
-					obj.messageLog(cType.ERROR, cMessages.InvalidFlowType, flw.type, flw.key);
-					return
-				end
-				ftypes(i) = typeId;
-			end
 			% Create Flows structure array
+			M = length(data);
+			[tst,ftypes]=cType.checkFlowTypes({data.type});
+            if ~tst 
+                obj.messageLog(cType.ERROR,'Invalid Flow Types')
+            end
 			obj.Flows= struct('id', num2cell(1:M), ...
 				'key', {data.key}, ...
 				'type', {data.type}, ...
-				'typeId', num2cell(ftypes), ...
+				'typeId', num2cell(ftypes'), ...
 				'from', 0, 'to', 0);
 			log = obj.status;
         end
@@ -629,24 +611,16 @@ classdef cProductiveStructure < cResultId
 		%    log - Result of the check true|false
 		%
 			% Initialize
-			log=false;
 			N=length(data);
 			ptypes=zeros(1,N+1);
-			% Check processes data
-			for i=1:N
+			% Loop over processes
+			for i=1:N				
+				%Check Process Type
                 prc=data(i);
-				if ~ischar(prc.key) % Check Process Key
-					obj.messageLog(cType.ERROR,cMessages.InvalidProcessId,i);
-					return
-				end
-				if ~cParseStream.checkTextKey(prc.key)
-					obj.messageLog(cType.ERROR,cMessages.InvalidTextKey,prc.key);
-					return
-				end
-				ptype=cType.getProcessId(prc.type); %Check Process Type
+				ptype=cType.getProcessId(prc.type); 
 				if isempty(ptype)	        
 					obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,prc.type,prc.key);
-				end
+				end					
 				% Check Fuel stream
 				prc.fuel=regexprep(prc.fuel,cType.SPACES,cType.EMPTY_CHAR);
 				if ~cParseStream.checkDefinitionFP(prc.fuel)

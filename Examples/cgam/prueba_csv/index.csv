@@ -1,0 +1,8 @@
+Key,Description,Graph
+Flows,Flows Data,false
+Processes,Processes Data,false
+Exergy,Exergy Data,false
+Format,Format Data,false
+ResourcesCost,Resources Cost,false
+WasteDefinition,Waste Definition,false
+WasteAllocation,Waste Allocation,false
