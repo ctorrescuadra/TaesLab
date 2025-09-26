@@ -69,6 +69,11 @@ classdef cResourceData < cMessageLogger
 			else
 				obj.messageLog(cType.INFO,cMessages.NoProcessResourceData);
 			end
+			ft=sum(obj.c0)+sum(obj.Z);
+            if ft<cType.EPS
+				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
+				return
+            end
 		end
 
 		function log=setFlowResource(obj,values)
@@ -156,7 +161,7 @@ classdef cResourceData < cMessageLogger
 		%      log - cMessageLog object with messages and errors
 		%               
 			log=cMessageLogger();
-			if ~all(isfield(se,{'key','value'}))
+			if ~all(isfield(se,cType.KEYVAL))
 				log.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return	
 			end
@@ -164,20 +169,10 @@ classdef cResourceData < cMessageLogger
 			for i=1:length(se)
 				id=obj.getResourceIndex(se(i).key);
 				if id
-					if (se(i).value < 0)
-						log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,se(i).key,se(i).value);
-					else
-						obj.c0(id)=se(i).value;
-					end
+					obj.c0(id)=se(i).value;		
 				else
 					log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,se(i).key);
 				end
-			end
-			idx=obj.frsc;
-			ft=sum(obj.c0(idx));
-			if ft<cType.EPS
-				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
-				return
 			end
 		end
 
@@ -192,20 +187,21 @@ classdef cResourceData < cMessageLogger
 		%
 			log=cMessageLogger();
             if length(c0) ~= obj.ps.NrOfFlows	
-				log.messageLog(cType.ERROR,cMessages.InvalidCSize,length(c0));
+				log.messageLog(cType.ERROR,cMessages.InvalidSize,length(c0));
 				return
             end
 			if any(c0<0)
 				log.messageLog(cType.ERROR,cMessages.NegativeResourceValue);
 				return
 			end
+			% Check if total resources are zero
 			idx=obj.frsc;
-			ft=sum(c0(idx));
-            if ft<cType.EPS
+            if iscolumn(c0), c0=c0';end
+			ft=sum(c0(idx))+sum(obj.Z);
+			if ft<cType.EPS
 				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
 				return
-            end
-            if iscolumn(c0), c0=c0';end
+			end
 			obj.c0(idx)=c0(idx);	
 		end
 
@@ -219,23 +215,20 @@ classdef cResourceData < cMessageLogger
 		%      log - cMessageLog object with messages and errors
 		%        
 			log=cMessageLogger();
-			if ~all(isfield(sz,{'key','value'}))
-				log.messageLog(cType.ERROR,cMessages.InvalidResourceModel');
+			if ~all(isfield(sz,cType.KEYVAL))
+				log.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return	
 			end		
-			% Check processes cost data
-            for i=1:length(sz)
-				id=obj.ps.getProcessId(sz(i).key);
-                if id
-					if (sz(i).value >= 0)
-						obj.Z(id)=sz(i).value;
-					else
-						log.messageLog(cType.ERROR,cMessages.InvalidResourceValue,sz(i).key,sz(i).value);
-					end
-                else
+			% Set processes cost data
+			pkeys={sz.key};
+			[tst,idx]=ismember(pkeys,obj.ps.ProcessKeys);
+			if tst
+				obj.Z(idx)=[sz(idx).value];
+			else
+				for i=find(~tst)
 					log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,sz(i).key);
-                end
-            end
+				end
+			end
 		end
 
 		function log=setProcessResourceValues(obj,Z)
@@ -257,6 +250,11 @@ classdef cResourceData < cMessageLogger
 				return
             end
             if iscolumn(Z),Z=Z';end
+			ft=sum(obj.c0)+sum(Z);
+			if ft<cType.EPS
+				log.messageLog(cType.ERROR,cMessages.ZeroResourceCost);
+				return
+			end
 			obj.Z=Z;
 		end
 	end	

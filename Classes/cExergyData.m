@@ -61,7 +61,7 @@ classdef cExergyData < cMessageLogger
                 return
             end
 			% Load flow exergy values
-            if all(isfield(data.exergy,{'key','value'}))
+            if all(isfield(data.exergy,cType.KEYVAL))
 				B=[exergy.value];
 			else
                 obj.messageLog(cType.ERROR,cMessages.InvalidExergyDefinition);

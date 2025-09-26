@@ -10,11 +10,17 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 %
     methods
         function obj = cReadModelXLS(filename)
-        % Construct an instance of the class
-		%	cfgfile - xlsx file containig the model of the plant
+        %cReadModelXLS - Build an instance of the class
+        %   Read a XLSX data model file
+        %   Syntax:
+        %     obj = cReadNodelXLS(filename)
+        %   Input Argument:
+		%	  filename - xlsx file containig the model of the plant
+        %   Output Argument
+        %     obj - cReadModel object
 		%
             % Read configuration file
-            config=loadDataModelConfig(obj);
+            config=getDataModelConfig(obj);
             if isempty(config)
                 return
             end
@@ -64,15 +70,24 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
             % Set Model properties
             if isValid(obj)                   
                 obj.modelTables=tables;
-                obj.ModelData=obj.buildModelData(tables);
                 obj.setModelProperties(filename);
+                obj.ModelData=obj.buildModelData(tables);
             end
         end 
     end
 
     methods(Static,Access=private)
         function tbl=import(xls,wsht,props)
-        	% Read sheet and store into a cModelTable object
+        %import - Read sheet and store into a cModelTable object
+        %   Syntax:
+        %     tbl = import(xls,wsht,props)
+        %   Input Arguments:
+        %     xls   - XLSX filename
+        %     wsht  - Worksheet of the file to read
+        %     props - Properties of the table
+        %   Output Argument
+        %     res - cModelTable object
+        %
             tbl=cMessageLogger;
             if isOctave
 		        try

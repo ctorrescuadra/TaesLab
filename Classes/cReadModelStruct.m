@@ -6,6 +6,7 @@ classdef (Abstract) cReadModelStruct < cReadModel
 %     buildModelData - Build the cModelData object
 %
 %   See also cReadModel, cReadModelJSON, cReadModelXML
+%
     methods(Access=protected)
 		function res = buildModelData(obj, data)
 		% Build the cModelData from structured data

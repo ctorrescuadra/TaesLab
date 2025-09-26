@@ -6,13 +6,16 @@ classdef cModelTable < cMessageLogger
 %     obj = cModelResults(table,props)
 %
 %   cModelTable properties:
+%     NrOfRows - Number of table rows
+%     NrOfCols - Number of table columns
 %     Values - Table data values
 %     Fields - Fields of the table
 %     Data   - Data of the table (without fields)
 %     Keys   - Keys or row names of the table data
 %   
 %   cModelTable methods:
-%     getStructData   - Get the table values as struct
+%     getStructData - Get the values as struct
+%     gettableData  - Get the values as cTable
 %
 %   See cReadModelTables, printconfig.json
 %   
@@ -74,11 +77,13 @@ classdef cModelTable < cMessageLogger
         end
 
         function res=get.NrOfRows(obj)
-            res = size(obj,1) - 1;
+        %Get number of rows
+            res = length(obj.Keys);
         end
 
         function res=get.NrOfCols(obj)
-            res = size(obj,2);
+        %Get number of cols
+            res = length(obj.Fields);
         end
 
         function res=getStructData(obj)
@@ -91,13 +96,18 @@ classdef cModelTable < cMessageLogger
         end
 
         function res=getTableData(obj)
+        %getTableData - Get a cTable with the table model info.
+        %   Syntax:
+        %     res = obj.getTableData
+        %   Output parameter:
+        %     res - cTable object
+        %
             p=struct('Name',obj.config.name,...
                 'Description',obj.config.descr,...
                 'State','DATA');
             res=cTableData(obj.Data(:,2:end),obj.Keys',obj.Fields,p);
             res.setStudyCase(p);
         end
-
 
         function res=size(obj,dim)
         %size - Overload size method
@@ -122,7 +132,7 @@ classdef cModelTable < cMessageLogger
             p=obj.config;
             N=numel(p.fields);
             if numel(obj.Fields) < N
-                log.messageLog(cType.ERROR,'Invalid number of fields %d in table %s',numel(obj.Fields),p.name);
+                log.messageLog(cType.ERROR,cMessages.InvalidFieldNumber,numel(obj.Fields),p.name);
                 return
             end
             % Loop over the fields definition
@@ -131,7 +141,7 @@ classdef cModelTable < cMessageLogger
                 fld=obj.Fields{i};
                 pfld=p.fields(i).name;
                 if ~strcmpi(fld,pfld) && (dt ~= cType.DataType.SAMPLE)
-                    log.messageLog(cType.ERROR,'Invalid field %s in table %s',fld,p.name);
+                    log.messageLog(cType.ERROR,cMessages.InvalidField,fld,p.name);
                     continue
                 end
                 colData=obj.Data(:,i);
@@ -148,7 +158,7 @@ classdef cModelTable < cMessageLogger
                         tst=cModelTable.validateSample(log,sampleData);
                 end
                 if ~tst
-                    log.messageLog(cType.ERROR,'Invalid data type for column %s in sheet %s',fld,p.name);
+                    log.messageLog(cType.ERROR,cMessages.InvalidFieldDatatype,fld,p.name);
                     continue
                 end
             end
@@ -172,7 +182,7 @@ classdef cModelTable < cMessageLogger
             if ~isempty(ier)
                 tst=false;
                 for i=ier
-                    log.messageLog(cType.ERROR,'Key %s is invalid',data{i});
+                    log.messageLog(cType.ERROR,cMessages.InvalidKey,data{i});
                 end
             end
             ier=cParseStream.checkDuplicates(data);
@@ -180,7 +190,7 @@ classdef cModelTable < cMessageLogger
             if ~isempty(ier)
                 tst=false;
                 for i=ier
-                    log.messageLog(cType.ERROR,'Key %s is duplicate',data{i});
+                    log.messageLog(cType.ERROR,cMessages.DuplicateKey,data{i});
                 end
             end
         end
@@ -222,7 +232,7 @@ classdef cModelTable < cMessageLogger
             if ~isempty(ier)
                 tst=false;
                 for i=ier
-                    log.messageLog(cType.ERROR,'Invalid sample name',samples{i});
+                    log.messageLog(cType.ERROR,cMessages.InvalidCaseName,samples{i});
                 end
             end
             % Check duplicate names
@@ -230,7 +240,7 @@ classdef cModelTable < cMessageLogger
             if ~isempty(ier)
                 tst=false;
                 for i=ier
-                    log.messageLog(cType.ERROR,'Duplicate sample name',samples{i});
+                    log.messageLog(cType.ERROR,cMessages.DuplicateCaseName,samples{i});
                 end
             end
             % Check if the block data is numeric and non-negative

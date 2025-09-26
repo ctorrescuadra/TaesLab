@@ -195,7 +195,7 @@ classdef cProductiveStructure < cResultId
 			end
 			% Set object variables
 			obj.ResultId=cType.ResultId.PRODUCTIVE_STRUCTURE;
-			obj.ModelName=data.name;
+			obj.ModelName=dm.ModelName;
 			obj.State='SUMMARY';
         end
 		
@@ -589,15 +589,18 @@ classdef cProductiveStructure < cResultId
 		%
 			% Create Flows structure array
 			M = length(data);
-			[tst,ftypes]=cType.checkFlowTypes({data.type});
-            if ~tst 
-                obj.messageLog(cType.ERROR,'Invalid Flow Types')
+			[tst,idx]=cType.checkFlowTypes({data.type});
+            if tst 
+				obj.Flows= struct('id', num2cell(1:M), ...
+					'key', {data.key}, ...
+					'type', {data.type}, ...
+					'typeId', num2cell(idx'), ...
+					'from', 0, 'to', 0);
+			else %log invalid key types
+				for i=idx
+                	obj.messageLog(cType.ERROR,cMessage.InvalidFlowType,data(i).key,data(i).type);
+				end
             end
-			obj.Flows= struct('id', num2cell(1:M), ...
-				'key', {data.key}, ...
-				'type', {data.type}, ...
-				'typeId', num2cell(ftypes'), ...
-				'from', 0, 'to', 0);
 			log = obj.status;
         end
 

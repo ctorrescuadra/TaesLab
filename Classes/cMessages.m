@@ -39,6 +39,14 @@ classdef cMessages
         InvalidSampleList='Invalid samples list'
         NodeNotReachedFromSource='Process %s not reached from resources'
         OutputNotReachedFromNode='Output not reached from Process %s'
+        % Invalid Model Table definitions
+        InvalidFieldNumber='Invalid number of fields %d in table %s'
+        InvalidField='Invalid column %s in table %s'
+        InvalidFieldDatatype='Invalid data type for column %s in table %s'
+        InvalidKey='Key %s is invalid'
+        DuplicateKey='Duplicate key %s'
+        InvalidCaseName='Invalid Case %s'
+        DuplicateCaseName='Duplicate Case %s'
         % Invalid keys
         InvalidFlowId='Invalid flow Id %d'
         InvalidProcessId='Invalid process Id %d'
@@ -94,6 +102,7 @@ classdef cMessages
         InvalidFormatKey='Invalid format key %s'
         BadFormatDefinition='Bad format definition for %s'
         % ExergyData messages
+        InvalidExergyKeys='Exergy Flow keys are not well defined'
         InvalidExergyDataSize='Invalid number of exergy values %d'
         InvalidExergyDefinition='Invalid exergy data structure definition'
         NegativeExergyFlow='Exergy of flow %s is negative %f'

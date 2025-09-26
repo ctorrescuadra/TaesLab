@@ -10,12 +10,15 @@ classdef cReadModelCSV < cReadModelTable
 %
     methods
         function obj=cReadModelCSV(cfgfile)
-        %cReadModelCSV - Construct an instance of the class
+        %cReadModelCSV - Build an instance of the class
+        %   Read a CSV file containing the data model
         %   Syntax:
         %     obj=cReadModelCSV(cfgfile)
         %   Input Arguments:
 		%	  cfgfile - csv file containig the model of the plant
-		% 
+		%   Output Argument:
+        %     obj - cReadModel object
+        %
             % Read data file
 			folder=fileread(cfgfile);
             if ~exist(folder,'dir')
@@ -23,7 +26,7 @@ classdef cReadModelCSV < cReadModelTable
 				return
             end
             % Read configuration file
-            config=loadDataModelConfig(obj);
+            config=getDataModelConfig(obj);
             if isempty(config)
                 return
             end
@@ -61,8 +64,16 @@ classdef cReadModelCSV < cReadModelTable
 
     methods(Static, Access=private)
         function tbl=import(filename,props)
-        % import a CSV file
-            tbl=cMessageLogger;
+        %import - Read a file and store into a cModelTable object
+        %   Syntax:
+        %     tbl = import(filename,props)
+        %   Input Arguments:
+        %     filename - CSV filename
+        %     props - Properties of the table
+        %   Output Argument
+        %     res - cModelTable object
+        %
+            tbl=cMessageLogger();
             if isOctave
 		        try
 			        values=csv2cell(filename);

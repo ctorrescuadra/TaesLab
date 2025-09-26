@@ -3,7 +3,7 @@ classdef (Sealed) cModelData < cMessageLogger
 %   Contains the data model from read interface
 %
 %   cModelData constructor:
-%     obj = cModelData(name, s)
+%     obj = cModelData(name,s)
 %
 %   cModelData properties:
 %     ModelName           - Name of the model

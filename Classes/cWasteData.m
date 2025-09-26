@@ -119,15 +119,11 @@ classdef cWasteData < cMessageLogger
 								obj.messageLog(cType.ERROR,cMessages.InvalidAllocationProcess,wval(j).process);
 								continue
 							end
-							if (wval(j).value <= 0)
-								obj.messageLog(cType.ERROR,cMessages.NegativeWasteAllocation,wval(j).process,wval(j).value);
-								continue
-							end
 							values(i,jp)=wval(j).value;
                         end
 					    else %if no values provided set type to DEFAULT
 						    wasteType(i)=cType.WasteAllocation.DEFAULT;
-						    obj.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,wd(i).flow);
+						    obj.messageLog(cType.INFO,cMessages.NoWasteAllocationValues,wd(i).flow);
 					end             
 				end
 			end

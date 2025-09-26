@@ -1,6 +1,5 @@
 {
   "ProductiveStructure": {
-    "name": "cgam_model",
     "flows": [
       {
         "key": "NG",
@@ -54,45 +53,45 @@
     "processes": [
       {
         "key": "COMB",
-        "description": "Combustor",
+        "type": "PRODUCTIVE",
         "fuel": "NG+B3",
         "product": "B4",
-        "type": "PRODUCTIVE"
+        "description": "Combustor"
       },
       {
         "key": "CMP",
-        "description": "Compressor",
+        "type": "PRODUCTIVE",
         "fuel": "WC",
         "product": "B2-B1",
-        "type": "PRODUCTIVE"
+        "description": "Compressor"
       },
       {
         "key": "TRB",
-        "description": "Turbine",
+        "type": "PRODUCTIVE",
         "fuel": "B4-B5",
         "product": "WC+WN",
-        "type": "PRODUCTIVE"
+        "description": "Turbine"
       },
       {
         "key": "APH",
-        "description": "Preheater",
+        "type": "PRODUCTIVE",
         "fuel": "B5-B6",
         "product": "B3-B2",
-        "type": "PRODUCTIVE"
+        "description": "Preheater"
       },
       {
         "key": "HRSG",
-        "description": "HRSG",
+        "type": "PRODUCTIVE",
         "fuel": "B6-B7",
         "product": "QV",
-        "type": "PRODUCTIVE"
+        "description": "HRSG"
       },
       {
         "key": "STCK",
-        "description": "Stack",
+        "type": "DISSIPATIVE",
         "fuel": "B7",
         "product": "QG",
-        "type": "DISSIPATIVE"
+        "description": "Stack"
       }
     ]
   },
@@ -565,7 +564,7 @@
     ]
   },
   "WasteDefinition": {
-    "wastes": [{
+    "wastes": {
       "flow": "QG",
       "type": "MANUAL",
       "recycle": 0,
@@ -586,17 +585,17 @@
           "process": "APH",
           "value": 0.089
         }
-      ]}
-    ]
+      ]
+    }
   },
   "ResourcesCost": {
     "Samples": [
       {
         "sampleId": "Base",
-        "flows": [{
+        "flows": {
           "key": "NG",
           "value": 30
-        }],
+        },
         "processes": [
           {
             "key": "COMB",
@@ -622,10 +621,10 @@
       },
       {
         "sampleId": "CGAMR",
-        "flows": [{
+        "flows": {
           "key": "NG",
           "value": 30
-        }],
+        },
         "processes": [
           {
             "key": "COMB",

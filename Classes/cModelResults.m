@@ -39,13 +39,14 @@ classdef (Sealed) cModelResults < cMessageLogger
         end
 
         function res=getResults(obj,id)
-        % getResults - Get the cResultInfo from the container
+        %getResults - Get the cResultInfo from the container
         %   Syntax:
         %     res = obj.getResults(id)
         %   Input Arguments:
         %     id - ResultId index
         %   Output Arguments:
         %     res - cResultInfo for the corresponding index
+        %
             res=cType.EMPTY;
             if nargin==1
                 res=obj.results;
@@ -113,7 +114,15 @@ classdef (Sealed) cModelResults < cMessageLogger
 
     methods(Static,Access=private)
         function res = checkAssign(obj1,obj2)
-        % Check if the set function (obj1=obj2) should be execute
+        %checkAssign - Check if the set function (obj1=obj2) should be execute
+        %   Assing obj2 to obj1, if are differents obj2 is valid, or obj1 is empty 
+        %   Syntax:
+        %     res = cModelResults.checkAssign(obj1,obj2)
+        %   Input Arguments:
+        %     obj1 - Current cResultInfo object
+        %     obj2 - New cResultInfo object
+        %   Output Arguments:
+        %     res - true | false
             % Check if obj2 is valid
             if ~isObject(obj2,'cResultInfo')
                 res=false;

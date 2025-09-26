@@ -386,7 +386,7 @@ classdef cDataModel < cResultSet
             if isstruct(values)
                 exs.exergy=values;
             elseif isnumeric(values)
-                fields={'key','value'};
+                fields=cType.KEYVAL;
                 keys=obj.ProductiveStructure.FlowKeys;
                 if iscolumn(values),values=values';end
                 tmp=[keys;num2cell(values)];
@@ -535,7 +535,7 @@ classdef cDataModel < cResultSet
                     res.printError(cMessages.InvalidExergyDataSize,M);
                     return
                 end
-                fields={'key','value'};
+                fields=cType.KEYVAL;
                 irsd=ps.ResourceFlows;
                 keys=ps.FlowKeys(irsd);
                 if iscolumn(rval), rval=rval';end
@@ -554,7 +554,7 @@ classdef cDataModel < cResultSet
                         res.printError(cMessages.InvalidExergyDataSize,M);
                         return
                     end
-                    fields={'key','value'};
+                    fields=cType.KEYVAL;
                     keys=ps.ProcessKeys(1:end-1);
                     if iscolumn(pval), pval=pval';end
                     tmp=[keys;num2cell(pval)];
@@ -985,7 +985,7 @@ classdef cDataModel < cResultSet
             ps=obj.ProductiveStructure;
             % Exergy
             ds=obj.ExergyData;
-            fields={'key','value'};
+            fields=cType.KEYVAL;
             snames=obj.StateNames;
             st=cell(obj.NrOfStates,1);
             for i=1:obj.NrOfStates

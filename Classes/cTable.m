@@ -290,7 +290,7 @@ classdef (Abstract) cTable < cMessageLogger
         %   Output Arguments:
         %     res - array struct key/value         
             try
-                res=cell2struct([obj.RowNames',obj.Data(:,idx)],{'key','value'},2);
+                res=cell2struct([obj.RowNames',obj.Data(:,idx)],cType.KEYVAL,2);
             catch
                 res=[];
             end

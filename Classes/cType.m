@@ -125,7 +125,9 @@ classdef cType
         RESULT_FILE='ModelResults';
 		SUMMARY_FILE='SummaryResults';
 		DIAGRAM_FILE='Diagram';
-        TABLE_FILE='table'
+        TABLE_FILE='table';
+		% key - value fields
+		KEYVAL={'key','value'};
 		% Format config file
 		CFGFILE='printformat.json';
 		% Table Names and keys
