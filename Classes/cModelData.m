@@ -126,14 +126,12 @@ classdef (Sealed) cModelData < cMessageLogger
 
         function res=isWaste(obj)
         %isWaste - Indicate is optional waste element exists
-            id=cType.DataId.WASTE;
-            res = isfield(obj.dm,cType.DataElements{id});
+            res=~isempty(obj.dm.WasteDefinition);
         end
 
         function res=isResourceCost(obj)
         %isResources - Indicate is optional resources cost element exists
-            id=cType.DataId.RESOURCES;
-            res = isfield(obj.dm,cType.DataElements{id});
+            res = ~isempty(obj.dm.ResourcesCost);
         end
 
         function log=saveAsXML(obj,filename)

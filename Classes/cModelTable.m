@@ -12,6 +12,7 @@ classdef cModelTable < cMessageLogger
 %     Fields - Fields of the table
 %     Data   - Data of the table (without fields)
 %     Keys   - Keys or row names of the table data
+%     Name   - Name of the table
 %   
 %   cModelTable methods:
 %     getStructData - Get the values as struct
@@ -26,6 +27,7 @@ classdef cModelTable < cMessageLogger
         Fields   % Fields of the table
         Data     % Table Data
         Keys     % Data keys
+        Name     % Table Name
     end
 
     properties(Access=private)
@@ -86,6 +88,11 @@ classdef cModelTable < cMessageLogger
             res = length(obj.Fields);
         end
 
+        function res=get.Name(obj)
+        %Get table name
+            res = obj.config.name;
+        end
+
         function res=getStructData(obj)
         %getStructData - Get a struct with the table values
         %   Syntax:
@@ -107,6 +114,14 @@ classdef cModelTable < cMessageLogger
                 'State','DATA');
             res=cTableData(obj.Data(:,2:end),obj.Keys',obj.Fields,p);
             res.setStudyCase(p);
+        end
+
+        function disp(obj)
+        %disp - Overload disp methods. Print Table on console.
+        %   Syntax:
+        %     printTable(obj)
+        %
+            printTable(getTableData(obj));
         end
 
         function res=size(obj,dim)

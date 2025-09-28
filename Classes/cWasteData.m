@@ -66,7 +66,7 @@ classdef cWasteData < cMessageLogger
 				return
 			end
 			if ~all(isfield(data.wastes,{'flow','type'}))
-				obj.messageLog(cType.ERROR,InvalidWasteData);
+				obj.messageLog(cType.ERROR,cMessages.InvalidWasteData);
 				return
 			end
 			% Initialize arrays
@@ -119,10 +119,16 @@ classdef cWasteData < cMessageLogger
 								obj.messageLog(cType.ERROR,cMessages.InvalidAllocationProcess,wval(j).process);
 								continue
 							end
-							values(i,jp)=wval(j).value;
+							if wval(j).value>0
+								values(i,jp)=wval(j).value;
+							else
+    							obj.messageLog(cType.ERROR,cMessages.NegativeWasteAllocation,wd(i).flow,wval(j).value);
+								continue
+							end
                         end
 					    else %if no values provided set type to DEFAULT
 						    wasteType(i)=cType.WasteAllocation.DEFAULT;
+                            wd(i).type=cType.DEFAULT_WASTE_ALLOCATION;
 						    obj.messageLog(cType.INFO,cMessages.NoWasteAllocationValues,wd(i).flow);
 					end             
 				end
@@ -313,7 +319,14 @@ classdef cWasteData < cMessageLogger
 		end			
 	
 		function status=updateValues(obj,val)
-		% Set the waste table values (internal use)
+		%updateValues - Set the waste table values (internal use)
+		%   Syntax:
+		%     status=val=updateValues(val)
+		%   Input Argument:
+		%     val - Waste allocation matrix
+		%   Output Argument
+		%     status - true | false
+		%
 			status=false;
 			if all(size(val)==size(obj.Values))
 				obj.Values=val;
@@ -323,12 +336,19 @@ classdef cWasteData < cMessageLogger
 	end	
 		
 	methods(Access=private)
-		% Check if value is a Index
 		function res=validateArg(obj,arg)
+		%validateArgument - Get the index of a waste key
+		% 	Syntax:
+		%     res = obj.validateArgument(arg)
+		%   Input Argument:
+		%     arg - waste key or index
+		%   Output Argument:
+		%     res - waste key index
+		%
 			res=cType.EMPTY;
 			if ischar(arg)
 				res=obj.getWasteIndex(arg);
-			elseif isIndex(arg,1:obj.NrOfObjects)
+			elseif isIndex(arg,1:obj.NrOfWastes)
 				res=arg;
 			end
 		end

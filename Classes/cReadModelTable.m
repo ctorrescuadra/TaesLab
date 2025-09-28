@@ -4,13 +4,15 @@ classdef (Abstract) cReadModelTable < cReadModel
 %	
 %   See also cReadModel, cReadModelXLS, cReadModelCSV
 %
-	properties (Access=protected)
+	properties (Access=public)
 		modelTables   % Model Tables
 	end
 
     properties (Access=private)
         ftype   % Flow types
         fkeys   % Flow keys
+        ptype   % Process types
+        pkeys   % Processes keys
     end
 
 	methods (Access=protected)
@@ -52,6 +54,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                 sd.WasteDefinition=checkWasteDefinition(obj,tm);
                 sd.ResourcesCost=checkResourcesCost(obj,tm);
                 res=cModelData(obj.ModelName,sd);
+                res.addLogger(obj);
             end
         end
     end
@@ -66,6 +69,7 @@ classdef (Abstract) cReadModelTable < cReadModel
         %   Output Arguments:
         %     res - structure with the flows and process tables
         %
+            res=cType.EMPTY;
             % Flows table
             ftbl=tm.Flows;
             obj.fkeys=ftbl.Keys;
@@ -92,6 +96,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             end
             % Processes table
             ptbl=tm.Processes;
+            obj.pkeys=ptbl.Keys;
             if ptbl.status
                 res.processes=ptbl.getStructData;
             else
@@ -106,7 +111,9 @@ classdef (Abstract) cReadModelTable < cReadModel
             end
             types=[ptbl.Data(:,cid)];
             [tst,idx]=cType.checkProcessTypes(types);
-            if ~tst
+            if tst
+                obj.ptype=idx;
+            else
                 for i=idx               
                     obj.messageLog(cType.ERROR,cMessages.InvalidProcessType,ptbl.Keys{i},types{i});
                 end
@@ -122,6 +129,7 @@ classdef (Abstract) cReadModelTable < cReadModel
         %   Output Arguments:
         %     res - structure array with the exergy states
         %
+            res=cType.EMPTY;
             % Check table status
             tbl=tm.Exergy;
             if ~tbl.status
@@ -147,7 +155,7 @@ classdef (Abstract) cReadModelTable < cReadModel
             end
         end
 
-        function pswd=checkWasteDefinition(obj,tm)
+        function res=checkWasteDefinition(obj,tm)
         %checkWasteDefinition - check WasteDefinition and WasteAllocation tables
         %   Syntax: 
         %     res = obj.checkWasteDefinition(tm)
@@ -155,85 +163,106 @@ classdef (Abstract) cReadModelTable < cReadModel
         %     tm - cModelTable structure
         %   Output Arguments:
         %     res - structure array with the waste data 
-        %      
-            % Check waste tables
-            isWasteDefinition=isfield(tm,'WasteDefinition');
-            isWasteAllocation=isfield(tm,'WasteAllocation');
-            if  isWasteAllocation || isWasteDefinition                
-                pswd=obj.WasteData(tm.Flows);
-                if isempty(pswd)
+        %                 
+            res=cType.EMPTY;
+            % Check if the model has waste flows
+            rid=find(obj.ftype==cType.Flow.WASTE);
+            if isempty(rid)
+                obj.messageLog(cType.INFO,cMessages.NoWasteModel);
+                return
+            end
+            % Get the default waste definition
+            wf=obj.fkeys(rid);
+            pswd=struct('flow',wf,...
+                    'type',cType.DEFAULT_WASTE_ALLOCATION,...
+                    'recycle',0.0);
+            % Read Waste Definition table
+            wdef=0;
+            if isfield(tm,'WasteDefinition') && isValid(tm.WasteDefinition)
+                tbl=tm.WasteDefinition;
+                cid=find(strcmp(tbl.Fields,'type'));
+                if isempty(cid)
                     obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteDefinition');
                     return
                 end
-                wf={pswd.wastes.flow};
-                wdef=0;
-                % Waste Definition
-                if isWasteDefinition
-                    tbl=tm.WasteDefinition;
-                    wdef=bitset(wdef,1);
-                    keys=tbl.Keys;
-                    tmp=tbl.getStructData;
-                    cid=find(strcmp(tbl.Fields,'type'),1);
-                    if isempty(cid)
-                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'WasteDefinition');
-                        return
-                    end
-                    % Check waste types
-                    types=[tbl.Data(:,cid)];
-                    [tst,idx]=cType.checkWasteTypes(types);
-                    if ~tst
-                        for i=idx
-                            obj.messageLog(cType.ERROR,cMessages.InvalidWasteType,tbl.Keys{i},types{i});
-                        end
-                    end
-                    % Build waste definition data 
+                wdef=bitset(wdef,1);
+                keys=tbl.Keys;
+                tmp=tbl.getStructData;
+                % Check waste types
+                types=[tbl.Data(:,cid)];
+                [tst,ier]=cType.checkWasteTypes(types);
+                if tst
                     for i=1:numel(keys)
-                        idx=find(strcmp(keys{i},wf),1);
-                        if isempty(idx)
+                        id=find(strcmp(keys{i},wf));
+                        if isempty(id)
                             obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
                             continue
                         end
-                        pswd.wastes(idx).type=tmp(i).type;
-                        pswd.wastes(idx).recycle=tmp(i).recycle;
+                        pswd(id).type=tmp(i).type;
+                        pswd(id).recycle=tmp(i).recycle;
                     end
-                end
-                % Waste Allocation Table
-                if isWasteAllocation
-                    tbl=tm.WasteAllocation;
-                    % Check Waste Allocation Table
-                    keys=tbl.Fields(2:end);
-                    processes=tbl.Keys;
-                    data=cell2mat(tbl.Data(:,2:end));
-                    wdef=bitset(wdef,2);
-                    % Build waste allocation data
-                    for i=1:numel(keys)
-                        idx=find(strcmp(keys{i},wf),1);
-                        if isempty(idx)
-                            obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
-                            continue
-                        end
-                        % Fill the waste allocation values
-                        try
-                            [irow,~,val]=find(data(:,i));
-                            nnz=length(irow);
-                            if nnz>0
-                                tmp=cell(nnz,1);
-                                for j=1:nnz
-                                    tmp{j}.process=processes{irow(j)};
-                                    tmp{j}.value=val(j);
-                                end
-                                if ~bitget(wdef,1)
-                                    pswd.wastes(idx).type='MANUAL';
-                                end
-                                pswd.wastes(idx).values=cell2mat(tmp');
-                            end
-                        catch
-                            obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{i});
-                            continue
-                        end
-                    end            
+                    wtypes=ier;
+                else
+                    for i=ier
+                        obj.messageLog(cType.ERROR,cMessages.InvalidWasteType,types{i},tbl.Keys{i});
+                    end
                 end
             end
+            % Waste Allocation Table
+            if isfield(tm,'WasteAllocation') && isValid(tm.WasteAllocation)
+                tbl=tm.WasteAllocation;
+                % Check Allocation processes
+                processes=tbl.Keys;
+                [tst,idx]=ismember(processes,obj.pkeys);
+                if ~all(tst) 
+                    ier=find(~tst);
+                    for i=ier
+                        obj.messageLog(cType.ERROR,cMessages.InvalidProcessTableKey,processes{i},tbl.Name);
+                    end
+                    return
+                end
+                % Procsses to allocate waste must be productive
+                ier=find(obj.ptype(idx)==cType.Process.DISSIPATIVE);
+                if ~isempty(ier)
+                    for i=ier
+                        obj.messageLog(cType.ERROR,cMessages.InvalidAllocationProcess,processes{i});
+                    end
+                    return
+                end
+                wkeys=tbl.Fields(2:end);
+                data=cell2mat(tbl.Data(:,2:end));
+                wdef=bitset(wdef,2);
+                % Build waste allocation data
+                for j=1:numel(wkeys)
+                    idx=find(strcmp(wkeys{j},wf),1);
+                    if isempty(idx)
+                        obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,wkeys{j});
+                        continue
+                    end
+                    % Fill the waste allocation values
+                    try
+                        [irow,~,val]=find(data(:,j));
+                        nnz=length(irow);
+                        if nnz>0
+                            tmp=cell(1,nnz);
+                            for k=1:nnz
+                                tmp{k}.process=processes{irow(k)};
+                                tmp{k}.value=val(k);
+                            end
+                            if ~bitget(wdef,1)
+                                pswd(idx).type='MANUAL';
+                            end
+                            pswd(idx).values=cell2mat(tmp);
+                        end
+                    catch
+                        obj.messageLog(cType.ERROR,cMessages.InvalidWasteKey,keys{j});
+                        continue
+                    end
+                end
+            elseif ~all(wtypes)
+                obj.messageLog(cType.ERROR,cMessages.InvalidManualAllocation);
+            end
+            res.wastes=pswd;
         end
         
         function res=checkResourcesCost(obj,tm)
@@ -245,82 +274,75 @@ classdef (Abstract) cReadModelTable < cReadModel
         %   Output Arguments:
         %     res - structure array with the resource cost data
         %     
-            % Get Resources cost definition
-            isResourceCost=isfield(tm,'ResourcesCost');
-            if isResourceCost
-                tbl=tm.ResourcesCost;
-                if tbl.status
-                    NrOfSamples=tbl.NrOfCols-2;           
-                    %Check Types
-                    cid=find(strcmp(tbl.Fields,'type'),1);
-                    if isempty(cid)
-                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourceCost');
-                        return
-                    end
-                    types=tbl.Data(:,cid);
-                    [tst,idx]=cType.checkResourceTypes(types);
-                    if tst
-                        rtype=idx;
-                    else
-                        for i=ier
-                            obj.messageLog(cType.ERROR,cMessages.InvalidResourcesType,tbl.Keys{i},types{i});
-                        end
-                    end
-                    % Check if there is resources flows
-                    samples=tbl.Fields(3:end);
-                    fields=cType.KEYVAL;
-                    fidx=find(rtype==cType.Resources.FLOW);
-                    if isempty(fidx)
-                        obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
-                        return
-                    end
-                    % Buil Resources Cost data
-                    res=struct();
-                    data=tbl.Data(:,3:end);
-                    for i=1:NrOfSamples
-                        fvalues=[tbl.Keys(fidx),data(fidx,i)];
-                        fs=cell2struct(fvalues,fields,2);
-                        res.Samples(i,1).sampleId=samples{i};
-                        res.Samples(i,1).flows=fs;
-                    end
-                    pidx=find(rtype==cType.Resources.PROCESS);
-                    if ~isempty(pidx)
-                        for i=1:NrOfSamples
-                            pvalues=[tbl.Keys(pidx),data(pidx,i)];
-                            pr=cell2struct(pvalues,fields,2);
-                            res.Samples(i,1).processes=pr;
-                        end
-                    end
+            res=cType.EMPTY;
+            if ~isfield(tm,'ResourcesCost') || ~isValid(tm.ResourcesCost)
+                return
+            end
+            tbl=tm.ResourcesCost;
+            NrOfSamples=tbl.NrOfCols-2;           
+            %Check Table
+            if NrOfSamples<1
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourceCost');
+                return
+            end
+            cid=find(strcmp(tbl.Fields,'type'),1);
+            if isempty(cid)
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourceCost');
+                return
+            end
+            types=tbl.Data(:,cid);
+            [tst,idx]=cType.checkResourceTypes(types);
+            if tst
+                rtype=idx;
+            else
+                for i=idx
+                    obj.messageLog(cType.ERROR,cMessages.InvalidResourcesType,tbl.Keys{i},types{i});
                 end
             end
-        end
-    
-        function res=WasteData(obj,tbl)
-        %WasteData - Get default waste data info
-        %   Syntax:
-        %     res = obj.WasteData(tbl)
-        %   Input Argument:
-        %     tbl - Flows table
-        %   Output Argument:
-        %     res - struct array containing waste data default info
-        %
-            res=cType.EMPTY;
-            % Search Wastes in Flows Table
-            fl=[tbl.Keys];
-            rid=find(obj.ftype==cType.Flow.WASTE);
-            NR=numel(rid);
-            if NR>0           
-                wf=[fl(rid)];
-                % Build Waste Data Table
-                wastes=cell(NR,1);
-                for i=1:NR
-                    wastes{i}.flow=wf{i};
-                    wastes{i}.type='DEFAULT';
-                    wastes{i}.recycle=0.0;
+            % Check if there is resources flows
+            samples=tbl.Fields(3:end);
+            fields=cType.KEYVAL;
+            fidx=find(rtype==cType.Resources.FLOW);
+            if isempty(fidx)
+                obj.messageLog(cType.ERROR,cMessages.InvalidTable,'ResourcesCost');
+                return
+            end
+            % Check resource flows keys
+            flows=tbl.Keys(fidx);
+            tf=ismember(flows,obj.fkeys);
+            if ~all(tf)
+                ier=find(~tf);
+                for i=ier
+                    obj.messageLog(cType.ERROR,cMessages.InvalidFlowTableKey,flows{i},tbl.Name);
                 end
-                res.wastes=cell2mat(wastes);
-            else
-                obj.messageLog(cType.ERROR,cMessages.NoWasteFlows);
+            end
+            % Buil Flow Resources Cost data
+            res=struct();
+            data=tbl.Data(:,3:end);
+            for i=1:NrOfSamples
+                fvalues=[tbl.Keys(fidx),data(fidx,i)];
+                fs=cell2struct(fvalues,fields,2);
+                res.Samples(i,1).sampleId=samples{i};
+                res.Samples(i,1).flows=fs;
+            end
+            % Process Resources
+            pidx=find(rtype==cType.Resources.PROCESS);
+            if ~isempty(pidx)
+            % Check Table Keys
+                processes=tbl.Keys(pidx);
+                tf=ismember(processes,obj.pkeys);
+                if ~all(tf)
+                    ier=find(~tf);
+                    for i=ier
+                        obj.messageLog(cType.ERROR,cMessages.InvalidProcessTableKey,processes{i},tbl.Name);
+                    end
+                end
+                % get sample values
+                for i=1:NrOfSamples
+                    pvalues=[tbl.Keys(pidx),data(pidx,i)];
+                    pr=cell2struct(pvalues,fields,2);
+                    res.Samples(i,1).processes=pr;
+                end
             end
         end
     end

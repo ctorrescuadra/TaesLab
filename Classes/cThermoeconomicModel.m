@@ -1113,7 +1113,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if wt.setValues(obj.ActiveWaste,val)
                 obj.printDebugInfo(cMessages.SetWasteValues,obj.ActiveWaste);
             else
-                log.printError(cMessages.NegativeWasteAllocation,obj.ActiveWaste);
+                log.printError(cMessages.NegativeWasteAllocation,obj.ActiveWaste,val);
                 return
             end
             wlog=obj.fp1.updateWasteOperators;
@@ -1820,7 +1820,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Output Arguments:
         %     res - cResultInfo 
             res=cMessageLogger();
-            tinfo=obj.getTableInfo(table);
+            tinfo=obj.fmt.getTableDefinition(table);
             if isempty(tinfo)
                 res.messageLog(cType.ERROR,cMessages.TableNotFound,table);
                 return

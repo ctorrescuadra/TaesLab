@@ -109,6 +109,9 @@ classdef cTablesDefinition < cMessageLogger
 		%     res - Struct with the properties of the table
 		%
 			res=cType.EMPTY;
+            if nargin<2 || ~ischar(name)
+                return
+            end
 			idx=obj.getTableId(name);
             if idx
 			    td=obj.tDirectory(idx,:);
@@ -129,12 +132,16 @@ classdef cTablesDefinition < cMessageLogger
         function res=getTableDefinition(obj,name)
         %getTableDefinition - Get the properties of a table
         %   Syntax:
-        %     res = obj.getTableProperties(name)
+        %     res = obj.getTableDefinition(name)
         %   Input Argument:
         %     name - Name of the table
         %   Output Argument:
         %     res - structure containing the table definition
         %
+            res=cType.EMPTY;
+            if nargin<2 || ~ischar(name)
+                return
+            end
             res=obj.tDictionary.getValues(name);   
         end
 
@@ -147,6 +154,10 @@ classdef cTablesDefinition < cMessageLogger
         %   Output Argument:
         %     res - Internal table id
         %
+            res=cType.EMPTY;
+            if nargin<2 || ~ischar(name)
+                return
+            end
             res=getIndex(obj.tDictionary,name);
         end
 
@@ -159,6 +170,10 @@ classdef cTablesDefinition < cMessageLogger
         %   Output Argument
         %     res - cell array with the ResultId tables
         %
+            res=cType.EMPTY_CELL;
+            if nargin<2 || ~isnumeric(id)
+                return
+            end
             rid=[obj.tableIndex.resultId];
             idx=find(rid==id);
             res={obj.tableIndex(idx).name};

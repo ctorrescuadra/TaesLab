@@ -60,7 +60,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 					    obj.messageLog(cType.ERROR,cMessages.SheetNotRead,sht);
                         continue
                     end
-                elseif ~opts(i)
+                elseif opts(i)
 					obj.messageLog(cType.INFO,'Optional Sheet %s is not available',sht);
                     continue
                 else

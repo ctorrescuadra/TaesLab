@@ -35,8 +35,8 @@ classdef cMessages
         InvalidExergyData='Invalid exergy data for state [%s]. See error log'
         InvalidResourceData='Invalid resource data for sample [%s]. See error log'
         InvalidResourceCost='Invalid resource cost for sample [%s]. See error log'
-        InvalidStateList='Invalid states list'
-        InvalidSampleList='Invalid samples list'
+        InvalidStateList='Invalid Exergy states list'
+        InvalidSampleList='Invalid Resource samples list'
         NodeNotReachedFromSource='Process %s not reached from resources'
         OutputNotReachedFromNode='Output not reached from Process %s'
         % Invalid Model Table definitions
@@ -47,6 +47,9 @@ classdef cMessages
         DuplicateKey='Duplicate key %s'
         InvalidCaseName='Invalid Case %s'
         DuplicateCaseName='Duplicate Case %s'
+        InvalidProcessTableKey='Invalid process key %s in table %s'
+        InvalidFlowTableKey='Invalid flow key %s in table %s'
+        InvalidManualAllocation='No Manual Waste Allocation defined'
         % Invalid keys
         InvalidFlowId='Invalid flow Id %d'
         InvalidProcessId='Invalid process Id %d'
@@ -130,7 +133,7 @@ classdef cMessages
         NoWasteFlow='Flow %s must be defined as waste'
         NoWasteAllocationValues='No allocation values defined for waste %s'
         NegativeWasteAllocation='Waste allocation value for waste %s cannot be NEGATIVE %f'
-        InvalidAllocationProcess='Waste %s cannot be asssigned to dissipative units'
+        InvalidAllocationProcess='Waste cannot be allocated to a dissipative units %s'
         InvalidWasteOperator='The waste operator for State %s is singular or bad conditioned'
         InvalidWasteDefinition='Invalid waste definition. See error log.'
         % Resource messages

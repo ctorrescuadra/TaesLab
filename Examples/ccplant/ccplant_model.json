@@ -1,6 +1,5 @@
 {
   "ProductiveStructure": {
-    "name": "ccplant_model",
     "flows": [
       {
         "key": "A1",
@@ -70,66 +69,66 @@
     "processes": [
       {
         "key": "COMB",
-        "description": "Combustor",
+        "type": "PRODUCTIVE",
         "fuel": "NG",
         "product": "A2-A1",
-        "type": "PRODUCTIVE"
+        "description": "Combustor"
       },
       {
         "key": "COMP",
-        "description": "Compresor",
+        "type": "PRODUCTIVE",
         "fuel": "WC",
         "product": "A1",
-        "type": "PRODUCTIVE"
+        "description": "Compresor"
       },
       {
         "key": "TGAS",
-        "description": "Turbina Gas",
+        "type": "PRODUCTIVE",
         "fuel": "A2-A3",
         "product": "WTG+WC",
-        "type": "PRODUCTIVE"
+        "description": "Turbina Gas"
       },
       {
         "key": "HRSG",
-        "description": "HRSG",
+        "type": "PRODUCTIVE",
         "fuel": "A3-A4",
         "product": "V6-V5",
-        "type": "PRODUCTIVE"
+        "description": "HRSG"
       },
       {
         "key": "TVAP",
-        "description": "Turbina de vapor",
+        "type": "PRODUCTIVE",
         "fuel": "V6-V7",
         "product": "WTV",
-        "type": "PRODUCTIVE"
+        "description": "Turbina de vapor"
       },
       {
         "key": "PUMP",
-        "description": "Bomba alimentacion",
+        "type": "PRODUCTIVE",
         "fuel": "WP",
         "product": "V5-V8",
-        "type": "PRODUCTIVE"
+        "description": "Bomba alimentacion"
       },
       {
         "key": "ALTN",
-        "description": "Alternador",
+        "type": "PRODUCTIVE",
         "fuel": "WTG+WTV",
         "product": "WP+WN",
-        "type": "PRODUCTIVE"
+        "description": "Alternador"
       },
       {
         "key": "STCK",
-        "description": "Chimenea",
+        "type": "DISSIPATIVE",
         "fuel": "A4",
         "product": "QG",
-        "type": "DISSIPATIVE"
+        "description": "Chimenea"
       },
       {
         "key": "COND",
-        "description": "Condensador",
+        "type": "DISSIPATIVE",
         "fuel": "V7-V8",
         "product": "QC",
-        "type": "DISSIPATIVE"
+        "description": "Condensador"
       }
     ]
   },

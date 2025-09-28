@@ -91,6 +91,7 @@ classdef cType
 		Flow=struct('INTERNAL',0,'OUTPUT',2,'RESOURCE',3,'WASTE',6);
         % Waste Allocation Types
 		WasteAllocation=struct('MANUAL',0,'DEFAULT',1,'RESOURCES',1,'COST',2,'EXERGY',3,'IRREVERSIBILITY',4,'HYBRID',5);
+		DEFAULT_WASTE_ALLOCATION='DEFAULT';
         % Types of Resources
 		Resources=struct('FLOW',1,'PROCESS',2);
 		% Types of define formats

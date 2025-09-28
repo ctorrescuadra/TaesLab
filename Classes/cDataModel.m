@@ -82,18 +82,19 @@ classdef cDataModel < cResultSet
 
     methods
         function obj = cDataModel(dm)
-        %cDataModel - Creates the cDataModel object
+        %cDataModel - Create an instance of the class
         %   Syntax:
         %     obj = cDataModel(dm)
         %   Input Argument:
         %     dm - cModelData object with the data of the model
-        %
+        %   Output Argument:
+        %     obj - cDataModel object
             % Check Data Structure
             if ~isObject(dm,'cModelData')
-                obj.addLogger(dm)
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(dm));
                 return
             end
+            obj.addLogger(dm);
             obj.ClassId=cType.ClassId.DATA_MODEL;
             obj.isResourceCost=dm.isResourceCost;
             % Check and get Productive Structure

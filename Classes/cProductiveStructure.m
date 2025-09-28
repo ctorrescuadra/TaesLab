@@ -232,17 +232,12 @@ classdef cProductiveStructure < cResultId
 		%     res=obj.WasteData
 		%   Output Argument:
 		%     res - Waste data info structure
-			NR=obj.NrOfWastes;
-			if NR>0
-				wastes=cell(NR,1);
-				for i=1:NR
-					wastes{i}.flow=obj.Flows(obj.Waste.flows(i)).key;
-					wastes{i}.type='DEFAULT';
-					wastes{i}.recycle=0.0;
-				end
-				res.wastes=cell2mat(wastes);
-			else
-				res.wastes=cType.EMPTY;
+		%
+			res=cType.EMPTY;
+			if obj.NrOfWastes > 0
+				res.wastes=struct('flow',obj.getWasteNames,...
+					'type',cType.DEFAULT_WASTE_ALLOCATION,...
+					'recycle',0.0);
 			end			
 		end
 	
@@ -453,16 +448,14 @@ classdef cProductiveStructure < cResultId
 		%   Input Argument:
 		%     key - process key
 		%   Output Argument
-		%     id - Process Id:
+		%     id - Process Id
 			id=0;
+			if nargin<2,return;end
 			if ischar(key)
 				id=obj.pDict.getIndex(key);
 			elseif iscell(key)
-				try
-					id=cellfun(@(x) obj.pDict.getIndex(x),key);
-				catch
-					return
-				end
+				[tf,id]=ismember(key,obj.ProcessKeys);
+				if ~all(tf),id=0;end
 			end
 		end
 			
@@ -473,16 +466,14 @@ classdef cProductiveStructure < cResultId
 		%   Input Argument:
 		%     key - flow key
 		%   Output Argument
-		%     id - flow Id:
+		%     id - flow Id
 			id=0;
+			if nargin<2,return;end		
 			if ischar(key)
 				id=obj.fDict.getIndex(key);
 			elseif iscell(key)
-				try
-					id=cellfun(@(x) obj.fDict.getIndex(x),key);
-				catch
-					return
-				end
+				[tf,id]=ismember(key,obj.FlowKeys);
+				if ~all(tf),id=0;end
 			end
 		end
 	
@@ -495,6 +486,8 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments:  
 		%     res - Array with the ids of the flows of this type
 		%
+			res=cType.EMPTY;
+			if nargin<2,return;end
             ftypes=[obj.Flows.typeId];
 			res=find(ftypes==typeId);
 		end
@@ -508,6 +501,8 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments:
 		%     res - Array with the ids of the processes of this type
 		%
+			res=cType.EMPTY;
+			if nargin<2,return;end
             ptypes=[obj.Processes.typeId];
 			res=find(ptypes==typeId);
 		end
@@ -521,6 +516,8 @@ classdef cProductiveStructure < cResultId
 		%   Output Arguments:
 		%     res - Array with the ids of the processes of this type
 		%
+			res=cType.EMPTY;
+			if nargin<2,return;end
             stypes=obj.Streams.typeId;
 			res=find(stypes==typeId);
 		end
@@ -540,7 +537,7 @@ classdef cProductiveStructure < cResultId
 		%     res = obj.getProductNames
 		%   Output Arguments
 		%     res - Cell Array with the final product names
-			res=obj.FlowKeys(obj.FinalProductsFlows);
+			res=obj.FlowKeys(obj.FinalProductFlows);
 		end
 
 		function res=getWasteNames(obj)
@@ -557,7 +554,7 @@ classdef cProductiveStructure < cResultId
 		%   Syntax:
 		%     res = obj.flows2Streams(values)
 		%   Input Arguments
-		%     values - exergy/cost values
+		%     val - exergy/cost values
 		%   Output Arguments
 		%     E  - exergy/cost of streams
 		%     ET - Total exergy of streams

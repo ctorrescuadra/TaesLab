@@ -1,6 +1,5 @@
 {
   "ProductiveStructure": {
-    "name": "NH3_model",
     "flows": [
       {
         "key": "H2",
@@ -122,121 +121,121 @@
     "processes": [
       {
         "key": "MIX1",
+        "type": "PRODUCTIVE",
         "fuel": "H2+N2",
         "product": "B3",
-        "type": "PRODUCTIVE",
         "description": "H2+N2 mix"
       },
       {
         "key": "MIX2",
+        "type": "PRODUCTIVE",
         "fuel": "B3+B22",
         "product": "B4",
-        "type": "PRODUCTIVE",
         "description": "H2+N2+recycle mix"
       },
       {
         "key": "MIX3",
+        "type": "PRODUCTIVE",
         "fuel": "B8+B11",
         "product": "B12",
-        "type": "PRODUCTIVE",
         "description": "Converter mix"
       },
       {
         "key": "MIX4",
+        "type": "DISSIPATIVE",
         "fuel": "B19",
         "product": "P20",
-        "type": "DISSIPATIVE",
         "description": "Dissipative purge mix"
       },
       {
         "key": "MIX5",
+        "type": "DISSIPATIVE",
         "fuel": "A25",
         "product": "AR26",
-        "type": "DISSIPATIVE",
         "description": "Dissipative water mix"
       },
       {
         "key": "SPLIT1",
+        "type": "PRODUCTIVE",
         "fuel": "B7",
         "product": "B8+B9",
-        "type": "PRODUCTIVE",
         "description": "Converter split"
       },
       {
         "key": "SPLIT2",
+        "type": "PRODUCTIVE",
         "fuel": "B18",
         "product": "B19+B21",
-        "type": "PRODUCTIVE",
         "description": "Separator split"
       },
       {
         "key": "COMP1",
+        "type": "PRODUCTIVE",
         "fuel": "WC1",
         "product": "B5-B4",
-        "type": "PRODUCTIVE",
         "description": "1st stage compressor"
       },
       {
         "key": "COMP2",
+        "type": "PRODUCTIVE",
         "fuel": "WC2",
         "product": "B7-B6",
-        "type": "PRODUCTIVE",
         "description": "2nd stage compressor"
       },
       {
         "key": "HEX1",
+        "type": "PRODUCTIVE",
         "fuel": "B5-B6",
         "product": "A24-A23",
-        "type": "PRODUCTIVE",
         "description": "First compressor Intercooler"
       },
       {
         "key": "HEX2",
+        "type": "PRODUCTIVE",
         "fuel": "B13-B14",
         "product": "B10-B9",
-        "type": "PRODUCTIVE",
         "description": "Converter preheater"
       },
       {
         "key": "HEX3",
+        "type": "PRODUCTIVE",
         "fuel": "B14-B15",
         "product": "A25-A24",
-        "type": "PRODUCTIVE",
         "description": "Cooling water cooler"
       },
       {
         "key": "HEX4",
+        "type": "DISSIPATIVE",
         "fuel": "B15-B16",
         "product": "Q29",
-        "type": "DISSIPATIVE",
         "description": "Cooling air cooler"
       },
       {
         "key": "REAC1",
+        "type": "PRODUCTIVE",
         "fuel": "B10",
         "product": "B11",
-        "type": "PRODUCTIVE",
         "description": "1st bed converter/reactor"
       },
       {
         "key": "REAC2",
+        "type": "PRODUCTIVE",
         "fuel": "B12",
         "product": "B13",
-        "type": "PRODUCTIVE",
         "description": "2nd bed converter/reactor"
       },
       {
         "key": "SEP1",
+        "type": "PRODUCTIVE",
         "fuel": "B16-B18",
         "product": "NH3",
-        "type": "PRODUCTIVE",
         "description": "NH3 separator"
       },
       {
         "key": "RCY1",
+        "type": "PRODUCTIVE",
         "fuel": "B21",
         "product": "B22",
-        "type": "PRODUCTIVE",
         "description": "Recycle"
       }
     ]
@@ -408,18 +407,30 @@
     "wastes": [
       {
         "flow": "P20",
-        "type": "RESOURCES",
-        "recycle": 0
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "MIX1",
+          "value": 1
+        }
       },
       {
         "flow": "AR26",
-        "type": "RESOURCES",
-        "recycle": 0
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "MIX1",
+          "value": 1
+        }
       },
       {
         "flow": "Q29",
-        "type": "RESOURCES",
-        "recycle": 0
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "MIX1",
+          "value": 1
+        }
       }
     ]
   },
@@ -597,56 +608,6 @@
           {
             "key": "WC2",
             "value": 1.034
-          }
-        ]
-      },
-      {
-        "sampleId": "WA30",
-        "flows": [
-          {
-            "key": "H2",
-            "value": 1.3888198757763976
-          },
-          {
-            "key": "N2",
-            "value": 7.5848032564450483
-          },
-          {
-            "key": "A23",
-            "value": 0
-          },
-          {
-            "key": "WC1",
-            "value": 1.118
-          },
-          {
-            "key": "WC2",
-            "value": 1.118
-          }
-        ]
-      },
-      {
-        "sampleId": "PA30",
-        "flows": [
-          {
-            "key": "H2",
-            "value": 1.7614906832298134
-          },
-          {
-            "key": "N2",
-            "value": 9.6200814111261863
-          },
-          {
-            "key": "A23",
-            "value": 0
-          },
-          {
-            "key": "WC1",
-            "value": 1.418
-          },
-          {
-            "key": "WC2",
-            "value": 1.418
           }
         ]
       }
