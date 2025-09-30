@@ -1,6 +1,5 @@
 {
   "ProductiveStructure": {
-    "name": "brc0_model",
     "flows": [
       {
         "key": "B1",
@@ -43,11 +42,11 @@
         "type": "INTERNAL"
       },
       {
-        "key": "WP1",
+        "key": "WT2",
         "type": "INTERNAL"
       },
       {
-        "key": "WT2",
+        "key": "WP1",
         "type": "INTERNAL"
       },
       {
@@ -66,51 +65,51 @@
     "processes": [
       {
         "key": "HRSG",
+        "type": "PRODUCTIVE",
         "fuel": "QH",
-        "product": "B1-B4",
-        "type": "PRODUCTIVE"
+        "product": "B1-B4"
       },
       {
         "key": "TRB1",
+        "type": "PRODUCTIVE",
         "fuel": "B1-B2",
-        "product": "WT1",
-        "type": "PRODUCTIVE"
+        "product": "WT1"
       },
       {
         "key": "PMP1",
+        "type": "PRODUCTIVE",
         "fuel": "WP1",
-        "product": "B4-B3",
-        "type": "PRODUCTIVE"
+        "product": "B4-B3"
       },
       {
         "key": "HE",
+        "type": "PRODUCTIVE",
         "fuel": "B2-B3",
-        "product": "B5-B8",
-        "type": "PRODUCTIVE"
+        "product": "B5-B8"
       },
       {
         "key": "TRB2",
+        "type": "PRODUCTIVE",
         "fuel": "B5-B6",
-        "product": "WT2",
-        "type": "PRODUCTIVE"
+        "product": "WT2"
       },
       {
         "key": "PMP2",
+        "type": "PRODUCTIVE",
         "fuel": "WP2",
-        "product": "B8-B7",
-        "type": "PRODUCTIVE"
+        "product": "B8-B7"
       },
       {
         "key": "GEN",
+        "type": "PRODUCTIVE",
         "fuel": "WT1+WT2",
-        "product": "WN+WP1+WP2",
-        "type": "PRODUCTIVE"
+        "product": "WN+WP1+WP2"
       },
       {
         "key": "CND",
+        "type": "DISSIPATIVE",
         "fuel": "B6-B7",
-        "product": "QCND",
-        "type": "DISSIPATIVE"
+        "product": "QCND"
       }
     ]
   },
@@ -744,10 +743,10 @@
     ]
   },
   "WasteDefinition": {
-    "wastes": {
+    "wastes": [{
       "flow": "QCND",
       "type": "RESOURCES",
       "recycle": 0
-    }
+    }]
   }
 }

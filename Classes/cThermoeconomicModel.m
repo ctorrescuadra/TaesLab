@@ -1819,18 +1819,20 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     table - table name
         %   Output Arguments:
         %     res - cResultInfo 
-            res=cMessageLogger();
-            tinfo=obj.fmt.getTableDefinition(table);
-            if isempty(tinfo)
+            res=cMessageLogger(cType.INVALID);
+            if nargin<2 || ~ischar(table), return; end
+            tinfo=obj.fmt.getResultId(table);
+            if tinfo
+                tmp=obj.getResults(tinfo);
+                if isempty(tmp)
+                    return
+                else
+                    res=tmp;
+                end
+            else
                 res.messageLog(cType.ERROR,cMessages.TableNotFound,table);
                 return
             end
-            tmp=obj.getResults(tinfo.resultId);
-            if ~isValid(tmp)
-                res.messageLog(cType.ERROR,cMessages.TableNotAvailable,table);
-                return
-            end
-            res=tmp;
         end
 
         function res=buildResultInfo(obj)

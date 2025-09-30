@@ -74,6 +74,23 @@ classdef cFormatData < cTablesDefinition
 		%
 			res=obj.cfgTypes(id).unit;
 		end
+
+		function res=getResultId(obj,table)
+		%getResultId - Get the ResultId of a table
+		%   Syntax:
+		%     res = obj.getResultId(table)
+		%   Input Arguments:
+		%     table - Name of the table (char)
+		%   Output Argument:
+		%     res - ResultId of the table (scalar numeric)
+		%
+			res=0;
+			if nargin<2 || ~ischar(table),return;end
+			tmp=obj.getTableDefinition(table);
+			if ~isempty(tmp)
+				res=tmp.resultId;
+			end
+		end
 		
 		function [tdef,tprop]=getTableProperties(obj,name)
 		%getTableProperties - Get the properties of a cTable

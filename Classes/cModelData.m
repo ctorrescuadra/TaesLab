@@ -17,7 +17,7 @@ classdef (Sealed) cModelData < cMessageLogger
 %     getStateNames     - Get a cell array with the state names
 %     getSampleNames    - Get a cell array with the resource sample names
 %     isWaste           - Check if data contains waste definition
-%     isResourceCost    - Check if data contains resource cost info
+%     isResource        - Check if data contains resource cost info
 %     saveAsXML         - Save data as XML file
 %     saveAsJSON        - Save data as JSON file
 %
@@ -45,65 +45,48 @@ classdef (Sealed) cModelData < cMessageLogger
         %     name - Name of the data model
         %     s - struct containing the data
         % 
-            obj.dm=struct();
+            if ~isstruct(s)
+                obj.messageLog(cType.ERROR,cMessages.InvalidDataModelFile);
+                return
+            end
             obj.ModelName=name;
-            for i=cType.MandatoryData
-                fld=cType.DataElements{i};
-                if isfield(s,fld)
-                    obj.dm.(fld)=s.(fld);
-                else
-                    obj.messageLog(cType.ERROR,cMessages.ModelDataMissing,fld);
-                    return
-                end
+            %Productive Structure
+            fld=cType.DataId.PRODUCTIVE_STRUCTURE;
+            if isfield(s,fld) 
+                obj.(fld)=s.(fld);
+            else
+                obj.messageLog(cType.ERROR,cMessages.ModelDataMissing,fld);
+                return
             end
-            for i=cType.OptionalData
-                fld=cType.DataElements{i};
-                if isfield(s,fld)
-                    obj.dm.(fld)=s.(fld);
-                end
+            %ExergyStates
+            fld=cType.DataId.EXERGY;
+            if isfield(s,fld) 
+                obj.(fld)=s.(fld);
+            else
+                obj.messageLog(cType.ERROR,cMessages.ModelDataMissing,fld);
+                return
             end
+            %FormatData
+            fld=cType.DataId.FORMAT;
+            if isfield(s,fld) 
+                obj.(fld)=s.(fld);
+            else
+                obj.messageLog(cType.ERROR,cMessages.ModelDataMissing,fld);
+                return
+            end
+            %WasteDefinition
+            fld=cType.DataId.WASTE;
+            if isfield(s,fld)
+                obj.(fld)=s.(fld);
+            end
+            %ResourceCost
+            fld=cType.DataId.RESOURCES;
+            if isfield(s,fld)
+                obj.(fld)=s.(fld);
+            end
+            obj.dm=s;
         end
 
-        function res=get.ProductiveStructure(obj)
-        % Get ProductiveStructure data
-            res=cType.EMPTY;
-            if obj.status
-                res=obj.dm.ProductiveStructure;
-            end
-        end
-    
-        function res=get.ExergyStates(obj)
-        % Get ExergyStates data
-            res=cType.EMPTY;
-            if obj.status
-                res=obj.dm.ExergyStates;
-            end
-        end
-
-        function res=get.WasteDefinition(obj)
-        % Get WasteDefinition data
-            res=cType.EMPTY;
-            if obj.status && obj.isWaste
-                res=obj.dm.WasteDefinition;
-            end
-        end
-    
-        function res=get.ResourcesCost(obj)
-        % Get ResourcesCost data
-            res=cType.EMPTY;
-            if obj.status && obj.isResourceCost
-                res=obj.dm.ResourcesCost;
-            end
-        end    
-    
-        function res=get.Format(obj)
-        % Get Format data
-            res=cType.EMPTY;
-            if obj.status
-                res=obj.dm.Format;
-            end
-        end
-    
         function res=getStateNames(obj)
         %getStateNames - Get a cell array list with the names of the states
         %   Syntax:
@@ -123,15 +106,14 @@ classdef (Sealed) cModelData < cMessageLogger
         %
             res={obj.dm.ResourcesCost.Samples(:).sampleId};
         end
-
         function res=isWaste(obj)
         %isWaste - Indicate is optional waste element exists
-            res=~isempty(obj.dm.WasteDefinition);
+            res=~isempty(obj.WasteDefinition);
         end
 
-        function res=isResourceCost(obj)
+        function res=isResource(obj)
         %isResources - Indicate is optional resources cost element exists
-            res = ~isempty(obj.dm.ResourcesCost);
+            res=~isempty(obj.ResourcesCost);
         end
 
         function log=saveAsXML(obj,filename)

@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "cgorc_model",
     "flows": [
       {
         "key": "B11",
@@ -98,94 +137,82 @@
     "processes": [
       {
         "key": "GTS",
-        "description": "Steam Generator",
+        "type": "PRODUCTIVE",
         "fuel": "GTS",
-        "product": "BW1-BW3",
-        "type": "PRODUCTIVE"
+        "product": "BW1-BW3"
       },
       {
         "key": "EVAP1",
-        "description": "Evaporator 1",
+        "type": "PRODUCTIVE",
         "fuel": "BW1-BW2",
-        "product": "B11-B16",
-        "type": "PRODUCTIVE"
+        "product": "B11-B16"
       },
       {
         "key": "TURB1",
-        "description": "Turbine 1",
+        "type": "PRODUCTIVE",
         "fuel": "B11-B12",
-        "product": "WT1",
-        "type": "PRODUCTIVE"
+        "product": "WT1"
       },
       {
         "key": "IHE1",
-        "description": "IHE 1",
+        "type": "PRODUCTIVE",
         "fuel": "B12-B13",
-        "product": "B16-B15",
-        "type": "PRODUCTIVE"
+        "product": "B16-B15"
       },
       {
         "key": "PMP1",
-        "description": "Pump 1",
+        "type": "PRODUCTIVE",
         "fuel": "WP1",
-        "product": "B15-B14",
-        "type": "PRODUCTIVE"
+        "product": "B15-B14"
       },
       {
         "key": "CND1",
-        "description": "Condenser 1",
+        "type": "DISSIPATIVE",
         "fuel": "B13-B14",
-        "product": "QCND1",
-        "type": "DISSIPATIVE"
+        "product": "QCND1"
       },
       {
         "key": "EVAP2",
-        "description": "Evaporator 2",
+        "type": "PRODUCTIVE",
         "fuel": "BW2-BW3",
-        "product": "B21-B26",
-        "type": "PRODUCTIVE"
+        "product": "B21-B26"
       },
       {
         "key": "TURB2",
-        "description": "Turbine 2",
+        "type": "PRODUCTIVE",
         "fuel": "B21-B22",
-        "product": "WT2",
-        "type": "PRODUCTIVE"
+        "product": "WT2"
       },
       {
         "key": "IHE2",
-        "description": "IHE 2",
+        "type": "PRODUCTIVE",
         "fuel": "B22-B23",
-        "product": "B26-B25",
-        "type": "PRODUCTIVE"
+        "product": "B26-B25"
       },
       {
         "key": "PMP2",
-        "description": "Pump 2",
+        "type": "PRODUCTIVE",
         "fuel": "WP2",
-        "product": "B25-B24",
-        "type": "PRODUCTIVE"
+        "product": "B25-B24"
       },
       {
         "key": "CND2",
-        "description": "Condenser 2",
+        "type": "DISSIPATIVE",
         "fuel": "B23-B24",
-        "product": "QCND2",
-        "type": "DISSIPATIVE"
+        "product": "QCND2"
       },
       {
         "key": "GEN",
-        "description": "Generator",
+        "type": "PRODUCTIVE",
         "fuel": "WT1+WT2",
-        "product": "WN+WP1+WP2",
-        "type": "PRODUCTIVE"
+        "product": "WN+WP1+WP2"
       }
     ]
   },
   "ExergyStates": {
     "States": [
       {
-        "stateId": "N-Pentane",
+        "stateId": "N_Pentane",
         "exergy": [
           {
             "key": "B11",
@@ -571,46 +598,6 @@
             "value": 81.259
           }
         ]
-      }
-    ]
-  },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(c/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(c/kWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(kW)"
       }
     ]
   },

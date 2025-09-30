@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kJ/kJ)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kJ)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kJ/kJ)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kJ)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "model_lithiumB",
     "flows": [
       {
         "key": "P4S1",
@@ -258,206 +297,177 @@
     "processes": [
       {
         "key": "PUMP",
-        "fuel": "P4S2",
-        "product": "(P4S3-P4S1)",
         "type": "PRODUCTIVE",
-        "description": "Pumping"
+        "fuel": "P4S2",
+        "product": "(P4S3-P4S1)"
       },
       {
         "key": "P1HP",
-        "fuel": "P4S5+P4S6",
-        "product": "(P4S9-P4S3)+P4S7+P4S8",
         "type": "PRODUCTIVE",
-        "description": "Pond 1 - Halite Precipitation"
+        "fuel": "P4S5+P4S6",
+        "product": "(P4S9-P4S3)+P4S7+P4S8"
       },
       {
         "key": "P2SP",
-        "fuel": "P4S9+P4S10",
-        "product": "P4S13+P4S11+P4S12",
         "type": "PRODUCTIVE",
-        "description": "Pond 2 - Sylvite Precipitation"
+        "fuel": "P4S9+P4S10",
+        "product": "P4S13+P4S11+P4S12"
       },
       {
         "key": "P3C",
-        "fuel": "P4S13+P4S14",
-        "product": "P4S17+P4S15+P4S16",
         "type": "PRODUCTIVE",
-        "description": "Pond 3 - Carnallite"
+        "fuel": "P4S13+P4S14",
+        "product": "P4S17+P4S15+P4S16"
       },
       {
         "key": "LP",
-        "fuel": "P4S17+P4S18",
-        "product": "P4S21+P4S19",
         "type": "PRODUCTIVE",
-        "description": "Lithium Pond"
+        "fuel": "P4S17+P4S18",
+        "product": "P4S21+P4S19"
       },
       {
         "key": "PREP",
-        "fuel": "P4S21+P4S22+P4S23+P4S24",
-        "product": "P4S26",
         "type": "PRODUCTIVE",
-        "description": "Preparation"
+        "fuel": "P4S21+P4S22+P4S23+P4S24",
+        "product": "P4S26"
       },
       {
         "key": "SEB",
-        "fuel": "P4S26+P4S27+P4S28",
-        "product": "P4S29+P4S33",
         "type": "PRODUCTIVE",
-        "description": "Solvent Extraction"
+        "fuel": "P4S26+P4S27+P4S28",
+        "product": "P4S29+P4S33"
       },
       {
         "key": "STRIP",
-        "fuel": "P4S29",
-        "product": "P4S31+P4S30",
         "type": "PRODUCTIVE",
-        "description": "Stripping"
+        "fuel": "P4S29",
+        "product": "P4S31+P4S30"
       },
       {
         "key": "MgR1",
-        "fuel": "P4S33+P4S34+P4S35+P4S36",
-        "product": "P4S38",
         "type": "PRODUCTIVE",
-        "description": "Mg Renoval 1"
+        "fuel": "P4S33+P4S34+P4S35+P4S36",
+        "product": "P4S38"
       },
       {
         "key": "F1",
-        "fuel": "P4S38",
-        "product": "P4S41+P4S40",
         "type": "PRODUCTIVE",
-        "description": "Filtration 1"
+        "fuel": "P4S38",
+        "product": "P4S41+P4S40"
       },
       {
         "key": "MgR2",
-        "fuel": "P4S41+P4S42+P4S43",
-        "product": "P4S44",
         "type": "PRODUCTIVE",
-        "description": "Mg Renoval 2"
+        "fuel": "P4S41+P4S42+P4S43",
+        "product": "P4S44"
       },
       {
         "key": "F2",
-        "fuel": "P4S44",
-        "product": "P4S46+P4S47",
         "type": "PRODUCTIVE",
-        "description": "Filtration 2"
+        "fuel": "P4S44",
+        "product": "P4S46+P4S47"
       },
       {
         "key": "CARBO",
-        "fuel": "P4S46+P4S48+P4S49",
-        "product": "P4S51+P4S50",
         "type": "PRODUCTIVE",
-        "description": "Carbonation"
+        "fuel": "P4S46+P4S48+P4S49",
+        "product": "P4S51+P4S50"
       },
       {
         "key": "SEP",
-        "fuel": "P4S51",
-        "product": "P4S34+P4S52",
         "type": "PRODUCTIVE",
-        "description": "Separation"
+        "fuel": "P4S51",
+        "product": "P4S34+P4S52"
       },
       {
         "key": "DRY",
-        "fuel": "P4S52+P4S54",
-        "product": "P4S56+P4S55",
         "type": "PRODUCTIVE",
-        "description": "Drying"
+        "fuel": "P4S52+P4S54",
+        "product": "P4S56+P4S55"
       },
       {
         "key": "C2",
-        "fuel": "P4S56",
-        "product": "P4S58+P4S59",
         "type": "PRODUCTIVE",
-        "description": "Cooling 2"
+        "fuel": "P4S56",
+        "product": "P4S58+P4S59"
       },
       {
         "key": "W1",
-        "fuel": "P4S7",
-        "product": "P4S700",
         "type": "DISSIPATIVE",
-        "description": "Waste 1"
+        "fuel": "P4S7",
+        "product": "P4S700"
       },
       {
         "key": "W2",
-        "fuel": "P4S8",
-        "product": "P4S800",
         "type": "DISSIPATIVE",
-        "description": "Waste 2"
+        "fuel": "P4S8",
+        "product": "P4S800"
       },
       {
         "key": "W3",
-        "fuel": "P4S11",
-        "product": "P4S1100",
         "type": "DISSIPATIVE",
-        "description": "Waste 3"
+        "fuel": "P4S11",
+        "product": "P4S1100"
       },
       {
         "key": "W4",
-        "fuel": "P4S12",
-        "product": "P4S1200",
         "type": "DISSIPATIVE",
-        "description": "Waste 4"
+        "fuel": "P4S12",
+        "product": "P4S1200"
       },
       {
         "key": "W5",
-        "fuel": "P4S15",
-        "product": "P4S1500",
         "type": "DISSIPATIVE",
-        "description": "Waste 5"
+        "fuel": "P4S15",
+        "product": "P4S1500"
       },
       {
         "key": "W6",
-        "fuel": "P4S16",
-        "product": "P4S1600",
         "type": "DISSIPATIVE",
-        "description": "Waste 6"
+        "fuel": "P4S16",
+        "product": "P4S1600"
       },
       {
         "key": "W7",
-        "fuel": "P4S19",
-        "product": "P4S1900",
         "type": "DISSIPATIVE",
-        "description": "Waste 7"
+        "fuel": "P4S19",
+        "product": "P4S1900"
       },
       {
         "key": "W8",
-        "fuel": "P4S30",
-        "product": "P4S3000",
         "type": "DISSIPATIVE",
-        "description": "Waste 8"
+        "fuel": "P4S30",
+        "product": "P4S3000"
       },
       {
         "key": "W10",
-        "fuel": "P4S40",
-        "product": "P4S4000",
         "type": "DISSIPATIVE",
-        "description": "Waste 10"
+        "fuel": "P4S40",
+        "product": "P4S4000"
       },
       {
         "key": "W12",
-        "fuel": "P4S47",
-        "product": "P4S4700",
         "type": "DISSIPATIVE",
-        "description": "Waste 12"
+        "fuel": "P4S47",
+        "product": "P4S4700"
       },
       {
         "key": "W13",
-        "fuel": "P4S50",
-        "product": "P4S5000",
         "type": "DISSIPATIVE",
-        "description": "Waste 13"
+        "fuel": "P4S50",
+        "product": "P4S5000"
       },
       {
         "key": "W15",
-        "fuel": "P4S55",
-        "product": "P4S5500",
         "type": "DISSIPATIVE",
-        "description": "Waste 15"
+        "fuel": "P4S55",
+        "product": "P4S5500"
       },
       {
         "key": "W16",
-        "fuel": "P4S59",
-        "product": "P4S5900",
         "type": "DISSIPATIVE",
-        "description": "Waste 16"
+        "fuel": "P4S59",
+        "product": "P4S5900"
       }
     ]
   },
@@ -719,46 +729,6 @@
         }
       ]
     }
-  },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(kJ/kJ)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kJ)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(kJ/kJ)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(kJ)"
-      }
-    ]
   },
   "WasteDefinition": {
     "wastes": [

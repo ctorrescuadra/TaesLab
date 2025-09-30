@@ -17,9 +17,13 @@ function res=ValidateModelTables(filename)
 %   See also cReadModel, cDataModel, ReadDataModel
 %   
     %Check input arguments
-    res=cMessageLogger();
-    if nargin~=1 || isempty(filename) || ~isFilename(filename)
-        res.messageLog(cType.ERROR,cMessages.InvalidFileName);
+    res=cMessageLogger();   
+    if nargin~=1 ||isempty(filename) || ~isFilename(filename)
+        res.printError(cMessages.InvalidInputFile);
+        return
+    end
+    if ~exist(filename,"file")
+        res.printError(cMessages.FileNotFound,filename);
         return
     end
     % Read the data model depending de file extension
@@ -30,7 +34,7 @@ function res=ValidateModelTables(filename)
         case cType.FileType.XLSX
             res=cReadModelXLS(filename);
         otherwise
-            res.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
+            res.printError(cMessages.InvalidFileExt,filename);
             return
     end
     % Print log messages

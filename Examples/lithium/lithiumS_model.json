@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kJ/kJ)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kJ)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kJ/kJ)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "model_lithiumS",
     "flows": [
       {
         "key": "P1S1",
@@ -510,437 +549,375 @@
     "processes": [
       {
         "key": "FJC",
-        "fuel": "P1S1+P1S2",
-        "product": "P1S4",
         "type": "PRODUCTIVE",
-        "description": "Feeder Jaw Crusher"
+        "fuel": "P1S1+P1S2",
+        "product": "P1S4"
       },
       {
         "key": "JC",
-        "fuel": "P1S4+P1S5",
-        "product": "P1S6",
         "type": "PRODUCTIVE",
-        "description": "Jaw Crusher"
+        "fuel": "P1S4+P1S5",
+        "product": "P1S6"
       },
       {
         "key": "CBOS",
-        "fuel": "P1S6+P1S8",
-        "product": "P1S9",
         "type": "PRODUCTIVE",
-        "description": "Conveyor belt to Ore Storage"
+        "fuel": "P1S6+P1S8",
+        "product": "P1S9"
       },
       {
         "key": "OS",
-        "fuel": "P1S9",
-        "product": "P1S11",
         "type": "PRODUCTIVE",
-        "description": "Ore Storage"
+        "fuel": "P1S9",
+        "product": "P1S11"
       },
       {
         "key": "FOS",
-        "fuel": "P1S11+P1S13",
-        "product": "P1S14",
         "type": "PRODUCTIVE",
-        "description": "Feeder Ore Storage"
+        "fuel": "P1S11+P1S13",
+        "product": "P1S14"
       },
       {
         "key": "CBSAG",
-        "fuel": "P1S14+P1S16",
-        "product": "P1S17",
         "type": "PRODUCTIVE",
-        "description": "Conveyor Belt to SAG"
+        "fuel": "P1S14+P1S16",
+        "product": "P1S17"
       },
       {
         "key": "SAGM",
-        "fuel": "P1S17+P1S19+P1S20+P1S21",
-        "product": "P1S22",
         "type": "PRODUCTIVE",
-        "description": "SAG Mill"
+        "fuel": "P1S17+P1S19+P1S20+P1S21",
+        "product": "P1S22"
       },
       {
         "key": "VSSAGM",
-        "fuel": "P1S22+P1S24",
-        "product": "P1S25+P1S27",
         "type": "PRODUCTIVE",
-        "description": "CB to SAG from Screen"
+        "fuel": "P1S22+P1S24",
+        "product": "P1S25+P1S27"
       },
       {
         "key": "CBSAGS",
-        "fuel": "P1S27+P1S28",
-        "product": "P1S19",
         "type": "PRODUCTIVE",
-        "description": "Pumps"
+        "fuel": "P1S27+P1S28",
+        "product": "P1S19"
       },
       {
         "key": "PUMP",
-        "fuel": "P1S25+P1S30+P1S31",
-        "product": "P1S32",
         "type": "PRODUCTIVE",
-        "description": "Hydrocyclone"
+        "fuel": "P1S25+P1S30+P1S31",
+        "product": "P1S32"
       },
       {
         "key": "HC",
-        "fuel": "P1S32",
-        "product": "P1S36+P1S38",
         "type": "PRODUCTIVE",
-        "description": "Ball Mill"
+        "fuel": "P1S32",
+        "product": "P1S36+P1S38"
       },
       {
         "key": "BM",
-        "fuel": "P1S38+P1S39+P1S40",
-        "product": "P1S30",
         "type": "PRODUCTIVE",
-        "description": "Spiral Classifier"
+        "fuel": "P1S38+P1S39+P1S40",
+        "product": "P1S30"
       },
       {
         "key": "SC",
-        "fuel": "P1S36",
-        "product": "P1S45",
         "type": "PRODUCTIVE",
-        "description": "Connection Comminution-Flotation"
+        "fuel": "P1S36",
+        "product": "P1S45"
       },
       {
         "key": "CONN1",
-        "fuel": "P1S45",
-        "product": "P2S1",
         "type": "PRODUCTIVE",
-        "description": "Connection Water Flotation-Connection"
+        "fuel": "P1S45",
+        "product": "P2S1"
       },
       {
         "key": "CONN2",
-        "fuel": "P2S66",
-        "product": "P1S40",
         "type": "PRODUCTIVE",
-        "description": "CT-R"
+        "fuel": "P2S66",
+        "product": "P1S40"
       },
       {
         "key": "CTR",
-        "fuel": "P2S1+P2S2+P2S3",
-        "product": "P2S4",
         "type": "PRODUCTIVE",
-        "description": "Rougher Cell"
+        "fuel": "P2S1+P2S2+P2S3",
+        "product": "P2S4"
       },
       {
         "key": "RC",
-        "fuel": "P2S4+P2S6+P2S7",
-        "product": "P2S8+P2S9",
         "type": "PRODUCTIVE",
-        "description": "CT-RC CIC"
+        "fuel": "P2S4+P2S6+P2S7",
+        "product": "P2S8+P2S9"
       },
       {
         "key": "CTRCClC",
-        "fuel": "P2S8",
-        "product": "P2S13",
         "type": "PRODUCTIVE",
-        "description": "Rougher CClC"
+        "fuel": "P2S8",
+        "product": "P2S13"
       },
       {
         "key": "RCClC",
-        "fuel": "P2S13+P2S16",
-        "product": "P2S17+P2S18",
         "type": "PRODUCTIVE",
-        "description": "CT - SsC 1"
+        "fuel": "P2S13+P2S16",
+        "product": "P2S17+P2S18"
       },
       {
         "key": "CTSsC1",
-        "fuel": "P2S9+P2S18+P2S20",
-        "product": "P2S22",
         "type": "PRODUCTIVE",
-        "description": "Scavenger Cell 1"
+        "fuel": "P2S9+P2S18+P2S20",
+        "product": "P2S22"
       },
       {
         "key": "SC1",
-        "fuel": "P2S22+P2S24+P2S25",
-        "product": "P2S26+P2S28",
         "type": "PRODUCTIVE",
-        "description": "Tailing dam"
+        "fuel": "P2S22+P2S24+P2S25",
+        "product": "P2S26+P2S28"
       },
       {
         "key": "TD",
-        "fuel": "P2S26+P2S29+P2S30",
-        "product": "P2S31+P2S32",
         "type": "PRODUCTIVE",
-        "description": "CT - SsC 2"
+        "fuel": "P2S26+P2S29+P2S30",
+        "product": "P2S31+P2S32"
       },
       {
         "key": "CTSsC2",
-        "fuel": "P2S28+P2S35+P2S36",
-        "product": "P2S37",
         "type": "PRODUCTIVE",
-        "description": "Scavenger Cell 2"
+        "fuel": "P2S28+P2S35+P2S36",
+        "product": "P2S37"
       },
       {
         "key": "SC2",
-        "fuel": "P2S37+P2S39+P2S40",
-        "product": "P2S30+P2S41",
         "type": "PRODUCTIVE",
-        "description": "CT - SsC 3"
+        "fuel": "P2S37+P2S39+P2S40",
+        "product": "P2S30+P2S41"
       },
       {
         "key": "CTSsC3",
-        "fuel": "P2S41+P2S44+P2S74",
-        "product": "P2S45",
         "type": "PRODUCTIVE",
-        "description": "Scavenger Cell 3"
+        "fuel": "P2S41+P2S44+P2S74",
+        "product": "P2S45"
       },
       {
         "key": "SC3",
-        "fuel": "P2S45+P2S48",
-        "product": "P2S36+P2S49",
         "type": "PRODUCTIVE",
-        "description": "CT - SsC 4"
+        "fuel": "P2S45+P2S48",
+        "product": "P2S36+P2S49"
       },
       {
         "key": "CTSsC4",
-        "fuel": "P2S49+P2S52",
-        "product": "P2S53",
         "type": "PRODUCTIVE",
-        "description": "Scavenger Cell 4"
+        "fuel": "P2S49+P2S52",
+        "product": "P2S53"
       },
       {
         "key": "SC4",
-        "fuel": "P2S53+P2S55+P2S56",
-        "product": "P2S57+P2S74",
         "type": "PRODUCTIVE",
-        "description": "Concentrate"
+        "fuel": "P2S53+P2S55+P2S56",
+        "product": "P2S57+P2S74"
       },
       {
         "key": "CONC",
-        "fuel": "P2S17+P2S57+P2S59",
-        "product": "P2S60",
         "type": "PRODUCTIVE",
-        "description": "Thickener"
+        "fuel": "P2S17+P2S57+P2S59",
+        "product": "P2S60"
       },
       {
         "key": "THICK",
-        "fuel": "P2S60+P2S62",
-        "product": "P2S63+P2S65",
         "type": "PRODUCTIVE",
-        "description": "Pump Water"
+        "fuel": "P2S60+P2S62",
+        "product": "P2S63+P2S65"
       },
       {
         "key": "PW",
-        "fuel": "P2S65",
-        "product": "P2S66+P2S67",
         "type": "PRODUCTIVE",
-        "description": "FilterPress"
+        "fuel": "P2S65",
+        "product": "P2S66+P2S67"
       },
       {
         "key": "FP",
-        "fuel": "P2S63+P2S68",
-        "product": "P2S69",
         "type": "PRODUCTIVE",
-        "description": "Concentrate Storage 2"
+        "fuel": "P2S63+P2S68",
+        "product": "P2S69"
       },
       {
         "key": "CS2",
-        "fuel": "P2S69+P2S71",
-        "product": "P2S72",
         "type": "PRODUCTIVE",
-        "description": "Waste 2.1"
+        "fuel": "P2S69+P2S71",
+        "product": "P2S72"
       },
       {
         "key": "P2W1",
-        "fuel": "P2S31",
-        "product": "P2S3100",
         "type": "DISSIPATIVE",
-        "description": "Waste 2.2"
+        "fuel": "P2S31",
+        "product": "P2S3100"
       },
       {
         "key": "P2W2",
-        "fuel": "P2S32",
-        "product": "P2S3200",
         "type": "DISSIPATIVE",
-        "description": "Waste 2.4"
+        "fuel": "P2S32",
+        "product": "P2S3200"
       },
       {
         "key": "P2W4",
-        "fuel": "P2S67",
-        "product": "P2S6700",
         "type": "DISSIPATIVE",
-        "description": "Connection Flotation-Scaling Drying"
+        "fuel": "P2S67",
+        "product": "P2S6700"
       },
       {
         "key": "CONN3",
-        "fuel": "P2S72",
-        "product": "P2P3S1",
         "type": "PRODUCTIVE",
-        "description": "Scaling Oxidation"
+        "fuel": "P2S72",
+        "product": "P2P3S1"
       },
       {
         "key": "CONN4",
-        "fuel": "P2P3S1+P2P3S5",
-        "product": "P2P3S2",
         "type": "PRODUCTIVE",
-        "description": "Scaling Impurities"
+        "fuel": "P2P3S1+P2P3S5",
+        "product": "P2P3S2"
       },
       {
         "key": "CONN5",
-        "fuel": "P2P3S2",
-        "product": "P2P3S3",
         "type": "PRODUCTIVE",
-        "description": "Scaling factor"
+        "fuel": "P2P3S2",
+        "product": "P2P3S3"
       },
       {
         "key": "CONN6",
-        "fuel": "P2P3S3+P2P3S6",
-        "product": "P2P3S4",
         "type": "PRODUCTIVE",
-        "description": "Connection Scaling-Refining"
+        "fuel": "P2P3S3+P2P3S6",
+        "product": "P2P3S4"
       },
       {
         "key": "CONN7",
-        "fuel": "P2P3S4",
-        "product": "P3S1",
         "type": "PRODUCTIVE",
-        "description": "Connection"
+        "fuel": "P2P3S4",
+        "product": "P3S1"
       },
       {
         "key": "RDC",
-        "fuel": "P3S1+P3S3",
-        "product": "P3S4+P3S6",
         "type": "PRODUCTIVE",
-        "description": "Rotary Decrepitation Kiln"
+        "fuel": "P3S1+P3S3",
+        "product": "P3S4+P3S6"
       },
       {
         "key": "BURN",
-        "fuel": "P3S7+P3S8",
-        "product": "P3S2+P3S3",
         "type": "PRODUCTIVE",
-        "description": "Burner"
+        "fuel": "P3S7+P3S8",
+        "product": "P3S2+P3S3"
       },
       {
         "key": "COOL",
-        "fuel": "P3S4",
-        "product": "P3S9",
         "type": "PRODUCTIVE",
-        "description": "Cooling"
+        "fuel": "P3S4",
+        "product": "P3S9"
       },
       {
         "key": "AR",
-        "fuel": "P3S9+P3S11+P3S12",
-        "product": "P3S14+P3S15",
         "type": "PRODUCTIVE",
-        "description": "AcidRoasting"
+        "fuel": "P3S9+P3S11+P3S12",
+        "product": "P3S14+P3S15"
       },
       {
         "key": "LEACH",
-        "fuel": "P3S14+P3S16+P3S17+P3S18",
-        "product": "P3S21",
         "type": "PRODUCTIVE",
-        "description": "Leaching"
+        "fuel": "P3S14+P3S16+P3S17+P3S18",
+        "product": "P3S21"
       },
       {
         "key": "F1",
-        "fuel": "P3S21",
-        "product": "P3S24+P3S22",
         "type": "PRODUCTIVE",
-        "description": "Filtration 1"
+        "fuel": "P3S21",
+        "product": "P3S24+P3S22"
       },
       {
         "key": "PURI",
-        "fuel": "P3S24+P3S25",
-        "product": "P3S28",
         "type": "PRODUCTIVE",
-        "description": "Purification"
+        "fuel": "P3S24+P3S25",
+        "product": "P3S28"
       },
       {
         "key": "F2",
-        "fuel": "P3S28",
-        "product": "P3S29+P3S31",
         "type": "PRODUCTIVE",
-        "description": "Filtration 2"
+        "fuel": "P3S28",
+        "product": "P3S29+P3S31"
       },
       {
         "key": "EVAP",
-        "fuel": "P3S29+P3S32",
-        "product": "P3S34",
         "type": "PRODUCTIVE",
-        "description": "Evaporation"
+        "fuel": "P3S29+P3S32",
+        "product": "P3S34"
       },
       {
         "key": "CARBO",
-        "fuel": "P3S34+P3S37",
-        "product": "P3S40",
         "type": "PRODUCTIVE",
-        "description": "Carbonation"
+        "fuel": "P3S34+P3S37",
+        "product": "P3S40"
       },
       {
         "key": "F3",
-        "fuel": "P3S40",
-        "product": "P3S41+P3S43",
         "type": "PRODUCTIVE",
-        "description": "Filtration 3"
+        "fuel": "P3S40",
+        "product": "P3S41+P3S43"
       },
       {
         "key": "RT",
-        "fuel": "P3S43",
-        "product": "P3S18+P3S44",
         "type": "PRODUCTIVE",
-        "description": "RecyclingTank"
+        "fuel": "P3S43",
+        "product": "P3S18+P3S44"
       },
       {
         "key": "DRY",
-        "fuel": "P3S41+P3S46",
-        "product": "P3S49+P3S47",
         "type": "PRODUCTIVE",
-        "description": "Drying"
+        "fuel": "P3S41+P3S46",
+        "product": "P3S49+P3S47"
       },
       {
         "key": "FC",
-        "fuel": "P3S49",
-        "product": "P3S50",
         "type": "PRODUCTIVE",
-        "description": "Final Cooling"
+        "fuel": "P3S49",
+        "product": "P3S50"
       },
       {
         "key": "P3W1",
-        "fuel": "P3S2",
-        "product": "P3S200",
         "type": "DISSIPATIVE",
-        "description": "Waste 3.1"
+        "fuel": "P3S2",
+        "product": "P3S200"
       },
       {
         "key": "P3W2",
-        "fuel": "P3S6",
-        "product": "P3S600",
         "type": "DISSIPATIVE",
-        "description": "Waste 3.2"
+        "fuel": "P3S6",
+        "product": "P3S600"
       },
       {
         "key": "P3W4",
-        "fuel": "P3S15",
-        "product": "P3S1500",
         "type": "DISSIPATIVE",
-        "description": "Waste 3.4"
+        "fuel": "P3S15",
+        "product": "P3S1500"
       },
       {
         "key": "P3W6",
-        "fuel": "P3S22",
-        "product": "P3S2200",
         "type": "DISSIPATIVE",
-        "description": "Waste 3.6"
+        "fuel": "P3S22",
+        "product": "P3S2200"
       },
       {
         "key": "P3W10",
-        "fuel": "P3S31",
-        "product": "P3S3100",
         "type": "DISSIPATIVE",
-        "description": "Waste 3.10"
+        "fuel": "P3S31",
+        "product": "P3S3100"
       },
       {
         "key": "P3W14",
-        "fuel": "P3S44",
-        "product": "P3S4400",
         "type": "DISSIPATIVE",
-        "description": "Waste 3.14"
+        "fuel": "P3S44",
+        "product": "P3S4400"
       },
       {
         "key": "P3W16",
-        "fuel": "P3S47",
-        "product": "P3S4700",
         "type": "DISSIPATIVE",
-        "description": "Waste 3.16"
+        "fuel": "P3S47",
+        "product": "P3S4700"
       }
     ]
   },
@@ -1454,46 +1431,6 @@
         }
       ]
     }
-  },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(kJ/kJ)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kJ)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(kJ/kJ)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(kW)"
-      }
-    ]
   },
   "WasteDefinition": {
     "wastes": [

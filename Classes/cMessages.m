@@ -10,7 +10,7 @@ classdef cMessages
         InvalidInputFile='Invalid file name %s'
         InvalidOutputFile='Invalid file name %s. File NOT saved'
         InvalidFileExt='File extension %s is not supported'
-        FileNotExist='File %s does NOT exists'
+        FileNotFound='File %s NOT found'
         CSVFolderNotExist='CSV folder data %s NOT exists'
         FileNotRead='Error reading file %s'
         SheetNotExist='Sheet %s NOT exists'

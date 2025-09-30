@@ -40,7 +40,7 @@ function data=ReadDataModel(filename,varargin)
         return
     end
     if ~exist(filename,'file')
-        data.printError(cMessages.FileNotExist,filename);
+        data.printError(cMessages.FileNotFound,filename);
         return
     end
     % Optional parameters

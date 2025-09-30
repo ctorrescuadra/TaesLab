@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "gorc_model",
     "flows": [
       {
         "key": "B1",
@@ -74,66 +113,57 @@
     "processes": [
       {
         "key": "GPW",
-        "description": "Geothernal source",
+        "type": "PRODUCTIVE",
         "fuel": "GTS",
-        "product": "B10-B11",
-        "type": "PRODUCTIVE"
+        "product": "B10-B11"
       },
       {
         "key": "EVAP",
-        "description": "Evaporador",
+        "type": "PRODUCTIVE",
         "fuel": "B10-B11",
-        "product": "B6-B5",
-        "type": "PRODUCTIVE"
+        "product": "B6-B5"
       },
       {
         "key": "TURB",
-        "description": "Turbina",
+        "type": "PRODUCTIVE",
         "fuel": "B6-B7-B8",
-        "product": "WT",
-        "type": "PRODUCTIVE"
+        "product": "WT"
       },
       {
         "key": "IHE",
-        "description": "Recuperador",
+        "type": "PRODUCTIVE",
         "fuel": "B8-B9",
-        "product": "B3-B2",
-        "type": "PRODUCTIVE"
+        "product": "B3-B2"
       },
       {
         "key": "OFOH",
-        "description": "Desgasificador",
+        "type": "PRODUCTIVE",
         "fuel": "B7",
-        "product": "B4-B3",
-        "type": "PRODUCTIVE"
+        "product": "B4-B3"
       },
       {
         "key": "PMP1",
-        "description": "Bomba 1",
+        "type": "PRODUCTIVE",
         "fuel": "WP1",
-        "product": "B2-B1",
-        "type": "PRODUCTIVE"
+        "product": "B2-B1"
       },
       {
         "key": "PMP2",
-        "description": "Bomba 2",
+        "type": "PRODUCTIVE",
         "fuel": "WP2",
-        "product": "B5-B4",
-        "type": "PRODUCTIVE"
+        "product": "B5-B4"
       },
       {
         "key": "GEN",
-        "description": "Generador",
+        "type": "PRODUCTIVE",
         "fuel": "WT",
-        "product": "WP1+WP2+WN",
-        "type": "PRODUCTIVE"
+        "product": "WP1+WP2+WN"
       },
       {
         "key": "COND",
-        "description": "Condensador",
+        "type": "DISSIPATIVE",
         "fuel": "B9-B1",
-        "product": "QC",
-        "type": "DISSIPATIVE"
+        "product": "QC"
       }
     ]
   },
@@ -722,46 +752,6 @@
             "value": 203.43
           }
         ]
-      }
-    ]
-  },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(c/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(c/kWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(kW)"
       }
     ]
   },

@@ -35,7 +35,7 @@ classdef cModelTable < cMessageLogger
     end
 
     methods
-        function obj=cModelTable(table,props)
+        function obj=cModelTable(vals,props)
         %cModelTable - Construct an instance of this class
         %   Validate the table data
         %
@@ -46,7 +46,7 @@ classdef cModelTable < cMessageLogger
         %     props - struct with the data model definition
         %
             % Check Input
-            if ~iscell(table) || ~isstruct(props)
+            if ~iscell(vals) || ~isstruct(props)
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessage.ShowHelp);
                 return
             end
@@ -54,9 +54,20 @@ classdef cModelTable < cMessageLogger
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
-            % Validate Table
-            obj.Values=table;
+            % Check number of fields
+            N=numel(props.fields);
+            if size(vals,2) < N
+                obj.messageLog(cType.ERROR,cMessages.InvalidFieldNumber,size(vals,2),props.name);
+                return
+            end
+            %Copy only mandatory fields
+            if props.fixed               
+                obj.Values=vals(:,1:N);
+            else
+                obj.Values=vals;
+            end
             obj.config=props;
+            % Validate table fields
             log=obj.validateTable;
             if ~log.status
                 obj.addLogger(log);
@@ -99,7 +110,7 @@ classdef cModelTable < cMessageLogger
         %     res = obj.getStructData();
         %   Output parameter:
         %     res - struct with the columns data
-            res=cell2struct(obj.Data,obj.Fields,2);
+                res=cell2struct(obj.Data,obj.Fields,2);
         end
 
         function res=getTableData(obj)
@@ -116,8 +127,8 @@ classdef cModelTable < cMessageLogger
             res.setStudyCase(p);
         end
 
-        function disp(obj)
-        %disp - Overload disp methods. Print Table on console.
+        function printTable(obj)
+        %printTable - Print data on console, using cTable interface.
         %   Syntax:
         %     printTable(obj)
         %
@@ -145,13 +156,15 @@ classdef cModelTable < cMessageLogger
             % Initilize variables            
             log=cMessageLogger();
             p=obj.config;
-            N=numel(p.fields);
-            if numel(obj.Fields) < N
-                log.messageLog(cType.ERROR,cMessages.InvalidFieldNumber,numel(obj.Fields),p.name);
+            % Check if the fields are chars
+            idx=cellfun(@ischar,obj.Fields);
+            if ~all(idx)
+                ier=find(~idx);col=num2str(ier(1));
+                obj.messageLog(cType.ERROR,cMessages.InvalidField,col,p.name);
                 return
             end
             % Loop over the fields definition
-            for i=1:N
+            for i=1:numel(p.fields)
                 dt=p.fields(i).datatype;
                 fld=obj.Fields{i};
                 pfld=p.fields(i).name;

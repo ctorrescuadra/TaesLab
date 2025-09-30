@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 4,
+        "unit": "(MW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "H2SO4_model",
     "flows": [
       {
         "key": "SLPH",
@@ -82,73 +121,63 @@
     "processes": [
       {
         "key": "MLT",
-        "fuel": "SLPH+Q34",
-        "product": "CH2",
         "type": "PRODUCTIVE",
-        "description": "Melting Tank"
+        "fuel": "SLPH+Q34",
+        "product": "CH2"
       },
       {
         "key": "BRN",
-        "fuel": "A5+CH2",
-        "product": "CH6",
         "type": "PRODUCTIVE",
-        "description": "Sulphur Burner"
+        "fuel": "A5+CH2",
+        "product": "CH6"
       },
       {
         "key": "WBA",
-        "fuel": "CH6-CH7",
-        "product": "(SW9-SW8)+Q34",
         "type": "PRODUCTIVE",
-        "description": "Waste Boiler A"
+        "fuel": "CH6-CH7",
+        "product": "(SW9-SW8)+Q34"
       },
       {
         "key": "CNVA",
-        "fuel": "CH7",
-        "product": "CH10",
         "type": "PRODUCTIVE",
-        "description": "Converter A"
+        "fuel": "CH7",
+        "product": "CH10"
       },
       {
         "key": "WBB",
-        "fuel": "CH10-CH11",
-        "product": "SW13-SW12",
         "type": "PRODUCTIVE",
-        "description": "Waste Boiler B"
+        "fuel": "CH10-CH11",
+        "product": "SW13-SW12"
       },
       {
         "key": "CNVB",
-        "fuel": "CH11",
-        "product": "CH14",
         "type": "PRODUCTIVE",
-        "description": "Converter B"
+        "fuel": "CH11",
+        "product": "CH14"
       },
       {
         "key": "ECON",
-        "fuel": "CH14",
-        "product": "CH15+(SW12+SW8-SW16)",
         "type": "PRODUCTIVE",
-        "description": "Economiser"
+        "fuel": "CH14-CH15",
+        "product": "SW12+SW8-SW16"
       },
       {
         "key": "ABS",
-        "fuel": "CH18",
-        "product": "CH19",
         "type": "PRODUCTIVE",
-        "description": "Absorber"
+        "fuel": "CH18",
+        "product": "CH19"
       },
       {
         "key": "SMIX",
-        "fuel": "SW9+SW13",
-        "product": "SW20",
         "type": "PRODUCTIVE",
-        "description": "Steam Mixer"
+        "fuel": "SW9+SW13",
+        "product": "SW20"
       },
       {
         "key": "COOL",
-        "fuel": "CH15-CH18",
-        "product": "QH",
         "type": "DISSIPATIVE",
-        "description": "Gas Cooler"
+        "fuel": "CH15-CH18",
+        "product": "QH"
       }
     ]
   },
@@ -235,46 +264,6 @@
       ]
     }
   },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 3,
-        "unit": "(MW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 3,
-        "unit": "(MW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(c/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(c/kWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 4,
-        "unit": "(MW)"
-      }
-    ]
-  },
   "WasteDefinition": {
     "wastes": {
       "flow": "QH",
@@ -285,5 +274,6 @@
         "value": 1
       }
     }
-  }
+  },
+  "ResourcesCost": []
 }

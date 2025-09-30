@@ -52,7 +52,7 @@ function model=ThermoeconomicModel(arg,varargin)
         if exist(filename,'file')
             data=readModel(filename);
         else
-            model.printError(cMessages.FileNotExist,filename);
+            model.printError(cMessages.FileNotFound,filename);
             return
         end
     elseif isa(arg,'cDataModel')

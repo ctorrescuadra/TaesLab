@@ -96,7 +96,8 @@ classdef cDataModel < cResultSet
             end
             obj.addLogger(dm);
             obj.ClassId=cType.ClassId.DATA_MODEL;
-            obj.isResourceCost=dm.isResourceCost;
+            obj.isWaste=dm.isWaste;
+            obj.isResourceCost=dm.isResource;
             % Check and get Productive Structure
             ps=cProductiveStructure(dm);
             obj.addLogger(ps);
@@ -148,7 +149,7 @@ classdef cDataModel < cResultSet
             end
             % Check Waste
             if ps.NrOfWastes > 0
-                if dm.isWaste
+                if obj.isWaste
                     data=dm.WasteDefinition;
                 else
                     data=ps.WasteData;

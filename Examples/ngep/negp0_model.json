@@ -1,0 +1,137 @@
+{
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "NG1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "NG3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG8",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "NG9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "HT16",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "HT19",
+        "type": "INTERNAL"
+      }
+    ],
+    "processes": [
+      {
+        "key": "GB",
+        "type": "PRODUCTIVE",
+        "fuel": "NG9",
+        "product": "HT16-HT19"
+      },
+      {
+        "key": "HHP",
+        "type": "PRODUCTIVE",
+        "fuel": "HT16-HT19",
+        "product": "NG3-NG1"
+      },
+      {
+        "key": "EXP",
+        "type": "PRODUCTIVE",
+        "fuel": "NG3",
+        "product": "NG7"
+      },
+      {
+        "key": "NGD",
+        "type": "PRODUCTIVE",
+        "fuel": "NG7",
+        "product": "NG8+NG9"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Reference",
+      "exergy": [
+        {
+          "key": "NG1",
+          "value": 366255
+        },
+        {
+          "key": "NG3",
+          "value": 366267
+        },
+        {
+          "key": "NG7",
+          "value": 363808
+        },
+        {
+          "key": "NG8",
+          "value": 363267
+        },
+        {
+          "key": "NG9",
+          "value": 541
+        },
+        {
+          "key": "HT16",
+          "value": 179
+        },
+        {
+          "key": "HT19",
+          "value": 89.8
+        }
+      ]
+    }
+  },
+  "WasteDefinition": [],
+  "ResourcesCost": []
+}

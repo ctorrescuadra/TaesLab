@@ -5,6 +5,7 @@
             "name": "Flows",
 			"descr": "Flows Data",
             "optional": false,
+			"fixed": true,
             "fields": [
                 {
                     "id": 1,
@@ -23,6 +24,7 @@
             "name": "Processes",
 			"descr": "Processes Data",
             "optional": false,
+			"fixed": true,
             "fields": [
                 {
                     "id": 1,
@@ -50,6 +52,7 @@
             "name": "Exergy",
 			"descr": "Exergy Data",
             "optional": false,
+			"fixed": false,
             "fields": [
                 {
                     "id": 1,
@@ -66,8 +69,9 @@
         {
             "id": 4,
             "name": "Format",
-			"descr": "Exergy Data",
+			"descr": "Format Data",
             "optional": false,
+			"fixed": true,
             "fields": [
                 {
                     "id": 1,
@@ -96,6 +100,7 @@
             "name": "WasteDefinition",
 			"descr": "Waste Definition",
             "optional": true,
+			"fixed": true,
             "fields": [
                 {
                     "id": 1,
@@ -119,6 +124,7 @@
             "name": "WasteAllocation",
 			"descr": "Waste Allocation",
             "optional": true,
+			"fixed": false,
             "fields": [
                 {
                     "id": 1,
@@ -137,6 +143,7 @@
             "name": "ResourcesCost",
 			"descr": "Resources Cost",
             "optional": true,
+			"fixed": false,
             "fields": [
                 {
                     "id": 1,

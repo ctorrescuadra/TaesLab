@@ -142,7 +142,10 @@ classdef cTablesDefinition < cMessageLogger
             if nargin<2 || ~ischar(name)
                 return
             end
-            res=obj.tDictionary.getValues(name);   
+            idx=obj.tDictionary.getIndex(name);
+            if idx
+                res=obj.tDictionary.getValues(idx);
+            end 
         end
 
         function res=getTableId(obj,name)

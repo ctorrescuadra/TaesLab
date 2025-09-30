@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(kW/kW)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "ecos25_model",
     "flows": [
       {
         "key": "B1",
@@ -166,157 +205,135 @@
     "processes": [
       {
         "key": "MIX1",
-        "description": "H2+N2 mix",
+        "type": "PRODUCTIVE",
         "fuel": "B1+B2",
-        "product": "B3",
-        "type": "PRODUCTIVE"
+        "product": "B3"
       },
       {
         "key": "MIX2",
-        "description": "H2+N2+recycle mix",
+        "type": "PRODUCTIVE",
         "fuel": "B3+B10+B25",
-        "product": "B4",
-        "type": "PRODUCTIVE"
+        "product": "B4"
       },
       {
         "key": "MIX3",
-        "description": "Converter mix",
+        "type": "PRODUCTIVE",
         "fuel": "B12+B15",
-        "product": "B16",
-        "type": "PRODUCTIVE"
+        "product": "B16"
       },
       {
         "key": "SPLIT1",
-        "description": "Load control split",
+        "type": "PRODUCTIVE",
         "fuel": "B7",
-        "product": "B8+B11",
-        "type": "PRODUCTIVE"
+        "product": "B8+B11"
       },
       {
         "key": "SPLIT2",
-        "description": "Converter split",
+        "type": "PRODUCTIVE",
         "fuel": "B11",
-        "product": "B12+B13",
-        "type": "PRODUCTIVE"
+        "product": "B12+B13"
       },
       {
         "key": "COMP1",
-        "description": "1st stage compressor",
+        "type": "PRODUCTIVE",
         "fuel": "B36",
-        "product": "B5-B4",
-        "type": "PRODUCTIVE"
+        "product": "B5-B4"
       },
       {
         "key": "COMP2",
-        "description": "2nd stage compressor",
+        "type": "PRODUCTIVE",
         "fuel": "B37",
-        "product": "B7-B6",
-        "type": "PRODUCTIVE"
+        "product": "B7-B6"
       },
       {
         "key": "HEX1",
-        "description": "First compressor Intercooler",
+        "type": "PRODUCTIVE",
         "fuel": "B5-B6",
-        "product": "B30-B29",
-        "type": "PRODUCTIVE"
+        "product": "B30-B29"
       },
       {
         "key": "HEX2",
-        "description": "Syngas compressor intercooler",
+        "type": "PRODUCTIVE",
         "fuel": "B8-B9",
-        "product": "B31-B30",
-        "type": "PRODUCTIVE"
+        "product": "B31-B30"
       },
       {
         "key": "HEX3",
-        "description": "Converter preheater",
+        "type": "PRODUCTIVE",
         "fuel": "B17-B18",
-        "product": "B14-B13",
-        "type": "PRODUCTIVE"
+        "product": "B14-B13"
       },
       {
         "key": "HEX4",
-        "description": "Cooling water cooler",
+        "type": "PRODUCTIVE",
         "fuel": "B18-B19",
-        "product": "B32-B31",
-        "type": "PRODUCTIVE"
+        "product": "B32-B31"
       },
       {
         "key": "REAC1",
-        "description": "1st bed converter/reactor",
+        "type": "PRODUCTIVE",
         "fuel": "B14",
-        "product": "B15",
-        "type": "PRODUCTIVE"
+        "product": "B15"
       },
       {
         "key": "REAC2",
-        "description": "2nd bed converter/reactor",
+        "type": "PRODUCTIVE",
         "fuel": "B16",
-        "product": "B17",
-        "type": "PRODUCTIVE"
+        "product": "B17"
       },
       {
         "key": "VLV1",
-        "description": "Recirculation valve",
+        "type": "PRODUCTIVE",
         "fuel": "B9",
-        "product": "B10",
-        "type": "PRODUCTIVE"
+        "product": "B10"
       },
       {
         "key": "SEP1",
-        "description": "First NH3 separator",
+        "type": "PRODUCTIVE",
         "fuel": "B20-B22",
-        "product": "B21",
-        "type": "PRODUCTIVE"
+        "product": "B21"
       },
       {
         "key": "SEP2",
-        "description": "Second NH3 separator",
+        "type": "PRODUCTIVE",
         "fuel": "B22-B24-B39",
-        "product": "B23",
-        "type": "PRODUCTIVE"
+        "product": "B23"
       },
       {
         "key": "SPLIT3",
-        "description": "Recirculation split",
+        "type": "PRODUCTIVE",
         "fuel": "B24",
-        "product": "B25+B26",
-        "type": "PRODUCTIVE"
+        "product": "B25+B26"
       },
       {
         "key": "FLASH",
-        "description": "Water flash",
+        "type": "PRODUCTIVE",
         "fuel": "B32-B33",
-        "product": "B35",
-        "type": "PRODUCTIVE"
+        "product": "B35"
       },
       {
         "key": "HEX5",
-        "description": "Cooling air cooler",
+        "type": "DISSIPATIVE",
         "fuel": "B19-B20",
-        "product": "B38",
-        "type": "DISSIPATIVE"
+        "product": "B38"
       },
       {
         "key": "SEP3",
-        "description": "Dissipative purge separator",
+        "type": "DISSIPATIVE",
         "fuel": "B26",
-        "product": "B27+B28",
-        "type": "DISSIPATIVE"
+        "product": "B27+B28"
       },
       {
         "key": "MIX4",
-        "description": "Dissipative water mix",
+        "type": "DISSIPATIVE",
         "fuel": "B33",
-        "product": "B34",
-        "type": "DISSIPATIVE"
+        "product": "B34"
       },
       {
         "key": "MIX5",
-        "description": "Dissipative cold heat mix",
+        "type": "DISSIPATIVE",
         "fuel": "B39",
-        "product": "B40",
-        "type": "DISSIPATIVE"
+        "product": "B40"
       }
     ]
   },
@@ -1974,46 +1991,6 @@
       }
     ]
   },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(kW/kW)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(kW)"
-      }
-    ]
-  },
   "WasteDefinition": {
     "wastes": [
       {
@@ -2042,5 +2019,6 @@
         "recycle": 0
       }
     ]
-  }
+  },
+  "ResourcesCost": []
 }

@@ -1,79 +1,4 @@
 {
-  "ProductiveStructure": {
-    "name": "eggs_model",
-    "flows": [
-      {
-        "key": "B1",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B2",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B3",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B4",
-        "type": "OUTPUT"
-      },
-      {
-        "key": "B5",
-        "type": "OUTPUT"
-      }
-    ],
-    "processes": [
-      {
-        "key": "FRM",
-        "fuel": "B1",
-        "product": "B2+B3",
-        "type": "PRODUCTIVE",
-        "description": "Chicken farm"
-      },
-      {
-        "key": "T1",
-        "fuel": "B2",
-        "product": "B4",
-        "type": "PRODUCTIVE",
-        "description": "City Transport"
-      },
-      {
-        "key": "T2",
-        "fuel": "B3",
-        "product": "B5",
-        "type": "PRODUCTIVE",
-        "description": "Local Transport"
-      }
-    ]
-  },
-  "ExergyStates": {
-    "States": {
-      "stateId": "Reference",
-      "exergy": [
-        {
-          "key": "B1",
-          "value": 1000
-        },
-        {
-          "key": "B2",
-          "value": 840
-        },
-        {
-          "key": "B3",
-          "value": 160
-        },
-        {
-          "key": "B4",
-          "value": 800
-        },
-        {
-          "key": "B5",
-          "value": 150
-        }
-      ]
-    }
-  },
   "Format": {
     "definitions": [
       {
@@ -114,6 +39,78 @@
       }
     ]
   },
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "B5",
+        "type": "OUTPUT"
+      }
+    ],
+    "processes": [
+      {
+        "key": "FRM",
+        "type": "PRODUCTIVE",
+        "fuel": "B1",
+        "product": "B2+B3"
+      },
+      {
+        "key": "T1",
+        "type": "PRODUCTIVE",
+        "fuel": "B2",
+        "product": "B4"
+      },
+      {
+        "key": "T2",
+        "type": "PRODUCTIVE",
+        "fuel": "B3",
+        "product": "B5"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Reference",
+      "exergy": [
+        {
+          "key": "B1",
+          "value": 1000
+        },
+        {
+          "key": "B2",
+          "value": 840
+        },
+        {
+          "key": "B3",
+          "value": 160
+        },
+        {
+          "key": "B4",
+          "value": 800
+        },
+        {
+          "key": "B5",
+          "value": 150
+        }
+      ]
+    }
+  },
+  "WasteDefinition": [],
   "ResourcesCost": {
     "Samples": [
       {

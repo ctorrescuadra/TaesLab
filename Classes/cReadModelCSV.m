@@ -49,16 +49,18 @@ classdef cReadModelCSV < cReadModelTable
                         continue
                     end              
                 elseif opts(i)
-                    obj.messageLog(cType.INFO,'Optional Sheet %s is not available',sht);
+                    obj.messageLog(cType.INFO,'Optional Sheet %s is not available',fname);
                     continue
                 else
 				    obj.messageLog(cType.ERROR,cMessages.FileNotFound,fname);
                 end
             end
             % Set Model properties
-            obj.modelTables=tables;
-            obj.setModelProperties(cfgfile);
-            obj.ModelData=obj.buildModelData(tables);
+            if isValid(obj)
+                obj.ModelTables=tables;
+                obj.setModelProperties(cfgfile);
+                obj.ModelData=obj.buildModelData(tables);
+            end
         end
     end
 
@@ -89,7 +91,10 @@ classdef cReadModelCSV < cReadModelTable
                     return
 		        end
             end
-            tbl=cModelTable(values,props);
+            % Check Values and get the model table
+            if cReadModelTable.checkValues(tbl,filename,values)
+                tbl=cModelTable(values,props);
+            end
         end
     end
 end

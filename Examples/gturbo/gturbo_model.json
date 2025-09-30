@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "gturbo_model",
     "flows": [
       {
         "key": "B1",
@@ -82,73 +121,63 @@
     "processes": [
       {
         "key": "CMB1",
-        "description": "Combustor",
+        "type": "PRODUCTIVE",
         "fuel": "F1",
-        "product": "B6-B5",
-        "type": "PRODUCTIVE"
+        "product": "B6-B5"
       },
       {
         "key": "CMB2",
-        "description": "Recalentador",
+        "type": "PRODUCTIVE",
         "fuel": "F2",
-        "product": "B8-B7",
-        "type": "PRODUCTIVE"
+        "product": "B8-B7"
       },
       {
         "key": "CMP1",
-        "description": "Compresor 1",
+        "type": "PRODUCTIVE",
         "fuel": "WC1",
-        "product": "B2-B1",
-        "type": "PRODUCTIVE"
+        "product": "B2-B1"
       },
       {
         "key": "CMP2",
-        "description": "Compresor 2",
+        "type": "PRODUCTIVE",
         "fuel": "WC2",
-        "product": "B4-B3",
-        "type": "PRODUCTIVE"
+        "product": "B4-B3"
       },
       {
         "key": "TRB1",
-        "description": "Turbina 1",
+        "type": "PRODUCTIVE",
         "fuel": "B6-B7",
-        "product": "WT1",
-        "type": "PRODUCTIVE"
+        "product": "WT1"
       },
       {
         "key": "TRB2",
-        "description": "Turbina 2",
+        "type": "PRODUCTIVE",
         "fuel": "B8-B9",
-        "product": "WT2",
-        "type": "PRODUCTIVE"
+        "product": "WT2"
       },
       {
         "key": "PHTR",
-        "description": "Precalentador",
+        "type": "PRODUCTIVE",
         "fuel": "B9-B10",
-        "product": "B5-B4",
-        "type": "PRODUCTIVE"
+        "product": "B5-B4"
       },
       {
         "key": "GEN",
-        "description": "Alternador",
+        "type": "PRODUCTIVE",
         "fuel": "WT1+WT2-WC1-WC2",
-        "product": "WN",
-        "type": "PRODUCTIVE"
+        "product": "WN"
       },
       {
         "key": "COOL",
-        "description": "Intercooler",
+        "type": "DISSIPATIVE",
         "fuel": "B2-B3",
-        "product": "QI",
-        "type": "DISSIPATIVE"
+        "product": "QI"
       },
       {
         "key": "STCK",
-        "description": "Chimenea",
+        "type": "DISSIPATIVE",
         "fuel": "B10",
-        "product": "QG",
-        "type": "DISSIPATIVE"
+        "product": "QG"
       }
     ]
   },
@@ -642,46 +671,6 @@
       }
     ]
   },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(kW)"
-      }
-    ]
-  },
   "WasteDefinition": {
     "wastes": [
       {
@@ -692,8 +681,9 @@
       {
         "flow": "QG",
         "type": "IRREVERSIBILITY",
-        "recycle": 0.9
+        "recycle": 0.5
       }
     ]
-  }
+  },
+  "ResourcesCost": []
 }

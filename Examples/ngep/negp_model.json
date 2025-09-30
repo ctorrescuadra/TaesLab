@@ -1,0 +1,735 @@
+{
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "NG1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "NG2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG8",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "NG9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "A10",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "G11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "G13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "QG",
+        "type": "WASTE"
+      },
+      {
+        "key": "HT16",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "HT17",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "HT18",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "HT19",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "LT21",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "LT23",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "LT24",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "LT25",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "LT26",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BZ28",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BZ29",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BZ30",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BZ31",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BZ32",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BZ33",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W34",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W35",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W36",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W37",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W38",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W39",
+        "type": "OUTPUT"
+      }
+    ],
+    "processes": [
+      {
+        "key": "ICE",
+        "type": "PRODUCTIVE",
+        "fuel": "NG9+A10",
+        "product": "G11+W36+(HT16+HT17-HT18-HT19)"
+      },
+      {
+        "key": "HRHE",
+        "type": "PRODUCTIVE",
+        "fuel": "G12-G13",
+        "product": "LT23+LT24-LT21"
+      },
+      {
+        "key": "LHP",
+        "type": "PRODUCTIVE",
+        "fuel": "LT23-LT26",
+        "product": "NG2-NG1"
+      },
+      {
+        "key": "HHP",
+        "type": "PRODUCTIVE",
+        "fuel": "HT16-HT19",
+        "product": "NG3-NG2"
+      },
+      {
+        "key": "GE1",
+        "type": "PRODUCTIVE",
+        "fuel": "NG3-NG4",
+        "product": "W34"
+      },
+      {
+        "key": "LMP",
+        "type": "PRODUCTIVE",
+        "fuel": "LT24-LT25",
+        "product": "NG5-NG4"
+      },
+      {
+        "key": "HMP",
+        "type": "PRODUCTIVE",
+        "fuel": "HT17-HT18",
+        "product": "NG6-NG5"
+      },
+      {
+        "key": "GE2",
+        "type": "PRODUCTIVE",
+        "fuel": "NG6-NG7",
+        "product": "W35"
+      },
+      {
+        "key": "EVAP",
+        "type": "PRODUCTIVE",
+        "fuel": "G11-G12",
+        "product": "BZ28-BZ33"
+      },
+      {
+        "key": "ORCT",
+        "type": "PRODUCTIVE",
+        "fuel": "BZ28-BZ29",
+        "product": "W37+W38"
+      },
+      {
+        "key": "REG",
+        "type": "PRODUCTIVE",
+        "fuel": "BZ29-BZ30",
+        "product": "BZ33-BZ32"
+      },
+      {
+        "key": "COND",
+        "type": "PRODUCTIVE",
+        "fuel": "BZ30-BZ31",
+        "product": "LT21-LT25-LT26"
+      },
+      {
+        "key": "ORCP",
+        "type": "PRODUCTIVE",
+        "fuel": "W38",
+        "product": "BZ32-BZ31"
+      },
+      {
+        "key": "NGD",
+        "type": "PRODUCTIVE",
+        "fuel": "NG7",
+        "product": "NG8+NG9"
+      },
+      {
+        "key": "POWER",
+        "type": "PRODUCTIVE",
+        "fuel": "W34+W35+W36+W37",
+        "product": "W39"
+      },
+      {
+        "key": "STACK",
+        "type": "DISSIPATIVE",
+        "fuel": "G13",
+        "product": "QG"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "ORC",
+        "exergy": [
+          {
+            "key": "NG1",
+            "value": 366255
+          },
+          {
+            "key": "NG2",
+            "value": 366289
+          },
+          {
+            "key": "NG3",
+            "value": 366379
+          },
+          {
+            "key": "NG4",
+            "value": 364957
+          },
+          {
+            "key": "NG5",
+            "value": 364986
+          },
+          {
+            "key": "NG6",
+            "value": 365039
+          },
+          {
+            "key": "NG7",
+            "value": 363808
+          },
+          {
+            "key": "NG8",
+            "value": 357729
+          },
+          {
+            "key": "NG9",
+            "value": 6079
+          },
+          {
+            "key": "A10",
+            "value": 0
+          },
+          {
+            "key": "G11",
+            "value": 851.4
+          },
+          {
+            "key": "G12",
+            "value": 180.9
+          },
+          {
+            "key": "G13",
+            "value": 146.6
+          },
+          {
+            "key": "QG",
+            "value": 146.6
+          },
+          {
+            "key": "HT16",
+            "value": 231.5
+          },
+          {
+            "key": "HT17",
+            "value": 146.5
+          },
+          {
+            "key": "HT18",
+            "value": 73.5
+          },
+          {
+            "key": "HT19",
+            "value": 116.1
+          },
+          {
+            "key": "LT21",
+            "value": 81.8
+          },
+          {
+            "key": "LT23",
+            "value": 55.4
+          },
+          {
+            "key": "LT24",
+            "value": 48.1
+          },
+          {
+            "key": "LT25",
+            "value": 2.93
+          },
+          {
+            "key": "LT26",
+            "value": 3.38
+          },
+          {
+            "key": "BZ28",
+            "value": 640.1
+          },
+          {
+            "key": "BZ29",
+            "value": 193.9
+          },
+          {
+            "key": "BZ30",
+            "value": 157.3
+          },
+          {
+            "key": "BZ31",
+            "value": 12.1
+          },
+          {
+            "key": "BZ32",
+            "value": 21.8
+          },
+          {
+            "key": "BZ33",
+            "value": 49.1
+          },
+          {
+            "key": "W34",
+            "value": 906
+          },
+          {
+            "key": "W35",
+            "value": 883.8
+          },
+          {
+            "key": "W36",
+            "value": 2349
+          },
+          {
+            "key": "W37",
+            "value": 343.2
+          },
+          {
+            "key": "W38",
+            "value": 13.2
+          },
+          {
+            "key": "W39",
+            "value": 4450
+          }
+        ]
+      },
+      {
+        "stateId": "ICE",
+        "exergy": [
+          {
+            "key": "NG1",
+            "value": 366255
+          },
+          {
+            "key": "NG2",
+            "value": 366297
+          },
+          {
+            "key": "NG3",
+            "value": 366379
+          },
+          {
+            "key": "NG4",
+            "value": 364957
+          },
+          {
+            "key": "NG5",
+            "value": 364994
+          },
+          {
+            "key": "NG6",
+            "value": 365039
+          },
+          {
+            "key": "NG7",
+            "value": 363808
+          },
+          {
+            "key": "NG8",
+            "value": 358579
+          },
+          {
+            "key": "NG9",
+            "value": 5228
+          },
+          {
+            "key": "A10",
+            "value": 0
+          },
+          {
+            "key": "G11",
+            "value": 732.3
+          },
+          {
+            "key": "G12",
+            "value": 732.3
+          },
+          {
+            "key": "G13",
+            "value": 123.8
+          },
+          {
+            "key": "QG",
+            "value": 123.8
+          },
+          {
+            "key": "HT16",
+            "value": 203.6
+          },
+          {
+            "key": "HT17",
+            "value": 121.5
+          },
+          {
+            "key": "HT18",
+            "value": 60.9
+          },
+          {
+            "key": "HT19",
+            "value": 102.1
+          },
+          {
+            "key": "LT21",
+            "value": 6.95
+          },
+          {
+            "key": "LT23",
+            "value": 61
+          },
+          {
+            "key": "LT24",
+            "value": 53.1
+          },
+          {
+            "key": "LT25",
+            "value": 3.24
+          },
+          {
+            "key": "LT26",
+            "value": 3.71
+          },
+          {
+            "key": "BZ28",
+            "value": 0
+          },
+          {
+            "key": "BZ29",
+            "value": 0
+          },
+          {
+            "key": "BZ30",
+            "value": 0
+          },
+          {
+            "key": "BZ31",
+            "value": 0
+          },
+          {
+            "key": "BZ32",
+            "value": 0
+          },
+          {
+            "key": "BZ33",
+            "value": 0
+          },
+          {
+            "key": "W34",
+            "value": 906
+          },
+          {
+            "key": "W35",
+            "value": 883.8
+          },
+          {
+            "key": "W36",
+            "value": 2020
+          },
+          {
+            "key": "W37",
+            "value": 0
+          },
+          {
+            "key": "W38",
+            "value": 0
+          },
+          {
+            "key": "W39",
+            "value": 3772
+          }
+        ]
+      },
+      {
+        "stateId": "Expander",
+        "exergy": [
+          {
+            "key": "NG1",
+            "value": 366255
+          },
+          {
+            "key": "NG2",
+            "value": 366255
+          },
+          {
+            "key": "NG3",
+            "value": 366379
+          },
+          {
+            "key": "NG4",
+            "value": 364957
+          },
+          {
+            "key": "NG5",
+            "value": 364957
+          },
+          {
+            "key": "NG6",
+            "value": 365039
+          },
+          {
+            "key": "NG7",
+            "value": 363808
+          },
+          {
+            "key": "NG8",
+            "value": 361103
+          },
+          {
+            "key": "NG9",
+            "value": 2704
+          },
+          {
+            "key": "A10",
+            "value": 0
+          },
+          {
+            "key": "G11",
+            "value": 93.1
+          },
+          {
+            "key": "G12",
+            "value": 93.1
+          },
+          {
+            "key": "G13",
+            "value": 93.1
+          },
+          {
+            "key": "QG",
+            "value": 93.1
+          },
+          {
+            "key": "HT16",
+            "value": 508.4
+          },
+          {
+            "key": "HT17",
+            "value": 386.9
+          },
+          {
+            "key": "HT18",
+            "value": 194
+          },
+          {
+            "key": "HT19",
+            "value": 255
+          },
+          {
+            "key": "LT21",
+            "value": 0
+          },
+          {
+            "key": "LT23",
+            "value": 0
+          },
+          {
+            "key": "LT24",
+            "value": 0
+          },
+          {
+            "key": "LT25",
+            "value": 0
+          },
+          {
+            "key": "LT26",
+            "value": 0
+          },
+          {
+            "key": "BZ28",
+            "value": 0
+          },
+          {
+            "key": "BZ29",
+            "value": 0
+          },
+          {
+            "key": "BZ30",
+            "value": 0
+          },
+          {
+            "key": "BZ31",
+            "value": 0
+          },
+          {
+            "key": "BZ32",
+            "value": 0
+          },
+          {
+            "key": "BZ33",
+            "value": 0
+          },
+          {
+            "key": "W34",
+            "value": 906
+          },
+          {
+            "key": "W35",
+            "value": 838.8
+          },
+          {
+            "key": "W36",
+            "value": 0
+          },
+          {
+            "key": "W37",
+            "value": 0
+          },
+          {
+            "key": "W38",
+            "value": 0
+          },
+          {
+            "key": "W39",
+            "value": 1727
+          }
+        ]
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "QG",
+      "type": "MANUAL",
+      "recycle": 0,
+      "values": {
+        "process": "ICE",
+        "value": 1
+      }
+    }
+  },
+  "ResourcesCost": []
+}

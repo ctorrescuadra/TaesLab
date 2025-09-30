@@ -39,7 +39,7 @@ function res=ImportData(filename,varargin)
         return
     end
     if ~exist(filename,'file')
-        res.printError(cMessages.FileNotExist,filename);
+        res.printError(cMessages.FileNotFound,filename);
         return
     end
     % Optional parameters

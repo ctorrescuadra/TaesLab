@@ -117,10 +117,8 @@ classdef cType
 		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...
 			'WASTEDEF',5,'WASTEALLOC',6,'RESOURCES',7,'DIRECTORY',8);
 		% Data Model
-		DataId=struct('PRODUCTIVE_STRUCTURE',1,'EXERGY_STATES',2,'FORMAT',3,'WASTE',4,'RESOURCES',5);
-		DataElements={'ProductiveStructure','ExergyStates','Format','WasteDefinition','ResourcesCost'};
-		MandatoryData=1:3;
-		OptionalData=4:5;
+		DataId=struct('PRODUCTIVE_STRUCTURE','ProductiveStructure','EXERGY','ExergyStates',...
+				'FORMAT','Format','WASTE','WasteDefinition','RESOURCES','ResourcesCost');
         % Default Results file
 		DATA_MODEL_FILE='DataModel';
         RESULT_FILE='ModelResults';

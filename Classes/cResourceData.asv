@@ -169,10 +169,10 @@ classdef cResourceData < cMessageLogger
 			fkeys={se.key}; id=1:length(fkeys);
 			[tst,idx]=ismember(fkeys,obj.ps.FlowKeys);
 			if all(tst)
-				obj.c0(idx)=[se(id).value];
+				obj.c(idx)=[se(id).value];
 			else
 				for i=idx
-					log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,se(i).key);
+					log.messageLog(cType.ERROR,cMessages.InvalidResourceKey,sz(i).key);
 				end
 			end
 		end

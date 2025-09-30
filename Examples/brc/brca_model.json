@@ -1,6 +1,5 @@
 {
   "ProductiveStructure": {
-    "name": "brca_model",
     "flows": [
       {
         "key": "B1",
@@ -82,63 +81,63 @@
     "processes": [
       {
         "key": "HRSG",
+        "type": "PRODUCTIVE",
         "fuel": "QH",
-        "product": "B1-B7",
-        "type": "PRODUCTIVE"
+        "product": "B1-B7"
       },
       {
         "key": "TRB1",
+        "type": "PRODUCTIVE",
         "fuel": "B1-B2",
-        "product": "WT1",
-        "type": "PRODUCTIVE"
+        "product": "WT1"
       },
       {
         "key": "WH",
+        "type": "PRODUCTIVE",
         "fuel": "B4-B5",
-        "product": "QWH",
-        "type": "PRODUCTIVE"
+        "product": "QWH"
       },
       {
         "key": "MXR",
+        "type": "PRODUCTIVE",
         "fuel": "B3+B5",
-        "product": "B6",
-        "type": "PRODUCTIVE"
+        "product": "B6"
       },
       {
         "key": "PMP1",
+        "type": "PRODUCTIVE",
         "fuel": "WP1",
-        "product": "B7-B6",
-        "type": "PRODUCTIVE"
+        "product": "B7-B6"
       },
       {
         "key": "HE",
+        "type": "PRODUCTIVE",
         "fuel": "B2-B3-B4",
-        "product": "B8-B11",
-        "type": "PRODUCTIVE"
+        "product": "B8-B11"
       },
       {
         "key": "TRB2",
+        "type": "PRODUCTIVE",
         "fuel": "B8-B9",
-        "product": "WT2",
-        "type": "PRODUCTIVE"
+        "product": "WT2"
       },
       {
         "key": "PMP2",
+        "type": "PRODUCTIVE",
         "fuel": "WP2",
-        "product": "B11-B10",
-        "type": "PRODUCTIVE"
+        "product": "B11-B10"
       },
       {
         "key": "GEN",
+        "type": "PRODUCTIVE",
         "fuel": "WT1+WT2",
-        "product": "WN+WP1+WP2",
-        "type": "PRODUCTIVE"
+        "product": "WN+WP1+WP2"
       },
       {
         "key": "CND",
+        "type": "DISSIPATIVE",
         "fuel": "B9-B10",
-        "product": "QCND",
-        "type": "DISSIPATIVE"
+        "product": "QCND"
       }
     ]
   },
@@ -784,7 +783,7 @@
           },
           {
             "key": "QWH",
-            "value": 627.0500000000001
+            "value": 627.05000000000007
           },
           {
             "key": "QCND",
@@ -835,10 +834,10 @@
     ]
   },
   "WasteDefinition": {
-    "wastes": {
+    "wastes": [{
       "flow": "QCND",
       "type": "RESOURCES",
       "recycle": 0
-    }
+    }]
   }
 }

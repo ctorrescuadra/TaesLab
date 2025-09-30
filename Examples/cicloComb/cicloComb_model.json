@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 11,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 11,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 11,
+        "precision": 2,
+        "unit": "(€/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(€/MWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 4,
+        "unit": "(MW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "cicloComb_model",
     "flows": [
       {
         "key": "B2",
@@ -86,80 +125,69 @@
     "processes": [
       {
         "key": "COMB",
-        "description": "Combustor",
+        "type": "PRODUCTIVE",
         "fuel": "NG",
-        "product": "B3-B2",
-        "type": "PRODUCTIVE"
+        "product": "B3-B2"
       },
       {
         "key": "COMP",
-        "description": "Compresor",
+        "type": "PRODUCTIVE",
         "fuel": "WC",
-        "product": "B2",
-        "type": "PRODUCTIVE"
+        "product": "B2"
       },
       {
         "key": "TGAS",
-        "description": "Turbina Gas",
+        "type": "PRODUCTIVE",
         "fuel": "B3-B4",
-        "product": "WTG+WC",
-        "type": "PRODUCTIVE"
+        "product": "WTG+WC"
       },
       {
         "key": "SHT",
-        "description": "Sobrecalentador",
+        "type": "PRODUCTIVE",
         "fuel": "B4-B5",
-        "product": "B13-B12",
-        "type": "PRODUCTIVE"
+        "product": "B13-B12"
       },
       {
         "key": "EVAP",
-        "description": "Evaporador",
+        "type": "PRODUCTIVE",
         "fuel": "B5-B6",
-        "product": "B12-B11",
-        "type": "PRODUCTIVE"
+        "product": "B12-B11"
       },
       {
         "key": "ECON",
-        "description": "Economizador",
+        "type": "PRODUCTIVE",
         "fuel": "B6-B7",
-        "product": "B11-B10",
-        "type": "PRODUCTIVE"
+        "product": "B11-B10"
       },
       {
         "key": "TVAP",
-        "description": "Turbina de vapor",
+        "type": "PRODUCTIVE",
         "fuel": "B13-B8",
-        "product": "WTV",
-        "type": "PRODUCTIVE"
+        "product": "WTV"
       },
       {
         "key": "PMP",
-        "description": "Bomba alimentacion",
+        "type": "PRODUCTIVE",
         "fuel": "WP",
-        "product": "B10-B9",
-        "type": "PRODUCTIVE"
+        "product": "B10-B9"
       },
       {
         "key": "GEN",
-        "description": "Alternador",
+        "type": "PRODUCTIVE",
         "fuel": "WTG+WTV",
-        "product": "WP+WN",
-        "type": "PRODUCTIVE"
+        "product": "WP+WN"
       },
       {
         "key": "STCK",
-        "description": "Chimenea",
+        "type": "DISSIPATIVE",
         "fuel": "B7",
-        "product": "QG",
-        "type": "DISSIPATIVE"
+        "product": "QG"
       },
       {
         "key": "CND",
-        "description": "Condensador",
+        "type": "DISSIPATIVE",
         "fuel": "B8-B9",
-        "product": "QC",
-        "type": "DISSIPATIVE"
+        "product": "QC"
       }
     ]
   },
@@ -844,46 +872,6 @@
             "value": 5.0598
           }
         ]
-      }
-    ]
-  },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 11,
-        "precision": 3,
-        "unit": "(MW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 11,
-        "precision": 3,
-        "unit": "(MW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 11,
-        "precision": 2,
-        "unit": "(€/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(€/MWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 4,
-        "unit": "(MW)"
       }
     ]
   },

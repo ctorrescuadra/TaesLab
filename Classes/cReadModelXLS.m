@@ -69,7 +69,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
             end
             % Set Model properties
             if isValid(obj)                   
-                obj.modelTables=tables;
+                obj.ModelTables=tables;
                 obj.setModelProperties(filename);
                 obj.ModelData=obj.buildModelData(tables);
             end
@@ -89,6 +89,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
         %     res - cModelTable object
         %
             tbl=cMessageLogger;
+            % Read values from file
             if isOctave
 		        try
 			        values=xls2oct(xls,wsht);
@@ -96,7 +97,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 			        tbl.messageLog(cType.ERROR,err.message);
 			        return
 		        end
-            else %Matlab
+            else %isMatlab
 		        try
 		            values=readcell(xls,'Sheet',wsht);
                 catch err
@@ -104,7 +105,10 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                     return
 		        end
             end
-            tbl=cModelTable(values,props);
+            % Check Values and get the model table
+            if cReadModelTable.checkValues(tbl,wsht,values)
+                tbl=cModelTable(values,props);
+            end
         end
     end
 end

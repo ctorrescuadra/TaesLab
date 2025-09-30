@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "(MW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "($/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 3,
+        "unit": "($/MWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 4,
+        "unit": "(MW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "gpp_model",
     "flows": [
       {
         "key": "GTS",
@@ -109,95 +148,82 @@
     ],
     "processes": [
       {
-        "key": "GTS",
-        "description": "Geotermal Source",
+        "key": "GTSP",
+        "type": "PRODUCTIVE",
         "fuel": "GTS",
-        "product": "B1-B6-B8",
-        "type": "PRODUCTIVE"
+        "product": "B1-B6-B8"
       },
       {
         "key": "VAP1",
-        "description": "Vaporizer 1",
+        "type": "PRODUCTIVE",
         "fuel": "B1-B2",
-        "product": "V10-V15",
-        "type": "PRODUCTIVE"
+        "product": "V10-V15"
       },
       {
         "key": "PHT1",
-        "description": "Preheater 1",
+        "type": "PRODUCTIVE",
         "fuel": "B5-B6",
-        "product": "V14-V13",
-        "type": "PRODUCTIVE"
+        "product": "V14-V13"
       },
       {
         "key": "TPHT",
-        "description": "Top Preheater",
+        "type": "PRODUCTIVE",
         "fuel": "B2-B3",
-        "product": "V15-V14",
-        "type": "PRODUCTIVE"
+        "product": "V15-V14"
       },
       {
         "key": "VAP2",
-        "description": "Vaporizer 2",
+        "type": "PRODUCTIVE",
         "fuel": "B3-B5-B7",
-        "product": "V16-V20",
-        "type": "PRODUCTIVE"
+        "product": "V16-V20"
       },
       {
         "key": "PHT2",
-        "description": "Preheater 2",
+        "type": "PRODUCTIVE",
         "fuel": "B7-B8",
-        "product": "V20-V19",
-        "type": "PRODUCTIVE"
+        "product": "V20-V19"
       },
       {
         "key": "TRB1",
-        "description": "Organic Turbine 1",
+        "type": "PRODUCTIVE",
         "fuel": "V10-V11",
-        "product": "W23",
-        "type": "PRODUCTIVE"
+        "product": "W23"
       },
       {
         "key": "PMP1",
-        "description": "Cycle Pump 1",
+        "type": "PRODUCTIVE",
         "fuel": "W25",
-        "product": "V13-V12",
-        "type": "PRODUCTIVE"
+        "product": "V13-V12"
       },
       {
         "key": "TRB2",
-        "description": "Organic Turbine 2",
+        "type": "PRODUCTIVE",
         "fuel": "V16-V17",
-        "product": "W24",
-        "type": "PRODUCTIVE"
+        "product": "W24"
       },
       {
         "key": "PMP2",
-        "description": "Cycle Pump 2",
+        "type": "PRODUCTIVE",
         "fuel": "W26",
-        "product": "V19-V18",
-        "type": "PRODUCTIVE"
+        "product": "V19-V18"
       },
       {
         "key": "GEN",
-        "description": "Generator",
+        "type": "PRODUCTIVE",
         "fuel": "W23+W24",
-        "product": "W25+W26+W27",
-        "type": "PRODUCTIVE"
+        "product": "W25+W26+W27"
       },
       {
         "key": "CND1",
-        "description": "AirCooler Conderser 1",
+        "type": "DISSIPATIVE",
         "fuel": "V11-V12",
-        "product": "Q28",
-        "type": "DISSIPATIVE"
+        "product": "Q28"
       },
       {
         "key": "CND2",
-        "description": "AirCooler Condenser 2",
+        "type": "DISSIPATIVE",
         "fuel": "V17-V18",
-        "product": "Q29",
-        "type": "DISSIPATIVE"
+        "product": "Q29"
       }
     ]
   },
@@ -312,46 +338,6 @@
       ]
     }
   },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 3,
-        "unit": "(MW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 3,
-        "unit": "(MW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 3,
-        "unit": "($/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 3,
-        "unit": "($/MWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 4,
-        "unit": "(MW)"
-      }
-    ]
-  },
   "WasteDefinition": {
     "wastes": [
       {
@@ -400,7 +386,7 @@
         },
         "processes": [
           {
-            "key": "GTS",
+            "key": "GTSP",
             "value": 2.016
           },
           {
@@ -461,7 +447,7 @@
         },
         "processes": [
           {
-            "key": "GTS",
+            "key": "GTSP",
             "value": 2.016
           },
           {

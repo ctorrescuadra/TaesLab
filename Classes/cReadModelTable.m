@@ -5,7 +5,7 @@ classdef (Abstract) cReadModelTable < cReadModel
 %   See also cReadModel, cReadModelXLS, cReadModelCSV
 %
 	properties (Access=public)
-		modelTables   % Model Tables
+		ModelTables   % Model Tables
 	end
 
     properties (Access=private)
@@ -13,6 +13,16 @@ classdef (Abstract) cReadModelTable < cReadModel
         fkeys   % Flow keys
         ptype   % Process types
         pkeys   % Processes keys
+    end
+
+    methods
+        function printModelTables(obj)
+        %printModelTables - Show the model tables on console
+        %   Syntax:
+        %     printModelTables(obj)
+        %
+            cellfun(@(x) printTable(x),struct2cell(obj.ModelTables));
+        end
     end
 
 	methods (Access=protected)
@@ -259,7 +269,7 @@ classdef (Abstract) cReadModelTable < cReadModel
                         continue
                     end
                 end
-            elseif ~all(wtypes)
+            elseif bitget(wdef,1) && ~all(wtypes)
                 obj.messageLog(cType.ERROR,cMessages.InvalidManualAllocation);
             end
             res.wastes=pswd;
@@ -345,5 +355,25 @@ classdef (Abstract) cReadModelTable < cReadModel
                 end
             end
         end
+    end
+
+    methods(Static,Access=protected)
+        function tst=checkValues(log,table,values)
+            tst=true;
+            %Search columns with missing cells
+            if isOctave
+                idx=all(cellfun(@isempty,values));
+            else %isMatlab
+                idx=all(cellfun(@(x) isa(x,'missing'),values));
+            end
+            % Log error
+            if any(idx)
+                tst=false;
+                for i=find(idx)
+                    log.messageLog(cType.ERROR,cMessages.InvalidFieldNumber,i,table);
+                end
+            end
+        end
+
     end
 end

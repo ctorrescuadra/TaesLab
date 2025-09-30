@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "orcvcr_model",
     "flows": [
       {
         "key": "B1",
@@ -70,59 +109,51 @@
     "processes": [
       {
         "key": "BLR",
-        "description": "Boiler",
+        "type": "PRODUCTIVE",
         "fuel": "QBLR",
-        "product": "B1-B4",
-        "type": "PRODUCTIVE"
+        "product": "B1-B4"
       },
       {
         "key": "TRB",
-        "description": "Turbine",
+        "type": "PRODUCTIVE",
         "fuel": "B1-B2",
-        "product": "WT",
-        "type": "PRODUCTIVE"
+        "product": "WT"
       },
       {
         "key": "PMP",
-        "description": "Pump",
+        "type": "PRODUCTIVE",
         "fuel": "WP",
-        "product": "B4-B3",
-        "type": "PRODUCTIVE"
+        "product": "B4-B3"
       },
       {
         "key": "CMP",
-        "description": "Compresor",
+        "type": "PRODUCTIVE",
         "fuel": "WC",
-        "product": "B8-B7",
-        "type": "PRODUCTIVE"
+        "product": "B8-B7"
       },
       {
         "key": "EVAP",
-        "description": "Evaporator",
+        "type": "PRODUCTIVE",
         "fuel": "B6-B7",
-        "product": "QEVP",
-        "type": "PRODUCTIVE"
+        "product": "QEVP"
       },
       {
         "key": "GEN",
-        "description": "Alternator",
+        "type": "PRODUCTIVE",
         "fuel": "WT-WC",
-        "product": "WN+WP",
-        "type": "PRODUCTIVE"
+        "product": "WN+WP"
       },
       {
         "key": "VEXP",
-        "description": "Expansion Valve",
+        "type": "DISSIPATIVE",
         "fuel": "B5-B6",
-        "product": "QEXP",
-        "type": "DISSIPATIVE"
+        "product": "QEXP"
       },
       {
         "key": "CND",
-        "description": "Condeser",
+        "type": "DISSIPATIVE",
         "fuel": "(B2-B3)+(B8-B5)",
-        "product": "QCND",
-        "type": "DISSIPATIVE"
+        "product": "QCND"
       }
     ]
   },
@@ -133,35 +164,35 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 620.8
+            "value": 617.2
           },
           {
             "key": "B2",
-            "value": 317.8
+            "value": 315.3
           },
           {
             "key": "B3",
-            "value": 281.6
+            "value": 246.9
           },
           {
             "key": "B4",
-            "value": 294.3
+            "value": 259.5
           },
           {
             "key": "B5",
-            "value": 220.7
+            "value": 193.5
           },
           {
             "key": "B6",
-            "value": 194
+            "value": 167.2
           },
           {
             "key": "B7",
-            "value": 59.57
+            "value": 55.19
           },
           {
             "key": "B8",
-            "value": 244.5
+            "value": 240.8
           },
           {
             "key": "WT",
@@ -177,11 +208,11 @@
           },
           {
             "key": "QBLR",
-            "value": 462.1
+            "value": 491
           },
           {
             "key": "QEVP",
-            "value": 64.2
+            "value": 42.96
           },
           {
             "key": "WN",
@@ -189,11 +220,11 @@
           },
           {
             "key": "QEXP",
-            "value": 26.699999999999989
+            "value": 26.300000000000011
           },
           {
             "key": "QCND",
-            "value": 59.93
+            "value": 115.70000000000005
           }
         ]
       },
@@ -202,39 +233,39 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 637.8
+            "value": 661.3
           },
           {
             "key": "B2",
-            "value": 326.9
+            "value": 339.1
           },
           {
             "key": "B3",
-            "value": 289.3
+            "value": 264.5
           },
           {
             "key": "B4",
-            "value": 302.3
+            "value": 278.1
           },
           {
             "key": "B5",
-            "value": 220.7
+            "value": 193.5
           },
           {
             "key": "B6",
-            "value": 194
+            "value": 167.2
           },
           {
             "key": "B7",
-            "value": 59.57
+            "value": 55.19
           },
           {
             "key": "B8",
-            "value": 244.5
+            "value": 240.8
           },
           {
             "key": "WT",
-            "value": 245.5
+            "value": 246.2
           },
           {
             "key": "WC",
@@ -242,15 +273,15 @@
           },
           {
             "key": "WP",
-            "value": 15.21
+            "value": 15.86
           },
           {
             "key": "QBLR",
-            "value": 474.8
+            "value": 526
           },
           {
             "key": "QEVP",
-            "value": 64.2
+            "value": 42.96
           },
           {
             "key": "WN",
@@ -258,11 +289,11 @@
           },
           {
             "key": "QEXP",
-            "value": 26.699999999999989
+            "value": 26.300000000000011
           },
           {
             "key": "QCND",
-            "value": 61.34
+            "value": 121.90000000000003
           }
         ]
       },
@@ -271,35 +302,35 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 620.8
+            "value": 617.2
           },
           {
             "key": "B2",
-            "value": 317.8
+            "value": 315.3
           },
           {
             "key": "B3",
-            "value": 281.6
+            "value": 246.9
           },
           {
             "key": "B4",
-            "value": 294.3
+            "value": 259.5
           },
           {
             "key": "B5",
-            "value": 215.2
+            "value": 181.4
           },
           {
             "key": "B6",
-            "value": 189.2
+            "value": 156.8
           },
           {
             "key": "B7",
-            "value": 58.08
+            "value": 51.74
           },
           {
             "key": "B8",
-            "value": 238.5
+            "value": 226.5
           },
           {
             "key": "WT",
@@ -315,11 +346,11 @@
           },
           {
             "key": "QBLR",
-            "value": 462.1
+            "value": 491
           },
           {
             "key": "QEVP",
-            "value": 62.6
+            "value": 40.28
           },
           {
             "key": "WN",
@@ -327,11 +358,11 @@
           },
           {
             "key": "QEXP",
-            "value": 26
+            "value": 24.599999999999994
           },
           {
             "key": "QCND",
-            "value": 59.5
+            "value": 113.49999999999997
           }
         ]
       },
@@ -340,35 +371,35 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 694
+            "value": 690.1
           },
           {
             "key": "B2",
-            "value": 390.3
+            "value": 387.3
           },
           {
             "key": "B3",
-            "value": 317.4
+            "value": 279.8
           },
           {
             "key": "B4",
-            "value": 331.1
+            "value": 293.5
           },
           {
             "key": "B5",
-            "value": 197.9
+            "value": 174.5
           },
           {
             "key": "B6",
-            "value": 167.1
+            "value": 144.2
           },
           {
             "key": "B7",
-            "value": 52.98
+            "value": 49.08
           },
           {
             "key": "B8",
-            "value": 238.6
+            "value": 235.4
           },
           {
             "key": "WT",
@@ -384,11 +415,11 @@
           },
           {
             "key": "QBLR",
-            "value": 505.9
+            "value": 537.1
           },
           {
             "key": "QEVP",
-            "value": 54.51
+            "value": 36.48
           },
           {
             "key": "WN",
@@ -396,11 +427,11 @@
           },
           {
             "key": "QEXP",
-            "value": 30.800000000000011
+            "value": 30.300000000000011
           },
           {
             "key": "QCND",
-            "value": 113.6
+            "value": 168.39999999999998
           }
         ]
       },
@@ -409,35 +440,35 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 641.4
+            "value": 637.5
           },
           {
             "key": "B2",
-            "value": 339.5
+            "value": 336.5
           },
           {
             "key": "B3",
-            "value": 301.5
+            "value": 264.3
           },
           {
             "key": "B4",
-            "value": 313.3
+            "value": 276.2
           },
           {
             "key": "B5",
-            "value": 220.7
+            "value": 193.5
           },
           {
             "key": "B6",
-            "value": 194
+            "value": 167.2
           },
           {
             "key": "B7",
-            "value": 59.57
+            "value": 55.19
           },
           {
             "key": "B8",
-            "value": 244.5
+            "value": 240.8
           },
           {
             "key": "WT",
@@ -453,11 +484,11 @@
           },
           {
             "key": "QBLR",
-            "value": 477.2
+            "value": 507.9
           },
           {
             "key": "QEVP",
-            "value": 64.2
+            "value": 42.96
           },
           {
             "key": "WN",
@@ -465,11 +496,11 @@
           },
           {
             "key": "QEXP",
-            "value": 26.699999999999989
+            "value": 26.300000000000011
           },
           {
             "key": "QCND",
-            "value": 61.71
+            "value": 119.5
           }
         ]
       },
@@ -478,35 +509,35 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 1172
+            "value": 1165
           },
           {
             "key": "B2",
-            "value": 599.8
+            "value": 595
           },
           {
             "key": "B3",
-            "value": 531.5
+            "value": 465.9
           },
           {
             "key": "B4",
-            "value": 555.4
+            "value": 489.8
           },
           {
             "key": "B5",
-            "value": 220.7
+            "value": 193.5
           },
           {
             "key": "B6",
-            "value": 194
+            "value": 167.2
           },
           {
             "key": "B7",
-            "value": 59.57
+            "value": 55.19
           },
           {
             "key": "B8",
-            "value": 244.5
+            "value": 240.8
           },
           {
             "key": "WT",
@@ -522,11 +553,11 @@
           },
           {
             "key": "QBLR",
-            "value": 872.1
+            "value": 926.7
           },
           {
             "key": "QEVP",
-            "value": 64.2
+            "value": 42.96
           },
           {
             "key": "WN",
@@ -534,53 +565,13 @@
           },
           {
             "key": "QEXP",
-            "value": 26.699999999999989
+            "value": 26.300000000000011
           },
           {
             "key": "QCND",
-            "value": 92.05
+            "value": 176.40000000000003
           }
         ]
-      }
-    ]
-  },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 1,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 1,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 1,
-        "unit": "(c/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(c/kWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(kW)"
       }
     ]
   },
@@ -588,7 +579,7 @@
     "wastes": [
       {
         "flow": "QEXP",
-        "type": "COST",
+        "type": "MANUAL",
         "recycle": 0,
         "values": {
           "process": "CMP",
@@ -597,9 +588,18 @@
       },
       {
         "flow": "QCND",
-        "type": "COST",
+        "type": "MANUAL",
         "recycle": 0,
-        "values": []
+        "values": [
+          {
+            "process": "BLR",
+            "value": 0.58
+          },
+          {
+            "process": "CMP",
+            "value": 0.42
+          }
+        ]
       }
     ]
   },
@@ -614,35 +614,35 @@
         "processes": [
           {
             "key": "BLR",
-            "value": 41.525403164603318
+            "value": 23.06084796908064
           },
           {
             "key": "TRB",
-            "value": 207.66675438557505
+            "value": 258.83154722805835
           },
           {
             "key": "PMP",
-            "value": 5.7198078864492281
+            "value": 2.2688100119799026
           },
           {
             "key": "CMP",
-            "value": 141.90589075325485
+            "value": 237.79584994793265
           },
           {
             "key": "EVAP",
-            "value": 43.526643673472357
+            "value": 23.43612094959958
           },
           {
             "key": "GEN",
-            "value": 64.955587991108871
+            "value": 17.678671835630151
           },
           {
             "key": "VEXP",
-            "value": 1.2324456288443102
+            "value": 0.27387680640984668
           },
           {
             "key": "CND",
-            "value": 72.471934811431737
+            "value": 39.7932767389091
           }
         ]
       },
@@ -655,35 +655,35 @@
         "processes": [
           {
             "key": "BLR",
-            "value": 83.050806329206637
+            "value": 33.755111728679623
           },
           {
             "key": "TRB",
-            "value": 415.33350877115009
+            "value": 524.80526428468806
           },
           {
             "key": "PMP",
-            "value": 11.439615772898456
+            "value": 2.9118495260250095
           },
           {
             "key": "CMP",
-            "value": 141.90589075325485
+            "value": 237.79584994793265
           },
           {
             "key": "EVAP",
-            "value": 43.526643673472357
+            "value": 23.43612094959958
           },
           {
             "key": "GEN",
-            "value": 64.955587991108871
+            "value": 69.225790334016224
           },
           {
             "key": "VEXP",
-            "value": 1.2324456288443102
+            "value": 0.27387680640984668
           },
           {
             "key": "CND",
-            "value": 108.70790221714761
+            "value": 51.001661989752904
           }
         ]
       }

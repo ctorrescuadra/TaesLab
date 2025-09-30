@@ -1,6 +1,5 @@
 {
   "ProductiveStructure": {
-    "name": "bfgt_model",
     "flows": [
       {
         "key": "B1",
@@ -10,7 +9,7 @@
       {
         "key": "B2",
         "type": "RESOURCE",
-        "description": "BFG"
+        "description": "Blast Furnace Gas"
       },
       {
         "key": "B3",
@@ -81,51 +80,51 @@
     "processes": [
       {
         "key": "CC",
+        "type": "PRODUCTIVE",
         "fuel": "B5+B6",
         "product": "B7",
-        "type": "PRODUCTIVE",
         "description": "Combustion Chamber"
       },
       {
         "key": "GC",
+        "type": "PRODUCTIVE",
         "fuel": "WGC",
         "product": "B4-B2",
-        "type": "PRODUCTIVE",
         "description": "Gas Compressor"
       },
       {
         "key": "AC",
+        "type": "PRODUCTIVE",
         "fuel": "WAC",
         "product": "B3-B1",
-        "type": "PRODUCTIVE",
         "description": "Air Compressor"
       },
       {
         "key": "GHE",
+        "type": "PRODUCTIVE",
         "fuel": "B10-B12",
         "product": "B6-B4",
-        "type": "PRODUCTIVE",
         "description": "Gas Heat Exchange"
       },
       {
         "key": "AHE",
+        "type": "PRODUCTIVE",
         "fuel": "B9-B11",
         "product": "B5-B3",
-        "type": "PRODUCTIVE",
         "description": "Air Heat Exchange"
       },
       {
         "key": "TRB",
+        "type": "PRODUCTIVE",
         "fuel": "B7-B9-B10",
         "product": "WN+WGC+WAC",
-        "type": "PRODUCTIVE",
         "description": "Gas Turbine"
       },
       {
         "key": "STCK",
+        "type": "DISSIPATIVE",
         "fuel": "B11+B12",
         "product": "QG",
-        "type": "DISSIPATIVE",
         "description": "Stack"
       }
     ]
@@ -236,5 +235,17 @@
         "unit": "(kW)"
       }
     ]
-  }
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "QG",
+      "type": "MANUAL",
+      "recycle": 0.6,
+      "values": {
+        "process": "CC",
+        "value": 1
+      }
+    }
+  },
+  "ResourcesCost": []
 }
