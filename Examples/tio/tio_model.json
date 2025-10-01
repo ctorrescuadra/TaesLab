@@ -1,79 +1,4 @@
 {
-  "ProductiveStructure": {
-    "name": "tio_model",
-    "flows": [
-      {
-        "key": "B1",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B2",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B3",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B4",
-        "type": "OUTPUT"
-      },
-      {
-        "key": "B5",
-        "type": "OUTPUT"
-      }
-    ],
-    "processes": [
-      {
-        "key": "PR1",
-        "fuel": "B1",
-        "product": "B2+B3",
-        "type": "PRODUCTIVE",
-        "description": "Process1"
-      },
-      {
-        "key": "PR2",
-        "fuel": "B2",
-        "product": "B4",
-        "type": "PRODUCTIVE",
-        "description": "Process2"
-      },
-      {
-        "key": "PR3",
-        "fuel": "B3",
-        "product": "B5",
-        "type": "PRODUCTIVE",
-        "description": "Process3"
-      }
-    ]
-  },
-  "ExergyStates": {
-    "States": {
-      "stateId": "Reference",
-      "exergy": [
-        {
-          "key": "B1",
-          "value": 100
-        },
-        {
-          "key": "B2",
-          "value": 40
-        },
-        {
-          "key": "B3",
-          "value": 20
-        },
-        {
-          "key": "B4",
-          "value": 30
-        },
-        {
-          "key": "B5",
-          "value": 16
-        }
-      ]
-    }
-  },
   "Format": {
     "definitions": [
       {
@@ -113,5 +38,78 @@
         "unit": "(kW)"
       }
     ]
-  }
+  },
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "B5",
+        "type": "OUTPUT"
+      }
+    ],
+    "processes": [
+      {
+        "key": "PR1",
+        "type": "PRODUCTIVE",
+        "fuel": "B1",
+        "product": "B2+B3"
+      },
+      {
+        "key": "PR2",
+        "type": "PRODUCTIVE",
+        "fuel": "B2",
+        "product": "B4"
+      },
+      {
+        "key": "PR3",
+        "type": "PRODUCTIVE",
+        "fuel": "B3",
+        "product": "B5"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Reference",
+      "exergy": [
+        {
+          "key": "B1",
+          "value": 100
+        },
+        {
+          "key": "B2",
+          "value": 40
+        },
+        {
+          "key": "B3",
+          "value": 20
+        },
+        {
+          "key": "B4",
+          "value": 30
+        },
+        {
+          "key": "B5",
+          "value": 16
+        }
+      ]
+    }
+  },
+  "WasteDefinition": [],
+  "ResourcesCost": []
 }

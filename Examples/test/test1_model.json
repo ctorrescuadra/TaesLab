@@ -1,0 +1,196 @@
+{
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "F1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "F2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "F3",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "F4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "F5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "F6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "F7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "F8",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "PA",
+        "type": "PRODUCTIVE",
+        "fuel": "F1",
+        "product": "F2+F4"
+      },
+      {
+        "key": "PB",
+        "type": "PRODUCTIVE",
+        "fuel": "F2",
+        "product": "F3"
+      },
+      {
+        "key": "PC",
+        "type": "PRODUCTIVE",
+        "fuel": "F4",
+        "product": "F5-F7"
+      },
+      {
+        "key": "PD",
+        "type": "PRODUCTIVE",
+        "fuel": "F5",
+        "product": "F6"
+      },
+      {
+        "key": "PE",
+        "type": "DISSIPATIVE",
+        "fuel": "F6-F7",
+        "product": "F8"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Reference",
+        "exergy": [
+          {
+            "key": "F1",
+            "value": 110
+          },
+          {
+            "key": "F2",
+            "value": 60
+          },
+          {
+            "key": "F3",
+            "value": 50
+          },
+          {
+            "key": "F4",
+            "value": 40
+          },
+          {
+            "key": "F5",
+            "value": 30
+          },
+          {
+            "key": "F6",
+            "value": 20
+          },
+          {
+            "key": "F7",
+            "value": 10
+          },
+          {
+            "key": "F8",
+            "value": 10
+          }
+        ]
+      },
+      {
+        "stateId": "Operation",
+        "exergy": [
+          {
+            "key": "F1",
+            "value": 115
+          },
+          {
+            "key": "F2",
+            "value": 60
+          },
+          {
+            "key": "F3",
+            "value": 50
+          },
+          {
+            "key": "F4",
+            "value": 42
+          },
+          {
+            "key": "F5",
+            "value": 30
+          },
+          {
+            "key": "F6",
+            "value": 20
+          },
+          {
+            "key": "F7",
+            "value": 8
+          },
+          {
+            "key": "F8",
+            "value": 12
+          }
+        ]
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "F8",
+      "type": "DEFAULT",
+      "recycle": 0
+    }
+  },
+  "ResourcesCost": []
+}

@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(c/h)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(c/kWh)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(kW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "tior_model",
     "flows": [
       {
         "key": "B1",
@@ -38,31 +77,27 @@
     "processes": [
       {
         "key": "PR1",
-        "fuel": "B1",
-        "product": "B2+B3+B4",
         "type": "PRODUCTIVE",
-        "description": "Process1"
+        "fuel": "B1",
+        "product": "B2+B3+B4"
       },
       {
         "key": "PR2",
-        "fuel": "B2",
-        "product": "B6",
         "type": "PRODUCTIVE",
-        "description": "Process2"
+        "fuel": "B2",
+        "product": "B6"
       },
       {
         "key": "PR3",
-        "fuel": "B3",
-        "product": "B7",
         "type": "PRODUCTIVE",
-        "description": "Process3"
+        "fuel": "B3",
+        "product": "B7"
       },
       {
         "key": "PR4",
-        "fuel": "B4+B5",
-        "product": "B8",
         "type": "DISSIPATIVE",
-        "description": "Process4"
+        "fuel": "B4+B5",
+        "product": "B8"
       }
     ]
   },
@@ -105,44 +140,12 @@
       ]
     }
   },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(c/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(c/kWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(kW)"
-      }
-    ]
-  }
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "B8",
+      "type": "DEFAULT",
+      "recycle": 0
+    }
+  },
+  "ResourcesCost": []
 }

@@ -1,6 +1,45 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 11,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 11,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  },
   "ProductiveStructure": {
-    "name": "tplcc_model",
     "flows": [
       {
         "key": "NG",
@@ -175,11 +214,11 @@
         "type": "INTERNAL"
       },
       {
-        "key": "WNST",
+        "key": "WNGT",
         "type": "OUTPUT"
       },
       {
-        "key": "WNGT",
+        "key": "WNST",
         "type": "OUTPUT"
       },
       {
@@ -194,135 +233,135 @@
     "processes": [
       {
         "key": "CC",
+        "type": "PRODUCTIVE",
         "fuel": "NG",
-        "product": "G3-G2",
-        "type": "PRODUCTIVE"
+        "product": "G3-G2"
       },
       {
         "key": "CMP",
+        "type": "PRODUCTIVE",
         "fuel": "WC",
-        "product": "G2-G1",
-        "type": "PRODUCTIVE"
+        "product": "G2-G1"
       },
       {
         "key": "GT",
+        "type": "PRODUCTIVE",
         "fuel": "G3-G4",
-        "product": "WGT+WC",
-        "type": "PRODUCTIVE"
+        "product": "WGT+WC"
       },
       {
         "key": "HPSH",
+        "type": "PRODUCTIVE",
         "fuel": "G4-G5",
-        "product": "(V1-V17)+(V4-V3-V2)",
-        "type": "PRODUCTIVE"
+        "product": "(V1-V17)+(V4-V3-V2)"
       },
       {
         "key": "HPEV",
+        "type": "PRODUCTIVE",
         "fuel": "G5-G6",
-        "product": "V17-V16",
-        "type": "PRODUCTIVE"
+        "product": "V17-V16"
       },
       {
         "key": "HPEC",
+        "type": "PRODUCTIVE",
         "fuel": "G6-G7",
-        "product": "V16-V15",
-        "type": "PRODUCTIVE"
+        "product": "V16-V15"
       },
       {
         "key": "IPSH",
+        "type": "PRODUCTIVE",
         "fuel": "G8-G9",
-        "product": "V3-V13",
-        "type": "PRODUCTIVE"
+        "product": "V3-V13"
       },
       {
         "key": "IPEV",
+        "type": "PRODUCTIVE",
         "fuel": "G9-G10",
-        "product": "V13-V12",
-        "type": "PRODUCTIVE"
+        "product": "V13-V12"
       },
       {
         "key": "IPEC",
+        "type": "PRODUCTIVE",
         "fuel": "G10-G11",
-        "product": "(V15-V14)+(V12-V11)",
-        "type": "PRODUCTIVE"
+        "product": "(V15-V14)+(V12-V11)"
       },
       {
         "key": "LPSH",
+        "type": "PRODUCTIVE",
         "fuel": "G7-G8",
-        "product": "V5a-V10",
-        "type": "PRODUCTIVE"
+        "product": "V5a-V10"
       },
       {
         "key": "LPEV",
+        "type": "PRODUCTIVE",
         "fuel": "G11-G12",
-        "product": "V10-V9c",
-        "type": "PRODUCTIVE"
+        "product": "V10-V9c"
       },
       {
         "key": "LPEC",
+        "type": "PRODUCTIVE",
         "fuel": "G12-G13",
-        "product": "V9a+V9b+V9c-V8",
-        "type": "PRODUCTIVE"
+        "product": "V9a+V9b+V9c-V8"
       },
       {
         "key": "HPST",
+        "type": "PRODUCTIVE",
         "fuel": "V1-V2",
-        "product": "WHPST",
-        "type": "PRODUCTIVE"
+        "product": "WHPST"
       },
       {
         "key": "IPST",
+        "type": "PRODUCTIVE",
         "fuel": "V4-V5b",
-        "product": "WIPST",
-        "type": "PRODUCTIVE"
+        "product": "WIPST"
       },
       {
         "key": "LPST",
+        "type": "PRODUCTIVE",
         "fuel": "V5a+V5b-V6",
-        "product": "WLPST",
-        "type": "PRODUCTIVE"
+        "product": "WLPST"
       },
       {
         "key": "LPP",
+        "type": "PRODUCTIVE",
         "fuel": "WLPP",
-        "product": "V8-V7",
-        "type": "PRODUCTIVE"
+        "product": "V8-V7"
       },
       {
         "key": "IPP",
+        "type": "PRODUCTIVE",
         "fuel": "WIPP",
-        "product": "V11-V9a",
-        "type": "PRODUCTIVE"
+        "product": "V11-V9a"
       },
       {
         "key": "HPP",
+        "type": "PRODUCTIVE",
         "fuel": "WHPP",
-        "product": "V14-V9b",
-        "type": "PRODUCTIVE"
+        "product": "V14-V9b"
       },
       {
         "key": "EG1",
+        "type": "PRODUCTIVE",
         "fuel": "WGT",
-        "product": "WNGT",
-        "type": "PRODUCTIVE"
+        "product": "WNGT"
       },
       {
         "key": "EG2",
+        "type": "PRODUCTIVE",
         "fuel": "WHPST+WIPST+WLPST",
-        "product": "WNST+WLPP+WIPP+WHPP+WCWP",
-        "type": "PRODUCTIVE"
+        "product": "WNST+WLPP+WIPP+WHPP+WCWP"
       },
       {
         "key": "STCK",
+        "type": "DISSIPATIVE",
         "fuel": "G13",
-        "product": "QG",
-        "type": "DISSIPATIVE"
+        "product": "QG"
       },
       {
         "key": "CND",
+        "type": "DISSIPATIVE",
         "fuel": "(V6-V7)+WCWP",
-        "product": "QCND",
-        "type": "DISSIPATIVE"
+        "product": "QCND"
       }
     ]
   },
@@ -909,46 +948,6 @@
       }
     ]
   },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 11,
-        "precision": 1,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 11,
-        "precision": 1,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 11,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 11,
-        "precision": 1,
-        "unit": "(kW)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 11,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 11,
-        "precision": 2,
-        "unit": "(kW)"
-      }
-    ]
-  },
   "WasteDefinition": {
     "wastes": [
       {
@@ -962,5 +961,6 @@
         "recycle": 0
       }
     ]
-  }
+  },
+  "ResourcesCost": []
 }
