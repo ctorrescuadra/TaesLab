@@ -54,6 +54,11 @@ classdef cModelTable < cMessageLogger
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
+            obj.config=props;
+            % Check Missing Values
+            if ~obj.checkMissingValues(vals)
+                return
+            end
             % Check number of fields
             N=numel(props.fields);
             if size(vals,2) < N
@@ -66,7 +71,6 @@ classdef cModelTable < cMessageLogger
             else
                 obj.Values=vals;
             end
-            obj.config=props;
             % Validate table fields
             log=obj.validateTable;
             if ~log.status
@@ -123,7 +127,7 @@ classdef cModelTable < cMessageLogger
             p=struct('Name',obj.config.name,...
                 'Description',obj.config.descr,...
                 'State','DATA');
-            res=cTableData(obj.Data(:,2:end),obj.Keys',obj.Fields,p);
+            res=cTableData.create(obj.Values,p);
             res.setStudyCase(p);
         end
 
@@ -191,6 +195,34 @@ classdef cModelTable < cMessageLogger
                 end
             end
         end
+
+        function tst=checkMissingValues(obj,values)
+        %checkValues - Check if the values have missing values
+        %   Syntax:
+        %     tst = cModelTable.checkMissingValues(log,table,values)
+        %   Input Arguments:
+        %     log    - cMessageLogger to log errors 
+        %     table  - Name of the table (char array)
+        %     values - Values to check
+        %   Output Arguments:
+        %     tst - true | false
+        %
+            tst=true;
+            %Search columns with missing cells
+            if isOctave
+                idx=all(cellfun(@isempty,values));
+            else %isMatlab
+                idx=all(cellfun(@(x) isa(x,'missing'),values));
+            end
+            % Log error
+            if any(idx)
+                tst=false;
+                for i=find(idx)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidFieldNumber,i,obj.config.name);
+                end
+            end
+        end
+
     end
 
     methods(Static,Access=private)

@@ -1,360 +1,351 @@
 {
-	"ProductiveStructure": {
-        "name": "rvpc_model",
-		"flows": [
-			{
-				"key": "B1",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B2",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B3",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B4",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B5",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B6",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "B7",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "AIR",
-				"type": "RESOURCE"
-			},
-			{
-				"key": "WT",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "WBC",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "WBA",
-				"type": "INTERNAL"
-			},
-			{
-				"key": "COMB",
-				"type": "RESOURCE"
-			},
-			{
-				"key": "WN",
-				"type": "OUTPUT"
-			},
-			{
-				"key": "QCON",
-				"type": "WASTE"
-			}
-		],
-		"processes": [
-			{
-				"key": "CALD",
-				"description": "Caldera",
-				"fuel": "COMB+AIR",
-				"product": "B1-B7",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "TURB",
-				"description": "Turbina",
-				"fuel": "B1-B2-B3",
-				"product": "WT",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "BC",
-				"description": "Bomba Condensados",
-				"fuel": "WBC",
-				"product": "B5-B4",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "DESG",
-				"description": "Desgasificador",
-				"fuel": "B2+B5",
-				"product": "B6",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "BA",
-				"description": "Bomba Alimentacion",
-				"fuel": "WBA",
-				"product": "B7-B6",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "GEN",
-				"description": "Generador",
-				"fuel": "WT",
-				"product": "WN+WBC+WBA",
-				"type": "PRODUCTIVE"
-			},
-			{
-				"key": "COND",
-				"description": "Condensador",
-				"fuel": "B3-B4",
-				"product": "QCON",
-				"type": "DISSIPATIVE"
-			}
-		]
-	},
-	"ExergyStates": {
-		"States": [
-			{
-				"stateId": "Reference",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 146374
-					},
-					{
-						"key": "B2",
-						"value": 16956
-					},
-					{
-						"key": "B3",
-						"value": 12183
-					},
-					{
-						"key": "B4",
-						"value": 256.9
-					},
-					{
-						"key": "B5",
-						"value": 315.6
-					},
-					{
-						"key": "B6",
-						"value": 12147
-					},
-					{
-						"key": "B7",
-						"value": 12993
-					},
-					{
-						"key": "AIR",
-						"value": 0
-					},
-					{
-						"key": "WT",
-						"value": 102964
-					},
-					{
-						"key": "WBC",
-						"value": 58.700000000000045
-					},
-					{
-						"key": "WBA",
-						"value": 846
-					},
-					{
-						"key": "COMB",
-						"value": 325246
-					},
-					{
-						"key": "WN",
-						"value": 100000
-					},
-					{
-						"key": "QCON",
-						"value": 11926.1
-					}
-				]
-			},
-			{
-				"stateId": "PC10",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 146459
-					},
-					{
-						"key": "B2",
-						"value": 16966
-					},
-					{
-						"key": "B3",
-						"value": 12190
-					},
-					{
-						"key": "B4",
-						"value": 257.1
-					},
-					{
-						"key": "B5",
-						"value": 315.8
-					},
-					{
-						"key": "B6",
-						"value": 12154
-					},
-					{
-						"key": "B7",
-						"value": 13059
-					},
-					{
-						"key": "AIR",
-						"value": 0
-					},
-					{
-						"key": "WT",
-						"value": 103024
-					},
-					{
-						"key": "WBC",
-						"value": 58.8
-					},
-					{
-						"key": "WBA",
-						"value": 910
-					},
-					{
-						"key": "COMB",
-						"value": 325366
-					},
-					{
-						"key": "WN",
-						"value": 100000
-					},
-					{
-						"key": "QCON",
-						"value": 11932.9
-					}
-				]
-			},
-			{
-				"stateId": "T84",
-				"exergy": [
-					{
-						"key": "B1",
-						"value": 147886
-					},
-					{
-						"key": "B2",
-						"value": 17139
-					},
-					{
-						"key": "B3",
-						"value": 12381
-					},
-					{
-						"key": "B4",
-						"value": 259.7
-					},
-					{
-						"key": "B5",
-						"value": 319
-					},
-					{
-						"key": "B6",
-						"value": 12273
-					},
-					{
-						"key": "B7",
-						"value": 13128
-					},
-					{
-						"key": "AIR",
-						"value": 0
-					},
-					{
-						"key": "WT",
-						"value": 102973
-					},
-					{
-						"key": "WBC",
-						"value": 60
-					},
-					{
-						"key": "WBA",
-						"value": 860
-					},
-					{
-						"key": "COMB",
-						"value": 328605
-					},
-					{
-						"key": "WN",
-						"value": 100000
-					},
-					{
-						"key": "QCON",
-						"value": 12121.3
-					}
-				]
-			}
-		]
-	},
-	"WasteDefinition": {
-		"wastes": [
-			{
-				"flow": "QCON",
-				"type": "MANUAL",
-				"recycle": 0,
-				"values": [
-					{
-						"process": "CALD",
-						"value": 0.92
-					},
-					{
-						"process": "DESG",
-						"value": 0.08
-					}
-				]
-			}
-		]
-	},
-	"Format": {
-		"definitions": [
-			{
-				"key": "EXERGY",
-				"width": 10,
-				"precision": 1,
-				"unit": "[kW]"
-			},
-			{
-				"key": "EXERGY_COST",
-				"width": 10,
-				"precision": 1,
-				"unit": "[kW]"
-			},
-			{
-				"key": "EXERGY_UNIT_COST",
-				"width": 10,
-				"precision": 4,
-				"unit": "[J/J]"
-			},
-			{
-				"key": "GENERALIZED_COST",
-				"width": 10,
-				"precision": 1,
-				"unit": "[kW]"
-			},
-			{
-				"key": "GENERALIZED_UNIT_COST",
-				"width": 10,
-				"precision": 4,
-				"unit": "[J/J]"
-			},
-			{
-				"key": "DIAGNOSIS",
-				"width": 10,
-				"precision": 2,
-				"unit": "[kW]"
-			}
-		]
-	}
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 1,
+        "unit": "[kW]"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "[kW]"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "[J/J]"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "[kW]"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "[J/J]"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 2,
+        "unit": "[kW]"
+      }
+    ]
+  },
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "AIR",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "WT",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WBC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WBA",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "COMB",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "WN",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QCON",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "CALD",
+        "type": "PRODUCTIVE",
+        "fuel": "COMB+AIR",
+        "product": "B1-B7"
+      },
+      {
+        "key": "TURB",
+        "type": "PRODUCTIVE",
+        "fuel": "B1-B2-B3",
+        "product": "WT"
+      },
+      {
+        "key": "BC",
+        "type": "PRODUCTIVE",
+        "fuel": "WBC",
+        "product": "B5-B4"
+      },
+      {
+        "key": "DESG",
+        "type": "PRODUCTIVE",
+        "fuel": "B2+B5",
+        "product": "B6"
+      },
+      {
+        "key": "BA",
+        "type": "PRODUCTIVE",
+        "fuel": "WBA",
+        "product": "B7-B6"
+      },
+      {
+        "key": "GEN",
+        "type": "PRODUCTIVE",
+        "fuel": "WT",
+        "product": "WN+WBC+WBA"
+      },
+      {
+        "key": "COND",
+        "type": "DISSIPATIVE",
+        "fuel": "B3-B4",
+        "product": "QCON"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "Reference",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 146374
+          },
+          {
+            "key": "B2",
+            "value": 16956
+          },
+          {
+            "key": "B3",
+            "value": 12183
+          },
+          {
+            "key": "B4",
+            "value": 256.9
+          },
+          {
+            "key": "B5",
+            "value": 315.6
+          },
+          {
+            "key": "B6",
+            "value": 12147
+          },
+          {
+            "key": "B7",
+            "value": 12993
+          },
+          {
+            "key": "AIR",
+            "value": 0
+          },
+          {
+            "key": "WT",
+            "value": 102964
+          },
+          {
+            "key": "WBC",
+            "value": 58.700000000000045
+          },
+          {
+            "key": "WBA",
+            "value": 846
+          },
+          {
+            "key": "COMB",
+            "value": 325246
+          },
+          {
+            "key": "WN",
+            "value": 100000
+          },
+          {
+            "key": "QCON",
+            "value": 11926.1
+          }
+        ]
+      },
+      {
+        "stateId": "PC10",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 146459
+          },
+          {
+            "key": "B2",
+            "value": 16966
+          },
+          {
+            "key": "B3",
+            "value": 12190
+          },
+          {
+            "key": "B4",
+            "value": 257.1
+          },
+          {
+            "key": "B5",
+            "value": 315.8
+          },
+          {
+            "key": "B6",
+            "value": 12154
+          },
+          {
+            "key": "B7",
+            "value": 13059
+          },
+          {
+            "key": "AIR",
+            "value": 0
+          },
+          {
+            "key": "WT",
+            "value": 103024
+          },
+          {
+            "key": "WBC",
+            "value": 58.8
+          },
+          {
+            "key": "WBA",
+            "value": 910
+          },
+          {
+            "key": "COMB",
+            "value": 325366
+          },
+          {
+            "key": "WN",
+            "value": 100000
+          },
+          {
+            "key": "QCON",
+            "value": 11932.9
+          }
+        ]
+      },
+      {
+        "stateId": "T84",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 147886
+          },
+          {
+            "key": "B2",
+            "value": 17139
+          },
+          {
+            "key": "B3",
+            "value": 12381
+          },
+          {
+            "key": "B4",
+            "value": 259.7
+          },
+          {
+            "key": "B5",
+            "value": 319
+          },
+          {
+            "key": "B6",
+            "value": 12273
+          },
+          {
+            "key": "B7",
+            "value": 13128
+          },
+          {
+            "key": "AIR",
+            "value": 0
+          },
+          {
+            "key": "WT",
+            "value": 102973
+          },
+          {
+            "key": "WBC",
+            "value": 60
+          },
+          {
+            "key": "WBA",
+            "value": 860
+          },
+          {
+            "key": "COMB",
+            "value": 328605
+          },
+          {
+            "key": "WN",
+            "value": 100000
+          },
+          {
+            "key": "QCON",
+            "value": 12121.3
+          }
+        ]
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "QCON",
+      "type": "MANUAL",
+      "recycle": 0,
+      "values": [
+        {
+          "process": "CALD",
+          "value": 0.92
+        },
+        {
+          "process": "DESG",
+          "value": 0.08
+        }
+      ]
+    }
+  },
+  "ResourcesCost": []
 }

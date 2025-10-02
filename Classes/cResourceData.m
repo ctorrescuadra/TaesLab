@@ -33,6 +33,8 @@ classdef cResourceData < cMessageLogger
 		%   Input Arguments:
 		%	  ps - cProductiveStructure object
         %	  data - resource data sample
+		%   Output Argument:
+		%     obj - cResourceData object
 		%
 		    % Check arguments and initilize class
 			if ~isObject(ps,'cProductiveStructure')
@@ -154,7 +156,7 @@ classdef cResourceData < cMessageLogger
 		function log=setFlowResourceData(obj,se)
  		%setFlowResourceData - Set the unit cost of resource flows
 		%    Syntax:
-		%      log=setProcessResource(obj,Z)
+		%      log=setFlowsResourceData(obj,Z)
 		%    Input Arguments:
 		%      sz - key/value structure with the unit cost of resource flows
 		%    Output Argument:

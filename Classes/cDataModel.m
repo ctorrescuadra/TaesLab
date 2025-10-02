@@ -89,6 +89,7 @@ classdef cDataModel < cResultSet
         %     dm - cModelData object with the data of the model
         %   Output Argument:
         %     obj - cDataModel object
+        %
             % Check Data Structure
             if ~isObject(dm,'cModelData')
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(dm));

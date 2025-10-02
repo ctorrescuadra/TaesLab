@@ -1,5 +1,6 @@
 classdef(Sealed) cDiagnosis < cResultId
-%cDiagnosis - Make a thermoeconomic diagnosis analysis.
+%cDiagnosis - Thermoeconomic diagnosis of a plant state change.
+%   This class performs a thermoeconomic diagnosis analysis.
 %   It compares two states of the plant given by two cExergyCost objects.
 %   Two method could be applied:
 %    WASTE_EXTERNAL considers waste as a system output
@@ -75,6 +76,8 @@ classdef(Sealed) cDiagnosis < cResultId
         %     method - Diagnosis Method used. 
         %       cType.DiagnosisMethod.WASTE_EXTERNAL
         %       cType.DiagnosisMethod.WASTE_INTERNAL
+        %   Output Argument:
+        %     obj - cDiagnosis object
         %
             % Check Arguments
             if ~isObject(fp0,'cExergyCost') || ~isObject(fp1,'cExergyCost')

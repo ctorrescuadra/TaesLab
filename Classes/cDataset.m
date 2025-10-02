@@ -1,5 +1,5 @@
 classdef(Sealed) cDataset < cDictionary
-%cDataset - Class container to store data and to access it by key or index.
+%cDataset - Store and access exergy and resource data by name.
 %   This class is used to store cExergyData, cExergyCost, and cResourceData objects
 %   and access by state name or sample name.
 %
@@ -24,6 +24,8 @@ classdef(Sealed) cDataset < cDictionary
         %     obj = cDataset(list)
         %   Input Arguments:
         %     list - cell array containig the key values
+        %   Output Argument:
+        %     obj - cDataset object
         %
             % Validate list
             obj=obj@cDictionary(list);
@@ -92,8 +94,14 @@ classdef(Sealed) cDataset < cDictionary
 
     methods(Access=private)
         function idx=validateArguments(obj,arg)
-        % Check if the arguments are valid
-        %   Return the index of the argument or zero if its not valid
+        %validateArguments - Check if the arguments are valid
+        %   Syntax: 
+        %     idx = obj.validateArguments(arg)
+        %   Input Argument:
+        %     arg - key or index of the values
+        %   Output Argument:
+        %     idx - index of the values or zero if its not valid
+        %
             idx=0;
             if ischar(arg)
                 idx=getIndex(obj,arg);

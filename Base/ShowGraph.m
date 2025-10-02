@@ -33,7 +33,7 @@ function ShowGraph(arg,varargin)
 	end
     % Check input parameters
     p = inputParser;
-    p.addParameter('Graph',arg.DefaultGraph);
+    p.addParameter('Graph',arg.DefaultGraph,@ischar);
 	p.addParameter('ShowOutput',true,@islogical);
 	p.addParameter('PieChart',true,@islogical);
 	p.addParameter('BarGraph',true,@islogical);

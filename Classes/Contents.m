@@ -1,5 +1,5 @@
 % Thermoeconomic Analysis Toolbox
-%   Version 1.7 (R2024b) 03-Jun-2025
+%   Version 1.8 (R2024b) 01-Oct-2025
 %
 % Classes
 %
@@ -16,6 +16,7 @@
 %  cReadModelTable.m         - Abstract class to read a table data model.
 %  cReadModelCSV.m           - Implements the cReadModel to read CSV data model files.
 %  cReadModelXLS.m           - Implements the cReadModel to read XLSX data model files.
+%  cModelTable.m             - Container class to store the values read by cReadModelTables.
 %
 %  cResultId.m               - Base class for the calculation layer classes.
 %  cResultSet.m              - Base class for results classes.
@@ -42,6 +43,7 @@
 %  cSummaryResults.m         - Gets the summary results tables of the model.
 %  cSummaryOptions.m         - Determine the summary options depending on the data model.
 %  cSummaryTable.m           - Stores the properties and values of each summary table.
+%  cDrigraphAnalysis.m       - Analyze the productive structure digraph.
 %
 %  cTable.m                  - Abstract class for tabular data.
 %  cTableIndex.m             - Create a cTable with the index table of a cResultInfo.
@@ -69,6 +71,9 @@
 %  cDataset.m                - Creates a container to store data and to access it by key or index.
 %  cParseStream.m            - Static utility class to check and validate strings.
 %  cSparseRow.m              - Store and operate with matrices that contain few non-null rows.
+%
+%  printformat.json          - Configuration file to define the format of the results tables.
+%  styles.css                - CSS file to define the styles of the HTML tables.
 %
 
 

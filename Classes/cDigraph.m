@@ -23,6 +23,8 @@ classdef cDigraph < cGraphResults
         %   Input Arguments:
         %     tbl - cTable with the data to show graphically
         %     info - cProductiveDiagram object with additional info
+		%   Output Argument:
+		%     obj - cDigraph object
         %
 			if isOctave
 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);

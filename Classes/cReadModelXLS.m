@@ -105,10 +105,7 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
                     return
 		        end
             end
-            % Check Values and get the model table
-            if cReadModelTable.checkValues(tbl,wsht,values)
-                tbl=cModelTable(values,props);
-            end
+            tbl=cModelTable(values,props);
         end
     end
 end

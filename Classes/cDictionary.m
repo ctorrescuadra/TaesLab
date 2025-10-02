@@ -1,9 +1,10 @@
 classdef cDictionary < cMessageLogger
-%cDictionary - Implementa a (key, id) dictionary for TaesLab.
+%cDictionary - Class container to store and access data by key or index.
+%   This class implements a (key, id) dictionary for TaesLab.
 %	It uses the containers.Map class
 %
 %   cDictionary constructor:
-%     obj = cDataset(list)
+%     obj = cDictionary(list)
 %
 %   cDictionary methods:
 %     getKey     - Get the key associated to a index
@@ -25,6 +26,8 @@ classdef cDictionary < cMessageLogger
 		%     obj = cDictionary(data)
 		%   Input Arguments:
 		%     data - cell array with the dictionary keys
+		%   Output Argument:
+		%	 obj - cDictionary object
 		% 
 			% Check data
 			if iscell(data) && ~isempty(data)

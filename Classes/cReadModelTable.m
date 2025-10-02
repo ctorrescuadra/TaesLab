@@ -356,24 +356,4 @@ classdef (Abstract) cReadModelTable < cReadModel
             end
         end
     end
-
-    methods(Static,Access=protected)
-        function tst=checkValues(log,table,values)
-            tst=true;
-            %Search columns with missing cells
-            if isOctave
-                idx=all(cellfun(@isempty,values));
-            else %isMatlab
-                idx=all(cellfun(@(x) isa(x,'missing'),values));
-            end
-            % Log error
-            if any(idx)
-                tst=false;
-                for i=find(idx)
-                    log.messageLog(cType.ERROR,cMessages.InvalidFieldNumber,i,table);
-                end
-            end
-        end
-
-    end
 end

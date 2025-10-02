@@ -27,14 +27,14 @@ function res=ValidateModelTables(filename)
         return
     end
     % Read the data model depending de file extension
-    fileType=cType.getFileType(filename);
+    [fileType,ext]=cType.getFileType(filename);
     switch fileType
         case cType.FileType.CSV
             res=cReadModelCSV(filename);
         case cType.FileType.XLSX
             res=cReadModelXLS(filename);
         otherwise
-            res.printError(cMessages.InvalidFileExt,filename);
+            res.printError(cMessages.InvalidFileExt,upper(ext));
             return
     end
     % Print log messages

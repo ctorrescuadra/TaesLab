@@ -1,5 +1,5 @@
 % Thermoeconomic Analysis Toolbox
-%   Version 1.7 (R2024b) 03-Jul-2025
+%   Version 1.8 (R2024b) 01-Oct-2025
 %
 % Functions
 %

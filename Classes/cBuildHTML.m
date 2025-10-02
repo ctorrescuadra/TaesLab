@@ -27,6 +27,8 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %   Input Arguments:
         %     tbl - cTable object to convert
         %     folder - Folder name where the files will be save if tbl is a cTableIndex
+        %   Output Argument:
+        %     obj - cBuildHTML object
         % 
             if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
@@ -45,6 +47,8 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %getMarkupHTML - Get the HTML text of the table
         %   Syntax:
         %     res = obj.getMarkupHTML
+        %   Output Argument:
+        %     res - text string with the HTML page
         %
             res=[obj.head,obj.body];
         end
@@ -84,7 +88,14 @@ classdef (Sealed) cBuildHTML < cMessageLogger
 
     methods(Static,Access=private)
         function res=buildHead(tbl)
-        % Build the head of the HTML file
+        %buildHead - Build the HTML head of a table
+        %   Syntax:
+        %     res = cBuildHTML.buildHead(tbl)
+        %   Input Arguments:
+        %     tbl - cTable object
+        %   Output Argument:
+        %     res - text string with the HTML head
+        %
             path=fileparts(mfilename('fullpath'));
             cssfile=fullfile(path,cType.CSSFILE);
             csstext=fileread(cssfile);
@@ -99,7 +110,14 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function res=buildTableBody(tbl)
-        % Build the body of the HTML file of a normal table
+        %buoldTableBody - Build the HTML body of a normal table
+        %   Syntax:
+        %     res = cBuildHTML.buildTableBody(tbl)
+        %   Input Arguments:
+        %     tbl - cTable object
+        %   Output Argument:
+        %     res - text string with the HTML body
+        %
             cols=cell(1,tbl.NrOfCols);
             rows=cell(1,tbl.NrOfRows);
             % Body and Table head
@@ -145,7 +163,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function res=buildIndexBody(tbl,folder)
-        % Build the body of the HTML file of a index table
+        %buildIndexBody - Build the HTML body a index table
             cols=cell(1,tbl.NrOfCols);
             rows=cell(1,tbl.NrOfRows);
             % Body and table head

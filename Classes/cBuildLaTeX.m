@@ -12,7 +12,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 %   cBuildLaTeX constructor:
 %     obj = cBuildLaTeX(tbl)
 %
-%   cBuildLatex methods:
+%   cBuildLateX methods:
 %     getLaTeXcode - Get a string with the LaTeX code
 %     saveTable    - Save the table into a tex file
 %
@@ -33,6 +33,8 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         %     obj = cBuildLaTeX(tbl)
         %   Input Argument:
         %     tbl - cTable object
+        %   Output Argument:
+        %     obj - cBuildLaTeX object
         %
             if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
@@ -69,7 +71,9 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         function res=getLaTeXcode(obj)
         %getLaTeXcode - Get the LaTeX code as string
         %   Syntax:
-        %     obj.getLaTeXcode
+        %     res=obj.getLaTeXcode()
+        %   Output Argument:
+        %     res - text string with the LaTeX code
         %
             res=sprintf('%s\n','\begin{table}[H]');
             res=[res,sprintf('%s\n',obj.caption)];

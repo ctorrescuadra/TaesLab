@@ -266,7 +266,7 @@ classdef (Abstract) cTable < cMessageLogger
             'State',obj.State,'Data',data);
         end
 
-        function res=getColumnValue(obj,idx)
+        function res=getColumnValues(obj,idx)
         %getColumnValues - Get the values of a column table
         %   Syntax:
         %     res = obj.setColumnValues(idx)
@@ -274,7 +274,7 @@ classdef (Abstract) cTable < cMessageLogger
         %     idx - Column data index
         %   Output Arguments:
         %     value - array if column is numeric or cell array otherwise
-            if isNumericColumn(obj,idx)
+            if isNumericColumn(obj,idx+1)
                 res=cell2mat(obj.Data(:,idx));
             else
                 res=obj.Data(:,idx);

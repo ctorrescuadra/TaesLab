@@ -1,5 +1,5 @@
 classdef cDigraphAnalysis < cMessageLogger
-%cDigraphAnalysis - Analize the connectivity of a SSR Graph
+%cDigraphAnalysis - Analyze a directed graph (digraph).
 %   Calculate the transitive closure of the digraph,
 %   their strong conmponents and the Kernel DAG.
 %   The graph is represented by its adjacency matrix,
@@ -54,7 +54,7 @@ classdef cDigraphAnalysis < cMessageLogger
         %     G - Adjacency matriz of the graph
         %     names - Name of the nodes
         %   Output Argument:
-        %     obj - cGraphAnalysis object
+        %     obj - cDigraphAnalysis object
         %
             % Check Inputs
             if ~isSquareMatrix(A)
