@@ -2,9 +2,6 @@ classdef (Sealed) cModelData < cMessageLogger
 %cModelData - Container class for the Data Model structure.
 %   Contains the data model from read interface
 %
-%   cModelData constructor:
-%     obj = cModelData(name,s)
-%
 %   cModelData properties:
 %     ModelName           - Name of the model
 %     ProductiveStructure - Productive Structure data
@@ -14,6 +11,7 @@ classdef (Sealed) cModelData < cMessageLogger
 %     Format              - Format data
 %   
 %   cModelData methods:
+%     cModelData        - Create an instance of this class
 %     getStateNames     - Get a cell array with the state names
 %     getSampleNames    - Get a cell array with the resource sample names
 %     isWaste           - Check if data contains waste definition
@@ -42,8 +40,10 @@ classdef (Sealed) cModelData < cMessageLogger
         %   Syntax:
         %     obj = cModelData(name,s)
         %   Input Arguments:
-        %     name - Name of the data model
-        %     s - struct containing the data
+        %     name - Name of the model
+        %     s - Structure containing the data model
+        %   Output Arguments:
+        %     obj - cModelData object
         % 
             if ~isstruct(s)
                 obj.messageLog(cType.ERROR,cMessages.InvalidDataModelFile);

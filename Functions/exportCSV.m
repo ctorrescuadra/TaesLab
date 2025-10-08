@@ -2,18 +2,18 @@ function log=exportCSV(values,filename)
 %exportCSV - Saves a cell array as CSV file.
 %   Octave/Matlab compatibility
 %   
-%   Syntax
+%   Syntax:
 %     log=exportCSV(values, filename)
 %
-%   Input Arguments
+%   Input Arguments:
 %      values - cell array values
 %      filename - CSV file name
 %        char array | string
 %
-%    Output Arguments
+%    Output Arguments:
 %      log - cMessageLogger containing the status of the save and error messages
 %
-%   Example
+%   Example:
 %     values = {'Name', 'Age'; 'Alice', 30; 'Bob', 25};
 %     filename = 'data.csv';                            
 %     log = exportCSV(values, filename);

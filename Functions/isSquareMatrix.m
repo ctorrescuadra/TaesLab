@@ -1,16 +1,16 @@
 function res = isSquareMatrix(A)
 %isSquareMatrix - Checks if input A is a numeric square matrix.
 %
-%   Syntax
+%   Syntax:
 %     res = isSquareMatrix(A)
 %
-%   Input Argument:
+%   Input Arguments:
 %     A - Matrix to check
 %
-%   Output Argument
+%   Output Arguments:
 %     res - true/false
 %
-%   Example
+%   Example:
 %     A = [1 2; 3 4];   % returns true
 %     B = [1 2 3; 4 5 6]; % returns false
 %

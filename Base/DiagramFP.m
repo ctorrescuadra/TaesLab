@@ -4,13 +4,13 @@ function res=DiagramFP(data,varargin)
 %   or using external graphics software such as yEd, saving the adjacency tables
 %   of the graph in xlsx format.
 %  	
-%   Syntax
+%   Syntax:
 %     res = DiagramFP(data,Name,Value);
 %
-%   Input Arguments
+%   Input Arguments:
 %     data - cReadModel Object containing the data model information.
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     State - Indicate one valid state to get exergy values. 
 %       char array
 %     Show -  Show results on console
@@ -18,11 +18,11 @@ function res=DiagramFP(data,varargin)
 %     SaveAs - Name of the file where the results are saved.
 %       char array | string
 %
-%   Output Arguments
+%   Output Arguments:
 %     res - cResultInfo object contains the FP diagram tables
 %      The following tables are obtained:
-%       atfp   - Diagram FP adjacency table (DIGRAPH_FP)                                    
-%       atcfp  - Cost Diagram FP adjacency table (DIGRAPH_COST_FP)
+%		atfp   - Diagram FP adjacency table (DIGRAPH_FP)                                    
+%		atcfp  - Cost Diagram FP adjacency table (DIGRAPH_COST_FP)
 %       katfp  - Kernel Diagram FP adjacency table (KDIGRAPH_FP) 
 %       katcfp - Kernel Cost Diagram FP adjacency table (KDIGRAPH_COST_FP)
 %		tfp    - Table FP (TABLE_FP)
@@ -31,7 +31,7 @@ function res=DiagramFP(data,varargin)
 %       kdcfp  - Kernel Direct Cost Table FP (KTABLE_COST_FP)
 %       grps   - Process Groups table (PROCESS_GROUP)
 %
-%   Examples
+%   Example:
 %     <a href="matlab:open DiagramFpDemo.mlx">Diagram FP Demo</a>
 %    
 %   See also cDiagramFP, cDataModel, cExergyCost, cResultInfo

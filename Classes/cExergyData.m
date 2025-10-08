@@ -3,9 +3,6 @@ classdef cExergyData < cMessageLogger
 %  	Check if these values are coherent with the productive
 %  	structure and get the exergy values for flows, streams and processes.
 %
-%   cExergyData constructor:
-% 	  obj = cExergyData(ps, data)
-%
 %   cExergyData properties:
 %     ps			  - Productive Structure
 %     State           - Exergy State
@@ -16,7 +13,10 @@ classdef cExergyData < cMessageLogger
 %     AdjacencyTable  - Adjacency Table of the productive graph
 %	  AdjacencyMatrix - Adjacency Matrix of the productive graph
 %
-%   See also cDataModel
+%   cExergyData methods:
+%     cExergyData     - Build an instance of the class
+%
+%   See also cDataModel, cDataset, cProductiveStructure
 %
 	properties(GetAccess=public,SetAccess=private)
 		ps				  % Productive Structure
@@ -31,13 +31,15 @@ classdef cExergyData < cMessageLogger
     
 	methods
 		function obj=cExergyData(ps,data)
-		%cExergyData - Class constructor
+		%cExergyData - Build an instance of the class
 		%   Syntax:
         %     obj = cExergyData(ps,data)
-		%   Input Arguments
+		%   Input Arguments:
 		%     ps - cProductiveStructure object
 		%     data - ExergyState struct from cModelData containing exergy values
-		%
+		%   Output Arguments:
+		%     obj - cExergyData object
+		
 			% Check arguments
 			if ~isObject(ps,'cProductiveStructure')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));

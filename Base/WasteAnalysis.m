@@ -4,13 +4,13 @@ function res = WasteAnalysis(data,varargin)
 %   If the 'Recycling' option is active, it calculates tables with direct
 %   and/or generalized costs depending on the waste recycling from 0 to 100%.
 %
-%   Syntax
+%   Syntax:
 %     res=WasteAnalysis(data,Name,Value)
 %
-%   Input Arguments
+%   Input Arguments:
 % 	  data - cDataModel object whose contains the thermoeconomic data model
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     State - Thermoeconomic state. If missing first sample is taken
 %       array char | string
 %     Recycling: Waste Recycling analysis 
@@ -28,15 +28,15 @@ function res = WasteAnalysis(data,varargin)
 %     SaveAs - Name of the file where the results will be saved. 
 %       char array | string
 %
-%   Output Arguments
+%    Output Arguments:
 %     res - cResultInfo object contains the results of thermoeconomic Analysis
-%     The following tables are obtained:
-%      wd - waste definition table
-%      wa - waste allocation table
+%      The following tables are obtained:
+%       wd - waste definition table
+%       wa - waste allocation table
 %      rad - recycling analysis direct cost
 %      rag - recycling analysis generalized cost
 %
-%   Example
+%   Example:
 %     <a href="matlab:open RecyclingAnalysisDemo.mlx">Recycling Analysis Demo</a>
 %
 %   See also cDataModel, cWasteAnalysis, cResultInfo

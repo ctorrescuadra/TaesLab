@@ -1,15 +1,14 @@
 classdef (Sealed) cBuildHTML < cMessageLogger
 %cBuildHTML - Convert a cTable object into HTML files.
 %   If a cTableIndex object is provided it create a HTML index page,
-%   which links HTML files of the cResultInfo tables. 
-% 
-%cBuildHTML constructor:
-%   obj = cBuildHTML(tbl,folder)
+%   which links HTML files of the cResultInfo tables. If a cTable object is
+%   provided it create a HTML page with the table.
 %
 %cBuildHTML methods:
+%   cBuildHTML    - Build an instance of the object
 %   getMarkupHTML - Get the text string with the HTML page
-%   showTable - Show the table in the default web browser
-%   saveTable - Save the HTML table created by the object
+%   showTable     - Show the table in the default web browser
+%   saveTable     - Save the HTML table created by the object
 %
 %   See also cTable
 %
@@ -18,6 +17,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         body         % HTML body
         isIndexTable % tbl is a index table
     end
+    
     methods
         function obj=cBuildHTML(tbl,folder)
         %cBuildHTML - Build an instance of the object
@@ -27,7 +27,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %   Input Arguments:
         %     tbl - cTable object to convert
         %     folder - Folder name where the files will be save if tbl is a cTableIndex
-        %   Output Argument:
+        %   Output Arguments:
         %     obj - cBuildHTML object
         % 
             if ~isObject(tbl,'cTable')
@@ -47,7 +47,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %getMarkupHTML - Get the HTML text of the table
         %   Syntax:
         %     res = obj.getMarkupHTML
-        %   Output Argument:
+        %   Output Arguments:
         %     res - text string with the HTML page
         %
             res=[obj.head,obj.body];
@@ -93,7 +93,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %     res = cBuildHTML.buildHead(tbl)
         %   Input Arguments:
         %     tbl - cTable object
-        %   Output Argument:
+        %   Output Arguments:
         %     res - text string with the HTML head
         %
             path=fileparts(mfilename('fullpath'));
@@ -115,7 +115,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %     res = cBuildHTML.buildTableBody(tbl)
         %   Input Arguments:
         %     tbl - cTable object
-        %   Output Argument:
+        %   Output Arguments:
         %     res - text string with the HTML body
         %
             cols=cell(1,tbl.NrOfCols);

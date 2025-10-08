@@ -2,17 +2,17 @@ function res=transitiveClosure(A)
 %transitiveClosure - Compute the transitive closure of a digraph.
 %   Use the Floyd - Warshall's Algorithm
 %
-%   Syntax
+%   Syntax:
 %     res = transitiveClosure(A)
 % 
-%   Input Arguments
+%   Input Arguments:
 %     A - Adjacency matrix of the digraph
 %
-%   Output Arguments
+%   Output Arguments:
 %     res - Connectivity matrix
 %           res(i,j) = 1 if there is a path from node i to node j
 %
-%   Example
+%   Example:
 %     A = [0, 1, 0; 0, 0, 1; 0, 0, 0];
 %     res = transitiveClosure(A); %res = [1, 1, 1; 0, 1, 1; 0, 0, 1]
 %
@@ -20,7 +20,7 @@ function res=transitiveClosure(A)
 %
 %   References
 %     - https://www.geeksforgeeks.org/dsa/transitive-closure-of-a-graph/
-%
+
     % Check Input
     if nargin ~= 1
         error('ERROR: transitiveClosure. Requires one input argument');
@@ -33,6 +33,7 @@ function res=transitiveClosure(A)
     else
         res=A;
     end
+    % Convert to logical matrix
     if ~islogical(res), res=logicalMatrix(res); end
     % Floyd - Warshall's Algorithm
     for k = 1:size(A,1)

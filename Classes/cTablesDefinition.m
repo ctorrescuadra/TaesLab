@@ -1,15 +1,32 @@
 classdef cTablesDefinition < cMessageLogger
-%cTablesDefinition - Get the results tables properties. 
-%   The printformat.json file, contains the results tables properties
-%   This function reads the file and provides information about it.
-%
-%   cTablesDefinition constructor:
-%     obj = cTablesDefinition()
+%cTablesDefinition - Get the results tables properties.
+%   This class provides methods to get information about the results tables
+%   definitions used in the TaasLab toolbox.
+%   The class reads the configuration file printconfig.json located in the
+%   Classes folder, which contains the tables properties.
+%   The tables definitions are stored in a cDataset object, which provides
+%   methods to get the table properties.
+%   The class also builds a cTableData object containing the tables index,
+%   which can be printed on console or viewed in a GUI.
+%   The tables index contains the following columns:
+%     DESCRIPTION - Table description
+%     RESULT_NAME - ResultId name
+%     GRAPH       - true | false
+%     TYPE        - Type of table (TABLE, MATRIX, SUMMARY)
+%     CODE        - Table code name
+%     RESULT_CODE - ResultId code name
+%   The tables definitions can be retrieved by table name, and the properties
+%   of the table can be obtained as a struct.
+%   The class also provides methods to get the tables configuration of a
+%   specific ResultId, as well as the configuration of cell, matrix and
+%   summary tables.
+%   Derived classes: cFormatData
 %
 %   cTablesDefinition methods:
+%     cTablesDefinition - Create an instance of the class
 %     getTablesDirectory - Get the a cTableData with the tables index
 %     getTableDefinition - Get configurarion properties of a table
-%     getTableInfo       - Get info about the a table definition
+%     getTableInfo       - Get table info as a struct
 %     getTableId         - Get the TableId of a table
 %     getResultIdTables  - Get the tables configuration of a ResultId
 %     getCellTables      - Get the Cell tables configuration
@@ -32,12 +49,12 @@ classdef cTablesDefinition < cMessageLogger
 
     methods
         function obj=cTablesDefinition()
-        %cTablesDefinition - Create an instance of the object
+        %cTablesDefinition - Create an instance of the class
         % Syntax:
         %   obj = cTablesDefinition();
-        % Output Argument:
+        % Output Arguments:
         %   obj - cTableDefinition object
-        %      
+              
 			% load default configuration filename			
 			path=fileparts(mfilename('fullpath'));
 			cfgfile=fullfile(path,cType.CFGFILE);
@@ -64,7 +81,7 @@ classdef cTablesDefinition < cMessageLogger
         %getTablesDirectory - Get the tables directory
         %   Syntax: 
         %     res=obj.getTablesDirectory(cols)
-        %   Input Arguments
+        %   Input Arguments:
         %     cols - cell array with the column names to show
         %       'DESCRIPTION': Table Description
         %       'RESULT_NAME': Result Info
@@ -109,10 +126,13 @@ classdef cTablesDefinition < cMessageLogger
 		%     res - Struct with the properties of the table
 		%
 			res=cType.EMPTY;
+            % Check input arguments
             if nargin<2 || ~ischar(name)
                 return
             end
+            % Get table index
 			idx=obj.getTableId(name);
+            % Get table properties
             if idx
 			    td=obj.tDirectory(idx,:);
 				res=struct();
@@ -133,9 +153,9 @@ classdef cTablesDefinition < cMessageLogger
         %getTableDefinition - Get the properties of a table
         %   Syntax:
         %     res = obj.getTableDefinition(name)
-        %   Input Argument:
+        %   Input Arguments:
         %     name - Name of the table
-        %   Output Argument:
+        %   Output Arguments:
         %     res - structure containing the table definition
         %
             res=cType.EMPTY;
@@ -143,18 +163,29 @@ classdef cTablesDefinition < cMessageLogger
                 return
             end
             idx=obj.tDictionary.getIndex(name);
-            if idx
-                res=obj.tDictionary.getValues(idx);
-            end 
+            if ~idx
+                return
+            end
+            tmp=obj.tableIndex(idx);
+            switch tmp.type
+                case cType.TableType.TABLE
+                    res=obj.cfgTables(tmp.tableId);
+                case cType.TableType.MATRIX
+                    res=obj.cfgMatrices(tmp.tableId);
+                case cType.TableType.SUMMARY
+                    res=obj.cfgSummary(tmp.tableId);
+                otherwise
+                    res=cType.EMPTY;
+            end
         end
 
         function res=getTableId(obj,name)
         %getTableId - Get tableId from dictionary. Internal use
         %   Syntax:
         %     res = obj.getTableId(name)
-        %   Input Argument:
+        %   Input Arguments:
         %     name - Table name
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Internal table id
         %
             res=cType.EMPTY;
@@ -168,9 +199,9 @@ classdef cTablesDefinition < cMessageLogger
         %getResultIdTables - Get the tables of an specific resultId
         %   Syntax:
         %     res = obj.getResultIdTables(id)
-        %   Input Argument:
+        %   Input Arguments:
         %     id - ResultId
-        %   Output Argument
+        %   Output Arguments:
         %     res - cell array with the ResultId tables
         %
             res=cType.EMPTY_CELL;
@@ -187,11 +218,12 @@ classdef cTablesDefinition < cMessageLogger
         %   Syntax:
         %     res = obj.getDataModelProperties()
         %     res = obj.getDataModelProperties(idx)
-        %   Input Argument:
+        %   Input Arguments:
         %     idx - Table index. Optional
-        %   Output Argument:
+        %   Output Arguments:
         %     res - struct with the table(s) properties
         %           If idx is not provided, get and array structure with all tables
+        %
             if nargin==2
                 res=obj.cfgDataModel(idx);
             else
@@ -203,9 +235,9 @@ classdef cTablesDefinition < cMessageLogger
         %getMatrixTables - Get the matrix tables configuration
         %   Syntax:
         %     res = obj.getMatrixTables(idx);
-        %   Input Argument:
+        %   Input Arguments:
         %     idx - Table index. Optional
-        %   Output Argument
+        %   Output Arguments:
         %     res - structed array with the configuration
         %
             if nargin==2
@@ -219,9 +251,9 @@ classdef cTablesDefinition < cMessageLogger
         %getMatrixTables - Get the matrix tables configuration
         %   Syntax:
         %     res = obj.getCellTables(idx);
-        %   Input Argument:
+        %   Input Arguments:
         %     idx - Table index. Optional
-        %   Output Argument;
+        %   Output Arguments:;
         %     res - structed array with the tables configuration
         %
             if nargin==2
@@ -240,9 +272,9 @@ classdef cTablesDefinition < cMessageLogger
         %     rsc    - Resource tables (true/false)
         %   Output Arguments:
         %     res - struct array with the tables configuration
-        %   
-            % Get optional arguments
+        %          
             res=cType.EMPTY_CELL;
+             % Get optional arguments
             switch nargin
                 case 1
                     option=cType.SummaryId.ALL;
@@ -282,7 +314,7 @@ classdef cTablesDefinition < cMessageLogger
             % Create the index dataset
             tCodes=fieldnames(cType.Tables);
             tNames=struct2cell(cType.Tables);
-            td=cDataset(tNames);
+            td=cDictionary(tNames);
             if ~td.status
                 td.printLogger;
                 obj.messageLog(cType.ERROR,cMessages.InvalidTableDict);
@@ -301,7 +333,6 @@ classdef cTablesDefinition < cMessageLogger
                     obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
                     return
                 end
-                td.setValues(idx,val);
                 cIndex{idx}=struct('name',val.key,...
                             'description',val.description,...
                             'code',tCodes{idx},...
@@ -318,7 +349,6 @@ classdef cTablesDefinition < cMessageLogger
                     obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
                     continue
                 end
-                td.setValues(idx,val);
                 cIndex{idx}=struct('name',val.key,...
                             'description',val.header,...
                             'code',tCodes{idx},...
@@ -335,7 +365,6 @@ classdef cTablesDefinition < cMessageLogger
                     obj.messageLog(cType.ERROR,cMessages.TableNotAvailable,key);
                     continue
                 end
-                td.setValues(idx,val);
                 cIndex{idx}=struct('name',val.key,...
                             'description',val.header,...
                             'code',tCodes{idx},...

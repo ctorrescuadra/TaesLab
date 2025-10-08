@@ -6,14 +6,14 @@ function data=ReadDataModel(filename,varargin)
 %   If the 'Show' option is selected, it displays the data tables in the console.
 %   A copy of the data model (usually a MAT file) can be created  if the 'SaveAs' option is selected.
 %
-%   Syntax
+%   Syntax:
 %     data = ReadDataModel(data,Name,Value);
 %   
-%   Input Arguments
+%   Input Arguments:
 %     filename - Name of the data model file.
 %       char array | string
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     Debug - The validation of each element is shown in the console.
 %       true | false (default)
 %     Show - Show the data tables in the console
@@ -21,10 +21,10 @@ function data=ReadDataModel(filename,varargin)
 %     SaveAs - Name of the file where the data model will be saved.
 %       char array | string
 %
-%   Output Arguments
+%   Output Arguments:
 %	  data - cDataModel object containing all the model information.
 %
-%   Example
+%   Example:
 %     <a href="matlab:open ReadDataModelDemo.mlx">Read Model Demo</a>
 %
 %   See also cReadModel, cDataModel
@@ -61,6 +61,7 @@ function data=ReadDataModel(filename,varargin)
     if param.Debug || ~data.status
         printLogger(data);
     end
+    % Show data tables
     if param.Show && data.status
         printResults(data);
     end

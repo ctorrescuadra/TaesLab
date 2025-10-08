@@ -2,9 +2,8 @@ classdef cDataModel < cResultSet
 %cDataModel - Create the data model object.
 %   It receives the data from the cReadModel interface classes, then validates
 %   and dispatch the information to be used by the calculation algorithms.
-%
-%   cDataModel constructor:
-%     obj = cDataModel(dm)
+%   The data model includes the productive structure, exergy states, resource costs,
+%   waste definitions and format data.
 %
 %   cDataModel properties:
 %     NrOfFlows           - Number of flows
@@ -30,6 +29,7 @@ classdef cDataModel < cResultSet
 %     ModelData           - cModelData object
 %
 %   cDataModel methods:
+%     cDataModel         - Create an instance of the class
 %     existState         - Check if a state name exists 
 %     existSample        - Check if a sample name exists
 %     getExergyData      - Get the cExergyData of a state
@@ -48,6 +48,18 @@ classdef cDataModel < cResultSet
 %     getResultInfo      - Get the cResultInfo associated to the data model
 %     showDataModel      - Show the data model
 %     saveDataModel      - Save the data model
+%
+%   cDataModel methods (inherited from cResultSet):
+%     ListOfTables     - Get the table names from a result set
+%     getTableIndex    - Get the table index from a result set
+%     printResults     - Print results on console
+%     showResults      - Show results in different interfaces
+%     showTableIndex   - Show the table index in different interfaces
+%     exportResults    - Export all the result Tables to another format
+%     saveResults      - Save all the result tables in an external file
+%     getTable         - Get a table of the result set by name
+%     saveTable        - Save the results in an external file 
+%     exportTable      - Export a table to another format
 %
 %   See also cResultSet, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData, cModelData
 %
@@ -85,9 +97,9 @@ classdef cDataModel < cResultSet
         %cDataModel - Create an instance of the class
         %   Syntax:
         %     obj = cDataModel(dm)
-        %   Input Argument:
+        %   Input Arguments:
         %     dm - cModelData object with the data of the model
-        %   Output Argument:
+        %   Output Arguments:
         %     obj - cDataModel object
         %
             % Check Data Structure
@@ -326,9 +338,9 @@ classdef cDataModel < cResultSet
 		%existState - Check if state is defined in States
         %   Syntax:
         %     res = obj.existState(state)
-        %   Input Argument:
+        %   Input Arguments:
         %     state - state name
-        %   Output Argument:
+        %   Output Arguments:
         %     res - true | false
         %
 			res=obj.ExergyData.getIndex(state);
@@ -338,9 +350,9 @@ classdef cDataModel < cResultSet
 		%existSample - Check if sample is defined in ResourceState
         %   Syntax:
         %     res = obj.existState(sample)
-        %   Input Argument:
+        %   Input Arguments:
         %     sample - Resource sample name
-        %   Output Argument:
+        %   Output Arguments:
         %     res - true | false
         %
 			res=obj.ResourceData.getIndex(sample);
@@ -366,7 +378,7 @@ classdef cDataModel < cResultSet
         %setExergyData - Set the exergy data values of a state
         %   Syntax:
         %     res = obj.setExergyData(state,values)
-        %   Input Argument:
+        %   Input Arguments:
         %     state - state key name or id
         %       char array | number
         %     values - array with the exergy values of the flows
@@ -411,10 +423,10 @@ classdef cDataModel < cResultSet
         %setExergyData - set exergy data to a state
         %   Syntax: 
         %     log = obj.setExergyData(state,val)
-        %   Input Argument:
+        %   Input Arguments:
         %     state - state to change 
         %     val - array | struct with exergy values
-        %   Output Argument:
+        %   Output Arguments:
         %     log - true | false status of the operation
         %
             log=cMessageLogger();
@@ -436,10 +448,10 @@ classdef cDataModel < cResultSet
         %setExergyData - add a new  exergy data state
         %   Syntax: 
         %     log = obj.addExergyData(state,val)
-        %   Input Argument:
+        %   Input Arguments:
         %     state - state to change 
         %     val - array | struct with exergy values
-        %   Output Argument:
+        %   Output Arguments:
         %     log - true | false status of the operation
         %
             res=cMessageLogger();
@@ -479,7 +491,7 @@ classdef cDataModel < cResultSet
         %   Input Arguments:
         %     sample - Sample key/id
         %     values - Array containing the flow-resource values
-        %   Output Argument:
+        %   Output Arguments:
         %     log - cMessageLogger with the operation status and errors
         %
             log=cMessageLogger();
@@ -499,7 +511,7 @@ classdef cDataModel < cResultSet
         %   Input Arguments:
         %     sample - Sample key/id
         %     values - Array containing the process-resource values
-        %   Output Argument:
+        %   Output Arguments:
         %     log - cMessageLogger with the operation status and errors
         %
             log=cMessageLogger();
@@ -685,18 +697,15 @@ classdef cDataModel < cResultSet
             end
         end
 
-        function log=updateModel(obj)
+        function updateModel(obj)
         %updateDataModel - Update the Data Model if there is changes
         %   Update cModelData and cResultInfo if changes have been made
         %   by setExergy, setResources or setWaste methods
-        %   Syntax
-        %     log = obj.updataModel
-        %   Output
-        %     log - true | false status of the update.
+        %   Syntax:
+        %     obj.updataModel()
         % 
-            buildModelData(obj)
+            buildModelData(obj);
             buildResultInfo(obj);
-            log=obj.status;
         end
 
         %%%
@@ -722,9 +731,9 @@ classdef cDataModel < cResultSet
         %getTableInfo - Get information about a table
         %   Syntax:
         %     res = obj.getTableInfo(name)
-        %   Input Argument:
+        %   Input Arguments:
         %     name - table name
-        %   Output Argument:
+        %   Output Arguments:
         %     res - struct with table properties
         %
             res=getTableInfo(obj.FormatData,name);
@@ -811,6 +820,9 @@ classdef cDataModel < cResultSet
     methods(Access=private)
         function buildResultInfo(obj)
         %buildResultInfo - Get the cResultInfo with the data model tables
+        %   Syntax:
+        %     obj.buildResultInfo()
+        %
             ps=obj.ProductiveStructure;
             p=struct('Name','','Description','');
             tableData=obj.FormatData.getDataModelProperties;
@@ -984,6 +996,9 @@ classdef cDataModel < cResultSet
 
         function buildModelData(obj)
         %buildModelData - Update the ModelData
+        %   Update the cModelData object with the current data of the model
+        %   Syntax:
+        %     obj.buildModelData()
             % General variables
             ps=obj.ProductiveStructure;
             % Exergy

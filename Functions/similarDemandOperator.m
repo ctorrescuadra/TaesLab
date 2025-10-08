@@ -2,24 +2,24 @@ function B = similarDemandOperator(A, x)
 %similarOperator - Compute the demand-driven operator from the resource-drive operator.
 %   Compute B(i,j) = x(i) * A(i,j) * (1./x(j)), making sure the diagonal of A remains invariant.
 %
-%   Syntax
+%   Syntax:
 %     B = similarResourceOperator(A,x)
 %
-%   Input Arguments
+%   Input Arguments:
 %     A - Resource-Driven Operator
 %     x - Transformation vector
 %
-%   Output Arguments
+%   Output Arguments:
 %     B - Demand-Driven Operator
 %
-%   Example
+%   Example:
 %     A = [1, 1, 0; 0, 1, 1; 0, 0, 1];
 %     x = [1; 2; 3];
 %     B = similarDemandOperator(A, x); %B = [1, 0.5, 0; 0, 1, 0.667; 0, 0, 1]
 %
 %   See also similarDemandMatrix, similarResourceOperator
-%
-    % Check Input Arguments
+
+    % Check Input Arguments:
     if nargin < 2 || nargin > 2
         error('ERROR: similarOperator. Requires two input arguments');
     end

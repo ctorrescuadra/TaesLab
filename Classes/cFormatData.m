@@ -1,26 +1,38 @@
 classdef cFormatData < cTablesDefinition
 %cFormatData - Get the format configuration data used to display tables of results.
-%	cResultTableBuilder derives from this class
-%
-%   cFormatData constructor:
-%     obj = cFormatData(data)
+%   This class loads the format configuration data from a struct, which
+%   should be obtained from a JSON file printconfig.json.
+%   The format configuration data contains the format definition of each type
+%   of variable, and the definition of each table used in TaesLab.
+%	cResultTableBuilder derives from this class.
 % 	
 %   cFormatData methods:
-%     getTableInfo       - Get info about the a table definition
+%	  cFormatData        - Create an instance of the class
 %     getFormat          - Get the format of a variable type
 %     getUnit            - Get the units of a variable type
+%     getResultId        - Get the ResultId of a table
 %     getTableProperties - Get the properties of a cTable
 %
-%   See also printformat.json, cTablesDefinition
+%   cFormatData methods (inherited from cTablesDefinition):
+%     getTablesDirectory - Get the a cTableData with the tables index
+%     getTableDefinition - Get configurarion properties of a table
+%     getTableInfo       - Get table info as a struct
+%     getTableId         - Get the TableId of a table
+%     getResultIdTables  - Get the tables configuration of a ResultId
+%     getCellTables      - Get the Cell tables configuration
+%     getMatrixTables    - Get the Matrix tables configuration     
+%     getSummaryTables   - Get the Summary tables configuration
+%
+%   See also printformat.json, cTablesDefinition, cResultTableBuilder
 %	
 	methods
 		function obj=cFormatData(data)
-		%cFormatData - Create an instance of the object
+		%cFormatData - Create an instance of the class
 		%   Syntax:
 		%     obj = cFormatData(data)
-		%   Input Argument:
+		%   Input Arguments:
 		%	  data - Format struct from cModelData
-		%   Output Argument:
+		%   Output Arguments:
 		%     obj - cFormatData object
 		%
 			% Check input
@@ -55,9 +67,9 @@ classdef cFormatData < cTablesDefinition
 		%getFormat - Get the format of a type of variable
 		%   Syntax:
 		%     format = obj.getFormat(id)
-		%   Input Argument:
+		%   Input Arguments:
 		%     id - Variable type, see cType.Format
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - char array with the C-like format of the variable
 		%
 			res=obj.cfgTypes(id).format;
@@ -65,12 +77,12 @@ classdef cFormatData < cTablesDefinition
 				
 		function res=getUnit(obj,id)
 		%getUnit - Get the format of a type of variable
-		% Syntax:
-		%  format = obj.getUnit(id)
-		% Input Argument:
-		%   id - Variable type, see cType.Format
-		% Output Argument:
-		%   res - char array with unit of the variable
+		% 	Syntax:
+		%     format = obj.getUnit(id)
+		% 	Input Arguments:
+		%     id - Variable type, see cType.Format
+		% 	Output Arguments:
+		%     res - char array with unit of the variable
 		%
 			res=obj.cfgTypes(id).unit;
 		end
@@ -81,7 +93,7 @@ classdef cFormatData < cTablesDefinition
 		%     res = obj.getResultId(table)
 		%   Input Arguments:
 		%     table - Name of the table (char)
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - ResultId of the table (scalar numeric)
 		%
 			res=0;
@@ -96,9 +108,9 @@ classdef cFormatData < cTablesDefinition
 		%getTableProperties - Get the properties of a cTable
 		%   Syntax:
 		%     [tdef,tprop] = obj.getTableProperties(name)
-		%   Input Argument:
+		%   Input Arguments:
 		%     name - name of the table
-		%   Output Argument:
+		%   Output Arguments:
 		%     tdef  - definition struct of the table
 		%     tprop - properties on the cTable
 		%
@@ -123,10 +135,11 @@ classdef cFormatData < cTablesDefinition
     methods(Access=protected)						
 		function res=getTableHeader(obj,tdef)
 		%getTableHeader - get the table header cell array
-		%   Input Argument:
+		%   Input Arguments:
 		%     tdef - Table properties
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - cell array with the table header of each column
+		%
 			units=obj.getTableUnits(tdef);
 			header={tdef.fields.header};
 			res=cellfun(@strcat,header,units,'UniformOutput',false);
@@ -134,29 +147,31 @@ classdef cFormatData < cTablesDefinition
 			
 		function format=getTableFormat(obj,tdef)
 		%getTableFormat - get an array cell with the format (C-like) of columns table
-		%   Input Argument:
+		%   Input Arguments:
 		%     tdef - Table definition struct
-		%   Output Argument:
+		%   Output Arguments:
 		%     format - cell array with the format of the column table
+		%
 			idx=[tdef.fields.type];
 			format={obj.cfgTypes(idx).format};
         end
 	
 		function units=getTableUnits(obj,tdef)
 		%getTableUnits - get a cell array with the units for each table column
-		%   Input Argument:
+		%   Input Arguments:
 		%     tdef - Table definition struct
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - cell array with the units of each column
+		%
 			idx=[tdef.fields.type];
 			units={obj.cfgTypes(idx).unit};
         end
 
         function tp=getCellTableProperties(obj,td)
 		%getCellTableProperties - Get the cTableCell properties from table definition
-		%   Input Argument:
+		%   Input Arguments:
 		%     td - table definition strcuture
-		%   Output Argument:
+		%   Output Arguments:
 		%     tp - struct witc cTableCell properties
 		% 
 			tp=struct('Name',td.key,...
@@ -178,9 +193,9 @@ classdef cFormatData < cTablesDefinition
 
         function tp=getMatrixTableProperties(obj,td)
 		%getMatrixTableProperties - Get the cTableMatrix properties from table definition
-		%   Input Argument:
+		%   Input Arguments:
 		%     td - table definition strcuture
-		%   Output Argument:
+		%   Output Arguments:
 		%     tp - struct witc cTableMatrix properties
 		% 
 			tp=struct('Name',td.key,...
@@ -198,9 +213,9 @@ classdef cFormatData < cTablesDefinition
 
         function tp=getSummaryTableProperties(obj,td)
 		%getSummaryTableProperties - Get the cTableMatrix properties from summary table definition
-		%   Input Argument:
+		%   Input Arguments:
 		%     td - table definition structure
-		%   Output Argument:
+		%   Output Arguments:
 		%     tp - struct with cTableMatrix properties for summary table
 		% 
 			tp=struct('Name',td.key,...

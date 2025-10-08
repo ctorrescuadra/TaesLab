@@ -2,8 +2,9 @@ classdef (Sealed) cViewTable < cMessageLogger
 %cViewTable - Show a result table using a GUI (uitable)
 % 	called by showTable/cTable method with GUI option
 % 
-%   cViewTable Methods:
-%     showTable - show the table on a uitable
+%   cViewTable methods:
+%     cViewTable - Create an instance of the class
+%     showTable  - Show the table on a uitable
 %
 %   See also cTable
 %
@@ -21,12 +22,14 @@ classdef (Sealed) cViewTable < cMessageLogger
 
 	methods 
 		function obj=cViewTable(tbl)
-		%cViewTable - object constructor
+		%cViewTable - Create an instance of the class
 		%   Syntax:
 		%     obj = cViewTable(tbl)
-		%   Input Argument:
+		%   Input Arguments:
 		%	  tbl - cResultTable object
-		%
+		%   Output Arguments:
+		%     obj - cViewTable object
+		
 			% Parameters depending of software platform
 			if isOctave
 				param=struct('ColumnScale',8,'RowWidth',21,'xMin',160,...
@@ -65,7 +68,7 @@ classdef (Sealed) cViewTable < cMessageLogger
 		% Shows the table values in a uitable object
 		%   Syntax:
 		%     obj.showTable
-		%   Example
+		%   Example:
 		%     vt = cViewTable(tbl)
 		%     vt.showTable;
 		%

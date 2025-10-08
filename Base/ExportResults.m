@@ -2,13 +2,13 @@ function res = ExportResults(arg,varargin)
 %ExportResults - Exports the results tables in different formats.
 %   If the option 'Table' is not used, the function returns a structure with all tables converted to the desired format. 
 %
-%   Syntax
+%   Syntax:
 %     res=ExportResults(arg,Name,Value)
 %  
-%   Input Arguments
+%   Input Arguments:
 %     arg - cResultSet object
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     Table: Name of the table to export. If it is not selected, a structure with all result tables is created
 %       char array
 %     ExportAs: Select the output VarMode of the table/s.
@@ -19,10 +19,10 @@ function res = ExportResults(arg,varargin)
 %     Format: Use the Format definition to output the (numeric values) tables
 %       true | false (default)
 %
-%   Output Arguments
+%   Output Arguments:
 %     res - The Table/s in the format specified by 'ExportAs' parameter
 %
-%   Example
+%   Example:
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %  
 %   See also cResultSet, cTable.

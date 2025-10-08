@@ -2,21 +2,21 @@ function B=scaleCol(A,x)
 %scaleCol - Multiplies each column of matrix A by the corresponding element of vector x.
 %   Compute B(i,j)=A(i,j)*x(j)
 %
-%   Usage
+%   Syntax:
 %     B = scaleCol(A, x)
 %
-%   Input Arguments
+%   Input Arguments:
 %	  A - Matrix to be scaled
 %	  x - scale vector
 %
-%   Output Arguments
+%   Output Arguments:
 %	  B - Scaled Matrix 
 %
-%   Example
+%   Example:
 %     A = [1, 2; 3, 4];
 %     x = [0.5, 2];
-%     B = scaleCol(A, x); %B = [0.5, 4; 1.5, 8]
-%
+%     B = scaleCol(A, x); %returns: B = [0.5, 4; 1.5, 8]
+
     % Check Input
     if nargin < 2 || ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
         error('ERROR: scaleCol. First argument must be a numeric/logic matrix');

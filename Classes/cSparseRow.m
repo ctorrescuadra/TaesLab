@@ -3,14 +3,14 @@ classdef  cSparseRow < cMessageLogger
 	%	This class is used to manage  waste allocation matrices, and provide a set of
 	%   algebraic operations. 
 	%
-	%   cSparseRow Properties:
+	%   cSparseRow properties:
 	%     N 		- Number of rows
 	%     NR  	- Number of active rows
 	%     M		- Number of Columns
 	%     mRows   - list containing the non-null rows
 	%     mValues - Matrix (NR x M) containing the active value
 	%
-	%   cSparseRow Methods:
+	%   cSparseRow methods:
 	%     scaleCol  - Scale the columns of the matrix by a vector
 	%     scaleRow  - Scale the rows of the matrix by a vector
 	%     divideCol - Divide the columns of the matrix by a vector
@@ -44,10 +44,12 @@ classdef  cSparseRow < cMessageLogger
 		%cSparseRow - create an instance of the class
 		%   Syntax:
 		%     obj = cSparseRow(rows,vals,n)
-		%   Input Argument
+		%   Input Arguments:
 		%     rows - array containing index of the active rows
 		%     vals - Matrix containing the values of active rows
 		%     n    - Number of rows (optional)
+		%   Output Arguments:
+		%     obj  - cSparseRow object
 		%
 			narginchk(2,3);
 			obj.NR=size(vals,1);
@@ -68,10 +70,22 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=scaleCol(obj,x)
-		% Overload scaleCol function
-			log=cMessageLogger();
+		%scaleCol - Scale the columns of the matrix by a vector
+		%   Overload scaleCol function for cSparseRow objects
+		%   Syntax:
+		%     nobj=obj.scaleCol(x)
+		%   Input Arguments:
+		%     x   - vector with the scaling values
+		%   Output Arguments:
+		%     nobj - cSparseRow object with the scaled values
+		%
+			nobj=cMessageLogger();
+			if nargin==1
+				nobj.printError(cMessages.InvaliArguments,'scaleCol');
+				return
+			end
 			if(obj.M~=length(x))
-				log.printError(cMessages.InvalidSparseRow,obj.M,length(rows));
+				nobj.printError(cMessages.InvalidSparseRow,obj.M,length(rows));
 				return
 			end
 			B=scaleCol(obj.mValues,x);
@@ -79,13 +93,21 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=divideCol(obj,x)
-		% Overload divideCol function
+		%divideCol - Divide the columns of the matrix by a vector
+		%   Overload divideCol function for cSparseRow objects
+		%   Syntax:
+		%     nobj=obj.divideCol(x)
+		%   Input Arguments:
+		%     x   - vector with the divisor values
+		%   Output Arguments:
+		%     nobj - cSparseRow object with the divided values
+		%
 			nobj=cMessageLogger();
 			if nargin==1
 				x=obj.sumCols;
 			end
 			if(obj.M~=length(x))
-				log.printError(cMessages.InvalidSparseRow,obj.M,length(rows));
+				nobj.printError(cMessages.InvalidSparseRow,obj.M,length(rows));
 				return
 			end
 			B=divideCol(obj.mValues,x);
@@ -93,10 +115,18 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=scaleRow(obj,x)
-		% Overload scaleRow function
+		%scaleRow - Scale the rows of the matrix by a vector
+		%   Overload scaleRow function for cSparseRow objects
+		%   Syntax:
+		%     nobj=obj.scaleRow(x)
+		%   Input Arguments:
+		%     x   - vector with the scaling values
+		%   Output Arguments:
+		%     nobj - cSparseRow object with the scaled values
+		%
 			nobj=cMessageLogger();
 			if(obj.N~=length(x))
-				log.printError(cMessages.InvalidSparseRow,obj.N,length(rows));
+				nobj.printError(cMessages.InvalidSparseRow,obj.N,length(rows));
 				return
 			end
 			B=scaleRow(obj.mValues,x(obj.mRows));
@@ -104,7 +134,15 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=divideRow(obj,x)
-		% Overload divideRow function
+		%divideRow - Divide the rows of the matrix by a vector
+		%   Overload divideRow function for cSparseRow objects
+		%   Syntax:
+		%     nobj=obj.divideRow(x)
+		%   Input Arguments:
+		%     x   - vector with the divisor values
+		%   Output Arguments:
+		%     nobj - cSparseRow object with the divided values
+		%
 			nobj=cMessageLogger();
 			if nargin==1
 				x(obj.mRows)=obj.sumRows;
@@ -118,19 +156,36 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function x = sumCols(obj)
-		% Sum the cols of the matrices
+		%sumCols - Sum the columns of the matrices
+		%   Syntax:
+		%     x=obj.sumCols()
+		%   Output Arguments:
+		%     x - row vector with the sum of each column
+		%	
 			x=sum(obj.mValues,1);
 		end
 
 		function x = sumRows(obj)
-		% Sum the rows of the matrices
+		%sumRows - Sum the rows of the matrices
+		%   Syntax:
+		%     x=obj.sumRows()
+		%   Output Arguments:
+		%     x - column vector with the sum of each row
+		%
             x=zeros(obj.N,1);
 			x(obj.mRows)=sum(obj.mValues,2);
 		end
 
         function res=sum(obj,dim)
-		% Overload sum function
-            narginchk(1,2);
+		%sum - Overload sum function for cSparseRow objects
+		%   Syntax:
+		%     res=sum(obj,dim)
+		%   Input Arguments:
+		%     dim - Dimension to sum (1 rows, 2 columns). Default is 1
+		%   Output Arguments:
+		%     res - Result of the sum operation
+		%
+            narginchk(1,2)
             if nargin==1
              dim=1;
             end
@@ -143,12 +198,22 @@ classdef  cSparseRow < cMessageLogger
         end
 
 		function nobj=plus(obj1,obj2)
-		% overload the plus operator
+		%plus - Overload the plus operator for cSparseRow objects
+		%   Syntax:
+		%     nobj=obj1+obj2
+		%   Input Arguments:
+		%     obj1 - cSparseRow object or scalar
+		%     obj2 - cSparseRow object or scalar
+		%   Output Arguments:
+		%     nobj - cSparseRow object with the result of the addition
+		%
 			nobj=cMessageLogger();
+			% Check dimensions
 			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
 				nobj.printError(cMessages.InvalidSparseRow);
 				return
 			end
+			% Determine type of inputs
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
 			switch test
 				case 1
@@ -163,12 +228,22 @@ classdef  cSparseRow < cMessageLogger
         end
 
 		function nobj=minus(obj1,obj2)
-		% overload the minus operator
+		%minus - Overload the minus operator for cSparseRow objects
+		%   Syntax:
+		%     nobj=obj1-obj2
+		%   Input Arguments:
+		%     obj1 - cSparseRow object or scalar
+		%     obj2 - cSparseRow object or scalar
+		%   Output Arguments:
+		%     nobj - cSparseRow object with the result of the subtraction
+		%
+			% Check dimensions
 			nobj=cMessageLogger();
 			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
 				nobj.printError(cMessages.InvalidSparseRow);
 				return
 			end
+			% Determine type of inputs
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
 			switch test
 				case 1
@@ -183,17 +258,34 @@ classdef  cSparseRow < cMessageLogger
 		end
 
 		function nobj=uminus(obj)
-		% overload the uminus operator
+		%uminus - Overload the uminus operator for cSparseRow objects
+		%   Syntax:
+		%     nobj=-obj
+		%   Input Arguments:
+		%     obj - cSparseRow object
+		%   Output Arguments:
+		%     nobj - cSparseRow object with the result of the operation
+		%
 			nobj=cSparseRow(obj.mRows,-obj.mValues,obj.N);
 		end
 
 		function nobj=mtimes(obj1,obj2)
-		% overload the mtimes operator
+		%mtimes - Overload the mtimes operator for cSparseRow objects
+		%   Syntax:
+		%     nobj=obj1*obj2
+		%   Input Arguments:
+		%     obj1 - cSparseRow object or scalar
+		%     obj2 - cSparseRow object or scalar or matrix
+		%   Output Arguments:
+		%     nobj - cSparseRow object or matrix with the result of the multiplication
+		%
+			% Check dimensions
 			nobj=cMessageLogger();
 			if (size(obj1,2)~=size(obj2,1))
 				nobj.printError(cMessages.InvalidSparseRow);
 				return
 			end
+			% Determine type of inputs
 			test=isa(obj1,'cSparseRow')+2*isa(obj2,'cSparseRow');
 			switch test
 				case 1
@@ -209,8 +301,42 @@ classdef  cSparseRow < cMessageLogger
 			end
 		end
 
+		function res=full(obj)
+		%full - Overload full function for cSparseRow objects
+		%   Syntax:
+		%     res=full(obj)
+		%   Input Arguments:
+		%     obj - cSparseRow object
+		%   Output Arguments:
+		%     res - Full matrix
+		%
+			res=zeros(obj.N,obj.M);
+			res(obj.mRows,:)=obj.mValues;
+		end
+
+		function res=sparse(obj)
+		%sparse - Overload sparse function for cSparseRow objects
+		%   Syntax:
+		%     res=sparse(obj)
+		%   Input Arguments:
+		%     obj - cSparseRow object
+		%   Output Arguments:
+		%     res - Sparse matrix
+		%
+			res=sparse(obj.mRows,1:obj.M,obj.mValues,obj.N,obj.M);
+		end
+
         function res=size(obj,dim)
-		% Overload size function
+		%size - Overload size function for cSparseRow objects
+		%   Syntax:
+		%     res=size(obj)
+		%     res=size(obj,dim)
+		%   Input Arguments:
+		%     obj - cSparseRow object
+		%     dim - Dimension to return (1 rows, 2 columns). Default is both dimensions
+		%   Output Arguments:
+		%     res - Size of the matrix (if dim is not provided) or size of the specified dimension
+		%
             narginchk(1,2);
 			val = [obj.N obj.M];
 			if nargin==1
@@ -219,31 +345,38 @@ classdef  cSparseRow < cMessageLogger
 				res=val(dim);
 			end
         end
-
-		function mat=full(obj)
-		% return the full matriz form
-			mat=zeros(obj.N,obj.M);
-			mat(obj.mRows,:)=obj.mValues;
-		end
-	
-		function mat=sparse(obj)
-		% return the sparse matrix form
-			[ix,iy,val]=find(obj.mValues);
-			mat=sparse(obj.mRows(ix),iy,val,obj.N,obj.M);
-		end
 		
 		function res=ctranspose(obj)
-		% Overload ctranspose operator
+		%ctranspose - Overload ctranspose operator for cSparseRow objects
+		%   Syntax:
+		%     res=ctranspose(obj)
+		%   Input Arguments:
+		%     obj - cSparseRow object
+		%   Output Arguments:
+		%     res - Transposed matrix
+		%
 			res=transpose(full(obj));
 		end
 
 		function res=transpose(obj)
-		% Overload ctranspose operator
+		%transpose - Overload transpose operator for cSparseRow objects
+		%   Syntax:
+		%     res=transpose(obj)
+		%   Input Arguments:
+		%     obj - cSparseRow object
+		%   Output Arguments:
+		%     res - Transposed matrix
+		%
 			res=transpose(full(obj));
 		end
 
 		function disp(obj)
-		% overload display object
+		%disp - Overload display object for cSparseRow objects
+		%   Syntax:
+		%     disp(obj)
+		%   Input Arguments:
+		%     obj - cSparseRow object
+		%
 			disp(full(obj));
 		end
 	end

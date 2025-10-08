@@ -1,9 +1,6 @@
 classdef (Sealed) cExergyCost < cExergyModel
 %cExergyCost - Calculate the exergy cost of flows and processes.
-%   It is the class that provides the thermoeconomic analysis results of a state of the plant
-%
-%   cExergyCost constructor:
-%     obj = cExergyCost(exd,wd)
+%   The class that provides the thermoeconomic analysis results of a state of the plant.
 % 
 %   cExergyCost properties:
 %     SystemOutput           - System Output of processes
@@ -18,10 +15,11 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     TableR                 - Waste Allocation Table
 %     RecycleRatio           - Recycle ratio of each waste
 %     WasteWeight            - Weight of each waste
-%     SpectralRatio          - Spectral Ratio of the productive matrix (mG)
 %
 %   cExergyCost methods:
+%     cExergyCost                  - Create an instance of the class
 %     buildResultInfo              - Build the cResultInfo object for THERMOECONOMIC_ANALYSIS
+%     getSpectralRatio             - Get the spectral ratio of the productive matrix
 %     getProcessCost               - Get cost of Processes
 %     getProcessUnitCost           - Get unit cost of Processes
 %     getFlowsCost                 - Get cost of flows
@@ -31,9 +29,8 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     getGeneralCostTableFPR       - Get the generalized cost FPR table
 %     getIrreversibilityCostTables - Get Irreversibility Cost Tables for processes and flows
 %     updateWasteOperators         - Update Waste Operator
-%     updateOperator               - Update an operator with the corresponding waste operator
 %  
-%   See also cExergyModel
+%   See also cResultId, cExergyModel, cResultInfo, cWasteData, cResourceCost
 %
 	properties(GetAccess=public,SetAccess=private)
         SystemOutput           % System Output of processes
@@ -49,8 +46,8 @@ classdef (Sealed) cExergyCost < cExergyModel
         WasteTable             % cWasteData object
         TableR                 % Waste Allocation Table
         RecycleRatio           % Recycle ratio of each waste
-        SpectralRatio          % Spectral Ratio of production matrix (mG)
     end
+    
     properties(Access=private)
        mpL
     end
@@ -63,11 +60,15 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Input Arguments:
 		%     exd - cExergyData object
         %     wd - cWasteData object (optional)
+        %   Output Arguments:
+        %     obj - cExergyCost object
         %
 			obj=obj@cExergyModel(exd);
+            % Check if the object is valid
             if ~obj.status
                 return
             end
+            % Set the ResultId property and initialize variables
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
 			N=obj.NrOfProcesses;
             M=obj.NrOfFlows;
@@ -89,7 +90,6 @@ classdef (Sealed) cExergyCost < cExergyModel
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
             opCP=similarResourceOperator(opP,obj.ProductExergy);
             obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
-            obj.SpectralRatio=abs(eigs(mFP(:,1:N),1));
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
             % Initialize waste operators
             if (nargin==2) && (obj.NrOfWastes>0)
@@ -134,7 +134,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         %
         %   Syntax:
         %     res=obj.SystemUnitConsumption
-        %   Output Arguments
+        %   Output Arguments:
         %     res - Total unit consumption value
         %  
             res=cType.EMPTY;
@@ -176,6 +176,17 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             res=fmt.getCostResults(obj,options);
         end
+
+        function res=getSpectralRatio(obj)
+        %getSpectralRatio - Get the spectral ratio of the productive matrix
+        %   Syntax:
+        %     res=obj.getSpectralRatio
+        %   Output Arguments:
+        %     res - Spectral Ratio value
+        %
+            N=obj.NrOfProcesses;
+            res=abs(eigs(obj.mFP(:,1:N),1));
+        end
    
         function res=getProcessCost(obj,rsc)
 		%getProcessCost - Get processes cost values
@@ -188,21 +199,24 @@ classdef (Sealed) cExergyCost < cExergyModel
 		%   Output Arguments:
 		%     res - structure containing cost values (CPE,CPZ,CPR,CP,CF,CR,Z)
         %
-			czoption=(nargin==2);
             res=struct();
+            % Initialize variables
+            czoption=(nargin==2);
 			N=obj.NrOfProcesses;
 			zero=zeros(1,N);
             aux=obj.fpOperators;
-			if czoption
+			if czoption %Compute generalized cost
                 Ce=rsc.Ce;
                 res.Z=rsc.Z;
 				res.CPE=Ce * aux.opCP;
 				res.CPZ=res.Z * aux.opCP;
-			else
+			else % Compute direct cost
+                res.Z=zero;
 				Ce=obj.TableFP(end,1:N);
 				res.CPE=Ce * aux.opCP;
 				res.CPZ=zero;
 			end
+            % Compute waste costs
 			if obj.isWaste
 				res.CPR=(res.CPE+res.CPZ) * aux.opR;
 				res.CP=res.CPE + res.CPZ + res.CPR;
@@ -212,6 +226,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 				res.CP=res.CPE+res.CPZ;
 				res.CR=zero;
 			end
+            % Compute fuel cost
 			res.CF= Ce+res.CP*obj.fpOperators.mFP(:,1:end-1);
 		end
 
@@ -227,21 +242,23 @@ classdef (Sealed) cExergyCost < cExergyModel
 		%     res - structure containing cost values (cP,cPE,cPZ,cPR,cF,cR)
         %
             res=struct();
+            % Initialize variables
             czoption=(nargin==2);
             N=obj.NrOfProcesses;
             zero=zeros(1,N);
             res.k=obj.UnitConsumption;
-            if czoption
+            if czoption %Compute generalized cost
                 ce= rsc.ce;
                 ke=ce .* res.k;
                 res.cPE= ke * obj.pfOperators.opP;
                 res.cPZ= rsc.zP * obj.pfOperators.opP;
-            else
+            else % Compute direct cost
                 ce=obj.pfOperators.mPF(end,:);
                 ke=ce .* res.k;
                 res.cPE= ke * obj.pfOperators.opP;
                 res.cPZ= zero;
             end
+            % Compute waste costs
             if obj.isWaste
                 res.cPR=(res.cPE+res.cPZ)*obj.pfOperators.opR;
                 res.cP=res.cPE+res.cPZ+res.cPR;
@@ -251,6 +268,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res.cP=res.cPE+res.cPZ;
                 res.cR=zero;
             end
+            % Compute fuel cost
             res.cF=ce+res.cP*obj.pfOperators.mPF(1:end-1,1:end);
         end  
 
@@ -265,25 +283,27 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Output
         %   res - cost of flows structure (B,CE,CZ,CR,C,cE,cZ,cR,c)
         %
-            fpm=obj.FlowProcessModel;
-            [~,frsc,val]=find(fpm.mP(end,:));
-            czoption=(nargin==2);
             res=struct();
+            % Initialize variables
+            czoption=(nargin==2);
             zero=zeros(1,obj.NrOfFlows);	   
             aux=obj.flowOperators;
             res.B=obj.FlowsExergy;
-            if czoption
+            fpm=obj.FlowProcessModel;
+            [~,frsc,val]=find(fpm.mP(end,:));
+            if czoption % Compute generalized cost
                 zB = rsc.zP * fpm.mP(1:end-1,:);
                 res.cE = rsc.c0(frsc) * aux.opB(frsc,:);
                 res.CE = res.cE .* res.B;
                 res.cZ = zB * aux.opB;  
                 res.CZ = res.cZ .* res.B;
-            else
+            else % Compute direct cost
                 res.cE = val * aux.opB(frsc,:);
                 res.CE = res.cE .* res.B;
                 res.cZ = zero;
                 res.CZ = zero;
             end
+            % Compute waste costs
             if obj.isWaste
                 res.cR = (res.cE + res.cZ) * aux.opR;
                 res.CR = res.cR .* res.B;
@@ -309,10 +329,17 @@ classdef (Sealed) cExergyCost < cExergyModel
         %     res - cost of flows structure (E,CE,CZ,CR,C,cE,cZ,cR,c)
         %
             res=struct();
+            % Check input parameters and initialize variables
+            if (nargin~=2) || ~isstruct(fcost) || ~isfield(fcost,'CE')
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument,'fcost');
+                return
+            end
             zero=zeros(1,obj.NrOfStreams);
             res.E=obj.StreamsExergy.E;
+            % Compute costs
             res.CE=obj.ps.flows2Streams(fcost.CE);
             res.cE=vDivide(res.CE,res.E);
+            % Compute waste costs
             if obj.isWaste
                 res.CR=obj.ps.flows2Streams(fcost.CR);
                 res.cR=vDivide(res.CR,res.E);
@@ -320,6 +347,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res.CR=zero;
                 res.cR=zero;
             end
+            % Compute generalized costs
             if isfield(fcost,'CZ')
                 res.CZ=obj.ps.flows2Streams(fcost.CZ);
                 res.cZ=vDivide(res.CZ,res.E);
@@ -384,20 +412,23 @@ classdef (Sealed) cExergyCost < cExergyModel
                 ucost=obj.getProcessUnitCost(rsc);
             end	
             N=obj.NrOfProcesses;
+            % Compute resource costs
             Ce= rsc.ce .* obj.ProcessesExergy.vF(1:N);
             aux=[Ce+rsc.Z,0];
             tmp=obj.TableFP(1:N,:);
+            % Compute waste costs
             if obj.isWaste
                 tR=obj.TableR;
                 recycle=scaleRow(obj.TableFP(tR.mRows,end),obj.RecycleRatio);
                 tmp(tR.mRows,:)=[tR.mValues,recycle];
             end
+            % Get cost table FPR
             res=[scaleRow(tmp,ucost.cP);aux];
         end 
 
         function [pict,fict]=getIrreversibilityCostTables(obj,rsc)
         %getIrreversibilityCostTable - Get Irreversibility Cost Tables for processes and flows
-        %   If resource cost is provided calculate the generalized table
+        %   If resource cost is provided calculate the generalized tables
         %
         %   Syntax:
         %     [pict,fict]=obj.getIrreversibilityCostTables(rsc)
@@ -420,6 +451,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 cn=ones(1,N);
                 ict=zerotol(pf.opI);
             end
+            % Add waste cost
             if obj.isWaste
                 cin=cn+sum(ict);
                 mopCR=scaleRow(pf.opR,cin);
@@ -440,11 +472,24 @@ classdef (Sealed) cExergyCost < cExergyModel
 
         function log=updateWasteOperators(obj)
         %updateWasteOperators - Calculate the waste allocation ratios and cost operators.
-        %   Syntax
+        %   The waste allocation ratios are calculated according to the waste definition
+        %   type. The waste cost operators are also calculated.
+        %   The waste allocation ratios are stored in the WasteTable property.
+        %   The waste cost operators are stored in the properties TableR, pfOperators, fpOperators and flowOperators.
+        %   The recycle ratio is stored in the RecycleRatio property.
+        %   The method returns a cMessageLogger object with error messages if any.
+        %
+        %   Syntax:
         %     obj.updateWasteOperators
-        %   Output Argument
+        %   Output Arguments:
         %     log - cMessageLogger with error messages
-            log=cMessageLogger;
+        %
+            log=cMessageLogger();
+            if ~obj.isWaste
+                log.messageLog(cType.ERROR,cMessages.NoWasteModel);
+                return
+            end
+            % Initialize variables
             wt=obj.WasteTable;
             NR=wt.NrOfWastes;
             N=obj.NrOfProcesses;
@@ -521,33 +566,6 @@ classdef (Sealed) cExergyCost < cExergyModel
             obj.WasteTable=wt;
         end 
     end   
-    
-    methods(Static)
-        function res=updateOperator(op,opR)
-        %updateOperator - Update an operator with the corresponding waste operator
-        %   Syntax:
-        %     res = cExergyCost.updateOperator(op,opR)
-        %   Input:
-        %     op - Operator
-        %     opR - Waste Operator
-        % 
-            res=op+op*opR;
-        end
-
-        function res=getOpR(mR,opL)
-        %getOpR - Get the corresponding waste operator
-        %   Syntax:
-        %     res = cExergyCost.getOpR(mR,opL)
-        %   Input:
-        %     mR - Waste allocation matrix
-        %     opL - Cost Operator
-        %
-            tmp=mR.mValues*opL;
-            opR=(eye(mR.NR)-tmp(:,mR.mRows))\tmp;
-            res=cSparseRow(mR.mRows,opR);
-        end
-
-	end
 
     methods(Access=private)
         function setWasteTable(obj,wd)
@@ -590,4 +608,30 @@ classdef (Sealed) cExergyCost < cExergyModel
 		    cp=ke/(eye(N)-tmp);
         end
     end
+
+    methods(Static,Access=private)
+        function res=updateOperator(op,opR)
+        %updateOperator - Update an operator with the corresponding waste operator
+        %   Syntax:
+        %     res = cExergyCost.updateOperator(op,opR)
+        %   Input:
+        %     op - Operator
+        %     opR - Waste Operator
+        % 
+            res=op+op*opR;
+        end
+
+        function res=getOpR(mR,opL)
+        %getOpR - Get the corresponding waste operator
+        %   Syntax:
+        %     res = cExergyCost.getOpR(mR,opL)
+        %   Input:
+        %     mR - Waste allocation matrix
+        %     opL - Cost Operator
+        %
+            tmp=mR.mValues*opL;
+            opR=(eye(mR.NR)-tmp(:,mR.mRows))\tmp;
+            res=cSparseRow(mR.mRows,opR);
+        end
+	end
 end

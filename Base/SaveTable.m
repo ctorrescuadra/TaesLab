@@ -12,7 +12,7 @@ function SaveTable(tbl,filename)
 %     filename - Name of the file (with extension) to save the table data
 %       array char | string
 %
-%   Example
+%   Example:
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %
 %   See also cTable

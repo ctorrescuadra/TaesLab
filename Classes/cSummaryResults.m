@@ -4,14 +4,12 @@ classdef (Sealed) cSummaryResults < cResultId
 %    STATES - Summarize the results for each state
 %    RESOURCES - Summarize the results for each resource sample
 %
-%   cSummaryResults constructor:
-%     obj =cSummaryResults(model,option)
-%
 %   cSummaryResults properties:
 %     Tables     - List of the Summary Tabled created
 %     NrOfTables - Number of Tables
 % 
-%   cSummaryResults methods
+%   cSummaryResults methods:
+%     cSummaryResults            - Build an instance of this class
 %     buildResultInfo            - Build the cResultInfo object with the summary tables
 %     defaultSummaryTables       - Get the default summary tables option name
 %     setSummaryTables           - Set the values of the summary tables
@@ -21,10 +19,10 @@ classdef (Sealed) cSummaryResults < cResultId
 %     getDefaultFlowVariables    - Get the names of the output flows for summary graphs
 %     getDefaultProcessVariables - Get the names of the output processes for summary graphs
 %
-%   See also cThermoeconomicModel
+%   See also cThermoeconomicModel, cSummaryTable, cSummaryOptions, cResultInfo, cResultId
 %
     properties(GetAccess=public,SetAccess=private)
-        Tables       % Names of Summary Tabled created
+        Tables       % Names of Summary Tables created
         NrOfTables   % Number of Tables
     end
 
@@ -48,8 +46,10 @@ classdef (Sealed) cSummaryResults < cResultId
         %       RESOURCES: Resource summary table are obtained
         %       ALL: Both type of tables are obtained
         %       If it is missing is determined by the model.
+        %   Output Arguments:
+        %     obj - cSummaryResults object
         %
-            % Check Input Arguments
+            % Check Input Arguments:
             if ~isObject(model,'cThermoeconomicModel')
                 obj.addLogger(model);
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(model));
@@ -113,9 +113,9 @@ classdef (Sealed) cSummaryResults < cResultId
         %buildResultInfo - Get cResultInfo object
         %   Syntax:
         %     res=obj.buildResultInfo(fmt)
-        %   Input Argument
+        %   Input Arguments:
         %     fmt - cResultTableBuilder object
-        %   Output Argument
+        %   Output Arguments:
         %     res - cResultInfo object with the summary result
         %
             res=fmt.getSummaryResults(obj);
@@ -125,7 +125,7 @@ classdef (Sealed) cSummaryResults < cResultId
         %defaultSummaryTables - Get the default summary tables option name
         %   Syntax:
         %     res=obj.defaultSummaryTable
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Get the default summary option name
         %
             res=obj.sopt.defaultOption;
@@ -135,7 +135,7 @@ classdef (Sealed) cSummaryResults < cResultId
         %setSummaryTables - Fill the values of the summary tables with the values of the model
         %   Syntax:
         %     obj.setSummaryTables(model,option)
-        %   Input Argument:
+        %   Input Arguments:
         %     model - cThermoeconomicModel object
         %     option - Type of summary result
         %
@@ -155,9 +155,9 @@ classdef (Sealed) cSummaryResults < cResultId
         %getValues - Get dataset tables
         %   Syntax:
         %     res = obj.getValues(id)
-        %   Input Argument
+        %   Input Arguments:
         %     id - Id/Name of the table
-        % Output Argument
+        % Output Arguments:
         %     res - cSummaryTable
         %
             res=getValues(obj.ds,id);
@@ -167,9 +167,9 @@ classdef (Sealed) cSummaryResults < cResultId
         %getSummaryColumns - Get the column names of the summary tables
         %   Syntax:
         %     res = obj.getSummaryColumns(id)
-        %   Input Argument
+        %   Input Arguments:
         %     type - Type of Summary Table (STATES/RESOURCES)
-        %   Output Argument
+        %   Output Arguments:
         %     res - cell array with the columns names of the table
         %
             switch type
@@ -184,7 +184,7 @@ classdef (Sealed) cSummaryResults < cResultId
         %getDefaultFlowVariables - Get the output flows keys
         %   Syntax:
         %     res = obj.getDefaultFlowVariables
-        %   Output Argument
+        %   Output Arguments:
         %     res - cell array with system output flows names
         %
             ps=obj.dm.ProductiveStructure;
@@ -196,7 +196,7 @@ classdef (Sealed) cSummaryResults < cResultId
         %getDeafaultOrocessVariables Get the output processes keys
         %   Syntax:
         %     res = obj.getDefaultFlowVariables
-        %   Output Argument
+        %   Output Arguments:
         %     res - cell array with system output processes names
         %
             ps=obj.dm.ProductiveStructure;
@@ -208,7 +208,7 @@ classdef (Sealed) cSummaryResults < cResultId
         %isStateSummary - Check if States Summary results are available
         %   Syntax:
         %     res = obj.isStateSummary
-        %   Output Argument
+        %   Output Arguments:
         %     res - true | false
         %
             res=logical(bitget(obj.option,cType.STATES));
@@ -218,7 +218,7 @@ classdef (Sealed) cSummaryResults < cResultId
         %isSampleSummary - Check if Samples Summary results are available
         %   Syntax:
         %     res = obj.isStateSummary
-        %   Output Argument
+        %   Output Arguments:
         %     res - true | false
         %
             res=logical(bitget(obj.option,cType.RESOURCES));
@@ -253,7 +253,7 @@ classdef (Sealed) cSummaryResults < cResultId
         %setStateTable - set the values of the state dataset tables
         %   Syntax:
         %     obj.setStates(model)  
-        %   Input Argument:
+        %   Input Arguments:
         %     model - cThermoeconomicModel object
         %
             if model.isResourceCost
@@ -312,7 +312,7 @@ classdef (Sealed) cSummaryResults < cResultId
         %setStateTable - set the values of the resource dataset tables
         %   Syntax:
         %     obj.setResourceTables(model)  
-        %   Input Argument:
+        %   Input Arguments:
         %     model - cThermoeconomicModel object
         %
             rstate=model.getResultState;

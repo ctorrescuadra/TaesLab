@@ -2,19 +2,19 @@ function obj = importMAT(filename)
 %importMAT - Create a cTaesLab object from a previous saved MAT file.
 %   Files can be created using exportMAT function
 %
-%   Syntax
+%   Syntax:
 %     obj=importMAT(matfile)
 %
-%   Input Argument:
+%   Input Arguments:
 %     filename - Existing MAT file containing a TaesLab object
 %       char array | string
 %
-%   Output Argument:
+%   Output Arguments:
 %     obj - cTaesLab object containing the data from the MAT file		
 %
 %   See also exportMAT
 %
-%   Example
+%   Example:
 %     obj = importMAT('data.mat')		
 %
     obj=cMessageLogger();

@@ -5,13 +5,13 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %    With the option 'CostTables', we choose the type of costs we want to calculate. 
 %    With the option 'ResourceSample', we choose the resource cost sample data.
 %
-%   Syntax
+%   Syntax:
 %     res=ThermoeconomicAnalysis(data,Name,Value)
 %
-%   Input Arguments
+%   Input Arguments:
 % 	  data - cDataModel object which contains the data model
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     State - Thermoeconomic state id. If missing first sample is taken
 %       array char | string
 %     CostTables - Indicate which cost tables are calculated
@@ -25,7 +25,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %     SaveAs - Name of the file where the results will be saved. 
 %       char array | string
 %
-%   Output Arguments
+%   Output Arguments:
 %     res - cResultInfo object contains the results of thermoeconomic Analysis
 %     If DirectCost is selected (default) the following tables are obtained:
 %      dfcost: Direct Exergy Cost of flows
@@ -43,7 +43,7 @@ function res=ThermoeconomicAnalysis(data,varargin)
 %      gict: Irreversibility generalized cost table 
 %      gfict: Flows Irreversibility generalized cost table
 %
-%   Example
+%   Example:
 %     <a href="matlab:open ThermoeconomicAnalysisDemo.mlx">Thermoeconomic Analysis Demo</a>
 %
 %   See also cDataModel, cExergyCost, cResultInfo

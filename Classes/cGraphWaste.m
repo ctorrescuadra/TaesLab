@@ -5,14 +5,12 @@ classdef cGraphWaste < cGraphResults
 %   - BarGraph - all the waste flows allocation is show in a bar chart
 %   If graph is launched in a app BarPlot is always use
 %
-%   cGraphWaste Constructor
-%     obj=cGraphWaste(tbl,info,option)
+%   cGraphWaste methods:
+%     cGraphWaste  - Build an instance of the class
+%     showGraph    - Show the graph in a window 
+%     showGraphUI  - Show the graph in the graph pannel of a GUI app
 %
-%   cGraphWaste Methods
-%     showGraph   - show the graph in a window 
-%     showGraphUI - show the graph in the graph pannel of a GUI app
-%
-%   See also cGraphResults
+%   See also cGraphResults, cWasteAnalysis
 %
 	properties(Access=private)
 		isPieChart    %Pie Chart is used
@@ -26,6 +24,8 @@ classdef cGraphWaste < cGraphResults
         %     tbl - cTable with the data to show graphically
         %     info - cWasteAnalysis object with additional info
 		%     option - (true/false) indicate if PieChart is used or not
+		%   Output Arguments:
+		%     obj - cGraphWaste object
         %
 			if (nargin==2)
 				option=true;

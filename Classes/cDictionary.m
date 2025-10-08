@@ -1,20 +1,22 @@
 classdef cDictionary < cMessageLogger
 %cDictionary - Class container to store and access data by key or index.
 %   This class implements a (key, id) dictionary for TaesLab.
-%	It uses the containers.Map class
-%
-%   cDictionary constructor:
-%     obj = cDictionary(list)
+%   The keys are strings and the ids are integer numbers starting from 1.
+%   The class uses a containers.Map object to store the (key, id) pairs.
 %
 %   cDictionary methods:
-%     getKey     - Get the key associated to a index
-%     getIndex   - Get the index of a key
-%     existsKey  - Check if a key exists in the dictionary
-%	  getKeys    - Get the entries of the dictionary
+%     cDictionary - Construct an instance of this class
+%     existsKey   - Check if a key exists in the dictionary
+%     getIndex    - Get the index of a key
+%     getKey      - Get the key associated to a index
+%     getKeys     - Get all the keys of the dictionary
+%     addKey      - Add a new key to the dictionary
+%     isIndex     - Check if an index is valid
 % 
     properties(Access=protected)
         map     % containers.Map object
 	end
+
 	properties(GetAccess=public,SetAccess=protected)
 		Keys    % cell array with the keys
     end
@@ -26,10 +28,10 @@ classdef cDictionary < cMessageLogger
 		%     obj = cDictionary(data)
 		%   Input Arguments:
 		%     data - cell array with the dictionary keys
-		%   Output Argument:
+		%   Output Arguments:
 		%	 obj - cDictionary object
-		% 
-			% Check data
+		 
+			% Check input parameters
 			if iscell(data) && ~isempty(data)
                 N=length(data);
             else
@@ -58,6 +60,7 @@ classdef cDictionary < cMessageLogger
 		%     key - key name
 		%   Output Arguments:
 		%     res - true | false
+		%
 			res=obj.map.isKey(key);
 		end
 		
@@ -67,7 +70,7 @@ classdef cDictionary < cMessageLogger
 		%     res = obj.getIndex(key)
 		%   Input Arguments:
 		%     key - key name
-		%   Output Arguments
+		%   Output Arguments:
 		%     res - Index of the key.
 		%
 			res=0;
@@ -103,18 +106,10 @@ classdef cDictionary < cMessageLogger
 		% getKeys - Get the keys of the dictionary
 		%   Syntax:
 		%     res = obj.getKeys
+		%   Output Arguments:
+		%     res - cell array with the keys
+		%
 			res=obj.Keys;
-		end
-
-		function res=isIndex(obj,idx)
-		%isIndex - Check if the index is valid
-		%   Syntax:
-		%     res = obj.isIndex(idx)
-		%   Input Arguments:
-		%     idx - Index to check
-		%   Output Argument:
-		%     res - true | false
-			  res=isIndex(idx,1:length(obj));
 		end
 
 		function idx=addKey(obj,key)
@@ -123,7 +118,7 @@ classdef cDictionary < cMessageLogger
 		%     res = obj.addKey(idx)
 		%   Input Arguments:
 		%     key - key name
-		%   Output Argument:
+		%   Output Arguments:
 		%     idx - true | false
 		%
 			idx=0;
@@ -134,18 +129,49 @@ classdef cDictionary < cMessageLogger
 			end
 		end
 
+		function res=isIndex(obj,idx)
+		%isIndex - Check if the index is valid. 
+		% 	Overload isIndex function
+		%   Syntax:
+		%     res = obj.isIndex(idx)
+		%   Input Arguments:
+		%     idx - Index to check
+		%   Output Arguments:
+		%     res - true | false
+		%
+			res=isIndex(idx,1,length(obj));
+		end
+
         function res=size(obj)
-        % Overload size function
+        %size - size of the dictionary
+		%	Overload size function
+		%   Syntax:
+		%     res = obj.size
+		%   Output Arguments:
+		%     res - size of the dictionary
+		%
            res=size(obj.map);
         end
         
         function res=length(obj)
-		% Overload length function
+		%length - length of the dictionary
+		% 	Overload length function
+		%   Syntax:
+		%     res = obj.length
+		%   Output Arguments:
+		%     res - length of the dictionary
+		%
 			res=obj.map.Count;
 		end
 
 		function res=numel(obj)
-		% Overload numel function
+		%numel - number of elements of the dictionary
+		% 	Overload numel function
+		%   Syntax:
+		%     res = obj.numel
+		%   Output Arguments:
+		%     res - number of elements of the dictionary
+		%
 			res=obj.map.Count;
 		end
 	end

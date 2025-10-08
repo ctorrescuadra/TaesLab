@@ -36,9 +36,9 @@ classdef cTableIndex < cTable
         %cTableIndex - create a instance of the class
         %   Syntax:
         %     obj = cTableIndex(res)
-        %   Input Arguments
+        %   Input Arguments:
         %     res - cResultInfo object
-        %   Output Argument:
+        %   Output Arguments:
         %     obj - cTableIndex object
         % 
             % Check input parameters
@@ -70,7 +70,7 @@ classdef cTableIndex < cTable
         %getDescriptionLabel - Get table description
         %   Syntax:
         %     res = obj.getDescriptionLabel
-        %   Output Argument:
+        %   Output Arguments:
         %     res - char array with the table description
         %
             res=[obj.Description, ' - Table Index'];
@@ -80,7 +80,7 @@ classdef cTableIndex < cTable
         %printTable - Print table on console or in a file in a pretty formatted way
         %   Syntax:
         %     obj.printTable(fid)
-        %   Input Argument:
+        %   Input Arguments:
         %     fId - optional parameter 
         %       If not provided, table is show in console
         %       If provided, table is writen to a file identified by fId

@@ -1,13 +1,14 @@
 classdef (Abstract) cReadModel < cMessageLogger
 %cReadModel - Abstract class to implemenent the model reader classes.
-%   These classes generate the data model.
+%   It implements the common properties and methods of the model reader
+%   Derived classes: cReadModelStruct and cReadModelTable.
 %
-%   cReadModel Properties:
+%   cReadModel properties:
 %     ModelFile    - File name of the model
 %     ModelName    - Name of the model
 %     ModelData    - cModelData object
 %
-%   cReadModel Methods:
+%   cReadModel methods:
 %     getDataModel - Get the cDataModel object of the plant  
 %
 %   See also cReadModelStruct, cReadModelTable
@@ -20,13 +21,27 @@ classdef (Abstract) cReadModel < cMessageLogger
 
 	methods	
 		function res=getDataModel(obj)
-		% get the data model object
+		%getDataModel - Get the data model object
+		%   Syntax:
+		%     res = obj.getDataModel()
+		%   Output Arguments:
+		%     res - cDataModel object
+		%
 			res=cDataModel(obj.ModelData);
 		end
 	end
     methods(Access=protected)
 		function setModelProperties(obj,cfgfile)
-		% Set the name of the data model file
+		%setModelProperties - Set the name of the data model
+		%   Syntax:
+		%     obj.setModelProperties(cfgfile)
+		%   Input Arguments:
+		%     cfgfile - File name of the model
+		%
+			if ~ischar(cfgfile) || ~isfile(cfgfile)
+				obj.messageLog(cType.ERROR,cMessages.FileNotFound, cfgfile);
+				return
+			end
 			[~,name,ext]=fileparts(cfgfile);
             obj.ModelFile=strcat(pwd,filesep,name,ext);
 			obj.ModelName=name;

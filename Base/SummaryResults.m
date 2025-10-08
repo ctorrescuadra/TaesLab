@@ -5,13 +5,13 @@ function res = SummaryResults(data,varargin)
 %     - STATES: Comparing cost values for the different states
 %     - RESOURCES: Comparing cost values for the different resource samples
 %
-%   Syntax
+%   Syntax:
 %     res=SummaryResults(data,Name,Value)
 %
-%   Input Arguments
+%   Input Arguments:
 %     data - cReadModel object containing the data model
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     Summary - Type of Summary to obtain
 %       'NONE' No summary results are obtained
 %       'STATES' State summary is obtained
@@ -25,7 +25,7 @@ function res = SummaryResults(data,varargin)
 %     SaveAs - Name of the file to save the results
 %       char array | string
 %
-%   Output Arguments
+%   Output Arguments:
 %     res - cResultInfo object with the summary results
 %      It contains the following tables for STATES
 %       Exergy of the states (exergy)
@@ -44,7 +44,7 @@ function res = SummaryResults(data,varargin)
 %       Generalized unit cost of processes (rgpuc)
 %       Generalized cost of flows (rgfc)
 %       Generalized unit cost of flows (rgfuc)
-%   Example
+%   Example:
 %     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
 %
 %   See also cDataModel, cSummaryResults, cResultInfo

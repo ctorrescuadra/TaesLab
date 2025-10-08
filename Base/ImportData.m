@@ -1,14 +1,14 @@
 function res=ImportData(filename,varargin)
 %ImportData - Import external data to a cTableData from CSV or XLSX files.
 %
-%   Syntax
+%   Syntax:
 %     res=ImportData(filename,Name,Value)
 %  
-%   Input Arguments
+%   Input Arguments:
 %     filename - Name of the file, including .xlsx extension
 %       char array
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     Name: Name of the table. 
 %       char array       
 %     Description: Description of the table
@@ -20,10 +20,20 @@ function res=ImportData(filename,varargin)
 %       the name of the file without extension, when filename is XLSX
 %       use the name of the sheet
 %
-%   Output Arguments
-%     tbl - cTableData with the content of the file/sheet
+%   Output Arguments:
+%     tbl - cTableData object with the content of the file/sheet
 %
-%   Example
+%   Notes:
+%     - If the file is CSV, the first row is considered as header
+%       and the rest as data. If the file is XLSX, empty rows and columns
+%       are removed.
+%     - If the file is XLSX and the sheet does not exist, an error is returned.
+%     - If the file is XLSX and the sheet is not provided, the first sheet is used.
+%     - If the file is CSV or XLSX and the Name or Description are not provided,
+%       use the name of the file without extension, when filename is CSV,
+%       and use the name of the sheet when filename is XLSX.
+%
+%   Example:
 %     <a href="matlab:open ImportDataDemo.mlx">Import Data Demo</a>
 %  
 %   See also cTableData

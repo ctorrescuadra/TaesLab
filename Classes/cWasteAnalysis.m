@@ -3,9 +3,6 @@ classdef (Sealed) cWasteAnalysis < cResultId
 %   This class calculates the unit cost of output flows of the plant as function
 %   of the recycling ratio of a waste.
 %
-%   cWasteAnalysis constructor:
-%     obj = cWasteAnalysis(fpm,recycling,wkey,rsd)
-%
 %   cWasteAnalysis properties:
 %     Recycling    - Indicate if recycling is available (true | false)
 %     OutputFlows - Output flows cell array
@@ -15,9 +12,10 @@ classdef (Sealed) cWasteAnalysis < cResultId
 %     gValues     - Recycling Analysis Generalized Cost values
 %
 %   cWasteAnalysis methods:
+%     cWasteAnalysis  - Create an instance of the class
 %     buildResultInfo - Build the cResultInfo for Waste Analysis
 %
-%   See also cResultId, cExergyCost
+%   See also cResultId, cExergyCost,cResultInfo, cResourceData
 %
     properties(GetAccess=public,SetAccess=private)
         Recycling    % Indicate if recycling is available
@@ -45,6 +43,8 @@ classdef (Sealed) cWasteAnalysis < cResultId
         %     recycling - Indicating if recycling analysis is required
         %     wkey - Current waste flow key 
         %     rsd - cResourcesData object (optional)
+        %   Output Arguments:
+        %     obj - cWasteAnalysis object
         %
             % Check mandatory parameters
             if nargin < 3
@@ -119,7 +119,11 @@ classdef (Sealed) cWasteAnalysis < cResultId
     
     methods(Access=private)
         function recyclingAnalysis(obj)
-        % Do the recycling analysis for a waste flow
+        %recyclingAnalysis - Do the recycling analysis for the active waste flow
+        %   Syntax:
+        %     obj.recyclingAnalysis()
+        %
+            % Get Waste Data
             wt=obj.wasteTable;
             ps=obj.modelFP.ps;
             wId=wt.getWasteIndex(obj.wasteFlow);

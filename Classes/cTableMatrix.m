@@ -1,41 +1,64 @@
 classdef (Sealed) cTableMatrix < cTableResult
 %cTableMatrix - Implements cTableResult interface to store matrix results.
-%   It store the row/col summary of the matrix
+%   This class is derived from cTableResult. It implements methods to print the table on console,
+%   get the table as struct or as Matlab table. It stores the row/col summary of the matrix
 %
-%   cTableCell constructor
-%     obj = cTableMatrix(data,rowNames,colNames,props)
-%
-%   cTableMatrix Properties
+%   cTableMatrix properties:
 %     GraphOptions  - Options for graphs
 %     SummaryType   - Type of summary type tables
 %     RowTotal	  - Row Total is calculated
 %     ColTotal	  - Column Total is calculated
+%
+%   cTableMatrix properties (inherited from cTableResult):
+%     Format    - Format of the table columns
+%     Unit      - Units of the table columns
+%     NodeType  - Type of row key (see cType.NodeType)
+%
+%   cTableMatrix properties (inherited from cTable):
+%     Data        - Cell array with the table data
+%     Values      - Cell array with the table data including row and column names
+%     RowNames    - Cell array with the row names
+%     ColNames    - Cell array with the column names
+%     NrOfRows    - Number of rows
+%     NrOfCols    - Number of columns
+%     Name        - Name of the table
+%     Description - Description of the table
+%     State       - State Name of the data
+%     Sample      - Resource sample name
+%     Resources   - Contains reources info
+%     GraphType   - Graph Type associated to table
 % 
-%   cTableMatrix methods
-%     printTable             - Print a table on console
-%     formatData             - Get formatted data
-%     getDescriptionLabel    - Get the title label for GUI presentation
+%   cTableMatrix methods:
+%     cTableMatrix           - Create an instance of the class
 %     getMatrixValues        - Get the matrix values
 %     getStructData          - Get data as struct array
 %     getMatlabTable         - Get data as MATLAB table
 %     getStructTable         - Get a structure with the table info
+%     getDescriptionLabel    - Get the title label for GUI presentation
+%     printTable             - Print a table on console
 %     isUnitCostTable        - Check if it's a unit cost table (GraphOptions)
 %     isFlowsTable           - Check if it's a flows table (GraphOptions)
 %     isGeneralCostTable     - Check if it's a general cost table (GraphOptions)
 %     isTotalMalfunctionCost - Check if it's Total Malfunction Cost Table (GraphOptions)
 %
-%   cTable methods
-%     getProperties   - Get table properties
+%   cTableMatrix methods (inherited from cTableResult):
+%     exportTable   - Get cTable info in diferent types of variables
+%     getCellData   - Get table as cell array
+%     getProperties - Get the additional properties of a cTableResults
+%
+%   cTableMatrix methods (inherited from cTable):
+%     getColumnWidth  - Get the width of each column
+%     getColumnFormat - Get the format of each column (TEXT or NUMERIC)
+%     setColumnValues - set the values of a column
+%     setRowValues    - set the values of a row
 %     setStudyCase    - Set state and sample values
 %     setDescription  - Set Table Header or Description
-%     showTable       - Show the tables in diferent interfaces
-%     exportTable     - Export table in diferent formats
-%     saveTable       - Save a table into a file in diferent formats
-%     isNumericTable  - Check if all data of the table are numeric
-%     isNumericColumn - Check if a column data is numeric
-%     isGraph         - Check if the table has a graph associated
-%     getColumnFormat - Get the format of the columns
-%     getColumnWidth  - Get the width of the columns
+%     isNumericColumn - Check if a column is numeric
+%     isNumericTable  - Check if the table is numeric
+%     isGraph         - Check if the table is a graphic table
+%     showTable       - show the tables in diferent interfaces
+%     exportTable     - export table in diferent formats
+%     saveTable       - save a table into a file in diferent formats
 %
 %   See also cTableResult, cTable, cGraphResults
 %
@@ -64,6 +87,9 @@ classdef (Sealed) cTableMatrix < cTableResult
         %      Format: format of the data
         %      GraphType: type of graph asociated
         %      GraphOptions: options of the graph
+        %      SummaryType: type of summary table
+        %   Output Arguments:
+        %     obj - cTableMatrix object
         %
             % Compute Totals if is required          
             if props.RowTotal
@@ -191,11 +217,11 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function printTable(obj,fId)
-        %printTable - Print table on console or in a file in a pretty formatted way
+        %printTable - Display a table on console or in a file in a pretty formatted way
         %   Syntax:
         %     obj.printTable(fid)
-        %   Input Argument:
-        %     fId - optional parameter 
+        %   Input Arguments:
+        %     fId - (optional) file Id parameter.
         %       If not provided, table is show in console
         %       If provided, table is writen to a file identified by fId
         %   See also fopen
@@ -248,21 +274,45 @@ classdef (Sealed) cTableMatrix < cTableResult
         %%%%
         function res = isUnitCostTable(obj)
         %isUnitCostTable - Check if table has unit costs
+        %   It is used to define the graph axis
+        %  Syntax:
+        %     res = obj.isUnitCostTable
+        %   Output Arguments:
+        %     res - true | false
+        %
             res=bitget(obj.GraphOptions,1);
         end
 
         function res = isFlowsTable(obj)
         %isFlowtable - Check if table contains flows or processes
+        %   It is used to define the graph axis
+        %  Syntax:
+        %     res = obj.isFlowsTable
+        %   Output Arguments:
+        %     res - true | false
+        %
             res=bitget(obj.GraphOptions,2);
         end
 
         function res = isGeneralCostTable(obj)
         %isGeneralCostTable - Check if table is general cost
+        %   It is used to define the graph axis
+        %  Syntax:
+        %     res = obj.isGeneralCostTable
+        %   Output Arguments:
+        %     res - true | false
+        %
             res=bitget(obj.GraphOptions,3);
         end
 
         function res = isTotalMalfunctionCost(obj)
         %isTotalMalfunctionCost - Check if table is total malfuction cost
+        %   It is used to define the graph axis
+        %  Syntax:
+        %     res = obj.isTotalMalfunctionCost
+        %   Output Arguments:
+        %     res - true | false
+        %       
             res=bitget(obj.GraphOptions,4);
         end
     end
@@ -287,13 +337,23 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function setColumnFormat(obj)
-        % Get the format of each column (TEXT or NUMERIC)
+        %setColumnFormat - Set the format of each column (TEXT or NUMERIC)
+        %   Set the property fcol
+        %   It is used in printTable method
+        %   Syntax:
+        %     obj.setColumnFormat
+        %
             tmp=repmat(cType.ColumnFormat.NUMERIC,1,obj.NrOfCols-1);
             obj.fcol=[cType.ColumnFormat.CHAR,tmp];
         end
     
         function setColumnWidth(obj)
-        % Define the width of columns
+        %setColumnFormat - Define the width of columns
+        %   Set the property wcol
+        %   It is used in printTable method
+        %   Syntax:
+        %     obj.setColumnWidth
+        %
             lkey=max(cellfun(@length,obj.Values(:,1)))+2;
             tmp=regexp(obj.Format,'[0-9]+','match','once');
             lfmt=str2double(tmp);

@@ -1,24 +1,25 @@
 classdef (Sealed) cReadModelXLS < cReadModelTable
 %cReadModelXLS -Implement the cReadModelTable to read XLSX data model files
-%   This class read a XLSX file containing the thermoeconomic model data
+%   This class read a XLSX file containing the thermoeconomic data
 %   and build the data model
 %
-%   cReadModelCSV constructor
-%     obj=cReadModelCSV(filename)
+%   cReadModelXLS methods:
+%     cReadModelXLS - Build an instance of the class
 %
 %   See also cReadModel, cReadModelTable
 %
     methods
         function obj = cReadModelXLS(filename)
         %cReadModelXLS - Build an instance of the class
-        %   Read a XLSX data model file
+        %   Read a XLSX file containing the data model
+
         %   Syntax:
         %     obj = cReadNodelXLS(filename)
-        %   Input Argument:
+        %   Input Arguments:
 		%	  filename - xlsx file containig the model of the plant
-        %   Output Argument
+        %   Output Arguments:
         %     obj - cReadModel object
-		%
+		
             % Read configuration file
             config=getDataModelConfig(obj);
             if isempty(config)
@@ -85,10 +86,10 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
         %     xls   - XLSX filename
         %     wsht  - Worksheet of the file to read
         %     props - Properties of the table
-        %   Output Argument
+        %   Output Arguments:
         %     res - cModelTable object
         %
-            tbl=cMessageLogger;
+            tbl=cMessageLogger();
             % Read values from file
             if isOctave
 		        try

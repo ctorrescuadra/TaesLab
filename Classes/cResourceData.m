@@ -1,8 +1,7 @@
 classdef cResourceData < cMessageLogger
-%cResourceData - Gets and validates the external cost resources of a system.
-% 
-%   cResourceData constructor:
-%     obj = cResourceData(ps, data)
+%cResourceData - Gets and validates the external cost resources of a productive structure.
+%   This class reads, validates and stores the external cost resources based on the data
+%   provided by the model.
 %
 %   cResourceData properties:
 %     sample  - Resource sample name
@@ -10,7 +9,8 @@ classdef cResourceData < cMessageLogger
 %     c0      - Unit cost of external resources
 %     Z       - Cost associated to processes
 %
-%   cResourceData	methods:
+%   cResourceData methods:
+%     cResourceData           - Creates an instance of the class
 %	  setFlowResource         - Set the unit cost of resource flows
 %     setProcessResource      - Set the values of external cost of processes
 %	  getResourceCost         - Get the corresponding cResourceCost object
@@ -21,6 +21,7 @@ classdef cResourceData < cMessageLogger
 		c0      % Unit cost of external resources
 		Z       % Cost associated to processes
 	end
+
 	properties(Access=private)
 		ps      % Productive Structure
 	end
@@ -33,9 +34,9 @@ classdef cResourceData < cMessageLogger
 		%   Input Arguments:
 		%	  ps - cProductiveStructure object
         %	  data - resource data sample
-		%   Output Argument:
+		%   Output Arguments:
 		%     obj - cResourceData object
-		%
+		
 		    % Check arguments and initilize class
 			if ~isObject(ps,'cProductiveStructure')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
@@ -79,16 +80,16 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setFlowResource(obj,values)
-        %setFlowResourceData - Set the flow-resource value of a sample
+        %setFlowResourceData - Set the flow-resource values of the current sample
         %   Syntax:
         %     log = obj.setFlowResourceData(sample,values)
         %   Input Arguments:
-        %     sample - Sample key/id
         %     values - Array or key/value struct containing the flow-resource values
-        %   Output Argument:
+        %   Output Arguments:
         %     log - cMessageLogger with the operation status and errors
         %
             log=cMessageLogger();
+			% Check input values
             if isstruct(values)
                 lrsd=obj.setFlowResourceData(values);
                 log.addLogger(lrsd);
@@ -101,16 +102,16 @@ classdef cResourceData < cMessageLogger
         end
 
         function log=setProcessResource(obj,values)
-        %setProcessResourceData - Set the process-resource value of a sample
+        %setProcessResourceData - Set the process-resource value of the current sample
         %   Syntax:
         %     log = obj.setProcessResourceData(sample,values)
         %   Input Arguments:
-        %     sample - Sample key/id
         %     values - Array or key value struct containing the process-resource values
-        %   Output Argument:
+        %   Output Arguments:
         %     log - cMessageLogger with the operation status and errors
         %
             log=cMessageLogger();
+			% Check input values
             if isstruct(values)
                 lrsd=obj.setProcessResourceData(values);
                 log.addLogger(lrsd);
@@ -123,12 +124,12 @@ classdef cResourceData < cMessageLogger
         end
 
 		function res=getResourceCost(obj,exm)
-		%getResourceCost - Get cResourceCost object
+		%getResourceCost - Get the current cResourceCost object
 		%   Syntax:
 		%     log=getResourceCost(obj,exm)
 		%   Input Arguments:
 		%     exm - cExergyModel object
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - cResourceCost object
 		%
 			res=cResourceCost(obj,exm);
@@ -138,12 +139,12 @@ classdef cResourceData < cMessageLogger
 
 	methods(Access=private)
 		function res=getResourceIndex(obj,key)
-		%getResourceIndex - Get the index of resource key
+		%getResourceIndex - Get the index of a resource key
 		%   Syntax:
 		%     log=getResourceIndex(obj,exm)
 		%   Input Arguments:
 		%     key - Flow key
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - Flow index
 		%
 			res=0;
@@ -158,11 +159,12 @@ classdef cResourceData < cMessageLogger
 		%    Syntax:
 		%      log=setFlowsResourceData(obj,Z)
 		%    Input Arguments:
-		%      sz - key/value structure with the unit cost of resource flows
-		%    Output Argument:
+		%      se - key/value structure with the unit cost of resource flows
+		%    Output Arguments:
 		%      log - cMessageLog object with messages and errors
 		%               
 			log=cMessageLogger();
+			% Check input values
 			if ~all(isfield(se,cType.KEYVAL))
 				log.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return	
@@ -185,10 +187,11 @@ classdef cResourceData < cMessageLogger
 		%     log=setFlowResource(obj,Z)
 		%   Input Arguments:
 		%     c0 - Resources flows unit cost values array
-		%   Output Argument:
+		%   Output Arguments:
 		%     log - cMessageLog object with messages and errors
 		%
 			log=cMessageLogger();
+			% Check input values
             if length(c0) ~= obj.ps.NrOfFlows	
 				log.messageLog(cType.ERROR,cMessages.InvalidSize,length(c0));
 				return
@@ -214,10 +217,11 @@ classdef cResourceData < cMessageLogger
 		%      log=setProcessResource(obj,Z)
 		%    Input Arguments:
 		%      sz - key/value structure with the resource cost of processes
-		%    Output Argument:
+		%    Output Arguments:
 		%      log - cMessageLog object with messages and errors
 		%        
 			log=cMessageLogger();
+			% Check input values
 			if ~all(isfield(sz,cType.KEYVAL))
 				log.messageLog(cType.ERROR,cMessages.InvalidResourceModel);
 				return	
@@ -240,10 +244,11 @@ classdef cResourceData < cMessageLogger
 		%      log=setProcessResource(obj,Z)
 		%    Input Arguments:
 		%      Z - Resources cost processes values array
-		%    Output Argument:
+		%    Output Arguments:
 		%      log - cMessageLog object with messages and errors
 		%
 			log=cMessageLogger();
+			% Check input values
             if length(Z) ~= obj.ps.NrOfProcesses
 				log.messageLog(cType.ERROR,cMessages.InvalidZSize,length(Z));
 				return

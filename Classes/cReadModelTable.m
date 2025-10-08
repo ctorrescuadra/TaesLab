@@ -1,7 +1,19 @@
 classdef (Abstract) cReadModelTable < cReadModel
 %cReadModelTable - Abstract class to read table data model.
-%   This class derives cReadModelCSV and cReadmodelXLS
-%	
+%   It implements the common properties and methods of the model reader
+%   based on tables. The data model configuration is stored in the file
+%   printconfig.json, located in the Classes folder.
+%   The data from tables is stored in cModelTable objects, which are stored
+%   in the ModelTables property as a structure. Each table is identified by
+%   its name. The model is built from the data stored in these tables.
+%   Derived classes: cReadModelCSV and cReadmodelXLS.
+%   It is derived from cReadModel.
+%
+%   cReadModelTable methods:
+%     getDataModelConfig - Get data model configuration
+%     buildModelData     - Build the cModelData from data tables
+%     printModelTables   - Show the model tables on console
+%
 %   See also cReadModel, cReadModelXLS, cReadModelCSV
 %
 	properties (Access=public)
@@ -48,15 +60,21 @@ classdef (Abstract) cReadModelTable < cReadModel
 
         function res=buildModelData(obj,tm)
         %buildModelData - Build the cModelData from data tables
+        %   Syntax:
+        %     res = obj.buildModelData(tm)
         %   Input Arguments:
-        %     tm - Structure containing the tables
-        %   Output Arguments
+        %     tm - Structure containing the cModelTable objects
+        %   Output Arguments:
         %     res - cModelData object
         %
-            % Initialize
             res=cMessageLogger();
+            % Check input
+            if ~isstruct(tm) || isempty(fieldnames(tm))
+                obj.messageLog(cType.ERROR,cMessages.InvalidModelTables);
+                return
+            end
+            % Check and build Model Data
             sd=struct();
-            % Check Model Data
             sd.Format.definitions=tm.Format.getStructData;
             sd.ProductiveStructure=checkProductiveStructure(obj,tm);
             if obj.status
@@ -81,14 +99,13 @@ classdef (Abstract) cReadModelTable < cReadModel
         %
             res=cType.EMPTY;
             % Flows table
-            ftbl=tm.Flows;
-            obj.fkeys=ftbl.Keys;
-            if ftbl.status
-                res.flows=ftbl.getStructData;
-            else
+            if ~isfield(tm,'Flows') || ~isValid(tm.Flows)
                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Flows');
                 return
             end
+            ftbl=tm.Flows;
+            obj.fkeys=ftbl.Keys;
+            res.flows=ftbl.getStructData;
             % Check Flows types
             cid=find(strcmp(ftbl.Fields,'type'),1);
             if isempty(cid)
@@ -105,14 +122,13 @@ classdef (Abstract) cReadModelTable < cReadModel
                 end
             end
             % Processes table
-            ptbl=tm.Processes;
-            obj.pkeys=ptbl.Keys;
-            if ptbl.status
-                res.processes=ptbl.getStructData;
-            else
+            if ~isfield(tm,'Processes') || ~isValid(tm.Processes)
                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Processes');
                 return
             end
+            ptbl=tm.Processes;
+            obj.pkeys=ptbl.Keys;
+            res.processes=ptbl.getStructData;
             % Check Processes types
             cid=find(strcmp(ptbl.Fields,'type'),1);
             if isempty(cid)
@@ -141,11 +157,11 @@ classdef (Abstract) cReadModelTable < cReadModel
         %
             res=cType.EMPTY;
             % Check table status
-            tbl=tm.Exergy;
-            if ~tbl.status
+            if ~isfield(tm,'Exergy') || ~isValid(tm.Exergy)
                 obj.messageLog(cType.ERROR,cMessages.TableNotFound,'Exergy');
                 return
             end
+            tbl=tm.Exergy;
             % Check keys against flow keys
             if ~isequal(tbl.Keys,obj.fkeys)
                 obj.messageLog(cType.ERROR,cMessages.InvalidExergyKeys);

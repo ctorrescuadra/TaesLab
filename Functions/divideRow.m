@@ -3,24 +3,24 @@ function B=divideRow(A,x)
 % 	Compute B(i,j)=A(i,j)/x(i)
 % 	If x is not provided, the columns of the matrix are scaled by its sum
 %
-%	Syntax
+%	Syntax:
 %		B=divideRow(A,x)
 %  	
-%	Input Arguments
+%	Input Arguments:
 %		A - Matrix to be scaled
 %		x - scale vector (optional)
 %  	
-%	Output Arguments
+%	Output Arguments:
 %		B - Scaled Matrix
 %
-%	Examples
+%	Examples:
 %		A = [1 2; 3 4];
 %		x = [1; 2];
 %		B = divideRow(A,x) % returns [1 2; 1.5 2]
 %		B = divideRow(A) % returns [0.3333 0.6667; 0.4286 0.5714]
 %
 %   See also scaleCol, scaleRow, divideCol
-%  
+  
 	% Check Input
 	if nargin < 1 || ~ismatrix(A) || ~isnumeric(A)
 		error('ERROR: divideCol. First argument must be a numeric matrix');

@@ -1,11 +1,9 @@
 classdef (Sealed) cModelResults < cMessageLogger
     %cModelResults - Class container for the model results.
     %   This class store the results of cThermoeconomicModel according to its ResultId
-    %
-    %   cModelResults constructor:
-    %     obj = cModelResults(data)
     %   
     %   cModelResults methods:
+    %     cModelResults   - Construct an instance of this class
     %     getResults      - Get a cResultInfo from the container
     %     setResults      - Store a cResultInfo in the container
     %     clearResults    - Delete a cResultInfo from the container
@@ -26,7 +24,9 @@ classdef (Sealed) cModelResults < cMessageLogger
         %     obj = cModelResults(data)
         %   Input Arguments:
         %     data - cDataModel object
-        %
+        %   Output Arguments:
+        %     obj  - cModelResults object
+        
             % Check inputs
             if ~isObject(data,'cDataModel')
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(data));
@@ -43,14 +43,14 @@ classdef (Sealed) cModelResults < cMessageLogger
         %   Syntax:
         %     res = obj.getResults(id)
         %   Input Arguments:
-        %     id - ResultId index
+        %     id - ResultId index to get from the container
         %   Output Arguments:
         %     res - cResultInfo for the corresponding index
         %
             res=cType.EMPTY;
             if nargin==1
                 res=obj.results;
-            elseif isIndex(id,1:cType.MAX_RESULT_INFO)
+            elseif isIndex(id,1,cType.MAX_RESULT_INFO)
                 res=obj.results{id};
             end
         end
@@ -63,7 +63,7 @@ classdef (Sealed) cModelResults < cMessageLogger
         %     id - ResultId index to remove from the container
         %   Output Arguments:
         %     res - previous cResultInfo stored
-            if ~isIndex(id,1:cType.MAX_RESULT_INFO)
+            if ~isIndex(id,1,cType.MAX_RESULT_INFO)
                 return
             end
             res=obj.getResults(id);
@@ -80,8 +80,8 @@ classdef (Sealed) cModelResults < cMessageLogger
         %   Syntax:
         %     obj.setResults(id)
         %   Input Arguments:
-        %     res   - cResultInfo to store
-        %     force - store without comparison
+        %     res   - cResultInfo to store in the container
+        %     force - (optional) Force to store the result without comparison
         %       true | false (default)
         %
             if ~isObject(res,'cResultInfo')
@@ -122,7 +122,8 @@ classdef (Sealed) cModelResults < cMessageLogger
         %     obj1 - Current cResultInfo object
         %     obj2 - New cResultInfo object
         %   Output Arguments:
-        %     res - true | false
+        %     res  - true if obj1 should be assigned to obj2
+        %           
             % Check if obj2 is valid
             if ~isObject(obj2,'cResultInfo')
                 res=false;

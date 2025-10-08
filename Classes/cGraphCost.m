@@ -1,14 +1,14 @@
 classdef cGraphCost < cGraphResults
 %cGraphCost - Plot the Irreversibility-cost graph.
+%   This class creates a stacked bar graph from a cTable object
+%   containing the irreversibility-cost data of a productive structure.
 %
-%   cGraphCost Constructor
-%     obj=cGraphCost(tbl)
+%   cGraphCost methods:
+%     cGraphCost  - Build an instance of the class
+%     showGraph   - Show the graph in a window 
+%     showGraphUI - Show the graph in the graph pannel of a GUI app
 %
-%   cGraphCost Methods
-%     showGraph   - show the graph in a window 
-%     showGraphUI - show the graph in the graph pannel of a GUI app
-%
-%   See also cGraphResults
+%   See also cGraphResults, cExergyCost
 %
     methods
         function obj=cGraphCost(tbl)
@@ -17,6 +17,8 @@ classdef cGraphCost < cGraphResults
         %     obj = cGraphRecycling(tbl)
         %   Input Arguments:
         %     tbl - cTable with the data to show graphically
+        %   Output Arguments:
+        %     obj - cGraphCost object
         %
             obj.Name=tbl.Description;
             obj.Title=[tbl.Description,' [',tbl.State,']'];

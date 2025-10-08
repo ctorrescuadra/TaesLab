@@ -1,8 +1,8 @@
 classdef cWasteData < cMessageLogger
 %cWasteData - Get the waste data information.
-%
-%   cWasteData constructor:
-%     obj = cWasteData(ps,data)
+%   This class is used to store and manage the waste data information.
+%   It is used by cExergyCost to perform the waste allocation and recycling
+%   analysis.
 %
 %   cWasteData properties:
 %     NrOfWastes    - Number of wastes
@@ -15,6 +15,7 @@ classdef cWasteData < cMessageLogger
 %     RecycleRatio  - Recycle Ratio
 %
 %   cWasteData methods:
+%	  cWasteData      - Create an instance of the class
 %     getWasteFlows    - Get the waste flows key
 %     getWasteIndex    - Get the waste flows index
 %     existWaste       - Check if a waste flow is defined
@@ -41,12 +42,14 @@ classdef cWasteData < cMessageLogger
     
 	methods
 		function obj=cWasteData(ps,data)
-		% Class constructor
-		% Syntax:
-		%   obj = cWasteData(ps,data)
-		% Input Arguments
-		%	ps - cProductiveStructure object
-		%	data - waste definition from cModelData
+		%cWasteData - Create an instance of the class
+		%   Syntax:
+		%   	obj = cWasteData(ps,data)
+		% 	Input Arguments:
+		%     ps - cProductiveStructure object
+		%	  data - waste definition from cModelData
+		%   Output Arguments:
+		%     obj - cWasteData object
 		%
 			% Check input arguments
             if ~isObject(ps,'cProductiveStructure')
@@ -161,13 +164,8 @@ classdef cWasteData < cMessageLogger
 				res=obj.Names;
                 return
 			end
-			if ~isIndex(idx,1:obj.NrOfWastes)
-				return
-			end
-			if isscalar(idx)
-                res=obj.Names{idx};
-            else
-                res=obj.Names(idx);
+			if isIndex(idx,1,obj.NrOfWastes)
+				res=obj.Names(idx);
 			end
 		end
 			
@@ -175,9 +173,9 @@ classdef cWasteData < cMessageLogger
 		%getWasteIndex - Get the id of the corresponding waste key
 		%   Syntax:
 		%     res = obj.getWasteIndex(key)
-		%   Input Argument:
+		%   Input Arguments:
 		%     key - waste flow name
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - waste flow id
 		%
 			res=0;
@@ -190,9 +188,9 @@ classdef cWasteData < cMessageLogger
 		%existWaste - Determine if waste key is defined
 		%   Syntax:
 		%     res = obj.existWaste(key)
-		%   Input Argument:
+		%   Input Arguments:
 		%    key - waste flow name
-		%   Output Argument:
+		%   Output Arguments:
 		%    res - true | false
 		%
 			res=false;
@@ -247,9 +245,9 @@ classdef cWasteData < cMessageLogger
 		%getType - Get the waste allocation type
 		%   Syntax:
 		%     res = obj.getType(arg)
-		%   Input Argument:
+		%   Input Arguments:
 		%     arg - waste key or id
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - waste type 
 		%
 			res=cType.EMPTY_CHAR;
@@ -286,9 +284,9 @@ classdef cWasteData < cMessageLogger
 		%getRecycleRatio - Get the recycle ratio value of a waste
 		%   Syntax:
 		%     res = obj.RecycleRatio(arg)
-		%   Input Argument:
+		%   Input Arguments:
 		%     arg - waste key or id
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - waste recycle ratio
 		%
 			res=cType.EMPTY;
@@ -322,9 +320,9 @@ classdef cWasteData < cMessageLogger
 		%updateValues - Set the waste table values (internal use)
 		%   Syntax:
 		%     status=val=updateValues(val)
-		%   Input Argument:
+		%   Input Arguments:
 		%     val - Waste allocation matrix
-		%   Output Argument
+		%   Output Arguments:
 		%     status - true | false
 		%
 			status=false;
@@ -340,15 +338,15 @@ classdef cWasteData < cMessageLogger
 		%validateArgument - Get the index of a waste key
 		% 	Syntax:
 		%     res = obj.validateArgument(arg)
-		%   Input Argument:
+		%   Input Arguments:
 		%     arg - waste key or index
-		%   Output Argument:
+		%   Output Arguments:
 		%     res - waste key index
 		%
 			res=cType.EMPTY;
 			if ischar(arg)
 				res=obj.getWasteIndex(arg);
-			elseif isIndex(arg,1:obj.NrOfWastes)
+			elseif isIndex(arg,1,obj.NrOfWastes)
 				res=arg;
 			end
 		end

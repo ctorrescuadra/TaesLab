@@ -19,7 +19,7 @@ classdef (Sealed) TaesPanel < handle
 %   If the result is selected in the Result menu, it is saved in the workspace
 %   to work with it interactively.
 %
-%   Syntax
+%   Syntax:
 %     app=TaesPanel;
 %
 %   See also cThermoeconomicModel
@@ -51,7 +51,7 @@ classdef (Sealed) TaesPanel < handle
 
     % Application variables
     properties(GetAccess=public,SetAccess=private)
-        model;
+        model           % cThermoeconomicModel object
     end
 
 	properties(Access=private)
@@ -72,7 +72,7 @@ classdef (Sealed) TaesPanel < handle
 
     methods
         function app=TaesPanel()
-        % Create an instance of the object
+        %TaesPanel - Create an instance of the object
             app.model=cMessageLogger(cType.INVALID);
             % Create GUI components
             createComponents(app);
@@ -84,9 +84,11 @@ classdef (Sealed) TaesPanel < handle
 		%%%%%%%%%%%%%%%%%%%%%%%%%%
 		% Callback Functions
 		%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % Get data model file callback
 		function getFile(app,~,~)
-		    % Select file and path
+		%getFile - Get the data model file using uigetfile
+		%   Syntax:
+		%     app.getFile()
+		%
 			app.initInputParameters;
             [file,path]=uigetfile({'*.json;*.csv;*.xlsx;*.xml;*.mat','Suported Data Models'});
 			if file
@@ -151,7 +153,10 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function activateRecycling(app,~,~)
-        % Get activate Summary callback
+        %activateRecycling - Activate Recycling callback
+        %   Syntax:
+        %     app.activateRecycling()
+        %
             val=get(app.ra_checkbox,'value');
             setRecycling(app.model,logical(val));
             if val
@@ -162,7 +167,9 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function getSummary(app,~,~)
-		% Get activate Summary callback
+		%getSummary - Activate Summary callback
+        %   Syntax:
+        %     app.getSummary()
             value=TaesPanel.getPopupValue(app.sr_popup);
             setSummary(app.model,value);
 			if isSummaryActive(app.model)
@@ -175,14 +182,20 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function getCostTables(app,~,~)
-		% Select Cost Table callback
+		%getCostTables - Select Cost Table callback
+        %   Syntax:
+        %     app.getCostTables()
+        %
             value=TaesPanel.getPopupValue(app.tables_popup);
             setCostTables(app.model,value);
             app.ViewIndexTable(app.model.thermoeconomicAnalysis);
         end
 
 		function getState(app,~,~)
-		% Get state callback
+		%getState - Get state callback
+        %   Syntax:
+        %     app.getState()
+        %
             value=TaesPanel.getPopupValue(app.state_popup);
 			setState(app.model,value);
             if app.model.isDiagnosis
@@ -194,7 +207,10 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function getReferenceState(app,~,~)
-		% Get state callback
+		%getReferenceState - Get reference state callback
+        %   Syntax:
+        %     app.getReferenceState()
+        %
             value=TaesPanel.getPopupValue(app.state_popup);
 			setReferenceState(app.model,value);
             if app.model.isDiagnosis
@@ -207,14 +223,19 @@ classdef (Sealed) TaesPanel < handle
 		end
 
 		function getSample(app,~,~)
-		% Get Resources Sample callback
+		%getSample - Get Resources Sample callback
+        %   Syntax:
+        %     app.getSample()
             value=TaesPanel.getPopupValue(app.sample_popup);
 			app.model.setResourceSample(value);
             app.ViewIndexTable(app.model.thermoeconomicAnalysis);
         end
 
 		function getDiagnosisMethod(app,~,~)
-		% Get WasteDiagnosis callback
+		%getDiagnosisMethod - Get WasteDiagnosis callback
+        %   Syntax:
+        %     app.getDiagnosisMethod()
+        %
             value=TaesPanel.getPopupValue(app.tdm_popup);
             setDiagnosisMethod(app.model,value);
             if isDiagnosis(app.model)
@@ -227,14 +248,21 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function getActiveWaste(app,~,~)
-        % Get WasteDiagnosis callback
+        %getActiveWaste - Get Active Waste callback
+        %   Syntax:
+        %     app.getActiveWaste()
+
             value=TaesPanel.getPopupValue(app.wf_popup);
             setActiveWaste(app.model,value);
             app.ViewIndexTable(app.model.wasteAnalysis);
         end
 
 		function saveResult(app,~,~)
-		% Save results callback
+		%saveResult - Save results callback
+        %   Syntax:
+        %     app.saveResult()
+        %
+            set(app.log,'string',cType.EMPTY_CHAR);
 			default_file=app.resultFile;
 			[file,path,ext]=uiputfile(cType.SAVE_RESULTS,'Select File',default_file);
             if ext % File has been selected
@@ -254,7 +282,10 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function showIndexTable(app,src,~)
-        % Show Index Table callback
+        %showIndexTable - Show Index Table callback
+        %   Syntax:
+        %     app.showIndexTable(src)
+
             set(app.log,'string',cType.EMPTY_CHAR);
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
@@ -267,8 +298,11 @@ classdef (Sealed) TaesPanel < handle
         end
     
         function getResult(app,src,~)
-        % Get Results callback
-        % Store the selected result into workspace
+        %getResult - Get Results callback
+        %   Store the selected result into workspace
+        %   Syntax:
+        %     app.getResult(src)
+        %
             set(app.log,'string',cType.EMPTY_CHAR);
             idx=get(src,'UserData');
             res=getResultInfo(app.model,idx);
@@ -283,19 +317,30 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function getDataModel(app,~,~)
-        % Get Data model callback
-        % Store the cDataModel object into workspace
+        %getDataModel - Get Data model callback
+        %   Store data model object into workspace
+        %   Syntax:
+        %     app.getDataModel()
+        %
             assignin('base', 'data', app.model.DataModel);
         end
 
         function getResultModel(app,~,~)
-        % Get Result model callback
-        % Store model object into workspace
+        %getResultModel - Get Result model callback
+        %   Store model object into workspace
+        %   Syntax:
+        %     app.getResultModel()
+        %
             assignin('base', 'model', app.model);
         end
 
         function setDebug(app,evt,~)
-        % Menu Debug callback
+        %setDebug - Menu Debug callback
+        %   Syntax:
+        %     app.setDebug(evt)
+        %   Input Arguments:
+        %     evt - Menu handle
+        %
             val=~app.debug;
             check=cType.log2text(val);
             app.debug=val;
@@ -306,7 +351,12 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function setConsole(app,src,~)
-        % Menu Console callback
+        %setConsole - Menu Console callback
+        %   Syntax:
+        %     app.setConsole(src)
+        %   Input Arguments:
+        %     src - Menu handle
+        %
             val=~app.console;
             check=cType.log2text(val);
             app.console=val;
@@ -319,7 +369,12 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function setPanel(app,src,~)
-        % Menu Panel callback
+        %setPanel - Menu Panel callback
+        %   Syntax:
+        %     app.setPanel(src)
+        %   Input Arguments:
+        %     src - Menu handle
+        %
             val=~app.panel;
             check=cType.log2text(val);
             app.panel=val;
@@ -333,8 +388,10 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function synchronizeParameters(app,~,~)
-        % Menu Synchronize callback. 
+        %synchronizeParameters - Menu Synchronize callback.
         %   Synchronize the widgets with thermoeconomic model parameters 
+        %   Syntax:
+        %     app.synchronizeParameters()
             tm=app.model;
             tdm_pos=cType.getDiagnosisMethod(tm.DiagnosisMethod)+1;
             set(app.sr_popup,'value',tm.Summary);
@@ -358,13 +415,20 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function aboutTaes(~,~,~)
-        % About TaesTool callback
-        % Show TaesLab web page
+        %aboutTaes - About TaesTool callback
+        %   Show TaesLab web page
+        %   Syntax:
+        %     app.aboutTaes()
+        %
             web('https://www.exergoecology.com/TaesLab');
         end
 
         function closeApp(app,~,~)
-        % Close callback
+        %closeApp - Close callback
+        %   Close the application
+        %   Syntax:
+        %     app.closeApp()
+        %
             if isValid(app.resPanel)
                 app.resPanel.closeApp;
             end
@@ -375,7 +439,12 @@ classdef (Sealed) TaesPanel < handle
 		% Methods
 		%%%%%%%%%%%%%%%%%%%%%%%
         function ViewIndexTable(app,res)
-        % View the index table into the table panel
+        %ViewIndexTable - View the index table into the table panel
+        %   Syntax:
+        %     app.ViewIndexTable(res)
+        %   Input Arguments:
+        %     res - cResultInfo object
+        %
             if isempty(res)
                 return
             end
@@ -390,13 +459,23 @@ classdef (Sealed) TaesPanel < handle
         end
 
         function disableResults(app,id)
-        % Disable menus and toolbar results
+        %disableResults - Disable menus and toolbar results
+        %   Syntax:
+        %     app.disableResults(id)
+        %   Input Arguments:
+        %     id - Result ID
+        %
             set(app.menu{id},'Enable','off');
             set(app.ptb{id},'Enable','off');
         end
 
         function enableResults(app,id)
-        % Enable menu and toolbar results
+        %enableResults - Enable menu and toolbar results
+        %   Syntax:
+        %     app.enableResults(id)
+        %   Input Arguments:
+        %     id - Result ID
+        %
             set(app.menu{id},'Enable','on');
             set(app.ptb{id},'Enable','on');
         end
@@ -405,7 +484,10 @@ classdef (Sealed) TaesPanel < handle
         % Create User Interface
         %%%%%%%%%%%%%%%%%%%%%%%%%
         function createComponents(app)
-        % Create Figure Components
+        %createComponents - Create Figure Components
+        %   Syntax:
+        %     app.createComponents()
+
 			% Determine the scale depending on screen size
             ss=get(groot,'ScreenSize');
             xsize=400; ysize=480;
@@ -661,6 +743,11 @@ classdef (Sealed) TaesPanel < handle
         end
 
 		function initInputParameters(app)
+        %initInputParameters - Initialize input parameters
+        %   Syntax:
+        %     app.initInputParameters()
+        %
+            set(app.log,'string',cType.EMPTY_CHAR);
 		    % Initialize widgets
 			set(app.mfile_text,'backgroundcolor',[1 0.5 0.5]);
             set(app.mn_save,'enable','off');
@@ -679,9 +766,16 @@ classdef (Sealed) TaesPanel < handle
             arrayfun(@(i) app.disableResults(i), 1:cType.MAX_RESULT_INFO);
 		end
     end
-    methods(Static,Access=private)
-    % Get the selected value in the popup downdrop widget
+    methods(Static,Access=private) 
         function res=getPopupValue(popup)
+        %getPopupValue - Get the selected value in the popup downdrop widget
+        %   Syntax:
+        %     res=TaesPanel.getPopupValue(popup)
+        %   Input Arguments:
+        %     popup - Popup handle
+        %   Output Arguments:
+        %     res - Selected string
+        %
             list=get(popup,'string');
 			idx=get(popup,'value');
             res=list{idx};

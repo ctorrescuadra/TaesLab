@@ -1,6 +1,8 @@
 classdef cQueue < cTaesLab
 %cQueue - Simple FIFO queue based on a dinamic cell array
-%   Internal use only
+%   This class implements a simple FIFO queue based on a dinamic cell array.
+%   It is used in cParseStream to store the flows while parsing a stream text,
+%   and in cMessageLogger to store the messages.
 %
 %   cQueue properties:
 %     Count - Number of elements of the queue
@@ -23,7 +25,12 @@ classdef cQueue < cTaesLab
     
     methods
         function obj = cQueue()
-        %cQueue - Create a cQueue object. Initialize as a empty cell array 
+        %cQueue - Create a cQueue object. Initialize as a empty cell array
+        %   Syntax:
+        %     obj = cQueue()
+        %   Output Arguments:
+        %     obj - cQueue object
+        %
             obj.clear;
         end
         
@@ -36,26 +43,27 @@ classdef cQueue < cTaesLab
         %add - Add an element at the end of the queue
         %   Syntax:
         %     obj.add(element)
-        %   Input Argument:
-        %     element - element to add to the queue 
+        %   Input Arguments:
+        %     element - Element to add at the end of the queue
+        %              
             obj.buffer{end+1} = element;
         end
         
-        function obj = clear(obj)
+        function clear(obj)
         %clear - Clear the queue
         %   Syntax: 
-        %     obj.clear
-        %   Output Argument
-        %     obj - Current obj
+        %     obj.clear()
+        %
             obj.buffer = cType.EMPTY_CELL;
         end
 
-        function obj = addQueue(obj, queue)
+        function addQueue(obj, queue)
         %addQueue - Add another queue at the end of this queue
         %   Syntax:
         %     obj.addQueue(queue)
-        %   Output Argument
-        %     obj - Current obj   
+        %   Input Arguments:
+        %     queue - cQueue object to add at the end of this queue
+        %
             if ~isempty(queue.buffer)
                 obj.buffer = [obj.buffer, queue.buffer];
             end
@@ -65,9 +73,9 @@ classdef cQueue < cTaesLab
         %getContent - get the content of the queue
         %   Syntax:
         %     res=obj.getContent(idx)
-        %   Input Argument:
+        %   Input Arguments:
         %     idx - Index of the cell array to obtain (optional)
-        %   Output Argument:
+        %   Output Arguments:
         %     res - If index if provided the value of the specific position of the queue
         %           if not provided return a cell array with all values of the queue
             if nargin==1
@@ -81,27 +89,23 @@ classdef cQueue < cTaesLab
         %printContent - Print the content of the buffer
         %   Syntax:
         %     obj.printContent
+        %
             arrayfun(@(i) disp(obj.buffer{i}), 1:obj.Count);
         end
         
-        function res=size(obj,dim)
-        % overload size function
-            tmp=[obj.Count 1];
-            if nargin==1
-                res=tmp;
-            else
-                res=tmp(dim);
-            end
+        function res=size(obj)
+        %size - Size of the queue. Overload size function
+            res=size(obj.buffer);
         end
     
         function res=length(obj)
-        % overload length function
-            res=size(obj,1);
+        %length - Leght of the queue. Overload length function
+            res=lenght(obj.buffer);
         end
     
         function res=numel(obj)
-        % overload numel function
-            res=size(obj,1);
+        %numel - Number of elements of the queue. Overload numel function
+            res=numel(obj.buffer);
         end
         
     end

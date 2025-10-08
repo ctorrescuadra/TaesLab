@@ -1,24 +1,24 @@
 function x = vDivide(arg1,arg2)
 %vDivide - Element-wise right division. Overload operator rdivide when 0/0.
-%   If the value is NaN or Inf it returns zero
+%   If the value is NaN it returns zero
 %
-%   Syntax
+%   Syntax:
 %     x = vDivide(arg1, arg2)
 %   
-%   Input Arguments
+%   Input Arguments:
 %     arg1, arg2 - vector arguments for rdivide
 %   
-%   Output Argument
+%   Output Arguments:
 %     x - result vector if x(i) is NaN return 0.
 %
-%   Example
+%   Example:
 %     a = [1, 0, 3];
 %     b = [1, 2, 3];
 %     x = vDivide(a, b); %x = [1, 0, 1]
 %
 %   See also rdivide, zerotol
-%
-    % Check Input Arguments
+
+    % Check Input Arguments:
     if nargin ~= 2
         error('ERROR: vDivide. Requires two input arguments');
     end 

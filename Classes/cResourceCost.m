@@ -1,8 +1,7 @@
 classdef cResourceCost < cMessageLogger
 %cResourceCost - Compute the resource cost properties for a state.
-%
-%   cResourceCost constructor
-%     obj = cResourceCost(rsd, exm)
+%   This class computes the resource cost properties of a state based on
+%   the resource data and exergy model provided.
 %
 %   cResourceCost properties:
 %     sample  - Resource sample name
@@ -12,6 +11,11 @@ classdef cResourceCost < cMessageLogger
 %     Z       - Cost associated to processes
 %     zP      - Cost associated to process per unit of Product
 %     zF      - Cost associated to process per unit of Fuel
+%
+%   cResourceCost methods:
+%     cResourceCost - Create an instance of the class
+%
+%   See also cResourceData, cExergyModel
 %
 	properties (GetAccess=public, SetAccess=private)
 		sample  % Resource sample name
@@ -28,9 +32,11 @@ classdef cResourceCost < cMessageLogger
 		%cResourceCost - Create an instance of the class
 		%   Syntax:
 		%     obj = cResourceCost(rsd, exm)
-		%   Input Argument:
+		%   Input Arguments:
 		%	  rsd - cResourceData object
 		%	  exm - cExergyModel object with state information
+		%   Output Arguments:
+		%     obj - cResourceCost object
 		%
 			if ~isObject(rsd,'cResourceData')
 				rsd.messageLog(cType.ERROR,cMessages.InvalidObject,class(rsd));

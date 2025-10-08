@@ -6,17 +6,15 @@ classdef cMessageBuilder < cTaesLab
 %     cType.WARNING - Non critical error
 %     cType.INFO - Informs that an operation finished correctly
 %
-%   cMessageBuilder constructor:
-%     obj = cMessageBuilder(type,class,text)
-%
-%   cMessageBuilder properties
+%   cMessageBuilder properties:
 %     Error - Type of message error code
 %     Class - Name of the class which generate the error
 %     Text  - Text of the message
 %
 %   cMessageBuilder methods:
-%     getMessage - get the text of the message including type and class
-%     disp - show the message on console. Overload disp
+%     cMessageBuilder - Construct an instance of this class
+%     getMessage      - Get the text of the message including type and class
+%     disp            - Show the message on console. Overload disp
 %
     properties(GetAccess=public,SetAccess=private)
         Error    % Error type
@@ -36,6 +34,8 @@ classdef cMessageBuilder < cTaesLab
         %       'INFO': info message
         %     class - class name where message is produced
         %     text  - text of the message
+        %   Output Arguments:
+        %     obj - cMessageBuilder object
         %
             obj.Error=type;
             obj.Class=class;
@@ -46,15 +46,22 @@ classdef cMessageBuilder < cTaesLab
         %getMessage - Get the message as text
         %   Syntax:
         %     text = obj.ggetMessage
-        %   Output Argument:
-        %     text - message text which appears in the logger including error type, class name and text.  
+        %   Output Arguments:
+        %     text - message text which appears in the logger including error type, class name and text.
+        %
             text=[cType.getTextErrorCode(obj.Error),': ',obj.Class,'. ',obj.Text];              
         end
 
         function disp(obj,debug)
         %disp - Overload disp function
         %   fid=1 is the standard output file id
-        %   fid=2 is the error output file id
+        %   fid=2 is the error output file id (printed in red in some consoles)
+        %   Syntax:
+        %     obj.disp(debug)
+        %   Input Arguments:
+        %     debug - (optional) if true, print the stack of the call
+        %             Default value is false
+        %
             if nargin==1
                 debug=false;
             end

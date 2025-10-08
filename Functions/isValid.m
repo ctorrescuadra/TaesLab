@@ -1,20 +1,20 @@
 function res = isValid(obj)
 %isValid - Check if it is a valid TaesLab object.
 %
-%   Syntax
+%   Syntax:
 %     res = isValid(obj)
 %
-%   Input Argument:
+%   Input Arguments:
 %     obj   - cTaesLab object
 %  
-%   Output Argument:
+%   Output Arguments:
 %     res - true | false
 %
-%   Example
+%   Example:
 %     res = isValid(obj); %return true if obj is a valid cTaesLab object
-%
-    %Check input arguments
+%    
     res=false;
+    %Check input arguments
     if nargin~=1, return; end
     res = isa(obj,'cTaesLab') && obj.status;
 end

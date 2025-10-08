@@ -1,17 +1,22 @@
 classdef (Sealed) cReadModelXML < cReadModelStruct
 %cReadModelXML implements the cReadModelStruct to read XML data model files.
-%   This class read a XML file containing the thermoeconomic model data
+%   This class read a XML file containing the thermoeconomic data
 %   and store it into a structure data
 %
-%   cReadModelXML constructor
-%     obj=cReadModelXML(cfgfile)
+%   cReadModelXML methods:
+%     cReadModelXML - Build an instance of the class
 %
-% See also cReadModel, cReadModelStruct
+%   See also cReadModel, cReadModelStruct
 %
 	methods
 		function obj=cReadModelXML(cfgfile)
-		% Constructor method
-		%	cfgfile - xml file containig the model of the plant
+		% cReadModelXML - Build an instance of the object
+		%   Syntax:
+		%     obj = cReadModelXML(cfgfile)
+		%   Input Arguments:
+		%	  cfgfile - xml file containig the model of the plant
+		%   Output Arguments:
+		%     obj - cReadModelXML object
 		%
 			%check arguments
             if isOctave 

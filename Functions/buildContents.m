@@ -1,7 +1,7 @@
 function buildContents(folder, output)
 %buildContents - Build the Content.m file of a directory
 %
-%   Usage:
+%   Syntax;
 %     buildContents(dir, output)
 %
 %   Input Arguments:

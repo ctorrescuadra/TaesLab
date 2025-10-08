@@ -1,18 +1,16 @@
 classdef (Sealed) cBuildLaTeX < cMessageLogger
 %cBuildLaTeX - Convert cTable object into a LaTeX code table.
 %   The LaTeX code includes:
-%    - table environment
-%    - booktabs package
-%    - tabular column aligment
+%    - Table environment
+%    - Booktabs package
+%    - Tabular column aligment
 %    - Column Names as header
 %    - Row Names and Data as body
 %    - Table Description as caption code
 %    - Table name as label code
-% 
-%   cBuildLaTeX constructor:
-%     obj = cBuildLaTeX(tbl)
 %
 %   cBuildLateX methods:
+%     cBuildLaTeX  - Create an instance of the class
 %     getLaTeXcode - Get a string with the LaTeX code
 %     saveTable    - Save the table into a tex file
 %
@@ -31,9 +29,9 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         %cBuildLaTex - Create an instance of the class
         %   Syntax:
         %     obj = cBuildLaTeX(tbl)
-        %   Input Argument:
+        %   Input Arguments:
         %     tbl - cTable object
-        %   Output Argument:
+        %   Output Arguments:
         %     obj - cBuildLaTeX object
         %
             if ~isObject(tbl,'cTable')
@@ -72,7 +70,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         %getLaTeXcode - Get the LaTeX code as string
         %   Syntax:
         %     res=obj.getLaTeXcode()
-        %   Output Argument:
+        %   Output Arguments:
         %     res - text string with the LaTeX code
         %
             res=sprintf('%s\n','\begin{table}[H]');

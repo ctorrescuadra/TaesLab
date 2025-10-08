@@ -1,16 +1,19 @@
 function obj = importDataModel(filename)
 %ImportDataModel - Get a cDataModel object from a previous saved MAT file.
 %
-%   Syntax
+%   Syntax:
 %     obj=ImportDataModel(matfile)
 %
-%   Input Argument
+%   Input Arguments:
 %     filename - Existing MAT file containing a TaesLab object
 %       char array | string
 %
-%   Output Argument
+%   Output Arguments:
 %     obj - cDataModel object
 %	   	obj.printLogger cdisplay the status of the import and error messages
+%
+%   Example:
+%	 dataModel = ImportDataModel('myDataModel.mat');
 %
     obj=cMessageLogger(cType.INVALID);
 	% Check input arguments

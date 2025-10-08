@@ -27,7 +27,7 @@ function ShowResults(arg,varargin)
 %     SaveAs:  Name of the file (with extension) to save the result tables
 %       char array | string 
 %
-%   Example
+%   Example:
 %     <a href="matlab:open ShowResultsDemo.mlx">Show Results Demo</a>
 %
 %   See also cResultSet

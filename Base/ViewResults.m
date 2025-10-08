@@ -4,10 +4,10 @@ classdef ViewResults < matlab.apps.AppBase
 %    Tables can be selected using the tree widget in the left panel. 
 %    The index table, result tables, and graphs are displayed in the right panel.
 %  
-%   Syntax
+%   Syntax:
 %     ViewResults(res)
 %
-%   Input Arguments
+%   Input Arguments:
 %     res - cResultSet object
 %
 %   See also cThermoeconomicTool

@@ -217,7 +217,7 @@ classdef cMessages
         %   If no output argument table is shown in console, else a cTableData is created
         % Syntax:
         %   cMessages.Table
-        % Output Argument:
+        % Output Arguments:
         %   res - cTable with the messages
         %
             rowNames=fieldnames(cMessages)';

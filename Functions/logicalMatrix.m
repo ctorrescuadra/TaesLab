@@ -4,17 +4,17 @@ function res=logicalMatrix(A,eps)
 % 	and converts to logical.
 %   If eps is missing, tolerance is taking as cType.EPS (1.0e-8)
 %
-%	Syntax
+%	Syntax:
 %     B = logicalMatrix(A, eps)
 %  	
-%	Input Arguments
+%	Input Arguments:
 %     A - matrix 
 %     eps - tolerance
 %  	
-%	Output Arguments
+%	Output Arguments:
 %	  res - logical matrix
 %
-%	Example
+%	Example:
 %     A = [0.1, 0.2; 0.00001, 0.3];
 %     res = logicalMatrix(A, 0.0001); %res = [1, 1; 0, 1]
 %

@@ -4,14 +4,12 @@ classdef cGraphSummary < cGraphResults
 %   - BarGraph: Values are show in bar graphs grouped by STATE or SAMPLE 
 %   - PlotGraph: Values are show in plot graphs
 %
-%   cGraphSummary Constructor
-%     obj=cGraphSummary(tbl,info,options)
+%   cGraphSummary methods:
+%     cGraphSummary  - Build an instance of the class
+%     showGraph      - show the graph in a window 
+%     showGraphUI    - show the graph in the graph pannel of a GUI app
 %
-%   cGraphWaste Methods
-%     showGraph   - show the graph in a window 
-%     showGraphUI - show the graph in the graph pannel of a GUI app
-%
-%   See also cGraphResults
+%   See also cGraphResults, cSummaryResults
 %
 	properties(Access=private)
 		isBarGraph
@@ -28,6 +26,17 @@ classdef cGraphSummary < cGraphResults
 		%     options - struct containing the option values
         %       Variables: cell array with the variables to show
 		%       BarGraph: true | false indicates if bar graph is used
+		%   Output Arguments:
+		%     obj - cGraphSummary object
+		%
+			if nargin < 2 || ~isObject(info,'cSummaryResults')
+				obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+				return
+			end
+			if ~tbl.isSummaryTable
+				obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+				return
+			end
 		%
 			if nargin < 3
 				options.Variables=cType.EMPTY_CELL;

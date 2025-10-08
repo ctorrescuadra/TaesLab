@@ -1,33 +1,30 @@
-function fdisplay(A,fmt,label)
-%fdisplay - Display a matrix A using C-like fmt.
+function fdisplay(A, fmt, label)
+%FDISPLAY - Display a matrix A using C-like formatting.
 %   This function is useful for displaying matrices in a readable format,
-%   especially when working with numerical data in a console or script.
+%   specially when working with numerical data in a console or script.
+%   The function takes a numeric matrix A and displays it using the specified
+%   format string fmt, similar to C-style formatting. If fmt is not provided,
+%   it defaults to '%g'. An optional label can be provided to identify the matrix.
+%   If label is not provided, the function attempts to use the variable name of A.
+%   If A is empty, it displays 'label = []'. If A is a scalar, 
+%   it displays 'label = value'.
+%   If A is a matrix, it displays the label followed by the matrix in the 
+%   specified format.
 %
-%   Syntax
-%       fdisplay(A, fmt, label)
+%   Syntax:
+%     FDISPLAY(A)
+%     FDISPLAY(A, fmt)
+%     FDISPLAY(A, fmt, label)
 %
-%   Input Arguments
-%    A     - numeric matrix, or scalar to display
-%    fmt   - C-like format string
-%    label - Header text (optional)
-%       If not provided, the variable name is used.
-%   
-%   Output Arguments
-%       Prints the matrix A to the console in a formatted way.
+%   Input Arguments:
+%     A     - Numeric matrix to be displayed
+%     fmt   - Format string (optional, default is '%g')
+%     label - Label for the matrix (optional, default is variable name of A)
 %
-%   Example
-%       A = [1.234567 2.345678; 3.456789 4.567890];
-%       fmt = '%.2f';
-%       label = 'My Matrix';
-%     fdisplay(A, fmt, label); %returns:
-%       My Matrix
-%        1.23 2.35
-%        3.46 4.57
-%     fdisplay(A, fmt); %returns:
-%        A =  
-%        1.23 2.35 
-%        3.46 4.57
+%   Note: This function uses zerotol to set very small values to zero for better readability.
 %
+%   See also zerotol, fprintf
+
     % Check Inputs   
     if nargin < 2
         fmt='%g'; % Default format

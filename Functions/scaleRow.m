@@ -2,21 +2,21 @@ function B=scaleRow(A,x)
 %scaleRow - Multiplies each row of matrix A by the corresponding element of vector x.
 %	Compute B(i,j)=x(i)*A(i,j)
 %
-%   Syntax
+%   Syntax:
 %     B = scaleRow(A, x)
 %
-%   Input Arguments
+%   Input Arguments:
 %	  A - Matrix to be scaled
 %	  x - scale vector
 %
-%   Output Arguments
+%   Output Arguments:
 %	  B - Scaled Matrix 
 %
-%   Example
+%   Example:
 %     A = [1, 2; 3, 4];
 %     x = [0.5; 2];
 %     B = scaleRow(A, x); %B = [0.5, 1; 6, 8]
-%
+
     % Check Input
     if nargin < 2 || ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
         error('ERROR: scaleCol. First argument must be a numeric/logical matrix');

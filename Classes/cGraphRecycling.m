@@ -1,12 +1,12 @@
 classdef cGraphRecycling < cGraphResults
 %cGraphCost - Plot the waste recycling cost graphs.
+%   This class creates a line graph from a cTable object
+%   containing the recycling cost data of a productive structure.
 %
-%   cGraphRecycling Constructor
-%     obj=cGraphRecycling(tbl)
-%
-%   cGraphRecycling Methods
-%     showGraph   - show the graph in a window 
-%     showGraphUI - show the graph in the graph pannel of a GUI app
+%   cGraphRecycling methods:
+%     cGraphRecycling - Build an instance of the class
+%     showGraph       - Show the graph in a figure window 
+%     showGraphUI     - Show the graph in the graph pannel of a GUI app
 %
 %   See also cGraphResults
 %
@@ -17,6 +17,8 @@ classdef cGraphRecycling < cGraphResults
         %     obj = cGraphRecycling(tbl)
         %   Input Arguments:
         %     tbl - cTable with the data to show graphically
+		%   Output Arguments:
+		%     obj - cGraphRecycling object
         %
 			obj.Name='Recycling Cost Analysis';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',tbl.ColNames{end},']'];
@@ -34,7 +36,7 @@ classdef cGraphRecycling < cGraphResults
         end
 
         function showGraph(obj)
- 		%showGraph - show the graph in a window
+ 		%showGraph - show the graph in a figure window
         %   Syntax:
         %     obj.showGraphUI(app)
 		    set(groot,'defaultTextInterpreter','none');

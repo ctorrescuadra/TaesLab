@@ -1,14 +1,15 @@
 classdef (Sealed) cProductiveDiagram < cResultId
 %cProductiveDiagram - Build the productive diagrams adjacency tables
+%   This class builds the adjacency tables of the productive structure of a
+%   cProductiveStructure object. It creates the nodes and edges structures to be
+%   used in graph plots.
+%   It creates the following diagrams:
 %   Flows Diagram (FAT)
 %   Process Diagram (PAT)
 %   Flow-Process Diagram (FPAT)
 %   Productive Diagram (SFPAT)
-%   
-%   cProductiveDiagram Constructor
-%     obj = cProductiveDiagram(ps)
 %
-%   cProductiveDiagram Properties
+%   cProductiveDiagram properties:
 %     NodesFAT   - Flow nodes table
 %     EdgesFAT   - Flow edges table
 %     NodesPAT   - Process nodes table
@@ -18,12 +19,13 @@ classdef (Sealed) cProductiveDiagram < cResultId
 %     NodesSFPAT - Productive table nodes
 %     EdgesSFAT  - Productive table edges
 %
-%   cProductiveDiagram Methods
-%     buildResultInfo - Build the cResultInfo for Productive Diagrams
-%     getNodesTable    - Get the nodes of the diagram
-%     getEdgesTable    - Get the edges of the diagram
+%   cProductiveDiagram methods:
+%     cProductiveDiagram - Create an instance of this class
+%     buildResultInfo    - Build the cResultInfo for Productive Diagrams
+%     getNodesTable      - Get the nodes of the diagram
+%     getEdgesTable      - Get the edges of the diagram
 %
-%   See also cResultId, cProductiveStructure
+%   See also cResultId, cProductiveStructure, cResultInfo
 %
     properties(Access=public)
         EdgesFAT          % Flow edges table
@@ -43,9 +45,12 @@ classdef (Sealed) cProductiveDiagram < cResultId
         %cProductiveStructure - Construct an instance of this class
         %   Syntax:
         %     obj = cProductiveDiagram(ps)
-        %   Input Argument:
+        %   Input Arguments:
         %     ps - cProductiveStructure object
-        %
+        %   Output Arguments:
+        %     obj - cProductiveDiagram object
+        
+            % Check input parameters
             if ~isObject(ps,'cProductiveStructure')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
                 return
@@ -93,14 +98,21 @@ classdef (Sealed) cProductiveDiagram < cResultId
         %getNodesTable - Get the nodes  of a  diagram
         %   Syntax:
         %     res = obj.getNodeTable(name)
-        %   Input Parameter:
+        %   Input Arguments:
         %     name - Name of the diagram
-        %   Output Parameter:
+        %   Output Arguments:
         %     res - structure with the properties of nodes of the diagram
         %      The struct has the following fields:
         %        Name  - name of the node
         %        Group - group of the node (colouring)
         %
+            res=cType.EMPTY;
+            % Check input parameters
+            if nargin<2 || ~ischar(name)
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                return
+            end
+            % Select the nodes table
             switch name
                 case cType.Tables.FLOW_DIAGRAM
                     res=obj.NodesFAT;
@@ -128,6 +140,12 @@ classdef (Sealed) cProductiveDiagram < cResultId
         %        target - target node of the edge
         %
             res=cType.EMPTY;
+            % Check input parameters
+            if nargin<2 || ~ischar(name)
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                return
+            end
+            % Select the edges table
             switch name
                 case cType.Tables.FLOW_DIAGRAM
                     res=obj.EdgesFAT;
@@ -160,14 +178,14 @@ classdef (Sealed) cProductiveDiagram < cResultId
         %edgesTable - Get the edges struct of an adjacency matrix
         %   Syntax:
         %     res=cDiagramFP.edgesTable(A,nodes);
-        %   Input Argument:
+        %   Input Arguments:
         %     A - Adjacency matrix
         %     nodes - Cell Array with the node names
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Struct Array containing the edges info of the diagram
         %      The struct has the following fields
-        %        source - source node of the edge
-        %        target - target node of the edge
+        %       source - source node of the edge
+        %       target - target node of the edge
         %
             fields={'source','target'};
             [idx,jdx,~]=find(A);
@@ -181,14 +199,14 @@ classdef (Sealed) cProductiveDiagram < cResultId
         %nodesTable - Get a struct with the nodes info of a diagram
         %   Syntax:
         %     res=cDiagramFP.nodesTable(nodenames,nodetypes);
-        %   Input Argument:
+        %   Input Arguments:
         %     nodenames - Cell Array with the node names
         %     nodetypes - Cell Array with the node types
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Struct Array containing the nodes info of the diagram
         %      The struct has the following fields
-        %        Name  - name of the node
-        %        Group - group of the node (colouring)
+        %       Name  - name of the node
+        %       Group - group of the node (colouring)
         %
             fields={'Name','Group'};
             res=cell2struct([nodenames;nodetypes],fields,1);

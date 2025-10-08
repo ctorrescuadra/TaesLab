@@ -1,10 +1,10 @@
 classdef cModelTable < cMessageLogger
 %cModelTable - Class container for the values read by cReadModelTable
 %   This class validate and store the data model values
-%
-%   cModelTable constructor:
-%     obj = cModelResults(table,props)
-%
+%   The table definition is provided by a struct with the table properties
+%   as read by cReadModelTables from the file printconfig.json.
+%   The table data is provided by a cell array read by cReadModelTables
+%   
 %   cModelTable properties:
 %     NrOfRows - Number of table rows
 %     NrOfCols - Number of table columns
@@ -15,8 +15,11 @@ classdef cModelTable < cMessageLogger
 %     Name   - Name of the table
 %   
 %   cModelTable methods:
+%     cModelTable  - Construct an instance of this class
 %     getStructData - Get the values as struct
-%     gettableData  - Get the values as cTable
+%     getTableData  - Get the values as cTable
+%     printTable    - Print the table on console
+%     size          - Size of the table model. Overload size method
 %
 %   See cReadModelTables, printconfig.json
 %   
@@ -37,14 +40,16 @@ classdef cModelTable < cMessageLogger
     methods
         function obj=cModelTable(vals,props)
         %cModelTable - Construct an instance of this class
-        %   Validate the table data
+        %   Validate the table data and store the values
         %
         %   Syntax:
         %     obj = cModelTable(table,props)
         %   Input Arguments:
         %     table - cell array with the table data
         %     props - struct with the data model definition
-        %
+        %   Output Arguments:
+        %     obj   - cModelTable object
+
             % Check Input
             if ~iscell(vals) || ~isstruct(props)
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessage.ShowHelp);
@@ -114,6 +119,7 @@ classdef cModelTable < cMessageLogger
         %     res = obj.getStructData();
         %   Output parameter:
         %     res - struct with the columns data
+        %
                 res=cell2struct(obj.Data,obj.Fields,2);
         end
 
@@ -140,7 +146,15 @@ classdef cModelTable < cMessageLogger
         end
 
         function res=size(obj,dim)
-        %size - Overload size method
+        %size - Size of the table model. Overload size method
+        %   Syntax:
+        %     res = obj.size
+        %     res = obj.size(dim)
+        %   Input Arguments:
+        %     dim - Dimension to get the size (1 - rows, 2 - columns)
+        %   Output Arguments:
+        %     res - size of the table model
+        %
             if nargin==1
                 res=size(obj.Values);
             else
@@ -156,7 +170,7 @@ classdef cModelTable < cMessageLogger
         %     log = obj.validateTable(p)
         %   Output Arguments:
         %     log - cMessageLog with the validation status and error messages
-        %
+        
             % Initilize variables            
             log=cMessageLogger();
             p=obj.config;
@@ -212,7 +226,7 @@ classdef cModelTable < cMessageLogger
             if isOctave
                 idx=all(cellfun(@isempty,values));
             else %isMatlab
-                idx=all(cellfun(@(x) isa(x,'missing'),values));
+                idx=all(cellfun(@(x) isa(x,'missing') || isempty(x),values));
             end
             % Log error
             if any(idx)
@@ -222,7 +236,6 @@ classdef cModelTable < cMessageLogger
                 end
             end
         end
-
     end
 
     methods(Static,Access=private)
@@ -230,44 +243,42 @@ classdef cModelTable < cMessageLogger
         %validateKey - Validate key data
         %   Syntax:
         %     test = cModelTable.validateKey(log,data)
-        %   Input Arguments
+        %   Input Arguments:
         %     log   - logger to store messages
         %     data  - field data
         %   Output Arguments:
         %     tst - true | false
-        %
-            tst=true;
+
             %Check if the keys has the correct pattern
             ier=cParseStream.checkListKeys(data);
             if ~isempty(ier)
-                tst=false;
                 for i=ier
                     log.messageLog(cType.ERROR,cMessages.InvalidKey,data{i});
                 end
             end
-            ier=cParseStream.checkDuplicates(data);
             %Check if the keys has duplicates
+            ier=cParseStream.checkDuplicates(data);
             if ~isempty(ier)
-                tst=false;
                 for i=ier
                     log.messageLog(cType.ERROR,cMessages.DuplicateKey,data{i});
                 end
             end
+            tst = isempty(ier);
         end
 
         function tst=validateNumeric(data)
         %validateNumeric - Validate numeric data
         %   Syntax:
         %     test = cModelTable.validateNumeric(data)
-        %   Input Arguments
+        %   Input Arguments:
         %     data  - field data
         %   Output Arguments:
         %     tst - true | false
         %
-            % Check if data column is mumeric
+            tst=false;
+            % Check if data column is numeric
             idx=cellfun(@isnumeric,data);
             if ~all(idx)
-                tst=false;
                 return
             end
             % Check if values are non-negative
@@ -278,16 +289,15 @@ classdef cModelTable < cMessageLogger
         %validateSample - Validate numeric data block
         %   Syntax:
         %     test = cModelTable.validateSample(log,data)
-        %   Input Arguments
+        %   Input Arguments:
         %     data  - field data
         %     log   - logger to store messages
         %   Output Arguments:
         %     tst - true | false
         %
-            % Initialize data
             tst=true;
-            samples=data(1,:);
             % Check sample names
+            samples=data(1,:);
             ier=cParseStream.checkListNames(samples);
             if ~isempty(ier)
                 tst=false;

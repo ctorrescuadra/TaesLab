@@ -1,6 +1,6 @@
 function pcbResults(inputFile,outputFile)
 %pcbResults Summary of generalized cost for pcb_model
-%   Usage:
+%   Syntax;
 %     pcbResults pcb_model20.xlsx pcb_results20.xlsx
 %
     model=ThermoeconomicModel(inputFile,'Debug',false,'CostTables','GENERALIZED','DiagnosisMethod','NONE');

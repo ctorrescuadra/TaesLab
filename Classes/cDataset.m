@@ -1,49 +1,56 @@
 classdef(Sealed) cDataset < cDictionary
-%cDataset - Store and access exergy and resource data by name.
+%cDataset - Class container to store objects and access them by key.
+%   This class implements a dataset for TaesLab.
+%   The keys are strings and the objects can be of any class.
 %   This class is used to store cExergyData, cExergyCost, and cResourceData objects
 %   and access by state name or sample name.
 %
-%   cDataset constructor:
-%     obj = cDataset(list) 
-%
 %   cDataset methods:
+%     cDataset  - Build an instance of the object
 %     getValues - Get the object associated to an entry
 %     setValues - Set an object to an entry
 %     addValues - Add a new entry
 %
+%   cDataset methods (inherited from cDictionary):
+%     existsKey   - Check if a key exists in the dictionary
+%     getIndex    - Get the index of a key
+%     getKey      - Get the key associated to a index
+%     getKeys     - Get all the keys of the dictionary
+%     addKey      - Add a new key to the dictionary
+%     isIndex     - Check if an index is valid
+%
 %   See also cDictionary
 %
     properties (Access=private)
-        Values       % Cell array with the object
+        Values       % Cell array with the objects
     end
   
     methods
         function obj=cDataset(list)
-        %cDataSet - Build an instance of the object
+        %cDataset - Build an instance of the object
         %   Syntax:
         %     obj = cDataset(list)
         %   Input Arguments:
         %     list - cell array containig the key values
-        %   Output Argument:
+        %   Output Arguments:
         %     obj - cDataset object
         %
-            % Validate list
             obj=obj@cDictionary(list);
+            % Validate object and initialize values
             if obj.status
                 obj.Values=cell(1,length(obj));
             end
         end
  
         function res=getValues(obj,arg)
-        %getvalues - Get an element of the dataset
+        %getValues - Get an element of the dataset
         %   Syntax: 
         %     res = obj.getValues(arg)
-        %   Input Argument:
+        %   Input Arguments:
         %     arg - key or index of the values to retrive
-        %   Output Argument:
+        %   Output Arguments:
         %     res - object with the required values
-        %
-            % Validate arguments
+        %  
             res=cMessageLogger();
             idx=obj.validateArguments(arg);
             if idx
@@ -57,10 +64,10 @@ classdef(Sealed) cDataset < cDictionary
         %setValues - Set the values in position indicates by arg
         %   Syntax: 
         %     res = obj.setValues(arg,val)
-        %   Input Argument:
+        %   Input Arguments:
         %     arg - key or index of the values
         %     val - object with the values to store
-        %   Output Argument:
+        %   Output Arguments:
         %     log - cMessagesLog with status and messages
         %
             log=cMessageLogger();
@@ -76,10 +83,10 @@ classdef(Sealed) cDataset < cDictionary
         %addValues - Add a new value at the end of the dataset
         %   Syntax: 
         %     res = obj.addValues(key,val)
-        %   Input Argument:
+        %   Input Arguments:
         %     key - key name
         %     val - object with the values to store
-        %   Output Argument:
+        %   Output Arguments:
         %     log - cMessagesLog with status and messages
         %        
             log=cMessageLogger();
@@ -97,9 +104,9 @@ classdef(Sealed) cDataset < cDictionary
         %validateArguments - Check if the arguments are valid
         %   Syntax: 
         %     idx = obj.validateArguments(arg)
-        %   Input Argument:
+        %   Input Arguments:
         %     arg - key or index of the values
-        %   Output Argument:
+        %   Output Arguments:
         %     idx - index of the values or zero if its not valid
         %
             idx=0;

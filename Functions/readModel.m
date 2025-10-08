@@ -2,22 +2,22 @@ function res=readModel(filename)
 %readModel - Read a data model file according its extension.
 %   Internal Function of ReadDataModel
 %
-%   Syntax
+%   Syntax:
 %     res = readModel(filename)
 %   
-%   Input Arguments
+%   Input Arguments:
 %     filename - data model file name
 %
-%   Output Arguments
+%   Output Arguments:
 %     res - cDataModel object
 %
-%   Example
+%   Example:
 %     res = readModel('dataModel.json'); %returns a cDataModel object from a JSON file 
 %
 %   See also cReadModel, cDataModel, ReadDataModel
-%   
-    %Check input arguments
+%     
     res=cMessageLogger(cType.INVALID);
+    %Check input arguments
     if nargin~=1 || isempty(filename) || ~isFilename(filename)
         res.messageLog(cType.ERROR,cMessages.InvalidFileName);
         return

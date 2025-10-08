@@ -3,15 +3,16 @@ classdef cSummaryTable < cMessageLogger
 %   Each cSummaryTable is stored in a dataset element using 'Name' as key
 %   It is an internal class of cSummaryResults
 %
-%   cSummaryTable Properties:
+%   cSummaryTable properties:
 %     TableDefinition - Table Definition
 %     Values          - Values of the table
 %     Name            - Name of the summary table
 %     Type            - Type of summary table (STATES/RESOURCES)
 %     Node            - Type of row names of the table (see cType.NODE_TYPE)
 %
-%   cSummaryTable Methods:
-%     setValues - Set the values of the summary table for each state or resource
+%   cSummaryTable methods:
+%     cSummaryTable - Create an instance of the class
+%     setValues     - Set the values of the summary table for each state or resource
 %
 %   See also cSummaryResults
 %
@@ -26,11 +27,13 @@ classdef cSummaryTable < cMessageLogger
     methods
         function obj = cSummaryTable(dm,td)
         %cSummaryTable - Create an instance of the class
-        %   Syntax
+        %   Syntax:
         %     obj = cSummaryTable(dm,td)
-        %   Input Argument:
+        %   Input Arguments:
         %     dm - cDataModel object
         %     td - Table definition structure
+        %   Output Arguments:
+        %     obj - cSummaryTable object
         %
             % Determine the size of the table
             % Number of Columns
@@ -70,9 +73,9 @@ classdef cSummaryTable < cMessageLogger
 
         function setValues(obj,idx,val)
         %setValues - Set the values of the table for each STATE/RESOURCE
-        %   Syntax
+        %   Syntax:
         %     obj.setValues(idx,val)
-        %   Input Arguments
+        %   Input Arguments:
         %     idx - Number of column (STATE/RESOURCE) to update
         %     val - Array with the values
         %

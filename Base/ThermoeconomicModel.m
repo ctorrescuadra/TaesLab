@@ -4,13 +4,13 @@ function model=ThermoeconomicModel(arg,varargin)
 %   all the functions available in the class can be used, 
 %   allowing you to get all the results of a thermoeconomic analysis interactively.
 %
-%   Syntax
+%   Syntax:
 %     model = ThermoeconomicModel(arg,Name,Value)
 %
-%   Input Arguments
+%   Input Arguments:
 %     arg - Name of the file with the data model or cDataModel object
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     ReferenceState - Reference state name. If it is not defined, first state is taken.
 %       char array | string
 %     State - Operation state name. If it is not defined, first state is taken.  
@@ -37,10 +37,10 @@ function model=ThermoeconomicModel(arg,varargin)
 %     Debug - Print Debug information during execution
 %       true | false (default)
 %
-%   Output Argument
+%   Output Arguments:
 %     model - cThermoeconomicModel object
 %
-%   Examples
+%   Example:
 %     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
 %    
 %   See also cThermoeconomicModel

@@ -1,14 +1,14 @@
 function res=isOctave()
 %isOctave - Identifies if the funcion has been executed in Octave.
 %	
-%	Syntax
+%	Syntax:
 %     res = isOctave;
 %
-%	Output Argument
+%	Output Arguments:
 %	  res - logical result
 %		true | false
 %
-%	Example
+%	Example:
 %     res = isOctave; %return true if executed in Octave
 %
 %	See also isMatlab, isdeployed

@@ -2,26 +2,26 @@ function B = similarDemandMatrix(A, x, y)
 %similarDemandMatrix - Compute the demand-driven adjacency matrix from the resource-driven matrix.
 %   Compute B(i,j) = x(i) * A(i,j) * (1./y(j)) for sparse matrices
 %
-%   Syntax
+%   Syntax:
 %     B = similarDemandMatrix(A,x,y)
 %
-%   Input Arguments
+%   Input Arguments:
 %     A - Resource-Driven matrix
 %     x - Left transformation vector
 %     y - Right transformation vector
 %
-%   Output Arguments
+%   Output Arguments:
 %     B - Demand-Driven Operator
 %
-%   Example
+%   Example:
 %     A = [0, 1, 0; 0, 0, 1; 0, 0, 0];
 %     x = [1; 2; 3];
 %     y = [1; 3; 2];
 %     B = similarDemandMatrix(A, x, y); %B = [0, 0.333, 0; 0, 0, 1.0; 0, 0, 0]
 %
 %   See also similarDemandOperator, similarResourceMatrix
-%
-    % Check Arguments
+
+    % Check Arguments:
     if nargin < 2 || nargin > 3
         error('ERROR: similarDemandMatrix. Requires two or three input arguments');
     end

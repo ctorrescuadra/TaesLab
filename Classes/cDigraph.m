@@ -1,14 +1,16 @@
 classdef cDigraph < cGraphResults
 %cDigraph - Plot the productive structure digraphs.
+%   This class creates a digraph object from a cTableCell object
+%   containing the adjacency table of a productive structure.
+%   It also needs a cProductiveDiagram or cDiagramFP object to get the
+%   nodes properties.
 %
-%   cDigraph Constructor
-%     obj=cDigraph(tbl,info)
-%
-%   cDigraph Methods
+%   cDigraph methods:
+%	  cDigraph    - Build an instance of the class
 %     showGraph   - show the graph in a window 
 %     showGraphUI - show the graph in the graph pannel of a GUI app
 %
-%   See also cGraphResults
+%   See also cGraphResults, cProductiveDiagram
 %
     properties(Access=private)
         MarkerSize = cType.MARKER_SIZE;
@@ -17,13 +19,13 @@ classdef cDigraph < cGraphResults
 
     methods
         function obj = cDigraph(tbl,info)
-		%cDigraph - Build an instance of the object
+		%cDigraph - Build an instance of the class
         %   Syntax:
         %     obj = cDigraph(tbl,info)
         %   Input Arguments:
         %     tbl - cTable with the data to show graphically
         %     info - cProductiveDiagram object with additional info
-		%   Output Argument:
+		%   Output Arguments:
 		%     obj - cDigraph object
         %
 			if isOctave
@@ -45,9 +47,9 @@ classdef cDigraph < cGraphResults
 				return
 			end
 			% Get the nodes table and build the digraph
-			nodes=info.getNodesTable(tbl.Name);
 			obj.Name=tbl.Description;
 			obj.Title=tbl.Description;
+			nodes=info.getNodesTable(tbl.Name);
 			tnodes=struct2table(nodes);
 			obj.xValues=digraph(edges,tnodes,'omitselfloops');
 			% Color by groups
@@ -73,7 +75,7 @@ classdef cDigraph < cGraphResults
 		%showGraph - show the graph in a window
         %   Syntax:
         %     obj.showGraph()
-		%
+		
 			% Initilize figure/axes
  			f=figure('name',obj.Name,...
 				'numbertitle','off', ...
@@ -103,7 +105,8 @@ classdef cDigraph < cGraphResults
         %     obj.showGraphUI(app)
 		%	Input Parameter:
 		%	  app - GUI app reference object
-		%
+
+			% Clear previous graph
 			if app.isColorbar && ~obj.DiagramFP
 				delete(app.Colorbar);
 			end

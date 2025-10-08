@@ -6,16 +6,15 @@ classdef(Sealed) cDiagnosis < cResultId
 %    WASTE_EXTERNAL considers waste as a system output
 %    WASTE_INTERNAL internalize the waste cost according waste table allocation
 %
-%   cDiagnosis constructor:
-%     obj = cDiagnosis(fp0,fp1,method)
-% 
 %   cDiagnosis properties:
 %     NrOfProcesses   - Number of processes
 %     NrOfWastes      - Number of Wastes
 %     FuelImpact      - Fuel Impact
 %     TechnicalSaving - Total Malfunction Cost
+%     Method          - Diagnosis Method
 % 
-%   cDiagnosis Methods
+%   cDiagnosis methods:
+%     cDiagnosis                  - Create an instance of the class
 %     buildResultInfo             - Build the cResultInfo associated to thermoeconomic diagnosis
 %     getDiagnosisTable           - Get the summary diagnosis results
 %     getUnitConsumptionVariation - Get the unit consumption variation of processes
@@ -33,9 +32,9 @@ classdef(Sealed) cDiagnosis < cResultId
 %     getMalfunctionCostTable     - Get the malfunction cost table
 %     getInternalDisfunction      - Get the internal disfunctions caused by malfunction
 %     getExternalDisfunction      - Get the disfunction caused by waste variation
-%     getDemmandCorrectionCost    - Get the correction of real demand variation cost
+%     getDemandCorrectionCost    - Get the correction of real demand variation cost
 %
-%   See also cExergyCost
+%   See also cResultId, cExergyCost, cResultInfo
 %
 	properties(GetAccess=public, SetAccess=private)
         NrOfProcesses        % Number of processes
@@ -44,6 +43,7 @@ classdef(Sealed) cDiagnosis < cResultId
         TechnicalSaving      % Total Malfunction Cost
         Method               % Diagnosis Method
     end
+
     properties(Access=private)
         dpuk    % Direct Unit exergy cost (operation)
         dpuk0   % Direct Unit exergy cost (reference) 
@@ -69,17 +69,17 @@ classdef(Sealed) cDiagnosis < cResultId
 		function obj=cDiagnosis(fp0,fp1,method)
         %cDiagnosis - Create an object of the class
         %   Syntax:
-        %     obj=cDiagnosis(fp0,fp1,method);
+        %     obj=cDiagnosis(fp0,fp1,method)
         %   Input Arguments:
         %     fp0 - cExergyCost object for reference state
         %     fp1 - cExergyCost object for operation state
         %     method - Diagnosis Method used. 
         %       cType.DiagnosisMethod.WASTE_EXTERNAL
         %       cType.DiagnosisMethod.WASTE_INTERNAL
-        %   Output Argument:
+        %   Output Arguments:
         %     obj - cDiagnosis object
-        %
-            % Check Arguments
+        
+            % Check Arguments:
             if ~isObject(fp0,'cExergyCost') || ~isObject(fp1,'cExergyCost')
                 obj.messageLog(cType.ERROR,cMessages.ExergyCostRequired);
                 return
@@ -123,9 +123,9 @@ classdef(Sealed) cDiagnosis < cResultId
             obj.vMF=sum(obj.tMF);
             obj.DFin=zerotol(opI*obj.tMF(1:end-1,:));
             obj.DCW=obj.dpuk.cP .* obj.DWt';
-            % Calculate the malfunction cost and disfunction tables according to the chosen method
             N=obj.NrOfProcesses;
-            if obj.NrOfWastes>0 % Waste depending parameter
+            % Calculate variables related to waste variation
+            if obj.NrOfWastes>0
                 tMR=scaleCol(fp1.pfOperators.mKR-fp0.pfOperators.mKR,fp0.ProductExergy);
                 opR=fp1.pfOperators.opR;
                 opIR=opI + opI*opR;
@@ -134,6 +134,7 @@ classdef(Sealed) cDiagnosis < cResultId
             else
                 obj.tMCR=zeros(N,N);
             end
+            % Calculate malfunction cost and disfunction tables depending on the method
             switch method
                 case cType.DiagnosisMethod.WASTE_EXTERNAL
                     % WASTE_EXTERNAL method
@@ -183,16 +184,17 @@ classdef(Sealed) cDiagnosis < cResultId
         %     fmt - cFormatData object
         %   Ouput Arguments:
         %     res - cResultInfo (cType.ResultInfo.THERMOECONOMIC_DIAGNOSIS)
+        %
             res=fmt.getDiagnosisResults(obj);
         end
 
-        function [res]=getDiagnosisTable(obj)
+        function res=getDiagnosisTable(obj)
         %getDiagnosisTable - Get Diagnosis Table
         %   Syntax:
         %     res=obj.getDiagnosisTable
-        %   Output Argument
+        %   Output Arguments:
         %     res - struct containing the column values of the diagnosis table
-        %     tbl - cell array with the diagnosis table values
+        %
             res.MF=zerotol(obj.getMalfunction);
             res.DI=zerotol(obj.getIrreversibilityVariation);
             res.DR=zerotol(obj.getWasteVariation);
@@ -206,7 +208,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getUnitConsumptionVariation - Get the unit consumption variation
         %   Syntax:
         %     res=obj.getUnitConsumptionVariation
-        %   Output Argument
+        %   Output Arguments:
         %     res - array with the unit consuption variation of each process
             res=sum(obj.DKP,1);
         end
@@ -215,17 +217,19 @@ classdef(Sealed) cDiagnosis < cResultId
         %getUnitCostVariation - Get the unit process cost variation
         %   Syntax:
         %     res=obj.getUnitCostVariation
-        %   Output Argument
-        %     res - array with the unit process cost variation of each process        
-        res=obj.dpuk.cP-obj.dpuk0.cP;
+        %   Output Arguments:
+        %     res - array with the unit process cost variation of each process
+        %        
+            res=obj.dpuk.cP-obj.dpuk0.cP;
         end
 
         function res=getIrreversibilityVariation(obj)
         %getIrreversibilityVariation - Get the unit process cost variation
         %   Syntax:
         %     res=obj.getIrreversibilityVariation
-        %   Output Argument
-        %     res - array with irreversibility variation of each process     
+        %   Output Arguments:
+        %     res - array with irreversibility variation of each process
+        %    
             res=[obj.vDI,sum(obj.vDI)];
         end
 
@@ -233,7 +237,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getOutputVariation - Get the system output variation
         %   Syntax:
         %     res=obj.getOutputVariation
-        %   Output Argument
+        %   Output Arguments:
         %     res - Array containing the values of the system output variation  
         % 
             res=[obj.DW0', sum(obj.DW0)];
@@ -243,7 +247,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getDemandVariation - Get the system demand variation
         %   Syntax:
         %     res=obj.getDemandVariation
-        %   Output Argument
+        %   Output Arguments:
         %     res - Array containing the values of the system demand variation  
         % 
             res=[obj.DWt', sum(obj.DWt)];
@@ -251,6 +255,11 @@ classdef(Sealed) cDiagnosis < cResultId
 
         function res=getWasteVariation(obj)
         %getWasteVariation - Get waste variation
+        %   Syntax:
+        %     res=obj.getWasteVariation
+        %   Output Arguments:
+        %     res - Array containing the values of the waste variation
+        %
             res=[obj.DWr',sum(obj.DWr)];
         end
 
@@ -258,7 +267,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getDemandVariationCost - Get the system demand variation cost
         %   Syntax:
         %     res=obj.getDemandVariationCost
-        %   Output Argument
+        %   Output Arguments:
         %     res - Array containing the values of the system demand variation cost
         % 
             res=[obj.DCW,sum(obj.DCW)];
@@ -268,7 +277,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getMalfunction - Get the malfunction vector
         %   Syntax:
         %     res=obj.getMalfunction
-        %   Output Argument
+        %   Output Arguments:
         %     res - Array containing the values of the processes malfunctions
         %         
             aux=obj.vMF;
@@ -279,7 +288,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getIrreversibilityTable - Build the irreversibility table
         %   Syntax:
         %     res=obj.getIrreversibilityTable
-        %   Output Argument
+        %   Output Arguments:
         %     res - matrix containing the values of the irreversibility table  
         %
             res=[obj.tDI',obj.DWt;obj.DF0',0;obj.vMF,0];
@@ -290,7 +299,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getMalfunctionTable - Get the Malfunction table
         %   Syntax:
         %     res=obj.getMalfunctionTable
-        %   Output Argument
+        %   Output Arguments:
         %     res - Matrix containing the values of the Malfunction Table
         % 
             res=[obj.tMF,[obj.DW0;0]];
@@ -300,7 +309,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getMalfunctionCost - Get the malfunction cost vector (MF*)
         %   Syntax:
         %     res=obj.getMalfunctionCoat
-        %   Output Argument
+        %   Output Arguments:
         %     res - Array containing the values of the processes cost malfunctions
         %       
             aux=zerotol(sum(obj.DFin))+obj.vMF;
@@ -311,7 +320,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getWasteMalfunctionCost - Get the waste cost variation (MR*)
         %   Syntax:
         %     res=obj.getWasteMalfunctionCoat
-        %   Output Argument
+        %   Output Arguments:
         %     res - Array containing the values of the waste variation cost
         %     
 	        res=[obj.vMCR,sum(obj.vMCR)];
@@ -320,7 +329,7 @@ classdef(Sealed) cDiagnosis < cResultId
         function res=getWasteMalfunctionCostTable(obj)
             %getWasteMalfunctionCost - Get the waste malfunction cost table
             %     res=obj.getWasteMalfunctionCoat
-            %   Output Argument
+            %   Output Arguments:
             %     res - cSparseRow Matrix containing the values of the table
             %     
                 res=obj.tMCR;
@@ -330,7 +339,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getMalfunctionCostTable - Get the malfunction cost table
         %   Syntax:
         %     res=obj.getMalfunctionCostTable
-        %   Output Argument
+        %   Output Arguments:
         %     res - Matrix containing the values of the Malfunction Cost Table
         % 
             res=[obj.tMC,obj.DCW';obj.vMF,0];
@@ -340,7 +349,7 @@ classdef(Sealed) cDiagnosis < cResultId
         %getInternalDisfunction - Get the internal disfunction matrix
         %   Syntax:
         %     res=obj.getInternalDisfunction
-        %   Output Argument
+        %   Output Arguments:
         %     res - Matrix containing the values of the internal disfunction values
         %
             res=obj.DFin';
@@ -350,17 +359,17 @@ classdef(Sealed) cDiagnosis < cResultId
         %getExternalDisfunction - Get the external disfunction matrix
         %   Syntax:
         %     res=obj.getInternalDisfunction
-        %   Output Argument
+        %   Output Arguments:
         %     res - Matrix containing the values of the internal disfunction values
         %
             res=obj.DFex';
         end
 
         function res=getDemandCorrectionCost(obj)
-        %getDemandCorrection - Get Demand Variation effective cost.
+        %getDemandCorrectionCost - Get Demand Variation effective cost.
         %   Syntax:
-        %     res=obj.getDemandVariationEffectiveCost
-        %   Output Argument
+        %     res=obj.getDemandVariationEffectiveCost()
+        %   Output Arguments:
         %     res - Array containing the values of demand variation effective cost
         %
             dcpt = (obj.dpuk.cP-obj.dpuk0.cP) .* (obj.DWt>0)';

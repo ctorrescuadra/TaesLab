@@ -1,15 +1,15 @@
 function res=ListResultTables(varargin)
 %ListResultTables - Displays the list of the TaesLab result tables and their properties.
-%   If a cResultSet is provided, the active tables of the results set are listed.
+%   If a cResultSet is provided, list the active tables of the result set.
 %    
-%   Syntax
+%   Syntax:
 %     res=ListResultTables(Name,Values)
 %     res=ListResultTables(res,Name,Values)
 %
-%   Input Arguments
+%   Input Arguments:
 %     res - cResultSet object (optional)
 %
-%   Name-Values Arguments
+%   Name-Values Arguments:
 %     Columns: Array of cells with the names of the columns to be displayed.
 %       'DESCRIPTION' Description of the table
 %       'RESULT_NAME' cResultInfo name of the table
@@ -30,10 +30,10 @@ function res=ListResultTables(varargin)
 %     SaveAs: Name of the file where the table will be saved.
 %       array char | string
 %
-%   Output Arguments
+%   Output Arguments:
 %     res - Table object in the format specified in ExportAs, with the selected columns
 %
-%   Example
+%   Example:
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %
 %   See also cTablesDefinition, cThermoeconomicModel

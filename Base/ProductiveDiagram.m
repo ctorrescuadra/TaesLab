@@ -4,28 +4,28 @@ function res=ProductiveDiagram(data,varargin)
 %   ShowGraph, or saving the adjacency tables in xlsx format, which can be
 %   used by external graph software such as yEd
 %
-%   Syntax
+%   Syntax:
 %     res = ProductiveDiagram(data,Name,Value)
 %
-%   Input Arguments
+%   Input Arguments:
 %     data - cReadModel object containing the data information
 %    
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     Show -  Show the results on console.  
 %       true | false (default)
 %     SaveAs - Name of file (with extension) to save the results.
 %       char array | string
 %
-%   Output Arguments
+%   Output Arguments:
 %     res - cResultsInfo object contains the productive structure information
-%     The following tables are obtained:
+%      The following tables are obtained:
 %       sfpat - Productive (Stream-Flow-Process) adjacency table
 %       fpat  - Flow-Process adjacency table
 %       fat   - Flow adjacency table
 %       pat   - Process adjacency table
 %       kpat  - Kernel adjacency table
 %
-%   Example
+%   Example:
 %     <a href="matlab:open ProductiveStructureDemo.mlx">Productive Structure Demo</a>
 %
 %   See also cDataModel, cProductiveDiagram, cResultInfo

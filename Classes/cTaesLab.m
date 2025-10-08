@@ -1,11 +1,8 @@
 classdef  cTaesLab < handle
     %TaesLab - Base class of the TaesLab toolbox.
-    %   Asign a unique objectId to each object
-    %   and permit to set the status of the class
-    %   to each class derived from it.
-    %
-    %   cTaesLab constructor
-    %     obj = cTaesLab() 
+    %   Asign a unique objectId to each object and permit to set
+    %   the status of the class derived from it. It also provides equality
+    %   (eq) and inequality (ne) operators to compare two objects of the same class.
     %
     %   cTaesLab properties
     %     objectId - Unique object identifier 
@@ -14,6 +11,7 @@ classdef  cTaesLab < handle
     %       true | false
     %
     %   cTaesLab methods:
+    %     cTaesLab     - Initialize a cTaesLab object
     %     getObjectId  - Get the object id
     % 
     properties(Access=protected)
@@ -27,6 +25,11 @@ classdef  cTaesLab < handle
     methods
         function obj = cTaesLab()
         %cTaesLab - Initialize a cTaesLab object
+        %   Syntax:
+        %     obj = cTaesLab()
+        %   Output Arguments:
+        %     obj - cTaesLab object
+        %
             obj.status=cType.VALID;   
             obj.objectId=cTaesLab.sequence;
         end
@@ -39,26 +42,48 @@ classdef  cTaesLab < handle
         end
 
         function res = getObjectId(obj)
-        %getObjectId Get the object identifier
+        %getObjectId - Get the object identifier
         %   Syntax:
         %     res = obj.getObjectId
             res=obj.objectId;
         end
 
         function res=eq(obj1,obj2)
-        % Overload eq operator. Check if two class object are equal. 
+        %eq - Overload eq operator. Check if two class object are equal.
+        %   Syntax:
+        %     res = (obj1 == obj2)
+        %   Input Arguments:
+        %     obj1 - cTaesLab object
+        %     obj2 - cTaesLab object
+        %   Output Arguments:
+        %     res - true | false
+        %
             res=(obj1.objectId==obj2.objectId);
         end
         
         function res=ne(obj1,obj2)
-        % Overload ne operator. Check if two class objects are different. 
+        %ne - Overload ne operator. Check if two class objects are different.
+        %   Syntax:
+        %     res = (obj1 ~= obj2)
+        %   Input Arguments:
+        %     obj1 - cTaesLab object
+        %     obj2 - cTaesLab object
+        %   Output Arguments:
+        %     res - true | false
+        %
             res=(obj1.objectId~=obj2.objectId);
 		end
     end
 
     methods(Static,Access=private)
         function res=sequence()
-		% Generate a sequence of numbers. Internal function,
+		%sequence - Generate a unique object identifier.
+        %   Use a persistent variable to count the number of objects created.
+        %   Syntax:
+        %     res = cTaesLab.sequence
+        %   Output Arguments:
+        %     res - Unique object identifier
+        %
 			persistent counter;
 			if isempty(counter)
 				counter=uint64(1);

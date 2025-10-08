@@ -4,7 +4,7 @@ function SaveDataModel(arg,filename)
 %   Displays a message about the status of the operation.
 %   Used as an interface for cDataModel/saveDataModel.
 %   
-%   Syntax
+%   Syntax:
 %     SaveDataModel(arg,filename)
 %
 %   Input Arguments:
@@ -12,13 +12,13 @@ function SaveDataModel(arg,filename)
 %     filename - Name of the output file (with extension)
 %       array char | string
 %
-%   Example
+%   Example:
 %     <a href="matlab:open SaveDataModelDemo.mlx">Save Data Model Demo</a>
 %
 %   See also cDataModel, cThermoeconomicModel
 %
     log=cMessageLogger();
-    % Check Input Parameters
+    % Check Input Arguments:
     if (nargin~=2)
         log.printError(cMessages.DataModelRequired);
         return

@@ -1,19 +1,20 @@
 classdef cSummaryOptions < cMessageLogger
 %cSummaryOptions - Determine the summary options depending on the data model
-% 
-%   cSummaryOptions Constructor
-%     obj = cSummaryOptions(NrOfStates,NrOfSamples)
+%   This class is used to determine the available summary options depending on the data model
+%   properties (number of states and number of samples). 
+%
 %   cSummaryOptions Properties
 %     Id    - Summary options Id (see cType.SummaryId)
 %     Names - Available summary options names
 %
 %   cSummaryOptions Methods
-%     checkId       - Check if the summary id is available
-%     checkName     - Check if the option name is available
-%     defaultOption - Get the default summary option
-%     isEnabled     - Check if summary is enabled
-%     isStates      - Check if there are summary States
-%     isResources   - Check if there are summary Resources
+%     cSummaryOptions - Build an instance of the class
+%     checkId         - Check if the summary id is available
+%     checkName       - Check if the option name is available
+%     defaultOption   - Get the default summary option
+%     isEnabled       - Check if summary is enabled
+%     isStates        - Check if there are summary States
+%     isResources     - Check if there are summary Resources
 %
 %   See also cSummaryResults
 %
@@ -30,11 +31,13 @@ classdef cSummaryOptions < cMessageLogger
     methods
         function obj=cSummaryOptions(NrOfStates,NrOfSamples)
         %cSummaryOptions - Build an instance of the class
-        %   Syntax:
-        %     obj = cSummaryOptions(data)
+        %   Syntax:   
+        %     obj = cSummaryOptions(NrOfStates,NrOfSamples)
         %   Input Paramaters
         %     NrOfStates - Number of States
         %     NrOfSamples - Number of Samples
+        %   Output Arguments:
+        %     obj - cSummaryOptions object
         %
             fields=cType.SummaryOptions';
             N=length(fields);
@@ -48,9 +51,9 @@ classdef cSummaryOptions < cMessageLogger
         %checkId - Check the summary id option
         %   Syntax:
         %     res = obj.checkId(option)
-        %   Input Argument:
+        %   Input Arguments:
         %     option - Summary Id option to check
-        %   Output Argument:
+        %   Output Arguments:
         %     true | false
         %
             res=false;
@@ -65,9 +68,9 @@ classdef cSummaryOptions < cMessageLogger
         %checkName - Check the summary name option
         %   Syntax:
         %     res = obj.checkName(option)
-        %   Input Argument:
+        %   Input Arguments:
         %     option - Summary name option to check
-        %   Output Argument:
+        %   Output Arguments:
         %     true | false
         %
             res=false;
@@ -81,8 +84,9 @@ classdef cSummaryOptions < cMessageLogger
         %defaultOption - Get the default summary option name for the data model
         %   Syntax:
         %     res = obj.defaultOption
-        %   Output Argument
+        %   Output Arguments:
         %     res - Default option name
+        %
             res=obj.Names{end};
         end
 
@@ -101,6 +105,7 @@ classdef cSummaryOptions < cMessageLogger
         %     res = obj.isStates
         %   Output Arguments:
         %     res - true | false
+        %
             res=bitget(obj.Id,cType.STATES);
         end
 
@@ -109,7 +114,8 @@ classdef cSummaryOptions < cMessageLogger
         %   Syntax:
         %     res = obj.isResources
         %   Output Arguments:
-        %     res - true | false   
+        %     res - true | false
+        %   
             res=bitget(obj.Id,cType.RESOURCES);
         end
     end

@@ -5,14 +5,14 @@ function SaveSummary(model,filename)
 %   Used as an interface for cResultSet/saveSummary.
 %
 %   Syntax:
-%     SaveTable(tbl,filename)
+%     SaveSummary(model,filename)
 %
-%   Input Arguments
+%   Input Arguments:
 %     model - cThermoeconomicModel object
 %     filename - Name of the file (with extension) to save the table data
 %       array char | string
 %
-%   Example
+%   Example:
 %     <a href="matlab:open SummaryResultsDemo.mlx">Summary Results Demo</a>
 %
 %   See also cThermoeconomicModel, cSummaryResults

@@ -5,35 +5,33 @@ classdef cDigraphAnalysis < cMessageLogger
 %   The graph is represented by its adjacency matrix,
 %   and must have a single source node (IN) and a single output node (OUT).
 %
-%   cGraphAnalysis constructor:
-%     obj = cDigraphAnalysis(A,names)
-%
-%   cGraphAnalysis properties:
+%   cDigraphAnalysis properties:
 %     NrOfNodes          - Number of nodes in the graph
 %     NrOfComponents     - Number of components
 %     GraphEdges         - Edges of the full graph
 %     GraphNodes         - Nodes of the full graph
 %     KernelNodes        - Nodes of the kernel DAG
 %     KernelEdges        - Edges of the kernel DAG
-%     isDAG              - Indicate if the graph is a DAG
+%     isDAG              - The graph is a DAG
 %   
-%   cGraphAnalysis methods:
-%     isProductive        - check if the SSR graph is productive
-%     isReachable         - check if two nodes are reacheable
-%     isStrongConnected   - chek if two nodes belong to the same component
-%     getComponentNames   - get the processes groups names 
-%     getKernelInfo       - get Kernel DAG matrix and node names
-%     getGroupsInfo       - get the groups info structure
-%     plot                - plot the digraph info
+%   cDigraphAnalysis methods:
+%     cDigraphAnalysis    - Construct an instance of this class
+%     isProductive        - Check if the SSR graph is productive
+%     isReachable         - Check if two nodes are reacheable
+%     isStrongConnected   - Chek if two nodes belong to the same component
+%     getComponentNames   - Get the processes groups names 
+%     getKernelInfo       - Get Kernel DAG matrix and node names
+%     getGroupsInfo       - Get the groups info structure
+%     plot                - Plot the digraph
 %
     properties(GetAccess=public,SetAccess=private)
-      NrOfNodes          % Number of nodes in the graph
-      NrOfComponents     % Number of components
-      GraphEdges         % Edges of the graph
-      GraphNodes         % Nodes of the graph      
-      KernelNodes        % Nodes of the kernel DAG
-      KernelEdges        % Edges of the kernel DAG
-      isDAG              % Indicate if the graph is a DAG 
+        NrOfNodes          % Number of nodes in the graph
+        NrOfComponents     % Number of components
+        GraphEdges         % Edges of the graph
+        GraphNodes         % Nodes of the graph      
+        KernelNodes        % Nodes of the kernel DAG
+        KernelEdges        % Edges of the kernel DAG
+        isDAG              % Digraph is Acycled
     end
 
     properties(Access=private)
@@ -48,14 +46,14 @@ classdef cDigraphAnalysis < cMessageLogger
     methods
         function obj = cDigraphAnalysis(A,names)
         %cDigraphAnalysis - Construct an instance of this class
-        %   Usage:
+        %   Syntax;
         %     obj = cGraphAnalysis(G,names)
-        %   Input Arguments :
+        %   Input Arguments: :
         %     G - Adjacency matriz of the graph
         %     names - Name of the nodes
-        %   Output Argument:
+        %   Output Arguments:
         %     obj - cDigraphAnalysis object
-        %
+        
             % Check Inputs
             if ~isSquareMatrix(A)
                 obj.messageLog(cType.ERROR,cMessages.NonSquareMatrix,size(A));
@@ -68,17 +66,16 @@ classdef cDigraphAnalysis < cMessageLogger
                 obj.messageLog(cType.ERROR,cMessages.InvalidNodeNames,numel(names),size(A,1));
                 return
             end
-
             % Initialize variables
             obj.graph = cDigraphAnalysis.tfp2ssr(A);
             obj.nodes = ['IN',names(1:end-1),'OUT'];
             obj.NrOfNodes = numel(obj.nodes);
-            % Calculate properties
+            % Get properties
 	        obj.tc = transitiveClosure(obj.graph);
             obj.getStrongComponents;
+            obj.isDAG=(obj.NrOfComponents == obj.NrOfNodes);
             obj.GraphEdges=cDigraphAnalysis.getEdgesTable(obj.graph,obj.nodes);
             obj.GraphNodes=cDigraphAnalysis.getNodesTable(obj.graph,obj.nodes,obj.comps);
-            obj.isDAG=(obj.NrOfComponents == obj.NrOfNodes);
             if obj.isDAG
                 [obj.kG,obj.kNodes] = deal(obj.graph,obj.nodes);
                 obj.KernelEdges=obj.GraphEdges;
@@ -94,20 +91,26 @@ classdef cDigraphAnalysis < cMessageLogger
         %isProductive - Check if the graph is productive
         %   A graph is productive if all source nodes can reach all output nodes
         %   and all output nodes can be reached from all source nodes.
-        %   Usage:
+        %   A graph without cycles (DAG) is always productive.
+        %   Syntax;
         %     [res,src,out] = obj.isProductive()
         %   Output Arguments:
         %     res - true | false
         %     src - Cell array with the non-SSR source nodes (optional)
         %     out - Cell array with the non-SSR output nodes (optional)
         %     
-            % Determine if the graph is productive
             src=cType.EMPTY_CELL;
             out=cType.EMPTY_CELL;
+            % A DAG is always productive
+            if obj.isDAG
+                res=true;
+                return
+            end
+            % Check if all source nodes can reach all output nodes
             s=obj.tc(1,:);
             t=obj.tc(:,end);            
             res=all(s) && all(t);
-            % Show the non-SSR nodes
+            % Get the non-SSR nodes
             if nargout==3
                 idx=find(~s);
                 if ~isempty(idx)
@@ -122,12 +125,12 @@ classdef cDigraphAnalysis < cMessageLogger
 
         function res=isReachable(obj,u,v)
         %isReachable - Check if node v is reachable from node u
-        %  Usage:
+        %  Syntax;
         %    res = obj.isReachable(u,v)
         %  Input Arguments:
         %    u - source node name
         %    v - target node name
-        %  Output Argument:
+        %  Output Arguments:
         %    res - true | false
         %   
             res=false;
@@ -140,13 +143,14 @@ classdef cDigraphAnalysis < cMessageLogger
 
         function res=isStrongConnected(obj,u,v)
         %isStrongConnected - Check if nodes u,v belong to the same component
-        %  Usage:
+        %  Syntax;
         %    res = obj.isReachable(u,v)
         %  Input Arguments:
         %    u - source node
         %    v - target node
-        %  Output Argument:
+        %  Output Arguments:
         %    res - true | false
+        %
             res=false;
             [~,udx]=ismember(u,obj.nodes);
             [~,vdx]=ismember(v,obj.nodes);
@@ -159,7 +163,7 @@ classdef cDigraphAnalysis < cMessageLogger
         %getKernelInfo - Get the Kernel Table information
         %   Syntax:
         %     [kA,kNames] = obj.getKernelInfo()
-        %   Output Parameters:
+        %   Output Arguments:
         %     kA - Kernel Table (FP Table format)
         %     kNames - Kernel Names (FP table format)
         % 
@@ -169,7 +173,7 @@ classdef cDigraphAnalysis < cMessageLogger
 
         function res=getGroupsInfo(obj)
         %getComponets - Build the Node Groups table
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Node Name/Group strcture 
         %
             tmp=obj.GraphNodes;
@@ -180,7 +184,12 @@ classdef cDigraphAnalysis < cMessageLogger
         end
 
         function res=getComponentNames(obj)
-        %getComponentNames
+        %getComponentNames - Get the names of the strong components
+        %   Syntax:
+        %     res = obj.getComponentNames()
+        %   Output Arguments:
+        %     res - Cell array with the names of the strong components
+        %
             idx=obj.comps(2:end-1);
             res=obj.kNodes(idx);
         end
@@ -190,9 +199,9 @@ classdef cDigraphAnalysis < cMessageLogger
         %%%%
         function plot(obj,option,text)
         % plot - plot the digraph
-        %   Usage:
+        %   Syntax:
         %     obj.plot(option,title)
-        %   Input Parameters
+        %   Input Arguments:
         %     option - type of digraph
         %      cType.DigraphType.GRAPH (Full graph without weigth)
         %      cType.DigraphType.KERNEL (Kernel graph without weigth)
@@ -200,8 +209,12 @@ classdef cDigraphAnalysis < cMessageLogger
         %      cType.DigraphType.KERNEL_WEIGHT (Kernel graph with weigth)
         %     text - char array with the title of the digraph
         %
-            % Initialize variables
             DEFAULT_TITLE='Digraph Analysis';
+            % Check inputs
+            if isOctave
+                obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
+                return
+            end
             if nargin<2 || option<0
                 option=0;
                 text=DEFAULT_TITLE;
@@ -249,13 +262,19 @@ classdef cDigraphAnalysis < cMessageLogger
     methods(Access=private)
         function getStrongComponents(obj)
         %getStrongComponents - Get the strong components of the graph
+        %   A strong component is a maximal subgraph in which every node is reachable
+        %   from every other node. A graph without cycles (DAG) has as many
+        %   components as nodes.
         %   The components are calculated using the transitive closure
-        %   The components are stored in obj.comps
-        %   The name of strong components are stores in kNodes
+        %   The components are stored in the property obj.comps
+        %   The name of strong components are stores in obj.kNodes
+        %   Syntax:
+        %     obj.getStrongComponents()
         %
-            % Calculate Strong Components
+            
             n=obj.NrOfNodes;
             res=zeros(1,n); cnt=0;
+            % Find the strongly connected components
             for u=1:n
                 if ~res(u)
                     cnt=cnt+1;
@@ -281,14 +300,8 @@ classdef cDigraphAnalysis < cMessageLogger
         %   The kernel graph is obtained by collapsing each strongly connected component
         %   into a single node. The kernel graph is a DAG.
         %   The kernel graph adjacency matrix is stored in obj.kG
-        %   The output parameters are optional, if provided, Kernel matrix and nodes 
-        %   are obtained in FP Table format
-        %   Usage:
-        %     obj.getKernelTable()
-        %     [kA,kNames]=obj.getKernelTable
-        %   Output Arguments:
-        %     kA: Kernel Matrix in FP Table format
-        %     kNames: Names of the kernel processes (FP Table format)
+        %   Syntax;
+        %     obj.getKernelMatrix()
         %    
             grps=obj.comps;
             ng=obj.NrOfComponents;
@@ -303,15 +316,15 @@ classdef cDigraphAnalysis < cMessageLogger
     methods(Static,Access=private)
         function res=getNodesTable(A,names,groups)
         %getNodeTable - Build Node Table from adjacency matrix and groups.
-        %   Usage:
+        %   Syntax;
         %     res=cDigraphAnalysis.getNodeTable(A,names)
         %   Input Arguments:
         %     A - Adjacency Matrix in SSR format 
         %     names - Names of the internal nodes
         %     groups - Array with the group of each node
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Struct with fields Name and Group, representing the node table
-        %
+        
             % Get number of groups
             ng=max(groups);
             % Internal nodes
@@ -335,14 +348,14 @@ classdef cDigraphAnalysis < cMessageLogger
 
         function res=getEdgesTable(A,names)
         %getEdgesTable - Build Edge Table from adjacency matrix
-        %   Usage:
+        %   Syntax;
         %     res=cDigraphAnalysis.getEdgesTable(A,names)
         %   Input Arguments:
         %     A - Adjacency Matrix in SSR format
         %     names - Names of the internal nodes
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Struct with fields Source, Target and Value, representing the edge table
-        %
+        
             % Internal Edges
             [idx,jdx,ival]=find(A(2:end-1,2:end-1));
             isource=names(idx+1);
@@ -365,12 +378,12 @@ classdef cDigraphAnalysis < cMessageLogger
         end
 
         function G=tfp2ssr(A)
-        % Tranform a Table FP into a SSR adjacency Matrix
-        %   Usage:
+        %tfp2ssr - Tranform a Table FP into a SSR adjacency Matrix
+        %   Syntax;
         %     G=tfp2ssr(A)
-        %   Input Argument:
+        %   Input Arguments:
         %     A: Table FP
-        %   Output Argument
+        %   Output Arguments:
         %     G: Incidence matrix in SSR format
         %
             N=size(A,1);
@@ -380,12 +393,12 @@ classdef cDigraphAnalysis < cMessageLogger
         end
 
         function A=ssr2tfp(G)
-        % Transform a SSR adjacency matrix into Table FP
-        %   Usage:
+        %ssr2tfp - Transform a SSR adjacency matrix into Table FP
+        %   Syntax;
         %     G=tfp2ssr(A)
-        %   Input Argument:
+        %   Input Arguments:
         %     G: Incidence matrix in SSR format        
-        %   Output Argument
+        %   Output Arguments:
         %     A: Table FP
         %
             A=[G(2:end-1,2:end);...

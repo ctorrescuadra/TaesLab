@@ -1,36 +1,64 @@
 classdef (Sealed) cTableCell < cTableResult
 %cTableCell - Implements cTableResult interface to store results as cell arrays.
+%   This class is derived from cTableResult. It implements methods to print the table on console,
+%   get the table as struct or as Matlab table. It also implements methods to get the table properties.
+%   The class is used to store results tables with mixed data types (string and numeric).
 % 
-%   cTableCell constructor
-%     obj = cTableCell(data,rowNames,colNames,props)
-%
 %   cTableCell properties
 %     DataType    - Array with the type of data of each column
 %     FieldNames  - Cell array with field names 
 %     ShowNumber  - Logical variable indicating if line number is printed
 %
-%   cTableCell methods
-%     printTable           - Print a table on console
+%   cTableCell properties (inherited from cTableResult):
+%     Format    - Format of the table columns
+%     Unit      - Units of the table columns
+%     NodeType  - Type of Row key
+%
+%   cTableCell properties (inherited from cTable):
+%     Data        - Cell array with the table data
+%     Values      - Cell array with the table data including row and column names
+%     RowNames    - Cell array with the row names
+%     ColNames    - Cell array with the column names
+%     NrOfRows    - Number of rows
+%     NrOfCols    - Number of columns
+%     Name        - Name of the table
+%     Description - Description of the table
+%     State       - State Name of the data
+%     Sample      - Resource sample name
+%     Resources   - Contains reources info
+%     GraphType   - Graph Type associated to table
+
+%   cTableCell methods:
+%     cTableCell           - Create an instance of the class
 %     formatData           - Get formatted data
+%     getMatlabTable       - Get table as Matlab table object
+%     getStructData        - Get data as struct array
+%     getStructTable       - Get the table as a struct. Include properties
 %     getDescriptionLabel  - Get the title label for GUI presentation
 %     getColumnValues      - Get the values of a column (using FieldNames)
-%     getMatlabTable       - Get data as MATLAB table
-%     getStructTable       - Get table as struct
-%     getStructData        - Get data as struct array
+%     printTable           - Print a table on console
 %
-%   cTable Methods
-%     getProperties   - Get table properties
+%   cTableCell methods (inherited from cTableResult):
+%     exportTable   - Get cTable info in diferent types of variables
+%     getCellData   - Get table as cell array
+%     getProperties - Get the additional properties of a cTableResults
+%
+%   cTableCell methods (inherited from cTable):
+%     getColumnWidth  - Get the width of each column
+%     getColumnFormat - Get the format of each column (TEXT or NUMERIC)
+%     isNumericColumn - Check if a column is numeric
+%     isNumericTable  - Check if the table is numeric
+%     getStructTable  - get a structure with the table info
+%     setColumnValues - set the values of a column
+%     setRowValues    - set the values of a row
 %     setStudyCase    - Set state and sample values
-%     setDescription  - Set Table Header or Description
-%     showTable       - Show the tables in diferent interfaces
-%     exportTable     - Export table in diferent formats
-%     saveTable       - Save a table into a file in diferent formats
-%     isNumericTable  - Check if all data of the table are numeric
-%     isNumericColumn - Check if a column data is numeric
-%     isGraph         - Check if the table has a graph associated
-%     getColumnFormat - Get the format of the columns
-%     getColumnWidth  - Get the width of the columns
-%     getStructTable  - Get a structure with the table info
+%     setDescription  - Set Table Header or Description 
+%     isNumericColumn - Check if a column is numeric
+%     isNumericTable  - Check if the table is numeric
+%     isGraph         - Check if the table is a graphic table
+%     showTable       - show the tables in diferent interfaces
+%     exportTable     - export table in diferent formats
+%     saveTable       - save a table into a file in diferent formats
 %
 %   See also cTableResult, cTable
 %
@@ -45,7 +73,7 @@ classdef (Sealed) cTableCell < cTableResult
         %cTableCell - Create Cell Table object
         %   Syntax:
         %     obj = cTableCell(data,rowNames,colNames,props)
-        %   Input:
+        %   Input Arguments:
         %     data - data values as cell array
         %     rowNames - row's names as cell array 
         %     colNames - column's  names as cell array
@@ -59,6 +87,8 @@ classdef (Sealed) cTableCell < cTableResult
         %       FieldNames: optional field name of the columns
         %       ShowNumber: true/false show column number option
         %       NodeType: Type of node (flow, process, stream)
+        %   Output Arguments:
+        %     obj - cTableCell object
         %
             % Assign properties
             if iscolumn(rowNames)
@@ -85,7 +115,7 @@ classdef (Sealed) cTableCell < cTableResult
         %formatData - Apply format to data
         %   Syntax:
         %     res=obj.formatData
-        %   Output Results:
+        %   Output Arguments:
         %     res - formatted data (numeric)
         %
             N=obj.NrOfRows;
@@ -103,9 +133,9 @@ classdef (Sealed) cTableCell < cTableResult
 
         function res=getMatlabTable(obj)
         %getMatlabTable - Get table as Matlab table object
-        % Syntax:
-        %   res=obj.getMatlabTable
-        % Output Results:
+        %   Syntax:
+        %     res=obj.getMatlabTable
+        %   Output Arguments:
         %   res - Matlab table with data information and properties
         %
             res=getMatlabTable@cTable(obj);
@@ -120,13 +150,14 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getStructData(obj,fmt)
-        % getStructData - Get the table data as struct
-        % Syntax:
-        %   res = obj.getStructData(fmt)
-        % Input Argument:
-        %   fmt - Use data table format true | false (default)
-        % Output Argument:
-        %   res - struct with data information
+        %getStructData - Get the table data as struct
+        %   Syntax:
+        %       res = obj.getStructData(fmt)
+        %   Input Arguments:
+        %       fmt - Use data table format true | false (default)
+        %   Output Arguments:
+        %       res - struct with data information
+        %
             if ~obj.status
                 printLogger(obj)
                 return
@@ -143,11 +174,11 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getStructTable(obj)
-        % getStructTable - Get the table as a struct. Include properties
-        % Syntax:
-        %   res = obj.getStructTable
-        % Output Argument:
-        %   res - struct with data information and properties
+        %getStructTable - Get the table as a struct. Include properties
+        %   Syntax:
+        %     res = obj.getStructTable
+        %   Output Arguments:
+        %     res - struct with data information and properties
             if ~obj.status
                 printLogger(obj)
                 return
@@ -165,13 +196,13 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getDescriptionLabel(obj)
-        % getDescriptionLabel - Get the description of the table
+        %getDescriptionLabel - Get the description of the table
         %   It is used in printTable and graphs
         %   Include table 'Description' 'State' and Sample
-        % Syntax:
-        %   res = obj.getDescriptionLabel
-        % Output Argument:
-        %   res - char array containg the table description 
+        %   Syntax:
+        %     res = obj.getDescriptionLabel
+        %   Output Arguments:
+        %     res - char array containg the table description 
         %     and the state of the table values
         % 
             if obj.Resources
@@ -182,14 +213,15 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function printTable(obj,fId)
-        % printTable - Print table on console or in a file in a pretty formatted way
-        % Syntax:
-        %   obj.printTable(fid)
-        % Input Argument:
-        %   fId - optional parameter 
-        %     If not provided, table is show in console
-        %     If provided, table is writen to a file identified by fId
-        % See also fopen
+        % printTable - Display table on console or in a file in a pretty formatted way
+        %   Syntax:
+        %     obj.printTable(fid)
+        %   Input Arguments:
+        %     fId - (optional) file id parameter 
+        %       If not provided, table is show in console
+        %       If provided, table is writen to a file identified by fId
+        %   See also fopen
+        %
             if ~obj.status
                 printLogger(obj)
                 return
@@ -234,15 +266,15 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function res=getColumnValues(obj,key)
-        % getColumnValues - Get the values of a specfic column
-        % Syntax:
-        %   res=obj.getColumnValues(key)
-        % Input Argument:
-        %   key - Name of the column identified by property 'FieldName'
-        % Output Argument
-        %   res - Values of the column
-        %     If column is a string then res is a cell array
-        %     If column is numeric then res is a numeric array
+        %getColumnValues - Get the values of a specfic column
+        %   Syntax:
+        %     res=obj.getColumnValues(key)
+        %   Input Arguments:
+        %     key - Name of the column identified by property 'FieldName'
+        %   Output Arguments:
+        %     res - Values of the column
+        %       If column is a string then res is a cell array
+        %       If column is numeric then res is a numeric array
         %
             res=cType.EMPTY;
             [~,idx]=ismember(key,obj.FieldNames);
@@ -280,12 +312,22 @@ classdef (Sealed) cTableCell < cTableResult
         end
 
         function setColumnFormat(obj)
-        % Define the format of each column (CHAR or NUMERIC)
+        %setColumnFormat - Define the format of each column (CHAR or NUMERIC)
+        %   Set the property fcol
+        %   It is used in printTable method
+        %   Syntax:
+        %     setColumnFormat(obj)
+        %
             obj.fcol=(obj.DataType>cType.Format.TEXT)+1;
         end
 
         function setColumnWidth(obj)
-        % define the width of the columns
+        %setColumnWidth - Define the width of the columns
+        %   Set the property wcol
+        %   It is used in printTable method
+        %   Syntax:
+        %     setColumnWidth(obj)
+        %
             M=obj.NrOfCols;
             res=zeros(1,M);
             for j=1:M

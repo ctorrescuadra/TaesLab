@@ -2,13 +2,13 @@ function ShowGraph(arg,varargin)
 %ShowGraph - Display the graph associated with a results table.
 %	Depending on the graph, additional options could be used.
 %
-%   Syntax 
+%   Syntax: 
 %     ShowGraph(arg,Name,Value)
 % 
-%   Input Argument
+%   Input Arguments:
 %     arg - cResultSet object
 %
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     Graph: Name of the table
 %       char array
 %     ShowOutput: Show Output variation.Use for Diagnosis tables. 
@@ -20,7 +20,7 @@ function ShowGraph(arg,varargin)
 %     Variables: Variables used in Summary results. 
 %       cell array
 %
-%   Example
+%   Example:
 %     <a href="matlab:open ShowGraphDemo.mlx">Show Graph Demo</a>
 %
 %   See also cGraphResults, cResultSet

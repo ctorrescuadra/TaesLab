@@ -8,7 +8,7 @@ classdef (Abstract) cGraphResults < cMessageLogger
 %     cGraphDiagramFP - Show Diagram FP
 %     cGraphRecycling - Show Waste Recycling graphs
 %     cGraphSummary   - Show Summary results graphs
-%     cGraphWaste    - Show Waste Allocation graphs
+%     cGraphWaste     - Show Waste Allocation graphs
 %
     properties(Access=public)
         Type        % Graph Type
@@ -26,8 +26,11 @@ classdef (Abstract) cGraphResults < cMessageLogger
     methods(Access=protected)
 		function setGraphParameters(obj,ax)
         %setGraphParameters - Set axis graph parameters
+        %   Syntax:
+        %     obj.setGraphParameters(ax)
         %   Input:
         %     ax - axis graphic object
+        %
             hold(ax,'off');
             title(ax,obj.Title,'fontsize',14);
             set(ax,'xtick',obj.xValues,'xticklabel',obj.Categories);
@@ -42,6 +45,8 @@ classdef (Abstract) cGraphResults < cMessageLogger
 
         function setGraphParametersUI(obj,app)
         %setGraphParametersUI - Set axis graph parameters for GUI applications
+        %   Syntax:
+        %     obj.setGraphParametersUI(app)
         %   Input:
         %     app - app reference for UIAxes
             title(app.UIAxes,obj.Title,'FontSize',14);

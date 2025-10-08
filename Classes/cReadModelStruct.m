@@ -1,8 +1,10 @@
 classdef (Abstract) cReadModelStruct < cReadModel
 %cReadModelStruct - Abstract class to read structured data model.
-%   This class derives cReadModelJSON and cReadModelXML
+%   It implements the common properties and methods of the model reader
+%   based on structured data.
+%   Derived classes cReadModelJSON and cReadModelXML
 %
-%   cReadModelStruct methods
+%   cReadModelStruct methods:
 %     buildModelData - Build the cModelData object
 %
 %   See also cReadModel, cReadModelJSON, cReadModelXML
@@ -12,7 +14,7 @@ classdef (Abstract) cReadModelStruct < cReadModel
 		% Build the cModelData from structured data
         % Input Arguments:
         %   data - structured data
-        % Output Arguments
+        % Output Arguments:
         %   res - cModelData object
         %
 			res=cModelData(obj.ModelName,data);

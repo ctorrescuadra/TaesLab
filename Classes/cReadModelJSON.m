@@ -1,10 +1,10 @@
 classdef (Sealed) cReadModelJSON < cReadModelStruct
 %cReadModelXML - Implement the cReadModelStruct to read JSON data model files.
-%   This class read a JSON file containing the thermoeconomic model data
-%   and build the data model
+%   This class reads a JSON file containing the thermoeconomic data
+%   and store it into a structure data.
 %
-%   cReadModelCSV constructor
-%     obj=cReadModelJSON(cfgfile)
+%   cReadModelCSV methods:
+%     - cReadModelCSV - Build an instance of the class
 %
 %   See also cReadModel, cReadModelStruct
 %
@@ -15,6 +15,14 @@ classdef (Sealed) cReadModelJSON < cReadModelStruct
         %     obj=cReadModelJSON(cfgfile)
         %   Input Arguments:
 		%	  cfgfile - json file containig the model of the plant
+        %   Output Arguments:
+        %     obj - cReadModelJSON object
+        %
+            %check arguments
+            if isOctave 
+                obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'JSON');
+                return
+            end
 		% 
 			% Read configuration file
             try

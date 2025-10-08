@@ -5,21 +5,21 @@ function B = similarResourceOperator(A, x)
 %   Syntqx
 %     B = similarResourceOperator(A,x)
 %
-%   Input Arguments
+%   Input Arguments:
 %     A - Demand-Driven Operator
 %     x - Transformation vector
 %
-%   Output Arguments
+%   Output Arguments:
 %     B - Resource-Driven Operator
 
-%   Example
+%   Example:
 %     A = [1, 0.5, 0; 0, 1, 0.6667; 0, 0, 1];
 %     x = [1; 2; 3];
 %     B = similarResourceOperator(A, x); %B = [1, 1, 0; 0, 1, 1; 0, 0, 1]
 %
 %   See also similarDemandOperator, similarResourceMatrix
-%
-    % Check Input Arguments
+
+    % Check Input Arguments:
     if nargin < 2 || nargin > 2
         error('ERROR: similarOperator. Requires two input arguments');
     end

@@ -1,23 +1,30 @@
 classdef (Sealed) cDiagramFP < cResultId
 %cDiagramFP - Build the Diagram FP adjacency tables.
+%   This class builds the exergy and exergy cost adjacency tables of the
+%   productive structure of a cExergyCost object. It also creates the kernel
+%   tables and the nodes and edges structures to be used in graph plots.
 %
-%   cDiagramFP constructor:
-%     obj = cDiagramFP(exc)
-%
-%   cDiagramFP properties
-%     EdgesFP  - Edges struct of the exergy adjacency table FP
-%     EdgesCFP - Edges struct of the exergy cost adjacency table FP
-%     EdgesKFP - Edges struct of the exergy kernel table FP
-%     EdgesKCFP- Edges struct of the exergy cost kernel table FP
-%     NodesFP  - Nodes struct Table FP
-%     NodesKFP - Nodes struct Kernel Table FP
+%   cDiagramFP properties:
+%     Names       - Process Names
+%     kNames      - Kernel Process Names
+%     TableFP     - Exergy adjacency table FP
+%     TableCFP    - Exergy cost adjacency table FP
+%     TableKFP    - Exergy kernel table FP
+%     TableKCFP   - Exergy cost kernel table FP
+%     EdgesFP     - Edges struct of the exergy adjacency table FP
+%     EdgesCFP    - Edges struct of the exergy cost adjacency table FP
+%     EdgesKFP    - Edges struct of the exergy kernel table FP
+%     EdgesKCFP   - Edges struct of the exergy cost kernel table FP
+%     NodesFP     - Nodes struct Table FP
+%     NodesKFP    - Nodes struct Kernel Table FP
 %     GroupsTable - Group table struct
 %
 %   cDiagramFP methods:
+%     cDiagramFP      - Create an instance of the class
 %     buildResultInfo - Build the cResultInfo object of the diagram FP
-%     getNodeInfo     - get the adjacency table
+%     getNodesTable   - Get the nodes of a diagram
 %
-%   See also cExergyCost, cResultId
+%   See also cResultId, cExergyCost, cResultInfo
 %
     properties (GetAccess=public,SetAccess=private)
         Names        % Process Names
@@ -37,15 +44,16 @@ classdef (Sealed) cDiagramFP < cResultId
 
     methods
         function obj = cDiagramFP(exc)
-        %cDiagramFP - Construct an instance of this class
+        %cDiagramFP - Build an instance of this class
         %   Syntax:
         %     obj = cDiagramFP(mfp)
-        %   Input Argument:
+        %   Input Arguments:
         %     exc - cExergyCost object
-        %   Output Argument
+        %   Output Arguments:
         %     obj - cDigramFP object
-        %
-            if ~isObject(exc,'cExergyCost')
+        
+            % Check input parameters
+            if nargin<1 || ~isObject(exc,'cExergyCost')
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exc));
                 return
             end
@@ -77,10 +85,11 @@ classdef (Sealed) cDiagramFP < cResultId
         %buildResultInfo - Get cResultInfo object of the DiagramFP
         %   Syntax:
         %     res = obj.buildResultInfo(fmt)
-        %   Input Argument:
+        %   Input Arguments:
         %     fmt - cFormatData object
-        %   Output Argument:
+        %   Output Arguments:
         %     res - cResultInfo object
+        %
             res=fmt.getDiagramFP(obj);
         end
 

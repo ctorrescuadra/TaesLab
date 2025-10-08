@@ -1,14 +1,14 @@
 classdef cGraphDiagramFP < cGraphResults
 %cGraphDiagramFP - Plot the FP Diagram.
+%   This class creates a digraph object from a cTableMatrix object
+%   containing the FP adjacency table of a productive structure.
 %
-%   cGraphDiagramFP Constructor
-%     obj=cGraphDiagramFP(tbl,info)
+%   cGraphDiagramFP methods:
+%     cGraphDiagramFP - Build an instance of the class
+%     showGraph       - Show the graph in a window 
+%     showGraphUI     - Show the graph in the graph pannel of a GUI app
 %
-%   cGraphDiagramFP Methods
-%     showGraph   - show the graph in a window 
-%     showGraphUI - show the graph in the graph pannel of a GUI app
-%
-%   See also cGraphResults
+%   See also cGraphResults, cDiagramFP
 %
     properties(Access=private)
         Unit         % Unit of the values
@@ -22,6 +22,8 @@ classdef cGraphDiagramFP < cGraphResults
         %   Input Arguments:
         %     tbl - cTable with the data to show graphically
         %     info - cExergyCost or cDiagramObject
+        %   Output Arguments:
+        %     obj - cGraphDiagramFP object
         %
             if isOctave
 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
@@ -104,10 +106,10 @@ classdef cGraphDiagramFP < cGraphResults
         %adjacencyTable - Get a table with the edges of the digraph
         %   Syntax:
         %     res=cDiagramFP.adjacencyTables(mFP,nodes);
-        %   Input Argument:
+        %   Input Arguments:
         %     mFP - FP matrix values
         %     nodes - Cell Array with the process node names
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Matlab table containing the edges of the digraph
         %      The tablet has the following fields
         %        EndNodes - source and target nodes of the edge
@@ -136,10 +138,10 @@ classdef cGraphDiagramFP < cGraphResults
         %nodesTable - Get a table with the properties of the nodes
         %   Syntax:
         %     res=cDiagramFP.nodesTable(mFP,nodes);
-        %   Input Argument:
+        %   Input Arguments:
         %     mFP - FP matrix values
         %     nodes - Cell Array with the process node names
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Matlab table containing the properties of the nodes
         %      The tablet has the following fields
         %        Name  - name of the node

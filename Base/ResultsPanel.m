@@ -4,19 +4,19 @@ classdef (Sealed) ResultsPanel < cTaesLab
 %   You can select a table or graph by clicking on the corresponding table.
 %   In the 'View' menu, you can choose where the tables are displayed:  the console, a web browser, or a GUI table.
 %   In addition, the current ResultSet can be saved into a file using the File->Save menu option.
-%
-%   ResultsPanel constructor:
-%     obj = ResultsPanel(res)
-%   
+%  
 %   ResultsPanel properties:
-%     resultInfo - Result set info object
-%     tableView  - Table view option
+%     ResultsPanel - Create an instance of the class
+%     resultInfo   - Result set info object
+%     tableView   - Table view option
 %
 %   ResultsPanel methods:
+%     ResultsPanel  - Create an instance of the class
 %     showResults   - Show another results
 %     setViewOption - Set the view option
 %     viewPanel     - Show the panel on the top
 %     hidePanel     - Hide the panel
+%     closeApp      - Close the panel
 %       
 %   See also cResultSet
 %
@@ -38,9 +38,13 @@ classdef (Sealed) ResultsPanel < cTaesLab
 
     methods
         function app=ResultsPanel(res)
-        % ResultsPanel - Create an instance of the class
-        % Input Arguments:
-        %   res - cResultSet object
+        %ResultsPanel - Create an instance of the class
+        %   Syntax:
+        %     app = ResultsPanel(res)
+        %   Input Arguments:
+        %     res - cResultSet object
+        %   Output Arguments:
+        %     app - ResultsPanel object
         %
             log=cMessageLogger();
             app.createPanel;
@@ -55,9 +59,11 @@ classdef (Sealed) ResultsPanel < cTaesLab
 
         function showResults(app,res)
         % showResults - Get the table index of the result set and show it in the table panel
+        %   Syntax:
+        %     app.showResults(res)  
         %  Input:
         %   res - cResultSet 
-        %
+        
             % Check Input parameter
             log=cMessageLogger();
             if ~isObject(res,'cResultSet')
@@ -78,18 +84,29 @@ classdef (Sealed) ResultsPanel < cTaesLab
         end
 
         function viewPanel(app)
-        % viewPanel - Show the table panel on top window
+        %viewPanel - Show the table panel on top window
+        %   Syntax:
+        %     app.viewPanel
+        %
             set(app.fig,'Visible','on');
             figure(app.fig);
         end
 
         function hidePanel(app)
-        % hidePanel - Hide the table panel 
+        % hidePanel - Hide the table panel
+        %   Syntax:
+        %     app.hidePanel
             set(app.fig,'Visible','off')
         end
 
         function setViewOption(app,idx)
         % setViewOption - Set the actual view option and update menu
+        %   Syntax:
+        %     app.setViewOption(idx)
+        %   Input Arguments:
+        %     idx - index of the view option
+        %       cType.TableView.CONSOLE | cType.TableView.HTML | cType.TableView.GUI
+        %
             pos=idx+1;
             if pos>0
                 app.tableView=idx;
@@ -100,6 +117,9 @@ classdef (Sealed) ResultsPanel < cTaesLab
 
         function closeApp(app,~,~)
         % closeApp - Close callback
+        %   Syntax:
+        %     app.closeApp()
+        %
             delete(app.fig);
             app.status=false;
         end
@@ -107,7 +127,10 @@ classdef (Sealed) ResultsPanel < cTaesLab
 
     methods(Access=private)
         function createPanel(app)
-        % Create Panel
+        %createPanel - Create Results Panel GUI
+        %   Syntax:
+        %     app.createPanel()
+        %
             ss=get(groot,'ScreenSize');
             xsize=ss(3)/4;
             ysize=ss(4)/1.8;
@@ -155,14 +178,26 @@ classdef (Sealed) ResultsPanel < cTaesLab
         end
 
         function selectViewOption(app,src,~)
-        % Set the table view as internal
+        %selectViewOption - Set the table view option callback
+        %   Syntax:
+        %     app.selectViewOption(src,event)
+        %   Input Arguments:
+        %     src - Menu handle
+        %     event - Event data (not used)
+        %
             text=get(src,'Text');
             idx=cType.getTableView(text);
             app.setViewOption(idx)
         end
 
         function selectTable(app,~,event)
-        % Cell selection callback.
+        %selectTable - Cell selection callback.
+        %   Syntax:
+        %     app.selectTable(src,event)
+        %   Input Arguments:
+        %     src - Table handle (not used)
+        %     event - Event data
+        %
             indices=event.Indices;
             if numel(indices)<2
                 return
@@ -185,7 +220,15 @@ classdef (Sealed) ResultsPanel < cTaesLab
         end
 
 		function saveResults(app,~,~)
-		% Save results callback
+		%saveResults - Save results callback
+        %   Syntax:
+        %     app.saveResults()
+        %
+            log=cMessageLogger();
+            if isempty(app.resultInfo)
+                log.printError(cMessages.NoResultsToSave);
+                return
+            end
 			default_file=cType.RESULT_FILE;
 			[file,path,ext]=uiputfile(cType.SAVE_RESULTS,'Select File',default_file);
             if ext % File has been selected
@@ -202,7 +245,10 @@ classdef (Sealed) ResultsPanel < cTaesLab
         end
 
         function saveTable(app,~,~)
-        % SaveTable callback
+        %saveTable - Save Table callback
+        %   Syntax:
+        %     app.saveTable()
+        %
             if ~isempty(app.currentTable)
                 tbl=app.currentTable;
                 default_file=tbl.Name;

@@ -1,5 +1,5 @@
 classdef(Abstract) cResultId < cMessageLogger
-%cResultID - Base class for the classes that provide results info.
+%cResultId - Abstract class to manage the result identification.
 %    It is used by cProductiveStructure, cExergyModel, cExergyCost, cDiagnosis, 
 %    cRecyclingAnalysis, cDiagramFP, cWasteData, and cSummaryResults.
 %
@@ -41,21 +41,25 @@ classdef(Abstract) cResultId < cMessageLogger
 
         function setResultId(obj,id)
         %setResultId - Set ResultId. Internal package use only
-        %   Input Arguments
+        %   Input Arguments:
         %     id - ResultId number
+            if ~isIndex(id,1,cType.MAX_RESULT_INFO)
+                obj.messageLog(cType.ERROR,cMessages.InvalidResultId,id);
+                return
+            end
             obj.ResultId=id;
         end
 
         function setSample(obj,sample)
         %setSample - Set Resource Sample Name. Internal package use only
-        %   Input Arguments
+        %   Input Arguments:
         %     sample - Resource sample name
             obj.Sample=sample;
         end
 
         function setDefaultGraph(obj,graph)
         %setDefaultGraph - Set Default Graph. Internal package use only
-        %   Input Arguments
+        %   Input Arguments:
         %     sample - Resource sample name
             obj.DefaultGraph=graph;
         end

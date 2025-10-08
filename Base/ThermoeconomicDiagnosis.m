@@ -6,13 +6,13 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %   'WASTE_INTERNAL' internalises the waste costs to the productive processes that generate them. 
 %   The data model must have at least two states defined to perform the analysis.
 % 
-%   Syntax
+%   Syntax:
 %	  res = ThermoeconomicDiagnosis(data,Name,Value)
 % 
-%   Input Arguments
+%   Input Arguments:
 %     data - cReadModel object containing the data information
 %    
-%   Name-Value Arguments
+%   Name-Value Arguments:
 %     Reference State - Reference State. If not provided first state is used
 %       char array
 %     State - State to compare. If not provided second state is used
@@ -25,28 +25,29 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %     SaveAs - Name of file (with extension) to save the results.
 %     char array | string
 % 
-%   Output Arguments
+%   Output Arguments:
 %     res - cResultsInfo object contains the results of the thermoeconomic diagnosis for the required state
-%     The following tables are obtained:
-%      dgn -  diagnosis summary table
-%      mf -   malfunction table
-%      mfc -  malfunction cost table
-%      dit -  irreversibility variation
+%      The following tables are obtained:
+%       dgn - diagnosis summary table
+%        mf - malfunction table
+%       mfc - malfunction cost table
+%       dit - irreversibility variation
 %      tmfc - total malfunction cost
-%      dft  - Fuel Impact
+%       dft - Fuel Impact
 %
-%   Example
+%   Example:
 %     <a href="matlab:open ThermoeconomicDiagnosisDemo.mlx">Thermoeconomic Diagnosis Demo</a>
 %
 %   See also cDataModel, cDiagnosis, cResultInfo
-%
+
+    % Initialize and validate input parameters
     res=cMessageLogger();
 	if nargin<1 || ~isObject(data,'cDataModel')
 		res.printError(cMessages.DataModelRequired);
         res.printError(cMessages.ShowHelp);
 		return
 	end
-    % Check input parameters
+    % Check optional input parameters
     p = inputParser;
     p.addParameter('ReferenceState',data.StateNames{1},@data.existState)
 	p.addParameter('State',cType.EMPTY_CHAR,@ischar);
@@ -60,7 +61,7 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         res.printError(cMessages.ShowHelp);
         return
     end
-    % Check Parameters
+    % Validate parameters
     param=p.Results;
     if ~data.isDiagnosis
         res.printError(cMessages.DiagnosisNotAvailable);

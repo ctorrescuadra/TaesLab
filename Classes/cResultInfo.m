@@ -1,17 +1,15 @@
 classdef cResultInfo < cResultSet
-%cResultInfo - Dispatcher class for the application results.
+%cResultInfo - Class to manage the result information and tables.
 %   It stores the tables and the application class info, and provide methods to show them
 %   The diferent types (ResultId) of cResultInfo objects are defined in cType.ResultId
-%
-%   cResultInfo constructor:
-%     obj = cResultInfo(info,tables)
 %
 %   cResultInfo properties:
 %     NrOfTables   - Number of tables
 %     Tables       - Struct containing the tables
 %     Info         - cResultId object containing the results
 %
-%   cResultInfo Methods:
+%   cResultInfo methods:
+%     cResultInfo      - Construct an instance of this class
 %     getResultInfo    - Get the result set object
 %     getTable         - Get a table of the result set
 %     getTableIndex    - Get the summary table of th results
@@ -20,7 +18,7 @@ classdef cResultInfo < cResultSet
 %     isStateSummary   - Check if States Summary is available
 %     isSampleSummary  - Check if Samples Summary is available
 %
-%   cResultSet Methods
+%   cResultInfo methods (inherited from cResultSet):
 %     StudyCase      - Get the study case value names
 %     ListOfTables   - get the table names from a result set
 %     printResults   - Print results on console
@@ -52,7 +50,9 @@ classdef cResultInfo < cResultSet
         %   Input Arguments:
         %     info - cResultId containing the results
         %     tables - struct containig the result tables
-        %
+        %   Output Arguments:
+        %     obj - cResultInfo object
+        
             % Check parameters
             if ~info.status
                 obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(info));
@@ -84,7 +84,7 @@ classdef cResultInfo < cResultSet
         %getResultInfo - Get cResultInfo object for cResultSet
         %   Syntax:
         %     res=obj.getResultInfo
-        %   Output Arguments
+        %   Output Arguments:
         %     res - cResultInfo associated to the result set
         %
             res=obj;
@@ -94,9 +94,9 @@ classdef cResultInfo < cResultSet
         %getTable - Get the table called name
         %   Syntax:
         %     res=obj.getTable(name)
-        %   Input Argument:
+        %   Input Arguments:
         %     name - Name of the table
-        %   Output Argument:
+        %   Output Arguments:
         %     res - cTable object
         %
             res = cMessageLogger();
@@ -124,7 +124,7 @@ classdef cResultInfo < cResultSet
         %       cType.VarMode.CELL: cell array
         %       cType.VarMode.STRUCT: structured array
         %       cType.VarModel.TABLE: Matlab table
-        %   Output Argument:
+        %   Output Arguments:
         %     res - Table Index info in the format selected
         %
             if nargin==1
@@ -216,8 +216,9 @@ classdef cResultInfo < cResultSet
         %   Syntax:
         %     obj.summaryTables
         %     res=obj.summaryTables;
-        %   Output Argument
+        %   Output Arguments:
         %     res - Default Summary Option
+        %
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
                 res=obj.Info.defaultSummaryTables;
@@ -233,6 +234,7 @@ classdef cResultInfo < cResultSet
         %     res = obj.isStateSummary
         %   Output Arguments:
         %     res - true | false
+        %
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
                 res=obj.Info.isStateSummary;
@@ -245,6 +247,7 @@ classdef cResultInfo < cResultSet
         %     res = obj.isStateSummary
         %   Output Arguments:
         %     res - true | false
+        %
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
                 res=obj.Info.isSampleSummary;
@@ -254,19 +257,47 @@ classdef cResultInfo < cResultSet
 
     methods(Access=private)
         function setStudyCase(obj,info)
-        % Set state and resource sample properties for all result set tables
+        %setStudyCase - Set state and resource sample properties for all result set tables
+        %   Syntax:
+        %     obj.setStudyCase(info)
+        %   Input Arguments:
+        %     info - struct with fields State and Sample
+        %
+            if ~isstruct(info) || ~all(isfield(info,{'State','Sample'})) || ...
+                    ~ischar(info.State) || ~ischar(info.Sample)
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                return
+            end
             cellfun(@(x) setStudyCase(x,info),obj.tableIndex.Content);
             obj.State=info.State;
             obj.Sample=info.Sample;
         end
 
         function status=existTable(obj,name)
-        % Check if there is a table called name available on the result set
+        %existTable - Check if there is a table called name available on the result set
+        %   Syntax:
+        %     status=obj.existTable(name)
+        %   Input Arguments:
+        %     name - Name of the table
+        %   Output Arguments:
+        %     status - true | false
+        %
+            status=false;
+            if nargin<2 || ~ischar(name) || isempty(name)
+                return
+            end
             status=isfield(obj.Tables,name);
         end
 
         function status=checkTables(obj,tables)
-        % Check if the results set tables are valid
+        %checkTables - Check if the results set tables are valid
+        %   Syntax:
+        %     status=obj.checkTables(tables)
+        %   Input Arguments:
+        %     tables - struct containig the result tables
+        %   Output Arguments:
+        %     status - true | false
+        %
             names=fieldnames(tables);
             test=cellfun(@(x) isValid(tables.(x)),names);
             status=all(test);

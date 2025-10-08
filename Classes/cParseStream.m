@@ -1,13 +1,15 @@
 classdef cParseStream
-%cParseStream - Static utility class to check and validadate strings.
+%cParseStream - Class with static methods to parse stream definition
 %   Contains functions to check names and fuel-product string definition
 %
-%   cParseStream Methods
-%     checkProcess   - Check the F-P definition string
+%   cParseStream methods:
+%     checkStreams   - Check the F-P definition string
 %     getFlowList    - Get the list of flows in a FP definition string
 %     getStreams     - Get the list of productive groups
 %	  getFlows       - Get the input and output flows of a productive group
 %     checkKeyText   - Check if a key name is valid
+%     checkListKeys  - Check if a list of keys are valid
+%     checkDuplicates- Check if a list has duplicate values
 %     checkName      - Check if a State or Sample name is valid
 %     checkListNames - Check if a list of names (states, samples) are valid 
 %
@@ -32,10 +34,10 @@ classdef cParseStream
 	end
 
     methods(Static)
-        function test=checkDefinitionFP(exp)
-		%checkDefinitionFP check if a fuel/product definition string is correct
+        function test=checkStream(exp)
+		%checkStream - Check if a fuel/product definition string is correct
         %   Syntax:
-        %     test=cParseStream.checkDefinitionFP(exp)
+        %     test=cParseStream.checkStream(exp)
         %   Input Arguments: 
         %     exp - FP definition string
         %   Output Arguments:
@@ -108,9 +110,9 @@ classdef cParseStream
         %checkName - Check if a name (state | sample) is valid
         %   Syntax:
         %     res=cParseStream.checkName(name)
-        %   Input Argument:
+        %   Input Arguments:
         %     name: char array to check
-        %   Output Argument:
+        %   Output Arguments:
         %     res - true/false
             res=false;
             if ischar(name)
@@ -122,9 +124,9 @@ classdef cParseStream
         %checkTextKey - Check if a text key is valid
         %   Syntax:
         %     res=cParseStream.checkTextKey(name)
-        %   Input Argument:
+        %   Input Arguments:
         %     key: char array to text
-        %   Output Argument:
+        %   Output Arguments:
         %     res - true/false
             res=false;
             if ischar(key)
@@ -136,9 +138,9 @@ classdef cParseStream
         %checkListNames - Check if a list of names is valid
         %   Syntax:
         %     res=cParseStream.checkListNames(name)
-        %   Input Argument:
+        %   Input Arguments:
         %     list: cell array of text
-        %   Output Argument:
+        %   Output Arguments:
         %     res - array with the position of the invalid keys
         %
             tmp=cellfun(@(x) cParseStream.checkName(x),list);
@@ -149,9 +151,9 @@ classdef cParseStream
         %checkListKeys - Check if a list of keys is valid
         %   Syntax:
         %     res=cParseStream.checkListKeys(name)
-        %   Input Argument:
+        %   Input Arguments:
         %     list: cell array of text
-        %   Output Argument:
+        %   Output Arguments:
         %     res - array with the position of the invalid keys
         %
             tmp=cellfun(@(x) cParseStream.checkTextKey(x),list);
@@ -162,9 +164,9 @@ classdef cParseStream
         %checkUniqueKeys - Check if the list has duplicate values
         %   Syntax:
         %     ier=cParseStream.checkUniqueKeys(keys)
-        %   Input Argument:
+        %   Input Arguments:
         %     keys - cell array of text
-        %   Output Argument:
+        %   Output Arguments:
         %     ier - Array with the position of the duplicate keys.
         %
             N=length(list);
@@ -181,16 +183,18 @@ classdef cParseStream
         %     char - char to analyze
         %   Output:
         %     res - type of char code
+        %
+            res=0;
+            if isempty(char) || (length(char)~=1)
+                return
+            end
             if isstrprop(char,'upper')
                 res=cParseStream.KEY_FIRST;
-                return
             elseif isstrprop(char,'alphanum')
                 res=cParseStream.KEY_TEXT;
             else
                 test=strfind(cParseStream.TEMPLATE,char);
-                if isempty(test)
-                    res=0;
-                else
+                if ~isempty(test)
                     res=cParseStream.TYPE_TABLE(test);
                 end
             end

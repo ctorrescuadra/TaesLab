@@ -1,14 +1,14 @@
 classdef cGraphDiagnosis < cGraphResults
 %cGraphDiagnosis - Plot the diagnosis graphs.
+%   This class creates a stacked bar graph from a cTable object
+%   containing the diagnosis data of a productive structure.
 %
-%   cGraphDiagnosis Constructor
-%     obj=cGraphDiagnosis(tbl,info,option)
+%   cGraphDiagnosis methods:
+%	  cGraphDiagnosis - Build an instance of the class
+%     showGraph       - Show the graph in a window 
+%     showGraphUI     - Show the graph in the graph pannel of a GUI app
 %
-%   cGraphDiagnosis Methods
-%     showGraph   - show the graph in a window 
-%     showGraphUI - show the graph in the graph pannel of a GUI app
-%
-%   See also cGraphResults
+%   See also cGraphResults, cDiagnosis
 %
     methods
         function obj=cGraphDiagnosis(tbl,info,option)
@@ -17,8 +17,11 @@ classdef cGraphDiagnosis < cGraphResults
         %     obj = cDigraph(tbl,info)
         %   Input Arguments:
         %     tbl    - cTable with the data to show graphically
-        %     info   - cGraphDiagnosis object with additional info
+        %     info   - cDiagnosis object with additional info
         %     option - (true/false) plot last bar (Demand Variation)
+        %   Output Arguments:
+        %     obj    - cGraphDiagnosis object
+        %
             if nargin==2
 				option=true;
             end

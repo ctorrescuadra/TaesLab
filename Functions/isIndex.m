@@ -1,31 +1,27 @@
-function res=isIndex(index,range)
+function res=isIndex(index,min,max)
 %isIndex - Check if a number belong to an index range.
 %   
-%   Syntax
+%   Syntax:
 %     res = isIndex(val)
 %
-%   Input Argument
+%   Input Arguments:
 %     index - value to check
-%     range - index range
+%     min   - minimum index value
+%     max   - maximum index value
 %
-%   Output Argument
+%   Output Arguments:
 %     res - Logical check
 %       true | false
 %
-%   Example 
-%     res = isIndex(3, 1:5); %return true
+%   Example: 
+%     res = isIndex(3, 1, 5); %return true
+%     res = isIndex(3.1, 1, 5); %return false
+%     res = isIndex(6, 1, 5); %return false
 %
     res=false;
     % Check Input
-    if nargin~=2 || ~isnumeric(range) || ~isvector(range) || isempty(range)
+    if nargin~=3 || ~isInteger(index) ||~isInteger(min) || ~isInteger(max) || (min>max)
         return
     end
-    if ~isnumeric(index)
-        return
-    end
-    if isscalar(index)
-        res = isInteger(index) && (index>=range(1)) && (index<=range(end));
-    elseif isvector(index)
-        res = all(ismember(index,range));
-    end
+    res = (index>=min) && (index<=max);
 end

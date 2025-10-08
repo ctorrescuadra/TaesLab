@@ -1,9 +1,7 @@
 classdef cExergyModel < cResultId
 %cExergyModel - Build the Flow-Process exergy model.
 %   It provides the exergy analysis results and the FP table of a state of the plant
-%
-%   cExergyModel constructor:
-%     obj = cExergyModel(exd)
+%   represented by a cExergyData object.
 % 
 %   cExergyModel properties:
 %     NrOfFlows        	   - Number of Flows
@@ -29,13 +27,13 @@ classdef cExergyModel < cResultId
 %     ActiveProcesses      - Active Processes Array (not bypassed)
 %
 %   cExergyModel methods:
-%     buildResultInfo - Build the cResultInfo object associated to EXERGY_ANALYSIS
-%     TotalOutput     - Get the total exergy output the system
-%     FlowProcessTable - Get the Flow-Process Table
+%     cExergyModel            - Create an instance of the class
+%     buildResultInfo         - Build the cResultInfo object associated to EXERGY_ANALYSIS
+%     FlowProcessTable        - Get the Flow-Process Table
 %     InternalIrreversibility - Get the total internal irreversibilities
 %     ExternalIrreversibility - Get the total external irreversibilities
 %
-%   See also cExergyCost, cResultId
+%   See also cExergyData, cExergyCost, cResultId, cResultInfo
 %
 	properties (GetAccess=public, SetAccess=protected)
 		NrOfFlows        	  % Number of Flows
@@ -55,7 +53,7 @@ classdef cExergyModel < cResultId
         Efficiency            % Process Efficiency
 		TotalResources		  % Total Resources
 		FinalProducts         % Final Products
-		TotalOutput
+		TotalOutput           % Total Output Exergy (OUTPUT,WASTE)
 		TotalIrreversibility  % Total Irreversibility
 		TotalUnitConsumption  % Total Unit Consumption
         ActiveProcesses       % Active Processes (not bypass)
@@ -69,21 +67,23 @@ classdef cExergyModel < cResultId
 		%     obj = cExergyModel(exd)
 		%   Input Arguments:
 		%     exd - cExergyData object
-		%
+		%   Output Arguments:
+		%     obj - cExergyModel object
+		
+			% Check input parameters
             if ~isObject(exd,'cExergyData')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(exd));
 				return
             end
-			M=exd.ps.NrOfFlows;
 			% Build Exergy Adjacency Tables
 			tbl=exd.AdjacencyTable;
 			mat=exd.AdjacencyMatrix;
 			% Demand Driven Adjacency Matrices
-			% Build the Flow-Process Table
 			mgF=mat.AE*mat.AF;
 			tgF=mat.AE*tbl.AF;
 			mgP=mat.AP*mat.AS;
 			% Build table FP
+			M=exd.ps.NrOfFlows;
 			if exd.ps.isModelIO
 				mgV=sparse(M,M);
 				mgL=eye(M);
@@ -204,6 +204,8 @@ classdef cExergyModel < cResultId
 		%InternalIrreversibility - get the total internal irreversibility
 		%   Syntax:
 		%     res=obj.InternalIrreversibility
+		%   Output Arguments:
+		%     res - Total internal irreversibility
 		%
 			res=sum(obj.Irreversibility);
 		end
@@ -212,6 +214,8 @@ classdef cExergyModel < cResultId
 		%ExternalIrreversibility - get the total external irreversibility (waste)
 		%   Syntax:
 		%     res=obj.InternalIrreversibility
+		%   Output Arguments:
+		%     res - Total external irreversibility (waste)
 		%
 			ind=obj.ps.Waste.flows;
 			res=sum(obj.FlowsExergy(ind));
@@ -221,7 +225,7 @@ classdef cExergyModel < cResultId
         %FlowProcessTable - get the Flow-Process table 
         %   Syntax:
         %     res=obj.FlowProcessTable
-        %   Output Arguments
+        %   Output Arguments:
         %     res - Structure containg tables tV,tF,tP
 		%     tbl - Table in matrix format
         %

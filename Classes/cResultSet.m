@@ -1,5 +1,5 @@
 classdef(Abstract) cResultSet < cResultId
-%cResultSet - Base class for results dispacher
+%cResultSet - Abstract class to manage the result sets.
 %   The results classes are cResultInfo, cDataModel and cThermoeconomicModel
 %   It provide methods to:
 %   - Show the results in console
@@ -7,13 +7,13 @@ classdef(Abstract) cResultSet < cResultId
 %   - Show the results in graphic user interfaces
 %   - Save the results in files: XLSX, CSV, TXT LaTeX and HTML
 %
-%   cResultSet Properties:
+%   cResultSet properties:
 %     ClassId - Result Set Id
 %       cType.ClassId.RESULT_INFO
 %       cType.ClassId.DATA_MODEL
 %       cTtpe.ClassId.RESULT_MODEL
 % 
-%   cResultSet Methods:
+%   cResultSet methods:
 %     StudyCase        - Get the study case value names
 %     ListOfTables     - Get the table names from a result set
 %     LIstOfGraphs     - Get the graphic table names from a result set
@@ -28,7 +28,7 @@ classdef(Abstract) cResultSet < cResultId
 %     saveTable        - Save the results in an external file 
 %     exportTable      - Export a table to another format
 %
-%   See also cResultInfo, cThermoeconomicModel, cDataModel
+%   See also cResultId, cResultInfo, cThermoeconomicModel, cDataModel
 %
     properties(GetAccess=public,SetAccess=protected)
         ClassId  % Class Id (see cType.ClassId)
@@ -42,7 +42,7 @@ classdef(Abstract) cResultSet < cResultId
         %   Syntax:
         %     obj.StudyCase;
         %     res=obj.StudyCase
-        %   Output Argument
+        %   Output Arguments:
         %     res - struct with the current state and sample names
         %
                 res=struct('State',obj.State,'Sample',obj.Sample);
@@ -57,6 +57,7 @@ classdef(Abstract) cResultSet < cResultId
         %     obj.ListOfTables
         %   Output Arguments:
         %     res - cell array with the table names
+        %
             res=cType.EMPTY_CELL;
             tmp=getResultInfo(obj);
             if tmp.status
@@ -70,6 +71,7 @@ classdef(Abstract) cResultSet < cResultId
         %     obj.ListOfTables
         %   Output Arguments:
         %     res - cell array with the graph table names
+        %
             res=cType.EMPTY_CELL;
             tmp=getResultInfo(obj);
             if ~tmp.status
@@ -94,6 +96,7 @@ classdef(Abstract) cResultSet < cResultId
         %       cType.VarModel.TABLE: Matlab table
         %   Output Arguments:
         %     res - Table Index info in the format selected
+        %
             tmp=getResultInfo(obj);
             res=getTableIndex(tmp,varargin{:});
         end
@@ -102,6 +105,7 @@ classdef(Abstract) cResultSet < cResultId
         %printResults - print the result tables on console
         %   Syntax:
         %     obj.printResults
+        %
             tidx=getTableIndex(obj);
             cellfun(@(x) printTable(x),tidx.Content);
         end
@@ -118,6 +122,7 @@ classdef(Abstract) cResultSet < cResultId
         %       cType.TableView.CONSOLE 
         %       cType.TableView.GUI
         %       cType.TableView.HTML (default)
+        %
             if nargin==1
                 printResults(obj);
                 return
@@ -134,7 +139,7 @@ classdef(Abstract) cResultSet < cResultId
         %showTableIndex - View the index table of the results set
         %   Syntax:
         %     obj.showTableIndex(option)
-        %   Input Parameters:
+        %   Input Arguments:
         %     option - Table view option
         %      cType.TableView.CONSOLE (default)
         %      cType.TableView.GUI
@@ -227,6 +232,11 @@ classdef(Abstract) cResultSet < cResultId
         %   Output Arguments:
         %     res - cTable object
         %
+            res=cMessageLogger();
+            if (nargin < 2) || ~ischar(name) || isempty(name)
+                res.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                return
+            end
             tmp=getResultInfo(obj);
             res=getTable(tmp,name);
         end
@@ -235,12 +245,12 @@ classdef(Abstract) cResultSet < cResultId
         %saveTable - Save a result table into a file depending on extension
         %   Valid extension depends of the result set
         %
-        %   Syntax
+        %   Syntax:
         %     obj.saveTable(tname, filename)
-        %   Input Arguments
+        %   Input Arguments:
         %     tname - name of the table
         %     filename - name of the file with extension
-        %   Output Arguments
+        %   Output Arguments:
         %     log - cMessageLogger, with the status of the action and error messages
         %
             log=cMessageLogger();
@@ -258,9 +268,9 @@ classdef(Abstract) cResultSet < cResultId
     
         function res=exportTable(obj,tname,varargin)
         %exportTable - Export tname into the selected varmode/format
-        %   Syntax
+        %   Syntax:
         %     obj.exportTable(tname,options)
-        %   Input Arguments
+        %   Input Arguments:
         %     tname - name of the table
         %     options - optional parameters
         %       varmode - result type
@@ -289,11 +299,11 @@ classdef(Abstract) cResultSet < cResultId
     methods(Access=protected)
         function log=saveAsCSV(obj,filename)
         %saveAsCSV - Save result tables as CSV files, each table in a file
-        %   Create a index file with the folder the files are located
+        %   Create a folder with all the tables and a file called "<filename>.csv" with the folder name
         %
         %   Syntax:
         %     log=obj.saveAsCSV(filename)
-        %   Input Arguments
+        %   Input Arguments:
         %     filename - Name of the file where the csv file information is stored
         %   Output Arguments:
         %     log - cMessageLogget object with error messages
