@@ -19,11 +19,14 @@ function B=scaleCol(A,x)
 
     % Check Input
     if nargin < 2 || ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
-        error('ERROR: scaleCol. First argument must be a numeric/logic matrix');
+        error('ERROR: %s. %s', mfilename, cMessages.NarginError);
+    end
+    if ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
+        error('ERROR: %s. %s', mfilename, cMessages.InvalidArgument);
     end
     [~,M]=size(A);
     if ~isvector(x) || (M~=length(x))
-        error('ERROR: scaleCol. Second argument must be a numeric vector with the same number of columns as A');
+        error('ERROR: %s. %s', mfilename, cMessages.ScaleColsError);
     end
     % Scale the matrix
     if issparse(A)

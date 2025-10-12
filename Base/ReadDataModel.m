@@ -31,7 +31,8 @@ function data=ReadDataModel(filename,varargin)
 %
     data=cMessageLogger();
     % Check parameters
-    if nargin<1 
+    if nargin<1
+        data.printError(cMessages.NarginError);
         data.printError(cMessages.ShowHelp);
         return
     end

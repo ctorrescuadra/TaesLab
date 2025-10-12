@@ -1,6 +1,6 @@
 function res=ListResultTables(varargin)
-%ListResultTables - Displays the list of the TaesLab result tables and their properties.
-%   If a cResultSet is provided, list the active tables of the result set.
+%ListResultTables - Display the list of the TaesLab result tables and their properties.
+%   If a cResultSet is provided, it shows the active tables of the result set.
 %    
 %   Syntax:
 %     res=ListResultTables(Name,Values)
@@ -31,7 +31,7 @@ function res=ListResultTables(varargin)
 %       array char | string
 %
 %   Output Arguments:
-%     res - Table object in the format specified in ExportAs, with the selected columns
+%     res - Table with the selected columns in the format specified by ExportAs
 %
 %   Example:
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>

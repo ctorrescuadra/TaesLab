@@ -23,10 +23,10 @@ function res=transitiveClosure(A)
 
     % Check Input
     if nargin ~= 1
-        error('ERROR: transitiveClosure. Requires one input argument');
+        error('ERROR: %s. %s', mfilename, cMessages.NarginError);
     end
     if ~isSquareMatrix(A)
-        error('ERROR: transitiveClosure. Input must be a square matrix');
+        error('ERROR: %s. %s', mfilename, cMessages.SquareMatrixError);
     end
     if issparse(A)
         res=full(A);

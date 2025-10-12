@@ -24,11 +24,12 @@ function res=ValidateModelTables(filename,varargin)
 %     res = ValidateModelTables('dataModel.xlsx','Show',true);
 %     res = ValidateModelTables('dataModel.csv','SaveAs','dataModel.json');
 %
-%   See also cReadModelTables, cModelTables, cModelData
+%   See also cReadModelTable, cModelTable, cModelData
 %   
-    %Check input arguments
     res=cMessageLogger();
-    if nargin<1 
+    %Check input arguments
+    if nargin<1
+        res.printError(cMessages.NarginError); 
         res.printError(cMessages.ShowHelp);
         return
     end

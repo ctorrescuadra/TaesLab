@@ -22,15 +22,18 @@ function B=divideCol(A,x)
 %   See also scaleCol, scaleRow, divideRow
 	
 	% Check Input
-	if nargin < 1 || ~ismatrix(A) || ~isnumeric(A)
-		error('ERROR: divideCol. First argument must be a numeric matrix');
+	if nargin < 1 
+		error('ERROR: ,%s. %s', mfilename, cMessages.NarginError);
+	end
+	if ~ismatrix(A) || ~isnumeric(A)
+		error('ERROR: %s. %s', mfilename, cMessages.InvalidArgument);
 	end
 	if nargin==1
 		x=sum(A,1);
 	end
-	[~,M]=size(A);
+	M=size(A,2);
 	if ~isvector(x) || (M~=length(x))
-		error('ERROR: divideCol. Second argument must be a numeric vector with the same number of columns as A');
+		error('ERROR: %s. %s', mfilename, cMessages.ScaleColsError);
 	end
 	% Avoid division by zero
 	x=zerotol(x);

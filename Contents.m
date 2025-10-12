@@ -6,7 +6,7 @@
 %   TaesTool                - Compatible user interface for Matlab/Octave.
 %
 % Read Data Models
-%   ValidateDataModel       - Validate a data model file.
+%   ValidateModelTables     - Validate the table data model files
 %   ReadDataModel           - Read a data model file.
 %   CopyDataModel           - Creates a copy of a data model file in another format.
 %   ImportData              - Import external data to a cTableData from CSV or XLSX files.

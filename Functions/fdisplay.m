@@ -37,16 +37,16 @@ function fdisplay(A, fmt, label)
     end
     % Check variables
     if ~isnumeric(A) || ~ismatrix(A)
-        error('ERROR: fdisplay. Input must be a numeric matrix.');
+        error('ERROR: %s. Input must be a numeric matrix.', mfilename);
     end
     if isempty(fmt)
         fmt='%g'; % Default format if empty
     end
     if ~ischar(fmt) 
-        error('ERROR: fdisplay. Format must be a character array.');
+        error('ERROR: %s. Format must be a character array.', mfilename);
     end
     if ~ischar(label) && ~isstring(label)
-        error('ERROR: fdisplay. Label must be a character array.');
+        error('ERROR: %s. Label must be a character array.', mfilename);
     end
     if isempty(A)
         fprintf('%s = []\n\n', label);

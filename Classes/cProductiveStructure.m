@@ -604,7 +604,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 					'from', 0, 'to', 0);
 			else %log invalid key types
 				for i=idx
-                	obj.messageLog(cType.ERROR,cMessage.InvalidFlowType,data(i).key,data(i).type);
+                	obj.messageLog(cType.ERROR,cMessages.InvalidFlowType,data(i).key,data(i).type);
 				end
             end
         end

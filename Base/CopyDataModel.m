@@ -12,7 +12,7 @@ function CopyDataModel(inputFile, outputFile)
 %     outputFile - Name of the output data model file
 %       char array | string
 %
-%   
+%   Example:
 %     <a href="matlab:open SaveDataModelDemo.mlx">Save Data Model Demo</a>
 %
 %   See also cDataModel, cReadModel
@@ -20,7 +20,8 @@ function CopyDataModel(inputFile, outputFile)
     log=cMessageLogger();
     % Check arguments
     if (nargin~=2) || ~isFilename(inputFile) || ~isFilename(outputFile)
-        log.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
+        log.printError(cMessages.InvalidArgument)
+        log.printError(cMessages.ShowHelp);
         return
     end
     % Read data model

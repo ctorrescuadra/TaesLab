@@ -10,8 +10,8 @@ classdef ViewResults < matlab.apps.AppBase
 %   Input Arguments:
 %     res - cResultSet object
 %
-%   See also cThermoeconomicTool
-%
+%   See also cResultSet
+
     % Properties that correspond to app components
     properties (Access = private)
         UIFigure          matlab.ui.Figure
@@ -34,7 +34,8 @@ classdef ViewResults < matlab.apps.AppBase
         SaveTableMenu     matlab.ui.container.Menu
         Colorbar                    
     end
-   
+
+    % Properties of TaesLab elements
     properties (Access = private)
         State            % Results State
         ExpandedNode     % Current Node

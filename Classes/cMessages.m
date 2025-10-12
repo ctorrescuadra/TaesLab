@@ -22,8 +22,9 @@ classdef cMessages
         InvalidMatFileObject='Invalid %s object from file %s'
         NoDataModel='MAT file does not contains a valid Data Model'
         % Input arguments messages
-        InvalidArgument='Invalid input arguments %s'
-        DataModelRequired='First argument must be a valid data model'
+        NarginError='Invalid number of input arguments. %s'
+        InvalidArgument='Invalid input arguments. %s'
+        DataModelRequired='First argument must be a valid Data Model'
         ResultSetRequired='First argument must be a valid cResultSet object'
         TableRequired='First argument must be a valid cTable object'
         % Invalid objects messages
@@ -209,6 +210,12 @@ classdef cMessages
         % Digraph analysis
         InvalidDigraph='Invalid Digraph Analysis'
         NoTableFP='The table %s is not a FP-Table';
+        % Function messages
+        NotImplemented='Function %s NOT implemented in Octave'
+        ScaleColsError='Matrix must have the same number of columns than the scale vector'
+        ScaleRowsError='Matrix must have the same number of rows than the scale vector'
+        SquareMatrixError='Input must be a square matrix'
+        NonNegativeMatrixError='Input matrix must be square and non-negative'
     end
 
     methods(Static)
@@ -239,7 +246,7 @@ classdef cMessages
         function res = ShowHelp
         % Get a string with the hyperlink to the help of the caller function
         % Syntax:
-        %   cMessage.ShowHelp
+        %   cMessages.ShowHelp
         % Output:
         %   res - hyperlink text
         %

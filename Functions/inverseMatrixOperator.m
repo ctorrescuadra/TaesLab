@@ -35,10 +35,14 @@ function [res,log]=inverseMatrixOperator(A)
 %
     warning('off','MATLAB:singularMatrix');
     log=cMessageLogger();
+    res=cType.EMPTY;
     % Check Input
-    if nargin~=1 || ~isNonNegativeMatrix(A)
-        log.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
-        res=cType.EMPTY;
+    if nargin~=1 
+        log.messageLog(cType.ERROR,cMessages.NarginError);
+        return
+    end
+    if ~isNonNegativeMatrix(A)
+        log.messageLog(cType.ERROR,cMessages.NonNegativeMatrixError);
         return
     end
     % Compute the inverse and catch warning messages

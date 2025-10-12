@@ -52,7 +52,7 @@ classdef cModelTable < cMessageLogger
 
             % Check Input
             if ~iscell(vals) || ~isstruct(props)
-                obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessage.ShowHelp);
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
                 return
             end
             if ~any(isfield(props,{'id','name','optional','fields'}))

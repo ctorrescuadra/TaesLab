@@ -20,7 +20,8 @@ function SaveDataModel(arg,filename)
     log=cMessageLogger();
     % Check Input Arguments:
     if (nargin~=2)
-        log.printError(cMessages.DataModelRequired);
+        log.printError(cMessages.NarginError);
+        log.printError(cMessages.ShowHelp);
         return
     end
     if isObject(arg,'cDataModel')

@@ -19,9 +19,17 @@ function log=exportCSV(values,filename)
 %     log = exportCSV(values, filename);
 %
     log=cMessageLogger();
-    if nargin~=2 || ~iscell(values) || ... 
-        ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.CSV)     
+    if nargin~=2
+        log.messageLog(cType.ERROR,cMessages.NarginError,cMessages.ShowHelp);
+        return
+    end
+    if ~iscell(values)
         log.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
+        return
+    end
+    if ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.CSV)
+        log.messageLog(cType.ERROR,cMessages.InvalidInputFile);
+        log.messageLog(cType.ERROR,cMessages.ShowHelp);
         return
     end
     try

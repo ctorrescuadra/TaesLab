@@ -6,13 +6,12 @@ classdef (Sealed) ResultsPanel < cTaesLab
 %   In addition, the current ResultSet can be saved into a file using the File->Save menu option.
 %  
 %   ResultsPanel properties:
-%     ResultsPanel - Create an instance of the class
-%     resultInfo   - Result set info object
-%     tableView   - Table view option
+%     resultInfo - Result set info object
+%     tableView  - Table view option
 %
 %   ResultsPanel methods:
 %     ResultsPanel  - Create an instance of the class
-%     showResults   - Show another results
+%     showResults   - Show results
 %     setViewOption - Set the view option
 %     viewPanel     - Show the panel on the top
 %     hidePanel     - Hide the panel
