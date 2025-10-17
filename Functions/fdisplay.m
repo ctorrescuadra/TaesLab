@@ -3,8 +3,8 @@ function fdisplay(A, fmt, label)
 %   This function is useful for displaying matrices in a readable format,
 %   specially when working with numerical data in a console or script.
 %   The function takes a numeric matrix A and displays it using the specified
-%   format string fmt, similar to C-style formatting. If fmt is not provided,
-%   it defaults to '%g'. An optional label can be provided to identify the matrix.
+%   format string fmt, similar to C-style formatting.
+%   An optional label can be provided to identify the matrix.
 %   If label is not provided, the function attempts to use the variable name of A.
 %   If A is empty, it displays 'label = []'. If A is a scalar, 
 %   it displays 'label = value'.
@@ -25,10 +25,14 @@ function fdisplay(A, fmt, label)
 %
 %   See also zerotol, fprintf
 
-    % Check Inputs   
-    if nargin < 2
-        fmt='%g'; % Default format
+    % Check Inputs
+    try 
+        narginchk(2,3); 
+    catch ME
+        msg=buildMessage(mfilename, ME.message);
+        error(msg);
     end
+
     if nargin < 3
         label=inputname(1); % Get the variable name
         if isempty(label)
@@ -37,16 +41,16 @@ function fdisplay(A, fmt, label)
     end
     % Check variables
     if ~isnumeric(A) || ~ismatrix(A)
-        error('ERROR: %s. Input must be a numeric matrix.', mfilename);
+        msg=buildMessage(mfilename, cMessages.NonNumericalMatrixError);
+        error(msg);
     end
-    if isempty(fmt)
-        fmt='%g'; % Default format if empty
-    end
-    if ~ischar(fmt) 
-        error('ERROR: %s. Format must be a character array.', mfilename);
+    if isempty(fmt) || ~ischar(fmt) || ~cParseStream.checkNumericFormat(fmt)
+        msg=buildMessage(mfilename, cMessages.InvalidFormatError);
+        error(msg);
     end
     if ~ischar(label) && ~isstring(label)
-        error('ERROR: %s. Label must be a character array.', mfilename);
+        msg=buildMessage(mfilename, cMessages.InvalidLabelError);
+        error(msg);
     end
     if isempty(A)
         fprintf('%s = []\n\n', label);

@@ -20,15 +20,18 @@ function B = similarDemandOperator(A, x)
 %   See also similarDemandMatrix, similarResourceOperator
 
     % Check Input Arguments:
-    if nargin < 2 || nargin > 2
-        error('ERROR: similarOperator. Requires two input arguments');
+    if nargin ~= 2
+        msg=buildMessage(mfilename, cMessages.NarginError,cMessages.ShowHelp);
+        error(msg);
     end
     if ~isNonNegativeMatrix(A)
-        error('ERROR: similarOperator. First argument must be a square non-negative matrix');
+        msg=buildMessage(mfilename, cMessages.NonNegativeMatrixError);
+        error(msg);
     end
     n=size(A,1);
-    if ~isvector(x) || length(x) ~= n
-        error('ERROR: similarOperator. Transformation vector must be compatible with matrix %d', size(A, 1));
+    if ~isnumeric(x) || ~isvector(x) || length(x) ~= n
+        msg=buildMessage(mfilename, sprintf(cMessages.VectorLengthError, n));
+        error(msg);
     end
     % Find null elements and compute 1/x
     if isrow(x), x = x'; end

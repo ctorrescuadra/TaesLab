@@ -21,7 +21,7 @@ function res=logicalMatrix(A,eps)
 %	See also zerotol, logical
 %
 	if nargin < 1 || ~ismatrix(A) || ~isnumeric(A)
-		error('ERROR: logicalMatrix. First argument must be a numeric matrix');
+		error(buildMessage(mfilename, cMessages.InvalidArgument,cMessages.ShowHelp));
 	end
 	% Check if eps is provided and valid
 	if nargin==1 || isempty(eps) || ~isscalar(eps) || eps < 0

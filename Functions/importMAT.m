@@ -18,12 +18,16 @@ function obj = importMAT(filename)
 %     obj = importMAT('data.mat')		
 %
     obj=cMessageLogger();
+	if nargin~=1
+		obj.printError(cMessages.NarginError,cMessages.ShowHelp);
+		return
+	end
 	% Check input
     if isOctave
-        obj.printError(cMessages.NoReadFiles,'MAT');
+        obj.printError(cMessages.FunctionNotAvailable,mfilename);
 		return
     end
-	if (nargin~=1) || ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.MAT)
+	if ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.MAT)
 		obj.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
 		return
 	end

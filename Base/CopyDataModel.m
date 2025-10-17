@@ -25,7 +25,7 @@ function CopyDataModel(inputFile, outputFile)
         return
     end
     % Read data model
-    data=readModel(inputFile);
+    data=cDataModel.create(inputFile);
     if data.status
         SaveDataModel(data,outputFile);
     else

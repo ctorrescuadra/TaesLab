@@ -196,6 +196,8 @@ classdef cType
 		colType={'char','numeric'};
 		% Digraph types
 		DigraphType=struct('GRAPH',0,'KERNEL',1,'GRAPH_WEIGHT',2,'KERNEL_WEIGHT',3);
+		% Function Error Texts
+		FunctionError='error: %s. %s';
         % TaesApp Tab Panels
         Panels=struct('WELCOME',1,'INDEX',2,'TABLES',3,'GRAPHS',4,'LOG',5);
         % File Extensions

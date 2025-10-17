@@ -23,17 +23,17 @@ function B=divideRow(A,x)
   
 	% Check Input
 	if nargin < 1 || ~ismatrix(A) || ~isnumeric(A)
-		error('ERROR: %s. %s', mfilename, cMessages.NarginError);
+		error(cType.FunctionError, mfilename, sprintf(cMessages.NarginError,cMessages.ShowHelp));
 	end
 	if ~ismatrix(A) || ~isnumeric(A)
-		error('ERROR: %s. %s', mfilename, cMessages.InvalidArgument);
+		error(cType.FunctionError, mfilename, cMessages.InvalidArgument);
 	end
 	if nargin==1
 		x=sum(A,2);
 	end
 	[N,~]=size(A);
-	if ~isvector(x) || (N~=length(x))
-		error('ERROR: %s. %s', mfilename, cMessages.ScaleRowsError);
+	if ~isnumeric(x) || ~isvector(x) || (N~=length(x))
+		error(cType.FunctionError, mfilename, cMessages.ScaleRowsError);
 	end
 	% Avoid division by zero
 	x=zerotol(x);

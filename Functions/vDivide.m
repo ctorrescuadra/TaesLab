@@ -20,11 +20,13 @@ function x = vDivide(arg1,arg2)
 
     % Check Input Arguments:
     if nargin ~= 2
-        error('ERROR: vDivide. Requires two input arguments');
-    end 
+        msg=buildMessage(mfilename, cMessages.NarginError,cMessages.ShowHelp);
+        error(msg);
+    end
     % Check if arg1 and arg2 are vectors of the same length
     if ~isvector(arg1) || ~isvector(arg2) || (length(arg1) ~= length(arg2))
-        error('ERROR: vDivide. Both input arguments must be vectors of the same length');
+        msg=buildMessage(mfilename, cMessages.VectorLengthError);
+        error(msg);
     end
     % Ensure both arguments are column or row  vectors for consistent division
     if iscolumn(arg1) && isrow(arg2),arg2= arg2';end

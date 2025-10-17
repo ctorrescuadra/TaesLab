@@ -817,6 +817,58 @@ classdef cDataModel < cResultSet
         end
     end
 
+    methods(Static)
+        function res = create(filename)
+        %create - Create a cDataModel object from a file
+        %   Syntax:
+        %     res = cDataModel.create(filename)
+        %   Input Arguments:
+        %     filename - name of the file to read
+        %   Output Arguments:
+        %     res - cDataModel object
+        %
+        %   Example:
+        %     res = cDataModel.create('dataModel.json'); %returns a cDataModel object from a JSON file 
+        %
+        %   See also cReadModel, ReadDataModel
+        %     
+            res=cMessageLogger(cType.INVALID);
+            %Check input arguments
+            if nargin~=1 || isempty(filename) || ~isFilename(filename)
+                res.messageLog(cType.ERROR,cMessages.InvalidFileName);
+                return
+            end
+            % Read the data model depending de file extension
+            fileType=cType.getFileType(filename);
+            switch fileType
+                case cType.FileType.JSON
+                    rdm=cReadModelJSON(filename);
+                case cType.FileType.XML
+                    rdm=cReadModelXML(filename);
+                case cType.FileType.CSV
+                    rdm=cReadModelCSV(filename);
+                case cType.FileType.XLSX
+                    rdm=cReadModelXLS(filename);
+                otherwise
+                    res.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
+                    return
+            end
+            % Check if the model read is correct
+                if ~rdm.status
+                    res.addLogger(rdm);
+                    res.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
+                    return
+                end
+                res=cDataModel(rdm.ModelData);
+            % Set log message
+            if res.status
+                res.messageLog(cType.INFO,cMessages.ValidDataModel,res.ModelName);
+            else
+                res.messageLog(cType.ERROR,cMessages.InvalidDataModelFile,filename);
+            end
+        end
+    end
+
     methods(Access=private)
         function buildResultInfo(obj)
         %buildResultInfo - Get the cResultInfo with the data model tables

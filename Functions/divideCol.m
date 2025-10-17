@@ -23,17 +23,17 @@ function B=divideCol(A,x)
 	
 	% Check Input
 	if nargin < 1 
-		error('ERROR: ,%s. %s', mfilename, cMessages.NarginError);
+		error(cType.FunctionError, mfilename, sprintf(cMessages.NarginError,cMessages.ShowHelp));
 	end
 	if ~ismatrix(A) || ~isnumeric(A)
-		error('ERROR: %s. %s', mfilename, cMessages.InvalidArgument);
+		error(cType.FunctionError, mfilename, cMessages.InvalidArgument);
 	end
 	if nargin==1
 		x=sum(A,1);
 	end
 	M=size(A,2);
-	if ~isvector(x) || (M~=length(x))
-		error('ERROR: %s. %s', mfilename, cMessages.ScaleColsError);
+	if ~isnumeric(x) || ~isvector(x) || (M~=length(x))
+		error(cType.FunctionError, mfilename, cMessages.ScaleColsError);
 	end
 	% Avoid division by zero
 	x=zerotol(x);

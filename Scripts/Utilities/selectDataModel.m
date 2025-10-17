@@ -12,5 +12,5 @@ function model=selectDataModel()
         return
 	end
 	% Read and Check model
-	model=readModel(data_file);
+	model=cDataModel.create(data_file);
 end

@@ -21,15 +21,17 @@ function B = similarResourceOperator(A, x)
 
     % Check Input Arguments:
     if nargin < 2 || nargin > 2
-        error('ERROR: similarOperator. Requires two input arguments');
+        msg=buildMessage(mfilename, cMessages.NarginError,cMessages.ShowHelp);
+        error(msg);
     end
     if ~isNonNegativeMatrix(A)
-        error('ERROR: similarOperator. First argument must be a non-negative square matrix');
+        msg=buildMessage(mfilename, cMessages.NonNegativeMatrixError);
+        error(msg);
     end
-    m = size(A,2);
-  
-    if ~isvector(x) || length(x) ~= m
-        error('ERROR: similarOperator. Tranformation vector must be compatible with operator matrix');
+    m = size(A,2);  
+    if ~isnumeric(x) || ~isvector(x) || length(x) ~= m
+        msg=buildMessage(mfilename, cMessages.VectorLengthError);
+        error(msg);
     end
     % Find null elements and compute 1/x
     if iscolumn(x), x = x'; end

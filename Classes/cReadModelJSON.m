@@ -17,13 +17,7 @@ classdef (Sealed) cReadModelJSON < cReadModelStruct
 		%	  cfgfile - json file containig the model of the plant
         %   Output Arguments:
         %     obj - cReadModelJSON object
-        %
-            %check arguments
-            if isOctave 
-                obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'JSON');
-                return
-            end
-		% 
+        % 
 			% Read configuration file
             try
 				text=fileread(cfgfile);

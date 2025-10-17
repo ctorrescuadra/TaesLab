@@ -111,7 +111,7 @@ classdef (Sealed) TaesTool < handle
 				return
 			end
 			% Read and Check Data Model
-			data=readModel(file);
+			data=cDataModel.create(file);
             % Activate widgets
 			if data.status 
                 if app.debug

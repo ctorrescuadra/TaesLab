@@ -565,7 +565,32 @@ classdef (Sealed) cExergyCost < cExergyModel
             obj.RecycleRatio=wt.RecycleRatio;
             obj.WasteTable=wt;
         end 
-    end   
+    end
+    methods(Static)
+        function res=updateOperator(op,opR)
+        %updateOperator - Update an operator with the corresponding waste operator
+        %   Syntax:
+        %     res = cExergyCost.updateOperator(op,opR)
+        %   Input:
+        %     op - Operator
+        %     opR - Waste Operator
+        % 
+            res=op+op*opR;
+        end
+
+        function res=getOpR(mR,opL)
+        %getOpR - Get the corresponding waste operator
+        %   Syntax:
+        %     res = cExergyCost.getOpR(mR,opL)
+        %   Input:
+        %     mR - Waste allocation matrix
+        %     opL - Cost Operator
+        %
+            tmp=mR.mValues*opL;
+            opR=(eye(mR.NR)-tmp(:,mR.mRows))\tmp;
+            res=cSparseRow(mR.mRows,opR);
+        end
+	end
 
     methods(Access=private)
         function setWasteTable(obj,wd)
@@ -608,30 +633,4 @@ classdef (Sealed) cExergyCost < cExergyModel
 		    cp=ke/(eye(N)-tmp);
         end
     end
-
-    methods(Static,Access=private)
-        function res=updateOperator(op,opR)
-        %updateOperator - Update an operator with the corresponding waste operator
-        %   Syntax:
-        %     res = cExergyCost.updateOperator(op,opR)
-        %   Input:
-        %     op - Operator
-        %     opR - Waste Operator
-        % 
-            res=op+op*opR;
-        end
-
-        function res=getOpR(mR,opL)
-        %getOpR - Get the corresponding waste operator
-        %   Syntax:
-        %     res = cExergyCost.getOpR(mR,opL)
-        %   Input:
-        %     mR - Waste allocation matrix
-        %     opL - Cost Operator
-        %
-            tmp=mR.mValues*opL;
-            opR=(eye(mR.NR)-tmp(:,mR.mRows))\tmp;
-            res=cSparseRow(mR.mRows,opR);
-        end
-	end
 end

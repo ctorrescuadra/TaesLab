@@ -13,10 +13,9 @@
 %  fdisplay                   - Display a matrix A using C-like formatting.
 %
 %  exportCSV                  - Save a cell array as a CSV file.
-%  exportMAT                  - Save a cTaesLab object as a MAT file.
-%  importDataModel            - Get a cDataModel object from a previously saved MAT file.
+%  exportMAT                  - Save a cTaesLab object as a MAT file
+%  importCSV                  - Read a CSV file and return its contents as a cell array.
 %  importMAT                  - Create a cTaesLab object from a previously saved MAT file.
-%  readModel                  - Read a data model file according to its extension.
 %
 %  isFilename                 - Check if file name is valid for read/write mode.
 %  isIndex                    - Check if a number belongs to an index range.
@@ -35,4 +34,6 @@
 %  similarResourceOperator    - Compute the resource-driven operator from the demmand-drive operator.
 %  transitiveClosure.         - Compute the transitive closure of a digraph.
 %  inverseMatrixOperator      - Calculate the inverse of the M-Matrix, I-A.
+%
+%  buildMessage               - Build error messages for TaesLab functions.
 %

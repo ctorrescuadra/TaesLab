@@ -7,8 +7,9 @@ classdef  cTaesLab < handle
     %   cTaesLab properties
     %     objectId - Unique object identifier 
     %       int64
-    %     status - status of the object
+    %     status - status of the object 
     %       true | false
+    %       Default value is true
     %
     %   cTaesLab methods:
     %     cTaesLab     - Initialize a cTaesLab object
@@ -19,26 +20,26 @@ classdef  cTaesLab < handle
     end
 
     properties(GetAccess=public,SetAccess=protected)
-        status  % Object status
+        status=true  % Object status (default true)
     end
 
     methods
-        function obj = cTaesLab()
+        function obj = cTaesLab(val)
         %cTaesLab - Initialize a cTaesLab object
         %   Syntax:
         %     obj = cTaesLab()
         %   Output Arguments:
         %     obj - cTaesLab object
+        %     obj = cTaesLab(status)
+        %   Input Arguments:
+        %     val - Initial status of the object [optional]
+        %       cType.VALID | cType.INVALID
+        %       Default value is cType.VALID
         %
-            obj.status=cType.VALID;   
-            obj.objectId=cTaesLab.sequence;
-        end
-
-        function set.status(obj,val)
-        % Set status of the class
-            if isscalar(val) && islogical(val)
+            if nargin==1 && isscalar(val) && islogical(val)
                 obj.status=val;
             end
+            obj.objectId=cTaesLab.sequence;
         end
 
         function res = getObjectId(obj)

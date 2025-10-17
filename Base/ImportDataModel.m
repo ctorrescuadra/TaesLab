@@ -1,4 +1,4 @@
-function obj = importDataModel(filename)
+function obj = ImportDataModel(filename)
 %ImportDataModel - Get a cDataModel object from a previous saved MAT file.
 %
 %   Syntax:

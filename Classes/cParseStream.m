@@ -23,6 +23,7 @@ classdef cParseStream
         KEY_PATTERN='[A-Z][A-Za-z0-9]+'
         KEY_CHECK='^[A-Z][A-Za-z0-9]{1,7}$'
 		NAME_PATTERN='^[A-Za-z]\w{1,9}$'
+        NUMERIC_FORMAT='^%[-+ 0#]*\d*(\.\d+)?[eEfFgG]$';
         BEGIN=1;
         PLUS=2;
         MINUS=3;
@@ -131,6 +132,20 @@ classdef cParseStream
             res=false;
             if ischar(key)
                 res = ~isempty(regexp(key,cParseStream.KEY_CHECK,'once'));
+            end
+        end
+
+        function res=checkNumericFormat(fmt)
+        %checkNumericFormat - Check if a numeric format is valid
+        %   Syntax:
+        %     res=cParseStream.checkNumericFormat(fmt)
+        %   Input Arguments:
+        %     fmt: char array to check
+        %   Output Arguments:
+        %     res - true/false
+            res=false;
+            if ischar(fmt)
+                res = ~isempty(regexp(fmt, cParseStream.NUMERIC_FORMAT, 'once'));
             end
         end
         

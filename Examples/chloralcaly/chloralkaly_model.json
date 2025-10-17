@@ -1,20 +1,60 @@
 {
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 2,
+        "unit": "(MJ)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(MJ)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(MJ/MJ)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 2,
+        "unit": "(MJ)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(MJ/MJ)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 3,
+        "unit": "(MJ)"
+      }
+    ]
+  },
   "ProductiveStructure": {
     "flows": [
       {
-        "key": "IN1",
+        "key": "H2O",
         "type": "RESOURCE"
       },
       {
-        "key": "IN2",
+        "key": "NaCl",
         "type": "RESOURCE"
       },
       {
-        "key": "IN3",
+        "key": "Elec",
         "type": "RESOURCE"
       },
       {
-        "key": "IN4",
+        "key": "H2SO4",
         "type": "RESOURCE"
       },
       {
@@ -98,15 +138,15 @@
         "type": "OUTPUT"
       },
       {
-        "key": "OUT11",
+        "key": "NaOH",
         "type": "OUTPUT"
       },
       {
-        "key": "OUT12",
+        "key": "H2",
         "type": "OUTPUT"
       },
       {
-        "key": "OUT13",
+        "key": "Cl2",
         "type": "OUTPUT"
       }
     ],
@@ -114,93 +154,80 @@
       {
         "key": "U1",
         "type": "PRODUCTIVE",
-        "fuel": "IN1",
-        "product": "P1F5+P1F8",
-        "description": "Water Reservoir"
+        "fuel": "H2O",
+        "product": "P1F5+P1F8"
       },
       {
         "key": "U2",
         "type": "PRODUCTIVE",
-        "fuel": "IN2",
-        "product": "P2F5",
-        "description": "Salt Mine"
+        "fuel": "NaCl",
+        "product": "P2F5"
       },
       {
         "key": "U3",
         "type": "PRODUCTIVE",
-        "fuel": "IN3",
-        "product": "P3F6+P3F10+P3F11+P3F12+P3F13",
-        "description": "AC Production"
+        "fuel": "Elec",
+        "product": "P3F6+P3F10+P3F11+P3F12+P3F13"
       },
       {
         "key": "U4",
         "type": "PRODUCTIVE",
-        "fuel": "IN4",
-        "product": "P4F9",
-        "description": "H2SO4 Production"
+        "fuel": "H2SO4",
+        "product": "P4F9"
       },
       {
         "key": "U5",
         "type": "PRODUCTIVE",
         "fuel": "P1F5+P2F5+P7F5",
-        "product": "P5F7",
-        "description": "Brine Plant"
+        "product": "P5F7"
       },
       {
         "key": "U6",
         "type": "PRODUCTIVE",
         "fuel": "P3F6",
-        "product": "P6F7",
-        "description": "Rectifier"
+        "product": "P6F7"
       },
       {
         "key": "U7",
         "type": "PRODUCTIVE",
         "fuel": "P8F7+P5F7+P6F7",
-        "product": "P7F5+P7F8+P7F9",
-        "description": "Electrochemical Cells"
+        "product": "P7F5+P7F8+P7F9"
       },
       {
         "key": "U8",
         "type": "PRODUCTIVE",
         "fuel": "P1F8+P7F8",
-        "product": "P8F7+P8F11+P8F12",
-        "description": "Denuder"
+        "product": "P8F7+P8F11+P8F12"
       },
       {
         "key": "U9",
         "type": "PRODUCTIVE",
         "fuel": "P7F9+(P4F9-OUT9)",
-        "product": "P9F10",
-        "description": "Cl2 Cooler Drier"
+        "product": "P9F10"
       },
       {
         "key": "U10",
         "type": "PRODUCTIVE",
         "fuel": "P3F10+P9F10",
-        "product": "P10F13",
-        "description": "Cl2 Compressor"
+        "product": "P10F13"
       },
       {
         "key": "U11",
         "type": "PRODUCTIVE",
         "fuel": "P8F11+P3F11",
-        "product": "OUT11",
-        "description": "Cooler"
+        "product": "NaOH"
       },
       {
         "key": "U12",
         "type": "PRODUCTIVE",
         "fuel": "P8F12+P3F12",
-        "product": "OUT12",
-        "description": "Cooler Drier"
+        "product": "H2"
       },
       {
         "key": "U13",
         "type": "PRODUCTIVE",
         "fuel": "P10F13+P3F13",
-        "product": "OUT13",
-        "description": "Cooler"
+        "product": "Cl2"
       }
     ]
   },
@@ -209,19 +236,19 @@
       "stateId": "REF",
       "exergy": [
         {
-          "key": "IN1",
+          "key": "H2O",
           "value": 0.098
         },
         {
-          "key": "IN2",
+          "key": "NaCl",
           "value": 3.08
         },
         {
-          "key": "IN3",
+          "key": "Elec",
           "value": 60.31
         },
         {
-          "key": "IN4",
+          "key": "H2SO4",
           "value": 3.19
         },
         {
@@ -305,82 +332,65 @@
           "value": 0.42
         },
         {
-          "key": "OUT11",
+          "key": "NaOH",
           "value": 1.455
         },
         {
-          "key": "OUT12",
+          "key": "H2",
           "value": 3.305
         },
         {
-          "key": "OUT13",
+          "key": "Cl2",
           "value": 1.812
         }
       ]
     }
   },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 2,
-        "unit": "(MJ)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(MJ)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(MJ/MJ)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(MJ)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(MJ/MJ)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 3,
-        "unit": "(MJ)"
-      }
-    ]
-  },
   "WasteDefinition": [],
   "ResourcesCost": {
-    "Samples": {
-      "sampleId": "Base",
-      "flows": [
-        {
-          "key": "IN1",
-          "value": 2.653
-        },
-        {
-          "key": "IN2",
-          "value": 1
-        },
-        {
-          "key": "IN3",
-          "value": 4
-        },
-        {
-          "key": "IN4",
-          "value": 2
-        }
-      ]
-    }
+    "Samples": [
+      {
+        "sampleId": "Base",
+        "flows": [
+          {
+            "key": "H2O",
+            "value": 1
+          },
+          {
+            "key": "NaCl",
+            "value": 1
+          },
+          {
+            "key": "Elec",
+            "value": 1.79
+          },
+          {
+            "key": "H2SO4",
+            "value": 2.08
+          }
+        ]
+      },
+      {
+        "sampleId": "Hau",
+        "flows": [
+          {
+            "key": "H2O",
+            "value": 2.653
+          },
+          {
+            "key": "NaCl",
+            "value": 1
+          },
+          {
+            "key": "Elec",
+            "value": 4
+          },
+          {
+            "key": "H2SO4",
+            "value": 2
+          }
+        ]
+      }
+    ]
   }
 }

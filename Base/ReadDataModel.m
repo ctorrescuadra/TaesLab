@@ -58,7 +58,7 @@ function data=ReadDataModel(filename,varargin)
     end
     param=p.Results;
     % Read data Model
-    data=readModel(filename);
+    data=cDataModel.create(filename);
     if param.Debug || ~data.status
         printLogger(data);
     end

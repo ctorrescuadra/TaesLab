@@ -22,21 +22,27 @@ function B = similarDemandMatrix(A, x, y)
 %   See also similarDemandOperator, similarResourceMatrix
 
     % Check Arguments:
-    if nargin < 2 || nargin > 3
-        error('ERROR: similarDemandMatrix. Requires two or three input arguments');
+    try 
+        narginchk(2,3) 
+    catch ME
+        msg=buildMessage(mfilename, ME.message);
+        error(msg);
     end
     if ~isnumeric(A) || ~ismatrix(A)
-        error('ERROR: similarDemandMatrix. First argument must be a numeric matrix');
+        msg=buildMessage(mfilename, cMessages.NonNumericalMatrixError);
+        error(msg);
     end
     [n,m] = size(A);
     if (nargin==2)
             y=x;
     end
-    if ~isvector(x) || length(x) ~= n
-        error('ERROR: similarMatrix. Left vector must be compatible with matrix %d',n);
+    if ~isnumeric(x) || ~isvector(x) || length(x) ~= n
+        msg=buildMessage(mfilename, cMessages.VectorLengthError);
+        error(msg);
     end
-    if ~isvector(y) || length(y) ~= m
-        error('ERROR: similarMatrix. Right vector must be compatible with matrix %d',m);
+    if ~isnumeric(y) || ~isvector(y) || length(y) ~= m
+        msg=buildMessage(mfilename, cMessages.VectorLengthError);
+        error(msg);
     end
     % Compute Matrix
     y=zerotol(y);

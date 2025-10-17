@@ -7,7 +7,7 @@ classdef cMessages
 %
     properties(Constant)
         % Read Model messages
-        InvalidInputFile='Invalid file name %s'
+        InvalidInputFile='Invalid file name %s.'
         InvalidOutputFile='Invalid file name %s. File NOT saved'
         InvalidFileExt='File extension %s is not supported'
         FileNotFound='File %s NOT found'
@@ -211,11 +211,15 @@ classdef cMessages
         InvalidDigraph='Invalid Digraph Analysis'
         NoTableFP='The table %s is not a FP-Table';
         % Function messages
-        NotImplemented='Function %s NOT implemented in Octave'
+        FunctionNotAvailable='Function NOT implemented in Octave'
         ScaleColsError='Matrix must have the same number of columns than the scale vector'
         ScaleRowsError='Matrix must have the same number of rows than the scale vector'
         SquareMatrixError='Input must be a square matrix'
         NonNegativeMatrixError='Input matrix must be square and non-negative'
+        NonNumericalMatrixError='Input must be a numerical matrix'
+        InvalidFormatError='Invalid numeric format expression.'
+        InvalidLabelError='Label must be a character array'
+        VectorLengthError='Both input arguments must be vectors of the same length'
     end
 
     methods(Static)

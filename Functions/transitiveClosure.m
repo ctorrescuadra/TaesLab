@@ -23,10 +23,12 @@ function res=transitiveClosure(A)
 
     % Check Input
     if nargin ~= 1
-        error('ERROR: %s. %s', mfilename, cMessages.NarginError);
+        msg=buildMessage(mfilename, cMessages.NarginError,cMessages.ShowHelp);
+        error(msg);
     end
     if ~isSquareMatrix(A)
-        error('ERROR: %s. %s', mfilename, cMessages.SquareMatrixError);
+        msg=buildMessage(mfilename, cMessages.SquareMatrixError);
+        error(msg);
     end
     if issparse(A)
         res=full(A);

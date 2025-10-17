@@ -19,14 +19,17 @@ function B=scaleCol(A,x)
 
     % Check Input
     if nargin < 2 || ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
-        error('ERROR: %s. %s', mfilename, cMessages.NarginError);
+        msg=buildMessage(mfilename, cMessages.InvalidArgument,cMessages.ShowHelp);
+        error(msg);
     end
     if ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
-        error('ERROR: %s. %s', mfilename, cMessages.InvalidArgument);
+        msg=buildMessage(mfilename, cMessages.InvalidArgument,cMessages.ShowHelp);
+        error(msg);
     end
     [~,M]=size(A);
-    if ~isvector(x) || (M~=length(x))
-        error('ERROR: %s. %s', mfilename, cMessages.ScaleColsError);
+    if ~isnumeric(x) || ~isvector(x) || (M~=length(x))
+        msg=buildMessage(mfilename, cMessages.ScaleColsError);
+        error(msg);
     end
     % Scale the matrix
     if issparse(A)

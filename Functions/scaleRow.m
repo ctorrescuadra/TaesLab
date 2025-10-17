@@ -18,15 +18,18 @@ function B=scaleRow(A,x)
 %     B = scaleRow(A, x); %B = [0.5, 1; 6, 8]
 
     % Check Input
-    if nargin < 2 
-        error('ERROR: ,%s. %s', mfilename, cMessages.NarginError);
+    if nargin < 2
+        msg=buildMessage(mfilename, cMessages.NarginError,cMessages.ShowHelp);
+        error(msg); 
     end
     if ~ismatrix(A) || ~(isnumeric(A) || islogical(A))
-        error('ERROR: %s. %s', mfilename, cMessages.InvalidArgument);
+        msg=buildMessage(mfilename, cMessages.InvalidArgument);
+        error(msg);
     end   
     N=size(A,1);
-    if ~isvector(x) || (N~=length(x))
-        error('ERROR: %s. %s', mfilename, cMessages.ScaleRowsError);
+    if ~isnumeric(x) || ~isvector(x) || (N~=length(x))
+        msg=buildMessage(mfilename, cMessages.ScaleRowsError);
+        error(msg);
     end
     % Scale the matrix
     if issparse(A)
