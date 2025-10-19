@@ -45,7 +45,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
         %   Output Arguments:
         %     app - ResultsPanel object
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             app.createPanel;
             if nargin > 0
                 if isObject(res,'cResultSet')
@@ -64,7 +64,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
         %   res - cResultSet 
         
             % Check Input parameter
-            log=cMessageLogger();
+            log=cTaesLab();
             if ~isObject(res,'cResultSet')
                 log.printError(cMessages.InvalidArgument,class(res));
                 return
@@ -223,7 +223,7 @@ classdef (Sealed) ResultsPanel < cTaesLab
         %   Syntax:
         %     app.saveResults()
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if isempty(app.resultInfo)
                 log.printError(cMessages.NoResultsToSave);
                 return

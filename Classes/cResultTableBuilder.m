@@ -555,6 +555,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   Output Arguments:
         %   res - cTableMatrix object
         %
+            res=cTaesLab(cType.INVALID);
             [~,tp]=obj.getTableProperties(cType.Tables.WASTE_ALLOCATION);
             flw=obj.flowKeys;
             prc=obj.processKeys;
@@ -565,8 +566,6 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 rowNames=prc(idx);
                 values=tmp(idx,:);
                 res=cTableMatrix(values,rowNames,colNames,tp);
-            else
-                res=cMessageLogger(cType.INVALID);
             end
         end
 

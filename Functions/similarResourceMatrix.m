@@ -33,17 +33,18 @@ function B = similarResourceMatrix(A, x, y)
         error(msg);
     end
     if ~isnumeric(A) || ~ismatrix(A)
-        error(cType.FunctionError, mfilename, cMessages.NonNumericalMatrixError);
+        msg=buildMessage(mfilename, cMessages.NonNumericalMatrixError);
+        error(msg);
     end
     [n,m] = size(A);
     if (nargin==2)
         y=x;
     end
     if ~isnumeric(x) || ~isvector(x) || length(x) ~= n
-        error(cType.FunctionError, mfilename, cMessages.VectorLengthError);
+        error(buildMessage(mfilename, cMessages.VectorLengthError));
     end
     if ~isnumeric(y) || ~isvector(y) || length(y) ~= m
-        error(cType.FunctionError, mfilename, cMessages.VectorLengthError);
+        error(buildMessage(mfilename, cMessages.VectorLengthError));
     end
     % Compute matrix
     x=zerotol(x);

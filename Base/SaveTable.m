@@ -17,16 +17,18 @@ function SaveTable(tbl,filename)
 %
 %   See also cTable
 %
-    log=cMessageLogger();
+    log=cTaesLab();
     % Check Input parameters
-    if (nargin~=2) || ~isObject(tbl,'cTable')
-        log.printError(cMessages.TableRequired);
-        log.printError(cMessages.ShowHelp);
+    if (nargin~=2)
+        log.printError(cMessages.NarginError,cMessages.ShowHelp);
+        return
+    end
+    if  ~isObject(tbl,'cTable')
+        log.printError(cMessages.TableRequired,cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
         log.printError(cMessages.InvalidOutputFilename,filename);
-        log.printError(cMessages.ShowHelp);
         return
     end
     % Save table

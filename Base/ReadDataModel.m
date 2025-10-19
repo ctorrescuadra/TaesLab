@@ -29,11 +29,10 @@ function data=ReadDataModel(filename,varargin)
 %
 %   See also cReadModel, cDataModel
 %
-    data=cMessageLogger();
+    data=cTaesLab();
     % Check parameters
     if nargin<1
-        data.printError(cMessages.NarginError);
-        data.printError(cMessages.ShowHelp);
+    	data.printError(cMessages.NarginError,cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
@@ -53,7 +52,6 @@ function data=ReadDataModel(filename,varargin)
 		p.parse(varargin{:});
     catch err
 		data.printError(err.message);
-        data.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

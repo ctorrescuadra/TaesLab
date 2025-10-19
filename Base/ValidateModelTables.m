@@ -26,13 +26,12 @@ function res=ValidateModelTables(filename,varargin)
 %
 %   See also cReadModelTable, cModelTable, cModelData
 %   
-    res=cMessageLogger();
+    res=cTaesLab();
     %Check input arguments
-    if nargin<1
-        res.printError(cMessages.NarginError); 
-        res.printError(cMessages.ShowHelp);
-        return
-    end
+	if nargin <1
+		res.printError(cMessages.NarginError,cMessages.ShowHelp);
+		return
+	end
     if ~isFilename(filename)
         res.printError(cMessages.InvalidInputFile);
         return
@@ -49,7 +48,6 @@ function res=ValidateModelTables(filename,varargin)
 		p.parse(varargin{:});
     catch err
 		res.printError(err.message);
-        res.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;
@@ -83,7 +81,7 @@ end
 
 function saveDataModel(data,filename)
 %saveDataModel - Save the data model in a different format (JSON, XML)
-    log=cMessageLogger();
+    log=cTaesLab();
     [fileType,ext]=cType.getFileType(filename);
     switch fileType
         case cType.FileType.JSON

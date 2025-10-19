@@ -30,10 +30,9 @@ function res=ExergyAnalysis(data,varargin)
 %
 %   See also cDataModel, cExergyModel, cResultInfo
 %
-	res=cMessageLogger();
+	res=cTaesLab();
 	if nargin<1 || ~isObject(data,'cDataModel')
-		res.printError(cMessages.DataModelRequired);
-		res.printError(cMessages.ShowHelp);
+		res.printError(cMessages.DataModelRequired,cMessages.ShowHelp);
 		return
 	end
 	% Check input parameters
@@ -45,7 +44,7 @@ function res=ExergyAnalysis(data,varargin)
 		p.parse(varargin{:});
 	catch err
 		res.printError(err.message);
-        res.printError(cMessages.ShowHelp);
+
 		return
 	end
 	param=p.Results;

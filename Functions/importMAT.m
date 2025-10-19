@@ -17,7 +17,7 @@ function obj = importMAT(filename)
 %   Example:
 %     obj = importMAT('data.mat')		
 %
-    obj=cMessageLogger();
+    obj=cTaesLab();
 	if nargin~=1
 		obj.printError(cMessages.NarginError,cMessages.ShowHelp);
 		return

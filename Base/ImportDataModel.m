@@ -10,33 +10,44 @@ function obj = ImportDataModel(filename)
 %
 %   Output Arguments:
 %     obj - cDataModel object
-%	   	obj.printLogger cdisplay the status of the import and error messages
+%
+%	Note: Use printLogger(obj) to display the status of the import and error messages
 %
 %   Example:
-%	 dataModel = ImportDataModel('myDataModel.mat');
+%	  dataModel = ImportDataModel('myDataModel.mat');
 %
-    obj=cMessageLogger(cType.INVALID);
+    obj=cTaesLab(cType.INVALID);
 	% Check input arguments
     if isOctave
-        obj.messageLog(cType.ERROR,cMessages.NoReadFiles,'MAT');
+        obj.printError(cMessages.NoReadFiles,'MAT');
 		return
     end
-    if (nargin~=1) || ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.MAT)
-        obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
+    if (nargin~=1)
+        obj.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
         return
     end
-    % Load and check the model
+    if ~isFilename(filename) || ~cType.checkFileExt(filename,cType.FileExt.MAT)
+        obj.printError(cMessages.InvalidInputFile,filename);
+        return
+    end
+	if ~exist(filename,'file')
+		obj.printError(cMessages.FileNotFound,filename);
+		return
+	end
+    % Load MAT file
 	try
         S=load(filename);
 		f=fieldnames(S);
 		var=S.(f{1});
 	catch err
-		obj.messageLog(cType.ERROR,err.message)
-		obj.messageLog(cType.ERROR,cMessages.FileNotRead,filename);
+		obj.printError(err.message)
+		obj.printError(cMessages.FileNotRead,filename);
 	end
+    % Check if it is a valid Data Model
 	if isObject(var,'cDataModel')
         obj=var;
+        obj.printInfo(cMessages.ValidDataModel,obj.ModelName);
 	else
-		obj.messageLog(cType.ERROR,cMessages.NoDataModel);
+		obj.printError(cMessages.NoDataModel);
 	end
 end

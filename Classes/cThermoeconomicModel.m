@@ -985,7 +985,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError(cMessages.InvalidArgument);
+                log.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end       
             msr=obj.summaryResults;
@@ -1008,7 +1008,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError(cMessages.InvalidArgument);
+                log.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             log=saveDataModel(obj.DataModel,filename);
@@ -1027,13 +1027,13 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             log=cMessageLogger();
             if nargin~=2
-                log.printError(cMessages.InvalidArgument);
+                log.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             % Save tables
             res=obj.diagramFP;
             if ~isValid(res)
-                printLogger(res)
+                log.addLogger(res)
                 return
             end
             log=saveResults(res,filename);
@@ -1048,17 +1048,17 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Input Arguments:
         %     filename - Name of the file
         %   Output Arguments:
-        %     log - cMessageLogger object containing the status and error messages
+        %     log - cTaesLab object containing the status of the operation
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if nargin~=2
-                log.printError(cMessages.InvalidArgument);
+                log.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             % Save fat,pat and fpat tables
             res=obj.productiveDiagram;
             if ~isValid(res)
-                res.printLogger;
+                log.addLogger(res);
                 return
             end
             log=saveResults(res,filename);
@@ -1084,10 +1084,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Input Arguments:
         %     wtype - waste allocation type
         %   Output Arguments:
-        %     log - cMessageLogger with the status and messages of operation
+        %     log - cTaesLab with the status of the operation
         %   See also cType.WasteAllocation
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if nargin~=2
                log.printError(cMessages.InvalidArgument);
                return
@@ -1118,9 +1118,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Input Arguments:
         %    val - vector containing the waste allocation values for processes
         %   Output Arguments:
-        %     log - cMessageLogger with the status and messages of operation
+        %     log - cTaesLab with the status and messages of operation
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if nargin~=2
                log.printError(cMessages.InvalidArgument);
                return
@@ -1151,9 +1151,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Input Arguments:
         %     val - Recycling ratio of the active waste
         %   Output Arguments:
-        %     log - cMessageLogger with the status and messages of operation
+        %     log - cTaesLab with the status of the operation
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if nargin~=2
                log.printError(cMessages.InvalidArgument);
                return
@@ -1189,7 +1189,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Output Arguments:
         %     res - cResourceCost object with the new values
         %
-            res=cMessageLogger();
+            res=cTaesLab();
             if ~obj.isGeneralCost
                 res.printError(cMessages.NoGeneralizedCost);
 				return
@@ -1214,7 +1214,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Output Arguments:
         %     res - cResourceCost object
         %
-            res=cMessageLogger();
+            res=cTaesLab();
             if ~obj.isGeneralCost
                 res.printWarning(cMessages.NoGeneralizedCost);
                 return
@@ -1239,9 +1239,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     c0 - array | struct with the unit cost of the resource flows
         %     Z -  array | struct with the cost associated to processes
         %   Output Arguments:
-        %     log - cMessageLogger object with the status and messages of operation
+        %     log - cTaesLab object with the status of the operation
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if nargin<3
                 obj.printWarning(cMessages.InvalidArgument);
                 return
@@ -1303,9 +1303,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Input Arguments:
         %     values - Array with the exergy values of the flows
         %   Output Arguments:
-        %     log - cMessageLogger object with the status and messages of operation
+        %     log - cTaesLab object with the status of the operation
         %
-            res=cMessageLogger();
+            res=cTaesLab();
             % Check state is no reference 
             if strcmp(obj.ReferenceState,obj.State)
                 res.printWarning(cMessages.NoSetExergyData);
@@ -1345,9 +1345,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     state - new state name to add
         %     values - Array with the exergy values of the flows
         %   Output Arguments:
-        %     log - cMessageLogger object with the status and messages of operation
+        %     log - cTaesLab object with the status of the operation
         %
-            res=cMessageLogger();
+            res=cTaesLab();
             if nargin<3
                 res.printWarning(cMessages.InvalidArgument);
                 return

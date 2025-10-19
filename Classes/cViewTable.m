@@ -1,4 +1,4 @@
-classdef (Sealed) cViewTable < cMessageLogger
+classdef (Sealed) cViewTable < cTaesLab
 %cViewTable - Show a result table using a GUI (uitable)
 % 	called by showTable/cTable method with GUI option
 % 

@@ -1,8 +1,10 @@
 classdef  cTaesLab < handle
     %TaesLab - Base class of the TaesLab toolbox.
     %   Asign a unique objectId to each object and permit to set
-    %   the status of the class derived from it. It also provides equality
-    %   (eq) and inequality (ne) operators to compare two objects of the same class.
+    %   the status of the class derived from it.
+    %   Provides methods to print error, warning and info messages,
+    %   Also provides equality (eq) and inequality (ne) operators 
+    %   to compare two objects of the same class.
     %
     %   cTaesLab properties
     %     objectId - Unique object identifier 
@@ -14,6 +16,9 @@ classdef  cTaesLab < handle
     %   cTaesLab methods:
     %     cTaesLab     - Initialize a cTaesLab object
     %     getObjectId  - Get the object id
+    %     printError   - Print error message
+    %     printWarning - Print warning message
+    %     printInfo    - Print info message
     % 
     properties(Access=protected)
         objectId % Unique object Id
@@ -49,6 +54,41 @@ classdef  cTaesLab < handle
             res=obj.objectId;
         end
 
+        function printError(obj,varargin)
+		%printError - Print error message. 
+		%   Syntax:
+		%	  obj.printError(varargin)
+		%   Input Arguments:
+		%     text - text message, use fprintf syntax
+		%       varargin
+		%   Example:
+		%	  obj.printError(cMessages.FileNotFound,filename)
+		%
+			printMessage(obj,cType.ERROR,varargin{:});
+		end
+			
+		function printWarning(obj,varargin)
+		%printWarning - Print warning message. 
+		%   Syntax:
+		% 	  obj.printWarning(varargin)
+		%   Input Arguments:
+		%     text - text message, use fprintf syntax
+		%       varargin
+		% 
+			printMessage(obj,cType.WARNING,varargin{:});
+		end
+			
+		function printInfo(obj,varargin)
+		%printInfo - Print info message. Use fprintf syntax
+		%   Syntax:
+		%     obj.printInfo(text)
+		%   Input Arguments:
+		%     text - text message, using fprintf syntax
+		%       varargin
+		%
+			printMessage(obj,cType.VALID,varargin{:});
+		end
+
         function res=eq(obj1,obj2)
         %eq - Overload eq operator. Check if two class object are equal.
         %   Syntax:
@@ -75,6 +115,50 @@ classdef  cTaesLab < handle
             res=(obj1.objectId~=obj2.objectId);
 		end
     end
+
+	methods(Access=protected)
+		function message=createMessage(obj,error,varargin)
+		%createMessage - Create the text message depending of error code
+		%   Syntax:
+		%     message = obj.createMessage(error,varargin)
+		%   Input Arguments:
+		%     error - type of error
+		%       cType.ERROR | cType.WARNING | cType.INFO
+		%     text - text message, use fprintf format
+		%       varargin
+		%   Output Arguments:
+		%     message - cMessageBuilder object containing the message
+		%	 Example:
+		%	   message=obj.createMessage(cType.ERROR,cMessages.InvalidFileName,filename)
+		%
+			if error>cType.INFO || error<cType.WARNING || isempty(varargin)
+				text='Unknown Error Code';
+			else
+				text=sprintf(varargin{:});
+			end
+			if error==cType.ERROR
+				obj.status=logical(error);
+			end
+			message=cMessageBuilder(error,class(obj),text);
+		end
+
+		function printMessage(obj,error,varargin)
+		% Print messages depending of type error and update state
+		%   Syntax:
+		%     obj.printMessage(error,varargin)
+		%   Input Arguments:
+		%     error - type of error
+		%       cType.ERROR | cType.WARNING | cType.INFO
+		%     text - text message, use fprintf format
+		%       varargin
+		%   Example:
+		%     obj.printMessage(cType.ERROR,cMessages.InvalidFileName,filename)
+        %     %returns ERROR: cTaesLab. Invalid file name 'filename'
+		%
+			msg=obj.createMessage(error,varargin{:});
+			disp(msg);
+		end
+	end
 
     methods(Static,Access=private)
         function res=sequence()

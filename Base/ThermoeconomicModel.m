@@ -45,7 +45,7 @@ function model=ThermoeconomicModel(arg,varargin)
 %    
 %   See also cThermoeconomicModel
 %
-    model=cMessageLogger();
+    model=cTaesLab();
     % Check input parameters
     if isFilename(arg)
         filename=char(arg);
@@ -58,8 +58,7 @@ function model=ThermoeconomicModel(arg,varargin)
     elseif isa(arg,'cDataModel')
         data=arg;
     else
-        model.printError(cMessages.InvalidArgument);
-        model.printError(cMessages.ShowHelp);
+        model.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
         return
     end
     % Check optional parameters and create cThermoeconomicModel obeject
@@ -80,7 +79,6 @@ function model=ThermoeconomicModel(arg,varargin)
             p.parse(varargin{:});
         catch err
             model.printError(err.message);
-            model.printError(cMessages.ShowHelp);
             return
         end
         if p.Results.Debug

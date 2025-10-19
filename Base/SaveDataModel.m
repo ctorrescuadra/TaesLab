@@ -17,11 +17,10 @@ function SaveDataModel(arg,filename)
 %
 %   See also cDataModel, cThermoeconomicModel
 %
-    log=cMessageLogger();
+    log=cTaesLab();
     % Check Input Arguments:
     if (nargin~=2)
-        log.printError(cMessages.NarginError);
-        log.printError(cMessages.ShowHelp);
+        log.printError(cMessages.NarginError,cMessages.ShowHelp);
         return
     end
     if isObject(arg,'cDataModel')
@@ -29,13 +28,11 @@ function SaveDataModel(arg,filename)
     elseif isObject(arg,'cThermoeconomicModel')
         data=arg.DataModel;
     else
-        log.printError(cMessages.DataModelRequired);
-        log.printError(cMessages.ShowHelp);
+        log.printError(cMessages.DataModelRequired,cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
         log.printError(cMessages.InvalidOutputFile,filename);
-        log.printError(cMessages.ShowHelp);
         return
     end
     % Save the data model

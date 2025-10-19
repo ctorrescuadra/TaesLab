@@ -309,8 +309,8 @@ classdef (Abstract) cTable < cMessageLogger
         %     idx - vector with columns index to replace
         %     value - cell array with the values to replace
         %   Output Arguments:
-        %     log - cMessageLogger with the status and messages of operation
-            log=cMessageLogger();
+        %     log - cMessageLogger with the status of the operation
+            log=cTaesLab();
             if iscell(value) && size(value,1)==obj.NrOfRows
                 obj.Data(:,idx)=value;
             else
@@ -326,9 +326,9 @@ classdef (Abstract) cTable < cMessageLogger
         %     idx - vector with rows index to replace
         %     value - cell array with the values to replace
         %   Output Arguments:
-        %   log - cMessageLogger with the status and messages of operation
+        %     log - cMessageLogger with the status of the operation
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if iscell(value) && (size(value,2)==obj.NrOfCols-1)
                 obj.Data(idx,:)=value;
             else

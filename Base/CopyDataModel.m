@@ -17,11 +17,10 @@ function CopyDataModel(inputFile, outputFile)
 %
 %   See also cDataModel, cReadModel
 %
-    log=cMessageLogger();
+    log=cTaesLab();
     % Check arguments
     if (nargin~=2) || ~isFilename(inputFile) || ~isFilename(outputFile)
-        log.printError(cMessages.InvalidArgument)
-        log.printError(cMessages.ShowHelp);
+        log.printError(cMessages.InvalidArgument,cMessages.ShowHelp)
         return
     end
     % Read data model

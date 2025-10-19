@@ -30,10 +30,9 @@ function res=ProductiveDiagram(data,varargin)
 %
 %   See also cDataModel, cProductiveDiagram, cResultInfo
 %
-	res=cMessageLogger();
+	res=cTaesLab();
 	if nargin <1 || ~isObject(data,'cDataModel')
-		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.ShowHelp);
+	    res.printError(cMessages.DataModelRequired,cMessages.ShowHelp);
 		return
 	end
     %Check input parameters
@@ -44,7 +43,6 @@ function res=ProductiveDiagram(data,varargin)
 		p.parse(varargin{:});
     catch err
 		res.printError(err.message);
-        res.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

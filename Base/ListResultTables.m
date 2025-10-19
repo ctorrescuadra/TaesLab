@@ -38,13 +38,17 @@ function res=ListResultTables(varargin)
 %
 %   See also cTablesDefinition, cThermoeconomicModel
 %
-    res=cMessageLogger();
+    res=cTaesLab();
     % Check the variable arguments
-    isResultSet=false;
-    if nargin>0 && isObject(varargin{1},'cResultSet')
+    if nargin==0
+        isResultSet=false;
+    elseif isObject(varargin{1},'cResultSet')
         isResultSet=true;
         arg=varargin{1};
         varargin=varargin(2:end);
+    else
+        res.printError(cMessages.ResultSetRequired,cMessages.ShowHelp);
+        return
     end
     % Select View depending of nargout
     if nargout 
@@ -62,7 +66,6 @@ function res=ListResultTables(varargin)
 		p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

@@ -1,6 +1,8 @@
 function res = ExportResults(arg,varargin)
 %ExportResults - Exports the results tables in different formats.
-%   If the option 'Table' is not used, the function returns a structure with all tables converted to the desired format. 
+%   - If no optional parameters are specified, the function returns a structure
+%     with all tables as cTable objects, equivalent to arg.Tables
+%   - If the option 'Table' is not used, the function returns a structure with all tables converted to the desired format.
 %
 %   Syntax:
 %     res=ExportResults(arg,Name,Value)
@@ -21,16 +23,20 @@ function res = ExportResults(arg,varargin)
 %
 %   Output Arguments:
 %     res - The Table/s in the format specified by 'ExportAs' parameter
-%
-%   Example:
+%     
+%   Examples:
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %  
 %   See also cResultSet, cTable.
 %
-    res=cMessageLogger();
-    if nargin<1 || ~isObject(arg,'cResultSet')
+    res=cTaesLab();
+    if nargin<1
+        res.printError(cMessages.NarginError,cMessages.ShowHelp);
+        return
+    end
+    if ~isObject(arg,'cResultSet')
 		res.printError(cMessages.InvalidObject,class(arg));
-		res.printError(cMessages.ShowHelp);
+        res.printError(cMessages.ShowHelp);
 		return
     end
     % Check input
@@ -42,7 +48,6 @@ function res = ExportResults(arg,varargin)
 		p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

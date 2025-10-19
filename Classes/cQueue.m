@@ -1,8 +1,7 @@
 classdef cQueue < cTaesLab
 %cQueue - Simple FIFO queue based on a dinamic cell array
 %   This class implements a simple FIFO queue based on a dinamic cell array.
-%   It is used in cParseStream to store the flows while parsing a stream text,
-%   and in cMessageLogger to store the messages.
+%   It is used in cParseStream to store the flows while parsing a stream text.
 %
 %   cQueue properties:
 %     Count - Number of elements of the queue

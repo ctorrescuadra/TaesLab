@@ -513,7 +513,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             for i=1:NR
                 j=aR(i);
                 if ~obj.ActiveProcesses(j)
-                    obj.messageLog(cType.WARNING,cMessages.ProcessNotActive,obj.ps.ProcessKeys{j});
+                    log.messageLog(cType.WARNING,cMessages.ProcessNotActive,obj.ps.ProcessKeys{j});
                     continue
                 end 
                 key=wt.Names{i};      

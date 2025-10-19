@@ -38,14 +38,14 @@ function res=ImportData(filename,varargin)
 %  
 %   See also cTableData
 %
-    res=cMessageLogger();
+    res=cTaesLab();
     % Check Mandatory parameter
     if nargin<1 
-        res.printError(cMessages.ShowHelp);
+        res.printError(cMessages.NarginError,cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
-        res.printError(cMessages.InvalidInputFile);
+        res.printError(cMessages.InvalidInputFile,filename);
         return
     end
     if ~exist(filename,'file')
@@ -61,7 +61,6 @@ function res=ImportData(filename,varargin)
 		p.parse(varargin{:});
     catch err
 		res.printError(err.message);
-        res.printError(cMessages.ShowHelp);
         return
     end
     props=p.Results;
@@ -83,7 +82,7 @@ end
 
 function tbl=importCSV(filename,props)
 %importCVS - import CSV files to cTableData object
-    tbl=cMessageLogger();
+    tbl=cTaesLab();
     if isOctave
 		try
 			values=csv2cell(filename);
@@ -112,7 +111,7 @@ end
 
 function tbl=importXLSX(filename,props)
 %importCVS - import CSV files to cTableData object
-    tbl=cMessageLogger();
+    tbl=cTaesLab();
     % Open the file
     if isOctave
 		try

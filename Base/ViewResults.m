@@ -112,10 +112,9 @@ classdef ViewResults < matlab.apps.AppBase
 
         % Code that executes after component creation
         function startupFcn(app, arg)
-            log=cMessageLogger();
+            log=cTaesLab();
             if nargin~=2 || ~isObject(arg,'cResultSet')
-                log.printError(cMessages.ResultSetRequired);
-                log.printError(cMessages.ShowHelp);
+                log.printError(cMessages.ResultSetRequired, cMessages.ShowHelp);
                 delete(app);
                 return
             end

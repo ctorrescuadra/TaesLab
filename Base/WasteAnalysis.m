@@ -41,12 +41,11 @@ function res = WasteAnalysis(data,varargin)
 %
 %   See also cDataModel, cWasteAnalysis, cResultInfo
 %
-    res=cMessageLogger();
-    if nargin<1 || ~isObject(data,'cDataModel')
-		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.ShowHelp);
+    res=cTaesLab();
+	if nargin <1 || ~isObject(data,'cDataModel')
+		res.printError(cMessages.DataModelRequired,cMessages.ShowHelp);
 		return
-    end
+	end
     if ~data.isWaste
 	    res.printError(cMessages.NoWasteModel)
         return
@@ -64,7 +63,6 @@ function res = WasteAnalysis(data,varargin)
         p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.ShowHelp)
         return
     end
     % 

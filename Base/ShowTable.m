@@ -29,10 +29,9 @@ function res=ShowTable(tbl,varargin)
 % 
 %   See also cTable
 %
-    log=cMessageLogger();
+    log=cTaesLab();
     if nargin<1 || ~isObject(tbl,'cTable')
-        log.printError(cMessages.InvalidTable,'object');
-        log.printError(cMessages.ShowHelp);
+        log.printError(cMessages.TableRequired,cMessages.ShowHelp);
         return
     end
     if nargout 
@@ -49,7 +48,6 @@ function res=ShowTable(tbl,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

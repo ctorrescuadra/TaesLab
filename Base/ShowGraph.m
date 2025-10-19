@@ -25,10 +25,12 @@ function ShowGraph(arg,varargin)
 %
 %   See also cGraphResults, cResultSet
 %
-    log=cMessageLogger();
-	if nargin < 1 || ~isObject(arg,'cResultSet')
-		log.printError(cMessages.InvalidObject,class(arg));
-		log.printError(cMessages.ShowHelp);
+    log=cTaesLab();
+	if nargin < 1
+		log.printError(cMessages.NarginError,cMessages.ShowHelp);
+	end	
+	if ~isObject(arg,'cResultSet')
+		log.printError(cMessages.ResultSetRequired,cMessages.ShowHelp);
 		return
 	end
     % Check input parameters
@@ -42,7 +44,6 @@ function ShowGraph(arg,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError(cMessages.ShowHelp);
         return
     end
 	param=p.Results;

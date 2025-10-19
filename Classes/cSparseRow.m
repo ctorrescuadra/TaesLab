@@ -1,4 +1,4 @@
-classdef  cSparseRow < cMessageLogger
+classdef  cSparseRow < cTaesLab
 	%cSparseRow - Store and operate with matrices that contain few non-null rows.
 	%	This class is used to manage  waste allocation matrices, and provide a set of
 	%   algebraic operations. 
@@ -79,7 +79,7 @@ classdef  cSparseRow < cMessageLogger
 		%   Output Arguments:
 		%     nobj - cSparseRow object with the scaled values
 		%
-			nobj=cMessageLogger();
+			nobj=cTaesLab();
 			if nargin==1
 				nobj.printError(cMessages.InvaliArguments,'scaleCol');
 				return
@@ -102,7 +102,7 @@ classdef  cSparseRow < cMessageLogger
 		%   Output Arguments:
 		%     nobj - cSparseRow object with the divided values
 		%
-			nobj=cMessageLogger();
+			nobj=cTaesLab();
 			if nargin==1
 				x=obj.sumCols;
 			end
@@ -124,7 +124,7 @@ classdef  cSparseRow < cMessageLogger
 		%   Output Arguments:
 		%     nobj - cSparseRow object with the scaled values
 		%
-			nobj=cMessageLogger();
+			nobj=cTaesLab();
 			if(obj.N~=length(x))
 				nobj.printError(cMessages.InvalidSparseRow,obj.N,length(rows));
 				return
@@ -143,12 +143,12 @@ classdef  cSparseRow < cMessageLogger
 		%   Output Arguments:
 		%     nobj - cSparseRow object with the divided values
 		%
-			nobj=cMessageLogger();
+			nobj=cTaesLab();
 			if nargin==1
 				x(obj.mRows)=obj.sumRows;
 			end
 			if(obj.N~=length(x))
-				log.printError(cMessages.InvalidSparseRow,obj.N,length(rows));
+				nobj.printError(cMessages.InvalidSparseRow,obj.N,length(rows));
 				return
 			end
 			B=divideRow(obj.mValues,x(obj.mRows));
@@ -207,7 +207,7 @@ classdef  cSparseRow < cMessageLogger
 		%   Output Arguments:
 		%     nobj - cSparseRow object with the result of the addition
 		%
-			nobj=cMessageLogger();
+			nobj=cTaesLab();
 			% Check dimensions
 			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
 				nobj.printError(cMessages.InvalidSparseRow);
@@ -238,7 +238,7 @@ classdef  cSparseRow < cMessageLogger
 		%     nobj - cSparseRow object with the result of the subtraction
 		%
 			% Check dimensions
-			nobj=cMessageLogger();
+			nobj=cTaesLab();
 			if (size(obj1,1)~=size(obj2,1)) || (size(obj1,2)~=size(obj2,2))
 				nobj.printError(cMessages.InvalidSparseRow);
 				return
@@ -280,7 +280,7 @@ classdef  cSparseRow < cMessageLogger
 		%     nobj - cSparseRow object or matrix with the result of the multiplication
 		%
 			% Check dimensions
-			nobj=cMessageLogger();
+			nobj=cTaesLab();
 			if (size(obj1,2)~=size(obj2,1))
 				nobj.printError(cMessages.InvalidSparseRow);
 				return

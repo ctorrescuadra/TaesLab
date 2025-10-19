@@ -17,18 +17,21 @@ function SaveResults(arg,filename)
 %
 %   See also cResultSet
 %
-    log=cMessageLogger();
+    log=cTaesLab();
     % Check Input parameters
-    if (nargin~=2) || ~isObject(arg,'cResultSet')
+    if (nargin~=2) 
+        log.printError(cMessages.NarginError,cMessages.ShowHelp);
+        return
+    end
+    if ~isObject(arg,'cResultSet')
         log.printError(cMessages.ResultSetRequired);
-        log.printError(cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
         log.printError(cMessages.InvalidOutputFile,filename);
-        log.printError(cMessages.ShowHelp);
         return
     end
+    % Save Results
     log=saveResults(arg,filename);
     printLogger(log);
 end

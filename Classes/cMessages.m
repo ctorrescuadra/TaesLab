@@ -24,9 +24,10 @@ classdef cMessages
         % Input arguments messages
         NarginError='Invalid number of input arguments. %s'
         InvalidArgument='Invalid input arguments. %s'
-        DataModelRequired='First argument must be a valid Data Model'
-        ResultSetRequired='First argument must be a valid cResultSet object'
-        TableRequired='First argument must be a valid cTable object'
+        DataModelRequired='First argument must be a valid Data Model. %s'
+        ResultSetRequired='First argument must be a valid cResultSet object. %s'
+        ThermoModelRequired='First argument must be a valid cThermoeconomicModel object. %s'
+        TableRequired='First argument must be a valid cTable object. %s'
         % Invalid objects messages
         InvalidObject='Invalid %s object. See error log'
         InvalidDataModel='Invalid data model. See error log'

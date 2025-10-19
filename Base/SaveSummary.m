@@ -17,16 +17,18 @@ function SaveSummary(model,filename)
 %
 %   See also cThermoeconomicModel, cSummaryResults
 %
-    log=cMessageLogger();
+    log=cTaesLab();
     % Check Input parameters
-    if (nargin~=2) || ~isObject(model,'cThermoeconomicModel')
-        log.printError(cMessages.ResultSetRequired);
-        log.printError(cMessages.ShowHelp);
+    if (nargin~=2)
+        log.printError(cMessages.NarginError,cMessages.ShowHelp);
+        return
+    end
+    if ~isObject(model,'cThermoeconomicModel')
+        log.printError(cMessages.ThermoModelRequired,cMessages.ShowHelp);
         return
     end
     if ~isFilename(filename)
         log.printError(cMessages.InvalidOutputFile,filename);
-        log.printError(cMessages.ShowHelp);
         return
     end
     % Save summary results

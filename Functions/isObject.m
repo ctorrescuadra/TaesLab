@@ -1,12 +1,13 @@
 function res=isObject(obj,class)
-%isObject - Check is a valid cTaesLab object belong to a specific class.
+%isObject - Check if 'obj' is a valid cTaesLab object belong to a specific class.
 %
 %   Syntax:
 %     res = isObject(obj,class)
 %
 %   Input Arguments:
 %     obj   - cTaesLab object
-%     class - name of the class (char array)
+%     class - name of the class to check
+%       char array
 %  
 %   Output Arguments:
 %     res - true | false
@@ -16,7 +17,7 @@ function res=isObject(obj,class)
 %
     res=false;
     % Check Input
-    if nargin~=2 || ~ischar(class) || isempty(class)
+    if nargin~=2 || ~ischar(class) || isempty(class) || ~isa(obj,'cTaesLab')
         return
     end
     res = isValid(obj) && isa(obj,class);

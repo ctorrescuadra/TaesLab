@@ -6,8 +6,9 @@ function res=isNonNegativeMatrix(A,tolerance)
 %     res = isNonNegativeMatrix(A)
 %   Input Arguments:
 %     A - Matrix to check
-%     tolerance - optional, default is cType.EPS
-%       Tolerance for non-negativity check
+%     tolerance - (optional) tolerance for non-negativity check. 
+%       Default value is cType.EPS
+%      
 %   Output Arguments:
 %     res - true | false
 %
@@ -19,10 +20,8 @@ function res=isNonNegativeMatrix(A,tolerance)
     
     %Chech input arguments
     res=false;
-    if nargin < 1 || nargin >2 
-        return
-    end
-    if nargin ~= 2 || ~isnumeric(tolerance) || ~isscalar(tolerance) || tolerance<0
+    try narginchk(1,2); catch, return; end
+    if nargin == 1 || ~isnumeric(tolerance) || ~isscalar(tolerance) || tolerance<0
         tolerance = cType.EPS; % Default tolerance
     end
     res=isSquareMatrix(A) && all(A(:))>=-tolerance;

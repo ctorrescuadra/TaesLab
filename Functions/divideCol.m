@@ -22,18 +22,20 @@ function B=divideCol(A,x)
 %   See also scaleCol, scaleRow, divideRow
 	
 	% Check Input
-	if nargin < 1 
-		error(cType.FunctionError, mfilename, sprintf(cMessages.NarginError,cMessages.ShowHelp));
+	try
+		narginchk(1,2)
+	catch ME
+		error(buildMessage(mfilename, ME.message));
 	end
 	if ~ismatrix(A) || ~isnumeric(A)
-		error(cType.FunctionError, mfilename, cMessages.InvalidArgument);
+		error(buildMessage(mfilename, cMessages.InvalidArgument));
 	end
 	if nargin==1
 		x=sum(A,1);
 	end
 	M=size(A,2);
 	if ~isnumeric(x) || ~isvector(x) || (M~=length(x))
-		error(cType.FunctionError, mfilename, cMessages.ScaleColsError);
+		error(buildMessage(mfilename, cMessages.ScaleColsError));
 	end
 	% Avoid division by zero
 	x=zerotol(x);

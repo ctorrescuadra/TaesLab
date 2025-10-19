@@ -41,10 +41,9 @@ function res=ThermoeconomicDiagnosis(data,varargin)
 %   See also cDataModel, cDiagnosis, cResultInfo
 
     % Initialize and validate input parameters
-    res=cMessageLogger();
-	if nargin<1 || ~isObject(data,'cDataModel')
-		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.ShowHelp);
+    res=cTaesLab();
+	if nargin <1 || ~isObject(data,'cDataModel')
+		res.printError(cMessages.DataModelRequired,cMessages.ShowHelp);
 		return
 	end
     % Check optional input parameters
@@ -58,7 +57,6 @@ function res=ThermoeconomicDiagnosis(data,varargin)
         p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.ShowHelp);
         return
     end
     % Validate parameters

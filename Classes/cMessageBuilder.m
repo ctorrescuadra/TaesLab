@@ -1,4 +1,4 @@
-classdef cMessageBuilder < cTaesLab
+classdef cMessageBuilder < handle
 %cMessageBuilder - Create a message for logger
 %   The message include the type of error, the class which cause the message and the text message
 %   There is three types of messages registered
@@ -29,9 +29,9 @@ classdef cMessageBuilder < cTaesLab
         %     obj = cMessageBuilder(type,class,text)
         %   Input Arguments:
         %     type - type of error
-        %       'ERROR': error message
-        %       'WARNING': warning message
-        %       'INFO': info message
+        %       cType.ERROR: error message
+        %       cType.WARNING: warning message
+        %       cType.INFO: info message
         %     class - class name where message is produced
         %     text  - text of the message
         %   Output Arguments:
@@ -52,21 +52,15 @@ classdef cMessageBuilder < cTaesLab
             text=[cType.getTextErrorCode(obj.Error),': ',obj.Class,'. ',obj.Text];              
         end
 
-        function disp(obj,debug)
+        function disp(obj)
         %disp - Overload disp function
         %   fid=1 is the standard output file id
         %   fid=2 is the error output file id (printed in red in some consoles)
         %   Syntax:
-        %     obj.disp(debug)
-        %   Input Arguments:
-        %     debug - (optional) if true, print the stack of the call
-        %             Default value is false
+        %     disp(obj)
         %
-            if nargin==1
-                debug=false;
-            end
             fid=2*(obj.Error==0)+(obj.Error~=0);
-            if debug
+            if cType.DEBUG_MODE && (obj.Error==cType.ERROR)
                 dbstack;
             end
             fprintf(fid,'%s\n',obj.getMessage);

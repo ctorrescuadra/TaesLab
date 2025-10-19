@@ -78,7 +78,7 @@ classdef cType
 		FORMAT_ID='%3d'           % Line number format
 		SPACES='\s+'              % Spaces Regular Expresion
 		BLANK=char(32)            % Blank character
-		DEBUG_MODE=false
+		DEBUG_MODE=false	      % Debug mode flag
 		% Node types
 		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3,'ENV',4);
 		MARKER_SIZE=5;
@@ -196,8 +196,6 @@ classdef cType
 		colType={'char','numeric'};
 		% Digraph types
 		DigraphType=struct('GRAPH',0,'KERNEL',1,'GRAPH_WEIGHT',2,'KERNEL_WEIGHT',3);
-		% Function Error Texts
-		FunctionError='error: %s. %s';
         % TaesApp Tab Panels
         Panels=struct('WELCOME',1,'INDEX',2,'TABLES',3,'GRAPHS',4,'LOG',5);
         % File Extensions

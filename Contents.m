@@ -9,6 +9,7 @@
 %   ValidateModelTables     - Validate the table data model files
 %   ReadDataModel           - Read a data model file.
 %   CopyDataModel           - Creates a copy of a data model file in another format.
+%   ImportDataModel         - Get a cDataModel object from a previous saved MAT file.
 %   ImportData              - Import external data to a cTableData from CSV or XLSX files.
 %
 % Get Thermoeconomic Results
@@ -30,7 +31,7 @@
 %
 % Display Results 
 %   ListResultTables        - List the results tables and their properties.
-%   ShowResults             - Dsiplay the results tables in different formats.
+%   ShowResults             - Display the results tables in different formats.
 %   ShowTable               - Display an individual table.
 %   ShowGraph               - Display the graph associated with a results table.
 %   ExportResults           - Export the results tables in different formats.

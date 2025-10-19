@@ -22,11 +22,13 @@ function res = buildMessage(functionName,message,varargin)
 %     % returns: 'ERROR: myFunction. Invalid filename: myfile.txt'
 %
 %   Note: This function is used internally for error handling.
+%
+%   See also: cMessages, cMessageBuilder
 
-    % Construct the base error message
+    % Construct the error message based on the environment
     if isOctave()
         sfmt=[functionName,'. ',message];
-    else
+    else %is MATLAB
         sfmt=['ERROR: ',functionName,'. ',message];  
     end
     res=sprintf(sfmt,varargin{:});

@@ -32,13 +32,14 @@ function ShowResults(arg,varargin)
 %
 %   See also cResultSet
 %
-    log=cMessageLogger();
-
-    if nargin<1 || ~isObject(arg,'cResultSet')
-        log.printError(cMessages.ResultSetRequired)
-        log.printError(cMessages.ShowHelp);
-        return
-    end
+    log=cTaesLab();
+	if nargin < 1
+		log.printError(cMessages.NarginError,cMessages.ShowHelp);
+	end	
+	if ~isObject(arg,'cResultSet')
+		log.printError(cMessages.ResultSetRequired,cMessages.ShowHelp);
+		return
+	end
     % Check input
     p = inputParser;
     p.addParameter('Table',cType.EMPTY_CHAR,@ischar);
@@ -49,7 +50,6 @@ function ShowResults(arg,varargin)
 		p.parse(varargin{:});
     catch err
         log.printError(err.message);
-        log.printError(cMessages.ShowHelp);
         return
     end
     param=p.Results;

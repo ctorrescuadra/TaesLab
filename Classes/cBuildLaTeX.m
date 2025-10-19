@@ -94,7 +94,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         %     filename - Name of the file
         %   Output Arguments:
         %     log - cMessageLogger object with status and messages
-            log=cMessageLogger;
+            log=cMessageLogger();
             try
                 fId = fopen (filename, 'wt');
                 fprintf(fId,'%s',obj.getLaTeXcode);

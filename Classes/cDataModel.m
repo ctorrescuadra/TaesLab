@@ -387,12 +387,12 @@ classdef cDataModel < cResultSet
         %
             res=cMessageLogger();
             if nargin<3
-                res.printError(cMessages.InvalidArgument);
+                res.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             M=length(values);
             if obj.NrOfFlows~=M
-                res.printError(cMessages.InvalidExergyDataSize,M);
+                res.messageLog(cType.ERROR,cMessages.InvalidExergyDataSize,M);
                 return
             end
             % Build exergy data structure
@@ -537,7 +537,7 @@ classdef cDataModel < cResultSet
         %
             res=cMessageLogger();
             if nargin<3
-                res.printError(cMessages.InvalidArgument);
+                res.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
             ps=obj.ProductiveStructure;
@@ -547,7 +547,7 @@ classdef cDataModel < cResultSet
                 rsd.flows=rval;
             elseif isnumeric(rval)
                 if obj.NrOfFlows~=length(rval)
-                    res.printError(cMessages.InvalidExergyDataSize,M);
+                    res.messageLog(cType.ERROR,cMessages.InvalidExergyDataSize,M);
                     return
                 end
                 fields=cType.KEYVAL;
@@ -558,7 +558,7 @@ classdef cDataModel < cResultSet
                 tmp=[keys;num2cell(vals)];
                 rsd.flows=cell2struct(tmp,fields,1);
             else
-                res.printError(cMessages.InvalidExergyData,state);
+                res.messageLog(cType.ERROR,cMessages.InvalidExergyData,state);
                 return
             end
             if nargin==4
@@ -575,15 +575,11 @@ classdef cDataModel < cResultSet
                     tmp=[keys;num2cell(pval)];
                     rsd.processes=cell2struct(tmp,fields,1);
                 else
-                    res.printError(cMessages.InvalidResourceData,sample);
+                    res.messageLog(cType.ERROR,cMessages.InvalidResourceData,sample);
                     return
                 end
             end
             res=cResourceData(ps,rsd);
-            if ~res.status
-                printLogger(res);
-                res.printError(cMessages.InvalidResourceData,sample);
-            end
         end
 
         function rsd=addResourceData(obj,sample,rval,varargin)
@@ -645,10 +641,10 @@ classdef cDataModel < cResultSet
         %     key - waste key 
         %     wtype - waste allocation type
         %   Output Arguments:
-        %     log - cMessageLogger with the status and messages of operation
+        %     log - cTaesLab with the status of the operation
         %   See also cType.WasteAllocation
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if nargin~=3
                log.printError(cMessages.InvalidArgument);
                return
@@ -666,8 +662,9 @@ classdef cDataModel < cResultSet
         %     key - waste key 
         %     val - vector containing the waste allocation values for processes
         %   Output Arguments:
-        %     log - cMessageLogger with the status and messages of operation
-            log=cMessageLogger();
+        %     log - cTaesLab with the status the operation
+        %
+            log=cTaesLab();
             if nargin~=3
                log.printError(cMessages.InvalidArgument);
                return
@@ -685,9 +682,9 @@ classdef cDataModel < cResultSet
         %     key - Waste key
         %     val - Recycling ratio of the active waste
         %   Output Arguments:
-        %     log - cMessageLogger with the status and messages of operation
+        %     log - cTaesLab with the status and messages of operation
         %
-            log=cMessageLogger();
+            log=cTaesLab();
             if nargin~=3
                log.printError(cMessages.InvalidArgument);
                return

@@ -142,7 +142,7 @@ classdef cResultInfo < cResultSet
         %     graph - graph table name [optional]
         %   See also cGraphResults
         %
-            tbl=cMessageLogger();
+            tbl = cTaesLab();
             res=getResultInfo(obj);
             if nargin==1
                 graph=res.Info.DefaultGraph;

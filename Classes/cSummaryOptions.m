@@ -1,4 +1,4 @@
-classdef cSummaryOptions < cMessageLogger
+classdef cSummaryOptions < cTaesLab
 %cSummaryOptions - Determine the summary options depending on the data model
 %   This class is used to determine the available summary options depending on the data model
 %   properties (number of states and number of samples). 

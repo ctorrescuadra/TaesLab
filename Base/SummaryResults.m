@@ -49,11 +49,10 @@ function res = SummaryResults(data,varargin)
 %
 %   See also cDataModel, cSummaryResults, cResultInfo
 %
-    res=cMessageLogger();
+    res=cTaesLab();
     % Check data model
 	if nargin <1 || ~isObject(data,'cDataModel')
-		res.printError(cMessages.DataModelRequired);
-        res.printError(cMessages.ShowHelp);
+		res.printError(cMessages.DataModelRequired,cMessages.ShowHelp);
 		return
 	end
     sopt=data.SummaryOptions;
@@ -74,7 +73,6 @@ function res = SummaryResults(data,varargin)
         p.parse(varargin{:});
     catch err
         res.printError(err.message);
-        res.printError(cMessages.ShowHelp);
         return
     end
     % Preparing parameters

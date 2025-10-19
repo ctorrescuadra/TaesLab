@@ -5,12 +5,12 @@ function res=isNonSingularMatrix(A)
 %   The matrix A must be a non-negative matrix.
 % 
 %   Syntax:
-%     res = isNonSingularMatrix
+%     res = isNonSingularMatrix(A)
 %
 %   Input Arguments:
 %     A - Square non-negative matrix
 %   Output Arguments:
-%     res - true/false
+%     res - true | false
 %
 %   Examples:
 %     A = [0.5 0.2; 0.3 0.4];

@@ -5,9 +5,6 @@ classdef cMessageLogger < cTaesLab
 %	
 %   cMessageLogger methods:
 %     cMessageLogger  - Create a messages logger
-%     printError      - Show a error message in the console
-%     printWarning    - Show a warning message in the console
-%     printInfo       - Show a print message in the console
 %     messageLog      - Add a message to the the logger queue
 %     printLogger     - Show the messages logger in console
 %     printLoggerType - Show a type of messages in the console 
@@ -37,41 +34,6 @@ classdef cMessageLogger < cTaesLab
 				obj.status=val;
 			end
 			obj.logger=cQueue();
-		end
-
-		function printError(obj,varargin)
-		%printError - Print error message. 
-		%   Syntax:
-		%	  obj.printError(varargin)
-		%   Input Arguments:
-		%     text - text message, use fprintf syntax
-		%       varargin
-		%   Example:
-		%	  obj.printError(cMessages.FileNotFound,filename)
-		%
-			printMessage(obj,cType.ERROR,varargin{:});
-		end
-			
-		function printWarning(obj,varargin)
-		%printWarning - Print warning message. 
-		%   Syntax:
-		% 	  obj.printWarning(varargin)
-		%   Input Arguments:
-		%     text - text message, use fprintf syntax
-		%       varargin
-		% 
-			printMessage(obj,cType.WARNING,varargin{:});
-		end
-			
-		function printInfo(obj,varargin)
-		%printInfo - Print info message. Use fprintf syntax
-		%   Syntax:
-		%     obj.printInfo(text)
-		%   Input Arguments:
-		%     text - text message, using fprintf syntax
-		%       varargin
-		%
-			printMessage(obj,cType.VALID,varargin{:});
 		end
 		
 		function messageLog(obj,error,varargin)
@@ -158,48 +120,4 @@ classdef cMessageLogger < cTaesLab
 			obj.logger.clear;
 		end
     end
-
-	methods(Access=private)
-		function message=createMessage(obj,error,varargin)
-		%createMessage - Create the text message depending of error code
-		%   Syntax:
-		%     message = obj.createMessage(error,varargin)
-		%   Input Arguments:
-		%     error - type of error
-		%       cType.ERROR | cType.WARNING | cType.INFO
-		%     text - text message, use fprintf format
-		%       varargin
-		%   Output Arguments:
-		%     message - cMessageBuilder object containing the message
-		%	 Example:
-		%	   message=obj.createMessage(cType.ERROR,'Invalid file name %s',filename)
-		%
-			if error>cType.INFO || error<cType.WARNING
-				text='Unknown Error Code';
-			else
-				text=sprintf(varargin{:});
-			end
-			if error==cType.ERROR
-				obj.status=logical(error);
-			end
-			message=cMessageBuilder(error,class(obj),text);
-		end
-
-		function printMessage(obj,error,varargin)
-		% Print messages depending of type error and update state
-		%   Syntax:
-		%     obj.printMessage(error,varargin)
-		%   Input Arguments:
-		%     error - type of error
-		%       cType.ERROR | cType.WARNING | cType.INFO
-		%     text - text message, use fprintf format
-		%       varargin
-		%   Example:
-		%     obj.printMessage(cType.ERROR,'Invalid file name %s',filename)
-		%
-			msg=obj.createMessage(error,varargin{:});
-            debug=cType.DEBUG_MODE && (error==cType.ERROR);
-			disp(msg,debug);
-		end
-	end
 end
