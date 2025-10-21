@@ -371,8 +371,12 @@ classdef (Abstract) cTable < cMessageLogger
                     log=exportLaTeX(obj,filename);
                 case cType.FileType.MAT
                     log=exportMAT(obj,filename);
+                case cType.FileType.MD
+                    log=exportMarkdown(obj,filename);
+                case cType.FileType.M
+                    log=exportContents(obj,filename);
                 otherwise
-                        log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
+                    log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
             end
             if log.status
                 log.messageLog(cType.INFO,cMessages.TableFileSaved,obj.Name, filename);
@@ -485,6 +489,22 @@ classdef (Abstract) cTable < cMessageLogger
             end
         end
 
+        function log=exportMarkdown(obj,filename)
+        %exportMarkdown - generates the Markdown table code file of cTable object
+        %   Input:
+        %     filename - name of the output file
+        %   Output:
+        %     log: cMessageLogger class containing status and messages
+        %
+            log=cMessageLogger();
+            md=cBuildMarkdown(obj);
+            if md.status
+                log=md.saveTable(filename);
+            else
+                log.addLogger(md);
+            end
+        end
+
         function log=exportJSON(obj,filename)
         %exportJSON - save table as JSON file
         %   Input:
@@ -521,7 +541,7 @@ classdef (Abstract) cTable < cMessageLogger
                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
             end
         end
-    
+
         function showTableGUI(obj)
         %showTableGUI - View the values of the table (tbl) in a uitable graphic object
         %   Syntax:

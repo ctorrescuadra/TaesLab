@@ -212,6 +212,8 @@ classdef(Abstract) cResultSet < cResultId
                     log=obj.saveAsTXT(filename);
                 case cType.FileType.LaTeX
                     log=obj.saveAsLaTeX(filename);
+                case cType.FileType.MD
+                    log=exportMarkdown(obj,filename);
                 case cType.FileType.MAT
                     log=exportMAT(obj,filename);
                 otherwise
@@ -507,6 +509,34 @@ classdef(Abstract) cResultSet < cResultId
                 tbl=tidx.Content{i};
                 ltx=cBuildLaTeX(tbl);
                 fprintf(fId,'%s',ltx.getLaTeXcode);
+            end
+            fclose(fId);
+        end
+
+        function log=exportMarkdown(obj,filename)
+        %exportMarkdown - Export the result tables into a Markdown file
+        %   Syntax:
+        %     log=exportMarkdown(filename)
+        %   Input Arguments:
+        %     filename - name of the file
+        %   Output Arguments:
+        %     log - cMessageLogger object with save status and error messages
+        %
+            log=cMessageLogger();
+            tidx=getTableIndex(obj);
+            % Open text file
+            try
+                fId = fopen (filename, 'wt');
+            catch err
+                log.messageLog(cType.ERROR,err.message)
+                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
+                return
+            end
+            % Save the tables in the file
+            for i=1:tidx.NrOfRows
+                tbl=tidx.Content{i};
+                md=cBuildMarkdown(tbl);
+                fprintf(fId,'%s',md.getMarkdownCode);
             end
             fclose(fId);
         end

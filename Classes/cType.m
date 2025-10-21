@@ -199,8 +199,8 @@ classdef cType
         % TaesApp Tab Panels
         Panels=struct('WELCOME',1,'INDEX',2,'TABLES',3,'GRAPHS',4,'LOG',5);
         % File Extensions
-		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7,'LaTeX',8);
-		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html','LaTeX','.tex');
+		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7,'LaTeX',8,'MD',9,'MHLP',10);
+		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html','LaTeX','.tex','MD','.md','MHLP','.m');
         % HTML/CCS style file
 		CSSFILE='styles.css';
         % Taess app welcome image
@@ -219,7 +219,7 @@ classdef cType
 		PATH_PC='\'           % Path Character for Windows
 		PATH_UNIX='/'         % Path Character for Unix
 		% File Pattern
-		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+.(xlsx|csv|mat|txt|json|xml|html|tex)$'
+		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+\.(xlsx|html|json|tex|csv|txt|xml|mat|md|m)$'
     end
     %----------------------------
     % Static Methods for types

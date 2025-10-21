@@ -221,6 +221,7 @@ classdef cMessages
         InvalidFormatError='Invalid numeric format expression.'
         InvalidLabelError='Label must be a character array'
         VectorLengthError='Both input arguments must be vectors of the same length'
+        NoMFilesInDir='Not M-files found in directory %s'
     end
 
     methods(Static)
@@ -232,7 +233,7 @@ classdef cMessages
         % Output Arguments:
         %   res - cTable with the messages
         %
-            rowNames=fieldnames(cMessages)';
+            rowNames=fieldnames(cMessages);
             N=length(rowNames);
             data=cell(N,1);
             for i=1:N

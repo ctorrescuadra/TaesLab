@@ -4,10 +4,12 @@
 % Classes
 %
 %  cTaesLab.m                - Base class of the TaesLab toolbox.
+%  cMessageBuilder.m         - Create and print messages for cTaesLab objects.
+%  cMessageLogger.m          - Create and manage a message logger for cTaesLab objects.
+%
 %  cType.m                   - Static class to manage the constants of TaesLab.
 %  cMessages.m               - Static class which defines the TaesLab messages.
-%  cMessageLogger.m          - Create and manage a message logger for cTaesLab objects.
-%  cMessageBuilder.m         - Create a message for Logger.
+%  cParseStream.m            - Static utility class to check and validate strings.
 %
 %  cReadModel.m              - Abstract class to implement the model reader classes.
 %  cReadModelStruct.m        - Abstract class to read a structured data model.
@@ -64,12 +66,12 @@
 %
 %  cBuildHTML.m              - Convert a cTable object into HTML files.
 %  cBuildLaTeX.m             - Convert a cTable object into a LaTeX code table.
+%  cBuildMarkdown.m          - Convert a cTable object into a Markdown code table.
 %  cViewTable.m              - Show a result table using a GUI (uitable).
 %
 %  cDictionary.m             - Implement a (key, id) dictionary for TaesLab.
 %  cQueue.m                  - A simple FIFO queue based on a dynamic cell array.
 %  cDataset.m                - Creates a container to store data and to access it by key or index.
-%  cParseStream.m            - Static utility class to check and validate strings.
 %  cSparseRow.m              - Store and operate with matrices that contain few non-null rows.
 %
 %  printformat.json          - Configuration file to define the format of the results tables.
