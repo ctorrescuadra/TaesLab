@@ -1,19 +1,21 @@
-# TaesLab Toolbox Utility Functions
+# Thermoeconomic Analysis Toolbox
 
-Version 1.8 (R2024b) 01-Oct-2025
+  Version 1.8 (R2024b) 01-Oct-2025
 
-## Import/Export Functions
+## TaesLab Utility Funtions
 
-| Function       | Description                                                |
+### Import/Export Functions
+
+| Name           | Description                                                |
 | :------------- | :----------------------------------------------------------|
 | [exportCSV][]  | Save a cell array as a CSV file.                           |
 | [exportMAT][]  | Save a cTaesLab object as a MAT file                       |
 | [importCSV][]  | Read a CSV file and return its contents as a cell array.   |
 | [importMAT][]  | Create a cTaesLab object from a previously saved MAT file. |
 
-## Validation Functions
+### Validation Functions
 
-| Function                | Description                                             |
+| Name                    | Description                                             |
 | :---------------------- | :-------------------------------------------------------|
 | [isFilename][]          | Check if file name is valid for read/write mode.        |
 | [isIndex][]             | Check if a number belongs to an index range.            |
@@ -26,9 +28,9 @@ Version 1.8 (R2024b) 01-Oct-2025
 | [isNonNegativeMatrix][] | Check if the matrix is non-negative.                    |
 | [isNonSingularMatrix][] | Check if the matrix I-A is non-singular.                |
 
-## Matrix Operations
+### Matrix Operations
 
-| Function                    | Description                                                                  |
+| Name                        | Description                                                                  |
 | :---------------------------| :----------------------------------------------------------------------------|
 | [divideCol][]               | Divide each column of matrix A by the corresponding element of vector x.     |
 | [divideRow][]               | Divide each row of matrix A by the corresponding element of vector x.        |
@@ -44,9 +46,9 @@ Version 1.8 (R2024b) 01-Oct-2025
 | [transitiveClosure][]       | Compute the transitive closure of a digraph.                                 |
 | [inverseMatrixOperator][]   | Calculate the inverse of the M-Matrix I-A                                    |
 
-## Miscellaneous Functions
+### Miscellaneous Functions
 
-| Function         | Description                                 |
+| Name             | Description                                 |
 | :----------------| :-------------------------------------------|
 | [fdisplay][]     | Display a matrix A using C-like formatting. |
 | [buildMessage][] | Build error messages for TaesLab functions  |

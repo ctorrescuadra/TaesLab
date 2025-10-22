@@ -19,7 +19,6 @@ classdef (Sealed) cBuildMarkdown < cMessageLogger
         separator   % separator code - alignment definition
         body        % body code - data rows
         caption     % caption code - table description
-        alignment   % column alignment characters
     end
 
     methods
