@@ -78,7 +78,7 @@ classdef cType
 		FORMAT_ID='%3d'           % Line number format
 		SPACES='\s+'              % Spaces Regular Expresion
 		BLANK=char(32)            % Blank character
-		DEBUG_MODE=false	      % Debug mode flag
+		DEBUG_MODE=false  	      % Debug mode flag
 		% Node types
 		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3,'ENV',4);
 		MARKER_SIZE=5;

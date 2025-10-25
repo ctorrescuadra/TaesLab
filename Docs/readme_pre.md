@@ -224,12 +224,58 @@ Each example includes:
 - Expected results
 - Documentation
 
+**Cost Diagram Example**
+
+```mermaid
+sankey-beta
+IN,COMB,78643
+IN,ICE,27568
+IN,BURN,10717
+COMB,GT,65060.5750
+ICE,WHTR,1422.6348
+COMB,HRSG,11453.5974
+GT,HRSG,11213.3347
+ICE,HRSG,6241.7069
+BURN,HRSG,9037.2819
+COMB,STCK,2128.8275
+GT,STCK,2084.1710
+ICE,STCK,1160.1174
+BURN,STCK,1679.7181
+GT,OUT,51763.0693
+ICE,OUT,18743.5409
+WHTR,OUT,1422.6348
+HRSG,OUT,37945.9210
+STCK,OUT,7052.8340
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [`LICENSE`](LICENSE ) file for details.
 
 ---
 
-**Repository**: [https://github.com/your-username/TaesLab](https://github.com/your-username/TaesLab)  
-**Documentation**: [Wiki Pages](https://github.com/your-username/TaesLab/wiki)  
+**Repository**: [https://github.com/ctorrescuadra/TaesLab](https://github.com/ctorrescuadra/TaesLab)  
+**Documentation**: [Wiki Pages](https://github.com/ctorrescuadra/TaesLab/wiki)  
 **Issues**: [Bug Reports & Feature Requests](https://github.com/your-username/TaesLab/issues)
+
+```mermaid
+sankey-beta
+IN,COMB,78643
+IN,ICE,27568
+IN,BURN,10717
+COMB,GT,65060.5750
+ICE,WHTR,1422.6348
+COMB,HRSG,11453.5974
+GT,HRSG,11213.3347
+ICE,HRSG,6241.7069
+BURN,HRSG,9037.2819
+COMB,STCK,2128.8275
+GT,STCK,2084.1710
+ICE,STCK,1160.1174
+BURN,STCK,1679.7181
+GT,OUT,51763.0693
+ICE,OUT,18743.5409
+WHTR,OUT,1422.6348
+HRSG,OUT,37945.9210
+STCK,OUT,7052.8340
+```

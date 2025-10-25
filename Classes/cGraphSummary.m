@@ -19,7 +19,7 @@ classdef cGraphSummary < cGraphResults
         function obj = cGraphSummary(tbl,info,options)
 		%cGraphWaste - Build an instance of the object
         % 	Syntax:
-        %     obj = cGraphWaste(tbl,info,option)
+        %     obj = cGraphSummary(tbl,info,option)
         %   Input Arguments:
         %     tbl - cTable with the data to show graphically
         %     info - cSummaryResults object with additional info

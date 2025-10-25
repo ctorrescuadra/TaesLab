@@ -272,6 +272,17 @@ classdef (Sealed) cTableMatrix < cTableResult
         %%%%
         % Graphic Interface functions
         %%%%
+        function res = isSummaryTable(obj)
+        %isSummaryTable - Check if table is a summary table
+        %   It is used to define the graph axis
+        %  Syntax:
+        %     res = obj.isSummaryTable
+        %   Output Arguments:
+        %     res - true | false
+        %
+            res=(obj.SummaryTable>0);
+        end
+
         function res = isUnitCostTable(obj)
         %isUnitCostTable - Check if table has unit costs
         %   It is used to define the graph axis
