@@ -289,17 +289,17 @@ classdef (Sealed) cSummaryResults < cResultId
                 obj.setValues(id,j,fcost.c');
                 % General Cost
                 if model.isResourceCost
-                    rsc=getResourceCost(rd,rstate);
+                    setResourceCost(rd,rstate);
                     % SUMMARY PROCESS COST
                     id=cType.Tables.SUMMARY_PROCESS_GENERAL_COST;
-                    cost=rstate.getProcessCost(rsc);
+                    cost=rstate.getProcessCost(rd);
                     obj.setValues(id,j,cost.CP');
                     % SUMMARY PROCESS UNIT COST
                     id=cType.Tables.SUMMARY_PROCESS_GENERAL_UNIT_COST;
-                    ucost=rstate.getProcessUnitCost(rsc);
+                    ucost=rstate.getProcessUnitCost(rd);
                     obj.setValues(id,j,ucost.cP');
                     % SUMMARY FLOW COST
-                    fcost=rstate.getFlowsCost(rsc);
+                    fcost=rstate.getFlowsCost(rd);
                     id=cType.Tables.SUMMARY_FLOW_GENERAL_COST;
                     obj.setValues(id,j,fcost.C');
                     id=cType.Tables.SUMMARY_FLOW_GENERAL_UNIT_COST;
@@ -318,17 +318,17 @@ classdef (Sealed) cSummaryResults < cResultId
             rstate=model.getResultState;
             for j=1:model.DataModel.NrOfSamples
                 rd=obj.dm.getResourceData(j);
-                rsc=getResourceCost(rd,rstate);
+                setResourceCost(rd,rstate);
                 % SUMMARY PROCESS COST
                 id=cType.Tables.RSUMMARY_PROCESS_GENERAL_COST;
-                cost=rstate.getProcessCost(rsc);
+                cost=rstate.getProcessCost(rd);
                 obj.setValues(id,j,cost.CP');
                 % SUMMARY PROCESS UNIT COST
                 id=cType.Tables.RSUMMARY_PROCESS_GENERAL_UNIT_COST;
-                ucost=rstate.getProcessUnitCost(rsc);
+                ucost=rstate.getProcessUnitCost(rd);
                 obj.setValues(id,j,ucost.cP');
                 % SUMMARY FLOW COST
-                fcost=rstate.getFlowsCost(rsc);
+                fcost=rstate.getFlowsCost(rd);
                 id=cType.Tables.RSUMMARY_FLOW_GENERAL_COST;
                 obj.setValues(id,j,fcost.C');
                 id=cType.Tables.RSUMMARY_FLOW_GENERAL_UNIT_COST;

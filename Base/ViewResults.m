@@ -24,7 +24,6 @@ classdef ViewResults < matlab.apps.AppBase
         TablesTab         matlab.ui.container.Tab
         Table             matlab.ui.control.HTML
         GraphsTab         matlab.ui.container.Tab
-        UIAxes            matlab.ui.control.UIAxes
         Tree              matlab.ui.container.Tree
         ContextMenu1      matlab.ui.container.ContextMenu
         OpenAsFigMenu     matlab.ui.container.Menu
@@ -32,7 +31,11 @@ classdef ViewResults < matlab.apps.AppBase
         SaveResultsMenu   matlab.ui.container.Menu
         ContextMenu3      matlab.ui.container.ContextMenu
         SaveTableMenu     matlab.ui.container.Menu
-        Colorbar                    
+        Colorbar          matlab.ui.control.UIAxes          
+    end
+
+    properties(Access = public)
+        UIAxes            matlab.ui.control.UIAxes
     end
 
     % Properties of TaesLab elements
@@ -43,7 +46,7 @@ classdef ViewResults < matlab.apps.AppBase
         CurrentTable     % Current Table
         ResultInfo       % Result Info
     end
-    
+
     methods (Access = private)
         % Show the index table in table panel
         function ViewIndexTable(app,res)
@@ -72,6 +75,8 @@ classdef ViewResults < matlab.apps.AppBase
             switch tbl.GraphType
                 case cType.GraphType.COST
                     gr=cGraphCost(tbl);
+                case cType.GraphType.RESOURCE_COST
+                    gr=cGraphCostRSC(tbl,info);
                 case cType.GraphType.DIAGNOSIS
                     gr=cGraphDiagnosis(tbl,info);
                 case cType.GraphType.SUMMARY

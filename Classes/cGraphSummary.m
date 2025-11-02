@@ -67,9 +67,9 @@ classdef cGraphSummary < cGraphResults
 				return
 			end
 			obj.Name='Cost Summary';
-			obj.Categories=tbl.ColNames(2:end);
-			obj.xValues=(1:tbl.NrOfCols-1)';
-			obj.yValues=cell2mat(tbl.Data(idx,:))';
+			obj.Categories=tbl.RowNames(idx);
+			obj.xValues=(1:length(idx))';
+			obj.yValues=cell2mat(tbl.Data(idx,:));
 			obj.Title=tbl.Description;
 			obj.isBarGraph=options.BarGraph;
 			switch tbl.SummaryType
@@ -85,13 +85,12 @@ classdef cGraphSummary < cGraphResults
 					obj.xLabel='';
 			end
 			obj.yLabel=['Unit Cost ',tbl.Unit];
-			obj.Legend=tbl.RowNames(idx);
-			if tbl.isGeneralCostTable %|| tbl.isFlowsTable
+			obj.Legend=tbl.ColNames(2:end);
+			if tbl.isGeneralCostTable
 				obj.BaseLine=0.0;
 			else
 				obj.BaseLine=1.0;
 			end
-
         end
 
         function showGraph(obj)

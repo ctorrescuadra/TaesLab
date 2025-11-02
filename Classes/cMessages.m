@@ -43,6 +43,7 @@ classdef cMessages
         OutputNotReachedFromNode='Output not reached from Process %s'
         % Invalid Model Table definitions
         InvalidFieldNumber='Invalid number of fields %d in table %s'
+        MissingValues='Missing values in column %d of table %s'
         InvalidField='Invalid column %s in table %s'
         InvalidFieldDatatype='Invalid data type for column %s in table %s'
         InvalidKey='Key %s is invalid'
@@ -92,6 +93,7 @@ classdef cMessages
         InvalidResourcesType='Invalid type %s for resource %s'
         InvalidFuelStream='Invalid fuel stream %s in process %s'
         InvalidProductStream='Invalid product stream %s in process %s'
+        InvalidStreamDefinition='Invalid stream definition %s in process %s'
         InvalidDissipative='Product %s of dissipative process %s must be a waste'
         InvalidStreamToFlow='Flow %s has not correct (FROM) definition'
         InvalidFlowToStream='Flow %s has not correct (TO) definition'
@@ -171,6 +173,7 @@ classdef cMessages
         GraphNotImplemented='Graph function NOT implemented in Octave'
         InvalidGraph='Invalid graph %s'
         InvalidGraphType='Invalid graph type %s'
+        InvalidVariableNames='Invalid variable names'
         % Thermoeconomic Model messages
         ResultNotAvailable='%s NOT available'
         InvalidCostTable='Invalid Cost Tables parameter value: %s'

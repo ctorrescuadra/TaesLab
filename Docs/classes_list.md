@@ -1,4 +1,4 @@
-**List of Classes**
+# List of Taes Toolbox Classes
 
 | Class                  | Description                                                                   |
 | ---------------------- | ----------------------------------------------------------------------------- |
@@ -17,6 +17,7 @@
 | cExergyModel           | Build the Flow-Process exergy model.                                          |
 | cFormatData            | Get the format configuration data used to display tables of results.          |
 | cGraphCost             | Plot the Irreversibility-cost graph.                                          |
+| cGraphCostRSC          | Plot the Resources Cost Distribution graph.                                   |
 | cGraphDiagnosis        | Plot the diagnosis graphs.                                                    |
 | cGraphDiagramFP        | Plot the FP Diagram.                                                          |
 | cGraphRecycling        | Plot the waste recycling cost graphs.                                         |
@@ -40,7 +41,6 @@
 | cReadModelTable        | Abstract class to read table data model.                                      |
 | cReadModelXLS          | cReadModelXLS -Implement the cReadModelTable to read XLSX data model files    |
 | cReadModelXML          | cReadModelXML implements the cReadModelStruct to read XML data model files.   |
-| cResourceCost          | Compute the resource cost properties for a state.                             |
 | cResourceData          | Gets and validates the external cost resources of a productive structure.     |
 | cResultId              | Abstract class to manage the result identification.                           |
 | cResultInfo            | Class to manage the result information and tables.                            |

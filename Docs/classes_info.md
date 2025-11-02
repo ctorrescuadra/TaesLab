@@ -42,7 +42,6 @@
  | [cFormatData][]          | Get the format configuration data used to display tables of results.|
  | [cResultTableBuilder][]  | Build the cResultInfo objects for the calculation layer.            |
  | [cResourceData][]        | Gets and validates the external cost resources of a system.         |
- | [cResourceCost][]        | Compute the resource cost values properties for a state.            |
  | [cWasteData][]           | Store the waste data information.                                   |
 
 ### Result Info Classes
@@ -88,14 +87,15 @@
 
  | Name                | Description                                                      |
  |:------------------- |:---------------------------------------------------------------- |
- | [cGraphResults][]   | Abstract class used to show graphs in interactive mode and apps.|
- | [cGraphCost][]      | Plot the irreversibility-cost Table.                            |
- | [cGraphDiagnosis][] | Plot the diagnosis Graphs.                                      |
- | [cGraphDiagramFP][] | Plot the FP Diagram.                                            |
- | [cGraphRecycling][] | Plot the waste recycling cost graphs.                           |
- | [cGraphSummary][]   | Plot the summary graphs for selecting flows or processes.       |
- | [cGraphWaste][]     | Plot the waste allocation graph.                                |
- | [cDigraph][]        | Plot the productive structure digraphs.                         |
+ | [cGraphResults][]   | Abstract class used to show graphs in interactive mode and apps. |
+ | [cGraphCost][]      | Plot the irreversibility-cost tables.                            |
+ | [cGraphCostRSC][]   | Plot the resources cost distribution tables.                     |
+ | [cGraphDiagnosis][] | Plot the diagnosis Graphs.                                       |
+ | [cGraphDiagramFP][] | Plot the FP Diagram.                                             |
+ | [cGraphRecycling][] | Plot the waste recycling cost graphs.                            |
+ | [cGraphSummary][]   | Plot the summary graphs for selecting flows or processes.        |
+ | [cGraphWaste][]     | Plot the waste allocation graph.                                 |
+ | [cDigraph][]        | Plot the productive structure digraphs.                          |
 
 ### Tables Conversion Classes
 
@@ -150,7 +150,6 @@
 [cFormatData]: ../Classes/cFormatData.m
 [cResultTableBuilder]: ../Classes/cResultTableBuilder.m
 [cResourceData]: ../Classes/cResourceData.m
-[cResourceCost]: ../Classes/cResourceCost.m
 [cWasteData]: ../Classes/cWasteData.m
 
 <!-- Result Info Classes -->
@@ -186,6 +185,7 @@
 <!-- Graph Presentation Classes -->
 [cGraphResults]: ../Classes/cGraphResults.m
 [cGraphCost]: ../Classes/cGraphCost.m
+[cGraphCostRSC]: ../Classes/cGraphCostRSC.m
 [cGraphDiagnosis]: ../Classes/cGraphDiagnosis.m
 [cGraphDiagramFP]: ../Classes/cGraphDiagramFP.m
 [cGraphRecycling]: ../Classes/cGraphRecycling.m

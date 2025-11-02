@@ -33,7 +33,6 @@
 %  cFormatData.m             - Get the format configuration data used to display tables of results.
 %  cResultTableBuilder.m     - Build the cResultInfo objects for the calculation layer.
 %  cResourceData.m           - Gets and validates the external cost resources of a system.
-%  cResourceCost.m           - Compute the resource cost values properties for a state.
 %  cWasteData.m              - Store the waste data information.
 %
 %  cExergyModel.m            - Build the Flow-Process exergy model.
@@ -57,6 +56,7 @@
 %
 %  cGraphResults.m           - Abstract class used to show graphs in interactive mode and apps.
 %  cGraphCost.m              - Plot the irreversibility-cost Table.
+%  cGraphCostRSC.m           - Plot the resource distribution cost graphs.
 %  cGraphDiagnosis.m         - Plot the diagnosis Graphs.
 %  cGraphDiagramFP.m         - Plot the FP Diagram.
 %  cGraphRecycling.m         - Plot the waste recycling cost graphs.

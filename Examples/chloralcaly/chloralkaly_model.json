@@ -50,91 +50,91 @@
         "type": "RESOURCE"
       },
       {
-        "key": "Elec",
+        "key": "Coal",
         "type": "RESOURCE"
+      },
+      {
+        "key": "SLF",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "W13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WDC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B8",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B10",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B12",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B13",
+        "type": "INTERNAL"
       },
       {
         "key": "H2SO4",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "P1F5",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P1F8",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P2F5",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P3F6",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P3F10",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P3F11",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P3F12",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P3F13",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P4F9",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P5F7",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P6F7",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P7F5",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P7F8",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P7F9",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P8F7",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P8F11",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P8F12",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P9F10",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "P10F13",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "OUT9",
         "type": "OUTPUT"
       },
       {
@@ -155,223 +155,317 @@
         "key": "U1",
         "type": "PRODUCTIVE",
         "fuel": "H2O",
-        "product": "P1F5+P1F8"
+        "product": "B1+B2"
       },
       {
         "key": "U2",
         "type": "PRODUCTIVE",
         "fuel": "NaCl",
-        "product": "P2F5"
+        "product": "B3"
       },
       {
         "key": "U3",
         "type": "PRODUCTIVE",
-        "fuel": "Elec",
-        "product": "P3F6+P3F10+P3F11+P3F12+P3F13"
+        "fuel": "Coal",
+        "product": "W6+W10+W11+W12+W13"
       },
       {
         "key": "U4",
         "type": "PRODUCTIVE",
-        "fuel": "H2SO4",
-        "product": "P4F9"
+        "fuel": "SLF",
+        "product": "B4"
       },
       {
         "key": "U5",
         "type": "PRODUCTIVE",
-        "fuel": "P1F5+P2F5+P7F5",
-        "product": "P5F7"
+        "fuel": "B1+B3+B6",
+        "product": "B5"
       },
       {
         "key": "U6",
         "type": "PRODUCTIVE",
-        "fuel": "P3F6",
-        "product": "P6F7"
+        "fuel": "W6",
+        "product": "WDC"
       },
       {
         "key": "U7",
         "type": "PRODUCTIVE",
-        "fuel": "P8F7+P5F7+P6F7",
-        "product": "P7F5+P7F8+P7F9"
+        "fuel": "B9+B5+WDC",
+        "product": "B6+B7+B8"
       },
       {
         "key": "U8",
         "type": "PRODUCTIVE",
-        "fuel": "P1F8+P7F8",
-        "product": "P8F7+P8F11+P8F12"
+        "fuel": "B2+B7",
+        "product": "B9+B10+B11"
       },
       {
         "key": "U9",
         "type": "PRODUCTIVE",
-        "fuel": "P7F9+(P4F9-OUT9)",
-        "product": "P9F10"
+        "fuel": "B8+(B4-H2SO4)",
+        "product": "B12"
       },
       {
         "key": "U10",
         "type": "PRODUCTIVE",
-        "fuel": "P3F10+P9F10",
-        "product": "P10F13"
+        "fuel": "W10+B12",
+        "product": "B13"
       },
       {
         "key": "U11",
         "type": "PRODUCTIVE",
-        "fuel": "P8F11+P3F11",
+        "fuel": "W11+B10",
         "product": "NaOH"
       },
       {
         "key": "U12",
         "type": "PRODUCTIVE",
-        "fuel": "P8F12+P3F12",
+        "fuel": "W12+B11",
         "product": "H2"
       },
       {
         "key": "U13",
         "type": "PRODUCTIVE",
-        "fuel": "P10F13+P3F13",
+        "fuel": "W13+B13",
         "product": "Cl2"
       }
     ]
   },
   "ExergyStates": {
-    "States": {
-      "stateId": "REF",
-      "exergy": [
-        {
-          "key": "H2O",
-          "value": 0.098
-        },
-        {
-          "key": "NaCl",
-          "value": 3.08
-        },
-        {
-          "key": "Elec",
-          "value": 60.31
-        },
-        {
-          "key": "H2SO4",
-          "value": 3.19
-        },
-        {
-          "key": "P1F5",
-          "value": 0.008
-        },
-        {
-          "key": "P1F8",
-          "value": 0.09
-        },
-        {
-          "key": "P2F5",
-          "value": 0.4
-        },
-        {
-          "key": "P3F6",
-          "value": 13.22
-        },
-        {
-          "key": "P3F10",
-          "value": 0.24
-        },
-        {
-          "key": "P3F11",
-          "value": 0.23
-        },
-        {
-          "key": "P3F12",
-          "value": 0.5
-        },
-        {
-          "key": "P3F13",
-          "value": 0.28
-        },
-        {
-          "key": "P4F9",
-          "value": 0.58
-        },
-        {
-          "key": "P5F7",
-          "value": 3.24
-        },
-        {
-          "key": "P6F7",
-          "value": 12.79
-        },
-        {
-          "key": "P7F5",
-          "value": 3.24
-        },
-        {
-          "key": "P7F8",
-          "value": 7.86
-        },
-        {
-          "key": "P7F9",
-          "value": 1.78
-        },
-        {
-          "key": "P8F7",
-          "value": 1.14
-        },
-        {
-          "key": "P8F11",
-          "value": 1.53
-        },
-        {
-          "key": "P8F12",
-          "value": 3.35
-        },
-        {
-          "key": "P9F10",
-          "value": 1.74
-        },
-        {
-          "key": "P10F13",
-          "value": 1.812
-        },
-        {
-          "key": "OUT9",
-          "value": 0.42
-        },
-        {
-          "key": "NaOH",
-          "value": 1.455
-        },
-        {
-          "key": "H2",
-          "value": 3.305
-        },
-        {
-          "key": "Cl2",
-          "value": 1.812
-        }
-      ]
-    }
+    "States": [
+      {
+        "stateId": "REF",
+        "exergy": [
+          {
+            "key": "H2O",
+            "value": 0.098
+          },
+          {
+            "key": "NaCl",
+            "value": 3.08
+          },
+          {
+            "key": "Coal",
+            "value": 60.31
+          },
+          {
+            "key": "SLF",
+            "value": 3.19
+          },
+          {
+            "key": "B1",
+            "value": 0.008
+          },
+          {
+            "key": "B2",
+            "value": 0.09
+          },
+          {
+            "key": "B3",
+            "value": 0.4
+          },
+          {
+            "key": "W6",
+            "value": 13.22
+          },
+          {
+            "key": "W10",
+            "value": 0.24
+          },
+          {
+            "key": "W11",
+            "value": 0.23
+          },
+          {
+            "key": "W12",
+            "value": 0.5
+          },
+          {
+            "key": "W13",
+            "value": 0.28
+          },
+          {
+            "key": "B4",
+            "value": 0.58
+          },
+          {
+            "key": "B5",
+            "value": 3.24
+          },
+          {
+            "key": "WDC",
+            "value": 12.79
+          },
+          {
+            "key": "B6",
+            "value": 3.24
+          },
+          {
+            "key": "B7",
+            "value": 7.86
+          },
+          {
+            "key": "B8",
+            "value": 1.78
+          },
+          {
+            "key": "B9",
+            "value": 1.14
+          },
+          {
+            "key": "B10",
+            "value": 1.53
+          },
+          {
+            "key": "B11",
+            "value": 3.35
+          },
+          {
+            "key": "B12",
+            "value": 1.74
+          },
+          {
+            "key": "B13",
+            "value": 1.812
+          },
+          {
+            "key": "H2SO4",
+            "value": 0.42
+          },
+          {
+            "key": "NaOH",
+            "value": 1.455
+          },
+          {
+            "key": "H2",
+            "value": 3.305
+          },
+          {
+            "key": "Cl2",
+            "value": 1.812
+          }
+        ]
+      },
+      {
+        "stateId": "RNW",
+        "exergy": [
+          {
+            "key": "H2O",
+            "value": 0.098
+          },
+          {
+            "key": "NaCl",
+            "value": 3.08
+          },
+          {
+            "key": "Coal",
+            "value": 15.204
+          },
+          {
+            "key": "SLF",
+            "value": 15.2
+          },
+          {
+            "key": "B1",
+            "value": 0.008
+          },
+          {
+            "key": "B2",
+            "value": 0.09
+          },
+          {
+            "key": "B3",
+            "value": 0.4
+          },
+          {
+            "key": "W6",
+            "value": 13.22
+          },
+          {
+            "key": "W10",
+            "value": 0.24
+          },
+          {
+            "key": "W11",
+            "value": 0.23
+          },
+          {
+            "key": "W12",
+            "value": 0.5
+          },
+          {
+            "key": "W13",
+            "value": 0.28
+          },
+          {
+            "key": "B4",
+            "value": 0.58
+          },
+          {
+            "key": "B5",
+            "value": 3.24
+          },
+          {
+            "key": "WDC",
+            "value": 12.79
+          },
+          {
+            "key": "B6",
+            "value": 3.24
+          },
+          {
+            "key": "B7",
+            "value": 7.86
+          },
+          {
+            "key": "B8",
+            "value": 1.78
+          },
+          {
+            "key": "B9",
+            "value": 1.14
+          },
+          {
+            "key": "B10",
+            "value": 1.53
+          },
+          {
+            "key": "B11",
+            "value": 3.35
+          },
+          {
+            "key": "B12",
+            "value": 1.74
+          },
+          {
+            "key": "B13",
+            "value": 1.812
+          },
+          {
+            "key": "H2SO4",
+            "value": 0.42
+          },
+          {
+            "key": "NaOH",
+            "value": 1.455
+          },
+          {
+            "key": "H2",
+            "value": 3.305
+          },
+          {
+            "key": "Cl2",
+            "value": 1.812
+          }
+        ]
+      }
+    ]
   },
   "WasteDefinition": [],
   "ResourcesCost": {
     "Samples": [
       {
         "sampleId": "Base",
-        "flows": [
-          {
-            "key": "H2O",
-            "value": 1
-          },
-          {
-            "key": "NaCl",
-            "value": 1
-          },
-          {
-            "key": "Elec",
-            "value": 1.79
-          },
-          {
-            "key": "H2SO4",
-            "value": 2.08
-          }
-        ]
-      },
-      {
-        "sampleId": "Hau",
         "flows": [
           {
             "key": "H2O",
@@ -382,11 +476,32 @@
             "value": 1
           },
           {
-            "key": "Elec",
+            "key": "Coal",
             "value": 4
           },
           {
-            "key": "H2SO4",
+            "key": "SLF",
+            "value": 2
+          }
+        ]
+      },
+      {
+        "sampleId": "RNW",
+        "flows": [
+          {
+            "key": "H2O",
+            "value": 2.653
+          },
+          {
+            "key": "NaCl",
+            "value": 1
+          },
+          {
+            "key": "Coal",
+            "value": 1.17
+          },
+          {
+            "key": "SLF",
             "value": 2
           }
         ]

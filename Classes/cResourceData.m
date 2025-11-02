@@ -4,22 +4,32 @@ classdef cResourceData < cMessageLogger
 %   provided by the model.
 %
 %   cResourceData properties:
-%     sample  - Resource sample name
+%     Sample  - Resource sample name
 %     frsc    - Resource flows index
 %     c0      - Unit cost of external resources
 %     Z       - Cost associated to processes
+%     C0      - Cost associated to external resources
+%     ce      - Process Resource Unit Costs
+%     Ce      - Process Resource Cost
+%     zP      - Cost associated to process per unit of Product
+%     zF      - Cost associated to process per unit of Fuel
 %
 %   cResourceData methods:
 %     cResourceData           - Creates an instance of the class
 %	  setFlowResource         - Set the unit cost of resource flows
 %     setProcessResource      - Set the values of external cost of processes
-%	  getResourceCost         - Get the corresponding cResourceCost object
+%	  setResourceCost         - Set the properties of the resource costs (depending on exergy model)
 %
 	properties (GetAccess=public, SetAccess=private) 
 		Sample  % Resource sample name
 		frsc    % Resource flows index
 		c0      % Unit cost of external resources
 		Z       % Cost associated to processes
+		C0      % Cost associated to external resources
+		ce      % Process Resource Unit Costs
+        Ce      % Process Resource Cost
+        zP      % Cost associated to process per unit of Product
+        zF      % Cost associated to process per unit of Fuel
 	end
 
 	properties(Access=private)
@@ -123,18 +133,35 @@ classdef cResourceData < cMessageLogger
             end
         end
 
-		function res=getResourceCost(obj,exm)
-		%getResourceCost - Get the current cResourceCost object
+		function log=setResourceCost(obj,exm)
+		%setResourceCost - Calculate the resource cost properties for the current sample
+		%	These properties are calculated based on the current exergy model.
+		%
 		%   Syntax:
-		%     log=getResourceCost(obj,exm)
+		%     log=obj.setResourceCost(exm)
 		%   Input Arguments:
 		%     exm - cExergyModel object
 		%   Output Arguments:
-		%     res - cResourceCost object
+		%     log - true|false indicating the status of the operation
 		%
-			res=cResourceCost(obj,exm);
+			log=cMessageLogger();
+			if ~isObject(exm,'cExergyModel')
+				log.messageLog(cType.ERROR,cMessages.InvalidObject,class(exm));
+				return
+			end
+			% Set Resource Cost properties for the current sample	
+			obj.C0=obj.c0 .* exm.FlowsExergy;
+			% Process Resources Cost
+			fpm=exm.FlowProcessModel;
+			idx=obj.frsc;
+			obj.ce = obj.c0(idx) * fpm.mL(idx,:) * fpm.mF0(:,1:end-1);
+			obj.Ce = obj.ce .* exm.FuelExergy;
+			% Set Process Properties
+            idx = ~exm.ActiveProcesses;
+	        obj.Z(idx) = 0.0;
+			obj.zP = vDivide(obj.Z,exm.ProductExergy);
+			obj.zF = vDivide(obj.Z,exm.FuelExergy);
 		end
-
 	end
 
 	methods(Access=private)

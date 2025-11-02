@@ -1,241 +1,4 @@
 {
-  "ProductiveStructure": {
-    "name": "polygen_model",
-    "flows": [
-      {
-        "key": "B1",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B2",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B3",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B4",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B5",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B6",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B7",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B8",
-        "type": "OUTPUT"
-      },
-      {
-        "key": "B9",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B10",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B11",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B12",
-        "type": "OUTPUT"
-      },
-      {
-        "key": "B13",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B14",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B15",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B16",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B17",
-        "type": "OUTPUT"
-      },
-      {
-        "key": "B18",
-        "type": "OUTPUT"
-      },
-      {
-        "key": "B19",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B20",
-        "type": "WASTE"
-      }
-    ],
-    "processes": [
-      {
-        "key": "COMB",
-        "description": "Combustor",
-        "fuel": "B4",
-        "product": "B5-B3",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "REGE",
-        "description": "Regenerator",
-        "fuel": "B6-B9",
-        "product": "B3-B2",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "COMP",
-        "description": "Compressor",
-        "fuel": "B7",
-        "product": "B2-B1",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "TURB",
-        "description": "Turbine",
-        "fuel": "B5-B6",
-        "product": "B7+B8",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "ICE",
-        "description": "ICE",
-        "fuel": "B10",
-        "product": "B11+B12+(B13-B14)",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "WHTR",
-        "description": "Water Heater",
-        "fuel": "B13-B14",
-        "product": "B17",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "BURN",
-        "description": "Burner",
-        "fuel": "B15",
-        "product": "B16-B11",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "HRSG",
-        "description": "HRSG",
-        "fuel": "B16+B9-B19",
-        "product": "B18",
-        "type": "PRODUCTIVE"
-      },
-      {
-        "key": "STCK",
-        "description": "Stack",
-        "fuel": "B19",
-        "product": "B20",
-        "type": "DISSIPATIVE"
-      }
-    ]
-  },
-  "ExergyStates": {
-    "States": [{
-      "stateId": "Reference",
-      "exergy": [
-        {
-          "key": "B1",
-          "value": 0
-        },
-        {
-          "key": "B2",
-          "value": 26204
-        },
-        {
-          "key": "B3",
-          "value": 41732
-        },
-        {
-          "key": "B4",
-          "value": 78643
-        },
-        {
-          "key": "B5",
-          "value": 94210
-        },
-        {
-          "key": "B6",
-          "value": 33696
-        },
-        {
-          "key": "B7",
-          "value": 27939
-        },
-        {
-          "key": "B8",
-          "value": 30000
-        },
-        {
-          "key": "B9",
-          "value": 16271
-        },
-        {
-          "key": "B10",
-          "value": 27568
-        },
-        {
-          "key": "B11",
-          "value": 3949
-        },
-        {
-          "key": "B12",
-          "value": 10000
-        },
-        {
-          "key": "B13",
-          "value": 3116
-        },
-        {
-          "key": "B14",
-          "value": 2357
-        },
-        {
-          "key": "B15",
-          "value": 10717
-        },
-        {
-          "key": "B16",
-          "value": 10073
-        },
-        {
-          "key": "B17",
-          "value": 375
-        },
-        {
-          "key": "B18",
-          "value": 14060
-        },
-        {
-          "key": "B19",
-          "value": 4129
-        },
-        {
-          "key": "B20",
-          "value": 4129
-        }
-      ]
-    }]
-  },
   "Format": {
     "definitions": [
       {
@@ -276,30 +39,282 @@
       }
     ]
   },
-  "WasteDefinition": {
-    "wastes": [{
-      "flow": "B20",
-      "type": "DEFAULT",
-      "recycle": 0
-    }]
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "B2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NG",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WGT",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B9",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BD",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B11",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WICE",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B13",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B14",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "PG",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "B16",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "QHW",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QV",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "B19",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WN",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "QG",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "CMB",
+        "type": "PRODUCTIVE",
+        "fuel": "NG+B3",
+        "product": "B5"
+      },
+      {
+        "key": "APH",
+        "type": "PRODUCTIVE",
+        "fuel": "B6-B9",
+        "product": "B3-B2"
+      },
+      {
+        "key": "CMP",
+        "type": "PRODUCTIVE",
+        "fuel": "WC",
+        "product": "B2"
+      },
+      {
+        "key": "GTRB",
+        "type": "PRODUCTIVE",
+        "fuel": "B5-B6",
+        "product": "WGT+WC"
+      },
+      {
+        "key": "ICE",
+        "type": "PRODUCTIVE",
+        "fuel": "BD+B14-B13",
+        "product": "WICE+B11"
+      },
+      {
+        "key": "WHTR",
+        "type": "PRODUCTIVE",
+        "fuel": "B13-B14",
+        "product": "QHW"
+      },
+      {
+        "key": "BURN",
+        "type": "PRODUCTIVE",
+        "fuel": "PG",
+        "product": "B16-B11"
+      },
+      {
+        "key": "HRSG",
+        "type": "PRODUCTIVE",
+        "fuel": "B16+B9-B19",
+        "product": "QV"
+      },
+      {
+        "key": "GEN",
+        "type": "PRODUCTIVE",
+        "fuel": "WICE+WGT",
+        "product": "WN"
+      },
+      {
+        "key": "STCK",
+        "type": "DISSIPATIVE",
+        "fuel": "B19",
+        "product": "QG"
+      }
+    ]
   },
-  "ResourcesCost": {
-    "Samples": [{
-      "sampleId": "Base",
-      "flows": [
+  "ExergyStates": {
+    "States": {
+      "stateId": "Reference",
+      "exergy": [
         {
-          "key": "B4",
-          "value": 1.284
+          "key": "B2",
+          "value": 26204
         },
         {
-          "key": "B10",
-          "value": 1.475
+          "key": "B3",
+          "value": 41732
         },
         {
-          "key": "B15",
-          "value": 1.346
+          "key": "NG",
+          "value": 78643
+        },
+        {
+          "key": "B5",
+          "value": 94210
+        },
+        {
+          "key": "B6",
+          "value": 33696
+        },
+        {
+          "key": "WC",
+          "value": 27939
+        },
+        {
+          "key": "WGT",
+          "value": 30000
+        },
+        {
+          "key": "B9",
+          "value": 16271
+        },
+        {
+          "key": "BD",
+          "value": 27568
+        },
+        {
+          "key": "B11",
+          "value": 3949
+        },
+        {
+          "key": "WICE",
+          "value": 10000
+        },
+        {
+          "key": "B13",
+          "value": 3116
+        },
+        {
+          "key": "B14",
+          "value": 2357
+        },
+        {
+          "key": "PG",
+          "value": 10717
+        },
+        {
+          "key": "B16",
+          "value": 10073
+        },
+        {
+          "key": "QHW",
+          "value": 375
+        },
+        {
+          "key": "QV",
+          "value": 14060
+        },
+        {
+          "key": "B19",
+          "value": 4129
+        },
+        {
+          "key": "WN",
+          "value": 40000
+        },
+        {
+          "key": "QG",
+          "value": 4129
         }
       ]
-    }]
+    }
+  },
+  "WasteDefinition": {
+    "wastes": {
+      "flow": "QG",
+      "type": "DEFAULT",
+      "recycle": 0
+    }
+  },
+  "ResourcesCost": {
+    "Samples": [
+      {
+        "sampleId": "Diesel",
+        "flows": [
+          {
+            "key": "NG",
+            "value": 1.284
+          },
+          {
+            "key": "BD",
+            "value": 1.475
+          },
+          {
+            "key": "PG",
+            "value": 1.346
+          }
+        ]
+      },
+      {
+        "sampleId": "Biodiesel",
+        "flows": [
+          {
+            "key": "NG",
+            "value": 1.284
+          },
+          {
+            "key": "BD",
+            "value": 0.45
+          },
+          {
+            "key": "PG",
+            "value": 1.346
+          }
+        ]
+      }
+    ]
   }
 }

@@ -176,6 +176,8 @@ classdef cResultInfo < cResultSet
                     gr=cGraphDiagramFP(tbl);
                 case cType.GraphType.SUMMARY
                     gr=cGraphSummary(tbl,obj.Info);
+                case cType.GraphType.RESOURCE_COST
+                    gr=cGraphCostRSC(tbl,obj.Info);
             end
             % Show Graph
             if gr.status

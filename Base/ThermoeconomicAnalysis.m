@@ -98,13 +98,8 @@ function res=ThermoeconomicAnalysis(data,varargin)
             rd.printLogger;
             rd.printError(cMessages.InvalidResourceData,param.ResourceSample);
         end
-		rsc=getResourceCost(rd,fpm);
-        if ~rsc.status
-			rsc.printLogger;
-			res.printError(cMessages.InvalidResourceCost,param.ResourceSample);
-			return
-        end
-        param.ResourcesCost=rsc;
+        param.ResourcesCost=rd;
+        rd.setResourceCost(fpm);
     end
     res=fpm.buildResultInfo(data.FormatData,param);
     if ~res.status

@@ -272,17 +272,6 @@ classdef (Sealed) cTableMatrix < cTableResult
         %%%%
         % Graphic Interface functions
         %%%%
-        function res = isSummaryTable(obj)
-        %isSummaryTable - Check if table is a summary table
-        %   It is used to define the graph axis
-        %  Syntax:
-        %     res = obj.isSummaryTable
-        %   Output Arguments:
-        %     res - true | false
-        %
-            res=(obj.SummaryTable>0);
-        end
-
         function res = isUnitCostTable(obj)
         %isUnitCostTable - Check if table has unit costs
         %   It is used to define the graph axis
@@ -316,6 +305,27 @@ classdef (Sealed) cTableMatrix < cTableResult
             res=bitget(obj.GraphOptions,3);
         end
 
+        function res=isSummaryTable(obj)
+        %isSummaryTable - Check if table is a summary table
+        %   It is used to define the graph axis
+        %  Syntax:
+        %     res = obj.isSummaryTable
+        %   Output Arguments:
+        %     res - true | false
+        %
+            res=bitget(obj.GraphOptions,4);
+        end
+
+        function res=isResourceCostTable(obj)
+        %isResourceCostTable - Check if table is resource cost table
+        %   It is used to define the graph axis
+        %  Syntax:
+        %     res = obj.isResourceCostTable
+        %   Output Arguments:
+        %     res - true | false
+            res=bitget(obj.GraphOptions,5);
+        end
+
         function res = isTotalMalfunctionCost(obj)
         %isTotalMalfunctionCost - Check if table is total malfuction cost
         %   It is used to define the graph axis
@@ -324,7 +334,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         %   Output Arguments:
         %     res - true | false
         %       
-            res=bitget(obj.GraphOptions,4);
+            res=bitget(obj.GraphOptions,6);
         end
     end
 

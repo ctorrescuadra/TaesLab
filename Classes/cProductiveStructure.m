@@ -72,6 +72,7 @@ classdef(Sealed) cProductiveStructure < cResultId
         ProcessKeys       % Cell array of Processes Names (keys)
         StreamKeys        % Cell array of Streams Names (keys)
 		ProductiveTable   % Adjacency Matrix of Productive Structure
+        ProcessMatrix     % Processes Matrix
 		ProcessDigraph	  % Process Digraph (cDigraphAnalysis)	
 	end
 
@@ -300,9 +301,9 @@ classdef(Sealed) cProductiveStructure < cResultId
         end
 		
 		function [res,src,out]=getProcessMatrix(obj)
-		%ProcessMatrix - Get the Process Adjacency Matrix (logical FP table)
+		%getProcessMatrix - Get the Process Adjacency Matrix (logical FP table)
 		%   Syntax:
-		%     res = obj.ProcessMatrix
+		%     res = obj.getProcessMatrix
 		%   Output Arguments:
 		%     res - process adjacency matrix 
 		%     src - external resources adjacency matrix
@@ -702,6 +703,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 				    obj.cstr{ns}=struct('id',ns,'key',key,'definition',expr,...
 				    'type',stype,'typeId',fp,'process',id);
                 else
+					obj.messageLog(cType.ERROR,cMessages.InvalidStreamDefinition,expr,pkey);
                     return
                 end
             end
@@ -726,6 +728,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%   Output Arguments:
 		%     status - true | false indicating if the stream flows are ok
 		%
+			status=true;
             [fe,fs]=cParseStream.getStreamFlows(expr,fp);
             % set input flows of the stream          
             for i=1:length(fe)
@@ -735,9 +738,11 @@ classdef(Sealed) cProductiveStructure < cResultId
 					if ~obj.Flows(idx).to
 					    obj.Flows(idx).to=sid;
 				    else
-						obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.Flows(idx).key);
+						status=false;
+						obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,in);
 					end
 			    else
+					status=false;
 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,in);
                 end
             end
@@ -749,13 +754,14 @@ classdef(Sealed) cProductiveStructure < cResultId
 					if ~obj.Flows(idx).from
 					    obj.Flows(idx).from=sid;
 				    else
+						status=false;
 						obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.Flows(idx).key);
 					end
 			    else
+					status=false;
 					obj.messageLog(cType.ERROR,cMessages.InvalidFlowKey,out);
                 end
             end
-			status=obj.status;
         end
 
         function res=buildEnvironment(obj)
@@ -887,6 +893,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 			% Log non-SSR nodes
 			if res
 				obj.ProcessDigraph=sc;
+                obj.ProcessMatrix=tfp;
 			else
 				for i=1:numel(src)
 					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,src{i});

@@ -35,6 +35,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         flowKeys     % Flow Key names
         streamKeys   % Stream Key names
         processKeys  % Process Key names
+        resourceKeys % Resource Key names
         flowEdges    % Flow edges (from,to)
     end
     
@@ -64,6 +65,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             obj.streamKeys=ps.StreamKeys;
             obj.processKeys=ps.ProcessKeys;
             obj.flowEdges=ps.FlowEdges;
+            obj.resourceKeys=ps.getResourceNames;
         end
         
         function res=getProductiveStructure(obj,ps)
@@ -156,11 +158,16 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 if mfp.isWaste
                     tbl.dcfpr=obj.getTableFP(cType.Tables.COST_TABLE_FPR,dcfpr);
                 end
+                if length(mfp.ps.ResourceFlows)>1
+                    [dfrsc,dprsc]=mfp.getResourcesCostDistribution;
+                    tbl.dfrsc=obj.getFlowRCDTable(cType.Tables.FLOW_RESOURCE_COST,dfrsc);
+                    tbl.dprsc=obj.getProcessRCDTable(cType.Tables.PROCESS_RESOURCE_COST,dprsc);
+                end
             end
             % Generalized Cost Tables
             if options.GeneralCost
                 cz=options.ResourcesCost;
-                mfp.setSample(cz.sample);
+                mfp.setSample(cz.Sample);
                 gcost=mfp.getProcessCost(cz);
                 gucost=mfp.getProcessUnitCost(cz);
                 gfcost=mfp.getFlowsCost(cz);
@@ -174,6 +181,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tbl.gict=obj.getProcessICTable(cType.Tables.PROCESS_GENERAL_ICT,gict);
                 tbl.gfict=obj.getFlowICTable(cType.Tables.FLOW_GENERAL_ICT,gfict);
                 tbl.gcfp=obj.getTableFP(cType.Tables.GENERAL_COST_TABLE,gcfp);
+                if length(mfp.ps.ResourceFlows)>1
+                    [gfrsc,gprsc]=mfp.getResourcesCostDistribution(cz);
+                    tbl.gfrsc=obj.getFlowRCDTable(cType.Tables.FLOW_RESOURCE_GENERAL_COST,gfrsc);
+                    tbl.gprsc=obj.getProcessRCDTable(cType.Tables.PROCESS_RESOURCE_GENERAL_COST,gprsc);
+                end
             end
             res=cResultInfo(mfp,tbl);
         end
@@ -601,8 +613,40 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             colNames=horzcat('Key',obj.processKeys(1:end-1));
             res=cTableMatrix(values,rowNames,colNames,tp);
         end
-            
+        
+        function res=getFlowRCDTable(obj,name,values)
+        %getFlowRCDTable - Get a cTableMatrix with the flows RCD (Resource Cost Distribution) values
+        %   Syntax:
+        %     res = obj.getFlowRCDTable(name,values,frsc)
+        %   Input Arguments:
+        %     name - table name
+        %     values - Flow RCD values
+        %     frsc - resource flows index
+        %   Output Arguments:
+        %     res - cTableMatrix object
         %
+            [~,tp]=obj.getTableProperties(name);
+            rowNames=obj.flowKeys;
+            colNames=horzcat('Key',obj.resourceKeys);
+            res=cTableMatrix(values,rowNames,colNames,tp);
+        end
+
+        function res=getProcessRCDTable(obj,name,values)
+        %getProcessRCDTable - Get a cTableMatrix with the processes RCD (Resource Cost Distribution) values
+        %   Syntax:
+        %     res = obj.getProcessRCDTable(name,values)
+        %   Input Arguments:
+        %     name - table name
+        %     values - Process RCD values
+        %   Output Arguments:
+        %     res - cTableMatrix object
+        %
+            [~,tp]=obj.getTableProperties(name);
+            rowNames=obj.processKeys(1:end-1);
+            colNames=horzcat('Key',obj.resourceKeys);
+            res=cTableMatrix(values,rowNames,colNames,tp);
+        end
+
         %--- Diagnosis tables
         function res=getMalfunctionTable(obj,dgn)
         %getMalfunctionTable - Get a cTableMatrix with the mafunction table values

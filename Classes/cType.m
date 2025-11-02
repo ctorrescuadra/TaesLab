@@ -6,7 +6,7 @@ classdef cType
 %   cType methods:
 %    Check data types methods:
 %  	  res=cType.checkFlowTypes(list)
-%  	  res=cType.checkProcessTypes(list))
+%  	  res=cType.checkProcessTypes(list)
 %  	  res=cType.checkResourcesTypes(list)
 %  	  res=cType.checkWasteTypes(list)
 %    Check option methods
@@ -28,7 +28,7 @@ classdef cType
 %     id=cType.getDiagnosisMethod(text)
 %     id=cType.getVarMode(text)
 %     id=cType.getTableView(text)
-%     idcType.=getDirColumns(text)    
+%     id=cType.getDirColumns(text)    
 %    Get type options:
 %	  res=cType.WasteTypeOptions()
 %	  res=cType.CostTablesOptions()
@@ -78,7 +78,7 @@ classdef cType
 		FORMAT_ID='%3d'           % Line number format
 		SPACES='\s+'              % Spaces Regular Expresion
 		BLANK=char(32)            % Blank character
-		DEBUG_MODE=false  	      % Debug mode flag
+		DEBUG_MODE=false 	      % Debug mode flag
 		% Node types
 		NodeType=struct('PROCESS',1,'STREAM',2,'FLOW',3,'ENV',4);
 		MARKER_SIZE=5;
@@ -137,6 +137,8 @@ classdef cType
 			'STREAM_EXERGY_COST','dscost','STREAM_GENERAL_COST','gscost',...
 			'COST_TABLE_FP','dcfp','COST_TABLE_FPR','dcfpr','GENERAL_COST_TABLE','gcfp',...
 			'PROCESS_ICT','dict','PROCESS_GENERAL_ICT','gict','FLOW_ICT','dfict','FLOW_GENERAL_ICT','gfict',...
+			'FLOW_RESOURCE_COST','dfrsc','PROCESS_RESOURCE_COST','dprsc',...
+			'FLOW_RESOURCE_GENERAL_COST','gfrsc','PROCESS_RESOURCE_GENERAL_COST','gprsc',...
 			'WASTE_DEFINITION','wd','WASTE_ALLOCATION','wa','WASTE_RECYCLING_DIRECT','rad','WASTE_RECYCLING_GENERAL','rag',...
 			'DIAGNOSIS','dgn','MALFUNCTION','mf','MALFUNCTION_COST','mfc',...
 			'IRREVERSIBILITY_VARIATION','dit','TOTAL_MALFUNCTION_COST','tmfc','FUEL_IMPACT','dft',...
@@ -154,7 +156,7 @@ classdef cType
 		TableType=struct('TABLE',1,'MATRIX',2,'SUMMARY',3');
 		TypeTables={'TABLE','MATRIX','SUMMARY'};
 		GraphType=struct('NONE',0,'COST',1,'DIAGNOSIS',2,'DIAGRAM_FP',3,'RECYCLING',4,'SUMMARY',5,...
-				'WASTE_ALLOCATION',6,'DIGRAPH',7);
+				'WASTE_ALLOCATION',6,'DIGRAPH',7,'RESOURCE_COST',8);
 		% Result Id types
         ResultId=struct('PRODUCTIVE_STRUCTURE',1,'THERMOECONOMIC_STATE',2,'THERMOECONOMIC_ANALYSIS',3,...
             'WASTE_ANALYSIS',4,'THERMOECONOMIC_DIAGNOSIS',5,'PRODUCTIVE_DIAGRAM',6,'DIAGRAM_FP',7,...

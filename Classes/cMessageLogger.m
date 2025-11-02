@@ -50,9 +50,6 @@ classdef cMessageLogger < cTaesLab
 		%
 			message=obj.createMessage(error,varargin{:});
             obj.logger.add(message);
-			if cType.DEBUG_MODE && (error==cType.ERROR)
-				disp(message,true);
-			end
 		end
 		
 		function printLogger(obj)

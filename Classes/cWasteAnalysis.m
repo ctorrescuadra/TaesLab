@@ -27,7 +27,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
     end
     properties(Access=private)
         modelFP                 % cExergyCost object
-        resourceCost            % cResourceCost object
+        resourceData            % cResourceData object
         directCost=true         % Direct cost are calculated
         generalCost=false       % General cost are calculated
         isResourceCost=false;   % Resource Cost available
@@ -79,7 +79,8 @@ classdef (Sealed) cWasteAnalysis < cResultId
                 if isObject(rsd,'cResourceData')
                     obj.isResourceCost=true;
                     obj.generalCost=true;
-                    obj.resourceCost=getResourceCost(rsd,fpm);
+                    obj.resourceData=rsd;
+                    setResourceCost(rsd,fpm);
                 else
                     rsd.printLogger;
                     obj.addLogger(rsd);
@@ -150,7 +151,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
                     yd(i,:)=fc.c(outputId);
                 end
                 if obj.generalCost
-                    fc=sol.getFlowsCost(obj.resourceCost);
+                    fc=sol.getFlowsCost(obj.resourceData);
                     yg(i,:)=fc.c(outputId);
                 end
             end

@@ -25,6 +25,7 @@ function ShowGraph(arg,varargin)
 %
 %   See also cGraphResults, cResultSet
 %
+	varchk=@(x) ischar(x) || isstring(x) || iscell(x);
     log=cTaesLab();
 	if nargin < 1
 		log.printError(cMessages.NarginError,cMessages.ShowHelp);
@@ -39,7 +40,7 @@ function ShowGraph(arg,varargin)
 	p.addParameter('ShowOutput',true,@islogical);
 	p.addParameter('PieChart',true,@islogical);
 	p.addParameter('BarGraph',true,@islogical);
-	p.addParameter('Variables',cType.EMPTY_CELL,@iscell);
+	p.addParameter('Variables',cType.EMPTY_CELL,varchk);
     try
 		p.parse(varargin{:});
     catch err
@@ -84,7 +85,13 @@ function ShowGraph(arg,varargin)
 			gr=cGraphDiagramFP(tbl);
 		case cType.GraphType.SUMMARY
 			gr=cGraphSummary(tbl,res.Info,param);
+		case cType.GraphType.RESOURCE_COST
+			gr=cGraphCostRSC(tbl,res.Info,param.Variables);
 	end
 	% Show Graph
-	gr.showGraph;
+	if isValid(gr)
+		gr.showGraph;
+	else
+		printLogger(gr);
+	end
 end

@@ -26,10 +26,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     StateNames      - cell array with the names of the defined states
 %     SampleNames     - cell array with the names of the defined resource samples
 %     WasteFlows      - cell array with the names of the waste flows
-%     ResourceData    - cResourceData object
-%     ResourceCost    - cResource Cost object
+%     ResourceData    - Current cResourceData object
 %
 %   cThermoeconomicModel methods:
+%
 %    Set methods:
 %     setState            - Set State value
 %     setReferenceState   - Set Reference State value
@@ -120,7 +120,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         SampleNames         % Names of the defined resource samples
         WasteFlows          % Names of the waste flows
         ResourceData        % Resource Data object
-        ResourceCost        % Resource Cost object
     end
 
     properties(Access=public)
@@ -134,13 +133,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         Recycling           % Activate Recycling Analysis
     end
 
-    properties(Access=public)
+    properties(Access=private)
         results            % cModelResults object
         rstate             % cDataset of cExergyCost object
         fmt                % cResultTableBuilder object
         wd                 % cWasteData object
         rsd                % cResourceData object
-        rsc                % cResourceCost object
         fp0                % cExergyCost actual reference state
         fp1                % cExergyCost actual operation state
         debug              % Debug info control
@@ -305,11 +303,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Get the current values of resource data
             res=obj.rsd;
         end
-     
-        function res=get.ResourceCost(obj)
-        % Get the current values of resource cost
-            res=obj.rsc;
-        end
 
         function res=get.costTableId(obj)
         % Get the current cost table Id
@@ -405,7 +398,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     value - Type of thermoeconomic tables
         %       'DIRECT' | 'GENERALIZED' | 'ALL'
         %
-            obj.CostTables(value)
+            obj.CostTables=value;
         end
 
         function set.ActiveWaste(obj,value)
@@ -1284,7 +1277,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Input Arguments:
         %     c0 - array containing the resources cost of flows
         %   Output Arguments:
-        %     res - cResourceCost object with the new values
+        %     res - cResourceData object with the new values
         %
             res=cTaesLab();
             if ~obj.isGeneralCost
@@ -1295,7 +1288,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if log.status
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryTables;
-                res=obj.rsc;
+                res=obj.rsd;
             else
                 printLogger(log);
                 res.printError(cMessages.InvalidResourceValues);
@@ -1309,7 +1302,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Input Agument:
         %     Z - array containing the processes cost
         %   Output Arguments:
-        %     res - cResourceCost object
+        %     res - cResourceData object
         %
             res=cTaesLab();
             if ~obj.isGeneralCost
@@ -1320,7 +1313,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if log.status
                 obj.setThermoeconomicAnalysis;
                 obj.setSummaryTables;
-                res=obj.rsc;
+                res=obj.rsd;
             else
                 printLogger(log);
                 res.printWarning(cMessages.InvalidProcessValues);
@@ -1485,8 +1478,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Output Arguments:
         %     log - true|false 
         %
-            updateModel(obj.DataModel);
-            log=isValid(obj.DataModel);
+            log=updateModel(obj.DataModel);
         end
 
         %%%%%
@@ -1615,19 +1607,18 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             % Read resources cost
             options=struct('DirectCost',obj.isDirectCost,'GeneralCost',obj.isGeneralCost);
-            if obj.isGeneralCost
-                obj.rsc=getResourceCost(obj.rsd,obj.fp1);
-                options.ResourcesCost=obj.rsc;
-            end
             % Get cModelResults info
             if isValid(obj.fp1)
+                if obj.isGeneralCost
+                    options.ResourcesCost=obj.rsd;
+                end  
                 res=getCostResults(obj.fmt,obj.fp1,options);
                 obj.setResults(res);
                 obj.printDebugInfo(cMessages.ComputeTA,obj.State);
+                obj.setRecyclingResults;
             else
                 obj.fp1.printError(cMessages.NoComputeTA,obj.State)
             end
-            obj.setRecyclingResults;
         end
 
         function setThermoeconomicDiagnosis(obj)
@@ -1887,7 +1878,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
             % Read resources and check if are valid
             obj.rsd=obj.getResourceData(sample);
-            res=isValid(obj.rsd);
+            if isValid(obj.rsd)
+                setResourceCost(obj.rsd,obj.fp1);
+                res=true;
+            end
         end
 
         function triggerResourceSampleChange(obj)

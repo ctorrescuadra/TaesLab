@@ -224,15 +224,15 @@ classdef cModelTable < cMessageLogger
             tst=true;
             %Search columns with missing cells
             if isOctave
-                idx=all(cellfun(@isempty,values));
+                idx=any(cellfun(@isempty,values));
             else %isMatlab
-                idx=all(cellfun(@(x) isa(x,'missing') || isempty(x),values));
+                idx=any(cellfun(@(x) isa(x,'missing') || isempty(x),values));
             end
             % Log error
             if any(idx)
                 tst=false;
                 for i=find(idx)
-                    obj.messageLog(cType.ERROR,cMessages.InvalidFieldNumber,i,obj.config.name);
+                    obj.messageLog(cType.ERROR,cMessages.MissingValues,i,obj.config.name);
                 end
             end
         end
@@ -252,7 +252,7 @@ classdef cModelTable < cMessageLogger
             %Check if the keys has the correct pattern
             ier=cParseStream.checkListKeys(data);
             if ~isempty(ier)
-                for i=ier
+                for i=transpose(ier)
                     log.messageLog(cType.ERROR,cMessages.InvalidKey,data{i});
                 end
             end

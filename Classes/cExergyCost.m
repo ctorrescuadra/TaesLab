@@ -30,7 +30,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     getIrreversibilityCostTables - Get Irreversibility Cost Tables for processes and flows
 %     updateWasteOperators         - Update Waste Operator
 %  
-%   See also cResultId, cExergyModel, cResultInfo, cWasteData, cResourceCost
+%   See also cResultId, cExergyModel, cResultInfo, cWasteData, cResourceData
 %
 	properties(GetAccess=public,SetAccess=private)
         SystemOutput           % System Output of processes
@@ -195,7 +195,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Syntax:
         %     obj.getProcessCost(rsc)
 		%   Input Arguments:
-		%     rsc - cResourceCost object [optional]
+		%     rsc - cResourceData object [optional]
 		%   Output Arguments:
 		%     res - structure containing cost values (CPE,CPZ,CPR,CP,CF,CR,Z)
         %
@@ -237,7 +237,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Syntax:
         %     obj.getProcessUnitCost(rsc)
 		%   Input Arguments:
-		%     rsc - cResourceCost object [optional]
+		%     rsc - cResourceData object [optional]
 		%   Output:
 		%     res - structure containing cost values (cP,cPE,cPZ,cPR,cF,cR)
         %
@@ -279,7 +279,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Syntax:
         %     res=obj.getFlowsCost(rsc)
         %   Input Arguments:
-		%     rsc - cResourceCost object [optional]
+		%     rsc - cResourceData object [optional]
         %   Output
         %   res - cost of flows structure (B,CE,CZ,CR,C,cE,cZ,cR,c)
         %
@@ -403,7 +403,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Syntax:
         %     res = obj.getGeneralizedCostTableFPR(rsc,ucost)
         %   Input Arguments:
-        %     rsc - cResourceCost object
+        %     rsc - cResourceData object
         %     ucost - Unitary costs of processes. If ommited is calculated
         %   Output: 
         %     res - matrix containing the Generalized Cost FPR table values
@@ -468,6 +468,41 @@ classdef (Sealed) cExergyCost < cExergyModel
                 cm=ones(1,M);
             end
             fict=[ict*obj.mpL;cm];    	
+        end
+
+        function [frsc,prsc,idx]=getResourcesCostDistribution(obj,rsd)
+        %getResourcesCostDistribution - Get the resource Cost distribution tables
+        %   This table decompose the exergy cost due to each resource flows defined
+        %   in the cResourceData object.
+        %   If resource data is not provided, the exergy of the resource flows is used,
+        %   obtaining the exergy cost distribution table. If resource data is provided,
+        %   the generalized cost distribution table is obtained.
+        %
+        %   Syntax:
+        %     [res,idx]=obj.getResourcesCostDistribution(rsd)
+        %   Input Arguments:
+        %     rsd - cResourceData object (optional)
+        %   Output Arguments:
+        %     res - matrix containing the resource cost distribution values
+        %     idx - index of resource flows in the flows list
+        %
+            narginchk(1,2);
+            idx=obj.ps.ResourceFlows;
+            opB=obj.flowOperators.opB;
+            fpm=obj.FlowProcessModel;
+            opP=obj.pfOperators.opP;
+            % Direct or Generalized cost
+            if nargin==2
+                c0=rsd.c0(idx);
+            else
+                c0=ones(1,length(idx));
+            end
+            % Calculate flow resource cost distribution table
+            frsc=transpose(scaleRow(opB(idx,:),c0));
+            % Calculate process resource cost distribution table
+            tmp = fpm.mL(idx,:) * fpm.mF(:,1:end-1);
+            ce=scaleRow(tmp,c0);
+            prsc=transpose(ce*opP);
         end
 
         function log=updateWasteOperators(obj)

@@ -694,7 +694,7 @@ classdef cDataModel < cResultSet
             end
         end
 
-        function updateModel(obj)
+        function log=updateModel(obj)
         %updateDataModel - Update the Data Model if there is changes
         %   Update cModelData and cResultInfo if changes have been made
         %   by setExergy, setResources or setWaste methods
@@ -703,6 +703,7 @@ classdef cDataModel < cResultSet
         % 
             buildModelData(obj);
             buildResultInfo(obj);
+            log=obj.status;
         end
 
         %%%
