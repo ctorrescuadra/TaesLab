@@ -1,9 +1,3 @@
-# Base Function Reference Template
-
-This template provides a standardized format for documenting TaesLab base functions in markdown format.
-
----
-
 # [FunctionName] Reference
 
 **Version**: 1.8 (R2024b) 01-Oct-2025  
@@ -14,11 +8,13 @@ This template provides a standardized format for documenting TaesLab base functi
 [Brief description of what the function does and its primary purpose]
 
 ### Category
+
 **Function Type**: [Data Model | Analysis | Display | Save/Export | Utility | GUI]
 
 ### Key Features
+
 - **Feature 1**: [Description]
-- **Feature 2**: [Description] 
+- **Feature 2**: [Description]
 - **Feature 3**: [Description]
 
 ---
@@ -36,6 +32,7 @@ output = FunctionName(input, 'Param1', value1, 'Param2', value2)
 ## Description
 
 [Detailed description of what the function does, including:]
+
 - [Main functionality]
 - [Processing steps]
 - [Expected workflow]
@@ -92,6 +89,7 @@ output = FunctionName(input, 'Param1', value1, 'Param2', value2)
 *Structure*: [If applicable, describe the structure or contents]
 
 ### Output Contents (if applicable)
+
 When the function returns a `cResultInfo` object, it contains the following tables:
 
 | Table Name | Description | Type |
@@ -105,6 +103,7 @@ When the function returns a `cResultInfo` object, it contains the following tabl
 ## Examples
 
 ### Basic Usage
+
 ```matlab
 % Load data model
 data = ReadDataModel('model.json');
@@ -117,6 +116,7 @@ disp(result);
 ```
 
 ### With Optional Parameters
+
 ```matlab
 % Run analysis with specific state
 result = FunctionName(data, 'State', 'design');
@@ -126,6 +126,7 @@ result = FunctionName(data, 'Debug', true, 'Show', true);
 ```
 
 ### Advanced Usage with Multiple Parameters
+
 ```matlab
 % Comprehensive analysis
 result = FunctionName(data, ...
@@ -142,6 +143,7 @@ end
 ```
 
 ### Integration with ThermoeconomicModel
+
 ```matlab
 % Using with model object
 model = ThermoeconomicModel('model.json');
@@ -156,12 +158,14 @@ SaveResults(result, 'analysis_output.xlsx');
 ## Algorithm Details
 
 ### Processing Steps
+
 1. **Input Validation**: [Description of validation performed]
 2. **Data Preparation**: [How input data is processed]
 3. **Core Computation**: [Main algorithm or analysis performed]
 4. **Results Assembly**: [How results are organized and packaged]
 
 ### Mathematical Background (if applicable)
+
 [Brief description of the mathematical or thermodynamic principles used]
 
 ---
@@ -169,13 +173,16 @@ SaveResults(result, 'analysis_output.xlsx');
 ## Error Handling
 
 ### Common Errors
+
 - **Invalid Input File**: File does not exist or is not readable
 - **Invalid Data Model**: Data model object is not valid or corrupted  
 - **Missing State**: Specified state name does not exist in the data model
 - **Parameter Validation**: Invalid parameter values or combinations
 
 ### Error Messages
+
 The function uses standardized TaesLab error messages:
+
 - `cMessages.DataModelRequired` - When data model is missing or invalid
 - `cMessages.InvalidInputFile` - When filename is invalid
 - `cMessages.FileNotFound` - When specified file does not exist
@@ -194,11 +201,13 @@ The function uses standardized TaesLab error messages:
 ## Dependencies
 
 ### Required Classes
+
 - [`cDataModel`][cDataModel] - For data model handling
 - [`cResultInfo`][cResultInfo] - For results management
 - [`cTaesLab`][cTaesLab] - Base class functionality
 
 ### Required Functions
+
 - [`isValid`][isValid] - Object validation
 - [`isFilename`][isFilename] - Filename validation
 - [`isObject`][isObject] - Object type checking
@@ -208,6 +217,7 @@ The function uses standardized TaesLab error messages:
 ## Workflow Integration
 
 ### Typical Usage Pattern
+
 ```matlab
 % 1. Load Data
 data = ReadDataModel('model.json', 'Debug', true);
@@ -223,6 +233,7 @@ SaveResults(results, 'output.xlsx');
 ```
 
 ### Integration Points
+
 - **Input Sources**: [Where data typically comes from]
 - **Output Destinations**: [Where results typically go]
 - **Related Functions**: [Functions commonly used together]
@@ -232,10 +243,12 @@ SaveResults(results, 'output.xlsx');
 ## Version History
 
 ### Current Version (1.8)
+
 - [List of current features and capabilities]
 - [Recent improvements or changes]
 
 ### Compatibility
+
 - **MATLAB**: R2019b or later
 - **Octave**: 6.0 or later (with limitations)
 - **Dependencies**: [Required toolboxes or additional software]
@@ -245,11 +258,13 @@ SaveResults(results, 'output.xlsx');
 ## Tips and Best Practices
 
 ### Recommended Usage
+
 - **Performance**: Use `'Show', false` for batch processing
 - **Debugging**: Enable `'Debug', true` when troubleshooting
 - **File Management**: Use descriptive filenames with `'SaveAs'`
 
 ### Common Pitfalls
+
 - [Common mistakes users make]
 - [How to avoid typical errors]
 - [Best practices for parameter selection]
@@ -259,15 +274,18 @@ SaveResults(results, 'output.xlsx');
 ## See Also
 
 ### Related Base Functions
+
 - [`RelatedFunction1`][RelatedFunction1] - [Brief description]
 - [`RelatedFunction2`][RelatedFunction2] - [Brief description]
 - [`RelatedFunction3`][RelatedFunction3] - [Brief description]
 
-### Related Classes  
+### Related Classes
+
 - [`cRelatedClass1`][cRelatedClass1] - [Brief description]
 - [`cRelatedClass2`][cRelatedClass2] - [Brief description]
 
 ### Demos and Examples
+
 - [**Function Demo**][FunctionDemo] - Interactive demonstration
 - [**Tutorial**][Tutorial] - Step-by-step guide
 - [**Use Cases**][UseCases] - Real-world applications

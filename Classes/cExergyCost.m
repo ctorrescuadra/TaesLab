@@ -290,15 +290,15 @@ classdef (Sealed) cExergyCost < cExergyModel
             aux=obj.flowOperators;
             res.B=obj.FlowsExergy;
             fpm=obj.FlowProcessModel;
-            [~,frsc,val]=find(fpm.mP(end,:));
+            idx=obj.ps.ResourceFlows;
             if czoption % Compute generalized cost
                 zB = rsc.zP * fpm.mP(1:end-1,:);
-                res.cE = rsc.c0(frsc) * aux.opB(frsc,:);
+                res.cE = rsc.c0(idx) * aux.opB(idx,:);
                 res.CE = res.cE .* res.B;
                 res.cZ = zB * aux.opB;  
                 res.CZ = res.cZ .* res.B;
             else % Compute direct cost
-                res.cE = val * aux.opB(frsc,:);
+                res.cE = sum(aux.opB(idx,:));
                 res.CE = res.cE .* res.B;
                 res.cZ = zero;
                 res.CZ = zero;
@@ -408,7 +408,9 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Output: 
         %     res - matrix containing the Generalized Cost FPR table values
         %
-            if nargin<2
+            nargin(2,3)
+            % Check inputs
+            if nargin<3
                 ucost=obj.getProcessUnitCost(rsc);
             end	
             N=obj.NrOfProcesses;
@@ -439,12 +441,14 @@ classdef (Sealed) cExergyCost < cExergyModel
         %     fict - matrix containing the values of the Flows ICT table
         %
             narginchk(1,2);
+            % Initialize variables
             N=obj.NrOfProcesses;
             M=obj.NrOfFlows;
             fpm=obj.FlowProcessModel;
             pf=obj.pfOperators;
+            czoption=(nargin==2);
             % Compute Process ICT
-            if nargin==2
+            if czoption
                 cn=obj.getMinCost(rsc);
                 ict=zerotol(scaleRow(pf.opI,cn));
             else
@@ -462,7 +466,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 return
             end
             % Compute Flows ICT 
-            if nargin==2
+            if czoption
                 cm=rsc.c0*fpm.mL+cn*obj.mpL;  
             else
                 cm=ones(1,M);
@@ -487,22 +491,23 @@ classdef (Sealed) cExergyCost < cExergyModel
         %     idx - index of resource flows in the flows list
         %
             narginchk(1,2);
+            % Initialize variables
+            czoption=(nargin==2);
             idx=obj.ps.ResourceFlows;
             opB=obj.flowOperators.opB;
-            fpm=obj.FlowProcessModel;
             opP=obj.pfOperators.opP;
-            % Direct or Generalized cost
-            if nargin==2
+            fpm=obj.FlowProcessModel;
+            aux = fpm.mL(idx,:) * fpm.mF(:,1:end-1);
+            % Generalized or direct cost
+            if czoption
                 c0=rsd.c0(idx);
+                frsc=transpose(scaleRow(opB(idx,:),c0));
+                ce=scaleRow(aux,c0);
+                prsc=transpose(ce*opP);             
             else
-                c0=ones(1,length(idx));
+                frsc=transpose(opB(idx,:));
+                prsc=transpose(aux*opP);
             end
-            % Calculate flow resource cost distribution table
-            frsc=transpose(scaleRow(opB(idx,:),c0));
-            % Calculate process resource cost distribution table
-            tmp = fpm.mL(idx,:) * fpm.mF(:,1:end-1);
-            ce=scaleRow(tmp,c0);
-            prsc=transpose(ce*opP);
         end
 
         function log=updateWasteOperators(obj)
