@@ -408,7 +408,6 @@ classdef (Sealed) cExergyCost < cExergyModel
         %   Output: 
         %     res - matrix containing the Generalized Cost FPR table values
         %
-            nargin(2,3)
             % Check inputs
             if nargin<3
                 ucost=obj.getProcessUnitCost(rsc);
@@ -495,19 +494,16 @@ classdef (Sealed) cExergyCost < cExergyModel
             czoption=(nargin==2);
             idx=obj.ps.ResourceFlows;
             opB=obj.flowOperators.opB;
-            opP=obj.pfOperators.opP;
             fpm=obj.FlowProcessModel;
-            aux = fpm.mL(idx,:) * fpm.mF(:,1:end-1);
-            % Generalized or direct cost
+            % Compute Generalized or direct flow costs distribution
             if czoption
                 c0=rsd.c0(idx);
-                frsc=transpose(scaleRow(opB(idx,:),c0));
-                ce=scaleRow(aux,c0);
-                prsc=transpose(ce*opP);             
+                frsc=scaleRow(opB(idx,:),c0);      
             else
-                frsc=transpose(opB(idx,:));
-                prsc=transpose(aux*opP);
+                frsc=opB(idx,:);
             end
+            % Compute process resource cost distribution
+            prsc=frsc*fpm.mF(:,1:end-1);  
         end
 
         function log=updateWasteOperators(obj)

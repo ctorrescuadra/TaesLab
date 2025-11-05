@@ -1015,13 +1015,13 @@ classdef cDataModel < cResultSet
                 end
 				% Waste Allocation
                 jdx=find(wd.TypeId==0);
-                if ~isempty(jdx)
+                idx=any(wd.Values);
+                if ~isempty(jdx) && any(idx)
                     index=cType.TableDataIndex.WASTEALLOC;
                     tp=tableData(index);
                     sheet=tp.name;
                     p.Name=sheet;
                     p.Description=tp.descr;
-                    [~,idx]=find(wd.Values);idx=unique(idx);
                     colNames=['key',wnames(jdx)];
                     rowNames=pNames(idx);
                     values=wd.Values(jdx,idx)';

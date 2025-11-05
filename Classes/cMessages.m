@@ -83,7 +83,7 @@ classdef cMessages
         ValidResourceCost='Resources Cost sample [%s] is valid'
         WasteNotAvailable='Waste Definition is not available. Default is assumed'
         ResourceNotAvailable='No Resources Cost Data available'
-        NoResourceData='Processes cost data is missing. Default values are assumed'
+        NoProcessResourceData='No process resource data available. Default is assumed'
         % Productive Structure messages
         DuplicatedFlow='There are duplicated flows in Dictionary'
         DuplicatedProcess='There are duplicated processses in Dictionary'
@@ -147,7 +147,6 @@ classdef cMessages
         NegativeResourceValue='Resource values must be non-negative'
         InvalidProcessValues='Invalid resource values'
         ZeroResourceCost='Total resource-Flow cost is zero'
-        NoProcessResourceData='No resource process data'
         % Summary messages
         SummaryNotAvailable='Summary Results NOT available'
         InvalidSummaryOption='Invalid summary option'
@@ -175,6 +174,7 @@ classdef cMessages
         InvalidGraphType='Invalid graph type %s'
         InvalidVariableNames='Invalid variable names'
         % Thermoeconomic Model messages
+        InvalidParameter='Invalid Parameter: %s'
         ResultNotAvailable='%s NOT available'
         InvalidCostTable='Invalid Cost Tables parameter value: %s'
         NoGeneralizedCost='No generalized cost activated'

@@ -25,6 +25,7 @@
 %  scaleCol                   - Multiplies each column of matrix A by the corresponding element of vector x.
 %  scaleRow                   - Multiplies each row of matrix A by the corresponding element of vector x.
 %  vDivide                    - Element-wise right division. Overload operator rdivide when 0/0.
+%  tolerance                  - Compute the relative tolerance value for a matrix.
 %  zerotol                    - Sets to zero the matrix values near to zero.
 %  logicalMatrix              - Convert a real matrix to logical with zero tolerance.
 %  similarDemandMatrix        - Compute the demand-driven adjacency matrix from the resource-driven matrix.

@@ -157,7 +157,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     varargin - optional paramaters (see ThermoeconomicModel)
         %   Output Arguments:
         %     obj - cThermoeconomicModel object
-        
             % Check is data is a valid cDataModel object  
             if ~isObject(data,'cDataModel')
                 obj.printError(cMessages.InvalidObject,class(data));
@@ -208,8 +207,8 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 sname=data.StateNames{i};
                 rex=data.getExergyData(i);
                 if ~rex.status
-                    rex.messageLog(cType.ERROR,cMessages.InvalidExergyData,sname);
-                    rex.printLogger;
+                    obj.addLogger(rex);
+                    obj.messageLog(cType.ERROR,cMessages.InvalidExergyData,sname);
                 end
                 if obj.isWaste
                     cex=cExergyCost(rex,obj.wd);
@@ -222,58 +221,48 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                     cex.printLogger;
                 end
             end
+            if ~obj.status
+                obj.printError(cMessages.InvalidDataModel,obj.ModelName);
+                return
+            end
             % Set Operation and Reference State
-            if obj.checkReferenceState(param.ReferenceState)
+            if data.existState(param.ReferenceState)
                 obj.ReferenceState=param.ReferenceState;
             else
-                return
+                obj.printWarning(cMessages.InvalidStateName,param.ReferenceState);
+                obj.ReferenceState=refstate;
             end
-            if obj.checkState(param.State)
+            if data.existState(param.State)
                 obj.CurrentState=param.State;
             else
-                return
+                obj.printWarning(cMessages.InvalidStateName,param.State);
+                obj.CurrentState=refstate;
             end
-            % Check Resource Sample option
+            % Check Resource Sample parameter
             if data.isResourceCost
-                if isempty(param.ResourceSample)
+                if isempty(param.ResourceSample) 
+                    param.ResourceSample=data.SampleNames{1};
+                elseif ~data.existSample(param.ResourceSample)
+                    obj.printWarning(cMessages.InvalidSampleName,param.ResourceSample);
                     param.ResourceSample=data.SampleNames{1};
                 end
-                if obj.checkResourceSample(param.ResourceSample)
-                    obj.CurrentSample=param.ResourceSample;
-                else 
-                    return
+                obj.CurrentSample=param.ResourceSample;
+            end
+            % Check if Waste Analysis is available
+            if obj.isWaste
+                % Check Active Waste parameter
+                if obj.wd.existsWaste(param.ActiveWaste)
+                    obj.ActiveWaste=param.ActiveWaste;
+                else
+                   obj.printWarning(cMessages.InvalidWasteKey,param.ActiveWaste)
+                   obj.ActiveWaste=data.WasteFlows{1};
                 end
-            end
-            % Check Cost Tables option
-            if obj.checkCostTables(param.CostTables)
-                obj.CostTables=param.CostTables;
-            else
-                return
-            end
-            % Check Active Waste option
-            if obj.checkActiveWaste(param.ActiveWaste)
-                obj.ActiveWaste=param.ActiveWaste;
-            else
-                return
-            end
-            % Check Recycling option
-            if obj.checkRecycling(param.Recycling)
                 obj.Recycling=param.Recycling;
-            else
-                return
             end
-            % Check Summary Option
-            if obj.checkSummary(param.Summary)
-                obj.Summary=param.Summary;
-            else
-                return
-            end
-            % Check Diagnosis Method option
-            if obj.checkDiagnosisMethod(param.DiagnosisMethod)
-                obj.DiagnosisMethod=param.DiagnosisMethod;
-            else
-                return
-            end
+            %Set the rest of parameters
+            obj.CostTables=param.CostTables;
+            obj.Summary=param.Summary;
+            obj.DiagnosisMethod=param.DiagnosisMethod;
             % Compute initial state results
             obj.activeModel=true;
             obj.setProductiveStructure;
@@ -1770,6 +1759,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
         %   See also cProductiveStructure and cProductiveDiagram
         %
+            % set productive structure results
             ps=obj.DataModel.ProductiveStructure;
             res=getProductiveStructure(obj.fmt,ps);
             obj.setResults(res)
@@ -1796,14 +1786,17 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     res - true | false
         %
             res=false;
+            % Check if state exists
             if ~obj.DataModel.existState(state)
                 obj.printWarning(cMessages.InvalidStateName,state);
                 return
             end
+            % Check value change
             if strcmp(obj.State,state)
                 obj.printDebugInfo(cMessages.NoParameterChange);
                 return
             end
+            % Set current exergy cost
             tmp=obj.rstate.getValues(state);
             if isValid(tmp)
                 obj.fp1=tmp;
@@ -1839,16 +1832,24 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     res - true | false
         %
             res=false;
+            % Check if reference state exists
             if ~obj.DataModel.existState(state)
                 obj.printWarning(cMessages.InvalidStateName,state);
                 return
             end
+            % Set reference exergy cost state
+            tmp=obj.rstate.getValues(state);
+            if isValid(tmp)
+                obj.fp0=tmp;
+                res=true;
+            else
+                obj.printWarning(cMessages.InvalidStateName,state);
+            end
+            % Check value change
             if strcmp(obj.ReferenceState,state)
                 obj.printDebugInfo(cMessages.InvalidDiagnosisState);
                 return
             end
-            obj.fp0=obj.rstate.getValues(state);
-            res=true;
         end
 
         function triggerReferenceState(obj)
@@ -1868,10 +1869,17 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     res - true | false
         %
             res=false;
+            % Check if resource cost is activated
+            if ~obj.isResourceCost
+                obj.printWarning(cMessages.ResourceNotAvailable);
+                return
+            end
+            % Check if sample exists
             if ~obj.DataModel.existSample(sample)
-                obj.printWarning(cMessages.InvalidResourceName,sample);
+                obj.printWarning(cMessages.InvalidSampleName,sample);
                 return       
             end
+            % Check value change
             if isempty(sample) || strcmp(obj.Sample,sample)
                 obj.printDebugInfo(cMessages.NoParameterChange);
                 return
@@ -1912,18 +1920,21 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %
             res=false;
             pct=cType.getCostTables(value);
+            % Check if cost tables parameter is valid
             if isempty(pct)
                 obj.printWarning(cMessages.InvalidCostTable,value);
                 return
             end
-            if strcmp(obj.CostTables,value)
-                obj.printDebugInfo(cMessages.NoParameterChange);
-                return
-            end       
+            % Check if cost tables are compatible with resource cost
             if bitget(pct,cType.RESOURCES) && ~obj.isResourceCost
                 obj.printWarning(cMessages.InvalidCostTable,value);
                 return
             end
+            % Check value change
+            if strcmp(obj.CostTables,value)
+                obj.printDebugInfo(cMessages.NoParameterChange);
+                return
+            end  
             res=true;
         end 
     
@@ -1948,10 +1959,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     res - true | false
         %
             res=false;
+            % Check if diagnosis method is valid
             if ~cType.checkDiagnosisMethod(value)
                 obj.printWarning(cMessages.InvalidDiagnosisMethod,value);
                 return
             end
+            % Check value change
             if strcmp(obj.DiagnosisMethod,value)
                 obj.printDebugInfo(cMessages.NoParameterChange);
                 return
@@ -1969,10 +1982,17 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     res - true | false
         %
             res=false;
-            if ~obj.wd.existWaste(value)
+            % Check waste model
+            if ~obj.isWaste
+                obj.printWarning(cMessages.NoWasteModel);
+                return
+            end
+            % Check waste flows exists
+            if ~obj.wd.existsWaste(value)
                 obj.printWarning(cMessages.InvalidWasteKey,value);
                 return
             end
+            % Check value change
             if strcmp(obj.ActiveWaste,value)
                 obj.printDebugInfo(cMessages.NoParameterChange);
                 return
@@ -1990,6 +2010,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     res - true | false
         %
             res=false;
+            % Check if summary option is a valid one
             if ~checkSummaryOption(obj,value)
                 obj.printDebugInfo(cMessages.InvalidSummaryOption,value);
                 return
@@ -2023,14 +2044,17 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     res - true | false
         %
             res=false;
+            % Check value type
             if ~islogical(value)
                 obj.printDebugInfo(cMessages.InvalidArgument);
                 return
             end
+            % Check waste model
             if ~obj.isWaste
                 obj.printDebugInfo(cMessages.NoWasteModel);
                 return
             end
+            % Check value change
             if obj.Recycling==value
                 obj.printDebugInfo(cMessages.NoParameterChange);
                 return

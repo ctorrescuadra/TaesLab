@@ -1,4 +1,4 @@
-function res=isNonNegativeMatrix(A,tolerance)
+function res=isNonNegativeMatrix(A,tol)
 %isNonNegativeMatrix - Check if the matrix is square and non-negative.
 %   Check if all elements of the matriz are non-negative with a tolerance of cType.EPS
 %
@@ -21,8 +21,9 @@ function res=isNonNegativeMatrix(A,tolerance)
     %Chech input arguments
     res=false;
     try narginchk(1,2); catch, return; end
-    if nargin == 1 || ~isnumeric(tolerance) || ~isscalar(tolerance) || tolerance<0
-        tolerance = cType.EPS; % Default tolerance
+    if nargin == 1 || ~isnumeric(tol) || ~isscalar(tol) || tol<0
+        tol = cType.EPS; % Default tolerance
     end
-    res=isSquareMatrix(A) && all(A(:))>=-tolerance;
+    reltol=tolerance(A,tol);
+    res=isSquareMatrix(A) && all(A(:))>=-reltol;
 end

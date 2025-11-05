@@ -1,16 +1,16 @@
-function A = zerotol(A,eps)
+function A = zerotol(A,tol)
 %ZEROTOL - Sets to zero the matrix values near to zero.
 %   Set to zero all elements of a matrix which absolute value is small to 
-%   a tolerance value eps. 
-%   If argument eps is missing tolerance is taking as cType.EPS=1.0e-8
+%   a tolerance value tol. 
+%   If argument tol is missing tolerance is taking as cType.EPS=1.0e-8
 %
 %	Syntax:
 %     B = ZEROTOL(A)
-%     B = ZEROTOL(A, eps)
+%     B = ZEROTOL(A, tol)
 %  	
 %	Input Arguments:
 %     A   - matrix 
-%     eps - tolerance (optional, default is cType.EPS)
+%     tol - tolerance (optional, default is cType.EPS)
 %  	
 %	Output Arguments:
 %	  A - modified matrix
@@ -26,9 +26,10 @@ function A = zerotol(A,eps)
 		msg=buildMessage(mfilename, cMessages.InvalidArgument,cMessages.ShowHelp);
 		error(msg);
 	end
-	if nargin==1 || isempty(eps) || ~isscalar(eps) || eps < 0
-		eps=cType.EPS;
+	if nargin==1 || isempty(tol) || ~isscalar(tol) || tol < 0
+		tol=cType.EPS;
 	end
+	reltol=tolerance(A,tol);
 	% Set to zero values near to zero
-	A(abs(A) <= eps) = 0;
+	A(abs(A) <= reltol) = 0;
 end

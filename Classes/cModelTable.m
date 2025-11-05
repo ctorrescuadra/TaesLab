@@ -282,7 +282,8 @@ classdef cModelTable < cMessageLogger
                 return
             end
             % Check if values are non-negative
-            tst=all(cell2mat(data) >- cType.EPS);
+            x=cell2mat(data);
+            tst=all(x >- tolerance(x));
         end
 
         function tst=validateSample(log,data)
@@ -320,7 +321,8 @@ classdef cModelTable < cMessageLogger
                 tst=false;
                 return
             end
-            tst = tst & all(A(:) > -cType.EPS);
+            reltol=tolerance(A);
+            tst = tst & all(A(:) > -reltol);
         end
     end
 end

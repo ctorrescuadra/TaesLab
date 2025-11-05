@@ -160,8 +160,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 end
                 if length(mfp.ps.ResourceFlows)>1
                     [dfrsc,dprsc]=mfp.getResourcesCostDistribution;
-                    tbl.dfrsc=obj.getFlowRCDTable(cType.Tables.FLOW_RESOURCE_COST,dfrsc);
-                    tbl.dprsc=obj.getProcessRCDTable(cType.Tables.PROCESS_RESOURCE_COST,dprsc);
+                    tbl.dfrsc=obj.getFlowRCDTable(cType.Tables.FLOW_RESOURCE_COST,dfrsc');
+                    tbl.dprsc=obj.getProcessRCDTable(cType.Tables.PROCESS_RESOURCE_COST,dprsc');
                 end
             end
             % Generalized Cost Tables
@@ -183,8 +183,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tbl.gcfp=obj.getTableFP(cType.Tables.GENERAL_COST_TABLE,gcfp);
                 if length(mfp.ps.ResourceFlows)>1
                     [gfrsc,gprsc]=mfp.getResourcesCostDistribution(cz);
-                    tbl.gfrsc=obj.getFlowRCDTable(cType.Tables.FLOW_RESOURCE_GENERAL_COST,gfrsc);
-                    tbl.gprsc=obj.getProcessRCDTable(cType.Tables.PROCESS_RESOURCE_GENERAL_COST,gprsc);
+                    tbl.gfrsc=obj.getFlowRCDTable(cType.Tables.FLOW_RESOURCE_GENERAL_COST,gfrsc');
+                    tbl.gprsc=obj.getProcessRCDTable(cType.Tables.PROCESS_RESOURCE_GENERAL_COST,gprsc');
                 end
             end
             res=cResultInfo(mfp,tbl);
@@ -567,18 +567,15 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   Output Arguments:
         %   res - cTableMatrix object
         %
-            res=cTaesLab(cType.INVALID);
             [~,tp]=obj.getTableProperties(cType.Tables.WASTE_ALLOCATION);
             flw=obj.flowKeys;
             prc=obj.processKeys;
             colNames=['Key',flw(wt.Flows)];
             tmp=100*[wt.Values';wt.RecycleRatio];
-            [idx,~]=find(tmp);idx=unique(idx);
-            if ~isempty(idx)
-                rowNames=prc(idx);
-                values=tmp(idx,:);
-                res=cTableMatrix(values,rowNames,colNames,tp);
-            end
+            idx=any(zerotol(tmp),2);
+            rowNames=prc(idx);
+            values=tmp(idx,:);
+            res=cTableMatrix(values,rowNames,colNames,tp);
         end
 
         %-- Thermoeconomic Analysis Tables    

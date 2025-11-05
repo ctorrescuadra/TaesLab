@@ -45,7 +45,7 @@ function model=ThermoeconomicModel(arg,varargin)
 %    
 %   See also cThermoeconomicModel
 %
-    model=cTaesLab();
+    model=cTaesLab(cType.INVALID);
     % Check input parameters
     if isFilename(arg)
         filename=char(arg);

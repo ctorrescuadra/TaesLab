@@ -76,7 +76,7 @@ classdef cGraphCostRSC < cGraphResults
             obj.BaseLine=0.0;
             if obj.isPieChart % Pie chart for a single variable
                 x=cell2mat(tbl.Data(idx,1:end-1));
-                jdx=find(x>cType.EPS);
+                jdx=find(x>tolerance(x));
                 obj.Title=[tbl.Description ' [',tbl.State,'/',variables,']',];
                 obj.xValues=x(jdx);
                 obj.Legend=tbl.ColNames(jdx+1);

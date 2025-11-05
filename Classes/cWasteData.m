@@ -18,7 +18,7 @@ classdef cWasteData < cMessageLogger
 %	  cWasteData      - Create an instance of the class
 %     getWasteFlows    - Get the waste flows key
 %     getWasteIndex    - Get the waste flows index
-%     existWaste       - Check if a waste flow is defined
+%     existsWaste       - Check if a waste flow is defined
 %     getValues        - Get the allocation cost values of a waste
 %     getType          - Get the allocation type of a waste
 %     getRecycleRatio  - Get the recycling ratio of a waste
@@ -184,10 +184,10 @@ classdef cWasteData < cMessageLogger
 			end
 		end
 			
-		function res=existWaste(obj,key)
-		%existWaste - Determine if waste key is defined
+		function res=existsWaste(obj,key)
+		%existsWaste - Determine if waste key is defined
 		%   Syntax:
-		%     res = obj.existWaste(key)
+		%     res = obj.existsWaste(key)
 		%   Input Arguments:
 		%    key - waste flow name
 		%   Output Arguments:
