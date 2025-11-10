@@ -16,5 +16,5 @@ function res = tolerance(A, tol)
     if nargin < 2 || isempty(tol) || ~isscalar(tol) || tol < 0
         tol = cType.EPS;
     end
-    res = tol * [1;max(abs(A(:)))];
+    res = tol * max([1;abs(A(:))]);
 end

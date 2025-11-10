@@ -850,28 +850,23 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%     res = obj.checkFlowsConnectivity
 		%   Output Arguments:
 		%     res - true | false indicating if the flows are ok
-			
+		
 			% Get the from and to of the flows
 			from=[obj.Flows.from]; to=[obj.Flows.to];
-            % Check loops and not defined from/to flows
-			idx=find(from==to);
-			for i=idx
-				if from(i) %Check if there is a loop
-					obj.messageLog(cType.ERROR,cMessages.InvalidFlowLoop,obj.Flows(i).key);
-				else %Check if is a no defined flow
-					obj.messageLog(cType.ERROR,cMessages.InvalidFlowDefinition,obj.Flows(i).key);
+			% Loop over flows to check connectivity
+			for id=1:obj.NrOfFlows
+				if (from(id)==to(id)) %Check if there is a loop
+					if from(id)==0
+						obj.messageLog(cType.ERROR,cMessages.InvalidFlowDefiniton,obj.cflw{id}.key);
+					else
+						obj.messageLog(cType.ERROR,cMessages.InvalidFlowLoop,obj.cflw{id}.key);
+					end
+				elseif (from(id)==0) && (to(id)~=0) % Check invalid FROM definition
+					obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.cflw{id}.key);
+				elseif (to(id)==0) && (from(id)~=0) % Check invalid TO definition
+					obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.cflw{id}.key);
 				end
 			end
-            % Check invalid FROM definition
-			jdx=setdiff(find(~from),idx);
-            for i=jdx
-				obj.messageLog(cType.ERROR,cMessages.InvalidStreamToFlow,obj.Flows(i).key);
-            end
-            % Check invalid TO definition
-			jdx=setdiff(find(~to),idx); 
-            for i=jdx
-				obj.messageLog(cType.ERROR,cMessages.InvalidFlowToStream,obj.Flows(i).key);
-            end
 			res=obj.status;
         end
 
