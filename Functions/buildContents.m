@@ -1,30 +1,28 @@
-function tbl=buildContents(filename,folder)
+function tbl=buildContents(folder,filename)
 %buildContents - Get a cTableData object with the description of .m files in a folder
-%   By default, MATLAB uses the Contents.m file to show the help of a directory.
-%   This function builds the Contents.m file scanning all the .m files in a folder.
-%   The first comment line of each .m file is extracted and used as the
-%   description for that file in the Contents.m file.
-%   If a file does not have comments, the description '(No Description)' is used.
-%   If filename is 'Contents.m', the file is saved in the MATLAB help format.
-%   If filename has a different extension than .m, the file is saved in that
-%   format using the cTableData/saveTable method.
+%   If filename is provided, save a file with these information
+%   The available formats are:  CSV, XLSX, JSON, XML, TXT, HTML, LaTeX, MD and MAT
 %
-%   Syntax;
-%     buildContents(filename,folder)
+%   Syntax:
+%     tbl=buildContents()
+%     tbl=buildContents(folder)
+%     buildContents(folder,filename)
 %
 %   Input Arguments:
-%     filename - file name of the Contents help (default: 'Contents.m')
 %     folder - folder to scan (default: current folder)
+%     filename - file name of the Contents help (default: 'Contents.m')
 %   Output Arguments:
 %     tbl - cTableData object with the contents information
 %
 %   Examples:
-%     tbl = buildContents('Contents.m','C:\MyFolder');
-%     This command builds the Contents.m file in the folder C:\MyFolder
-%     scanning all the .m files in the folder.
-%     tbl = buildContents('Contents.m');
-%     This command builds the Contents.m file in the current folder
-%     scanning all the .m files in the folder.
+%     tbl = buildContents();
+%      This command get a cTableData with the name and description of
+%      all *.m files of the current folder
+%     tbl = buildContents('C:/MyFolder')
+%      This command get a cTableData with the name and description of
+%      all *.m files of the folder C:/MyFolder  
+%     tbl = buildContents('.','mFiles.txt)
+%      This command generate also a file called mFiles.txt
 %   See also: cTableData/saveTable
 %
     tbl=cMessageLogger();
@@ -35,11 +33,9 @@ function tbl=buildContents(filename,folder)
         tbl.printError(cMessages.NarginError,cMessages.ShowHelp);
         return
     end
-    if nargin == 0
-        filename = 'Contents.m';
-        folder = '.';
-    end
-    if nargin == 1
+    if nargin < 2
+        filename = cType.EMPTY;
+    elseif nargin == 0
         folder = '.';
     end
     % Get the files of the directory
@@ -71,19 +67,14 @@ function tbl=buildContents(filename,folder)
         printLogger(tbl);
         return
     end
-    % Save the Contents file
-    fileType =cType.getFileType(filename);
-    if fileType == cType.FileType.MHLP
-        log=exportContents(tbl,filename);
-    else
+    % Save the Content file if required.
+    if isFilename(filename)
         log=tbl.saveTable(filename);
-    end
-    % Print log messages
-    if log.status
-        log.printInfo(cMessages.TableFileSaved,tbl.Name,filename);
-    else
-        printLogger(log);
-        return
+        if log.status
+            log.printInfo(cMessages.TableFileSaved,tbl.Name,filename);
+        else
+            printLogger(log);
+        end
     end
 end
 
@@ -95,47 +86,18 @@ function res = getComment(filename)
 %     res - Comment line
 %
     % Open the file
-    fid = fopen(filename, 'r');
+    fId = fopen(filename, 'r');
     res = '(No Description)';
-    if fid == -1
+    if fId == -1
         return;
     end
     % Read lines until first comment
-    while ~feof(fid)
-        line = strtrim(fgetl(fid));
+    while ~feof(fId)
+        line = strtrim(fgetl(fId));
         if startsWith(line, '%')
             res = regexprep(line,'%\w+ - ',cType.EMPTY_CHAR);
             break;
         end
     end
-    fclose(fid);
+    fclose(fId);
 end
-
-function log=exportContents(obj,filename)
-%exportContents - Save the Contents.m file in the folder
-%   Input:
-%     filename - Name of the Contents.m file
-%     Name - Cell array with names of functions/files
-%     Description - Cell array with descriptions of functions/files
-%   Output:
-%     log - cMessageLogger object with status and messages
-%
-    log = cMessageLogger();
-    fnames=obj.RowNames;
-    fdesc=obj.Data;
-    cw = getColumnWidth(obj);
-    fmt=sprintf('%s %%-%ds - %%s\n','%%',cw(1));
-    try
-        fid = fopen(filename, 'w');
-        for k = 1:length(fnames)
-            fprintf(fid, fmt, fnames{k}, fdesc{k});
-        end
-        fclose(fid);
-    catch
-        log.messageLog(cType.ERROR,err.message)
-        log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
-        return;
-    end
-end
-
-

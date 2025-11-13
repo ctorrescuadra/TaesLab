@@ -73,6 +73,7 @@ classdef cMessages
         TableNotSaved='Table %s is NOT saved'
         InfoFileSaved='%s is saved in file %s'
         TableFileSaved='Table %s has been saved in file %s'
+        FileSaved='File %s has been saved'
         % Data Model Info
         ValidDataModel='Data model %s is valid'
         ResultVarInfo='%s results available in workspace'

@@ -339,7 +339,7 @@ classdef (Abstract) cTable < cMessageLogger
         function log = saveTable(obj,filename)
         %saveTable - Generate a file with the table values
         %   The file type depends on the extension
-        %   Valid extensions are: CSV,XLSX,JSON,XML,TXT,HTML,LaTeX and MAT
+        %   Valid extensions are: CSV,XLSX,JSON,XML,TXT,HTML,LaTeX, MD and MAT
         %
         %   Syntax:
         %     log = obj.saveTable(filename)

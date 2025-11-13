@@ -1,0 +1,906 @@
+{
+  "Base": [
+    {
+      "Name": "rmf",
+      "Description": "Read Data Model Functions.",
+      "Files": [
+        {
+          "Name": "CopyDataModel",
+          "Description": "Creates a copy of a data model file in another format"
+        },
+        {
+          "Name": "ImportData",
+          "Description": "Import external data to a cTableData from CSV or XLSX files."
+        },
+        {
+          "Name": "ImportDataModel",
+          "Description": "Get a cDataModel object from a previous saved MAT file."
+        },
+        {
+          "Name": "ReadDataModel",
+          "Description": "Reads a data model file."
+        },
+        {
+          "Name": "ValidateModelTables",
+          "Description": "Validate the data tables of a data model file."
+        }
+      ]
+    },
+    {
+      "Name": "taf",
+      "Description": "Thermoeconomic Analysis Functions.",
+      "Files": [
+        {
+          "Name": "DiagramFP",
+          "Description": "Get the FP diagrams for a plant state."
+        },
+        {
+          "Name": "ExergyAnalysis",
+          "Description": "Get the exergy analysis for a plant state."
+        },
+        {
+          "Name": "ProductiveDiagram",
+          "Description": "Get the productive diagrams of the plant."
+        },
+        {
+          "Name": "ProductiveStructure",
+          "Description": "Get the productive structure of the plant."
+        },
+        {
+          "Name": "SummaryResults",
+          "Description": "Get the summary results for a plant."
+        },
+        {
+          "Name": "ThermoeconomicAnalysis",
+          "Description": "Perform the termoeconomic analysis of a plant state."
+        },
+        {
+          "Name": "ThermoeconomicDiagnosis",
+          "Description": "Compare two states of the plant and make a thermoeconomic diagnosis"
+        },
+        {
+          "Name": "ThermoeconomicModel",
+          "Description": "Creates a cThermoeconomicModel object from a data model file."
+        },
+        {
+          "Name": "WasteAnalysis",
+          "Description": "Waste recycling analysis of a plant state."
+        }
+      ]
+    },
+    {
+      "Name": "srf",
+      "Description": "Save Results Functions.",
+      "Files": [
+        {
+          "Name": "ExportResults",
+          "Description": "Exports the results tables in different formats."
+        },
+        {
+          "Name": "SaveDataModel",
+          "Description": "Saves the data model tables into a file."
+        },
+        {
+          "Name": "SaveResults",
+          "Description": "Save the result tables into a file."
+        },
+        {
+          "Name": "SaveSummary",
+          "Description": "Save the summary results into a file."
+        },
+        {
+          "Name": "SaveTable",
+          "Description": "Saves a table into a file"
+        }
+      ]
+    },
+    {
+      "Name": "rdf",
+      "Description": "Display Results Functions.",
+      "Files": [
+        {
+          "Name": "ListResultTables",
+          "Description": "Display the list of the TaesLab result tables and their properties."
+        },
+        {
+          "Name": "ShowGraph",
+          "Description": "Display the graph associated with a results table."
+        },
+        {
+          "Name": "ShowResults",
+          "Description": "Show the results tables in different formats."
+        },
+        {
+          "Name": "ShowTable",
+          "Description": "Display, export, or save a table object."
+        }
+      ]
+    },
+    {
+      "Name": "gui",
+      "Description": "GUI Functions.",
+      "Files": [
+        {
+          "Name": "ResultsPanel",
+          "Description": "Graphical user interface for displaying results interactively."
+        },
+        {
+          "Name": "TaesPanel",
+          "Description": "Graphical user interface for selecting thermoeconomic model parameters."
+        },
+        {
+          "Name": "TaesTool",
+          "Description": "Compatible user interface App for MATLAB/Octave."
+        },
+        {
+          "Name": "ViewResults",
+          "Description": "MATLAB app for displaying results tables."
+        }
+      ]
+    }
+  ],
+  "Functions": [
+    {
+      "Name": "io",
+      "Description": "Input/Output Functions.",
+      "Files": [
+        {
+          "Name": "exportCSV",
+          "Description": "Saves a cell array as CSV file."
+        },
+        {
+          "Name": "exportMAT",
+          "Description": "Save a valid cTaesLab object as MAT file."
+        },
+        {
+          "Name": "importCSV",
+          "Description": "Read a CSV file and return its contents as a cell array"
+        },
+        {
+          "Name": "importMAT",
+          "Description": "Create a cTaesLab object from a previous saved MAT file."
+        }
+      ]
+    },
+    {
+      "Name": "val",
+      "Description": "Validation Functions.",
+      "Files": [
+        {
+          "Name": "inverseMatrixOperator",
+          "Description": "Calculate the inverse of the M-Matrix, I-A."
+        },
+        {
+          "Name": "isFilename",
+          "Description": "Check if file name is valid for read/write mode."
+        },
+        {
+          "Name": "isIndex",
+          "Description": "Check if a number belong to an index range."
+        },
+        {
+          "Name": "isInteger",
+          "Description": "Check if the value is an integer number."
+        },
+        {
+          "Name": "isMatlab",
+          "Description": "Identifies if the funcion has been executed in MATLAB."
+        },
+        {
+          "Name": "isNonNegativeMatrix",
+          "Description": "Check if the matrix is square and non-negative."
+        },
+        {
+          "Name": "isNonSingularMatrix",
+          "Description": "Check if the matrix I-A is non-singular."
+        },
+        {
+          "Name": "isObject",
+          "Description": "Check if 'obj' is a valid cTaesLab object belong to a specific class."
+        },
+        {
+          "Name": "isOctave",
+          "Description": "Identifies if the funcion has been executed in Octave."
+        },
+        {
+          "Name": "isSquareMatrix",
+          "Description": "Checks if input A is a numeric square matrix."
+        },
+        {
+          "Name": "isValid",
+          "Description": "Check if 'obj' is a valid TaesLab object."
+        }
+      ]
+    },
+    {
+      "Name": "mat",
+      "Description": "Matrix Operations Functions.",
+      "Files": [
+        {
+          "Name": "divideCol",
+          "Description": "Divide each colums of matrix A by the corresponding element of vector x."
+        },
+        {
+          "Name": "divideRow",
+          "Description": "Divide each row of matrix A by the corresponding element of vector x."
+        },
+        {
+          "Name": "logicalMatrix",
+          "Description": "Convert a real matrix to logical with zero tolerance."
+        },
+        {
+          "Name": "scaleCol",
+          "Description": "Multiplies each column of matrix A by the corresponding element of vector x."
+        },
+        {
+          "Name": "scaleRow",
+          "Description": "Multiplies each row of matrix A by the corresponding element of vector x."
+        },
+        {
+          "Name": "similarDemandMatrix",
+          "Description": "Compute the demand-driven adjacency matrix from the resource-driven matrix."
+        },
+        {
+          "Name": "similarDemandOperator",
+          "Description": "Compute the demand-driven operator from the resource-drive operator."
+        },
+        {
+          "Name": "similarResourceMatrix",
+          "Description": "Compute the resource-driven adjacency matrix from the demand-driven matrix."
+        },
+        {
+          "Name": "similarResourceOperator",
+          "Description": "Compute the resource-driven operator from the demmand drive operator."
+        },
+        {
+          "Name": "tolerance",
+          "Description": "Compute the relative tolerance value for a matrix."
+        },
+        {
+          "Name": "transitiveClosure",
+          "Description": "Compute the transitive closure of a digraph."
+        },
+        {
+          "Name": "vDivide",
+          "Description": "Element-wise right division. Overload operator rdivide when 0/0."
+        },
+        {
+          "Name": "zerotol",
+          "Description": "Sets to zero the matrix values near to zero."
+        }
+      ]
+    },
+    {
+      "Name": "fmt",
+      "Description": "Formatting and Display Functions.",
+      "Files": [
+        {
+          "Name": "buildContents",
+          "Description": "Get a cTableData object with the description of .m files in a folder"
+        },
+        {
+          "Name": "buildMessage",
+          "Description": "Builds a formatted error message for a given function."
+        },
+        {
+          "Name": "fdisplay",
+          "Description": "Display a matrix A using C-like formatting."
+        }
+      ]
+    }
+  ],
+  "Classes": [
+    {
+      "Name": "base",
+      "Description": "Base Classes.",
+      "Files": [
+        {
+          "Name": "cMessageLogger",
+          "Description": "Create and manage a messages logger for cTaesLab objects."
+        },
+        {
+          "Name": "cTaesLab",
+          "Description": "Base class of the TaesLab toolbox."
+        }
+      ]
+    },
+    {
+      "Name": "static",
+      "Description": "Static Classes",
+      "Files": [
+        {
+          "Name": "cMessageBuilder",
+          "Description": "Create a message for logger"
+        },
+        {
+          "Name": "cMessages",
+          "Description": "Static class which defines the TaesLab messages."
+        },
+        {
+          "Name": "cParseStream",
+          "Description": "Class with static methods to parse stream definition"
+        },
+        {
+          "Name": "cType",
+          "Description": "Static class to manage the constants of TaesLab"
+        }
+      ]
+    },
+    {
+      "Name": "rmc",
+      "Description": "Read Model Classes.",
+      "Files": [
+        {
+          "Name": "cModelTable",
+          "Description": "Class container for the values read by cReadModelTable"
+        },
+        {
+          "Name": "cReadModel",
+          "Description": "Abstract class to implemenent the model reader classes."
+        },
+        {
+          "Name": "cReadModelCSV",
+          "Description": "Implements the cReadModelTable to read CSV data model files."
+        },
+        {
+          "Name": "cReadModelJSON",
+          "Description": "Implement the cReadModelStruct to read JSON data model files."
+        },
+        {
+          "Name": "cReadModelStruct",
+          "Description": "Abstract class to read structured data model."
+        },
+        {
+          "Name": "cReadModelTable",
+          "Description": "Abstract class to read table data model."
+        },
+        {
+          "Name": "cReadModelXLS",
+          "Description": "%cReadModelXLS -Implement the cReadModelTable to read XLSX data model files"
+        },
+        {
+          "Name": "cReadModelXML",
+          "Description": "%cReadModelXML implements the cReadModelStruct to read XML data model files."
+        }
+      ]
+    },
+    {
+      "Name": "dmc",
+      "Description": "Data Model Classes.",
+      "Files": [
+        {
+          "Name": "cExergyData",
+          "Description": "Get and validates the exergy data values for a state of the plant"
+        },
+        {
+          "Name": "cFormatData",
+          "Description": "Get the format configuration data used to display tables of results."
+        },
+        {
+          "Name": "cProductiveStructure",
+          "Description": "Build the productive structure of a plant."
+        },
+        {
+          "Name": "cResourceData",
+          "Description": "Gets and validates the external cost resources of a productive structure."
+        },
+        {
+          "Name": "cResultTableBuilder",
+          "Description": "Build the cResultInfo objects for the calculation layer"
+        },
+        {
+          "Name": "cWasteData",
+          "Description": "Get the waste data information."
+        }
+      ]
+    },
+    {
+      "Name": "ric",
+      "Description": "Result Info Classes.",
+      "Files": [
+        {
+          "Name": "cDataModel",
+          "Description": "Create the data model object."
+        },
+        {
+          "Name": "cModelData",
+          "Description": "Container class for the Data Model structure."
+        },
+        {
+          "Name": "cModelResults",
+          "Description": "Class container for the model results."
+        },
+        {
+          "Name": "cResultId",
+          "Description": "Abstract class to manage the result identification."
+        },
+        {
+          "Name": "cResultInfo",
+          "Description": "Class to manage the result information and tables."
+        },
+        {
+          "Name": "cResultSet",
+          "Description": "Abstract class to manage the result sets."
+        },
+        {
+          "Name": "cThermoeconomicModel",
+          "Description": "Create the thermoeconomic model results object."
+        }
+      ]
+    },
+    {
+      "Name": "tac",
+      "Description": "Thermoeconomic Analysis Classes.",
+      "Files": [
+        {
+          "Name": "cDiagnosis",
+          "Description": "Thermoeconomic diagnosis of a plant state change."
+        },
+        {
+          "Name": "cDigraphAnalysis",
+          "Description": "Analyze a directed graph (digraph)."
+        },
+        {
+          "Name": "cExergyCost",
+          "Description": "Calculate the exergy cost of flows and processes."
+        },
+        {
+          "Name": "cExergyModel",
+          "Description": "Build the Flow-Process exergy model."
+        },
+        {
+          "Name": "cProductiveDiagram",
+          "Description": "Build the productive diagrams adjacency tables"
+        },
+        {
+          "Name": "cSummaryOptions",
+          "Description": "Determine the summary options depending on the data model"
+        },
+        {
+          "Name": "cSummaryResults",
+          "Description": "Get the summary results tables of the model."
+        },
+        {
+          "Name": "cSummaryTable",
+          "Description": "Store the properties and values of each summary table."
+        },
+        {
+          "Name": "cWasteAnalysis",
+          "Description": "Analyze the potential cost saving of waste recycling."
+        }
+      ]
+    },
+    {
+      "Name": "rtc",
+      "Description": "Result Tables Classes.",
+      "Files": [
+        {
+          "Name": "cTable",
+          "Description": "Abstract class for tabular data."
+        },
+        {
+          "Name": "cTableCell",
+          "Description": "Implements cTableResult interface to store results as cell arrays."
+        },
+        {
+          "Name": "cTableData",
+          "Description": "Implement cTable to store data model tables."
+        },
+        {
+          "Name": "cTableIndex",
+          "Description": "Create a cTable with the index table of a cResultInfo."
+        },
+        {
+          "Name": "cTableMatrix",
+          "Description": "Implements cTableResult interface to store matrix results."
+        },
+        {
+          "Name": "cTableResult",
+          "Description": "Abstrat class to store results into a cTable."
+        },
+        {
+          "Name": "cTablesDefinition",
+          "Description": "Get the results tables properties."
+        }
+      ]
+    },
+    {
+      "Name": "gc",
+      "Description": "Graph Classes.",
+      "Files": [
+        {
+          "Name": "cDigraph",
+          "Description": "Plot the productive structure digraphs."
+        },
+        {
+          "Name": "cGraphCost",
+          "Description": "Plot the Irreversibility-cost graph."
+        },
+        {
+          "Name": "cGraphCostRSC",
+          "Description": "Plot the cost distribution due to resources graph."
+        },
+        {
+          "Name": "cGraphDiagnosis",
+          "Description": "Plot the diagnosis graphs."
+        },
+        {
+          "Name": "cGraphDiagramFP",
+          "Description": "Plot the FP Diagram."
+        },
+        {
+          "Name": "cGraphRecycling",
+          "Description": "Plot the waste recycling cost graphs."
+        },
+        {
+          "Name": "cGraphResults",
+          "Description": "Abstract class used to show graphs in interactive mode and apps."
+        },
+        {
+          "Name": "cGraphSummary",
+          "Description": "Plot the summary graphs for selecting flows or processes."
+        },
+        {
+          "Name": "cGraphWaste",
+          "Description": "Plot the Waste Allocation Graph."
+        }
+      ]
+    },
+    {
+      "Name": "tcc",
+      "Description": "Table Conversion Classes.",
+      "Files": [
+        {
+          "Name": "cBuildHTML",
+          "Description": "Convert a cTable object into HTML files."
+        },
+        {
+          "Name": "cBuildLaTeX",
+          "Description": "Convert cTable object into a LaTeX code table."
+        },
+        {
+          "Name": "cBuildMarkdown",
+          "Description": "Convert cTable object into a Markdown code table."
+        },
+        {
+          "Name": "cViewTable",
+          "Description": "Show a result table using a GUI (uitable)"
+        }
+      ]
+    },
+    {
+      "Name": "dsc",
+      "Description": "Data Structure Classes.",
+      "Files": [
+        {
+          "Name": "cDataset",
+          "Description": "Class container to store objects and access them by key."
+        },
+        {
+          "Name": "cDiagramFP",
+          "Description": "Build the Diagram FP adjacency tables."
+        },
+        {
+          "Name": "cDictionary",
+          "Description": "Class container to store and access data by key or index."
+        },
+        {
+          "Name": "cQueue",
+          "Description": "Simple FIFO queue based on a dinamic cell array"
+        },
+        {
+          "Name": "cSparseRow",
+          "Description": "Store and operate with matrices that contain few non-null rows."
+        }
+      ]
+    }
+  ],
+  "ThermoeconomicModel": [
+    {
+      "Name": "spm",
+      "Description": "Set methods",
+      "Files": [
+        {
+          "Name": "setState     ",
+          "Description": "Set State value"
+        },
+        {
+          "Name": "setReferenceState  ",
+          "Description": "Set Reference State value"
+        },
+        {
+          "Name": "setResourceSample  ",
+          "Description": "Set Resource Sample value"
+        },
+        {
+          "Name": "setCostTables",
+          "Description": "Set CostTables parameter"
+        },
+        {
+          "Name": "setDiagnosisMethod ",
+          "Description": "Set DiagnosisMethod parameter"
+        },
+        {
+          "Name": "setActiveWaste     ",
+          "Description": "Set Active Waste value"
+        },
+        {
+          "Name": "setRecycling ",
+          "Description": "Activate Recycling Analysis"
+        },
+        {
+          "Name": "setSummary   ",
+          "Description": "Activate Summary Results"
+        },
+        {
+          "Name": "setDebug     ",
+          "Description": "Set Debug mode"
+        },
+        {
+          "Name": "toggleDebug  ",
+          "Description": "Toggle Debug mode"
+        }
+      ]
+    },
+    {
+      "Name": "rim",
+      "Description": "Results Info methods",
+      "Files": [
+        {
+          "Name": "productiveStructure    ",
+          "Description": "Get Productive Structure cResultInfo"
+        },
+        {
+          "Name": "exergyAnalysis   ",
+          "Description": "Get ExergyAnalysis cResultInfo"
+        },
+        {
+          "Name": "thermoeconomicAnalysis ",
+          "Description": "Get Thermoeconomic Analysis cResultInfo"
+        },
+        {
+          "Name": "thermoeconomicDiagnosis",
+          "Description": "Get Thermoeconomic Diagnosis cResultInfo"
+        },
+        {
+          "Name": "wasteAnalysis    ",
+          "Description": "Get Waste Analysis cResultInfo"
+        },
+        {
+          "Name": "summaryDiagnosis ",
+          "Description": "Get Diagnosis Summary"
+        },
+        {
+          "Name": "productiveDiagram",
+          "Description": "Get Productive Diagrams cResultInfo"
+        },
+        {
+          "Name": "diagramFP  ",
+          "Description": "Get Diagram FP cResultInfo"
+        },
+        {
+          "Name": "summaryResults   ",
+          "Description": "Get Summary cResultInfo"
+        },
+        {
+          "Name": "dataInfo   ",
+          "Description": "Get Data Model cResultInfo"
+        },
+        {
+          "Name": "getResultInfo    ",
+          "Description": "Get cResultInfo with optional parameters"
+        },
+        {
+          "Name": "showResultInfo   ",
+          "Description": "Get a structure with all available cResultInfo"
+        }
+      ]
+    },
+    {
+      "Name": "mim",
+      "Description": "Model Info methods",
+      "Files": [
+        {
+          "Name": "showProperties ",
+          "Description": "Show model properties"
+        },
+        {
+          "Name": "isResourceCost ",
+          "Description": "Check if model has Resource Cost Data"
+        },
+        {
+          "Name": "isDirectCost   ",
+          "Description": "Check if model has Direct Cost Tables"
+        },
+        {
+          "Name": "isGeneralCost  ",
+          "Description": "Check if model compute Generalized Costs"
+        },
+        {
+          "Name": "isDiagnosis    ",
+          "Description": "Check if model compute Diagnosis"
+        },
+        {
+          "Name": "isWaste  ",
+          "Description": "Check if model has waste"
+        }
+      ]
+    },
+    {
+      "Name": "sim",
+      "Description": "Summary Info methods",
+      "Files": [
+        {
+          "Name": "summaryOptions ",
+          "Description": "List of available summary Options"
+        },
+        {
+          "Name": "isSummaryEnable",
+          "Description": "Check if Summary Results are enabled"
+        },
+        {
+          "Name": "isSummaryActive",
+          "Description": "Check if Summary is activated"
+        },
+        {
+          "Name": "isStateSummary ",
+          "Description": "Check if States Summary is available"
+        },
+        {
+          "Name": "isSampleSummary",
+          "Description": "Check if Samples Summary is available"
+        }
+      ]
+    },
+    {
+      "Name": "tim",
+      "Description": "Tables Info methods",
+      "Files": [
+        {
+          "Name": "getTablesDirectory ",
+          "Description": "Get the tables directory"
+        },
+        {
+          "Name": "getTableInfo ",
+          "Description": "Get Information of a table"
+        }
+      ]
+    },
+    {
+      "Name": "rsm",
+      "Description": "ResultSet methods",
+      "Files": [
+        {
+          "Name": "ListOfTables   ",
+          "Description": "Get the list of available tables"
+        },
+        {
+          "Name": "getTable ",
+          "Description": "Get a table by name"
+        },
+        {
+          "Name": "getTableIndex  ",
+          "Description": "Get the table index"
+        },
+        {
+          "Name": "saveTable",
+          "Description": "Save the results in a external file"
+        },
+        {
+          "Name": "exportTable    ",
+          "Description": "Export a table to another format"
+        },
+        {
+          "Name": "printResults   ",
+          "Description": "Print results on console"
+        },
+        {
+          "Name": "showResults    ",
+          "Description": "Show results in different interfaces"
+        },
+        {
+          "Name": "showGraph",
+          "Description": "Show the graph associated to a table"
+        },
+        {
+          "Name": "showDataModel  ",
+          "Description": "Show the data model tables"
+        },
+        {
+          "Name": "showSummary    ",
+          "Description": "Show the summary tables"
+        },
+        {
+          "Name": "showTablesDirectory  ",
+          "Description": "Show the tables directory"
+        },
+        {
+          "Name": "showTableIndex ",
+          "Description": "Show the table index in different interfaces"
+        },
+        {
+          "Name": "exportResults  ",
+          "Description": "Export all the result Tables to another format"
+        },
+        {
+          "Name": "saveResults    ",
+          "Description": "Save all the result tables in a external file"
+        },
+        {
+          "Name": "saveDataModel  ",
+          "Description": "Save the data model tables into a file"
+        },
+        {
+          "Name": "saveDiagramFP  ",
+          "Description": "Save the Diagram FP table into a file"
+        },
+        {
+          "Name": "saveProductiveDiagram",
+          "Description": "Save the Productive Diagram tables into a file"
+        },
+        {
+          "Name": "saveSummary    ",
+          "Description": "Save Summary results into a file"
+        }
+      ]
+    },
+    {
+      "Name": "wam",
+      "Description": "Waste Methods",
+      "Files": [
+        {
+          "Name": "wasteAllocation ",
+          "Description": "Show waste allocation info"
+        },
+        {
+          "Name": "setWasteType    ",
+          "Description": "Set the type of a waste"
+        },
+        {
+          "Name": "setWasteValues  ",
+          "Description": "Set the allocation values of a waste"
+        },
+        {
+          "Name": "setWasteRecycled",
+          "Description": "Set the recycled ratio of a waste"
+        }
+      ]
+    },
+    {
+      "Name": "rcm",
+      "Description": "Resources Methods",
+      "Files": [
+        {
+          "Name": "setFlowResource  ",
+          "Description": "Set the resource flows values"
+        },
+        {
+          "Name": "setProcessResource",
+          "Description": "Set the processes resource values"
+        },
+        {
+          "Name": "addResourceData",
+          "Description": "Add a new resource sample"
+        }
+      ]
+    },
+    {
+      "Name": "edm",
+      "Description": "Exergy Data Methods",
+      "Files": [
+        {
+          "Name": "getExergyData",
+          "Description": "Get the exergy data of a state"
+        },
+        {
+          "Name": "setExergyData",
+          "Description": "Set the exergy values of a state"
+        },
+        {
+          "Name": "addExergyData",
+          "Description": "Add a new exergy state"
+        }
+      ]
+    }
+  ]
+}

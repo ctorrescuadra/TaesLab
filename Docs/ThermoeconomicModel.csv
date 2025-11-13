@@ -1,0 +1,72 @@
+spm,Set methods,1
+rim,Results Info methods,2
+mim,Model Info methods,3
+sim,Summary Info methods,4
+tim,Tables Info methods,5
+rsm,ResultSet methods,6
+wam,Waste Methods,7
+rcm,Resources Methods,8
+edm,Exergy Data Methods,9
+setState     ,Set State value,1
+setReferenceState  ,Set Reference State value,1
+setResourceSample  ,Set Resource Sample value,1
+setCostTables,Set CostTables parameter,1
+setDiagnosisMethod ,Set DiagnosisMethod parameter,1
+setActiveWaste     ,Set Active Waste value,1
+setRecycling ,Activate Recycling Analysis,1
+setSummary   ,Activate Summary Results,1
+setDebug     ,Set Debug mode,1
+toggleDebug  ,Toggle Debug mode,1
+productiveStructure    ,Get Productive Structure cResultInfo,2
+exergyAnalysis   ,Get ExergyAnalysis cResultInfo,2
+thermoeconomicAnalysis ,Get Thermoeconomic Analysis cResultInfo,2 
+thermoeconomicDiagnosis,Get Thermoeconomic Diagnosis cResultInfo,2
+wasteAnalysis    ,Get Waste Analysis cResultInfo,2  
+summaryDiagnosis ,Get Diagnosis Summary,2
+productiveDiagram,Get Productive Diagrams cResultInfo,2
+diagramFP  ,Get Diagram FP cResultInfo,2
+summaryResults   ,Get Summary cResultInfo,2
+dataInfo   ,Get Data Model cResultInfo,2
+getResultInfo    ,Get cResultInfo with optional parameters,2
+showResultInfo   ,Get a structure with all available cResultInfo,2
+showProperties ,Show model properties,3
+isResourceCost ,Check if model has Resource Cost Data,3
+isDirectCost   ,Check if model has Direct Cost Tables,3
+isGeneralCost  ,Check if model compute Generalized Costs,3
+isDiagnosis    ,Check if model compute Diagnosis,3
+isWaste  ,Check if model has waste,3  
+summaryOptions ,List of available summary Options,4
+isSummaryEnable,Check if Summary Results are enabled,4
+isSummaryActive,Check if Summary is activated,4
+isStateSummary ,Check if States Summary is available,4
+isSampleSummary,Check if Samples Summary is available,4   
+getTablesDirectory ,Get the tables directory,5
+getTableInfo ,Get Information of a table,5   
+ListOfTables   ,Get the list of available tables,6
+getTable ,Get a table by name,6
+getTableIndex  ,Get the table index,6
+saveTable,Save the results in a external file,6
+exportTable    ,Export a table to another format,6
+printResults   ,Print results on console,6
+showResults    ,Show results in different interfaces,6
+showGraph,Show the graph associated to a table,6
+showDataModel  ,Show the data model tables,6
+showSummary    ,Show the summary tables,6
+showTablesDirectory  ,Show the tables directory,6
+showTableIndex ,Show the table index in different interfaces,6
+exportResults  ,Export all the result Tables to another format,6
+saveResults    ,Save all the result tables in a external file,6
+saveDataModel  ,Save the data model tables into a file,6
+saveDiagramFP  ,Save the Diagram FP table into a file,6
+saveProductiveDiagram,Save the Productive Diagram tables into a file,6
+saveSummary    ,Save Summary results into a file,6   
+wasteAllocation ,Show waste allocation info,7
+setWasteType    ,Set the type of a waste,7
+setWasteValues  ,Set the allocation values of a waste,7
+setWasteRecycled,Set the recycled ratio of a waste,7
+setFlowResource  ,Set the resource flows values,8
+setProcessResource,Set the processes resource values,8
+addResourceData,Add a new resource sample,8 
+getExergyData,Get the exergy data of a state,9
+setExergyData,Set the exergy values of a state,9
+addExergyData,Add a new exergy state,9
