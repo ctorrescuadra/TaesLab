@@ -9,9 +9,10 @@ function res=importJSON(log,filename)
 %     res - structure containind the data of json file
 %
     try
-		text=fileread(filename);
+	    text=fileread(filename);
 		res=jsondecode(text);
 	catch err
         log.messageLog(cType.ERROR,err.message);
         log.messageLog(cType.ERROR,cMessages.FileNotRead,filename);
     end
+end

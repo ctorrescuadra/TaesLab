@@ -171,7 +171,7 @@ classdef  cTaesLab < handle
         %
 			persistent counter;
 			if isempty(counter)
-				counter=uint64(1);
+				counter=uint64(randi(intmax));
 			else
 				counter=counter+1;
 			end

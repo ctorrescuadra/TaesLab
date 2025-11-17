@@ -83,7 +83,7 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function setStudyCase(obj,info)
-        %setStudyCase. Set state and sample values. Internal function
+        %setStudyCase - Set state and sample values. Internal function
         %   Syntax:
         %     obj.setStudyCase(filename)
         %   Input Arguments:
@@ -98,7 +98,7 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function setDescription(obj,descr)
-        %setDescription. Set Table Header or Description.
+        %setDescription - Set Table Header or Description.
         %   Internal Use. Permite to reuse a table format with other names
         %   Syntax:
         %     obj.setTableName(filename)
