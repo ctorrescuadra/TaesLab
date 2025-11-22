@@ -12,19 +12,19 @@
 				"fileMatch": [
 					"*_model.json"
 				],
-				"url": "./Examples/Templates/plant_model.json"
+				"url": "./schemas/plant_model.json"
 			},
 			{
 				"fileMatch": [
 					"printformat.json"
 				],
-				"url": "./Examples/Templates/printformat_schema.json"
+				"url": "./schemas/printformat_schema.json"
 			},
 			{
 				"fileMatch": [
-					"datamodel_config.json"
+					"Contents.json"
 				],
-				"url": "./Examples/Templates/datamodel_schema.json"
+				"url": "./schemas/contents_schema.json"
 			}
 		],
 		"editor.indentSize": "tabSize",

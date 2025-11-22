@@ -58,13 +58,10 @@ classdef cTablesDefinition < cMessageLogger
 			% load default configuration filename			
 			path=fileparts(mfilename('fullpath'));
 			cfgfile=fullfile(path,cType.CFGFILE);
-			try		
-				config=jsondecode(fileread(cfgfile));
-			catch err
-				obj.messageLog(cType.ERROR,err.message);
-				obj.messageLog(cType.ERROR,cMessages.InvalidConfigFile,cfgfile);
-				return
-			end
+            config=importJSON(obj,cfgfile);
+            if isempty(config)
+                return
+            end
             % set the object properties
             obj.cfgDataModel=config.datamodel;
             obj.cfgTables=config.tables;

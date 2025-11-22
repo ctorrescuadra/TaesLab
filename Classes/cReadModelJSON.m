@@ -19,13 +19,9 @@ classdef (Sealed) cReadModelJSON < cReadModelStruct
         %     obj - cReadModelJSON object
         % 
 			% Read configuration file
-            try
-				text=fileread(cfgfile);
-				sd=jsondecode(text);
-		    catch err
-                obj.messageLog(cType.ERROR,err.message);
-                obj.messageLog(cType.ERROR,cMessages.FileNotRead,cfgfile);
-                return
+            sd=importJSON(obj,cfgfile);
+            if isempty(sd)
+                return;
             end
             % Build Data Model
             obj.setModelProperties(cfgfile);

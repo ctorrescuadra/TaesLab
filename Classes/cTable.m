@@ -226,8 +226,8 @@ classdef (Abstract) cTable < cMessageLogger
             res=obj.wcol;
         end
         
-        function res = getStructData(obj)
-        %getTable - Get table data as struct array
+        function res=getStructData(obj)
+        %getStructData - Get table data as struct array
         %   Syntax:
         %     res = obj.getStructData
         %   Output Arguments:
@@ -239,7 +239,7 @@ classdef (Abstract) cTable < cMessageLogger
         end
     
         function res=getMatlabTable(obj)
-        %getMatlabTable - Get Table as Matlab table
+        %getMatlabTable - Get cTable as Matlab table
         %   Syntax:
         %     res = obj.getMatlabTable
         %   Output Arguments:
@@ -512,17 +512,8 @@ classdef (Abstract) cTable < cMessageLogger
         %   Output:
         %     log: cMessageLogger class containing status and messages
         %
-            log=cMessageLogger(); 
             data=obj.getStructTable;
-            try
-                text=jsonencode(data,'PrettyPrint',true);
-                fid=fopen(filename,'wt');
-                fwrite(fid,text);
-                fclose(fid);
-            catch err
-                log.messageLog(cType.ERROR,err.message);
-                log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
-            end
+            log = exportJSON(data,filename);
         end
 
         function log=exportXML(obj,filename)

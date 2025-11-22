@@ -1,653 +1,659 @@
 {
-  "ProductiveStructure": {
-    "flows": [
-      {
-        "key": "NG",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B1",
-        "type": "RESOURCE"
-      },
-      {
-        "key": "B2",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B3",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B4",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B5",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B6",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "B7",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "WC",
-        "type": "INTERNAL"
-      },
-      {
-        "key": "WN",
-        "type": "OUTPUT"
-      },
-      {
-        "key": "QV",
-        "type": "OUTPUT"
-      },
-      {
-        "key": "QG",
-        "type": "WASTE"
-      }
-    ],
-    "processes": [
-      {
-        "key": "COMB",
-        "type": "PRODUCTIVE",
-        "fuel": "NG+B3",
-        "product": "B4",
-        "description": "Combustor"
-      },
-      {
-        "key": "CMP",
-        "type": "PRODUCTIVE",
-        "fuel": "WC",
-        "product": "B2-B1",
-        "description": "Compressor"
-      },
-      {
-        "key": "TRB",
-        "type": "PRODUCTIVE",
-        "fuel": "B4-B5",
-        "product": "WC+WN",
-        "description": "Turbine"
-      },
-      {
-        "key": "APH",
-        "type": "PRODUCTIVE",
-        "fuel": "B5-B6",
-        "product": "B3-B2",
-        "description": "Preheater"
-      },
-      {
-        "key": "HRSG",
-        "type": "PRODUCTIVE",
-        "fuel": "B6-B7",
-        "product": "QV",
-        "description": "HRSG"
-      },
-      {
-        "key": "STCK",
-        "type": "DISSIPATIVE",
-        "fuel": "B7",
-        "product": "QG",
-        "description": "Stack"
-      }
-    ]
-  },
-  "ExergyStates": {
-    "States": [
-      {
-        "stateId": "REF",
-        "exergy": [
-          {
-            "key": "NG",
-            "value": 72.465
-          },
-          {
-            "key": "B1",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 28.651
-          },
-          {
-            "key": "B3",
-            "value": 50.339
-          },
-          {
-            "key": "B4",
-            "value": 102.53
-          },
-          {
-            "key": "B5",
-            "value": 38.81
-          },
-          {
-            "key": "B6",
-            "value": 14.784
-          },
-          {
-            "key": "B7",
-            "value": 2.122
-          },
-          {
-            "key": "WC",
-            "value": 31.105
-          },
-          {
-            "key": "WN",
-            "value": 30
-          },
-          {
-            "key": "QV",
-            "value": 9.30257
-          },
-          {
-            "key": "QG",
-            "value": 2.122
-          }
+    "ProductiveStructure": {
+        "flows": [
+            {
+                "key": "NG",
+                "type": "RESOURCE"
+            },
+            {
+                "key": "B1",
+                "type": "RESOURCE"
+            },
+            {
+                "key": "B2",
+                "type": "INTERNAL"
+            },
+            {
+                "key": "B3",
+                "type": "INTERNAL"
+            },
+            {
+                "key": "B4",
+                "type": "INTERNAL"
+            },
+            {
+                "key": "B5",
+                "type": "INTERNAL"
+            },
+            {
+                "key": "B6",
+                "type": "INTERNAL"
+            },
+            {
+                "key": "B7",
+                "type": "INTERNAL"
+            },
+            {
+                "key": "WC",
+                "type": "INTERNAL"
+            },
+            {
+                "key": "WN",
+                "type": "OUTPUT"
+            },
+            {
+                "key": "QV",
+                "type": "OUTPUT"
+            },
+            {
+                "key": "QG",
+                "type": "WASTE"
+            }
+        ],
+        "processes": [
+            {
+                "key": "COMB",
+                "type": "PRODUCTIVE",
+                "fuel": "NG+B3",
+                "product": "B4",
+                "description": "Combustor"
+            },
+            {
+                "key": "CMP",
+                "type": "PRODUCTIVE",
+                "fuel": "WC",
+                "product": "B2-B1",
+                "description": "Compressor"
+            },
+            {
+                "key": "TRB",
+                "type": "PRODUCTIVE",
+                "fuel": "B4-B5",
+                "product": "WC+WN",
+                "description": "Turbine"
+            },
+            {
+                "key": "APH",
+                "type": "PRODUCTIVE",
+                "fuel": "B5-B6",
+                "product": "B3-B2",
+                "description": "Preheater"
+            },
+            {
+                "key": "HRSG",
+                "type": "PRODUCTIVE",
+                "fuel": "B6-B7",
+                "product": "QV",
+                "description": "HRSG"
+            },
+            {
+                "key": "STCK",
+                "type": "DISSIPATIVE",
+                "fuel": "B7",
+                "product": "QG",
+                "description": "Stack"
+            }
         ]
-      },
-      {
-        "stateId": "T1180",
-        "exergy": [
-          {
-            "key": "NG",
-            "value": 73.327
-          },
-          {
-            "key": "B1",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 29.507
-          },
-          {
-            "key": "B3",
-            "value": 50.896
-          },
-          {
-            "key": "B4",
-            "value": 103.462
-          },
-          {
-            "key": "B5",
-            "value": 38.735
-          },
-          {
-            "key": "B6",
-            "value": 15.021
-          },
-          {
-            "key": "B7",
-            "value": 2.23
-          },
-          {
-            "key": "WC",
-            "value": 32.033
-          },
-          {
-            "key": "WN",
-            "value": 30
-          },
-          {
-            "key": "QV",
-            "value": 9.4033600000000011
-          },
-          {
-            "key": "QG",
-            "value": 2.23
-          }
+    },
+    "ExergyStates": {
+        "States": [
+            {
+                "stateId": "REF",
+                "exergy": [
+                    {
+                        "key": "NG",
+                        "value": 72.465
+                    },
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 28.651
+                    },
+                    {
+                        "key": "B3",
+                        "value": 50.339
+                    },
+                    {
+                        "key": "B4",
+                        "value": 102.53
+                    },
+                    {
+                        "key": "B5",
+                        "value": 38.81
+                    },
+                    {
+                        "key": "B6",
+                        "value": 14.784
+                    },
+                    {
+                        "key": "B7",
+                        "value": 2.122
+                    },
+                    {
+                        "key": "WC",
+                        "value": 31.105
+                    },
+                    {
+                        "key": "WN",
+                        "value": 30
+                    },
+                    {
+                        "key": "QV",
+                        "value": 9.30257
+                    },
+                    {
+                        "key": "QG",
+                        "value": 2.122
+                    }
+                ]
+            },
+            {
+                "stateId": "T1180",
+                "exergy": [
+                    {
+                        "key": "NG",
+                        "value": 73.327
+                    },
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 29.507
+                    },
+                    {
+                        "key": "B3",
+                        "value": 50.896
+                    },
+                    {
+                        "key": "B4",
+                        "value": 103.462
+                    },
+                    {
+                        "key": "B5",
+                        "value": 38.735
+                    },
+                    {
+                        "key": "B6",
+                        "value": 15.021
+                    },
+                    {
+                        "key": "B7",
+                        "value": 2.23
+                    },
+                    {
+                        "key": "WC",
+                        "value": 32.033
+                    },
+                    {
+                        "key": "WN",
+                        "value": 30
+                    },
+                    {
+                        "key": "QV",
+                        "value": 9.4033600000000011
+                    },
+                    {
+                        "key": "QG",
+                        "value": 2.23
+                    }
+                ]
+            },
+            {
+                "stateId": "ETG87",
+                "exergy": [
+                    {
+                        "key": "NG",
+                        "value": 73.6
+                    },
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 29.337
+                    },
+                    {
+                        "key": "B3",
+                        "value": 51.926
+                    },
+                    {
+                        "key": "B4",
+                        "value": 104.971
+                    },
+                    {
+                        "key": "B5",
+                        "value": 40.23
+                    },
+                    {
+                        "key": "B6",
+                        "value": 15.213
+                    },
+                    {
+                        "key": "B7",
+                        "value": 2.156
+                    },
+                    {
+                        "key": "WC",
+                        "value": 31.849
+                    },
+                    {
+                        "key": "WN",
+                        "value": 30
+                    },
+                    {
+                        "key": "QV",
+                        "value": 9.5909699999999987
+                    },
+                    {
+                        "key": "QG",
+                        "value": 2.156
+                    }
+                ]
+            },
+            {
+                "stateId": "ECMP84",
+                "exergy": [
+                    {
+                        "key": "NG",
+                        "value": 73.297
+                    },
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 29.196
+                    },
+                    {
+                        "key": "B3",
+                        "value": 51.018
+                    },
+                    {
+                        "key": "B4",
+                        "value": 103.813
+                    },
+                    {
+                        "key": "B5",
+                        "value": 39.295
+                    },
+                    {
+                        "key": "B6",
+                        "value": 15.137
+                    },
+                    {
+                        "key": "B7",
+                        "value": 2.112
+                    },
+                    {
+                        "key": "WC",
+                        "value": 31.869
+                    },
+                    {
+                        "key": "WN",
+                        "value": 30
+                    },
+                    {
+                        "key": "QV",
+                        "value": 9.5640200000000011
+                    },
+                    {
+                        "key": "QG",
+                        "value": 2.112
+                    }
+                ]
+            },
+            {
+                "stateId": "RP8",
+                "exergy": [
+                    {
+                        "key": "NG",
+                        "value": 72.283
+                    },
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 27.863
+                    },
+                    {
+                        "key": "B3",
+                        "value": 51.048
+                    },
+                    {
+                        "key": "B4",
+                        "value": 103.163
+                    },
+                    {
+                        "key": "B5",
+                        "value": 40.324
+                    },
+                    {
+                        "key": "B6",
+                        "value": 14.597
+                    },
+                    {
+                        "key": "B7",
+                        "value": 2.228
+                    },
+                    {
+                        "key": "WC",
+                        "value": 30.295
+                    },
+                    {
+                        "key": "WN",
+                        "value": 30
+                    },
+                    {
+                        "key": "QV",
+                        "value": 9.097
+                    },
+                    {
+                        "key": "QG",
+                        "value": 2.228
+                    }
+                ]
+            },
+            {
+                "stateId": "PINCH15",
+                "exergy": [
+                    {
+                        "key": "NG",
+                        "value": 72.465
+                    },
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 28.651
+                    },
+                    {
+                        "key": "B3",
+                        "value": 50.339
+                    },
+                    {
+                        "key": "B4",
+                        "value": 102.53
+                    },
+                    {
+                        "key": "B5",
+                        "value": 38.81
+                    },
+                    {
+                        "key": "B6",
+                        "value": 14.784
+                    },
+                    {
+                        "key": "B7",
+                        "value": 2.353
+                    },
+                    {
+                        "key": "WC",
+                        "value": 31.105
+                    },
+                    {
+                        "key": "WN",
+                        "value": 30
+                    },
+                    {
+                        "key": "QV",
+                        "value": 9.038120000000001
+                    },
+                    {
+                        "key": "QG",
+                        "value": 2.353
+                    }
+                ]
+            },
+            {
+                "stateId": "CGAMR",
+                "exergy": [
+                    {
+                        "key": "NG",
+                        "value": 72.465
+                    },
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 28.651
+                    },
+                    {
+                        "key": "B3",
+                        "value": 50.339
+                    },
+                    {
+                        "key": "B4",
+                        "value": 102.53
+                    },
+                    {
+                        "key": "B5",
+                        "value": 38.81
+                    },
+                    {
+                        "key": "B6",
+                        "value": 14.784
+                    },
+                    {
+                        "key": "B7",
+                        "value": 14.784
+                    },
+                    {
+                        "key": "WC",
+                        "value": 31.105
+                    },
+                    {
+                        "key": "WN",
+                        "value": 30
+                    },
+                    {
+                        "key": "QV",
+                        "value": 0
+                    },
+                    {
+                        "key": "QG",
+                        "value": 14.784
+                    }
+                ]
+            },
+            {
+                "stateId": "noAPH",
+                "exergy": [
+                    {
+                        "key": "NG",
+                        "value": 109.913
+                    },
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 28.228
+                    },
+                    {
+                        "key": "B3",
+                        "value": 28.228
+                    },
+                    {
+                        "key": "B4",
+                        "value": 101.759
+                    },
+                    {
+                        "key": "B5",
+                        "value": 38.518
+                    },
+                    {
+                        "key": "B6",
+                        "value": 38.518
+                    },
+                    {
+                        "key": "B7",
+                        "value": 1.668
+                    },
+                    {
+                        "key": "WC",
+                        "value": 30.645
+                    },
+                    {
+                        "key": "WN",
+                        "value": 30
+                    },
+                    {
+                        "key": "QV",
+                        "value": 22.213
+                    },
+                    {
+                        "key": "QG",
+                        "value": 1.668
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "stateId": "ETG87",
-        "exergy": [
-          {
-            "key": "NG",
-            "value": 73.6
-          },
-          {
-            "key": "B1",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 29.337
-          },
-          {
-            "key": "B3",
-            "value": 51.926
-          },
-          {
-            "key": "B4",
-            "value": 104.971
-          },
-          {
-            "key": "B5",
-            "value": 40.23
-          },
-          {
-            "key": "B6",
-            "value": 15.213
-          },
-          {
-            "key": "B7",
-            "value": 2.156
-          },
-          {
-            "key": "WC",
-            "value": 31.849
-          },
-          {
-            "key": "WN",
-            "value": 30
-          },
-          {
-            "key": "QV",
-            "value": 9.5909699999999987
-          },
-          {
-            "key": "QG",
-            "value": 2.156
-          }
+    },
+    "Format": {
+        "definitions": [
+            {
+                "key": "EXERGY",
+                "width": 11,
+                "precision": 3,
+                "unit": "(MW)"
+            },
+            {
+                "key": "EXERGY_COST",
+                "width": 11,
+                "precision": 3,
+                "unit": "(MW)"
+            },
+            {
+                "key": "EXERGY_UNIT_COST",
+                "width": 12,
+                "precision": 4,
+                "unit": "(J/J)"
+            },
+            {
+                "key": "GENERALIZED_COST",
+                "width": 12,
+                "precision": 2,
+                "unit": "($/h)"
+            },
+            {
+                "key": "GENERALIZED_UNIT_COST",
+                "width": 11,
+                "precision": 3,
+                "unit": "($/MWh)"
+            },
+            {
+                "key": "DIAGNOSIS",
+                "width": 11,
+                "precision": 4,
+                "unit": "(MW)"
+            }
         ]
-      },
-      {
-        "stateId": "ECMP84",
-        "exergy": [
-          {
-            "key": "NG",
-            "value": 73.297
-          },
-          {
-            "key": "B1",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 29.196
-          },
-          {
-            "key": "B3",
-            "value": 51.018
-          },
-          {
-            "key": "B4",
-            "value": 103.813
-          },
-          {
-            "key": "B5",
-            "value": 39.295
-          },
-          {
-            "key": "B6",
-            "value": 15.137
-          },
-          {
-            "key": "B7",
-            "value": 2.112
-          },
-          {
-            "key": "WC",
-            "value": 31.869
-          },
-          {
-            "key": "WN",
-            "value": 30
-          },
-          {
-            "key": "QV",
-            "value": 9.5640200000000011
-          },
-          {
-            "key": "QG",
-            "value": 2.112
-          }
+    },
+    "WasteDefinition": {
+        "wastes": [
+            {
+                "flow": "QG",
+                "type": "MANUAL",
+                "recycle": 0,
+                "values": [
+                    {
+                        "process": "COMB",
+                        "value": 0.768
+                    },
+                    {
+                        "process": "CMP",
+                        "value": 0.093
+                    },
+                    {
+                        "process": "TRB",
+                        "value": 0.05
+                    },
+                    {
+                        "process": "APH",
+                        "value": 0.089
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "stateId": "RP8",
-        "exergy": [
-          {
-            "key": "NG",
-            "value": 72.283
-          },
-          {
-            "key": "B1",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 27.863
-          },
-          {
-            "key": "B3",
-            "value": 51.048
-          },
-          {
-            "key": "B4",
-            "value": 103.163
-          },
-          {
-            "key": "B5",
-            "value": 40.324
-          },
-          {
-            "key": "B6",
-            "value": 14.597
-          },
-          {
-            "key": "B7",
-            "value": 2.228
-          },
-          {
-            "key": "WC",
-            "value": 30.295
-          },
-          {
-            "key": "WN",
-            "value": 30
-          },
-          {
-            "key": "QV",
-            "value": 9.097
-          },
-          {
-            "key": "QG",
-            "value": 2.228
-          }
+    },
+    "ResourcesCost": {
+        "Samples": [
+            {
+                "sampleId": "Base",
+                "flows": [
+                    {
+                        "key": "NG",
+                        "value": 30
+                    }
+                ],
+                "processes": [
+                    {
+                        "key": "COMB",
+                        "value": 3.6
+                    },
+                    {
+                        "key": "CMP",
+                        "value": 32.5
+                    },
+                    {
+                        "key": "TRB",
+                        "value": 46
+                    },
+                    {
+                        "key": "APH",
+                        "value": 20
+                    },
+                    {
+                        "key": "HRSG",
+                        "value": 35
+                    }
+                ]
+            },
+            {
+                "sampleId": "CGAMR",
+                "flows": [
+                    {
+                        "key": "NG",
+                        "value": 30
+                    }
+                ],
+                "processes": [
+                    {
+                        "key": "COMB",
+                        "value": 3.6
+                    },
+                    {
+                        "key": "CMP",
+                        "value": 32.5
+                    },
+                    {
+                        "key": "TRB",
+                        "value": 46
+                    },
+                    {
+                        "key": "APH",
+                        "value": 20
+                    },
+                    {
+                        "key": "HRSG",
+                        "value": 0
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "stateId": "PINCH15",
-        "exergy": [
-          {
-            "key": "NG",
-            "value": 72.465
-          },
-          {
-            "key": "B1",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 28.651
-          },
-          {
-            "key": "B3",
-            "value": 50.339
-          },
-          {
-            "key": "B4",
-            "value": 102.53
-          },
-          {
-            "key": "B5",
-            "value": 38.81
-          },
-          {
-            "key": "B6",
-            "value": 14.784
-          },
-          {
-            "key": "B7",
-            "value": 2.353
-          },
-          {
-            "key": "WC",
-            "value": 31.105
-          },
-          {
-            "key": "WN",
-            "value": 30
-          },
-          {
-            "key": "QV",
-            "value": 9.038120000000001
-          },
-          {
-            "key": "QG",
-            "value": 2.353
-          }
-        ]
-      },
-      {
-        "stateId": "CGAMR",
-        "exergy": [
-          {
-            "key": "NG",
-            "value": 72.465
-          },
-          {
-            "key": "B1",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 28.651
-          },
-          {
-            "key": "B3",
-            "value": 50.339
-          },
-          {
-            "key": "B4",
-            "value": 102.53
-          },
-          {
-            "key": "B5",
-            "value": 38.81
-          },
-          {
-            "key": "B6",
-            "value": 14.784
-          },
-          {
-            "key": "B7",
-            "value": 14.784
-          },
-          {
-            "key": "WC",
-            "value": 31.105
-          },
-          {
-            "key": "WN",
-            "value": 30
-          },
-          {
-            "key": "QV",
-            "value": 0
-          },
-          {
-            "key": "QG",
-            "value": 14.784
-          }
-        ]
-      },
-      {
-        "stateId": "noAPH",
-        "exergy": [
-          {
-            "key": "NG",
-            "value": 109.913
-          },
-          {
-            "key": "B1",
-            "value": 0
-          },
-          {
-            "key": "B2",
-            "value": 28.228
-          },
-          {
-            "key": "B3",
-            "value": 28.228
-          },
-          {
-            "key": "B4",
-            "value": 101.759
-          },
-          {
-            "key": "B5",
-            "value": 38.518
-          },
-          {
-            "key": "B6",
-            "value": 38.518
-          },
-          {
-            "key": "B7",
-            "value": 1.668
-          },
-          {
-            "key": "WC",
-            "value": 30.645
-          },
-          {
-            "key": "WN",
-            "value": 30
-          },
-          {
-            "key": "QV",
-            "value": 22.213
-          },
-          {
-            "key": "QG",
-            "value": 1.668
-          }
-        ]
-      }
-    ]
-  },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 11,
-        "precision": 3,
-        "unit": "(MW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 11,
-        "precision": 3,
-        "unit": "(MW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 12,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 12,
-        "precision": 2,
-        "unit": "($/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 11,
-        "precision": 3,
-        "unit": "($/MWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 11,
-        "precision": 4,
-        "unit": "(MW)"
-      }
-    ]
-  },
-  "WasteDefinition": {
-    "wastes": {
-      "flow": "QG",
-      "type": "MANUAL",
-      "recycle": 0,
-      "values": [
-        {
-          "process": "COMB",
-          "value": 0.768
-        },
-        {
-          "process": "CMP",
-          "value": 0.093
-        },
-        {
-          "process": "TRB",
-          "value": 0.05
-        },
-        {
-          "process": "APH",
-          "value": 0.089
-        }
-      ]
     }
-  },
-  "ResourcesCost": {
-    "Samples": [
-      {
-        "sampleId": "Base",
-        "flows": {
-          "key": "NG",
-          "value": 30
-        },
-        "processes": [
-          {
-            "key": "COMB",
-            "value": 3.6
-          },
-          {
-            "key": "CMP",
-            "value": 32.5
-          },
-          {
-            "key": "TRB",
-            "value": 46
-          },
-          {
-            "key": "APH",
-            "value": 20
-          },
-          {
-            "key": "HRSG",
-            "value": 35
-          }
-        ]
-      },
-      {
-        "sampleId": "CGAMR",
-        "flows": {
-          "key": "NG",
-          "value": 30
-        },
-        "processes": [
-          {
-            "key": "COMB",
-            "value": 3.6
-          },
-          {
-            "key": "CMP",
-            "value": 32.5
-          },
-          {
-            "key": "TRB",
-            "value": 46
-          },
-          {
-            "key": "APH",
-            "value": 20
-          },
-          {
-            "key": "HRSG",
-            "value": 0
-          }
-        ]
-      }
-    ]
-  }
 }

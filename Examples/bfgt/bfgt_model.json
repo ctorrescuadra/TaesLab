@@ -1,251 +1,256 @@
 {
-  "ProductiveStructure": {
-    "flows": [
-      {
-        "key": "B1",
-        "type": "RESOURCE",
-        "description": "Air"
-      },
-      {
-        "key": "B2",
-        "type": "RESOURCE",
-        "description": "Blast Furnace Gas"
-      },
-      {
-        "key": "B3",
-        "type": "INTERNAL",
-        "description": "Air"
-      },
-      {
-        "key": "B4",
-        "type": "INTERNAL",
-        "description": "BFG"
-      },
-      {
-        "key": "B5",
-        "type": "INTERNAL",
-        "description": "Air"
-      },
-      {
-        "key": "B6",
-        "type": "INTERNAL",
-        "description": "BFG"
-      },
-      {
-        "key": "B7",
-        "type": "INTERNAL",
-        "description": "Gases"
-      },
-      {
-        "key": "B9",
-        "type": "INTERNAL",
-        "description": "Gases"
-      },
-      {
-        "key": "B10",
-        "type": "INTERNAL",
-        "description": "Gases"
-      },
-      {
-        "key": "B11",
-        "type": "INTERNAL",
-        "description": "Gases"
-      },
-      {
-        "key": "B12",
-        "type": "INTERNAL",
-        "description": "Gases"
-      },
-      {
-        "key": "WGC",
-        "type": "INTERNAL",
-        "description": "Work"
-      },
-      {
-        "key": "WAC",
-        "type": "INTERNAL",
-        "description": "Work"
-      },
-      {
-        "key": "WN",
-        "type": "OUTPUT",
-        "description": "Work"
-      },
-      {
-        "key": "QG",
-        "type": "WASTE",
-        "description": "Gases"
-      }
-    ],
-    "processes": [
-      {
-        "key": "CC",
-        "type": "PRODUCTIVE",
-        "fuel": "B5+B6",
-        "product": "B7",
-        "description": "Combustion Chamber"
-      },
-      {
-        "key": "GC",
-        "type": "PRODUCTIVE",
-        "fuel": "WGC",
-        "product": "B4-B2",
-        "description": "Gas Compressor"
-      },
-      {
-        "key": "AC",
-        "type": "PRODUCTIVE",
-        "fuel": "WAC",
-        "product": "B3-B1",
-        "description": "Air Compressor"
-      },
-      {
-        "key": "GHE",
-        "type": "PRODUCTIVE",
-        "fuel": "B10-B12",
-        "product": "B6-B4",
-        "description": "Gas Heat Exchange"
-      },
-      {
-        "key": "AHE",
-        "type": "PRODUCTIVE",
-        "fuel": "B9-B11",
-        "product": "B5-B3",
-        "description": "Air Heat Exchange"
-      },
-      {
-        "key": "TRB",
-        "type": "PRODUCTIVE",
-        "fuel": "B7-B9-B10",
-        "product": "WN+WGC+WAC",
-        "description": "Gas Turbine"
-      },
-      {
-        "key": "STCK",
-        "type": "DISSIPATIVE",
-        "fuel": "B11+B12",
-        "product": "QG",
-        "description": "Stack"
-      }
-    ]
-  },
-  "ExergyStates": {
-    "States": {
-      "stateId": "Reference",
-      "exergy": [
-        {
-          "key": "B1",
-          "value": 0
-        },
-        {
-          "key": "B2",
-          "value": 12077.294685990339
-        },
-        {
-          "key": "B3",
-          "value": 4995.1690821256043
-        },
-        {
-          "key": "B4",
-          "value": 12643.719806763285
-        },
-        {
-          "key": "B5",
-          "value": 8113.5265700483105
-        },
-        {
-          "key": "B6",
-          "value": 13004.830917874397
-        },
-        {
-          "key": "B7",
-          "value": 16925.120772946859
-        },
-        {
-          "key": "B9",
-          "value": 6246.376811594203
-        },
-        {
-          "key": "B10",
-          "value": 727.05314009661834
-        },
-        {
-          "key": "B11",
-          "value": 2387.68115942029
-        },
-        {
-          "key": "B12",
-          "value": 277.77777777777777
-        },
-        {
-          "key": "WGC",
-          "value": 650.96618357487921
-        },
-        {
-          "key": "WAC",
-          "value": 5602.6570048309177
-        },
-        {
-          "key": "WN",
-          "value": 3000
-        },
-        {
-          "key": "QG",
-          "value": 2665.4589371980678
-        }
-      ]
+    "ProductiveStructure": {
+        "flows": [
+            {
+                "key": "B1",
+                "type": "RESOURCE",
+                "description": "Air"
+            },
+            {
+                "key": "B2",
+                "type": "RESOURCE",
+                "description": "Blast Furnace Gas"
+            },
+            {
+                "key": "B3",
+                "type": "INTERNAL",
+                "description": "Air"
+            },
+            {
+                "key": "B4",
+                "type": "INTERNAL",
+                "description": "BFG"
+            },
+            {
+                "key": "B5",
+                "type": "INTERNAL",
+                "description": "Air"
+            },
+            {
+                "key": "B6",
+                "type": "INTERNAL",
+                "description": "BFG"
+            },
+            {
+                "key": "B7",
+                "type": "INTERNAL",
+                "description": "Gases"
+            },
+            {
+                "key": "B9",
+                "type": "INTERNAL",
+                "description": "Gases"
+            },
+            {
+                "key": "B10",
+                "type": "INTERNAL",
+                "description": "Gases"
+            },
+            {
+                "key": "B11",
+                "type": "INTERNAL",
+                "description": "Gases"
+            },
+            {
+                "key": "B12",
+                "type": "INTERNAL",
+                "description": "Gases"
+            },
+            {
+                "key": "WGC",
+                "type": "INTERNAL",
+                "description": "Work"
+            },
+            {
+                "key": "WAC",
+                "type": "INTERNAL",
+                "description": "Work"
+            },
+            {
+                "key": "WN",
+                "type": "OUTPUT",
+                "description": "Work"
+            },
+            {
+                "key": "QG",
+                "type": "WASTE",
+                "description": "Gases"
+            }
+        ],
+        "processes": [
+            {
+                "key": "CC",
+                "type": "PRODUCTIVE",
+                "fuel": "B5+B6",
+                "product": "B7",
+                "description": "Combustion Chamber"
+            },
+            {
+                "key": "GC",
+                "type": "PRODUCTIVE",
+                "fuel": "WGC",
+                "product": "B4-B2",
+                "description": "Gas Compressor"
+            },
+            {
+                "key": "AC",
+                "type": "PRODUCTIVE",
+                "fuel": "WAC",
+                "product": "B3-B1",
+                "description": "Air Compressor"
+            },
+            {
+                "key": "GHE",
+                "type": "PRODUCTIVE",
+                "fuel": "B10-B12",
+                "product": "B6-B4",
+                "description": "Gas Heat Exchange"
+            },
+            {
+                "key": "AHE",
+                "type": "PRODUCTIVE",
+                "fuel": "B9-B11",
+                "product": "B5-B3",
+                "description": "Air Heat Exchange"
+            },
+            {
+                "key": "TRB",
+                "type": "PRODUCTIVE",
+                "fuel": "B7-B9-B10",
+                "product": "WN+WGC+WAC",
+                "description": "Gas Turbine"
+            },
+            {
+                "key": "STCK",
+                "type": "DISSIPATIVE",
+                "fuel": "B11+B12",
+                "product": "QG",
+                "description": "Stack"
+            }
+        ]
+    },
+    "ExergyStates": {
+        "States": [
+            {
+                "stateId": "Reference",
+                "exergy": [
+                    {
+                        "key": "B1",
+                        "value": 0
+                    },
+                    {
+                        "key": "B2",
+                        "value": 12077.294685990339
+                    },
+                    {
+                        "key": "B3",
+                        "value": 4995.1690821256043
+                    },
+                    {
+                        "key": "B4",
+                        "value": 12643.719806763285
+                    },
+                    {
+                        "key": "B5",
+                        "value": 8113.5265700483105
+                    },
+                    {
+                        "key": "B6",
+                        "value": 13004.830917874397
+                    },
+                    {
+                        "key": "B7",
+                        "value": 16925.120772946859
+                    },
+                    {
+                        "key": "B9",
+                        "value": 6246.376811594203
+                    },
+                    {
+                        "key": "B10",
+                        "value": 727.05314009661834
+                    },
+                    {
+                        "key": "B11",
+                        "value": 2387.68115942029
+                    },
+                    {
+                        "key": "B12",
+                        "value": 277.77777777777777
+                    },
+                    {
+                        "key": "WGC",
+                        "value": 650.96618357487921
+                    },
+                    {
+                        "key": "WAC",
+                        "value": 5602.6570048309177
+                    },
+                    {
+                        "key": "WN",
+                        "value": 3000
+                    },
+                    {
+                        "key": "QG",
+                        "value": 2665.4589371980678
+                    }
+                ]
+            }
+        ]
+    },
+    "Format": {
+        "definitions": [
+            {
+                "key": "EXERGY",
+                "width": 10,
+                "precision": 1,
+                "unit": "(kW)"
+            },
+            {
+                "key": "EXERGY_COST",
+                "width": 10,
+                "precision": 1,
+                "unit": "(kW)"
+            },
+            {
+                "key": "EXERGY_UNIT_COST",
+                "width": 10,
+                "precision": 4,
+                "unit": "(J/J)"
+            },
+            {
+                "key": "GENERALIZED_COST",
+                "width": 10,
+                "precision": 2,
+                "unit": "(c/h)"
+            },
+            {
+                "key": "GENERALIZED_UNIT_COST",
+                "width": 10,
+                "precision": 4,
+                "unit": "(c/kWh)"
+            },
+            {
+                "key": "DIAGNOSIS",
+                "width": 10,
+                "precision": 2,
+                "unit": "(kW)"
+            }
+        ]
+    },
+    "WasteDefinition": {
+        "wastes": [
+            {
+                "flow": "QG",
+                "type": "MANUAL",
+                "recycle": 0.6,
+                "values": [
+                    {
+                        "process": "CC",
+                        "value": 1
+                    }
+                ]
+            }
+        ]
     }
-  },
-  "Format": {
-    "definitions": [
-      {
-        "key": "EXERGY",
-        "width": 10,
-        "precision": 1,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_COST",
-        "width": 10,
-        "precision": 1,
-        "unit": "(kW)"
-      },
-      {
-        "key": "EXERGY_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(J/J)"
-      },
-      {
-        "key": "GENERALIZED_COST",
-        "width": 10,
-        "precision": 2,
-        "unit": "(c/h)"
-      },
-      {
-        "key": "GENERALIZED_UNIT_COST",
-        "width": 10,
-        "precision": 4,
-        "unit": "(c/kWh)"
-      },
-      {
-        "key": "DIAGNOSIS",
-        "width": 10,
-        "precision": 2,
-        "unit": "(kW)"
-      }
-    ]
-  },
-  "WasteDefinition": {
-    "wastes": {
-      "flow": "QG",
-      "type": "MANUAL",
-      "recycle": 0.6,
-      "values": {
-        "process": "CC",
-        "value": 1
-      }
-    }
-  },
-  "ResourcesCost": []
 }

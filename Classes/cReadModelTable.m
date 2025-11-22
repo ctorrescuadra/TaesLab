@@ -48,13 +48,10 @@ classdef (Abstract) cReadModelTable < cReadModel
             res=cType.EMPTY;
 			path=fileparts(mfilename('fullpath'));
 			cfgfile=fullfile(path,cType.CFGFILE);
-			try		
-				config=jsondecode(fileread(cfgfile));
-			catch err
-				obj.messageLog(cType.ERROR,err.message);
-				obj.messageLog(cType.ERROR,cMessages.InvalidConfigFile,cfgfile);
-				return
-			end
+            config=importJSON(obj,cfgfile);
+            if isempty(config)
+                return
+            end
     		res=config.datamodel;
 		end
 

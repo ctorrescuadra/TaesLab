@@ -33,10 +33,11 @@ function tbl=buildContents(folder,filename)
         tbl.printError(cMessages.NarginError,cMessages.ShowHelp);
         return
     end
-    if nargin < 2
-        filename = cType.EMPTY;
-    elseif nargin == 0
+    if nargin == 0
         folder = '.';
+        filename = cType.EMPTY;
+    elseif nargin == 1
+        filename = cType.EMPTY;
     end
     % Get the files of the directory
     files = dir(fullfile(folder, '*.m'));
@@ -59,7 +60,8 @@ function tbl=buildContents(folder,filename)
         path = fullfile(folder, tmp);
         Description{k} = getComment(path);
     end
-    p=struct('Name','Contents','Description','Contents of the file index');
+    p.Name = getFolderName(folder);
+    p.Description = ['Contents of the folder ', p.Name];
     fields={'Name','Description'};
     tbl=cTableData(Description,Name,fields,p);
     if ~tbl.status
@@ -100,4 +102,13 @@ function res = getComment(filename)
         end
     end
     fclose(fId);
+end
+
+function res = getFolderName(folder)
+%getFolderName - extract the folder name from a path
+    oldpwd = pwd;
+    cd(folder);
+    tokens = regexp(pwd, '[^\\/]+', 'match');
+    res = tokens{end};
+    cd(oldpwd);
 end

@@ -11,7 +11,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %   - Export the results tables in different formats (Excel, CSV, HTML, MAT)
 %   The class is derived from cResultSet, and implements methods to manage the results tables.
 %
-%   cThermoeconomicModel parameters:
+%   cThermoeconomicModel properties (set/get):
 %     CurrentState    - Active Operation state name
 %     CurrentSample   - Active Resource sample name
 %     ReferenceState  - Active Reference state name
@@ -21,7 +21,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     Recycling       - Recycling Analysis active (true | false)
 %     ActiveWaste     - Active waste flow name for Waste Analysis
 %
-%   cThermoeconomicModel properties:
+%   cThermoeconomicModel properties (get only):
 %     DataModel       - cDataModel object
 %     StateNames      - cell array with the names of the defined states
 %     SampleNames     - cell array with the names of the defined resource samples
@@ -29,88 +29,97 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %     ResourceData    - Current cResourceData object
 %
 %   cThermoeconomicModel methods:
-%
-%    Set methods:
-%     setState            - Set State value
-%     setReferenceState   - Set Reference State value
-%     setResourceSample   - Set Resource Sample value
-%     setCostTables       - Set CostTables parameter
-%     setDiagnosisMethod  - Set DiagnosisMethod parameter
-%     setActiveWaste      - Set Active Waste value
-%     setRecycling        - Activate Recycling Analysis
-%     setSummary          - Activate Summary Results
-%     setDebug            - Set Debug mode
-%     toggleDebug         - Toggle Debug mode
-%
-%    Results Info methods:
-%     productiveStructure     - Get Productive Structure cResultInfo
-%     exergyAnalysis          - Get ExergyAnalysis cResultInfo
-%     thermoeconomicAnalysis  - Get Thermoeconomic Analysis cResultInfo
-%     wasteAnalysis           - Get Waste Analysis cResultInfo  
-%     thermoeconomicDiagnosis - Get Thermoeconomic Diagnosis cResultInfo
-%     summaryDiagnosis        - Get Diagnosis Summary
-%     productiveDiagram       - Get Productive Diagrams cResultInfo
-%     diagramFP               - Get Diagram FP cResultInfo
-%     summaryResults          - Get Summary cResultInfo
-%     dataInfo                - Get Data Model cResultInfo
-%     getResultInfo           - Get cResultInfo with optional parameters
-%     showResultInfo          - Get a structure with all available cResultInfo
-%
-%    Model Info methods:
-%     showProperties  - Show model properties
-%     isResourceCost  - Check if model has Resource Cost Data
-%     isDirectCost    - Check if model has Direct Cost Tables
-%     isGeneralCost   - Check if model compute Generalized Costs
-%     isDiagnosis     - Check if model compute Diagnosis
-%     isWaste         - Check if model has waste
-%
-%    Summary Info methods:
-%     summaryOptions  - List of available summary Options
-%     isSummaryEnable - Check if Summary Results are enabled
-%     isSummaryActive - Check if Summary is activated
-%     isStateSummary  - Check if States Summary is available
-%     isSampleSummary - Check if Samples Summary is available
-%
-%    Tables Info methods:
-%     getTablesDirectory  - Get the tables directory
-%     getTableInfo        - Get Information of a table
-%
-%    ResultSet methods:
-%     ListOfTables          - Get the list of available tables
-%     getTable              - Get a table by name
-%     getTableIndex         - Get the table index
-%     saveTable             - Save the results in a external file 
-%     exportTable           - Export a table to another format
-%     printResults          - Print results on console
-%     showResults           - Show results in different interfaces
-%     showGraph             - Show the graph associated to a table
-%     showDataModel         - Show the data model tables
-%     showSummary           - Show the summary tables
-%     showTablesDirectory   - Show the tables directory
-%     showTableIndex        - Show the table index in different interfaces
-%     exportResults         - Export all the result Tables to another format
-%     saveResults           - Save all the result tables in a external file
-%     saveDataModel         - Save the data model tables into a file
-%     saveDiagramFP         - Save the Diagram FP table into a file
-%     saveProductiveDiagram - Save the Productive Diagram tables into a file
-%     saveSummary           - Save Summary results into a file
-%
-%    Waste Methods
-%     wasteAllocation  - Show waste allocation info 
-%     setWasteType     - Set the type of a waste
-%     setWasteValues   - Set the allocation values of a waste
-%     setWasteRecycled - Set the recycled ratio of a waste
-%
-%    Resources Methods
-%     getResourceData         - Get the resource data of a sample
-%     setFlowResource         - Set the resource flows values
-%     setProcessResource      - Set the processes resource values
-%     addResourceData         - Add a new resource sample
-%
-%    Exergy Data Methods
-%     getExergyData - Get the exergy data of a state
-%     setExergyData - Set the exergy values of a state
-%     addExergyData - Add a new exergy state
+%     Set Methods
+%      setState                  - Set a new valid state from StateNames
+%      setReferenceState         - Set a new valid reference state from StateNames
+%      setResourceSample         - Set a new valid ResourceSample from SampleNames
+%      setSummary                - Set a new Summary available option
+%      setCostTables             - Set a new value of CostTables parameter
+%      setDiagnosisMethod        - Set a new value of DiagnosisMethod parameter
+%      setActiveWaste            - Set a new waste flow for recycling analysis
+%      setRecycling              - Set Recycling parameter
+%      setDebug                  - Set debug control variable
+%      toggleDebug               - Toggle debug property
+%  
+%     Result Info Methods
+%      productiveStructure       - Get the Productive Structure cResultInfo object
+%      exergyAnalysis            - Get the ExergyAnalysis cResultInfo object for the current state
+%      productiveDiagram         - Get the productive diagram cResultInfo object
+%      diagramFP                 - Get the diagram FP cResultInfo object of rhe current state
+%      thermoeconomicAnalysis    - Get the Thermoeconomic Analysis cResultInfo object
+%      thermoeconomicDiagnosis   - Get the Thermoeconomic Diagnosis cResultInfo object
+%      summaryDiagnosis          - Get the diagnosis results summary
+%      wasteAnalysis             - Get the Waste Analysis cResultInfo object
+%      summaryResults            - Get the Summary Results cResultInfo object
+%      dataInfo                  - Get the data model cResultInfo object
+%      getResultInfo             - Get the cResultInfo with optional parameters
+%  
+%     Model Info Methods
+%      showProperties            - Show the values of the current parameters of the model
+%      isDiagnosis               - Check if diagnosis computation is available.
+%      isDirectCost              - Check if Direct cost tables are selected
+%      isGeneralCost             - isGeneralizedCost - Check if Generalized cost calculation are activated
+%      isResourceCost            - Check if the model has resources cost defined
+%      isWaste                   - Check if model has waste defined
+%      showResultInfo            - Show or get a structure containig the results of the model
+%  
+%     Summary Info Methods
+%      summaryOptions            - Get the available summary option names
+%      isSampleSummary           - Check if Samples Summary results has been activated
+%      isStateSummary            - Check if States Summary results has been activated
+%      isSummaryActive           - Check if Summary has been activated
+%      isSummaryEnable           - Check if Summary is enable
+%  
+%     Table Info Methods
+%      getTable                  - Get a table called name, if its available
+%      getTableInfo              - Get the properties of a table
+%      getTablesDirectory        - Create the tables directory of the active model
+%      showTablesDirectory       - Show the list of available tables
+%  
+%     Result Set Methods
+%      ListOfGraphs              - Get the list of graph tables as cell array
+%      ListOfTables              - Get the list of tables as cell array
+%      StudyCase                 - Get/display the study case names
+%      exportResults             - Export result tables into a structure using diferent formats.
+%      exportTable               - Export tname into the selected varmode/format
+%      getTableIndex             - Get the table index of the results set
+%      printResults              - print the result tables on console
+%      saveResults               - Save result tables in different file formats depending on file extension
+%      saveTable                 - Save a result table into a file depending on extension
+%      saveDataModel             - Save the data model in a file
+%      saveDiagramFP             - Save the Adjacency matrix of the Diagram FP in a file
+%      saveProductiveDiagram     - Save the productive diagram adjacency tables into a file
+%      saveSummary               - Save the summary tables into a filename
+%      showDataModel             - Show Data Model tables
+%      showGraph                 - Show a graph table.
+%      showResults               - View an individual table
+%      showSummary               - Show Summary tables
+%      showTableIndex            - View the index table of the results set
+%  
+%     Waste Methods
+%      setWasteRecycled          - Set the waste recycling ratios
+%      setWasteType              - Set the waste type allocation method for Active Waste
+%      setWasteValues            - Set the waste table values
+%      wasteAllocation           - Show waste information in console
+%  
+%     Resource Methods
+%      addResourceData           - addExergyData - Set exergy data values to actual state
+%      getResourceData           - Get the resource data cost values of sample
+%      setFlowResource           - setFlowResources - Set the resource cost of the flows
+%      setProcessResource        - Set the resource cost of the processes
+%  
+%     Exergy Methods
+%      addExergyData             - Set exergy data values to actual state
+%      getExergyData             - Get cExergyData object of a state
+%      setExergyData             - Set exergy data values to actual state
+%  
+%     Internal Methods
+%      updateDataModel           - update the data model if have been changes
+%      getResultState            - Get the cExergyCost object of each state
+%      getModelResults           - Get a cell array of cResultInfo objects of the current state
+%      getSampleId               - Get the Sample Id given the resource sample name
+%      getStateId                - Get the State Id given the name.
+%      getWasteId                - Get the Waste flow Id
 %
 %   See also cResultSet, cResultId
 %
@@ -361,10 +370,10 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         function setResourceSample(obj,sample)
         %setResourceSample- Set a new valid ResourceSample from SampleNames
         %   Syntax:
-        %     obj.setResourceSample(state)
+        %     obj.setResourceSample(sample)
         %     obj.CurrentSample=sample;
         %   Input Arguments:
-        %     state - Valid state.
+        %     sample - Valid sample.
         %       array of chars
         %
             obj.CurrentSample=sample;
@@ -482,18 +491,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %       true | false
         %
             obj.Recycling=value;
-        end
-
-        function updateModel(obj)
-        %updateModel - Recompute all the model results
-        %   Syntax:
-        %     model.updateModel
-        %
-            obj.setStateInfo;
-            obj.setThermoeconomicAnalysis;
-            obj.setThermoeconomicDiagnosis;
-            obj.setRecyclingResults;   
-            obj.setSummaryResults;
         end
 
         function setDebug(obj,dbg)
@@ -1460,6 +1457,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             obj.setState(state);
         end
 
+        %%%%%
+        % Internal Package functions
+        %%%%% 
         function log=updateDataModel(obj)
         %updateDataModel - update the data model if have been changes
         %   Syntax:
@@ -1470,9 +1470,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             log=updateModel(obj.DataModel);
         end
 
-        %%%%%
-        % Internal Package functions
-        %%%%% 
         function res=getStateId(obj,key)
         %getStateId - Get the State Id given the name.
         %   Internal function use in TaesPanel.
@@ -1545,6 +1542,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 res=obj.rstate.getValues(idx);
             end
         end
+
     end
     %%%%%%
     % Private Methods
@@ -1562,6 +1560,18 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if obj.debug
                 obj.printInfo(varargin{:});
             end
+        end
+
+        function updateModel(obj)
+        %updateModel - Recompute all the model results
+        %   Syntax:
+        %     model.updateModel
+        %
+            obj.setStateInfo;
+            obj.setThermoeconomicAnalysis;
+            obj.setThermoeconomicDiagnosis;
+            obj.setRecyclingResults;   
+            obj.setSummaryResults;
         end
 
         function setStateInfo(obj)

@@ -1,0 +1,94 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/Contents",
+    "definitions": {
+        "Contents": {
+            "properties": {
+                "Base": {
+                    "$ref": "#/definitions/Content"
+                },
+                "Functions": {
+                    "$ref": "#/definitions/Content"
+                },
+                "Classes": {
+                    "$ref": "#/definitions/Content"
+                },
+                "Model": {
+                    "$ref": "#/definitions/Content"
+                }
+            },
+            "required": [
+                "Base",
+                "Functions",
+                "Classes",
+                "Model"
+            ]
+        },
+        "Content": {
+            "type": "object",
+            "uniqueItems": true,
+            "minItems": 1,
+            "items": {
+                "required": [
+                    "Name",
+                    "Description",
+                    "Groups"
+                ],
+                "properties": {
+                    "Name": {
+                        "ref": "#/definitions/Text"
+                    },
+                    "Description": {
+                        "ref": "#/definitions/Text"
+                    },
+                    "Groups": {
+                        "ref": "#/definitions/Folder"
+                    }
+                }
+            }
+        },
+        "Folder": {
+            "type": "array",
+            "uniqueItems": true,
+            "minItems": 1,
+            "items": {
+                "required": [
+                    "Name",
+                    "Description",
+                    "Files"
+                ],
+                "properties": {
+                    "Name": {
+                        "$ref": "#/definitions/Text"
+                    },
+                    "Description": {
+                        "$ref": "#/definitions/Text"
+                    },
+                    "Files": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "minItems": 1,
+                        "items": {
+                            "required": [
+                                "Name",
+                                "Description"
+                            ],
+                            "properties": {
+                                "Name": {
+                                    "$ref": "#/definitions/Text"
+                                },
+                                "Description": {
+                                    "$ref": "#/definitions/Text"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "Text": {
+            "type": "string",
+            "minLength": 2
+        }
+    }
+}

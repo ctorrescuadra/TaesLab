@@ -198,6 +198,8 @@ classdef cType
 		colType={'char','numeric'};
 		% Digraph types
 		DigraphType=struct('GRAPH',0,'KERNEL',1,'GRAPH_WEIGHT',2,'KERNEL_WEIGHT',3);
+		% Class Info types
+		ClassInfo=struct('PROPERTIES',1,'METHODS',2);
         % TaesApp Tab Panels
         Panels=struct('WELCOME',1,'INDEX',2,'TABLES',3,'GRAPHS',4,'LOG',5);
         % File Extensions
@@ -410,6 +412,18 @@ classdef cType
 			res=cType.getTypeId(cType.TableView,text);
         end
 
+		function res=getClassInfo(text)
+		%getClassInfo - Get the id of ClassInfo option
+        %   Syntax:
+        %     res=cType.getClassInfo(text)
+        %   Input Arguments:
+        %     text - ClassInfo type text
+        %   Output Arguments:
+        %     res - ClassInfo type Id (empty if it doesn't exist)
+        %
+			res=cType.getTypeId(cType.ClassInfo,text);
+        end
+
 		function [res,idx]=checkProcessTypes(list)
 		%checkProcessTypes - Check if the Process Type list is correct
 		%   Syntax:
@@ -521,6 +535,20 @@ classdef cType
         %
 			res=cType.checkTypeKey(cType.TableView,text);
 		end
+
+		function res=checkClassInfo(text)
+		%checkTableView - Check ClassInfo value
+		%   Syntax:
+        %     res=cType.checkClassInfo(text)
+        %   Input Arguments:
+        %     text - ClassInfo type text.
+        %   Output Arguments:
+        %     res - true/false
+        %
+			res=cType.checkTypeKey(cType.ClassInfo,text);
+		end
+
+
 
 		function [res,missing]=checkDirColumns(fields)
 		%checkDirColums - Check Table Directory Columns names

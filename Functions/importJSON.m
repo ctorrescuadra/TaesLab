@@ -8,6 +8,7 @@ function res=importJSON(log,filename)
 %   Output Arguments:
 %     res - structure containind the data of json file
 %
+    res=cType.EMPTY;
     try
 	    text=fileread(filename);
 		res=jsondecode(text);

@@ -238,5 +238,47 @@ classdef cTableData < cTable
                 tbl.messageLog(cType.ERROR,cMessages.NoValuesAvailable);
             end
         end
+
+        function tbl=import(filename,props)
+        %import - Create cTableData from file
+        %   Valid formats: CSV, JSON.
+        %   In case of CSV file, first row must contain column names and first column row names.
+        %   In case of JSON file, it must contain a single JSON array object with field names as column names and field values as data.
+        %   Syntax:
+        %     tbl = cTableData.import(filename,props)
+        %   Input Arguments:
+        %     filename - char array with the file name
+        %     props - struct with additional table properties
+        %       Name - name of the table
+        %       Description - table description
+        %   Output Arguments:
+        %     tbl - cTableData object or cMessageLogger object if an error occurs
+        %
+            tbl=cMessageLogger();
+            % Validate filename
+            if ~isFilename(filename)
+                tbl.messageLog(cType.ERROR,cMessages.InvalidFileName)
+                return
+            end
+            % Determine file type and import data
+            fileType=cType.getFileType(filename);
+            switch fileType
+                case cType.FileType.CSV
+                    values=importCSV(filename);
+                case cType.FileType.JSON
+                    S=importJSON(tbl,filename);
+                    if ~empty(S) && isstruct(S)
+                        values=[fieldnames(S)'; struct2cell(S)'];
+                    else
+                        tbl.messageLog(cType.ERROR,cMessages.InvalidInputFile,filename);
+                        return
+                    end
+                otherwise
+                    tbl.messageLog(cType.ERROR,cMessages.InvalidInputFile);
+                    return
+            end
+            % Create cTableData object
+            tbl=cTableData.create(values,props);
+        end
     end
 end

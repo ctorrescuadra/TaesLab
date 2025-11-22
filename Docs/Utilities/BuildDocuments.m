@@ -1,6 +1,33 @@
 function [tables,log]=BuildDocuments(folder,filename)
+% BuildDocuments - Build documentation tables of TaesLab and save them to file
+%   This functon read the Contents.json file and builds documentation tables
+%   for the specified folder. The tables are then saved to the specified file
+%   in the format determined by the file extension.
+%   The valid file extensions are: .mhlp, .txt, .tex, .md
+%   The Contents.json file contains the name and the description of the M-files of
+%   the TaesLab toolbox grouped by its functionality.
+%
+%   Syntax:
+%     [tables,log]=BuildDocuments(folder,filename)
+%
+%   Input Arguments:
+%     folder - (char or string) Name of the folder in the Contents.json file
+%              for which the documentation tables are to be built.
+%              Valid folder names are the field names of the Contents.json file.
+%     filename - (char or string) Name of the file where the tables will be saved.
+%              The file extension determines the format of the saved file.
+%
+%   Output Arguments:
+%     tables - (cell array of cTableData) Cell array containing the built documentation tables.
+%     log - (cMessageLogger) Logger object containing messages about the execution status.
+%
+%   Examples:
+%     % Build documentation tables for the 'Functions' folder and save them as Markdown:
+%     BuildDocuments('Functions', 'Functions.md');
+%
     log=cMessageLogger();
-    tables={};
+    tables=cType.EMPTY_CELL;
+    % Validate input arguments
     if nargin~=2 || isempty(folder) || ~(ischar(folder) || isstring(folder))
         log.printError(cMessages.InvalidArgument);
         return
@@ -10,6 +37,7 @@ function [tables,log]=BuildDocuments(folder,filename)
         log.printError(cMessages.InvalidArgument)
         return
     end
+    % Import Contents.json file
     Contents=importJSON(log,'Contents.json');
     if ~log.status
         printLogger(log);
@@ -19,17 +47,19 @@ function [tables,log]=BuildDocuments(folder,filename)
         log.printError(cMessages.InvalidArgument,folder);
         return
     end
+    % Build documentation tables
     docData=Contents.(folder);
     NG=length(docData);
     tables=cell(NG,1);
-    for i=1:length(docData)
-        group=docData(i);
+    for i=1:length(docData.Groups)
+        group=docData.Groups(i);
         colNames=fieldnames(group.Files);
         rowNames={group.Files.Name};
         values={group.Files.Description}';
         p=struct('Name',group.Name,'Description',group.Description);
         tables{i}=cTableData(values,rowNames,colNames,p);
     end
+    % Save tables to file
     fileType =cType.getFileType(filename);
     switch fileType
         case cType.FileType.MHLP
@@ -44,6 +74,14 @@ function [tables,log]=BuildDocuments(folder,filename)
 end
 
 function saveAsContents(log,tables,filename)
+%saveAsContents - Save tables in the .mhlp format
+%   Syntax:
+%     saveAsContents(log,tables,filename)
+%   Input Arguments:
+%     log - (cMessageLogger) Logger object for logging messages
+%     tables - (cell array of cTableData) Documentation tables to be saved
+%     filename - (char or string) Name of the file to save the tables
+%
     % Determine the maximum length of first column
     cw=0;
     for i=1:length(tables)
@@ -75,6 +113,14 @@ function saveAsContents(log,tables,filename)
 end
 
 function saveAsText(log,tables,filename)
+%saveAsText - Save tables in plain text format
+%   Syntax:
+%     saveAsText(log,tables,filename)
+%   Input Arguments:
+%     log - (cMessageLogger) Logger object for logging messages
+%     tables - (cell array of cTableData) Documentation tables to be saved
+%     filename - (char or string) Name of the file to save the tables
+%
     % Open text file
     try
         fId = fopen (filename, 'wt');
@@ -89,6 +135,14 @@ function saveAsText(log,tables,filename)
 end
 
 function saveAsLaTeX(log,tables,filename)
+%saveAsLaTeX - Save tables in LaTeX format
+%   Syntax:
+%     saveAsLaTeX(log,tables,filename)
+%   Input Arguments:
+%     log - (cMessageLogger) Logger object for logging messages
+%     tables - (cell array of cTableData) Documentation tables to be saved
+%     filename - (char or string) Name of the file to save the tables
+%
     % Open text file
     try
         fId = fopen (filename, 'wt');
@@ -106,6 +160,14 @@ function saveAsLaTeX(log,tables,filename)
 end
 
 function saveAsMarkdown(log,tables,filename)
+%saveAsMarkdown - Save tables in Markdown format
+%   Syntax:
+%     saveAsMarkdown(log,tables,filename)
+%   Input Arguments:
+%     log - (cMessageLogger) Logger object for logging messages
+%     tables - (cell array of cTableData) Documentation tables to be saved
+%     filename - (char or string) Name of the file to save the tables
+%
     % Open text file
     try
         fId = fopen (filename, 'wt');

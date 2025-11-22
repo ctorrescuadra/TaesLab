@@ -695,12 +695,14 @@ classdef cDataModel < cResultSet
         end
 
         function log=updateModel(obj)
-        %updateDataModel - Update the Data Model if there is changes
+        %updateModel - Update the Data Model if there is changes
         %   Update cModelData and cResultInfo if changes have been made
         %   by setExergy, setResources or setWaste methods
         %   Syntax:
-        %     obj.updataModel()
-        % 
+        %     obj.updateModel()
+        %   Output Arguments:
+        %     log - true | false status of the operation
+        %
             buildModelData(obj);
             buildResultInfo(obj);
             log=obj.status;

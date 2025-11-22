@@ -226,6 +226,10 @@ classdef cMessages
         InvalidLabelError='Label must be a character array'
         VectorLengthError='Both input arguments must be vectors of the same length'
         NoMFilesInDir='Not M-files found in directory %s'
+        InvalidClassInfo='Invalid Class Info %s'
+        InvalidFolderData='Invalid folder data %s'
+        InvalidGroupData='Invalid group data %s'
+        EmptyData='No valid data in file %s sheet %s'
     end
 
     methods(Static)
