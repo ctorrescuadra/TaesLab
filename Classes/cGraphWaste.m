@@ -27,12 +27,18 @@ classdef cGraphWaste < cGraphResults
 		%   Output Arguments:
 		%     obj - cGraphWaste object
         %
-			if (nargin==2)
-				option=true;
+			% Validate input arguments
+			if nargin < 2 || ~isObject(info,'cWasteAnalysis')
+				obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+				return
+			end
+			if nargin == 2
+				option=cType.DEFAULT_GRAPHSTYLE;
 			end
 			wf=info.wasteFlow;
 			obj.Name='Waste Allocation';
-			if option
+			style=cType.getGraphStyle(option);
+			if style==cType.GraphStyles.PIE % Use pie chart to show active waste flow
 				cols=tbl.ColNames(2:end);
 				idx=find(strcmp(cols,wf),1);
 				if isempty(idx)

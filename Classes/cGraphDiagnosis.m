@@ -22,6 +22,7 @@ classdef cGraphDiagnosis < cGraphResults
         %   Output Arguments:
         %     obj    - cGraphDiagnosis object
         %
+            % Check input arguments
             if nargin==2
 				option=true;
             end
@@ -30,6 +31,8 @@ classdef cGraphDiagnosis < cGraphResults
             end
 			obj.Name=tbl.Description;
 			obj.Title=[tbl.Description,' [',tbl.State,']'];
+            obj.Style=cType.GraphStyles.STACK;
+            % Build graph data
 			if tbl.isTotalMalfunctionCost
                 obj.Categories=tbl.RowNames(1:end-1);
 				obj.xValues=(1:tbl.NrOfRows-1)';

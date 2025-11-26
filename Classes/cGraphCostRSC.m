@@ -32,12 +32,13 @@ classdef cGraphCostRSC < cGraphResults
         %       if variables exist and is a string then a pie chart is shown for that variable
         %       if variables do not exist or is a cell array then a stacked bar graph is shown
         %   
-            obj.isPieChart=false;
+            obj.Style = cType.GraphStyles.STACK;
             % Validate input arguments
             if ~isa(tbl,'cTable') || ~isa(info,'cExergyCost')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
+            % Build graph data
             if (nargin==2) || isempty(variables) % Plot system outputs/processes (default)
                 [res,idx]=cGraphCostRSC.getCategories(tbl,info);
                 if isempty(res)
@@ -76,7 +77,8 @@ classdef cGraphCostRSC < cGraphResults
             obj.BaseLine=0.0;
             if obj.isPieChart % Pie chart for a single variable
                 x=cell2mat(tbl.Data(idx,1:end-1));
-                jdx=find(x>tolerance(x));
+                x=100*x/sum(x);
+                jdx=find(x>1.0);
                 obj.Title=[tbl.Description ' [',tbl.State,'/',variables,']',];
                 obj.xValues=x(jdx);
                 obj.Legend=tbl.ColNames(jdx+1);
@@ -84,10 +86,15 @@ classdef cGraphCostRSC < cGraphResults
                 obj.xLabel=cType.EMPTY_CHAR;
                 obj.yLabel=cType.EMPTY_CHAR;
                 obj.Categories=cType.EMPTY_CELL;
+                obj.Style=cType.GraphStyles.PIE;
             else    % Stacked bar graph for multiple variables
                 obj.Title=[tbl.Description,' [',tbl.State,']'];
                 obj.xValues=(1:length(obj.Categories))';
-                obj.xLabel='Resource';
+                if tbl.isFlowsTable
+                    obj.xLabel='Flow';
+                else
+                    obj.xLabel='Process';
+                end
                 obj.Legend=tbl.ColNames(2:end-1);
                 obj.BaseLine=0.0;
                 obj.yLabel=['Unit Cost ',tbl.Unit];

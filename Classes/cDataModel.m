@@ -839,6 +839,7 @@ classdef cDataModel < cResultSet
                 return
             end
             % Read the data model depending de file extension
+            filename=char(filename);
             fileType=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.JSON

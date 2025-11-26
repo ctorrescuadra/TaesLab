@@ -21,6 +21,7 @@ classdef (Abstract) cGraphResults < cMessageLogger
         yLabel      % Y-axis label
         BaseLine    % Base Line
         Legend      % Legend Categories
+        Style       % Graph Style
     end
 
     methods(Access=protected)
@@ -39,8 +40,9 @@ classdef (Abstract) cGraphResults < cMessageLogger
             set(ax,'ygrid','on');
             set(ax,'xgrid','off')
             box(ax,'on');
-            hl=legend(ax,obj.Legend);
-            set(hl,'location','southoutside','orientation','horizontal','fontsize',10);
+            hl=legend(ax,obj.Legend,'interpreter','none');
+            set(hl,'Location','northeastoutside',...,
+                'Interpreter','none','FontSize',10);
         end
 
         function setGraphParametersUI(obj,app)

@@ -22,7 +22,7 @@ TaesLab uses a **two-level documentation system**:
 
 The documentation workflow is:
 
-```
+```matlab
 Inline Docs  Utilities  Structured JSON  Formatted Output
  (*.m files)   (extract)   (Contents.json)   (MD/PDF/HTML/LaTeX)
 ```
@@ -68,6 +68,7 @@ function output = FunctionName(input, varargin)
 ```
 
 **Key Elements:**
+
 - **H1 line**: `%FunctionName - Brief description` (used for Contents listings)
 - **Syntax section**: Shows all valid calling patterns
 - **Input/Output sections**: Type information and descriptions
@@ -130,6 +131,7 @@ The `Docs/Utilities/` folder contains tools for automated documentation generati
 **Purpose**: Extract function/class descriptions from a folder
 
 **Syntax**:
+
 ```matlab
 tbl = buildContents()                    % Current folder
 tbl = buildContents(folder)              % Specific folder
@@ -139,6 +141,7 @@ buildContents(folder, filename)          % Save to file
 **Output**: `cTableData` object with Name and Description columns
 
 **Example**:
+
 ```matlab
 % Extract descriptions from Base folder
 tbl = buildContents('Base');
@@ -155,17 +158,20 @@ buildContents('Base', 'Base_Functions.md');
 **Purpose**: Organize functions into groups using Excel template
 
 **Syntax**:
+
 ```matlab
 groupContents()                              % Use default Contents.xlsx
 groupContents(inFile, outFile)               % Specify files
 ```
 
 **Input**: `Contents.xlsx` with structure:
+
 - **Index sheet**: Folder definitions (Name, Description, Content, Groups)
 - **Content sheets**: Function listings with Group assignments
 - **Groups sheets**: Group definitions (Id, Name, Description)
 
 **Output**: `Contents.json` with hierarchical structure:
+
 ```json
 {
   "FolderName": {
@@ -185,6 +191,7 @@ groupContents(inFile, outFile)               % Specify files
 ```
 
 **Example**:
+
 ```matlab
 % Generate Contents.json from Contents.xlsx
 groupContents('Docs/Utilities/Contents.xlsx', 'Docs/Utilities/Contents.json');
@@ -195,21 +202,25 @@ groupContents('Docs/Utilities/Contents.xlsx', 'Docs/Utilities/Contents.json');
 **Purpose**: Generate formatted documentation from `Contents.json`
 
 **Syntax**:
+
 ```matlab
 [tables, log] = BuildDocuments(folder, filename)
 ```
 
 **Input Arguments**:
+
 - `folder` - Folder name from Contents.json (e.g., 'Base', 'Functions', 'Classes')
 - `filename` - Output filename (extension determines format)
 
 **Supported Formats**:
+
 - `.mhlp` - MATLAB help format (Contents.m style)
 - `.txt` - Plain text tables
 - `.md` - Markdown tables
 - `.tex` - LaTeX tables
 
 **Example**:
+
 ```matlab
 % Generate Markdown documentation for Base functions
 BuildDocuments('Base', 'base_functions.md');
@@ -226,12 +237,14 @@ BuildDocuments('Functions', 'Contents.m');
 **Purpose**: Extract class properties and methods using metaclass introspection
 
 **Syntax**:
+
 ```matlab
 [res, tbl] = getClassInfo(className, info)
 [res, tbl] = getClassInfo(className, info, filename)
 ```
 
 **Input Arguments**:
+
 - `className` - Name of the class (string or char)
 - `info` - Type of information:
   - `cType.ClassInfo.PROPERTIES` - Public properties
@@ -239,10 +252,12 @@ BuildDocuments('Functions', 'Contents.m');
 - `filename` - (optional) File to save results
 
 **Output**:
+
 - `res` - `cTableData` object with extracted information
 - `tbl` - MATLAB table with columns: Name, Description, DefiningClass, Access
 
 **Example**:
+
 ```matlab
 % Get properties of cThermoeconomicModel
 [res, tbl] = getClassInfo('cThermoeconomicModel', cType.ClassInfo.PROPERTIES);
@@ -253,36 +268,30 @@ BuildDocuments('Functions', 'Contents.m');
 % Print in console
 getClassInfo('cDataModel', cType.ClassInfo.PROPERTIES);
 ```
+
 ---
 
 ## Workflow for Generating Documentation
 
 ### Complete Documentation Workflow
 
-```
-
+```matlab
  1. Write inline docs in .m files                               
 ─
-                     
-                     
+                                         
 ─
  2. Run buildContents on folder                                  
      Extracts H1 lines from all .m files                        
-
-                     
-                     
+                    
 
  3. Create/update Contents.xlsx                                  
      Organize functions into groups                             
-
-                     
-                     
+                   
 
  4. Run groupContents                                            
      Generates Contents.json with hierarchy                     
 ─
-                     
-                     
+                                         
 ─
  5. Run BuildDocuments for each folder                           
      Generate formatted docs (MD/PDF/LaTeX/etc)                 
@@ -317,28 +326,25 @@ buildContents('Classes', 'Docs/Utilities/classes_contents.xlsx');
 
 1. Open `Docs/Utilities/Contents.xlsx`
 2. **Index sheet**: Define folders
-   ```
+
    | Name      | Description                  | Content        | Groups        |
    |-----------|------------------------------|----------------|---------------|
    | Base      | TaesLab Base Functions       | BaseContent    | BaseGroups    |
    | Functions | TaesLab Utility Functions    | FunctionsContent| FunctionsGroups|
-   ```
 
 3. **Content sheets**: Assign group numbers
-   ```
+
    | Name           | Description              | Group |
    |----------------|--------------------------|-------|
    | ReadDataModel  | Reads a data model file  | 1     |
    | ExergyAnalysis | Get exergy analysis      | 2     |
-   ```
 
 4. **Groups sheets**: Define groups
-   ```
+
    | Id | Name | Description                    |
    |----|------|--------------------------------|
    | 1  | rdmb | Read Data Models               |
    | 2  | trb  | Thermoeconomic Results         |
-   ```
 
 #### Step 4: Generate Contents.json
 
@@ -401,10 +407,13 @@ end
 ### Format-Specific Features
 
 #### MATLAB Help (.mhlp)
+
 ```matlab
 BuildDocuments('Base', 'Contents.m');
 ```
+
 Output format:
+
 ```matlab
 %
 % Read Data Models
@@ -414,11 +423,15 @@ Output format:
 ```
 
 #### Markdown (.md)
+
 ```matlab
 BuildDocuments('Base', 'base_functions.md');
 ```
+
 Output format:
+
 ```markdown
+
 ## Read Data Models
 
 | Function | Description |
@@ -428,9 +441,11 @@ Output format:
 ```
 
 #### LaTeX (.tex)
+
 ```matlab
 BuildDocuments('Base', 'base_functions.tex');
 ```
+
 Output includes formatted tables with LaTeX markup.
 
 ---
@@ -516,7 +531,7 @@ classdef cMyAnalysis < cResultId
         %   Creates analysis object from data model.
         %
         %   Syntax:
-%     obj = cMyAnalysis(data)
+        %     obj = cMyAnalysis(data)
         %
         %   Input Arguments:
         %     data - cExergyData object
@@ -596,12 +611,15 @@ fprintf('Documentation generation complete!\n');
 ## Best Practices
 
 ### 1. Keep H1 Lines Concise
+
 The H1 line appears in Contents listings:
+
 ```matlab
 %FunctionName - Brief description (keep under 80 chars).
 ```
 
 ### 2. Use Consistent Terminology
+
 - **Data model** - Input file representation
 - **State** - Operating condition
 - **Sample** - Cost configuration
@@ -609,7 +627,9 @@ The H1 line appears in Contents listings:
 - **Process** - Component/operation
 
 ### 3. Include Examples
+
 Every public function should have at least one example:
+
 ```matlab
 %   Example:
 %     data = ReadDataModel('rankine_model.json');
@@ -617,13 +637,17 @@ Every public function should have at least one example:
 ```
 
 ### 4. Cross-Reference Related Items
+
 Use "See also" section:
+
 ```matlab
 %   See also ReadDataModel, cDataModel, ThermoeconomicAnalysis
 ```
 
 ### 5. Update Documentation Regularly
+
 After adding/modifying functions:
+
 1. Update inline docs
 2. Re-run `buildContents`
 3. Update `Contents.xlsx` groupings
@@ -631,7 +655,9 @@ After adding/modifying functions:
 5. Rebuild formatted documentation
 
 ### 6. Validate Generated Files
+
 After running `BuildDocuments`:
+
 - Check that all functions are listed
 - Verify group organization makes sense
 - Test MATLAB help: `help FolderName`
@@ -644,10 +670,13 @@ After running `BuildDocuments`:
 ### Issue: Function not appearing in Contents
 
 **Solution**: Check that H1 line follows pattern:
+
 ```matlab
 %FunctionName - Description.
 ```
+
 Not:
+
 ```matlab
 % FunctionName - Description  (extra space)
 %FunctionName: Description     (wrong delimiter)
@@ -656,6 +685,7 @@ Not:
 ### Issue: Missing descriptions
 
 **Solution**: Ensure `buildContents` can read the file:
+
 ```matlab
 tbl = buildContents('Base');
 % Check tbl.Data for "(No Description)" entries
@@ -664,13 +694,15 @@ tbl = buildContents('Base');
 ### Issue: Group assignment not working
 
 **Solution**: Verify Contents.xlsx structure:
+
 - Index sheet has correct sheet references
 - Content sheets have "Group" column with numeric values
 - Groups sheets have "Id" column matching Group numbers
 
 ### Issue: Class info extraction fails
 
-**Solution**: 
+**Solution**:
+
 - MATLAB only (not Octave)
 - Class must be on path
 - Check class name spelling

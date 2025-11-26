@@ -23,6 +23,8 @@ classdef cTableData < cTable
 %     formatData           - Get formatted data
 %     getDescriptionLabel  - Get the title label for GUI presentation
 %     create               - Create a cTableData from values (static method)
+%     import               - Import a cTableData from a file (static method)
+%     importMatlabTable    - Import data from a MATLAB table into cTableData (static method)
 %
 %   cTableData methods (inherited from cTable):
 %     exportTable     - Get cTable info in diferent types of variables
@@ -279,6 +281,57 @@ classdef cTableData < cTable
             end
             % Create cTableData object
             tbl=cTableData.create(values,props);
+        end
+
+        function obj=importMatlabTable(T)
+        %importMatlabTable - Import data from a MATLAB table into cTable object
+        %   Syntax:
+        %     obj= cTableData.importMatlabTable(mt)
+        %   Input Arguments:
+        %     mt - MATLAB table
+        %   Output Arguments:
+        %     obj - cTableData object
+        %
+            obj=cMessageLogger();
+            % Check Input Arguments 
+            if nargin < 1 || isOctave || isempty(T) || ~istable(T)
+                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                return
+            end
+            % Check the size of the table
+            if any(size(T)<2)   
+                obj.messageLog(cType.ERROR,cMessages.NoValuesAvailable);
+                return
+            end
+            % Build the cTableData from table info
+            try
+                colNames = T.Properties.VariableNames;
+                if ~isempty(T.Properties.RowNames)
+                    rowNames = T.Properties.RowNames';
+                    data=table2cell(T);
+                else
+                    values=table2cell(T);
+                    rowNames = values(:,1);
+                    data=values(:,2:end);
+                end
+                % Set cTable properties
+                if ~isempty(T.Properties.UserData)      
+                    props.Name = T.Properties.UserData;
+                else
+                    props.Name = 'NoName';
+                end
+                if ~isempty(T.Properties.Description)
+                    props.Description = T.Properties.Description;
+                else
+                    props.Description = 'No Description';
+                end
+            catch err
+                obj.messageLog(cType.ERROR, err.message);
+                obj.messageLog(cType.ERROR, cMessages.InvalidTableValues);
+                return
+            end
+            props.Description=horzcat(props.Name,' - ',props.Description);
+            obj = cTableData(data,rowNames,colNames,props);
         end
     end
 end

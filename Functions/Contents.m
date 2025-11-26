@@ -38,4 +38,3 @@
 % Miscellaneous Functions
 %  fdisplay                   - Display a matrix A using C-like formatting.
 %  buildMessage               - Build error messages for TaesLab functions.
-%  mt2td                      - Convert a MATLAB table into a cTableData object.

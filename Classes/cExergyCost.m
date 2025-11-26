@@ -298,7 +298,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res.cZ = zB * aux.opB;  
                 res.CZ = res.cZ .* res.B;
             else % Compute direct cost
-                res.cE = sum(aux.opB(idx,:));
+                res.cE = sum(aux.opB(idx,:),1);
                 res.CE = res.cE .* res.B;
                 res.cZ = zero;
                 res.CZ = zero;

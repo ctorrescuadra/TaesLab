@@ -28,6 +28,7 @@ classdef cDigraph < cGraphResults
 		%   Output Arguments:
 		%     obj - cDigraph object
         %
+			% Check input arguments
 			if isOctave
 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
 				return
@@ -36,6 +37,7 @@ classdef cDigraph < cGraphResults
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(tbl));
 				return
 			end
+			% Build edges table
 			if isObject(info,'cDiagramFP')
 				obj.isDiagramFP=true;
                 edges=table(tbl.Data(:,1:2),cell2mat(tbl.Data(:,3)),'VariableNames',{'EndNodes','Weight'});
@@ -49,6 +51,7 @@ classdef cDigraph < cGraphResults
 			% Get the nodes table and build the digraph
 			obj.Name=tbl.Description;
 			obj.Title=tbl.Description;
+			obj.Style=cType.GraphStyles.DIGRAPH;
 			nodes=info.getNodesTable(tbl.Name);
 			tnodes=struct2table(nodes);
 			obj.xValues=digraph(edges,tnodes,'omitselfloops');

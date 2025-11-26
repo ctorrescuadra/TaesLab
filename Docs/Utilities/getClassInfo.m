@@ -82,7 +82,7 @@ function [res, tbl] = getClassInfo(obj,info,filename)
     rowNames = tbl.Name';
     colNames = tbl.Properties.VariableNames(1:2);
     props.Name=tbl.Properties.UserData;
-    props.Description=[props.Name,' - ',tbl.Properties.Description];
+    props.Description=[props.Name,' ',info];
     res = cTableData(data(:,2), rowNames, colNames, props);
     % Save Properties table if it is required
     if nargin==2
@@ -118,7 +118,7 @@ function saveAsContents(log,tbl,filename)
     end
     % Print tables into file
     fprintf(fId,'%%\n');
-    fprintf(fId,'%%   %s Properties:\n',tbl.Name);
+    fprintf(fId,'%%   %s:\n',tbl.Description);
     for k = 1:tbl.NrOfRows
         fprintf(fId, fmt, tbl.RowNames{k}, tbl.Data{k,1});
     end

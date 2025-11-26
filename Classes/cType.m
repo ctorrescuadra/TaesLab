@@ -112,6 +112,9 @@ classdef cType
 		% Options for Table View
 		TableView=struct('NONE',0,'CONSOLE',1,'HTML',2,'GUI',3);
 		DEFAULT_TABLEVIEW='CONSOLE';
+		% Graph styles
+		GraphStyles=struct('BAR',1,'STACK',2,'PLOT',3,'PIE',4,'DIGRAPH',5);
+		DEFAULT_GRAPHSTYLE='BAR';
 		% Input Tables
 		TableDataType=struct('KEY',1,'CHAR',2,'NUMERIC',3,'SAMPLE',4);
 		TableDataIndex=struct('FLOWS',1,'PROCESSES',2,'EXERGY',3,'FORMAT',4,...
@@ -424,6 +427,18 @@ classdef cType
 			res=cType.getTypeId(cType.ClassInfo,text);
         end
 
+		function res=getGraphStyle(text)
+		%getGraphStyle - Get the id of Graph Style option
+		%   Syntax:
+		%     res=cType.getGraphStyle(text)
+		%   Input Arguments:
+		%     text - Graph Style type text
+		%   Output Arguments:
+		%     res - Graph Style type Id (empty if it doesn't exist)
+		%
+			res=cType.getTypeId(cType.GraphStyles,text);
+		end
+
 		function [res,idx]=checkProcessTypes(list)
 		%checkProcessTypes - Check if the Process Type list is correct
 		%   Syntax:
@@ -548,7 +563,17 @@ classdef cType
 			res=cType.checkTypeKey(cType.ClassInfo,text);
 		end
 
-
+		function res=checkGraphStyle(text)
+		%checkGraphStyle - Check Graph Style value
+		%   Syntax:
+		%     res=cType.checkGraphStyle(text)
+		%   Input Arguments:
+		%     text - Graph Style type text.
+		%   Output Arguments:
+		%     res - true/false
+		%
+			res=cType.checkTypeKey(cType.GraphStyles,text);
+		end
 
 		function [res,missing]=checkDirColumns(fields)
 		%checkDirColums - Check Table Directory Columns names

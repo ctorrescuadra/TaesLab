@@ -29,6 +29,7 @@ classdef cGraphDiagramFP < cGraphResults
 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
 				return
             end
+            obj.Style=cType.GraphStyles.DIGRAPH;
             % Check input arguments
             if  isObject(tbl,'cTableMatrix')
                 mFP=cell2mat(tbl.Data(1:end-1,1:end-1));

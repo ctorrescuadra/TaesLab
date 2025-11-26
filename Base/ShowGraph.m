@@ -13,10 +13,8 @@ function ShowGraph(arg,varargin)
 %       char array
 %     ShowOutput: Show Output variation.Use for Diagnosis tables. 
 %       false | true (default)
-%     PieChart: Use Pie Chart graph for Waste Allocation
-%       false | true (default) 
-%     BarGraph: Use Bar Graph for Summary results
-%       false | true (default)
+%     Style: Style of the graph.
+%	   'BAR' | 'STACK' | 'PLOT' | 'PIE' | 'DIAGRAPH'
 %     Variables: Variables used in Summary results. 
 %       cell array
 %
@@ -29,6 +27,7 @@ function ShowGraph(arg,varargin)
     log=cTaesLab();
 	if nargin < 1
 		log.printError(cMessages.NarginError,cMessages.ShowHelp);
+        return
 	end	
 	if ~isObject(arg,'cResultSet')
 		log.printError(cMessages.ResultSetRequired,cMessages.ShowHelp);
@@ -38,9 +37,9 @@ function ShowGraph(arg,varargin)
     p = inputParser;
     p.addParameter('Graph',arg.DefaultGraph,@ischar);
 	p.addParameter('ShowOutput',true,@islogical);
-	p.addParameter('PieChart',true,@islogical);
-	p.addParameter('BarGraph',true,@islogical);
+	p.addParameter('Style',cType.DEFAULT_GRAPHSTYLE,@cType.checkGraphStyle);
 	p.addParameter('Variables',cType.EMPTY_CELL,varchk);
+	p.addParameter('Cases',cType.EMPTY_CELL,@iscell);
     try
 		p.parse(varargin{:});
     catch err
@@ -76,7 +75,7 @@ function ShowGraph(arg,varargin)
 		case cType.GraphType.DIAGNOSIS
             gr=cGraphDiagnosis(tbl,res.Info,param.ShowOutput);
 		case cType.GraphType.WASTE_ALLOCATION
-            gr=cGraphWaste(tbl,res.Info,param.PieChart);
+            gr=cGraphWaste(tbl,res.Info,param.Style);
         case cType.GraphType.RECYCLING
             gr=cGraphRecycling(tbl);
 		case cType.GraphType.DIGRAPH

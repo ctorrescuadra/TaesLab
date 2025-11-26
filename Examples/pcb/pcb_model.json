@@ -1,0 +1,1439 @@
+{
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 11,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 12,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 12,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 11,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "Elec",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "PCB",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "RED",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "CK",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "OXI",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "NG",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "FR",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "ER",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "DeCu",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "DeAg",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "DeAu",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "DePd",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "NW1",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "A2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "AB1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "AB2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "BG",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "B3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CB",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CD",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "CH",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "DC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "DE",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "EF",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "F1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "FD",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "FK",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "GH",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "H2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "H4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "J2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "JB",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "JC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "K1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "KF",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "KL",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "L1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "LM",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "M1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "MN",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "N1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "N4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "STM",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "Cu",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "Ag",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "Au",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "Pd",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "PYW",
+        "type": "WASTE"
+      },
+      {
+        "key": "HGW",
+        "type": "WASTE"
+      },
+      {
+        "key": "SLW",
+        "type": "WASTE"
+      }
+    ],
+    "processes": [
+      {
+        "key": "EDST",
+        "type": "PRODUCTIVE",
+        "fuel": "Elec",
+        "product": "A2+F1+H2+J2+K1+L1+M1+N1"
+      },
+      {
+        "key": "SRD",
+        "type": "PRODUCTIVE",
+        "fuel": "PCB+A2",
+        "product": "AB1+AB2"
+      },
+      {
+        "key": "RED",
+        "type": "PRODUCTIVE",
+        "fuel": "(AB1+JB-BG)+(RED+AB2+CB-B3)",
+        "product": "BC"
+      },
+      {
+        "key": "OXI",
+        "type": "PRODUCTIVE",
+        "fuel": "OXI+(CK+JC-CH)+(BC+DC-CB)",
+        "product": "CD"
+      },
+      {
+        "key": "FR",
+        "type": "PRODUCTIVE",
+        "fuel": "NG+FR+FD+(CD-DC)",
+        "product": "DE"
+      },
+      {
+        "key": "AC",
+        "type": "PRODUCTIVE",
+        "fuel": "DE",
+        "product": "EF"
+      },
+      {
+        "key": "ER",
+        "type": "PRODUCTIVE",
+        "fuel": "F1+ER+KF+(EF-FD)",
+        "product": "Cu+FK"
+      },
+      {
+        "key": "AB",
+        "type": "PRODUCTIVE",
+        "fuel": "BG",
+        "product": "GH"
+      },
+      {
+        "key": "HE",
+        "type": "PRODUCTIVE",
+        "fuel": "H2+(GH+CH-H4)",
+        "product": "STM"
+      },
+      {
+        "key": "ASU",
+        "type": "PRODUCTIVE",
+        "fuel": "J2",
+        "product": "JB+JC"
+      },
+      {
+        "key": "DeCu",
+        "type": "PRODUCTIVE",
+        "fuel": "K1+DeCu+FK",
+        "product": "KL+KF"
+      },
+      {
+        "key": "AgRe",
+        "type": "PRODUCTIVE",
+        "fuel": "L1+DeAg+KL",
+        "product": "Ag+LM"
+      },
+      {
+        "key": "AuRe",
+        "type": "PRODUCTIVE",
+        "fuel": "M1+DeAu+LM",
+        "product": "Au+MN"
+      },
+      {
+        "key": "PdRe",
+        "type": "PRODUCTIVE",
+        "fuel": "N1+DePd+(MN-N4)",
+        "product": "Pd"
+      },
+      {
+        "key": "PYRW",
+        "type": "DISSIPATIVE",
+        "fuel": "B3",
+        "product": "PYW"
+      },
+      {
+        "key": "HEW",
+        "type": "DISSIPATIVE",
+        "fuel": "H4",
+        "product": "HGW"
+      },
+      {
+        "key": "SLMW",
+        "type": "DISSIPATIVE",
+        "fuel": "N4+NW1",
+        "product": "SLW"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": [
+      {
+        "stateId": "B20",
+        "exergy": [
+          {
+            "key": "Elec",
+            "value": 5993.21242726877
+          },
+          {
+            "key": "PCB",
+            "value": 80173.625871283366
+          },
+          {
+            "key": "RED",
+            "value": 1551.5980110100579
+          },
+          {
+            "key": "CK",
+            "value": 1976.7766512828066
+          },
+          {
+            "key": "OXI",
+            "value": 1517.7314774427114
+          },
+          {
+            "key": "NG",
+            "value": 4455.1553999217176
+          },
+          {
+            "key": "FR",
+            "value": 407.112808191088
+          },
+          {
+            "key": "ER",
+            "value": 160.01799703677096
+          },
+          {
+            "key": "DeCu",
+            "value": 10.447492122788054
+          },
+          {
+            "key": "DeAg",
+            "value": 5.78639367186357
+          },
+          {
+            "key": "DeAu",
+            "value": 20.640772751960274
+          },
+          {
+            "key": "DePd",
+            "value": 13.127653780972306
+          },
+          {
+            "key": "NW1",
+            "value": 51.423779570700965
+          },
+          {
+            "key": "A2",
+            "value": 877.4
+          },
+          {
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 13995.332035287312
+          },
+          {
+            "key": "BC",
+            "value": 7366.3682729083293
+          },
+          {
+            "key": "BG",
+            "value": 17800.057135963369
+          },
+          {
+            "key": "B3",
+            "value": 9494.2509599539044
+          },
+          {
+            "key": "CB",
+            "value": 5093.7800173578516
+          },
+          {
+            "key": "CD",
+            "value": 3525.3527549597461
+          },
+          {
+            "key": "CH",
+            "value": 683.94913122363914
+          },
+          {
+            "key": "DC",
+            "value": 755.21211498339756
+          },
+          {
+            "key": "DE",
+            "value": 3642.7012516456193
+          },
+          {
+            "key": "EF",
+            "value": 2924.4182116711308
+          },
+          {
+            "key": "F1",
+            "value": 1426.10387390689
+          },
+          {
+            "key": "FD",
+            "value": 381.4396193807645
+          },
+          {
+            "key": "FK",
+            "value": 14.110803253484669
+          },
+          {
+            "key": "GH",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H2",
+            "value": 103.30918253911165
+          },
+          {
+            "key": "H4",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "J2",
+            "value": 3470.96867
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "K1",
+            "value": 22.979448225111213
+          },
+          {
+            "key": "KF",
+            "value": 4.8921762127944106
+          },
+          {
+            "key": "KL",
+            "value": 7.3148395442635188
+          },
+          {
+            "key": "L1",
+            "value": 22.547442650673521
+          },
+          {
+            "key": "LM",
+            "value": 2.4691636558894858
+          },
+          {
+            "key": "M1",
+            "value": 45.446479280850319
+          },
+          {
+            "key": "MN",
+            "value": 1.9034207229143003
+          },
+          {
+            "key": "N1",
+            "value": 24.457330666133409
+          },
+          {
+            "key": "N4",
+            "value": 0.46684363318597033
+          },
+          {
+            "key": "STM",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "Cu",
+            "value": 2421.7633645441506
+          },
+          {
+            "key": "Ag",
+            "value": 4.8456758883740338
+          },
+          {
+            "key": "Au",
+            "value": 0.5657429329751853
+          },
+          {
+            "key": "Pd",
+            "value": 1.4365770897283299
+          },
+          {
+            "key": "PYW",
+            "value": 9494.2509599539044
+          },
+          {
+            "key": "HGW",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "SLW",
+            "value": 29.440595957428776
+          }
+        ]
+      },
+      {
+        "stateId": "ELC20",
+        "exergy": [
+          {
+            "key": "Elec",
+            "value": 5993.21242726877
+          },
+          {
+            "key": "PCB",
+            "value": 1.1017444940024994E+6
+          },
+          {
+            "key": "RED",
+            "value": 1551.5980110100579
+          },
+          {
+            "key": "CK",
+            "value": 1976.7766512828066
+          },
+          {
+            "key": "OXI",
+            "value": 1517.7314774427114
+          },
+          {
+            "key": "NG",
+            "value": 4455.1553999217176
+          },
+          {
+            "key": "FR",
+            "value": 407.112808191088
+          },
+          {
+            "key": "ER",
+            "value": 160.01799703677096
+          },
+          {
+            "key": "DeCu",
+            "value": 10.447492122788054
+          },
+          {
+            "key": "DeAg",
+            "value": 5.78639367186357
+          },
+          {
+            "key": "DeAu",
+            "value": 20.640772751960274
+          },
+          {
+            "key": "DePd",
+            "value": 13.127653780972306
+          },
+          {
+            "key": "NW1",
+            "value": 51.423779570700965
+          },
+          {
+            "key": "A2",
+            "value": 877.4
+          },
+          {
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 1.0355662001665032E+6
+          },
+          {
+            "key": "BC",
+            "value": 1.0543840209539761E+6
+          },
+          {
+            "key": "BG",
+            "value": 17800.057135963369
+          },
+          {
+            "key": "B3",
+            "value": 11207.74280336316
+          },
+          {
+            "key": "CB",
+            "value": 32254.056410631896
+          },
+          {
+            "key": "CD",
+            "value": 1.0274565037477572E+6
+          },
+          {
+            "key": "CH",
+            "value": 683.94913122363914
+          },
+          {
+            "key": "DC",
+            "value": 4829.1007822415077
+          },
+          {
+            "key": "DE",
+            "value": 1.1764773775613287E+6
+          },
+          {
+            "key": "EF",
+            "value": 1.1757590945213542E+6
+          },
+          {
+            "key": "F1",
+            "value": 1426.10387390689
+          },
+          {
+            "key": "FD",
+            "value": 153359.19264649265
+          },
+          {
+            "key": "FK",
+            "value": 966557.1684599343
+          },
+          {
+            "key": "GH",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H2",
+            "value": 103.30918253911165
+          },
+          {
+            "key": "H4",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "J2",
+            "value": 3470.96867
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "K1",
+            "value": 22.979448225111213
+          },
+          {
+            "key": "KF",
+            "value": 110.65305820409529
+          },
+          {
+            "key": "KL",
+            "value": 966444.61161423381
+          },
+          {
+            "key": "L1",
+            "value": 22.547442650673521
+          },
+          {
+            "key": "LM",
+            "value": 896226.15603388031
+          },
+          {
+            "key": "M1",
+            "value": 45.446479280850319
+          },
+          {
+            "key": "MN",
+            "value": 155859.34193177885
+          },
+          {
+            "key": "N1",
+            "value": 24.457330666133409
+          },
+          {
+            "key": "N4",
+            "value": 11776.944141236014
+          },
+          {
+            "key": "STM",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "Cu",
+            "value": 54774.774587753811
+          },
+          {
+            "key": "Ag",
+            "value": 70218.41748635628
+          },
+          {
+            "key": "Au",
+            "value": 740366.430059624
+          },
+          {
+            "key": "Pd",
+            "value": 144082.32312939502
+          },
+          {
+            "key": "PYW",
+            "value": 11207.74280336316
+          },
+          {
+            "key": "HGW",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "SLW",
+            "value": 11805.917893560256
+          }
+        ]
+      },
+      {
+        "stateId": "ERC20",
+        "exergy": [
+          {
+            "key": "Elec",
+            "value": 5993.21242726877
+          },
+          {
+            "key": "PCB",
+            "value": 1.1688622783103174E+7
+          },
+          {
+            "key": "RED",
+            "value": 1551.5980110100579
+          },
+          {
+            "key": "CK",
+            "value": 1976.7766512828066
+          },
+          {
+            "key": "OXI",
+            "value": 1517.7314774427114
+          },
+          {
+            "key": "NG",
+            "value": 4455.1553999217176
+          },
+          {
+            "key": "FR",
+            "value": 407.112808191088
+          },
+          {
+            "key": "ER",
+            "value": 160.01799703677096
+          },
+          {
+            "key": "DeCu",
+            "value": 10.447492122788054
+          },
+          {
+            "key": "DeAg",
+            "value": 5.78639367186357
+          },
+          {
+            "key": "DeAu",
+            "value": 20.640772751960274
+          },
+          {
+            "key": "DePd",
+            "value": 13.127653780972306
+          },
+          {
+            "key": "NW1",
+            "value": 51.423779570700965
+          },
+          {
+            "key": "A2",
+            "value": 877.4
+          },
+          {
+            "key": "AB1",
+            "value": 66178.293835996054
+          },
+          {
+            "key": "AB2",
+            "value": 1.1622444489267178E+7
+          },
+          {
+            "key": "BC",
+            "value": 1.1780363468313694E+7
+          },
+          {
+            "key": "BG",
+            "value": 17800.057135963369
+          },
+          {
+            "key": "B3",
+            "value": 20574.297529313444
+          },
+          {
+            "key": "CB",
+            "value": 180721.76939569783
+          },
+          {
+            "key": "CD",
+            "value": 1.1627236936898174E+7
+          },
+          {
+            "key": "CH",
+            "value": 683.94913122363914
+          },
+          {
+            "key": "DC",
+            "value": 27098.422516145965
+          },
+          {
+            "key": "DE",
+            "value": 1.3340608730729658E+7
+          },
+          {
+            "key": "EF",
+            "value": 1.3339890447689682E+7
+          },
+          {
+            "key": "F1",
+            "value": 1426.10387390689
+          },
+          {
+            "key": "FD",
+            "value": 1.7399787161293542E+6
+          },
+          {
+            "key": "FK",
+            "value": 1.1252636481581278E+7
+          },
+          {
+            "key": "GH",
+            "value": 17561.899402017785
+          },
+          {
+            "key": "H2",
+            "value": 103.30918253911165
+          },
+          {
+            "key": "H4",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "J2",
+            "value": 3470.96867
+          },
+          {
+            "key": "JB",
+            "value": 708.51843060302826
+          },
+          {
+            "key": "JC",
+            "value": 50.027420760144935
+          },
+          {
+            "key": "K1",
+            "value": 22.979448225111213
+          },
+          {
+            "key": "KF",
+            "value": 688.77958553282087
+          },
+          {
+            "key": "KL",
+            "value": 1.1251945798208248E+7
+          },
+          {
+            "key": "L1",
+            "value": 22.547442650673521
+          },
+          {
+            "key": "LM",
+            "value": 1.1213139389898445E+7
+          },
+          {
+            "key": "M1",
+            "value": 45.446479280850319
+          },
+          {
+            "key": "MN",
+            "value": 9.9947596370605044E+6
+          },
+          {
+            "key": "N1",
+            "value": 24.457330666133409
+          },
+          {
+            "key": "N4",
+            "value": 92925.607311322121
+          },
+          {
+            "key": "STM",
+            "value": 8794.9356028080419
+          },
+          {
+            "key": "Cu",
+            "value": 340954.91987214651
+          },
+          {
+            "key": "Ag",
+            "value": 38806.38725823642
+          },
+          {
+            "key": "Au",
+            "value": 1.2183791208407846E+6
+          },
+          {
+            "key": "Pd",
+            "value": 9.9018288987299241E+6
+          },
+          {
+            "key": "PYW",
+            "value": 20574.297529313444
+          },
+          {
+            "key": "HGW",
+            "value": 5429.8561042141682
+          },
+          {
+            "key": "SLW",
+            "value": 92954.581063646372
+          }
+        ]
+      }
+    ]
+  },
+  "WasteDefinition": {
+    "wastes": [
+      {
+        "flow": "PYW",
+        "type": "EXERGY",
+        "recycle": 0,
+        "values": [
+          {
+            "process": "RED",
+            "value": 0.25
+          },
+          {
+            "process": "OXI",
+            "value": 0.25
+          },
+          {
+            "process": "FR",
+            "value": 0.25
+          },
+          {
+            "process": "ER",
+            "value": 0.25
+          }
+        ]
+      },
+      {
+        "flow": "HGW",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": [
+          {
+            "process": "SRD",
+            "value": 0.9
+          },
+          {
+            "process": "OXI",
+            "value": 0.1
+          }
+        ]
+      },
+      {
+        "flow": "SLW",
+        "type": "MANUAL",
+        "recycle": 0,
+        "values": {
+          "process": "SRD",
+          "value": 1
+        }
+      }
+    ]
+  },
+  "ResourcesCost": {
+    "Samples": [
+      {
+        "sampleId": "Total",
+        "flows": [
+          {
+            "key": "Elec",
+            "value": 2.0763406463263792
+          },
+          {
+            "key": "PCB",
+            "value": 0
+          },
+          {
+            "key": "RED",
+            "value": 6.2120115428054374
+          },
+          {
+            "key": "CK",
+            "value": 1.06
+          },
+          {
+            "key": "OXI",
+            "value": 7.3371315261967922
+          },
+          {
+            "key": "NG",
+            "value": 1.04
+          },
+          {
+            "key": "FR",
+            "value": 7.3371315261967922
+          },
+          {
+            "key": "ER",
+            "value": 0.31581198224320628
+          },
+          {
+            "key": "DeCu",
+            "value": 0.31903053458925118
+          },
+          {
+            "key": "DeAg",
+            "value": 10.6144656263663
+          },
+          {
+            "key": "DeAu",
+            "value": 34.772809952926025
+          },
+          {
+            "key": "DePd",
+            "value": 23.881562681062267
+          },
+          {
+            "key": "NW1",
+            "value": 14.742374098942069
+          }
+        ]
+      },
+      {
+        "sampleId": "Mineral",
+        "flows": [
+          {
+            "key": "Elec",
+            "value": 0
+          },
+          {
+            "key": "PCB",
+            "value": 0
+          },
+          {
+            "key": "RED",
+            "value": 0.13164150846698966
+          },
+          {
+            "key": "CK",
+            "value": 0
+          },
+          {
+            "key": "OXI",
+            "value": 0.1458923816596899
+          },
+          {
+            "key": "NG",
+            "value": 0
+          },
+          {
+            "key": "FR",
+            "value": 0.1458923816596899
+          },
+          {
+            "key": "ER",
+            "value": 0
+          },
+          {
+            "key": "DeCu",
+            "value": 0
+          },
+          {
+            "key": "DeAg",
+            "value": 0
+          },
+          {
+            "key": "DeAu",
+            "value": 0
+          },
+          {
+            "key": "DePd",
+            "value": 0
+          },
+          {
+            "key": "NW1",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "sampleId": "NG",
+        "flows": [
+          {
+            "key": "Elec",
+            "value": 0
+          },
+          {
+            "key": "PCB",
+            "value": 0
+          },
+          {
+            "key": "RED",
+            "value": 0.57641124005931232
+          },
+          {
+            "key": "CK",
+            "value": 0
+          },
+          {
+            "key": "OXI",
+            "value": 0.64917963304019421
+          },
+          {
+            "key": "NG",
+            "value": 1.04
+          },
+          {
+            "key": "FR",
+            "value": 0.64917963304019421
+          },
+          {
+            "key": "ER",
+            "value": 0.00075797913302774452
+          },
+          {
+            "key": "DeCu",
+            "value": 0.00048753279970580732
+          },
+          {
+            "key": "DeAg",
+            "value": 0.8175522796558331
+          },
+          {
+            "key": "DeAu",
+            "value": 4.7442353456986339
+          },
+          {
+            "key": "DePd",
+            "value": 3.2800255483788727
+          },
+          {
+            "key": "NW1",
+            "value": 3.8847044943821025
+          }
+        ]
+      },
+      {
+        "sampleId": "OIL",
+        "flows": [
+          {
+            "key": "Elec",
+            "value": 0
+          },
+          {
+            "key": "PCB",
+            "value": 0
+          },
+          {
+            "key": "RED",
+            "value": 0.711678762605705
+          },
+          {
+            "key": "CK",
+            "value": 0
+          },
+          {
+            "key": "OXI",
+            "value": 0.57679800615091836
+          },
+          {
+            "key": "NG",
+            "value": 0
+          },
+          {
+            "key": "FR",
+            "value": 0.57679800615091836
+          },
+          {
+            "key": "ER",
+            "value": 0.24574768089043419
+          },
+          {
+            "key": "DeCu",
+            "value": 0.15806510979681188
+          },
+          {
+            "key": "DeAg",
+            "value": 0.10415052509619084
+          },
+          {
+            "key": "DeAu",
+            "value": 0.11774873292346132
+          },
+          {
+            "key": "DePd",
+            "value": 0.023511302077021953
+          },
+          {
+            "key": "NW1",
+            "value": 0.010983304956929505
+          }
+        ]
+      },
+      {
+        "sampleId": "Coal",
+        "flows": [
+          {
+            "key": "Elec",
+            "value": 0
+          },
+          {
+            "key": "PCB",
+            "value": 0
+          },
+          {
+            "key": "RED",
+            "value": 2.7807196508643632
+          },
+          {
+            "key": "CK",
+            "value": 1.06
+          },
+          {
+            "key": "OXI",
+            "value": 3.5886850945687812
+          },
+          {
+            "key": "NG",
+            "value": 0
+          },
+          {
+            "key": "FR",
+            "value": 3.5886850945687812
+          },
+          {
+            "key": "ER",
+            "value": 1.4876080022717485E-6
+          },
+          {
+            "key": "DeCu",
+            "value": 9.5683068650619666E-7
+          },
+          {
+            "key": "DeAg",
+            "value": 3.6408431899136109
+          },
+          {
+            "key": "DeAu",
+            "value": 0.12406603056087519
+          },
+          {
+            "key": "DePd",
+            "value": 1.8734697803077898
+          },
+          {
+            "key": "NW1",
+            "value": 0.44506418085204719
+          }
+        ]
+      },
+      {
+        "sampleId": "Elec_NR",
+        "flows": [
+          {
+            "key": "Elec",
+            "value": 1.7907016392155253
+          },
+          {
+            "key": "PCB",
+            "value": 0
+          },
+          {
+            "key": "RED",
+            "value": 1.7348330957489673
+          },
+          {
+            "key": "CK",
+            "value": 0
+          },
+          {
+            "key": "OXI",
+            "value": 2.0496344287385013
+          },
+          {
+            "key": "NG",
+            "value": 0
+          },
+          {
+            "key": "FR",
+            "value": 2.0496344287385013
+          },
+          {
+            "key": "ER",
+            "value": 0.05977067451065033
+          },
+          {
+            "key": "DeCu",
+            "value": 0.13840036862900676
+          },
+          {
+            "key": "DeAg",
+            "value": 5.2193663039159652
+          },
+          {
+            "key": "DeAu",
+            "value": 25.689040848611079
+          },
+          {
+            "key": "DePd",
+            "value": 16.131398881647378
+          },
+          {
+            "key": "NW1",
+            "value": 8.9706868723601616
+          }
+        ]
+      },
+      {
+        "sampleId": "Elec_R",
+        "flows": [
+          {
+            "key": "Elec",
+            "value": 0.28563900711085366
+          },
+          {
+            "key": "PCB",
+            "value": 0
+          },
+          {
+            "key": "RED",
+            "value": 0.2767272850601003
+          },
+          {
+            "key": "CK",
+            "value": 0
+          },
+          {
+            "key": "OXI",
+            "value": 0.326941982038708
+          },
+          {
+            "key": "NG",
+            "value": 0
+          },
+          {
+            "key": "FR",
+            "value": 0.326941982038708
+          },
+          {
+            "key": "ER",
+            "value": 0.0095341601010917043
+          },
+          {
+            "key": "DeCu",
+            "value": 0.02207656653304017
+          },
+          {
+            "key": "DeAg",
+            "value": 0.8325533277846997
+          },
+          {
+            "key": "DeAu",
+            "value": 4.097718995131979
+          },
+          {
+            "key": "DePd",
+            "value": 2.5731571686512047
+          },
+          {
+            "key": "NW1",
+            "value": 1.4309352463908269
+          }
+        ]
+      }
+    ]
+  }
+}

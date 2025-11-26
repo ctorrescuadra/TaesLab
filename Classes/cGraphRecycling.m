@@ -22,6 +22,7 @@ classdef cGraphRecycling < cGraphResults
         %
 			obj.Name='Recycling Cost Analysis';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',tbl.ColNames{end},']'];
+			obj.Style=cType.GraphStyles.PLOT;
 			obj.xValues=(0:10:100);
 			obj.yValues=cell2mat(tbl.Data);
 			obj.xLabel='Recycling (%)';

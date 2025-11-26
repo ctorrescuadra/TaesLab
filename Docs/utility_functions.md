@@ -53,7 +53,6 @@
 | :----------------| :-------------------------------------------|
 | [fdisplay][]     | Display a matrix A using C-like formatting. |
 | [buildMessage][] | Build error messages for TaesLab functions. |
-| [mt2td][]        | Convert a MATLAB table to cTableData.       |
 
 <!-- Reference Links - Functions Directory -->
 [exportCSV]: ../Functions/exportCSV.m
@@ -92,4 +91,3 @@
 <!-- Miscellaneous Functions -->
 [fdisplay]: ../Functions/fdisplay.m
 [buildMessage]: ../Functions/buildMessage.m
-[mt2td]: ../Functions/mt2td.m

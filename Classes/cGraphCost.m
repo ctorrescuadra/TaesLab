@@ -20,8 +20,10 @@ classdef cGraphCost < cGraphResults
         %   Output Arguments:
         %     obj - cGraphCost object
         %
+            % Build graph data
             obj.Name=tbl.Description;
             obj.Title=[tbl.Description,' [',tbl.State,']'];
+            obj.Style = cType.GraphStyles.STACK;
             obj.Categories=tbl.ColNames(2:end);
             obj.xValues=(1:tbl.NrOfCols-1)';
             obj.yValues=circshift(cell2mat(tbl.Data(1:end-1,1:end)),1)';

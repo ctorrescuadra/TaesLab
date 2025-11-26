@@ -9,15 +9,15 @@ classdef (Sealed) cSummaryResults < cResultId
 %     NrOfTables - Number of Tables
 % 
 %   cSummaryResults methods:
-%     cSummaryResults            - Build an instance of this class
-%     buildResultInfo            - Build the cResultInfo object with the summary tables
-%     defaultSummaryTables       - Get the default summary tables option name
-%     setSummaryTables           - Set the values of the summary tables
-%     getValues                  - Get the summary tables info
-%     getRowNames                - Get the row names of the summary tables
-%     getColNames                - Get the column names of the summary tables
-%     getDefaultFlowVariables    - Get the names of the output flows for summary graphs
-%     getDefaultProcessVariables - Get the names of the output processes for summary graphs
+%     cSummaryResults              - Build an instance of this class
+%     defaultSummaryTables         - Get the default summary tables option name
+%     getDefaultFlowVariables      - Get the output flows keys
+%     getDefaultProcessVariables   - Get the output processes keys
+%     getSummaryColumns            - Get the column names of the summary tables
+%     getValues                    - Get dataset tables
+%     isSampleSummary              - Check if Samples Summary results are available
+%     isStateSummary               - Check if States Summary results are available
+%     setSummaryTables             - Fill the values of the summary tables with the values of the model
 %
 %   See also cThermoeconomicModel, cSummaryTable, cSummaryOptions, cResultInfo, cResultId
 %
@@ -193,7 +193,7 @@ classdef (Sealed) cSummaryResults < cResultId
         end
     
         function res=getDefaultProcessVariables(obj)
-        %getDeafaultOrocessVariables Get the output processes keys
+        %getDefaultProcessVariables - Get the output processes keys
         %   Syntax:
         %     res = obj.getDefaultFlowVariables
         %   Output Arguments:
