@@ -10,7 +10,7 @@ classdef (Abstract) cGraphResults < cMessageLogger
 %     cGraphSummary   - Show Summary results graphs
 %     cGraphWaste     - Show Waste Allocation graphs
 %
-    properties(Access=public)
+    properties(Access=protected)
         Type        % Graph Type
         Name        % Name of the graph (window name)
         Title       % Title of the graph

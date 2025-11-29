@@ -17,7 +17,8 @@ classdef (Sealed) cProductiveDiagram < cResultId
 %     NodesFPAT  - Flow-Process nodes table
 %     EdgesFPAT  - Flow-Process edges table
 %     NodesSFPAT - Productive table nodes
-%     EdgesSFAT  - Productive table edges
+%     EdgesSFPAT - Productive table edges
+%     NodesKPAT  - Kernel Process nodes table
 %
 %   cProductiveDiagram methods:
 %     cProductiveDiagram - Create an instance of this class
@@ -42,7 +43,7 @@ classdef (Sealed) cProductiveDiagram < cResultId
 
     methods
         function obj = cProductiveDiagram(ps)
-        %cProductiveStructure - Construct an instance of this class
+        %cProductiveDiagram - Construct an instance of this class
         %   Syntax:
         %     obj = cProductiveDiagram(ps)
         %   Input Arguments:

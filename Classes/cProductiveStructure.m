@@ -16,43 +16,45 @@ classdef(Sealed) cProductiveStructure < cResultId
 %     NrOfResources     - Number of resources
 %     NrOfFinalProducts - Number of final products
 %     NrOfSystemOutputs - Number of system output
-%     Processes         - Processes info
 %     Flows             - Flows info
-%     Streams           - Streams info
-%     Waste             - Waste array structure (flow, stream, process) index
 %     FlowKeys          - Cell array of Flows Names (keys)
+%     Processes         - Processes info
 %     ProcessKeys       - Cell array of Processes Names (keys)
-%     StreamKeys        - Cell array of Streams Names (keys)
+%     ProcessMatrix     - Processes Matrix
+%     ProcessDigraph    - Process Digraph (cDigraphAnalysis)
+%     Streams           - Streams info
+%     StreamKeys      	- Cell array of Streams Names (keys)
+%     Waste             - Waste array structure (flow, stream, process) index
 %     ProductiveTable   - Adjacency Matrix of the productive structure graph
 %     
 %   cProductiveStructure methods:
 %     cProductiveStructure - Create an instance of the class
 %     buildResultInfo      - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
 %     WasteData            - Get the default waste data
-%     IncidenceMatrix      - Get the incidence matrices
-%     getStreamMatrix      - Get the productive groups adjacency matrix 
-%     getFlowMatrix        - Get the flows adjacency matrix
-%     getProcessMatrix     - Get the process matrix (Logical FP matrix)
-%     getProductiveMatrix  - Get the productive adjacency matrix
-%     getFlowProcessMatrix - Get the flow-process adjacency matrix
+%     IncidenceMatrix      - Get the incidence matrices of the plant
 %     FlowEdges            - Get the flow edges definition names 
 %     FuelStreams          - Get the Fuel streams ids
 %     ProductStreams       - Get the Product streams ids
 %     ResourceFlows        - Get the Resource Flows id
+%     ResourceProcesses    - Get the Processes with external resources
 %     FinalProductFlows    - Get the Final Products Flows id
 %     SystemOutputFlows    - Get the System Output Flows id
-%     ResourceProcesses    - Get the Processes with external resources
 %     OutputProcesses      - Get the Processes with system outputs
 %     isModelIO            - Check if model is pure Input-Output
-%     getProcessId         - Get the process Id given the name
-%     getFlowId            - Get the flow Id given the name
-%     getFlowTypes         - Get the flows id of type typeId
-%     getProcessTypes      - Get the process id of type typeId
-%     getStreamTypes       - Get the stream id of type typeId
-%     getResourceNames     - Get the resource flow names
-%     getProductNames      - Get the final product flow names
-%     getWasteNames        - Get the waste flow names
-%     flows2streams        - Compute the exergy or cost of streams from flow values
+%	  getFlowId            - Get the Id of a flow given its key                                                                                                           
+%     getProcessId         - Get the Id of a process given its key                                               
+%     getProcessMatrix     - Get the Process Adjacency Matrix (logical FP table)
+%     getFlowTypes  	   - Get the flowId of type typeId                                
+%     getProcessTypes      - Get the processId of type typeId                                                   
+%     getProductNames      - Get the name of the final products flows                                              
+%     getResourceNames     - Get the name of the resource flows
+%     getWasteNames        - Get the name of the waste flows
+%     getStreamTypes       - Get the stream-id of type typeId                                                    
+%     getFlowMatrix        - Get the Structural Theory Flows Adjacency Matrix                 
+%     getFlowProcessMatrix - Get the Flow-Process Adjacency Matrix (Flows, Processes)                                                      
+%     getStreamMatrix      - Get the Streams graph adjacency matrix
+%     getProductiveMatrix  - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
+%     flows2Streams        - Compute the exergy or cost of streams from flow values                              
 %
 %   See also cDataModel, cResultId, cResultInfo
 %
@@ -266,9 +268,9 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 
 		function [res,src,out]=getStreamMatrix(obj)
-		%StreamMatrix - Get the Streams graph adjacency matrix
+		%getStreamMatrix - Get the Streams graph adjacency matrix
 		%   Syntax:
-		%     res = obj.StreamMatrix
+		%     res = obj.getStreamMatrix
 		%   Output Arguments:
 		%     res - streams adjacency matrix
 		%     src - external resources adjacency matrix
@@ -283,9 +285,9 @@ classdef(Sealed) cProductiveStructure < cResultId
         end
 	
 		function [res,src,out]=getFlowMatrix(obj)
-		%StructuralMatrix - Get the Structural Theory Flows Adjacency Matrix
+		%getFlowMatrix - Get the Structural Theory Flows Adjacency Matrix
 		%   Syntax:
-		%     res = obj.StructuralMatrix
+		%     res = obj.getFlowMatrix
 		%   Output Arguments:
 		%     res - flows adjacency matrix 
 		%     src - external resources adjacency matrix
@@ -321,9 +323,9 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
         
         function res=getProductiveMatrix(obj)
-		%ProductiveMatrix - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
+		%getProductiveMatrix - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
 		%   Syntax:
-		%     res = obj.ProductiveMatrix
+		%     res = obj.getProductiveMatrix
 		%   Output Arguments:
 		%     res - logical matrix
 		%
@@ -337,7 +339,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 			
 		function res=getFlowProcessMatrix(obj)
-		%FlowProcessMatrix - Get the Flow-Process Adjacency Matrix (Flows, Processes)
+		%getFlowProcessMatrix - Get the Flow-Process Adjacency Matrix (Flows, Processes)
 		%   Syntax:
 		%     res = obj.FlowProcessMatrix
 		%   Output Arguments:

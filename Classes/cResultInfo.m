@@ -212,7 +212,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=summaryTables(obj)
-        %summaryTable - Get/Display available summary tables
+        %summaryTables - Get/Display available summary tables
         %   If no output argument, the value is displayed in console
         %
         %   Syntax:
@@ -231,7 +231,7 @@ classdef cResultInfo < cResultSet
         end
 
         function res=isStateSummary(obj)
-        %isStatesSummary - Check if the States Summary results are available
+        %isStateSummary - Check if the States Summary results are available
         %   Syntax:
         %     res = obj.isStateSummary
         %   Output Arguments:

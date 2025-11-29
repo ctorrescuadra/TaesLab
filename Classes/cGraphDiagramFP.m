@@ -7,6 +7,8 @@ classdef cGraphDiagramFP < cGraphResults
 %     cGraphDiagramFP - Build an instance of the class
 %     showGraph       - Show the graph in a window 
 %     showGraphUI     - Show the graph in the graph pannel of a GUI app
+%     edgesTable      - Get a table with the edges of the digraph
+%     nodesTable      - Get a table with the properties of the nodes
 %
 %   See also cGraphResults, cDiagramFP
 %
@@ -54,7 +56,7 @@ classdef cGraphDiagramFP < cGraphResults
         end
         
         function showGraph(obj)
-        %showGraph - show the graph in a window
+        %showGraph - Show the graph in a window
         %   Syntax:
         %     obj.showGraph
 		%
@@ -76,7 +78,7 @@ classdef cGraphDiagramFP < cGraphResults
         end
 
         function showGraphUI(obj,app)
-        %showGraph - show the graph in a GUI app
+        %showGraphUI - Show the graph in a GUI app
         %   Syntax:
         %     obj.showGraphUI(app)
 		%	Input Parameter:
@@ -104,9 +106,9 @@ classdef cGraphDiagramFP < cGraphResults
 
     methods(Static)
         function res=edgesTable(mFP,nodes)
-        %adjacencyTable - Get a table with the edges of the digraph
+        %edgesTable - Get a table with the edges of the digraph
         %   Syntax:
-        %     res=cDiagramFP.adjacencyTables(mFP,nodes);
+        %     res=cDiagramFP.edgesTable(mFP,nodes);
         %   Input Arguments:
         %     mFP - FP matrix values
         %     nodes - Cell Array with the process node names

@@ -1,4 +1,4 @@
-classdef cModelTable < cMessageLogger
+classdef (Sealed) cModelTable < cMessageLogger
 %cModelTable - Class container for the values read by cReadModelTable
 %   This class validate and store the data model values
 %   The table definition is provided by a struct with the table properties

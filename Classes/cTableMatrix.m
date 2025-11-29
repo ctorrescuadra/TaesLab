@@ -71,7 +71,7 @@ classdef (Sealed) cTableMatrix < cTableResult
 
     methods
         function obj=cTableMatrix(data,rowNames,colNames,props)
-        %cTableMatrix - create an instance of the class
+        %cTableMatrix - Create an instance of the class
         %   Syntax:
         %     obj = cTableMatrix(data,rowNames,colNames,props) 
         %   Input:
@@ -284,7 +284,7 @@ classdef (Sealed) cTableMatrix < cTableResult
         end
 
         function res = isFlowsTable(obj)
-        %isFlowtable - Check if table contains flows or processes
+        %isFlowstable - Check if table contains flows or processes
         %   It is used to define the graph axis
         %  Syntax:
         %     res = obj.isFlowsTable

@@ -4,6 +4,9 @@ classdef cDictionary < cMessageLogger
 %   The keys are strings and the ids are integer numbers starting from 1.
 %   The class uses a containers.Map object to store the (key, id) pairs.
 %
+%	cDictionary Properties:
+%     - Keys - Cell array with the keys of the dictionary
+%
 %   cDictionary methods:
 %     cDictionary - Construct an instance of this class
 %     existsKey   - Check if a key exists in the dictionary
@@ -113,7 +116,7 @@ classdef cDictionary < cMessageLogger
 		end
 
 		function idx=addKey(obj,key)
-		%addKey - add a new key if doesn't exists
+		%addKey - Add a new key if doesn't exists
 		%   Syntax:
 		%     res = obj.addKey(idx)
 		%   Input Arguments:
@@ -143,7 +146,7 @@ classdef cDictionary < cMessageLogger
 		end
 
         function res=size(obj)
-        %size - size of the dictionary
+        %size - Size of the dictionary
 		%	Overload size function
 		%   Syntax:
 		%     res = obj.size
@@ -154,7 +157,7 @@ classdef cDictionary < cMessageLogger
         end
         
         function res=length(obj)
-		%length - length of the dictionary
+		%length - Length of the dictionary
 		% 	Overload length function
 		%   Syntax:
 		%     res = obj.length
@@ -165,7 +168,7 @@ classdef cDictionary < cMessageLogger
 		end
 
 		function res=numel(obj)
-		%numel - number of elements of the dictionary
+		%numel - Number of elements of the dictionary
 		% 	Overload numel function
 		%   Syntax:
 		%     res = obj.numel

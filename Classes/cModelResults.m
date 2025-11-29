@@ -101,7 +101,7 @@ classdef (Sealed) cModelResults < cMessageLogger
         end
 
         function res=getModelResults(obj)
-        %getModelResult - Get a cell array with the cResultInfo objects of the current state
+        %getModelResults - Get a cell array with the cResultInfo objects of the current state
         %   Syntax:
         %     res = obj.getModelResults
         %   Output Arguments:

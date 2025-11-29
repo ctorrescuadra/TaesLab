@@ -24,7 +24,7 @@ classdef cFormatData < cTablesDefinition
 %     getSummaryTables   - Get the Summary tables configuration
 %
 %   See also printformat.json, cTablesDefinition, cResultTableBuilder
-%	
+%
 	methods
 		function obj=cFormatData(data)
 		%cFormatData - Create an instance of the class

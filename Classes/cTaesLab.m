@@ -28,7 +28,7 @@ classdef  cTaesLab < handle
         status=true  % Object status (default true)
     end
 
-    methods
+    methods(Access=public)
         function obj = cTaesLab(val)
         %cTaesLab - Initialize a cTaesLab object
         %   Syntax:

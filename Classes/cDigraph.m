@@ -75,7 +75,7 @@ classdef cDigraph < cGraphResults
         end
 
         function showGraph(obj)
-		%showGraph - show the graph in a window
+		%showGraph - Show the graph in a window
         %   Syntax:
         %     obj.showGraph()
 		
@@ -103,7 +103,7 @@ classdef cDigraph < cGraphResults
         end
 
 		function showGraphUI(obj,app)
-		%showGraph - show the graph in a GUI app
+		%showGraphUI - Show the graph in a GUI app
         %   Syntax:
         %     obj.showGraphUI(app)
 		%	Input Parameter:

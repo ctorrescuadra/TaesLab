@@ -51,6 +51,7 @@ function res=ValidateModelTables(filename,varargin)
         return
     end
     param=p.Results;
+    filename=char(filename);
     % Read the data model depending the file extension
     [fileType,ext]=cType.getFileType(filename);
     switch fileType

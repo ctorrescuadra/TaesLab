@@ -24,6 +24,8 @@ classdef cDigraphAnalysis < cMessageLogger
 %     getGroupsInfo       - Get the groups info structure
 %     plot                - Plot the digraph
 %
+%   See also cDigraph, cExergyCost, cDiagramFP
+%
     properties(GetAccess=public,SetAccess=private)
         NrOfNodes          % Number of nodes in the graph
         NrOfComponents     % Number of components
@@ -172,7 +174,9 @@ classdef cDigraphAnalysis < cMessageLogger
         end
 
         function res=getGroupsInfo(obj)
-        %getComponets - Build the Node Groups table
+        %getGroupsInfo - Build the Node Groups table
+        %   Syntax:
+        %     res = obj.getGroupsInfo()
         %   Output Arguments:
         %     res - Node Name/Group strcture 
         %
@@ -198,7 +202,7 @@ classdef cDigraphAnalysis < cMessageLogger
         % Plot function
         %%%%
         function plot(obj,option,text)
-        % plot - plot the digraph
+        % plot - Plot the digraph
         %   Syntax:
         %     obj.plot(option,title)
         %   Input Arguments:

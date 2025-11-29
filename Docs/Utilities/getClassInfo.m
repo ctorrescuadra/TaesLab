@@ -50,7 +50,7 @@ function [res, tbl] = getClassInfo(obj,info,filename)
     className = char(obj);
     mc = meta.class.fromName(className);
     if isempty(mc)
-        res.printError(cMessages.ClassNotFound,className);
+        res.printWarning(cMessages.ClassNotFound,className);
         return
     end
     % Prepare table info
@@ -78,7 +78,11 @@ function [res, tbl] = getClassInfo(obj,info,filename)
     tbl = tbl(strcmp(tbl.Access, 'public'), :);
     tbl = sortrows(tbl, {'DefiningClass', 'Name'});
     % Create cTableData object
-    data = table2cell(tbl);
+    if size(tbl,1)==0
+        res.printWarning(cMessages.NoClassInfo, info, className);
+        return
+    end
+    data = table2cell(tbl);   
     rowNames = tbl.Name';
     colNames = tbl.Properties.VariableNames(1:2);
     props.Name=tbl.Properties.UserData;
@@ -86,20 +90,21 @@ function [res, tbl] = getClassInfo(obj,info,filename)
     res = cTableData(data(:,2), rowNames, colNames, props);
     % Save Properties table if it is required
     if nargin==2
+        if (nargout==0), printTable(res); end
         return
     end
     fileType=cType.getFileType(filename);
     if fileType==cType.FileType.MHLP
-        saveAsContents(cMessageLogger,res,filename)
+        saveAsHelpInfo(cMessageLogger,res,filename)
     else
         saveTable(res,filename);
     end
 end
 
-function saveAsContents(log,tbl,filename)
+function saveAsHelpInfo(log,tbl,filename)
 %saveAsContents - Save table in the .mhlp format
 %   Syntax:
-%     saveAsContents(log,tbl,filename)
+%     saveAsHelpInfo(log,tbl,filename)
 %   Input Arguments:
 %     log - (cMessageLogger) Logger object for logging messages
 %     tbl - (cTableData) Documentation table to be saved

@@ -90,9 +90,9 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setFlowResource(obj,values)
-        %setFlowResourceData - Set the flow-resource values of the current sample
+        %setFlowResource - Set the flow-resource values of the current sample
         %   Syntax:
-        %     log = obj.setFlowResourceData(sample,values)
+        %     log = obj.setFlowResource(values)
         %   Input Arguments:
         %     values - Array or key/value struct containing the flow-resource values
         %   Output Arguments:
@@ -112,9 +112,9 @@ classdef cResourceData < cMessageLogger
         end
 
         function log=setProcessResource(obj,values)
-        %setProcessResourceData - Set the process-resource value of the current sample
+        %setProcessResource - Set the process-resource value of the current sample
         %   Syntax:
-        %     log = obj.setProcessResourceData(sample,values)
+        %     log = obj.setProcessResource(values)
         %   Input Arguments:
         %     values - Array or key value struct containing the process-resource values
         %   Output Arguments:

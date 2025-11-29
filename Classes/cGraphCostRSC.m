@@ -5,10 +5,10 @@ classdef cGraphCostRSC < cGraphResults
 %  If a single flow or process is selected a pie chart is shown for that resource,
 %  otherwise a stacked bar graph is shown for all the selected resources.
 %
-%   cGraphCost methods:
-%     cGraphCost  - Build an instance of the class
-%     showGraph   - Show the graph in a window
-%     showGraphUI - Show the graph in the graph panel of a GUI app
+%   cGraphCostRSC methods:
+%     cGraphCostRSC  - Build an instance of the class
+%     showGraph      - Show the graph in a window
+%     showGraphUI    - Show the graph in the graph panel of a GUI app
 %
 %   See also cGraphResults, cExergyCost
 %
@@ -18,7 +18,7 @@ classdef cGraphCostRSC < cGraphResults
 
     methods
         function obj=cGraphCostRSC(tbl,info,variables)
-        %cGraphCost - Build an instance of the object
+        %cGraphCostRSC - Build an instance of the object
         %   Syntax:
         %     obj = cGraphRecycling(tbl)
         %   Input Arguments:
@@ -102,7 +102,7 @@ classdef cGraphCostRSC < cGraphResults
         end
 
         function showGraph(obj)
-        %showGraph - show the graph in a window
+        %showGraph - Show the graph in a window
         %   Syntax:
         %     obj.showGraph
         %
@@ -114,7 +114,7 @@ classdef cGraphCostRSC < cGraphResults
         end
         
         function showGraphUI(obj,app)
-        %showGraphUI - show the graph in a GUI app
+        %showGraphUI - Show the graph in a GUI app
         %   Syntax:
         %     obj.showGraphUI(app)
 		%	Input Arguments:
@@ -140,7 +140,7 @@ classdef cGraphCostRSC < cGraphResults
 
     methods(Access=private)
         function showBarGraph(obj)
-        %showGraphBar - Show the bar graph in a window
+        %showBarGraph - Show the bar graph in a window
         %   Syntax:
         %     obj.showGraph
 		%

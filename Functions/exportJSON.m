@@ -1,5 +1,5 @@
 function log=exportJSON(S,filename)
-%exportJSON - save struct as JSON file
+%exportJSON - Save struct as JSON file
 %   Input:
 %     S - struct array
 %     filename - name of the output file

@@ -87,7 +87,7 @@ classdef(Sealed) cDataset < cDictionary
         %     key - key name
         %     val - object with the values to store
         %   Output Arguments:
-        %     log - cMessagesLog with status and messages
+        %     log - cMessagesLogger with status and messages
         %        
             log=cMessageLogger();
             idx=obj.addKey(key);

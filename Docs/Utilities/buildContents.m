@@ -1,46 +1,45 @@
-function tbl=buildContents(folder,filename)
+function tbl=buildContents(folder,outfile)
 %buildContents - Get a cTableData object with the description of .m files in a folder
 %   If filename is provided, save a file with these information
 %   The available formats are:  CSV, XLSX, JSON, XML, TXT, HTML, LaTeX, MD and MAT
 %
 %   Syntax:
-%     tbl=buildContents()
 %     tbl=buildContents(folder)
 %     buildContents(folder,filename)
 %
 %   Input Arguments:
-%     folder - folder to scan (default: current folder)
-%     filename - file name of the Contents help (default: 'Contents.m')
+%     folder - TaesLab folder to scan. 
+%     filename - output file name (optional)
 %   Output Arguments:
 %     tbl - cTableData object with the contents information
 %
 %   Examples:
-%     tbl = buildContents();
+%     tbl = buildContents('Base')
 %      This command get a cTableData with the name and description of
-%      all *.m files of the current folder
-%     tbl = buildContents('C:/MyFolder')
-%      This command get a cTableData with the name and description of
-%      all *.m files of the folder C:/MyFolder  
-%     tbl = buildContents('.','mFiles.txt)
+%      all *.m files of the 'Base' folder
+%     tbl = buildContents('Base','mFiles.txt)
 %      This command generate also a file called mFiles.txt
+%
 %   See also: cTableData/saveTable
 %
     tbl=cMessageLogger();
-    % Default Parameters
+    % Check input parameters
     try 
-        narginchk(0,2); 
+        narginchk(1,2); 
     catch
         tbl.printError(cMessages.NarginError,cMessages.ShowHelp);
         return
     end
-    if nargin == 0
-        folder = '.';
-        filename = cType.EMPTY;
-    elseif nargin == 1
-        filename = cType.EMPTY;
+    if nargin == 1
+        outfile = cType.EMPTY;
     end
     % Get the files of the directory
-    files = dir(fullfile(folder, '*.m'));
+    pathName=fullfile(cType.TaesLabPath,folder);
+    if ~exist(pathName,'dir')
+        tbl.printError(cMessages.InvalidFolderData,folder)
+        return
+    end
+    files = dir(fullfile(pathName, '*.m'));
     % Exclude Contents.m from the list
     fileNames = {files.name};
     idx = strcmpi(fileNames, 'Contents.m');
@@ -60,7 +59,7 @@ function tbl=buildContents(folder,filename)
         path = fullfile(folder, tmp);
         Description{k} = getComment(path);
     end
-    p.Name = getFolderName(folder);
+    p.Name = folder;
     p.Description = ['Contents of the folder ', p.Name];
     fields={'Name','Description'};
     tbl=cTableData(Description,Name,fields,p);
@@ -70,10 +69,10 @@ function tbl=buildContents(folder,filename)
         return
     end
     % Save the Content file if required.
-    if isFilename(filename)
-        log=tbl.saveTable(filename);
+    if isFilename(outfile)
+        log=tbl.saveTable(outfile);
         if log.status
-            log.printInfo(cMessages.TableFileSaved,tbl.Name,filename);
+            log.printInfo(cMessages.TableFileSaved,tbl.Name,outfile);
         else
             printLogger(log);
         end
@@ -102,13 +101,4 @@ function res = getComment(filename)
         end
     end
     fclose(fId);
-end
-
-function res = getFolderName(folder)
-%getFolderName - extract the folder name from a path
-    oldpwd = pwd;
-    cd(folder);
-    tokens = regexp(pwd, '[^\\/]+', 'match');
-    res = tokens{end};
-    cd(oldpwd);
 end

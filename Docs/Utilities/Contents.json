@@ -288,10 +288,6 @@
           {
             "Name": "fdisplay",
             "Description": "Display a matrix A using C-like formatting."
-          },
-          {
-            "Name": "mt2td",
-            "Description": "Convert a MATLAB table into a cTableData object"
           }
         ]
       }
@@ -306,12 +302,12 @@
         "Description": "Base Classes",
         "Files": [
           {
-            "Name": "cMessageLogger",
-            "Description": "Create and manage a messages logger for cTaesLab objects."
-          },
-          {
             "Name": "cTaesLab",
             "Description": "Base class of the TaesLab toolbox."
+          },
+          {
+            "Name": "cMessageLogger",
+            "Description": "Create and manage a messages logger for cTaesLab objects."
           }
         ]
       },
@@ -320,8 +316,8 @@
         "Description": "Static Classes",
         "Files": [
           {
-            "Name": "cMessageBuilder",
-            "Description": "Create a message for logger"
+            "Name": "cType",
+            "Description": "Static class to manage the constants of TaesLab"
           },
           {
             "Name": "cMessages",
@@ -332,8 +328,8 @@
             "Description": "Class with static methods to parse stream definition"
           },
           {
-            "Name": "cType",
-            "Description": "Static class to manage the constants of TaesLab"
+            "Name": "cMessageBuilder",
+            "Description": "Create a message for logger"
           }
         ]
       },
@@ -342,36 +338,36 @@
         "Description": "Read Model Classes",
         "Files": [
           {
-            "Name": "cModelTable",
-            "Description": "Class container for the values read by cReadModelTable"
-          },
-          {
             "Name": "cReadModel",
             "Description": "Abstract class to implemenent the model reader classes."
-          },
-          {
-            "Name": "cReadModelCSV",
-            "Description": "Implements the cReadModelTable to read CSV data model files."
-          },
-          {
-            "Name": "cReadModelJSON",
-            "Description": "Implement the cReadModelStruct to read JSON data model files."
-          },
-          {
-            "Name": "cReadModelStruct",
-            "Description": "Abstract class to read structured data model."
           },
           {
             "Name": "cReadModelTable",
             "Description": "Abstract class to read table data model."
           },
           {
+            "Name": "cModelTable",
+            "Description": "Class container for the values read by cReadModelTable"
+          },
+          {
+            "Name": "cReadModelCSV",
+            "Description": "Implements the cReadModelTable to read CSV data model files."
+          },
+          {
             "Name": "cReadModelXLS",
-            "Description": "%cReadModelXLS -Implement the cReadModelTable to read XLSX data model files"
+            "Description": "Implement the cReadModelTable to read XLSX data model files"
+          },
+          {
+            "Name": "cReadModelStruct",
+            "Description": "Abstract class to read structured data model."
+          },
+          {
+            "Name": "cReadModelJSON",
+            "Description": "Implement the cReadModelStruct to read JSON data model files."
           },
           {
             "Name": "cReadModelXML",
-            "Description": "%cReadModelXML implements the cReadModelStruct to read XML data model files."
+            "Description": "Implements the cReadModelStruct to read XML data model files."
           }
         ]
       },
@@ -380,6 +376,10 @@
         "Description": "Data Model Classes",
         "Files": [
           {
+            "Name": "cProductiveStructure",
+            "Description": "Build the productive structure of a plant."
+          },
+          {
             "Name": "cExergyData",
             "Description": "Get and validates the exergy data values for a state of the plant"
           },
@@ -387,17 +387,13 @@
             "Name": "cFormatData",
             "Description": "Get the format configuration data used to display tables of results."
           },
-          {
-            "Name": "cProductiveStructure",
-            "Description": "Build the productive structure of a plant."
+                    {
+            "Name": "cResultTableBuilder",
+            "Description": "Build the cResultInfo objects for the calculation layer"
           },
           {
             "Name": "cResourceData",
             "Description": "Gets and validates the external cost resources of a productive structure."
-          },
-          {
-            "Name": "cResultTableBuilder",
-            "Description": "Build the cResultInfo objects for the calculation layer"
           },
           {
             "Name": "cWasteData",
@@ -410,32 +406,32 @@
         "Description": "Result Info Classes",
         "Files": [
           {
-            "Name": "cDataModel",
-            "Description": "Create the data model object."
-          },
-          {
-            "Name": "cModelData",
-            "Description": "Container class for the Data Model structure."
-          },
-          {
-            "Name": "cModelResults",
-            "Description": "Class container for the model results."
-          },
-          {
             "Name": "cResultId",
             "Description": "Abstract class to manage the result identification."
+          },
+                    {
+            "Name": "cResultSet",
+            "Description": "Abstract class to manage the result sets."
           },
           {
             "Name": "cResultInfo",
             "Description": "Class to manage the result information and tables."
           },
           {
-            "Name": "cResultSet",
-            "Description": "Abstract class to manage the result sets."
+            "Name": "cDataModel",
+            "Description": "Create the data model object."
+          },
+          {
+            "Name": "cModelData",
+            "Description": "Class container for the read data model."
           },
           {
             "Name": "cThermoeconomicModel",
             "Description": "Create the thermoeconomic model results object."
+          },
+          {
+            "Name": "cModelResults",
+            "Description": "Class container for the model results."
           }
         ]
       },
@@ -444,20 +440,20 @@
         "Description": "Thermoeconomic Analysis Classes",
         "Files": [
           {
-            "Name": "cDiagnosis",
-            "Description": "Thermoeconomic diagnosis of a plant state change."
-          },
-          {
-            "Name": "cDigraphAnalysis",
-            "Description": "Analyze a directed graph (digraph)."
+            "Name": "cExergyModel",
+            "Description": "Build the Flow-Process exergy model."
           },
           {
             "Name": "cExergyCost",
             "Description": "Calculate the exergy cost of flows and processes."
           },
           {
-            "Name": "cExergyModel",
-            "Description": "Build the Flow-Process exergy model."
+            "Name": "cDiagnosis",
+            "Description": "Thermoeconomic diagnosis of a plant state change."
+          },
+          {
+            "Name": "cDigraphAnalysis",
+            "Description": "Analyze a directed graph (digraph)."
           },
           {
             "Name": "cProductiveDiagram",
@@ -641,7 +637,7 @@
           },
           {
             "Name": "setRecycling",
-            "Description": "setRecycing - Set Recycling parameter"
+            "Description": "Set Recycling parameter"
           },
           {
             "Name": "setSummary",
@@ -725,7 +721,7 @@
           },
           {
             "Name": "isGeneralCost",
-            "Description": "isGeneralizedCost - Check if Generalized cost calculation are activated"
+            "Description": "Check if Generalized cost calculation are activated"
           },
           {
             "Name": "isResourceCost",
@@ -819,7 +815,7 @@
           },
           {
             "Name": "printResults",
-            "Description": "print the result tables on console"
+            "Description": "Print the result tables on console"
           },
           {
             "Name": "saveResults",
@@ -903,7 +899,7 @@
           },
           {
             "Name": "setFlowResource",
-            "Description": "setFlowResources - Set the resource cost of the flows"
+            "Description": "Set the resource cost of the flows"
           },
           {
             "Name": "setProcessResource",
@@ -935,7 +931,7 @@
         "Files": [
           {
             "Name": "updateDataModel",
-            "Description": "update the data model if have been changes"
+            "Description": "Update the data model if have been changes"
           },
           {
             "Name": "getResultState",

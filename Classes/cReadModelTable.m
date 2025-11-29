@@ -46,8 +46,7 @@ classdef (Abstract) cReadModelTable < cReadModel
         %     res - struct array containing the data model configuration
         %
             res=cType.EMPTY;
-			path=fileparts(mfilename('fullpath'));
-			cfgfile=fullfile(path,cType.CFGFILE);
+			cfgfile=fullfile(cType.ClassesPath,cType.CFGFILE);
             config=importJSON(obj,cfgfile);
             if isempty(config)
                 return

@@ -108,20 +108,31 @@ classdef (Sealed) cModelData < cMessageLogger
         end
         function res=isWaste(obj)
         %isWaste - Indicate is optional waste element exists
+        %   Syntax:
+        %     res = obj.isWaste()
+        %   Output Arguments:
+        %     res - true|false check if WasteDefinition element exists
+        %
             res=~isempty(obj.WasteDefinition);
         end
 
         function res=isResource(obj)
-        %isResources - Indicate is optional resources cost element exists
+        %isResource - Indicate is optional resource cost element exists
+        %   Syntax:
+        %     res = obj.isResource()
+        %   Output Arguments:
+        %     res - true|false check if ResourcesCost element exists
+        %
             res=~isempty(obj.ResourcesCost);
         end
 
         function log=saveAsXML(obj,filename)
-        %saveAsXML - save data model as XML file
+        %saveAsXML - Save data model as XML file
         %   Input Arguments:
         %     filename - name of the output file
         %   Output Arguments:
         %     log: cMessageLogger class containing error messages ans status
+
             log=cMessageLogger();
             try
                 writestruct(obj.dm,filename,'StructNodeName','root','AttributeSuffix','Id');
@@ -132,11 +143,12 @@ classdef (Sealed) cModelData < cMessageLogger
 		end
 
         function log=saveAsJSON(obj,filename)
-        %saveAsJSON - save data model as JSON file
+        %saveAsJSON - Save data model as JSON file
         %   Input Arguments:
         %     filename - name of the output file
         %   Output Arguments:
         %     log: cMessageLogger class containing error messages and status
+        %
             log=cMessageLogger();
             try
                 text=jsonencode(obj.dm,'PrettyPrint',true);

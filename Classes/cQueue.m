@@ -69,7 +69,7 @@ classdef cQueue < cTaesLab
         end
               
         function res=getContent(obj,idx)
-        %getContent - get the content of the queue
+        %getContent - Get the content of the queue
         %   Syntax:
         %     res=obj.getContent(idx)
         %   Input Arguments:
@@ -98,7 +98,7 @@ classdef cQueue < cTaesLab
         end
     
         function res=length(obj)
-        %length - Leght of the queue. Overload length function
+        %length - Length of the queue. Overload length function
             res=lenght(obj.buffer);
         end
     

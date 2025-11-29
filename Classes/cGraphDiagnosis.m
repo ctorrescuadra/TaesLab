@@ -12,9 +12,9 @@ classdef cGraphDiagnosis < cGraphResults
 %
     methods
         function obj=cGraphDiagnosis(tbl,info,option)
-		%cDigraph - Build an instance of the object
+		%cGraphDiagnosis - Build an instance of the object
         %   Syntax:
-        %     obj = cDigraph(tbl,info)
+        %     obj = cGraphDiagnosis(tbl,info)
         %   Input Arguments:
         %     tbl    - cTable with the data to show graphically
         %     info   - cDiagnosis object with additional info
@@ -55,7 +55,7 @@ classdef cGraphDiagnosis < cGraphResults
         end
         
         function showGraph(obj)
-        %showGraph - show the graph in a window
+        %showGraph - Show the graph in a window
         %   Syntax:
         %     obj.showGraph
 		%
@@ -67,7 +67,7 @@ classdef cGraphDiagnosis < cGraphResults
         end
 
         function showGraphUI(obj,app)
-        %showGraph - show the graph in a GUI app
+        %showGraphUI - Show the graph in a GUI app
         %   Syntax:
         %     obj.showGraphUI(app)
         %	Input Parameter:
@@ -97,7 +97,9 @@ classdef cGraphDiagnosis < cGraphResults
 
     methods(Access=private)
         function graphDiagnosis_OC(obj)
-        % Show the diagnosis graph (Octave Version)
+        %graphDiagnosis_OC - Show the diagnosis graph (Octave Version)
+        %   Syntax:
+        %     graphDiagnosis_OC(obj)
         %
             M=numel(obj.Legend);
             cm=turbo(M);
@@ -118,7 +120,9 @@ classdef cGraphDiagnosis < cGraphResults
         end
         
         function graphDiagnosis_ML(obj)
-        % Show the diagnosis graph (Matlab version)
+        %graphDiagnosis_ML - Show the diagnosis graph (Matlab version)
+        %   Syntax:
+        %     graphDiagnosis_ML(obj)
         %
             M=numel(obj.Legend);
             cm=turbo(M);

@@ -190,7 +190,7 @@ classdef cExergyModel < cResultId
         end
 
 		function res=get.TotalOutput(obj)
-		%TotalOutput - get the total output exergy
+		%TotalOutput - Get the total output exergy
 		%   Syntax:
 		%     res=obj.TotalOutput
 		%
@@ -201,7 +201,7 @@ classdef cExergyModel < cResultId
 		end
 
 		function res=InternalIrreversibility(obj)
-		%InternalIrreversibility - get the total internal irreversibility
+		%InternalIrreversibility - Get the total internal irreversibility
 		%   Syntax:
 		%     res=obj.InternalIrreversibility
 		%   Output Arguments:
@@ -211,7 +211,7 @@ classdef cExergyModel < cResultId
 		end
 
 		function res=ExternalIrreversibility(obj)
-		%ExternalIrreversibility - get the total external irreversibility (waste)
+		%ExternalIrreversibility - Get the total external irreversibility (waste)
 		%   Syntax:
 		%     res=obj.InternalIrreversibility
 		%   Output Arguments:
@@ -222,11 +222,11 @@ classdef cExergyModel < cResultId
         end
 
         function [res,tbl]=FlowProcessTable(obj)
-        %FlowProcessTable - get the Flow-Process table 
+        %FlowProcessTable - Get the Flow-Process table 
         %   Syntax:
         %     res=obj.FlowProcessTable
         %   Output Arguments:
-        %     res - Structure containg tables tV,tF,tP
+        %     res - Structure contains tables tV,tF,tP
 		%     tbl - Table in matrix format
         %
             a=obj.FlowProcessModel;

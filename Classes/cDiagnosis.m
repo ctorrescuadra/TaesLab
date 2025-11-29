@@ -7,7 +7,7 @@ classdef(Sealed) cDiagnosis < cResultId
 %    WASTE_INTERNAL internalize the waste cost according waste table allocation
 %
 %   cDiagnosis properties:
-%     NrOfProcesses   - Number of processes
+%     NrOfProcesses   - Number of Processes
 %     NrOfWastes      - Number of Wastes
 %     FuelImpact      - Fuel Impact
 %     TechnicalSaving - Total Malfunction Cost
@@ -32,7 +32,7 @@ classdef(Sealed) cDiagnosis < cResultId
 %     getMalfunctionCostTable     - Get the malfunction cost table
 %     getInternalDisfunction      - Get the internal disfunctions caused by malfunction
 %     getExternalDisfunction      - Get the disfunction caused by waste variation
-%     getDemandCorrectionCost    - Get the correction of real demand variation cost
+%     getDemandCorrectionCost     - Get the correction of real demand variation cost
 %
 %   See also cResultId, cExergyCost, cResultInfo
 %
@@ -327,8 +327,9 @@ classdef(Sealed) cDiagnosis < cResultId
         end
 
         function res=getWasteMalfunctionCostTable(obj)
-            %getWasteMalfunctionCost - Get the waste malfunction cost table
-            %     res=obj.getWasteMalfunctionCoat
+            %getWasteMalfunctionCostTable - Get the waste malfunction cost table
+            %   Syntax:
+            %     res=obj.getWasteMalfunctionCostTable
             %   Output Arguments:
             %     res - cSparseRow Matrix containing the values of the table
             %     

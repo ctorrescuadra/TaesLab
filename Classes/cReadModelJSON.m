@@ -3,8 +3,14 @@ classdef (Sealed) cReadModelJSON < cReadModelStruct
 %   This class reads a JSON file containing the thermoeconomic data
 %   and store it into a structure data.
 %
-%   cReadModelCSV methods:
-%     - cReadModelCSV - Build an instance of the class
+%   cReadModelJSON Properties:
+%     - ModelName   - Name of the model
+%     - ModelData   - cModelData object
+%     - ModelFile   - File name of the model
+%
+%   cReadModelJSON methods:
+%     - cReadModelJSON - Build an instance of the class
+%     - getDataModel   - Get the data model object
 %
 %   See also cReadModel, cReadModelStruct
 %

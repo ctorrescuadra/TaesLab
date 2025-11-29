@@ -1,12 +1,20 @@
 classdef cReadModelCSV < cReadModelTable
 %cReadModelCSV - Implements the cReadModelTable to read CSV data model files.
 %   This class read a set of CSV files containing the thermoeconomic data
-%   and build the data model
+%   and build the data model.
+%
+%   cReadModelCSV Properties:
+%     ModelName   - Name of the model
+%     ModelData   - cModelData object
+%     ModelFile   - File name of the model
+%     ModelTables - cModelTable object
 % 
 %   cReadModelCSV methods:
-%     cReadModelCSV - Build an instance of the class
+%     cReadModelCSV    - Build an instance of the class
+%     getDataModel     - Get the data model object
+%     printModelTables - Show the model tables on console
 %   
-%   See also cReadModel, cReadModelTable
+%   See also cReadModel, cReadModelTable, cModelData, cModelTable.
 %
     methods
         function obj=cReadModelCSV(cfgfile)

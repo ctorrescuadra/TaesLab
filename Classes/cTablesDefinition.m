@@ -56,8 +56,7 @@ classdef cTablesDefinition < cMessageLogger
         %   obj - cTableDefinition object
               
 			% load default configuration filename			
-			path=fileparts(mfilename('fullpath'));
-			cfgfile=fullfile(path,cType.CFGFILE);
+			cfgfile=fullfile(cType.ClassesPath,cType.CFGFILE);
             config=importJSON(obj,cfgfile);
             if isempty(config)
                 return
@@ -245,7 +244,7 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getCellTables(obj,idx)
-        %getMatrixTables - Get the matrix tables configuration
+        %getCellTables - Get the cell tables configuration
         %   Syntax:
         %     res = obj.getCellTables(idx);
         %   Input Arguments:

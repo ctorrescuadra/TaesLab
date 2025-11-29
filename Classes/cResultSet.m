@@ -102,7 +102,7 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function printResults(obj)
-        %printResults - print the result tables on console
+        %printResults - Print the result tables on console
         %   Syntax:
         %     obj.printResults
         %

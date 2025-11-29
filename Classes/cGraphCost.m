@@ -42,7 +42,7 @@ classdef cGraphCost < cGraphResults
         end
         
         function showGraph(obj)
-        %showGraph - show the graph in a window
+        %showGraph - Show the graph in a window
         %   Syntax:
         %     obj.showGraph
 		%
@@ -64,7 +64,7 @@ classdef cGraphCost < cGraphResults
         end
 
         function showGraphUI(obj,app)
-        %showGraphUI - show the graph in a GUI app
+        %showGraphUI - Show the graph in a GUI app
         %   Syntax:
         %     obj.showGraphUI(app)
 		%	Input Parameter:

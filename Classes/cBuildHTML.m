@@ -96,8 +96,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %   Output Arguments:
         %     res - text string with the HTML head
         %
-            path=fileparts(mfilename('fullpath'));
-            cssfile=fullfile(path,cType.CSSFILE);
+            cssfile=fullfile(cType.ClassesPath,cType.CSSFILE);
             csstext=fileread(cssfile);
             res = '<!DOCTYPE html>';
             res=[res,sprintf('\n<html>\n')];
@@ -158,6 +157,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
             res=[res,[rows{:}]];
             % Close the HTML labels
             res=[res,sprintf('\t\t</table>\n')];
+            res=[res,sprintf('\t<br>')];
             res=[res,sprintf('\t</body>\n')];
             res=[res,sprintf('</html>\n')];
         end

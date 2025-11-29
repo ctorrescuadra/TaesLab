@@ -70,7 +70,7 @@ classdef cGraphWaste < cGraphResults
         end
 
         function showGraph(obj)
-		%showGraph - show the graph in a window
+		%showGraph - Show the graph in a window
         %   Syntax:
         %     obj.showGraph
 		%
@@ -82,7 +82,7 @@ classdef cGraphWaste < cGraphResults
         end
 
 		function showGraphUI(obj,app)
-		%showGraphUI - show the graph in a GUI app
+		%showGraphUI - Show the graph in a GUI app
         %   Syntax:
         %     obj.showGraphUI(app)
 		%	Input Parameter:
@@ -115,7 +115,10 @@ classdef cGraphWaste < cGraphResults
 
     methods(Access=private)
         function showPieChart(obj)
-    	% Plot the waste allocation pie chart
+    	%showPieChart - Show the waste allocation pie chart
+		%   Syntax:
+		%     obj.showPieChart
+		%
 			set(groot,'defaultTextInterpreter','none');
 			f=figure('name',obj.Name,...
 				'numbertitle','off',...
@@ -135,7 +138,10 @@ classdef cGraphWaste < cGraphResults
         end
         
         function showBarGraph(obj)
-		% Plot the waste allocation bar graph
+		%showBarGraph - Show the waste allocation bar graph
+		%   Syntax:
+		%     obj.showBarGraph
+		%
 			set(groot,'defaultTextInterpreter','none');
         	f=figure('name',obj.Name,...
 				'numbertitle','off',...

@@ -4,9 +4,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %   - Read and check a thermoeconomic data model
 %   - Compute direct and generalized exergy cost
 %   - Compare two thermoeconomic states (thermoeconomic diagnosis)
-%   - Analize Recycling effects (recycling analysis)
+%   - Analyze Recycling effects (recycling analysis)
 %   - Get Summary Results
-%   - Save the data model and results in diferent formats, for further analysis
+%   - Save the data model and results in different formats, for further analysis
 %   - Show the results tables in console, as GUI tables or graphs
 %   - Export the results tables in different formats (Excel, CSV, HTML, MAT)
 %   The class is derived from cResultSet, and implements methods to manage the results tables.
@@ -43,25 +43,25 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %  
 %     Result Info Methods
 %      productiveStructure       - Get the Productive Structure cResultInfo object
-%      exergyAnalysis            - Get the ExergyAnalysis cResultInfo object for the current state
-%      productiveDiagram         - Get the productive diagram cResultInfo object
-%      diagramFP                 - Get the diagram FP cResultInfo object of rhe current state
+%      exergyAnalysis            - Get the Exergy Analysis cResultInfo object for the current state
+%      productiveDiagram         - Get the Productive Diagram cResultInfo object
+%      diagramFP                 - Get the Diagram FP cResultInfo object of rhe current state
 %      thermoeconomicAnalysis    - Get the Thermoeconomic Analysis cResultInfo object
 %      thermoeconomicDiagnosis   - Get the Thermoeconomic Diagnosis cResultInfo object
-%      summaryDiagnosis          - Get the diagnosis results summary
+%      summaryDiagnosis          - Get the Diagnosis results summary
 %      wasteAnalysis             - Get the Waste Analysis cResultInfo object
 %      summaryResults            - Get the Summary Results cResultInfo object
-%      dataInfo                  - Get the data model cResultInfo object
+%      dataInfo                  - Get the Data model cResultInfo object
 %      getResultInfo             - Get the cResultInfo with optional parameters
 %  
 %     Model Info Methods
 %      showProperties            - Show the values of the current parameters of the model
 %      isDiagnosis               - Check if diagnosis computation is available.
 %      isDirectCost              - Check if Direct cost tables are selected
-%      isGeneralCost             - isGeneralizedCost - Check if Generalized cost calculation are activated
+%      isGeneralCost             - Check if Generalized cost calculation are activated
 %      isResourceCost            - Check if the model has resources cost defined
 %      isWaste                   - Check if model has waste defined
-%      showResultInfo            - Show or get a structure containig the results of the model
+%      showResultInfo            - Show or get a structure containing the results of the model
 %  
 %     Summary Info Methods
 %      summaryOptions            - Get the available summary option names
@@ -80,8 +80,8 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %      ListOfGraphs              - Get the list of graph tables as cell array
 %      ListOfTables              - Get the list of tables as cell array
 %      StudyCase                 - Get/display the study case names
-%      exportResults             - Export result tables into a structure using diferent formats.
-%      exportTable               - Export tname into the selected varmode/format
+%      exportResults             - Export result tables into a structure using different formats.
+%      exportTable               - Export table into the selected varmode format
 %      getTableIndex             - Get the table index of the results set
 %      printResults              - print the result tables on console
 %      saveResults               - Save result tables in different file formats depending on file extension
@@ -103,9 +103,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %      wasteAllocation           - Show waste information in console
 %  
 %     Resource Methods
-%      addResourceData           - addExergyData - Set exergy data values to actual state
+%      addResourceData           - Set exergy data values to actual state
 %      getResourceData           - Get the resource data cost values of sample
-%      setFlowResource           - setFlowResources - Set the resource cost of the flows
+%      setFlowResource           - Set the resource cost of the flows
 %      setProcessResource        - Set the resource cost of the processes
 %  
 %     Exergy Methods
@@ -114,7 +114,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %      setExergyData             - Set exergy data values to actual state
 %  
 %     Internal Methods
-%      updateDataModel           - update the data model if have been changes
+%      updateDataModel           - Update the data model if have been changes
 %      getResultState            - Get the cExergyCost object of each state
 %      getModelResults           - Get a cell array of cResultInfo objects of the current state
 %      getSampleId               - Get the Sample Id given the resource sample name
@@ -482,7 +482,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setRecycling(obj,value)
-        %setRecycing - Set Recycling parameter
+        %setRecycling - Set Recycling parameter
         %   Syntax:
         %     model.setRecycling(value)
         %     model.Recycling=value;
@@ -722,7 +722,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=isGeneralCost(obj)
-        %isGeneralizedCost - Check if Generalized cost calculation are activated
+        %isGeneralCost - Check if Generalized cost calculation is activated
         %   It is activated if it has resource samples defined in the data model
         %   and 'CostTables' parameter is defined as 'GENERALIZED' | 'ALL'
         %   
@@ -1257,9 +1257,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Resource Cost Methods
         %%%
         function res=setFlowResource(obj,c0)
-        %setFlowResources - Set the resource cost of the flows
+        %setFlowResource - Set the resource cost of the flows
         %   Syntax:
-        %     res = setFlowResources(c0)
+        %     res = setFlowResource(c0)
         %   Input Arguments:
         %     c0 - array containing the resources cost of flows
         %   Output Arguments:
@@ -1307,7 +1307,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=addResourceData(obj,sample,c0,varargin)
-        %addExergyData - Set exergy data values to actual state
+        %addResourceData - Set exergy data values to actual state
         %   Syntax:
         %     log=obj.setExergyData(values)
         %   Input Arguments:
@@ -1461,7 +1461,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Internal Package functions
         %%%%% 
         function log=updateDataModel(obj)
-        %updateDataModel - update the data model if have been changes
+        %updateDataModel - Update the data model if have been changes
         %   Syntax:
         %     log = obj.updateDataModel
         %   Output Arguments:

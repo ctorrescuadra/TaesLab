@@ -37,7 +37,7 @@ classdef cGraphRecycling < cGraphResults
         end
 
         function showGraph(obj)
- 		%showGraph - show the graph in a figure window
+ 		%showGraph - Show the graph in a figure window
         %   Syntax:
         %     obj.showGraphUI(app)
 		    set(groot,'defaultTextInterpreter','none');
@@ -54,7 +54,7 @@ classdef cGraphRecycling < cGraphResults
         end
 
 		function showGraphUI(obj,app)
-        %showGraphUI - show the graph in a GUI app
+        %showGraphUI - Show the graph in a GUI app
         %   Syntax:
         %     obj.showGraphUI(app)
 		%	Input Parameter:

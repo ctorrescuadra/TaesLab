@@ -18,7 +18,7 @@ classdef cMessageLogger < cTaesLab
 		logger      % cQueue containinig object messages
 	end
 	
-	methods
+	methods(Access=public)
 		function obj=cMessageLogger(val)
         %cMessageLogger - Creates an instance of the class
 		%   Syntax:

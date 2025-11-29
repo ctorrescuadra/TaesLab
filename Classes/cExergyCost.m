@@ -273,7 +273,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         end  
 
         function res=getFlowsCost(obj,rsc)
-        %getFlowCost - Get the exergy cost of flows
+        %getFlowsCost - Get the exergy cost of flows
         %   If resource cost is provided calculate the generalized cost
         %
         %   Syntax:
@@ -376,7 +376,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
 
         function res = getDirectCostTableFPR(obj,ucost)
-        %getDirectCostTableFPR - Get FPR CostTable with direct costs
+        %getDirectCostTableFPR - Get FPR Cost Table with direct costs
         %   Syntax:
         %     res = obj.getDirectCostTableFPR(ucost)
         %   Input Arguments:
@@ -399,7 +399,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         end 
     
         function res = getGeneralCostTableFPR(obj,rsc,ucost)
-        %getGeneralCostTableFPR - Get FPR CostTable with generalized costs
+        %getGeneralCostTableFPR - Get FPR Cost-Table with generalized costs
         %   Syntax:
         %     res = obj.getGeneralizedCostTableFPR(rsc,ucost)
         %   Input Arguments:
@@ -428,7 +428,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         end 
 
         function [pict,fict]=getIrreversibilityCostTables(obj,rsc)
-        %getIrreversibilityCostTable - Get Irreversibility Cost Tables for processes and flows
+        %getIrreversibilityCostTables - Get Irreversibility Cost Tables for processes and flows
         %   If resource cost is provided calculate the generalized tables
         %
         %   Syntax:

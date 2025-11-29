@@ -230,6 +230,9 @@ classdef cMessages
         InvalidFolderData='Invalid folder data %s'
         InvalidGroupData='Invalid group data %s'
         EmptyData='No valid data in file %s sheet %s'
+        NoClassInfo='No public %s found for class %s'
+        ClassNotFound='Class %s NOT found'
+        NotAvailableType='No available document type'
     end
 
     methods(Static)

@@ -96,14 +96,6 @@ classdef (Sealed) cBuildMarkdown < cMessageLogger
             res = [res, newline];
         end
 
-        function showTable(obj)
-        %saveTable - Show the table as Markdown code
-        %   Syntax:
-        %     showTable(obj);
-        %
-            disp(obj.getMarkdownCode);
-        end
-
         function log=saveTable(obj,filename)
         %saveTable - Save the table as Markdown code into filename
         %   Syntax:

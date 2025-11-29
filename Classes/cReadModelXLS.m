@@ -1,12 +1,20 @@
 classdef (Sealed) cReadModelXLS < cReadModelTable
-%cReadModelXLS -Implement the cReadModelTable to read XLSX data model files
+%cReadModelXLS - Implement the cReadModelTable to read XLSX data model files
 %   This class read a XLSX file containing the thermoeconomic data
 %   and build the data model
 %
-%   cReadModelXLS methods:
-%     cReadModelXLS - Build an instance of the class
+%   cReadModelXLS Properties:
+%     ModelName   - Name of the model
+%     ModelData   - cModelData object       
+%     ModelFile   - File name of the model  
+%     ModelTables - cModelTable object 
 %
-%   See also cReadModel, cReadModelTable
+%   cReadModelXLS methods:
+%     cReadModelXLS    - Build an instance of the class
+%     getDataModel     - Get the data model object
+%     printModelTables - Show the model tables on console
+%
+%   See also cReadModel, cReadModelTable, cModelData, cModelTable.
 %
     methods
         function obj = cReadModelXLS(filename)

@@ -375,7 +375,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=buildExergyData(obj,state,values)
-        %setExergyData - Set the exergy data values of a state
+        %buildExergyData - Set the exergy data values of a state
         %   Syntax:
         %     res = obj.setExergyData(state,values)
         %   Input Arguments:
@@ -420,7 +420,7 @@ classdef cDataModel < cResultSet
         end
 
         function log=setExergyData(obj,state,val)
-        %setExergyData - set exergy data to a state
+        %setExergyData - Set the exergy values of a state
         %   Syntax: 
         %     log = obj.setExergyData(state,val)
         %   Input Arguments:
@@ -445,7 +445,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=addExergyData(obj,state,val)
-        %setExergyData - add a new  exergy data state
+        %addExergyData - add a new  exergy data state
         %   Syntax: 
         %     log = obj.addExergyData(state,val)
         %   Input Arguments:
@@ -485,7 +485,7 @@ classdef cDataModel < cResultSet
         end
 
         function log=setFlowResource(obj,sample,values)
-        %setFlowResourceData - Set the flow-resource value of a sample
+        %setFlowResource - Set the flow-resource value of a sample
         %   Syntax:
         %     log = obj.setFlowResourceData(sample,values)
         %   Input Arguments:
@@ -505,7 +505,7 @@ classdef cDataModel < cResultSet
         end
 
         function log=setProcessResource(obj,sample,values)
-        %setProcessResourceData - Set the process-resource value of a sample
+        %setProcessResource - Set the process-resource value of a sample
         %   Syntax:
         %     log = obj.setProcessResourceData(sample,values)
         %   Input Arguments:
@@ -525,7 +525,7 @@ classdef cDataModel < cResultSet
         end
 
         function res=buildResourceData(obj,sample,rval,pval)
-        %buildResourceData - create a new cResourceData object
+        %buildResourceData - Create a new cResourceData object
         %   Syntax:
         %     res = obj.buildResourceData(sample,rval,pval)
         %   Input Arguments:
@@ -583,7 +583,7 @@ classdef cDataModel < cResultSet
         end
 
         function rsd=addResourceData(obj,sample,rval,varargin)
-        %addResourceData - create a new cResourceData object and add to Resource samples
+        %addResourceData - Create a new cResourceData object and add to Resource samples
         %   Syntax:
         %     res = obj.addResourceData(sample,rval,pval)
         %   Input Arguments:

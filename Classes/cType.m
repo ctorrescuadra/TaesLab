@@ -40,9 +40,11 @@ classdef cType
 %	  res=cType.getFileType(filename)
 %	  res=cType.checkFileExt(filename,ext)
 %    Other methods:
+%     res=cType.TaesLabPath()
 %     res=cType.tableCode()
 %     res=cType.getLine(lenght)
 %  	  text=cType.getTextErrorCode(val) 
+%	  text=cType.log2text(val)
 %  	  char=cType.getNewline()                               
 %  	  char=cType.getPathDelimiter() 
 %  	  img=cType.getIcon(name)
@@ -206,8 +208,9 @@ classdef cType
         % TaesApp Tab Panels
         Panels=struct('WELCOME',1,'INDEX',2,'TABLES',3,'GRAPHS',4,'LOG',5);
         % File Extensions
-		FileType=struct('JSON',1,'XLSX',2,'CSV',3,'MAT',4,'XML',5,'TXT',6,'HTML',7,'LaTeX',8,'MD',9,'MHLP',10);
-		FileExt=struct('JSON','.json','XLSX','.xlsx','CSV','.csv','MAT','.mat','XML','.xml','TXT','.txt','HTML','.html','LaTeX','.tex','MD','.md','MHLP','.m');
+		FileType=struct('JSON',1,'XML',2,'XLSX',3,'CSV',4,'MAT',5,'TXT',6,'HTML',7,'LaTeX',8,'MD',9,'MCNT',10,'MHLP',11);
+		FileExt=struct('JSON','.json','XML','.xml','XLSX','.xlsx','CSV','.csv','MAT','.mat',...
+			'TXT','.txt','HTML','.html','LaTeX','.tex','MD','.md','MCNT','.m','MHLP','.mhlp');
         % HTML/CCS style file
 		CSSFILE='styles.css';
         % Taess app welcome image
@@ -218,6 +221,12 @@ classdef cType
 		Symbols=jsondecode('{"dash": "\u2014","delta": "\u0394"}');  
 		% Icon Files
 		IconFile={'ps.png','ea.png','ta.png','wa.png','td.png','pd.png','fp.png','sr.png','md.png','mr.png'};
+		% TaesLab Paths
+		BasePath=fullfile(cType.TaesLabPath(),'Base');
+		ClassesPath=fullfile(cType.TaesLabPath(),'Classes');
+		FunctionsPath=fullfile(cType.TaesLabPath(),'Functions');
+		DocsPath=fullfile(cType.TaesLabPath(),'Docs');
+		ExamplesPath=fullfile(cType.TaesLabPath(),'Examples');
 		% System constanst
 		NEWLINE_PC='\r\n';    % Newline character for Windows
 		NEWLINE_UNIX='\n';    % Newline character for Unix (MAC)
@@ -226,7 +235,7 @@ classdef cType
 		PATH_PC='\'           % Path Character for Windows
 		PATH_UNIX='/'         % Path Character for Unix
 		% File Pattern
-		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+\.(xlsx|html|json|tex|csv|txt|xml|mat|md|m)$'
+		FILE_PATTERN='^(?!^(PRN|AUX|CLOCK\$|NUL|CON|COM\d|LPT\d)\..*)^\w+\.(xlsx|html|json|tex|csv|txt|xml|mat|md|m|mhlp)$'
     end
     %----------------------------
     % Static Methods for types
@@ -552,7 +561,7 @@ classdef cType
 		end
 
 		function res=checkClassInfo(text)
-		%checkTableView - Check ClassInfo value
+		%checkClassInfo - Check ClassInfo value
 		%   Syntax:
         %     res=cType.checkClassInfo(text)
         %   Input Arguments:
@@ -576,7 +585,7 @@ classdef cType
 		end
 
 		function [res,missing]=checkDirColumns(fields)
-		%checkDirColums - Check Table Directory Columns names
+		%checkDirColumns - Check Table Directory Columns names
 		%   Syntax:
         %     res=cType.checkDirColumns(text)
         %   Input Arguments:
@@ -674,6 +683,13 @@ classdef cType
 		%%%
 		% Other functions
 		%%%
+		function res=TaesLabPath()
+		%TaesLabPath - Get the full path of the TaesLab installation
+		%   Syntax:
+		%     res=cType.TaesLabPath
+			path=fileparts(mfilename('fullpath'));
+			res=fileparts(path);
+		end
 		function res=getLine(length)
 		%getLine - Get a dash line of the given length
 		%   Syntax:
@@ -686,7 +702,7 @@ classdef cType
 		end
 
 		function tableCode(name)
-		%tableCode - display the key code of a table
+		%tableCode - Display the key code of a table
 		%   Syntax:
         %     res=cType.tableCode
 		%   Input Arguments:
@@ -724,7 +740,7 @@ classdef cType
 		end
 
 		function res=log2text(val)
-		%log2str - Get the text representation of a logical value. Used in GUI Apps
+		%log2text - Get the text representation of a logical value. Used in GUI Apps
 		%   Syntax:
 		%     res = log2text(x)
 	    %   Input Arguments:

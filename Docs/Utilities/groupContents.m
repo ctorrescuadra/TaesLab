@@ -2,42 +2,19 @@ function groupContents(inFile, outFile)
 %groupContents - Read Contents.xlsx and generate grouped Contents.json
 %
 % Syntax:
-%   outFile = groupTablesByGroup()
-%   outFile = groupTablesByGroup(inFile)
-%   outFile = groupTablesByGroup(inFile, outFile)
+%   groupContents()
+%   groupContents(inFile)
+%   groupContents(inFile, outFile)
 %
-% Inputs:
+% Inputs Arguments
 %   inFile  - (optional) path to the input JSON (default: ./Contents.xlsx)
 %   outFile - (optional) path for the grouped JSON (./Contents.json)
 %
-% Output:
-%   log - cMessageLogger object with the log of the operation
-%
-% The output JSON file has this structure:
-%  {
-%    Folder: {
-%        "Name": "rdmb",
-%        "Description": "Read Data Model Function",
-%        "Groups": [
-%           {
-%            "Name": "Group Name",
-%            "Description": "Group Description",
-%            "Files": [
-%               {
-%                 "Name": "functionName",
-%                 "Description": "function description"
-%               }, 
-%           ]
-%        },
-%      ...
-%    ]
-%  }
-%
 % Example:
-%   groupFunctions(); % Contents.xlsx and writes Contents.json
+%   groupFunctions(); % Reads Contents.xlsx and writes Contents.json
 %   groupFunctions('C:/MyFolder/Contents.xlsx', 'C:/MyFolder/Contents.json');
 %
-    % locate default input (Functions/Contents.json next to this script)
+
     log=cMessageLogger();
     scriptFolder = fileparts(mfilename('fullpath'));
     if isempty(scriptFolder)

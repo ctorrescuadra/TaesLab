@@ -73,9 +73,9 @@ classdef cParseStream
 		end
 
         function [finp,fout]=getStreamFlows(str,fp)
-        %getStreamFlows - return input/output flows lists
+        %getStreamFlows - Get the input and output flows of a stream
         %   Syntax:
-        %     [finp,fout]=cParseStream.getFlows(stream)
+        %     [finp,fout]=cParseStream.getStreamFlows(stream)
         %   Input Arguments: 
         %     str - string contains the productive group definition
         %     fp - Indicate if the stream is fuel or product
@@ -176,7 +176,7 @@ classdef cParseStream
         end
 
         function res=checkDuplicates(list)
-        %checkUniqueKeys - Check if the list has duplicate values
+        %checkDuplicates - Check if the list has duplicate values
         %   Syntax:
         %     ier=cParseStream.checkUniqueKeys(keys)
         %   Input Arguments:

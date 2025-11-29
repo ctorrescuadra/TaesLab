@@ -1,0 +1,3052 @@
+[
+  {
+    "Name": "cBuildHTML",
+    "Description": "cBuildHTML Methods",
+    "Methods": [
+      {
+        "Name": "cBuildHTML",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "getMarkupHTML",
+        "Description": "Get the HTML text of the table"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Save the table into a HTML file"
+      },
+      {
+        "Name": "showTable",
+        "Description": "Show a normal table in the web browser"
+      }
+    ]
+  },
+  {
+    "Name": "cBuildLaTeX",
+    "Description": "cBuildLaTeX Methods",
+    "Methods": [
+      {
+        "Name": "cBuildLaTeX",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "getLaTeXcode",
+        "Description": "Get the LaTeX code as string"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Save the table as LaTeX code into filename"
+      }
+    ]
+  },
+  {
+    "Name": "cBuildMarkdown",
+    "Description": "cBuildMarkdown Methods",
+    "Methods": [
+      {
+        "Name": "cBuildMarkdown",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "getMarkdownCode",
+        "Description": "Get the Markdown code as string"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Save the table as Markdown code into filename"
+      }
+    ]
+  },
+  {
+    "Name": "cDataModel",
+    "Description": "cDataModel Methods",
+    "Methods": [
+      {
+        "Name": "addExergyData",
+        "Description": "add a new  exergy data state"
+      },
+      {
+        "Name": "addResourceData",
+        "Description": "Create a new cResourceData object and add to Resource samples"
+      },
+      {
+        "Name": "buildExergyData",
+        "Description": "Set the exergy data values of a state"
+      },
+      {
+        "Name": "buildResourceData",
+        "Description": "Create a new cResourceData object"
+      },
+      {
+        "Name": "cDataModel",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "create",
+        "Description": "Create a cDataModel object from a file"
+      },
+      {
+        "Name": "existSample",
+        "Description": "Check if sample is defined in ResourceState"
+      },
+      {
+        "Name": "existState",
+        "Description": "Check if state is defined in States"
+      },
+      {
+        "Name": "getExergyData",
+        "Description": "Get the exergy data for a state"
+      },
+      {
+        "Name": "getResourceData",
+        "Description": "Get the resource data for a sample"
+      },
+      {
+        "Name": "getResultInfo",
+        "Description": "Get data model result info"
+      },
+      {
+        "Name": "getTableInfo",
+        "Description": "Get information about a table"
+      },
+      {
+        "Name": "getTablesDirectory",
+        "Description": "Get the tables directory"
+      },
+      {
+        "Name": "getWasteDefinition",
+        "Description": "Get Waste Data"
+      },
+      {
+        "Name": "saveDataModel",
+        "Description": "Save data model depending of filename extension"
+      },
+      {
+        "Name": "setExergyData",
+        "Description": "Set the exergy values of a state"
+      },
+      {
+        "Name": "setFlowResource",
+        "Description": "Set the flow-resource value of a sample"
+      },
+      {
+        "Name": "setProcessResource",
+        "Description": "Set the process-resource value of a sample"
+      },
+      {
+        "Name": "setWasteRecycled",
+        "Description": "Set the waste recycling ratios"
+      },
+      {
+        "Name": "setWasteType",
+        "Description": "Set the waste type allocation method for Active Waste"
+      },
+      {
+        "Name": "setWasteValues",
+        "Description": "Set the waste table values"
+      },
+      {
+        "Name": "showDataModel",
+        "Description": "View a table in a GUI Table"
+      },
+      {
+        "Name": "updateModel",
+        "Description": "Update the Data Model if there is changes"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      },
+      {
+        "Name": "ListOfGraphs",
+        "Description": "Get the list of graph tables as cell array"
+      },
+      {
+        "Name": "ListOfTables",
+        "Description": "Get the list of tables as cell array"
+      },
+      {
+        "Name": "StudyCase",
+        "Description": "Get/display the study case names"
+      },
+      {
+        "Name": "exportResults",
+        "Description": "Export result tables into a structure using diferent formats."
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Export tname into the selected varmode/format"
+      },
+      {
+        "Name": "getTable",
+        "Description": "Get the table called name"
+      },
+      {
+        "Name": "getTableIndex",
+        "Description": "Get the table index of the results set"
+      },
+      {
+        "Name": "printResults",
+        "Description": "Print the result tables on console"
+      },
+      {
+        "Name": "saveResults",
+        "Description": "Save result tables in different file formats depending on file extension"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Save a result table into a file depending on extension"
+      },
+      {
+        "Name": "showResults",
+        "Description": "View an individual table"
+      },
+      {
+        "Name": "showTableIndex",
+        "Description": "View the index table of the results set"
+      }
+    ]
+  },
+  {
+    "Name": "cDataset",
+    "Description": "cDataset Methods",
+    "Methods": [
+      {
+        "Name": "addValues",
+        "Description": "Add a new value at the end of the dataset"
+      },
+      {
+        "Name": "cDataset",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "getValues",
+        "Description": "Get an element of the dataset"
+      },
+      {
+        "Name": "setValues",
+        "Description": "Set the values in position indicates by arg"
+      },
+      {
+        "Name": "addKey",
+        "Description": "Add a new key if doesn't exists"
+      },
+      {
+        "Name": "existsKey",
+        "Description": "Check if key exists"
+      },
+      {
+        "Name": "getIndex",
+        "Description": "Get the corresponding index of a key"
+      },
+      {
+        "Name": "getKey",
+        "Description": "Get the corresponding key(s) of a set of indexes"
+      },
+      {
+        "Name": "getKeys",
+        "Description": "Get the keys of the dictionary"
+      },
+      {
+        "Name": "isIndex",
+        "Description": "Check if the index is valid. "
+      },
+      {
+        "Name": "length",
+        "Description": "Length of the dictionary"
+      },
+      {
+        "Name": "numel",
+        "Description": "Number of elements of the dictionary"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the dictionary"
+      }
+    ]
+  },
+  {
+    "Name": "cDiagnosis",
+    "Description": "cDiagnosis Methods",
+    "Methods": [
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get cResultInfo object for thermoeconomic diagnosis"
+      },
+      {
+        "Name": "cDiagnosis",
+        "Description": "Create an object of the class"
+      },
+      {
+        "Name": "getDemandCorrectionCost",
+        "Description": "Get Demand Variation effective cost."
+      },
+      {
+        "Name": "getDemandVariation",
+        "Description": "Get the system demand variation"
+      },
+      {
+        "Name": "getDemandVariationCost",
+        "Description": "Get the system demand variation cost"
+      },
+      {
+        "Name": "getDiagnosisTable",
+        "Description": "Get Diagnosis Table"
+      },
+      {
+        "Name": "getExternalDisfunction",
+        "Description": "Get the external disfunction matrix"
+      },
+      {
+        "Name": "getInternalDisfunction",
+        "Description": "Get the internal disfunction matrix"
+      },
+      {
+        "Name": "getIrreversibilityTable",
+        "Description": "Build the irreversibility table"
+      },
+      {
+        "Name": "getIrreversibilityVariation",
+        "Description": "Get the unit process cost variation"
+      },
+      {
+        "Name": "getMalfunction",
+        "Description": "Get the malfunction vector"
+      },
+      {
+        "Name": "getMalfunctionCost",
+        "Description": "Get the malfunction cost vector (MF*)"
+      },
+      {
+        "Name": "getMalfunctionCostTable",
+        "Description": "Get the malfunction cost table"
+      },
+      {
+        "Name": "getMalfunctionTable",
+        "Description": "Get the Malfunction table"
+      },
+      {
+        "Name": "getOutputVariation",
+        "Description": "Get the system output variation"
+      },
+      {
+        "Name": "getUnitConsumptionVariation",
+        "Description": "Get the unit consumption variation"
+      },
+      {
+        "Name": "getUnitCostVariation",
+        "Description": "Get the unit process cost variation"
+      },
+      {
+        "Name": "getWasteMalfunctionCost",
+        "Description": "Get the waste cost variation (MR*)"
+      },
+      {
+        "Name": "getWasteMalfunctionCostTable",
+        "Description": "Get the waste malfunction cost table"
+      },
+      {
+        "Name": "getWasteVariation",
+        "Description": "Get waste variation"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      }
+    ]
+  },
+  {
+    "Name": "cDiagramFP",
+    "Description": "cDiagramFP Methods",
+    "Methods": [
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get cResultInfo object of the DiagramFP"
+      },
+      {
+        "Name": "cDiagramFP",
+        "Description": "Build an instance of this class"
+      },
+      {
+        "Name": "getNodesTable",
+        "Description": "Get the nodes  of a  diagram"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      }
+    ]
+  },
+  {
+    "Name": "cDictionary",
+    "Description": "cDictionary Methods",
+    "Methods": [
+      {
+        "Name": "addKey",
+        "Description": "Add a new key if doesn't exists"
+      },
+      {
+        "Name": "cDictionary",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "existsKey",
+        "Description": "Check if key exists"
+      },
+      {
+        "Name": "getIndex",
+        "Description": "Get the corresponding index of a key"
+      },
+      {
+        "Name": "getKey",
+        "Description": "Get the corresponding key(s) of a set of indexes"
+      },
+      {
+        "Name": "getKeys",
+        "Description": "Get the keys of the dictionary"
+      },
+      {
+        "Name": "isIndex",
+        "Description": "Check if the index is valid. "
+      },
+      {
+        "Name": "length",
+        "Description": "Length of the dictionary"
+      },
+      {
+        "Name": "numel",
+        "Description": "Number of elements of the dictionary"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the dictionary"
+      }
+    ]
+  },
+  {
+    "Name": "cDigraph",
+    "Description": "cDigraph Methods",
+    "Methods": [
+      {
+        "Name": "cDigraph",
+        "Description": "Build an instance of the class"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show the graph in a window"
+      },
+      {
+        "Name": "showGraphUI",
+        "Description": "Show the graph in a GUI app"
+      }
+    ]
+  },
+  {
+    "Name": "cDigraphAnalysis",
+    "Description": "cDigraphAnalysis Methods",
+    "Methods": [
+      {
+        "Name": "cDigraphAnalysis",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "getComponentNames",
+        "Description": "Get the names of the strong components"
+      },
+      {
+        "Name": "getGroupsInfo",
+        "Description": "Build the Node Groups table"
+      },
+      {
+        "Name": "getKernelInfo",
+        "Description": "Get the Kernel Table information"
+      },
+      {
+        "Name": "isProductive",
+        "Description": "Check if the graph is productive"
+      },
+      {
+        "Name": "isReachable",
+        "Description": "Check if node v is reachable from node u"
+      },
+      {
+        "Name": "isStrongConnected",
+        "Description": "Check if nodes u,v belong to the same component"
+      },
+      {
+        "Name": "plot",
+        "Description": "Plot the digraph"
+      }
+    ]
+  },
+  {
+    "Name": "cExergyCost",
+    "Description": "cExergyCost Methods",
+    "Methods": [
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get the cResultInfo object for thermoeconomic analysis"
+      },
+      {
+        "Name": "cExergyCost",
+        "Description": "Creates an instance of the class"
+      },
+      {
+        "Name": "getCostTableFP",
+        "Description": "Get the FP Cost Table considering only internal irreversibilities"
+      },
+      {
+        "Name": "getDirectCostTableFPR",
+        "Description": "Get FPR Cost Table with direct costs"
+      },
+      {
+        "Name": "getFlowsCost",
+        "Description": "Get the exergy cost of flows"
+      },
+      {
+        "Name": "getGeneralCostTableFPR",
+        "Description": "Get FPR Cost-Table with generalized costs"
+      },
+      {
+        "Name": "getIrreversibilityCostTables",
+        "Description": "Get Irreversibility Cost Tables for processes and flows"
+      },
+      {
+        "Name": "getOpR",
+        "Description": "Get the corresponding waste operator"
+      },
+      {
+        "Name": "getProcessCost",
+        "Description": "Get processes cost values"
+      },
+      {
+        "Name": "getProcessUnitCost",
+        "Description": "Get Process Unit Cost"
+      },
+      {
+        "Name": "getResourcesCostDistribution",
+        "Description": "Get the resource Cost distribution tables"
+      },
+      {
+        "Name": "getSpectralRatio",
+        "Description": "Get the spectral ratio of the productive matrix"
+      },
+      {
+        "Name": "getStreamsCost",
+        "Description": "Get the exergy cost of streams"
+      },
+      {
+        "Name": "updateOperator",
+        "Description": "Update an operator with the corresponding waste operator"
+      },
+      {
+        "Name": "updateWasteOperators",
+        "Description": "Calculate the waste allocation ratios and cost operators."
+      },
+      {
+        "Name": "ExternalIrreversibility",
+        "Description": "Get the total external irreversibility (waste)"
+      },
+      {
+        "Name": "FlowProcessTable",
+        "Description": "Get the Flow-Process table "
+      },
+      {
+        "Name": "InternalIrreversibility",
+        "Description": "Get the total internal irreversibility"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      }
+    ]
+  },
+  {
+    "Name": "cExergyData",
+    "Description": "cExergyData Methods",
+    "Methods": {
+      "Name": "cExergyData",
+      "Description": "Build an instance of the class"
+    }
+  },
+  {
+    "Name": "cExergyModel",
+    "Description": "cExergyModel Methods",
+    "Methods": [
+      {
+        "Name": "ExternalIrreversibility",
+        "Description": "Get the total external irreversibility (waste)"
+      },
+      {
+        "Name": "FlowProcessTable",
+        "Description": "Get the Flow-Process table "
+      },
+      {
+        "Name": "InternalIrreversibility",
+        "Description": "Get the total internal irreversibility"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get the cResultInfo object"
+      },
+      {
+        "Name": "cExergyModel",
+        "Description": "Create an instance of the class\t"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      }
+    ]
+  },
+  {
+    "Name": "cFormatData",
+    "Description": "cFormatData Methods",
+    "Methods": [
+      {
+        "Name": "cFormatData",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "getFormat",
+        "Description": "Get the format of a type of variable"
+      },
+      {
+        "Name": "getResultId",
+        "Description": "Get the ResultId of a table"
+      },
+      {
+        "Name": "getTableProperties",
+        "Description": "Get the properties of a cTable"
+      },
+      {
+        "Name": "getUnit",
+        "Description": "Get the format of a type of variable"
+      },
+      {
+        "Name": "getCellTables",
+        "Description": "Get the cell tables configuration"
+      },
+      {
+        "Name": "getDataModelProperties",
+        "Description": "Get the data model properties"
+      },
+      {
+        "Name": "getMatrixTables",
+        "Description": "Get the matrix tables configuration"
+      },
+      {
+        "Name": "getResultIdTables",
+        "Description": "Get the tables of an specific resultId"
+      },
+      {
+        "Name": "getSummaryTables",
+        "Description": "Get the summary tables configuration"
+      },
+      {
+        "Name": "getTableDefinition",
+        "Description": "Get the properties of a table"
+      },
+      {
+        "Name": "getTableId",
+        "Description": "Get tableId from dictionary. Internal use"
+      },
+      {
+        "Name": "getTableInfo",
+        "Description": "Get the properties of a table"
+      },
+      {
+        "Name": "getTablesDirectory",
+        "Description": "Get the tables directory"
+      }
+    ]
+  },
+  {
+    "Name": "cGraphCost",
+    "Description": "cGraphCost Methods",
+    "Methods": [
+      {
+        "Name": "cGraphCost",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show the graph in a window"
+      },
+      {
+        "Name": "showGraphUI",
+        "Description": "Show the graph in a GUI app"
+      }
+    ]
+  },
+  {
+    "Name": "cGraphCostRSC",
+    "Description": "cGraphCostRSC Methods",
+    "Methods": [
+      {
+        "Name": "cGraphCostRSC",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show the graph in a window"
+      },
+      {
+        "Name": "showGraphUI",
+        "Description": "Show the graph in a GUI app"
+      }
+    ]
+  },
+  {
+    "Name": "cGraphDiagnosis",
+    "Description": "cGraphDiagnosis Methods",
+    "Methods": [
+      {
+        "Name": "cGraphDiagnosis",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show the graph in a window"
+      },
+      {
+        "Name": "showGraphUI",
+        "Description": "Show the graph in a GUI app"
+      }
+    ]
+  },
+  {
+    "Name": "cGraphDiagramFP",
+    "Description": "cGraphDiagramFP Methods",
+    "Methods": [
+      {
+        "Name": "cGraphDiagramFP",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "edgesTable",
+        "Description": "Get a table with the edges of the digraph"
+      },
+      {
+        "Name": "nodesTable",
+        "Description": "Get a table with the properties of the nodes"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show the graph in a window"
+      },
+      {
+        "Name": "showGraphUI",
+        "Description": "Show the graph in a GUI app"
+      }
+    ]
+  },
+  {
+    "Name": "cGraphRecycling",
+    "Description": "cGraphRecycling Methods",
+    "Methods": [
+      {
+        "Name": "cGraphRecycling",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show the graph in a figure window"
+      },
+      {
+        "Name": "showGraphUI",
+        "Description": "Show the graph in a GUI app"
+      }
+    ]
+  },
+  {
+    "Name": "cGraphResults",
+    "Description": "cGraphResults Methods",
+    "Methods": {
+      "Name": "cGraphResults",
+      "Description": "Abstract class used to show graphs in interactive mode and apps."
+    }
+  },
+  {
+    "Name": "cGraphSummary",
+    "Description": "cGraphSummary Methods",
+    "Methods": [
+      {
+        "Name": "cGraphSummary",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show the graph in a window"
+      },
+      {
+        "Name": "showGraphUI",
+        "Description": "Show the graph in a GUI app"
+      }
+    ]
+  },
+  {
+    "Name": "cGraphWaste",
+    "Description": "cGraphWaste Methods",
+    "Methods": [
+      {
+        "Name": "cGraphWaste",
+        "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show the graph in a window"
+      },
+      {
+        "Name": "showGraphUI",
+        "Description": "Show the graph in a GUI app"
+      }
+    ]
+  },
+  {
+    "Name": "cMessageBuilder",
+    "Description": "cMessageBuilder Methods",
+    "Methods": [
+      {
+        "Name": "cMessageBuilder",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "disp",
+        "Description": "Overload disp function"
+      },
+      {
+        "Name": "getMessage",
+        "Description": "Get the message as text"
+      }
+    ]
+  },
+  {
+    "Name": "cMessages",
+    "Description": "cMessages Methods",
+    "Methods": [
+      {
+        "Name": "ShowHelp",
+        "Description": "Get a string with the hyperlink to the help of the caller function"
+      },
+      {
+        "Name": "Table",
+        "Description": "Get or show in console a table with all the messages or show in console"
+      },
+      {
+        "Name": "cMessages",
+        "Description": "Static class which defines the TaesLab messages."
+      }
+    ]
+  },
+  {
+    "Name": "cModelData",
+    "Description": "cModelData Methods",
+    "Methods": [
+      {
+        "Name": "cModelData",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "getSampleNames",
+        "Description": "Get a cell array list with the names of the resource samples"
+      },
+      {
+        "Name": "getStateNames",
+        "Description": "Get a cell array list with the names of the states"
+      },
+      {
+        "Name": "isResource",
+        "Description": "Indicate is optional resource cost element exists"
+      },
+      {
+        "Name": "isWaste",
+        "Description": "Indicate is optional waste element exists"
+      },
+      {
+        "Name": "saveAsJSON",
+        "Description": "Save data model as JSON file"
+      },
+      {
+        "Name": "saveAsXML",
+        "Description": "Save data model as XML file"
+      }
+    ]
+  },
+  {
+    "Name": "cModelResults",
+    "Description": "cModelResults Methods",
+    "Methods": [
+      {
+        "Name": "cModelResults",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "clearResults",
+        "Description": "Clear the result index in the container"
+      },
+      {
+        "Name": "getModelResults",
+        "Description": "Get a cell array with the cResultInfo objects of the current state"
+      },
+      {
+        "Name": "getResults",
+        "Description": "Get the cResultInfo from the container"
+      },
+      {
+        "Name": "setResults",
+        "Description": "Store the cResultInfo in the results container using ResultId as index"
+      }
+    ]
+  },
+  {
+    "Name": "cModelTable",
+    "Description": "cModelTable Methods",
+    "Methods": [
+      {
+        "Name": "cModelTable",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "getStructData",
+        "Description": "Get a struct with the table values"
+      },
+      {
+        "Name": "getTableData",
+        "Description": "Get a cTable with the table model info."
+      },
+      {
+        "Name": "printTable",
+        "Description": "Print data on console, using cTable interface."
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the table model. Overload size method"
+      }
+    ]
+  },
+  {
+    "Name": "cParseStream",
+    "Description": "cParseStream Methods",
+    "Methods": [
+      {
+        "Name": "cParseStream",
+        "Description": "Class with static methods to parse stream definition"
+      },
+      {
+        "Name": "checkDuplicates",
+        "Description": "Check if the list has duplicate values"
+      },
+      {
+        "Name": "checkListKeys",
+        "Description": "Check if a list of keys is valid"
+      },
+      {
+        "Name": "checkListNames",
+        "Description": "Check if a list of names is valid"
+      },
+      {
+        "Name": "checkName",
+        "Description": "Check if a name (state | sample) is valid"
+      },
+      {
+        "Name": "checkNumericFormat",
+        "Description": "Check if a numeric format is valid"
+      },
+      {
+        "Name": "checkStream",
+        "Description": "Check if a fuel/product definition string is correct"
+      },
+      {
+        "Name": "checkTextKey",
+        "Description": "Check if a text key is valid"
+      },
+      {
+        "Name": "getFlowsList",
+        "Description": "Get the list of flows in a FP definition string"
+      },
+      {
+        "Name": "getStreamFlows",
+        "Description": "Get the input and output flows of a stream"
+      },
+      {
+        "Name": "getStreams",
+        "Description": "Get the list of productive groups"
+      }
+    ]
+  },
+  {
+    "Name": "cProductiveDiagram",
+    "Description": "cProductiveDiagram Methods",
+    "Methods": [
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get cResultInfo object"
+      },
+      {
+        "Name": "cProductiveDiagram",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "getEdgesTable",
+        "Description": "Get the edges info of a diagram"
+      },
+      {
+        "Name": "getNodesTable",
+        "Description": "Get the nodes  of a  diagram"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      }
+    ]
+  },
+  {
+    "Name": "cProductiveStructure",
+    "Description": "cProductiveStructure Methods",
+    "Methods": [
+      {
+        "Name": "FinalProductFlows",
+        "Description": "Get the final product flows id"
+      },
+      {
+        "Name": "FlowEdges",
+        "Description": "Get a structure array with the stream node names of the flow edges"
+      },
+      {
+        "Name": "FuelStreams",
+        "Description": "Get the fuel streams id (including output and wastes)"
+      },
+      {
+        "Name": "IncidenceMatrix",
+        "Description": "Get incidence matrices of the plant"
+      },
+      {
+        "Name": "OutputProcesses",
+        "Description": "Get the id of processes with external outputs"
+      },
+      {
+        "Name": "ProductStreams",
+        "Description": "Get the product streams id (including resources)"
+      },
+      {
+        "Name": "ResourceFlows",
+        "Description": "Get the resource flows id"
+      },
+      {
+        "Name": "ResourceProcesses",
+        "Description": "Get the id of processes with external resources"
+      },
+      {
+        "Name": "SystemOutputFlows",
+        "Description": "Get the system output flows id"
+      },
+      {
+        "Name": "WasteData",
+        "Description": "Get default waste data info"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Build the cResultInfo object for PRODUCTIVE_STRUCTURE"
+      },
+      {
+        "Name": "cProductiveStructure",
+        "Description": "Creates an instance of the class"
+      },
+      {
+        "Name": "flows2Streams",
+        "Description": "Compute the exergy or cost of streams from flow values"
+      },
+      {
+        "Name": "getFlowId",
+        "Description": "Get the Id of a flow given its key"
+      },
+      {
+        "Name": "getFlowMatrix",
+        "Description": "Get the Structural Theory Flows Adjacency Matrix"
+      },
+      {
+        "Name": "getFlowProcessMatrix",
+        "Description": "Get the Flow-Process Adjacency Matrix (Flows, Processes)"
+      },
+      {
+        "Name": "getFlowTypes",
+        "Description": "Get the flowId of type typeId"
+      },
+      {
+        "Name": "getProcessId",
+        "Description": "Get the Id of a process given its key"
+      },
+      {
+        "Name": "getProcessMatrix",
+        "Description": "Get the Process Adjacency Matrix (logical FP table)"
+      },
+      {
+        "Name": "getProcessTypes",
+        "Description": "Get the process-id of type typeId"
+      },
+      {
+        "Name": "getProductNames",
+        "Description": "Get the name of the final products flows"
+      },
+      {
+        "Name": "getProductiveMatrix",
+        "Description": "Get the Productive Adjacency Matrix (Streams, Flows, Processes)"
+      },
+      {
+        "Name": "getResourceNames",
+        "Description": "Get the name of the resource flows"
+      },
+      {
+        "Name": "getStreamMatrix",
+        "Description": "Get the Streams graph adjacency matrix"
+      },
+      {
+        "Name": "getStreamTypes",
+        "Description": "Get the stream-id of type typeId"
+      },
+      {
+        "Name": "getWasteNames",
+        "Description": "Get the name of the waste flows"
+      },
+      {
+        "Name": "isModelIO",
+        "Description": "Check if the model is pure Input-Output"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      }
+    ]
+  },
+  {
+    "Name": "cQueue",
+    "Description": "cQueue Methods",
+    "Methods": [
+      {
+        "Name": "add",
+        "Description": "Add an element at the end of the queue"
+      },
+      {
+        "Name": "addQueue",
+        "Description": "Add another queue at the end of this queue"
+      },
+      {
+        "Name": "cQueue",
+        "Description": "Create a cQueue object. Initialize as a empty cell array"
+      },
+      {
+        "Name": "clear",
+        "Description": "Clear the queue"
+      },
+      {
+        "Name": "getContent",
+        "Description": "Get the content of the queue"
+      },
+      {
+        "Name": "length",
+        "Description": "Length of the queue. Overload length function"
+      },
+      {
+        "Name": "numel",
+        "Description": "Number of elements of the queue. Overload numel function"
+      },
+      {
+        "Name": "printContent",
+        "Description": "Print the content of the buffer"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the queue. Overload size function"
+      }
+    ]
+  },
+  {
+    "Name": "cReadModel",
+    "Description": "cReadModel Methods",
+    "Methods": [
+      {
+        "Name": "cReadModel",
+        "Description": "Abstract class to implemenent the model reader classes."
+      },
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
+      }
+    ]
+  },
+  {
+    "Name": "cReadModelCSV",
+    "Description": "cReadModelCSV Methods",
+    "Methods": [
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
+      },
+      {
+        "Name": "cReadModelCSV",
+        "Description": "Build an instance of the class"
+      },
+      {
+        "Name": "printModelTables",
+        "Description": "Show the model tables on console"
+      }
+    ]
+  },
+  {
+    "Name": "cReadModelJSON",
+    "Description": "cReadModelJSON Methods",
+    "Methods": [
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
+      },
+      {
+        "Name": "cReadModelJSON",
+        "Description": "Construct an instance of the class"
+      }
+    ]
+  },
+  {
+    "Name": "cReadModelStruct",
+    "Description": "cReadModelStruct Methods",
+    "Methods": [
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
+      },
+      {
+        "Name": "cReadModelStruct",
+        "Description": "Abstract class to read structured data model."
+      }
+    ]
+  },
+  {
+    "Name": "cReadModelTable",
+    "Description": "cReadModelTable Methods",
+    "Methods": [
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
+      },
+      {
+        "Name": "cReadModelTable",
+        "Description": "Abstract class to read table data model."
+      },
+      {
+        "Name": "printModelTables",
+        "Description": "Show the model tables on console"
+      }
+    ]
+  },
+  {
+    "Name": "cReadModelXLS",
+    "Description": "cReadModelXLS Methods",
+    "Methods": [
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
+      },
+      {
+        "Name": "printModelTables",
+        "Description": "Show the model tables on console"
+      },
+      {
+        "Name": "cReadModelXLS",
+        "Description": "Build an instance of the class"
+      }
+    ]
+  },
+  {
+    "Name": "cReadModelXML",
+    "Description": "cReadModelXML Methods",
+    "Methods": [
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
+      },
+      {
+        "Name": "cReadModelXML",
+        "Description": "Build an instance of the object"
+      }
+    ]
+  },
+  {
+    "Name": "cResourceData",
+    "Description": "cResourceData Methods",
+    "Methods": [
+      {
+        "Name": "cResourceData",
+        "Description": "Creates an instance of the class"
+      },
+      {
+        "Name": "setFlowResource",
+        "Description": "Set the flow-resource values of the current sample"
+      },
+      {
+        "Name": "setProcessResource",
+        "Description": "Set the process-resource value of the current sample"
+      },
+      {
+        "Name": "setResourceCost",
+        "Description": "Calculate the resource cost properties for the current sample"
+      }
+    ]
+  },
+  {
+    "Name": "cResultId",
+    "Description": "cResultId Methods",
+    "Methods": [
+      {
+        "Name": "cResultId",
+        "Description": "Abstract class to manage the result identification."
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      }
+    ]
+  },
+  {
+    "Name": "cResultInfo",
+    "Description": "cResultInfo Methods",
+    "Methods": [
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      },
+      {
+        "Name": "cResultInfo",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "getResultInfo",
+        "Description": "Get cResultInfo object for cResultSet"
+      },
+      {
+        "Name": "getTable",
+        "Description": "Get the table called name"
+      },
+      {
+        "Name": "getTableIndex",
+        "Description": "Get the Table Index"
+      },
+      {
+        "Name": "isSampleSummary",
+        "Description": "Check if the Samples Summary results are available"
+      },
+      {
+        "Name": "isStateSummary",
+        "Description": "Check if the States Summary results are available"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show graph with default options"
+      },
+      {
+        "Name": "summaryDiagnosis",
+        "Description": "Get the Fuel Impact/Malfunction Cost as a string including format and unit"
+      },
+      {
+        "Name": "summaryTables",
+        "Description": "Get/Display available summary tables"
+      },
+      {
+        "Name": "ListOfGraphs",
+        "Description": "Get the list of graph tables as cell array"
+      },
+      {
+        "Name": "ListOfTables",
+        "Description": "Get the list of tables as cell array"
+      },
+      {
+        "Name": "StudyCase",
+        "Description": "Get/display the study case names"
+      },
+      {
+        "Name": "exportResults",
+        "Description": "Export result tables into a structure using diferent formats."
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Export tname into the selected varmode/format"
+      },
+      {
+        "Name": "printResults",
+        "Description": "Print the result tables on console"
+      },
+      {
+        "Name": "saveResults",
+        "Description": "Save result tables in different file formats depending on file extension"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Save a result table into a file depending on extension"
+      },
+      {
+        "Name": "showResults",
+        "Description": "View an individual table"
+      },
+      {
+        "Name": "showTableIndex",
+        "Description": "View the index table of the results set"
+      }
+    ]
+  },
+  {
+    "Name": "cResultSet",
+    "Description": "cResultSet Methods",
+    "Methods": [
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      },
+      {
+        "Name": "ListOfGraphs",
+        "Description": "Get the list of graph tables as cell array"
+      },
+      {
+        "Name": "ListOfTables",
+        "Description": "Get the list of tables as cell array"
+      },
+      {
+        "Name": "StudyCase",
+        "Description": "Get/display the study case names"
+      },
+      {
+        "Name": "cResultSet",
+        "Description": "Abstract class to manage the result sets."
+      },
+      {
+        "Name": "exportResults",
+        "Description": "Export result tables into a structure using diferent formats."
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Export tname into the selected varmode/format"
+      },
+      {
+        "Name": "getTable",
+        "Description": "Get the table called name"
+      },
+      {
+        "Name": "getTableIndex",
+        "Description": "Get the table index of the results set"
+      },
+      {
+        "Name": "printResults",
+        "Description": "Print the result tables on console"
+      },
+      {
+        "Name": "saveResults",
+        "Description": "Save result tables in different file formats depending on file extension"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Save a result table into a file depending on extension"
+      },
+      {
+        "Name": "showResults",
+        "Description": "View an individual table"
+      },
+      {
+        "Name": "showTableIndex",
+        "Description": "View the index table of the results set"
+      }
+    ]
+  },
+  {
+    "Name": "cResultTableBuilder",
+    "Description": "cResultTableBuilder Methods",
+    "Methods": [
+      {
+        "Name": "getFormat",
+        "Description": "Get the format of a type of variable"
+      },
+      {
+        "Name": "getResultId",
+        "Description": "Get the ResultId of a table"
+      },
+      {
+        "Name": "getTableProperties",
+        "Description": "Get the properties of a cTable"
+      },
+      {
+        "Name": "getUnit",
+        "Description": "Get the format of a type of variable"
+      },
+      {
+        "Name": "cResultTableBuilder",
+        "Description": "Create and instance of the class"
+      },
+      {
+        "Name": "getCostResults",
+        "Description": "Get the thermoeconomic analysis result "
+      },
+      {
+        "Name": "getDiagnosisResults",
+        "Description": "Get the thermoeconomic diagnosis results"
+      },
+      {
+        "Name": "getDiagramFP",
+        "Description": "Get the diagram FP adjacency results"
+      },
+      {
+        "Name": "getExergyResults",
+        "Description": "Generate the exergy results"
+      },
+      {
+        "Name": "getProductiveDiagram",
+        "Description": "Get the productive diagram tables"
+      },
+      {
+        "Name": "getProductiveStructure",
+        "Description": "Generate the productive structure results"
+      },
+      {
+        "Name": "getSummaryResults",
+        "Description": "Get the cResultInfo for Summary Results"
+      },
+      {
+        "Name": "getWasteAnalysisResults",
+        "Description": "Get the waste analysis results"
+      },
+      {
+        "Name": "getCellTables",
+        "Description": "Get the cell tables configuration"
+      },
+      {
+        "Name": "getDataModelProperties",
+        "Description": "Get the data model properties"
+      },
+      {
+        "Name": "getMatrixTables",
+        "Description": "Get the matrix tables configuration"
+      },
+      {
+        "Name": "getResultIdTables",
+        "Description": "Get the tables of an specific resultId"
+      },
+      {
+        "Name": "getSummaryTables",
+        "Description": "Get the summary tables configuration"
+      },
+      {
+        "Name": "getTableDefinition",
+        "Description": "Get the properties of a table"
+      },
+      {
+        "Name": "getTableId",
+        "Description": "Get tableId from dictionary. Internal use"
+      },
+      {
+        "Name": "getTableInfo",
+        "Description": "Get the properties of a table"
+      },
+      {
+        "Name": "getTablesDirectory",
+        "Description": "Get the tables directory"
+      }
+    ]
+  },
+  {
+    "Name": "cSparseRow",
+    "Description": "cSparseRow Methods",
+    "Methods": [
+      {
+        "Name": "cSparseRow",
+        "Description": "create an instance of the class"
+      },
+      {
+        "Name": "ctranspose",
+        "Description": "Overload ctranspose operator for cSparseRow objects"
+      },
+      {
+        "Name": "disp",
+        "Description": "Overload display object for cSparseRow objects"
+      },
+      {
+        "Name": "divideCol",
+        "Description": "Divide the columns of the matrix by a vector"
+      },
+      {
+        "Name": "divideRow",
+        "Description": "Divide the rows of the matrix by a vector"
+      },
+      {
+        "Name": "full",
+        "Description": "Overload full function for cSparseRow objects"
+      },
+      {
+        "Name": "minus",
+        "Description": "Overload the minus operator for cSparseRow objects"
+      },
+      {
+        "Name": "mtimes",
+        "Description": "Overload the mtimes operator for cSparseRow objects"
+      },
+      {
+        "Name": "plus",
+        "Description": "Overload the plus operator for cSparseRow objects"
+      },
+      {
+        "Name": "scaleCol",
+        "Description": "Scale the columns of the matrix by a vector"
+      },
+      {
+        "Name": "scaleRow",
+        "Description": "Scale the rows of the matrix by a vector"
+      },
+      {
+        "Name": "size",
+        "Description": "Overload size function for cSparseRow objects"
+      },
+      {
+        "Name": "sparse",
+        "Description": "Overload sparse function for cSparseRow objects"
+      },
+      {
+        "Name": "sum",
+        "Description": "Overload sum function for cSparseRow objects"
+      },
+      {
+        "Name": "sumCols",
+        "Description": "Sum the columns of the matrices"
+      },
+      {
+        "Name": "sumRows",
+        "Description": "Sum the rows of the matrices"
+      },
+      {
+        "Name": "transpose",
+        "Description": "Overload transpose operator for cSparseRow objects"
+      },
+      {
+        "Name": "uminus",
+        "Description": "Overload the uminus operator for cSparseRow objects"
+      }
+    ]
+  },
+  {
+    "Name": "cSummaryOptions",
+    "Description": "cSummaryOptions Methods",
+    "Methods": [
+      {
+        "Name": "cSummaryOptions",
+        "Description": "Build an instance of the class"
+      },
+      {
+        "Name": "checkId",
+        "Description": "Check the summary id option"
+      },
+      {
+        "Name": "checkName",
+        "Description": "Check the summary name option"
+      },
+      {
+        "Name": "defaultOption",
+        "Description": "Get the default summary option name for the data model"
+      },
+      {
+        "Name": "isEnable",
+        "Description": "Check if model has summary enabled"
+      },
+      {
+        "Name": "isResources",
+        "Description": "Check if the model has resources summary available"
+      },
+      {
+        "Name": "isStates",
+        "Description": "Check if the model has states summary available"
+      }
+    ]
+  },
+  {
+    "Name": "cSummaryResults",
+    "Description": "cSummaryResults Methods",
+    "Methods": [
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get cResultInfo object"
+      },
+      {
+        "Name": "cSummaryResults",
+        "Description": "Build an instance of this class"
+      },
+      {
+        "Name": "defaultSummaryTables",
+        "Description": "Get the default summary tables option name"
+      },
+      {
+        "Name": "getDefaultFlowVariables",
+        "Description": "Get the output flows keys"
+      },
+      {
+        "Name": "getDefaultProcessVariables",
+        "Description": "Get the output processes keys"
+      },
+      {
+        "Name": "getSummaryColumns",
+        "Description": "Get the column names of the summary tables"
+      },
+      {
+        "Name": "getValues",
+        "Description": "Get dataset tables"
+      },
+      {
+        "Name": "isSampleSummary",
+        "Description": "Check if Samples Summary results are available"
+      },
+      {
+        "Name": "isStateSummary",
+        "Description": "Check if States Summary results are available"
+      },
+      {
+        "Name": "setSummaryTables",
+        "Description": "Fill the values of the summary tables with the values of the model"
+      }
+    ]
+  },
+  {
+    "Name": "cSummaryTable",
+    "Description": "cSummaryTable Methods",
+    "Methods": [
+      {
+        "Name": "cSummaryTable",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "setValues",
+        "Description": "Set the values of the table for each STATE/RESOURCE"
+      }
+    ]
+  },
+  {
+    "Name": "cTable",
+    "Description": "cTable Methods",
+    "Methods": [
+      {
+        "Name": "cTable",
+        "Description": "Abstract class for tabular data."
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Get table values in diferent formats"
+      },
+      {
+        "Name": "getColumnData",
+        "Description": "Get a key/value array struct of a column table"
+      },
+      {
+        "Name": "getColumnFormat",
+        "Description": "Get the format of each column table"
+      },
+      {
+        "Name": "getColumnValues",
+        "Description": "Get the values of a column table"
+      },
+      {
+        "Name": "getColumnWidth",
+        "Description": "Get the maximun width of each column"
+      },
+      {
+        "Name": "getMatlabTable",
+        "Description": "Get cTable as Matlab table"
+      },
+      {
+        "Name": "getProperties",
+        "Description": "Get table properties"
+      },
+      {
+        "Name": "getStructData",
+        "Description": "Get table data as struct array"
+      },
+      {
+        "Name": "getStructTable",
+        "Description": "Get a structure with the table info"
+      },
+      {
+        "Name": "isGraph",
+        "Description": "Check if the table has a graph associated"
+      },
+      {
+        "Name": "isNumericColumn",
+        "Description": "Check if a column is numeric (base method)"
+      },
+      {
+        "Name": "isNumericTable",
+        "Description": "Check if the data of the table is numeric"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Generate a file with the table values"
+      },
+      {
+        "Name": "setColumnValues",
+        "Description": "Set the values of a column table"
+      },
+      {
+        "Name": "setDescription",
+        "Description": "Set Table Header or Description."
+      },
+      {
+        "Name": "setRowValues",
+        "Description": "Set the values of a table row"
+      },
+      {
+        "Name": "setStudyCase",
+        "Description": "Set state and sample values. Internal function"
+      },
+      {
+        "Name": "showTable",
+        "Description": "View Table in console GUI or HTML"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the table. Overload of size function."
+      }
+    ]
+  },
+  {
+    "Name": "cTableCell",
+    "Description": "cTableCell Methods",
+    "Methods": [
+      {
+        "Name": "getColumnData",
+        "Description": "Get a key/value array struct of a column table"
+      },
+      {
+        "Name": "getColumnFormat",
+        "Description": "Get the format of each column table"
+      },
+      {
+        "Name": "getColumnWidth",
+        "Description": "Get the maximun width of each column"
+      },
+      {
+        "Name": "isGraph",
+        "Description": "Check if the table has a graph associated"
+      },
+      {
+        "Name": "isNumericColumn",
+        "Description": "Check if a column is numeric (base method)"
+      },
+      {
+        "Name": "isNumericTable",
+        "Description": "Check if the data of the table is numeric"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Generate a file with the table values"
+      },
+      {
+        "Name": "setColumnValues",
+        "Description": "Set the values of a column table"
+      },
+      {
+        "Name": "setDescription",
+        "Description": "Set Table Header or Description."
+      },
+      {
+        "Name": "setRowValues",
+        "Description": "Set the values of a table row"
+      },
+      {
+        "Name": "setStudyCase",
+        "Description": "Set state and sample values. Internal function"
+      },
+      {
+        "Name": "showTable",
+        "Description": "View Table in console GUI or HTML"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the table. Overload of size function."
+      },
+      {
+        "Name": "cTableCell",
+        "Description": "Create Cell Table object"
+      },
+      {
+        "Name": "formatData",
+        "Description": "Apply format to data"
+      },
+      {
+        "Name": "getColumnValues",
+        "Description": "Get the values of a specfic column"
+      },
+      {
+        "Name": "getDescriptionLabel",
+        "Description": "Get the description of the table"
+      },
+      {
+        "Name": "getMatlabTable",
+        "Description": "Get table as Matlab table object"
+      },
+      {
+        "Name": "getStructData",
+        "Description": "Get the table data as struct"
+      },
+      {
+        "Name": "getStructTable",
+        "Description": "Get the table as a struct. Include properties"
+      },
+      {
+        "Name": "printTable",
+        "Description": "Display table on console or in a file in a pretty formatted way"
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Get cTable info in diferent types of variables"
+      },
+      {
+        "Name": "getCellData",
+        "Description": "Get table as cell array"
+      },
+      {
+        "Name": "getProperties",
+        "Description": "get the additional properties of a cTableResults"
+      }
+    ]
+  },
+  {
+    "Name": "cTableData",
+    "Description": "cTableData Methods",
+    "Methods": [
+      {
+        "Name": "exportTable",
+        "Description": "Get table values in diferent formats"
+      },
+      {
+        "Name": "getColumnData",
+        "Description": "Get a key/value array struct of a column table"
+      },
+      {
+        "Name": "getColumnFormat",
+        "Description": "Get the format of each column table"
+      },
+      {
+        "Name": "getColumnValues",
+        "Description": "Get the values of a column table"
+      },
+      {
+        "Name": "getColumnWidth",
+        "Description": "Get the maximun width of each column"
+      },
+      {
+        "Name": "getMatlabTable",
+        "Description": "Get cTable as Matlab table"
+      },
+      {
+        "Name": "getProperties",
+        "Description": "Get table properties"
+      },
+      {
+        "Name": "getStructData",
+        "Description": "Get table data as struct array"
+      },
+      {
+        "Name": "isGraph",
+        "Description": "Check if the table has a graph associated"
+      },
+      {
+        "Name": "isNumericColumn",
+        "Description": "Check if a column is numeric (base method)"
+      },
+      {
+        "Name": "isNumericTable",
+        "Description": "Check if the data of the table is numeric"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Generate a file with the table values"
+      },
+      {
+        "Name": "setColumnValues",
+        "Description": "Set the values of a column table"
+      },
+      {
+        "Name": "setDescription",
+        "Description": "Set Table Header or Description."
+      },
+      {
+        "Name": "setRowValues",
+        "Description": "Set the values of a table row"
+      },
+      {
+        "Name": "setStudyCase",
+        "Description": "Set state and sample values. Internal function"
+      },
+      {
+        "Name": "showTable",
+        "Description": "View Table in console GUI or HTML"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the table. Overload of size function."
+      },
+      {
+        "Name": "cTableData",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "create",
+        "Description": "Create a cTableData from values"
+      },
+      {
+        "Name": "formatData",
+        "Description": "Format the values of the table"
+      },
+      {
+        "Name": "getDescriptionLabel",
+        "Description": "Get the description of each table for graph or printing"
+      },
+      {
+        "Name": "getStructTable",
+        "Description": "Get table as a struct"
+      },
+      {
+        "Name": "import",
+        "Description": "Create cTableData from file"
+      },
+      {
+        "Name": "importMatlabTable",
+        "Description": "Import data from a MATLAB table into cTable object"
+      },
+      {
+        "Name": "printTable",
+        "Description": "Display table on console or in a file in a pretty formatted way"
+      }
+    ]
+  },
+  {
+    "Name": "cTableIndex",
+    "Description": "cTableIndex Methods",
+    "Methods": [
+      {
+        "Name": "exportTable",
+        "Description": "Get table values in diferent formats"
+      },
+      {
+        "Name": "getColumnData",
+        "Description": "Get a key/value array struct of a column table"
+      },
+      {
+        "Name": "getColumnFormat",
+        "Description": "Get the format of each column table"
+      },
+      {
+        "Name": "getColumnValues",
+        "Description": "Get the values of a column table"
+      },
+      {
+        "Name": "getColumnWidth",
+        "Description": "Get the maximun width of each column"
+      },
+      {
+        "Name": "getMatlabTable",
+        "Description": "Get cTable as Matlab table"
+      },
+      {
+        "Name": "getProperties",
+        "Description": "Get table properties"
+      },
+      {
+        "Name": "getStructData",
+        "Description": "Get table data as struct array"
+      },
+      {
+        "Name": "getStructTable",
+        "Description": "Get a structure with the table info"
+      },
+      {
+        "Name": "isGraph",
+        "Description": "Check if the table has a graph associated"
+      },
+      {
+        "Name": "isNumericColumn",
+        "Description": "Check if a column is numeric (base method)"
+      },
+      {
+        "Name": "isNumericTable",
+        "Description": "Check if the data of the table is numeric"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Generate a file with the table values"
+      },
+      {
+        "Name": "setColumnValues",
+        "Description": "Set the values of a column table"
+      },
+      {
+        "Name": "setDescription",
+        "Description": "Set Table Header or Description."
+      },
+      {
+        "Name": "setRowValues",
+        "Description": "Set the values of a table row"
+      },
+      {
+        "Name": "setStudyCase",
+        "Description": "Set state and sample values. Internal function"
+      },
+      {
+        "Name": "showTable",
+        "Description": "View Table in console GUI or HTML"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the table. Overload of size function."
+      },
+      {
+        "Name": "cTableIndex",
+        "Description": "create a instance of the class"
+      },
+      {
+        "Name": "getDescriptionLabel",
+        "Description": "Get table description"
+      },
+      {
+        "Name": "printTable",
+        "Description": "Print table on console or in a file in a pretty formatted way"
+      }
+    ]
+  },
+  {
+    "Name": "cTableMatrix",
+    "Description": "cTableMatrix Methods",
+    "Methods": [
+      {
+        "Name": "getColumnData",
+        "Description": "Get a key/value array struct of a column table"
+      },
+      {
+        "Name": "getColumnFormat",
+        "Description": "Get the format of each column table"
+      },
+      {
+        "Name": "getColumnValues",
+        "Description": "Get the values of a column table"
+      },
+      {
+        "Name": "getColumnWidth",
+        "Description": "Get the maximun width of each column"
+      },
+      {
+        "Name": "isGraph",
+        "Description": "Check if the table has a graph associated"
+      },
+      {
+        "Name": "isNumericColumn",
+        "Description": "Check if a column is numeric (base method)"
+      },
+      {
+        "Name": "isNumericTable",
+        "Description": "Check if the data of the table is numeric"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Generate a file with the table values"
+      },
+      {
+        "Name": "setColumnValues",
+        "Description": "Set the values of a column table"
+      },
+      {
+        "Name": "setDescription",
+        "Description": "Set Table Header or Description."
+      },
+      {
+        "Name": "setRowValues",
+        "Description": "Set the values of a table row"
+      },
+      {
+        "Name": "setStudyCase",
+        "Description": "Set state and sample values. Internal function"
+      },
+      {
+        "Name": "showTable",
+        "Description": "View Table in console GUI or HTML"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the table. Overload of size function."
+      },
+      {
+        "Name": "cTableMatrix",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "formatData",
+        "Description": "Apply Format to the data values"
+      },
+      {
+        "Name": "getDescriptionLabel",
+        "Description": "Get the description of the table plus Unit and State"
+      },
+      {
+        "Name": "getMatlabTable",
+        "Description": "Get the table as Matlab table"
+      },
+      {
+        "Name": "getMatrixValues",
+        "Description": "Get the table data as Array"
+      },
+      {
+        "Name": "getStructData",
+        "Description": "Get table as formatted structure"
+      },
+      {
+        "Name": "getStructTable",
+        "Description": "Get table info as structure"
+      },
+      {
+        "Name": "isFlowsTable",
+        "Description": "Check if table contains flows or processes"
+      },
+      {
+        "Name": "isGeneralCostTable",
+        "Description": "Check if table is general cost"
+      },
+      {
+        "Name": "isResourceCostTable",
+        "Description": "Check if table is resource cost table"
+      },
+      {
+        "Name": "isSummaryTable",
+        "Description": "Check if table is a summary table"
+      },
+      {
+        "Name": "isTotalMalfunctionCost",
+        "Description": "Check if table is total malfuction cost"
+      },
+      {
+        "Name": "isUnitCostTable",
+        "Description": "Check if table has unit costs"
+      },
+      {
+        "Name": "printTable",
+        "Description": "Display a table on console or in a file in a pretty formatted way"
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Get cTable info in diferent types of variables"
+      },
+      {
+        "Name": "getCellData",
+        "Description": "Get table as cell array"
+      },
+      {
+        "Name": "getProperties",
+        "Description": "get the additional properties of a cTableResults"
+      }
+    ]
+  },
+  {
+    "Name": "cTableResult",
+    "Description": "cTableResult Methods",
+    "Methods": [
+      {
+        "Name": "getColumnData",
+        "Description": "Get a key/value array struct of a column table"
+      },
+      {
+        "Name": "getColumnFormat",
+        "Description": "Get the format of each column table"
+      },
+      {
+        "Name": "getColumnValues",
+        "Description": "Get the values of a column table"
+      },
+      {
+        "Name": "getColumnWidth",
+        "Description": "Get the maximun width of each column"
+      },
+      {
+        "Name": "getMatlabTable",
+        "Description": "Get cTable as Matlab table"
+      },
+      {
+        "Name": "getStructData",
+        "Description": "Get table data as struct array"
+      },
+      {
+        "Name": "getStructTable",
+        "Description": "Get a structure with the table info"
+      },
+      {
+        "Name": "isGraph",
+        "Description": "Check if the table has a graph associated"
+      },
+      {
+        "Name": "isNumericColumn",
+        "Description": "Check if a column is numeric (base method)"
+      },
+      {
+        "Name": "isNumericTable",
+        "Description": "Check if the data of the table is numeric"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Generate a file with the table values"
+      },
+      {
+        "Name": "setColumnValues",
+        "Description": "Set the values of a column table"
+      },
+      {
+        "Name": "setDescription",
+        "Description": "Set Table Header or Description."
+      },
+      {
+        "Name": "setRowValues",
+        "Description": "Set the values of a table row"
+      },
+      {
+        "Name": "setStudyCase",
+        "Description": "Set state and sample values. Internal function"
+      },
+      {
+        "Name": "showTable",
+        "Description": "View Table in console GUI or HTML"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the table. Overload of size function."
+      },
+      {
+        "Name": "cTableResult",
+        "Description": "Abstrat class to store results into a cTable."
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Get cTable info in diferent types of variables"
+      },
+      {
+        "Name": "getCellData",
+        "Description": "Get table as cell array"
+      },
+      {
+        "Name": "getProperties",
+        "Description": "get the additional properties of a cTableResults"
+      }
+    ]
+  },
+  {
+    "Name": "cTablesDefinition",
+    "Description": "cTablesDefinition Methods",
+    "Methods": [
+      {
+        "Name": "cTablesDefinition",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "getCellTables",
+        "Description": "Get the cell tables configuration"
+      },
+      {
+        "Name": "getDataModelProperties",
+        "Description": "Get the data model properties"
+      },
+      {
+        "Name": "getMatrixTables",
+        "Description": "Get the matrix tables configuration"
+      },
+      {
+        "Name": "getResultIdTables",
+        "Description": "Get the tables of an specific resultId"
+      },
+      {
+        "Name": "getSummaryTables",
+        "Description": "Get the summary tables configuration"
+      },
+      {
+        "Name": "getTableDefinition",
+        "Description": "Get the properties of a table"
+      },
+      {
+        "Name": "getTableId",
+        "Description": "Get tableId from dictionary. Internal use"
+      },
+      {
+        "Name": "getTableInfo",
+        "Description": "Get the properties of a table"
+      },
+      {
+        "Name": "getTablesDirectory",
+        "Description": "Get the tables directory"
+      }
+    ]
+  },
+  {
+    "Name": "cThermoeconomicModel",
+    "Description": "cThermoeconomicModel Methods",
+    "Methods": [
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      },
+      {
+        "Name": "ListOfGraphs",
+        "Description": "Get the list of graph tables as cell array"
+      },
+      {
+        "Name": "ListOfTables",
+        "Description": "Get the list of tables as cell array"
+      },
+      {
+        "Name": "StudyCase",
+        "Description": "Get/display the study case names"
+      },
+      {
+        "Name": "exportResults",
+        "Description": "Export result tables into a structure using diferent formats."
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Export tname into the selected varmode/format"
+      },
+      {
+        "Name": "getTableIndex",
+        "Description": "Get the table index of the results set"
+      },
+      {
+        "Name": "printResults",
+        "Description": "Print the result tables on console"
+      },
+      {
+        "Name": "saveResults",
+        "Description": "Save result tables in different file formats depending on file extension"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Save a result table into a file depending on extension"
+      },
+      {
+        "Name": "showTableIndex",
+        "Description": "View the index table of the results set"
+      },
+      {
+        "Name": "addExergyData",
+        "Description": "Set exergy data values to actual state"
+      },
+      {
+        "Name": "addResourceData",
+        "Description": "Set exergy data values to actual state"
+      },
+      {
+        "Name": "cThermoeconomicModel",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "dataInfo",
+        "Description": "Get the data model cResultInfo object"
+      },
+      {
+        "Name": "diagramFP",
+        "Description": "Get the diagram FP cResultInfo object of rhe current state"
+      },
+      {
+        "Name": "exergyAnalysis",
+        "Description": "Get the ExergyAnalysis cResultInfo object for the current state "
+      },
+      {
+        "Name": "getExergyData",
+        "Description": "Get cExergyData object of a state"
+      },
+      {
+        "Name": "getModelResults",
+        "Description": "Get a cell array of cResultInfo objects of the current state"
+      },
+      {
+        "Name": "getResourceData",
+        "Description": "Get the resource data cost values of sample"
+      },
+      {
+        "Name": "getResultInfo",
+        "Description": "Get the cResultInfo with optional parameters"
+      },
+      {
+        "Name": "getResultState",
+        "Description": "Get the cExergyCost object of each state "
+      },
+      {
+        "Name": "getSampleId",
+        "Description": "Get the Sample Id given the resource sample name"
+      },
+      {
+        "Name": "getStateId",
+        "Description": "Get the State Id given the name."
+      },
+      {
+        "Name": "getTable",
+        "Description": "Get a table called name, if its available"
+      },
+      {
+        "Name": "getTableInfo",
+        "Description": "Get the properties of a table"
+      },
+      {
+        "Name": "getTablesDirectory",
+        "Description": "Create the tables directory of the active model"
+      },
+      {
+        "Name": "getWasteId",
+        "Description": "Get the Waste flow Id"
+      },
+      {
+        "Name": "isDiagnosis",
+        "Description": "Check if diagnosis computation is available."
+      },
+      {
+        "Name": "isDirectCost",
+        "Description": "Check if Direct cost tables are selected"
+      },
+      {
+        "Name": "isGeneralCost",
+        "Description": "Check if Generalized cost calculation is activated"
+      },
+      {
+        "Name": "isResourceCost",
+        "Description": "Check if the model has resources cost defined"
+      },
+      {
+        "Name": "isSampleSummary",
+        "Description": "Check if Samples Summary results has been activated"
+      },
+      {
+        "Name": "isStateSummary",
+        "Description": "Check if States Summary results has been activated"
+      },
+      {
+        "Name": "isSummaryActive",
+        "Description": "Check if Summary has been activated"
+      },
+      {
+        "Name": "isSummaryEnable",
+        "Description": "Check if Summary is enable"
+      },
+      {
+        "Name": "isWaste",
+        "Description": "Check if model has waste defined"
+      },
+      {
+        "Name": "productiveDiagram",
+        "Description": "Get the productive diagram cResultInfo object"
+      },
+      {
+        "Name": "productiveStructure",
+        "Description": "Get the Productive Structure cResultInfo object"
+      },
+      {
+        "Name": "saveDataModel",
+        "Description": "Save the data model in a file"
+      },
+      {
+        "Name": "saveDiagramFP",
+        "Description": "Save the Adjacency matrix of the Diagram FP in a file"
+      },
+      {
+        "Name": "saveProductiveDiagram",
+        "Description": "Save the productive diagram adjacency tables into a file"
+      },
+      {
+        "Name": "saveSummary",
+        "Description": "Save the summary tables into a filename"
+      },
+      {
+        "Name": "setActiveWaste",
+        "Description": "Set a new waste flow for recycling analysis"
+      },
+      {
+        "Name": "setCostTables",
+        "Description": "Set a new value of CostTables parameter"
+      },
+      {
+        "Name": "setDebug",
+        "Description": "Set debug control variable"
+      },
+      {
+        "Name": "setDiagnosisMethod",
+        "Description": "Set a new value of DiagnosisMethod parameter"
+      },
+      {
+        "Name": "setExergyData",
+        "Description": "Set exergy data values to actual state"
+      },
+      {
+        "Name": "setFlowResource",
+        "Description": "Set the resource cost of the flows"
+      },
+      {
+        "Name": "setProcessResource",
+        "Description": "Set the resource cost of the processes"
+      },
+      {
+        "Name": "setRecycling",
+        "Description": "Set Recycling parameter"
+      },
+      {
+        "Name": "setReferenceState",
+        "Description": "Set a new valid reference state from StateNames"
+      },
+      {
+        "Name": "setResourceSample",
+        "Description": "Set a new valid ResourceSample from SampleNames"
+      },
+      {
+        "Name": "setState",
+        "Description": "Set a new valid state from StateNames"
+      },
+      {
+        "Name": "setSummary",
+        "Description": "Set a new Summary available option"
+      },
+      {
+        "Name": "setWasteRecycled",
+        "Description": "Set the waste recycling ratios"
+      },
+      {
+        "Name": "setWasteType",
+        "Description": "Set the waste type allocation method for Active Waste"
+      },
+      {
+        "Name": "setWasteValues",
+        "Description": "Set the waste table values"
+      },
+      {
+        "Name": "showDataModel",
+        "Description": "Show Data Model tables"
+      },
+      {
+        "Name": "showGraph",
+        "Description": "Show a graph table. "
+      },
+      {
+        "Name": "showProperties",
+        "Description": "Show the values of the current parameters of the model"
+      },
+      {
+        "Name": "showResultInfo",
+        "Description": "Show or get a structure containig the results of the model"
+      },
+      {
+        "Name": "showResults",
+        "Description": "View an individual table"
+      },
+      {
+        "Name": "showSummary",
+        "Description": "Show Summary tables"
+      },
+      {
+        "Name": "showTablesDirectory",
+        "Description": "Show the list of available tables"
+      },
+      {
+        "Name": "summaryDiagnosis",
+        "Description": "Get the diagnosis results summary"
+      },
+      {
+        "Name": "summaryOptions",
+        "Description": "Get the available summary option names"
+      },
+      {
+        "Name": "summaryResults",
+        "Description": "Get the Summary Results cResultInfo object"
+      },
+      {
+        "Name": "thermoeconomicAnalysis",
+        "Description": "Get the Thermoeconomic Analysis cResultInfo object for the current state"
+      },
+      {
+        "Name": "thermoeconomicDiagnosis",
+        "Description": "Get the Thermoeconomic Diagnosis cResultInfo object"
+      },
+      {
+        "Name": "toggleDebug",
+        "Description": "Toggle debug property"
+      },
+      {
+        "Name": "updateDataModel",
+        "Description": "Update the data model if have been changes"
+      },
+      {
+        "Name": "wasteAllocation",
+        "Description": "Show waste information in console"
+      },
+      {
+        "Name": "wasteAnalysis",
+        "Description": "Get the Waste Analysis cResultInfo object for the current state and waste flow"
+      }
+    ]
+  },
+  {
+    "Name": "cType",
+    "Description": "cType Methods",
+    "Methods": [
+      {
+        "Name": "CostTablesOptions",
+        "Description": "Get a cell array with the Cost Tables Type options"
+      },
+      {
+        "Name": "DiagnosisOptions",
+        "Description": "Get a cell array with the Diagnosis Type options"
+      },
+      {
+        "Name": "SummaryOptions",
+        "Description": "Get a cell array with the Summary Options"
+      },
+      {
+        "Name": "TableViewOptions",
+        "Description": "Get a cell array with the Table view options"
+      },
+      {
+        "Name": "TaesLabPath",
+        "Description": "Get the full path of the TaesLab installation"
+      },
+      {
+        "Name": "VarModeOptions",
+        "Description": "Get a cell array with the VarMode Type options"
+      },
+      {
+        "Name": "WasteTypeOptions",
+        "Description": "Get a cell array with the Waste Allocation Type options"
+      },
+      {
+        "Name": "cType",
+        "Description": "Static class to manage the constants of TaesLab"
+      },
+      {
+        "Name": "checkClassInfo",
+        "Description": "Check ClassInfo value"
+      },
+      {
+        "Name": "checkCostTables",
+        "Description": "Check CostTable type text"
+      },
+      {
+        "Name": "checkDiagnosisMethod",
+        "Description": "Check Diagnosis method type text"
+      },
+      {
+        "Name": "checkDirColumns",
+        "Description": "Check Table Directory Columns names"
+      },
+      {
+        "Name": "checkFileExt",
+        "Description": "Check if filename has a valid extension"
+      },
+      {
+        "Name": "checkFlowTypes",
+        "Description": "Check if the Flows Type list is correct"
+      },
+      {
+        "Name": "checkGraphStyle",
+        "Description": "Check Graph Style value"
+      },
+      {
+        "Name": "checkProcessTypes",
+        "Description": "Check if the Process Type list is correct"
+      },
+      {
+        "Name": "checkResourceTypes",
+        "Description": "Check if the Flows Type list is correct"
+      },
+      {
+        "Name": "checkSummaryOption",
+        "Description": "Check Summary type text"
+      },
+      {
+        "Name": "checkTableView",
+        "Description": "Check TableView value"
+      },
+      {
+        "Name": "checkVarMode",
+        "Description": "Check Variable display option"
+      },
+      {
+        "Name": "checkWasteTypes",
+        "Description": "checkFlowTypes - Check if the Flows Type list is correct"
+      },
+      {
+        "Name": "getClassInfo",
+        "Description": "Get the id of ClassInfo option"
+      },
+      {
+        "Name": "getCostTables",
+        "Description": "Get id for CostTables option"
+      },
+      {
+        "Name": "getDiagnosisMethod",
+        "Description": "Get id for Diagnosis Method option"
+      },
+      {
+        "Name": "getFileType",
+        "Description": "Get file type acording its extension (ext)"
+      },
+      {
+        "Name": "getFlowId",
+        "Description": "Get the internal code of a flow type text"
+      },
+      {
+        "Name": "getFormatId",
+        "Description": "Get internal code of format type text"
+      },
+      {
+        "Name": "getGraphStyle",
+        "Description": "Get the id of Graph Style option"
+      },
+      {
+        "Name": "getIcon",
+        "Description": "Get app icons"
+      },
+      {
+        "Name": "getLine",
+        "Description": "Get a dash line of the given length"
+      },
+      {
+        "Name": "getNewline",
+        "Description": "Get the newline character depending on operating system"
+      },
+      {
+        "Name": "getPathDelimiter",
+        "Description": "get the path delimiter"
+      },
+      {
+        "Name": "getProcessId",
+        "Description": "Get the internal code of a process type text"
+      },
+      {
+        "Name": "getPropertiesList",
+        "Description": "Get the list of additional properties of cResultTables"
+      },
+      {
+        "Name": "getResourcesId",
+        "Description": "Get internal code of a resources cost type text"
+      },
+      {
+        "Name": "getSummaryId",
+        "Description": "Get id for Summary option"
+      },
+      {
+        "Name": "getTableView",
+        "Description": "Get id for TableView option"
+      },
+      {
+        "Name": "getTaesImage",
+        "Description": "Get the full path of the Taes Welcome image"
+      },
+      {
+        "Name": "getTextErrorCode",
+        "Description": "Get the text of the corresponding error code"
+      },
+      {
+        "Name": "getVarMode",
+        "Description": "Get id for VarMode option"
+      },
+      {
+        "Name": "getWasteId",
+        "Description": "Get internal code of a waste allocation type text"
+      },
+      {
+        "Name": "log2text",
+        "Description": "Get the text representation of a logical value. Used in GUI Apps"
+      },
+      {
+        "Name": "tableCode",
+        "Description": "Display the key code of a table"
+      }
+    ]
+  },
+  {
+    "Name": "cViewTable",
+    "Description": "cViewTable Methods",
+    "Methods": [
+      {
+        "Name": "cViewTable",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "showTable",
+        "Description": "Shows the table values in a uitable object"
+      }
+    ]
+  },
+  {
+    "Name": "cWasteAnalysis",
+    "Description": "cWasteAnalysis Methods",
+    "Methods": [
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Build/Get the cResultInfo object"
+      },
+      {
+        "Name": "cWasteAnalysis",
+        "Description": "Create an instance of the class"
+      }
+    ]
+  },
+  {
+    "Name": "cWasteData",
+    "Description": "cWasteData Methods",
+    "Methods": [
+      {
+        "Name": "cWasteData",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "existsWaste",
+        "Description": "Determine if waste key is defined"
+      },
+      {
+        "Name": "getRecycleRatio",
+        "Description": "Get the recycle ratio value of a waste"
+      },
+      {
+        "Name": "getType",
+        "Description": "Get the waste allocation type"
+      },
+      {
+        "Name": "getValues",
+        "Description": "Get the allocation ratios of a waste"
+      },
+      {
+        "Name": "getWasteFlows",
+        "Description": "Get the waste name of the corresponding index"
+      },
+      {
+        "Name": "getWasteIndex",
+        "Description": "Get the id of the corresponding waste key"
+      },
+      {
+        "Name": "setRecycleRatio",
+        "Description": "Set the recycle ratio of a waste"
+      },
+      {
+        "Name": "setType",
+        "Description": "Set the waste allocation type"
+      },
+      {
+        "Name": "setValues",
+        "Description": "Set the cost allocation values of a waste"
+      },
+      {
+        "Name": "updateValues",
+        "Description": "Set the waste table values (internal use)"
+      }
+    ]
+  }
+]
