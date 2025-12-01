@@ -1,0 +1,65 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/ClassInfoArray",
+    "definitions": {
+        "ClassInfoArray": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/ClassInfo"
+            },
+            "title": "ClassInfoArray",
+            "description": "Array of TaesLab class information objects"
+        },
+        "ClassInfo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "Name of the class (e.g., cDataModel, cExergyModel)",
+                    "pattern": "^c[A-Z][A-Za-z0-9]*$"
+                },
+                "Description": {
+                    "type": "string",
+                    "description": "Brief description of the class and its purpose"
+                },
+                "Methods": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Method"
+                    },
+                    "description": "Array of methods available in the class"
+                }
+            },
+            "required": [
+                "Name",
+                "Description",
+                "Methods"
+            ],
+            "title": "ClassInfo",
+            "description": "Information about a single TaesLab class including its methods"
+        },
+        "Method": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "description": "Name of the method"
+                },
+                "Description": {
+                    "type": "string",
+                    "description": "Brief description of what the method does"
+                }
+            },
+            "required": [
+                "Name",
+                "Description"
+            ],
+            "title": "Method",
+            "description": "Information about a class method"
+        }
+    },
+    "title": "TaesLab ClassInfo Schema",
+    "description": "JSON Schema for TaesLab class information documentation"
+}

@@ -18,13 +18,13 @@ classdef cTableData < cTable
 %
 %   cTableData methods:
 %     cTableData          - Construct an instance of this class
+%     create               - Create a cTableData from values (static method)
+%     import               - Import a cTableData from a file (static method)
+%     importMatlabTable    - Import data from a MATLAB table into cTableData (static method)
 %     getStructTable       - Get a table as struct
 %     printTable           - Print a table on console
 %     formatData           - Get formatted data
 %     getDescriptionLabel  - Get the title label for GUI presentation
-%     create               - Create a cTableData from values (static method)
-%     import               - Import a cTableData from a file (static method)
-%     importMatlabTable    - Import data from a MATLAB table into cTableData (static method)
 %
 %   cTableData methods (inherited from cTable):
 %     exportTable     - Get cTable info in diferent types of variables
@@ -263,7 +263,7 @@ classdef cTableData < cTable
                 return
             end
             % Determine file type and import data
-            fileType=cType.getFileType(filename);
+            [fileType,fileExt]=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.CSV
                     values=importCSV(filename);
@@ -276,7 +276,7 @@ classdef cTableData < cTable
                         return
                     end
                 otherwise
-                    tbl.messageLog(cType.ERROR,cMessages.InvalidInputFile);
+                    tbl.messageLog(cType.ERROR,cMessages.InvalidFileExt,upper(fileExt));
                     return
             end
             % Create cTableData object

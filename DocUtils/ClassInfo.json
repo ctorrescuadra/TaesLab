@@ -62,22 +62,6 @@
     "Description": "cDataModel Methods",
     "Methods": [
       {
-        "Name": "addExergyData",
-        "Description": "add a new  exergy data state"
-      },
-      {
-        "Name": "addResourceData",
-        "Description": "Create a new cResourceData object and add to Resource samples"
-      },
-      {
-        "Name": "buildExergyData",
-        "Description": "Set the exergy data values of a state"
-      },
-      {
-        "Name": "buildResourceData",
-        "Description": "Create a new cResourceData object"
-      },
-      {
         "Name": "cDataModel",
         "Description": "Create an instance of the class"
       },
@@ -86,24 +70,48 @@
         "Description": "Create a cDataModel object from a file"
       },
       {
-        "Name": "existSample",
-        "Description": "Check if sample is defined in ResourceState"
-      },
-      {
-        "Name": "existState",
-        "Description": "Check if state is defined in States"
-      },
-      {
         "Name": "getExergyData",
         "Description": "Get the exergy data for a state"
+      },
+      {
+        "Name": "buildExergyData",
+        "Description": "Set the exergy data values of a state"
+      },
+      {
+        "Name": "addExergyData",
+        "Description": "add a new  exergy data state"
+      },
+      {
+        "Name": "setExergyData",
+        "Description": "Set the exergy values of a state"
       },
       {
         "Name": "getResourceData",
         "Description": "Get the resource data for a sample"
       },
       {
-        "Name": "getResultInfo",
-        "Description": "Get data model result info"
+        "Name": "addResourceData",
+        "Description": "Create a new cResourceData object and add to Resource samples"
+      },
+      {
+        "Name": "buildResourceData",
+        "Description": "Create a new cResourceData object"
+      },
+      {
+        "Name": "setFlowResource",
+        "Description": "Set the flow-resource value of a sample"
+      },
+      {
+        "Name": "setProcessResource",
+        "Description": "Set the process-resource value of a sample"
+      },
+      {
+        "Name": "existSample",
+        "Description": "Check if sample is defined in ResourceState"
+      },
+      {
+        "Name": "existState",
+        "Description": "Check if state is defined in States"
       },
       {
         "Name": "getTableInfo",
@@ -118,22 +126,6 @@
         "Description": "Get Waste Data"
       },
       {
-        "Name": "saveDataModel",
-        "Description": "Save data model depending of filename extension"
-      },
-      {
-        "Name": "setExergyData",
-        "Description": "Set the exergy values of a state"
-      },
-      {
-        "Name": "setFlowResource",
-        "Description": "Set the flow-resource value of a sample"
-      },
-      {
-        "Name": "setProcessResource",
-        "Description": "Set the process-resource value of a sample"
-      },
-      {
         "Name": "setWasteRecycled",
         "Description": "Set the waste recycling ratios"
       },
@@ -146,6 +138,10 @@
         "Description": "Set the waste table values"
       },
       {
+        "Name": "getResultInfo",
+        "Description": "Get data model result info"
+      },
+      {
         "Name": "showDataModel",
         "Description": "View a table in a GUI Table"
       },
@@ -154,28 +150,8 @@
         "Description": "Update the Data Model if there is changes"
       },
       {
-        "Name": "setDefaultGraph",
-        "Description": "Set Default Graph. Internal package use only"
-      },
-      {
-        "Name": "setResultId",
-        "Description": "Set ResultId. Internal package use only"
-      },
-      {
-        "Name": "setSample",
-        "Description": "Set Resource Sample Name. Internal package use only"
-      },
-      {
-        "Name": "ListOfGraphs",
-        "Description": "Get the list of graph tables as cell array"
-      },
-      {
-        "Name": "ListOfTables",
-        "Description": "Get the list of tables as cell array"
-      },
-      {
-        "Name": "StudyCase",
-        "Description": "Get/display the study case names"
+        "Name": "saveDataModel",
+        "Description": "Save data model depending of filename extension"
       },
       {
         "Name": "exportResults",
@@ -183,7 +159,7 @@
       },
       {
         "Name": "exportTable",
-        "Description": "Export tname into the selected varmode/format"
+        "Description": "Export table into the selected varmode/format"
       },
       {
         "Name": "getTable",
@@ -194,12 +170,20 @@
         "Description": "Get the table index of the results set"
       },
       {
+        "Name": "ListOfGraphs",
+        "Description": "Get the list of graph tables as cell array"
+      },
+      {
+        "Name": "ListOfTables",
+        "Description": "Get the list of tables as cell array"
+      },
+      {
         "Name": "printResults",
         "Description": "Print the result tables on console"
       },
       {
         "Name": "saveResults",
-        "Description": "Save result tables in different file formats depending on file extension"
+        "Description": "Save result tables in different file formats depending on extension"
       },
       {
         "Name": "saveTable",
@@ -212,6 +196,22 @@
       {
         "Name": "showTableIndex",
         "Description": "View the index table of the results set"
+      },
+      {
+        "Name": "StudyCase",
+        "Description": "Get/display the study case names"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
       }
     ]
   },
@@ -220,12 +220,12 @@
     "Description": "cDataset Methods",
     "Methods": [
       {
-        "Name": "addValues",
-        "Description": "Add a new value at the end of the dataset"
-      },
-      {
         "Name": "cDataset",
         "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "addValues",
+        "Description": "Add a new value at the end of the dataset"
       },
       {
         "Name": "getValues",
@@ -278,12 +278,12 @@
     "Description": "cDiagnosis Methods",
     "Methods": [
       {
-        "Name": "buildResultInfo",
-        "Description": "Get cResultInfo object for thermoeconomic diagnosis"
-      },
-      {
         "Name": "cDiagnosis",
         "Description": "Create an object of the class"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get cResultInfo object for thermoeconomic diagnosis"
       },
       {
         "Name": "getDemandCorrectionCost",
@@ -376,12 +376,12 @@
     "Description": "cDiagramFP Methods",
     "Methods": [
       {
-        "Name": "buildResultInfo",
-        "Description": "Get cResultInfo object of the DiagramFP"
-      },
-      {
         "Name": "cDiagramFP",
         "Description": "Build an instance of this class"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get cResultInfo object of the DiagramFP"
       },
       {
         "Name": "getNodesTable",
@@ -406,12 +406,12 @@
     "Description": "cDictionary Methods",
     "Methods": [
       {
-        "Name": "addKey",
-        "Description": "Add a new key if doesn't exists"
-      },
-      {
         "Name": "cDictionary",
         "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "addKey",
+        "Description": "Add a new key if doesn't exists"
       },
       {
         "Name": "existsKey",
@@ -508,12 +508,12 @@
     "Description": "cExergyCost Methods",
     "Methods": [
       {
-        "Name": "buildResultInfo",
-        "Description": "Get the cResultInfo object for thermoeconomic analysis"
-      },
-      {
         "Name": "cExergyCost",
         "Description": "Creates an instance of the class"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get the cResultInfo object for thermoeconomic analysis"
       },
       {
         "Name": "getCostTableFP",
@@ -596,18 +596,24 @@
   {
     "Name": "cExergyData",
     "Description": "cExergyData Methods",
-    "Methods": {
-      "Name": "cExergyData",
-      "Description": "Build an instance of the class"
-    }
+    "Methods": [
+      {
+        "Name": "cExergyData",
+        "Description": "Build an instance of the class"
+      }
+    ]
   },
   {
     "Name": "cExergyModel",
     "Description": "cExergyModel Methods",
     "Methods": [
       {
-        "Name": "ExternalIrreversibility",
-        "Description": "Get the total external irreversibility (waste)"
+        "Name": "cExergyModel",
+        "Description": "Create an instance of the class\t"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get the cResultInfo object"
       },
       {
         "Name": "FlowProcessTable",
@@ -618,12 +624,8 @@
         "Description": "Get the total internal irreversibility"
       },
       {
-        "Name": "buildResultInfo",
-        "Description": "Get the cResultInfo object"
-      },
-      {
-        "Name": "cExergyModel",
-        "Description": "Create an instance of the class\t"
+        "Name": "ExternalIrreversibility",
+        "Description": "Get the total external irreversibility (waste)"
       },
       {
         "Name": "setDefaultGraph",
@@ -802,10 +804,12 @@
   {
     "Name": "cGraphResults",
     "Description": "cGraphResults Methods",
-    "Methods": {
-      "Name": "cGraphResults",
-      "Description": "Abstract class used to show graphs in interactive mode and apps."
-    }
+    "Methods": [
+      {
+        "Name": "cGraphResults",
+        "Description": "Abstract class used to show graphs in interactive mode and apps."
+      }
+    ]
   },
   {
     "Name": "cGraphSummary",
@@ -852,12 +856,70 @@
         "Description": "Construct an instance of this class"
       },
       {
-        "Name": "disp",
-        "Description": "Overload disp function"
-      },
-      {
         "Name": "getMessage",
         "Description": "Get the message as text"
+      },
+      {
+        "Name": "disp",
+        "Description": "Overload disp function"
+      }
+    ]
+  },
+  {
+    "Name": "cMessageLogger",
+    "Description": "cMessageLogger Methods",
+    "Methods": [
+      {
+        "Name": "cMessageLogger",
+        "Description": "Creates an instance of the class"
+      },
+      {
+        "Name": "messageLog",
+        "Description": "Add a message to the logger"
+      },
+      {
+        "Name": "printLogger",
+        "Description": "Print the logger"
+      },
+      {
+        "Name": "addLogger",
+        "Description": "Concatenate two message loggers"
+      },
+      {
+        "Name": "clearLogger",
+        "Description": "Clear the message logger"
+      },
+      {
+        "Name": "printLoggerType",
+        "Description": "Print the messages of the logger of the specified type"
+      },
+      {
+        "Name": "tableLogger",
+        "Description": "Build a table logger to use in apps"
+      },
+      {
+        "Name": "getObjectId",
+        "Description": "Get the object identifier"
+      },
+      {
+        "Name": "printError",
+        "Description": "Print error message. "
+      },
+      {
+        "Name": "printInfo",
+        "Description": "Print info message. Use fprintf syntax"
+      },
+      {
+        "Name": "printWarning",
+        "Description": "Print warning message. "
+      },
+      {
+        "Name": "eq",
+        "Description": "Overload eq operator. Check if two class object are equal."
+      },
+      {
+        "Name": "ne",
+        "Description": "Overload ne operator. Check if two class objects are different."
       }
     ]
   },
@@ -866,16 +928,16 @@
     "Description": "cMessages Methods",
     "Methods": [
       {
+        "Name": "cMessages",
+        "Description": "Static class which defines the TaesLab messages."
+      },
+      {
         "Name": "ShowHelp",
         "Description": "Get a string with the hyperlink to the help of the caller function"
       },
       {
         "Name": "Table",
         "Description": "Get or show in console a table with all the messages or show in console"
-      },
-      {
-        "Name": "cMessages",
-        "Description": "Static class which defines the TaesLab messages."
       }
     ]
   },
@@ -1020,12 +1082,12 @@
     "Description": "cProductiveDiagram Methods",
     "Methods": [
       {
-        "Name": "buildResultInfo",
-        "Description": "Get cResultInfo object"
-      },
-      {
         "Name": "cProductiveDiagram",
         "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Get cResultInfo object"
       },
       {
         "Name": "getEdgesTable",
@@ -1053,6 +1115,14 @@
     "Name": "cProductiveStructure",
     "Description": "cProductiveStructure Methods",
     "Methods": [
+      {
+        "Name": "cProductiveStructure",
+        "Description": "Creates an instance of the class"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Build the cResultInfo object for PRODUCTIVE_STRUCTURE"
+      },
       {
         "Name": "FinalProductFlows",
         "Description": "Get the final product flows id"
@@ -1092,14 +1162,6 @@
       {
         "Name": "WasteData",
         "Description": "Get default waste data info"
-      },
-      {
-        "Name": "buildResultInfo",
-        "Description": "Build the cResultInfo object for PRODUCTIVE_STRUCTURE"
-      },
-      {
-        "Name": "cProductiveStructure",
-        "Description": "Creates an instance of the class"
       },
       {
         "Name": "flows2Streams",
@@ -1180,16 +1242,16 @@
     "Description": "cQueue Methods",
     "Methods": [
       {
+        "Name": "cQueue",
+        "Description": "Create a cQueue object. Initialize as a empty cell array"
+      },
+      {
         "Name": "add",
         "Description": "Add an element at the end of the queue"
       },
       {
         "Name": "addQueue",
         "Description": "Add another queue at the end of this queue"
-      },
-      {
-        "Name": "cQueue",
-        "Description": "Create a cQueue object. Initialize as a empty cell array"
       },
       {
         "Name": "clear",
@@ -1254,12 +1316,12 @@
     "Description": "cReadModelJSON Methods",
     "Methods": [
       {
-        "Name": "getDataModel",
-        "Description": "Get the data model object"
-      },
-      {
         "Name": "cReadModelJSON",
         "Description": "Construct an instance of the class"
+      },
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
       }
     ]
   },
@@ -1268,12 +1330,12 @@
     "Description": "cReadModelStruct Methods",
     "Methods": [
       {
-        "Name": "getDataModel",
-        "Description": "Get the data model object"
-      },
-      {
         "Name": "cReadModelStruct",
         "Description": "Abstract class to read structured data model."
+      },
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
       }
     ]
   },
@@ -1282,12 +1344,12 @@
     "Description": "cReadModelTable Methods",
     "Methods": [
       {
-        "Name": "getDataModel",
-        "Description": "Get the data model object"
-      },
-      {
         "Name": "cReadModelTable",
         "Description": "Abstract class to read table data model."
+      },
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
       },
       {
         "Name": "printModelTables",
@@ -1300,16 +1362,16 @@
     "Description": "cReadModelXLS Methods",
     "Methods": [
       {
+        "Name": "cReadModelXLS",
+        "Description": "Build an instance of the class"
+      },
+      {
         "Name": "getDataModel",
         "Description": "Get the data model object"
       },
       {
         "Name": "printModelTables",
         "Description": "Show the model tables on console"
-      },
-      {
-        "Name": "cReadModelXLS",
-        "Description": "Build an instance of the class"
       }
     ]
   },
@@ -1318,12 +1380,12 @@
     "Description": "cReadModelXML Methods",
     "Methods": [
       {
-        "Name": "getDataModel",
-        "Description": "Get the data model object"
-      },
-      {
         "Name": "cReadModelXML",
         "Description": "Build an instance of the object"
+      },
+      {
+        "Name": "getDataModel",
+        "Description": "Get the data model object"
       }
     ]
   },
@@ -1375,18 +1437,6 @@
     "Name": "cResultInfo",
     "Description": "cResultInfo Methods",
     "Methods": [
-      {
-        "Name": "setDefaultGraph",
-        "Description": "Set Default Graph. Internal package use only"
-      },
-      {
-        "Name": "setResultId",
-        "Description": "Set ResultId. Internal package use only"
-      },
-      {
-        "Name": "setSample",
-        "Description": "Set Resource Sample Name. Internal package use only"
-      },
       {
         "Name": "cResultInfo",
         "Description": "Construct an instance of this class"
@@ -1462,13 +1512,7 @@
       {
         "Name": "showTableIndex",
         "Description": "View the index table of the results set"
-      }
-    ]
-  },
-  {
-    "Name": "cResultSet",
-    "Description": "cResultSet Methods",
-    "Methods": [
+      },
       {
         "Name": "setDefaultGraph",
         "Description": "Set Default Graph. Internal package use only"
@@ -1480,19 +1524,13 @@
       {
         "Name": "setSample",
         "Description": "Set Resource Sample Name. Internal package use only"
-      },
-      {
-        "Name": "ListOfGraphs",
-        "Description": "Get the list of graph tables as cell array"
-      },
-      {
-        "Name": "ListOfTables",
-        "Description": "Get the list of tables as cell array"
-      },
-      {
-        "Name": "StudyCase",
-        "Description": "Get/display the study case names"
-      },
+      }
+    ]
+  },
+  {
+    "Name": "cResultSet",
+    "Description": "cResultSet Methods",
+    "Methods": [
       {
         "Name": "cResultSet",
         "Description": "Abstract class to manage the result sets."
@@ -1532,6 +1570,30 @@
       {
         "Name": "showTableIndex",
         "Description": "View the index table of the results set"
+      },
+      {
+        "Name": "ListOfGraphs",
+        "Description": "Get the list of graph tables as cell array"
+      },
+      {
+        "Name": "ListOfTables",
+        "Description": "Get the list of tables as cell array"
+      },
+      {
+        "Name": "StudyCase",
+        "Description": "Get/display the study case names"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
       }
     ]
   },
@@ -1539,22 +1601,6 @@
     "Name": "cResultTableBuilder",
     "Description": "cResultTableBuilder Methods",
     "Methods": [
-      {
-        "Name": "getFormat",
-        "Description": "Get the format of a type of variable"
-      },
-      {
-        "Name": "getResultId",
-        "Description": "Get the ResultId of a table"
-      },
-      {
-        "Name": "getTableProperties",
-        "Description": "Get the properties of a cTable"
-      },
-      {
-        "Name": "getUnit",
-        "Description": "Get the format of a type of variable"
-      },
       {
         "Name": "cResultTableBuilder",
         "Description": "Create and instance of the class"
@@ -1626,6 +1672,22 @@
       {
         "Name": "getTablesDirectory",
         "Description": "Get the tables directory"
+      },
+            {
+        "Name": "getFormat",
+        "Description": "Get the format of a type of variable"
+      },
+      {
+        "Name": "getResultId",
+        "Description": "Get the ResultId of a table"
+      },
+      {
+        "Name": "getTableProperties",
+        "Description": "Get the properties of a cTable"
+      },
+      {
+        "Name": "getUnit",
+        "Description": "Get the format of a type of variable"
       }
     ]
   },
@@ -1746,24 +1808,12 @@
     "Description": "cSummaryResults Methods",
     "Methods": [
       {
-        "Name": "setDefaultGraph",
-        "Description": "Set Default Graph. Internal package use only"
-      },
-      {
-        "Name": "setResultId",
-        "Description": "Set ResultId. Internal package use only"
-      },
-      {
-        "Name": "setSample",
-        "Description": "Set Resource Sample Name. Internal package use only"
+        "Name": "cSummaryResults",
+        "Description": "Build an instance of this class"
       },
       {
         "Name": "buildResultInfo",
         "Description": "Get cResultInfo object"
-      },
-      {
-        "Name": "cSummaryResults",
-        "Description": "Build an instance of this class"
       },
       {
         "Name": "defaultSummaryTables",
@@ -1796,6 +1846,18 @@
       {
         "Name": "setSummaryTables",
         "Description": "Fill the values of the summary tables with the values of the model"
+      },
+            {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
       }
     ]
   },
@@ -1904,6 +1966,50 @@
     "Description": "cTableCell Methods",
     "Methods": [
       {
+        "Name": "cTableCell",
+        "Description": "Create Cell Table object"
+      },
+      {
+        "Name": "formatData",
+        "Description": "Apply format to data"
+      },
+      {
+        "Name": "getColumnValues",
+        "Description": "Get the values of a specfic column"
+      },
+      {
+        "Name": "getDescriptionLabel",
+        "Description": "Get the description of the table"
+      },
+      {
+        "Name": "getMatlabTable",
+        "Description": "Get table as Matlab table object"
+      },
+      {
+        "Name": "getStructData",
+        "Description": "Get the table data as struct"
+      },
+      {
+        "Name": "getStructTable",
+        "Description": "Get the table as a struct. Include properties"
+      },
+      {
+        "Name": "printTable",
+        "Description": "Display table on console or in a file in a pretty formatted way"
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Get cTable info in diferent types of variables"
+      },
+      {
+        "Name": "getCellData",
+        "Description": "Get table as cell array"
+      },
+      {
+        "Name": "getProperties",
+        "Description": "get the additional properties of a cTableResults"
+      },
+      {
         "Name": "getColumnData",
         "Description": "Get a key/value array struct of a column table"
       },
@@ -1954,50 +2060,6 @@
       {
         "Name": "size",
         "Description": "Size of the table. Overload of size function."
-      },
-      {
-        "Name": "cTableCell",
-        "Description": "Create Cell Table object"
-      },
-      {
-        "Name": "formatData",
-        "Description": "Apply format to data"
-      },
-      {
-        "Name": "getColumnValues",
-        "Description": "Get the values of a specfic column"
-      },
-      {
-        "Name": "getDescriptionLabel",
-        "Description": "Get the description of the table"
-      },
-      {
-        "Name": "getMatlabTable",
-        "Description": "Get table as Matlab table object"
-      },
-      {
-        "Name": "getStructData",
-        "Description": "Get the table data as struct"
-      },
-      {
-        "Name": "getStructTable",
-        "Description": "Get the table as a struct. Include properties"
-      },
-      {
-        "Name": "printTable",
-        "Description": "Display table on console or in a file in a pretty formatted way"
-      },
-      {
-        "Name": "exportTable",
-        "Description": "Get cTable info in diferent types of variables"
-      },
-      {
-        "Name": "getCellData",
-        "Description": "Get table as cell array"
-      },
-      {
-        "Name": "getProperties",
-        "Description": "get the additional properties of a cTableResults"
       }
     ]
   },
@@ -2005,6 +2067,38 @@
     "Name": "cTableData",
     "Description": "cTableData Methods",
     "Methods": [
+       {
+        "Name": "cTableData",
+        "Description": "Construct an instance of this class"
+      },
+      {
+        "Name": "create",
+        "Description": "Create a cTableData from values"
+      },
+      {
+        "Name": "import",
+        "Description": "Create cTableData from file"
+      },
+      {
+        "Name": "importMatlabTable",
+        "Description": "Import data from a MATLAB table into cTable object"
+      },
+      {
+        "Name": "formatData",
+        "Description": "Format the values of the table"
+      },
+      {
+        "Name": "getDescriptionLabel",
+        "Description": "Get the description of each table for graph or printing"
+      },
+      {
+        "Name": "getStructTable",
+        "Description": "Get table as a struct"
+      },
+      {
+        "Name": "printTable",
+        "Description": "Display table on console or in a file in a pretty formatted way"
+      },
       {
         "Name": "exportTable",
         "Description": "Get table values in diferent formats"
@@ -2076,38 +2170,6 @@
       {
         "Name": "size",
         "Description": "Size of the table. Overload of size function."
-      },
-      {
-        "Name": "cTableData",
-        "Description": "Construct an instance of this class"
-      },
-      {
-        "Name": "create",
-        "Description": "Create a cTableData from values"
-      },
-      {
-        "Name": "formatData",
-        "Description": "Format the values of the table"
-      },
-      {
-        "Name": "getDescriptionLabel",
-        "Description": "Get the description of each table for graph or printing"
-      },
-      {
-        "Name": "getStructTable",
-        "Description": "Get table as a struct"
-      },
-      {
-        "Name": "import",
-        "Description": "Create cTableData from file"
-      },
-      {
-        "Name": "importMatlabTable",
-        "Description": "Import data from a MATLAB table into cTable object"
-      },
-      {
-        "Name": "printTable",
-        "Description": "Display table on console or in a file in a pretty formatted way"
       }
     ]
   },
@@ -2115,6 +2177,18 @@
     "Name": "cTableIndex",
     "Description": "cTableIndex Methods",
     "Methods": [
+      {
+        "Name": "cTableIndex",
+        "Description": "create a instance of the class"
+      },
+      {
+        "Name": "getDescriptionLabel",
+        "Description": "Get table description"
+      },
+      {
+        "Name": "printTable",
+        "Description": "Print table on console or in a file in a pretty formatted way"
+      },
       {
         "Name": "exportTable",
         "Description": "Get table values in diferent formats"
@@ -2190,82 +2264,15 @@
       {
         "Name": "size",
         "Description": "Size of the table. Overload of size function."
-      },
-      {
-        "Name": "cTableIndex",
-        "Description": "create a instance of the class"
-      },
-      {
-        "Name": "getDescriptionLabel",
-        "Description": "Get table description"
-      },
-      {
-        "Name": "printTable",
-        "Description": "Print table on console or in a file in a pretty formatted way"
       }
+
     ]
   },
   {
     "Name": "cTableMatrix",
     "Description": "cTableMatrix Methods",
     "Methods": [
-      {
-        "Name": "getColumnData",
-        "Description": "Get a key/value array struct of a column table"
-      },
-      {
-        "Name": "getColumnFormat",
-        "Description": "Get the format of each column table"
-      },
-      {
-        "Name": "getColumnValues",
-        "Description": "Get the values of a column table"
-      },
-      {
-        "Name": "getColumnWidth",
-        "Description": "Get the maximun width of each column"
-      },
-      {
-        "Name": "isGraph",
-        "Description": "Check if the table has a graph associated"
-      },
-      {
-        "Name": "isNumericColumn",
-        "Description": "Check if a column is numeric (base method)"
-      },
-      {
-        "Name": "isNumericTable",
-        "Description": "Check if the data of the table is numeric"
-      },
-      {
-        "Name": "saveTable",
-        "Description": "Generate a file with the table values"
-      },
-      {
-        "Name": "setColumnValues",
-        "Description": "Set the values of a column table"
-      },
-      {
-        "Name": "setDescription",
-        "Description": "Set Table Header or Description."
-      },
-      {
-        "Name": "setRowValues",
-        "Description": "Set the values of a table row"
-      },
-      {
-        "Name": "setStudyCase",
-        "Description": "Set state and sample values. Internal function"
-      },
-      {
-        "Name": "showTable",
-        "Description": "View Table in console GUI or HTML"
-      },
-      {
-        "Name": "size",
-        "Description": "Size of the table. Overload of size function."
-      },
-      {
+     {
         "Name": "cTableMatrix",
         "Description": "Create an instance of the class"
       },
@@ -2332,6 +2339,62 @@
       {
         "Name": "getProperties",
         "Description": "get the additional properties of a cTableResults"
+      },
+      {
+        "Name": "getColumnData",
+        "Description": "Get a key/value array struct of a column table"
+      },
+      {
+        "Name": "getColumnFormat",
+        "Description": "Get the format of each column table"
+      },
+      {
+        "Name": "getColumnValues",
+        "Description": "Get the values of a column table"
+      },
+      {
+        "Name": "getColumnWidth",
+        "Description": "Get the maximun width of each column"
+      },
+      {
+        "Name": "isGraph",
+        "Description": "Check if the table has a graph associated"
+      },
+      {
+        "Name": "isNumericColumn",
+        "Description": "Check if a column is numeric (base method)"
+      },
+      {
+        "Name": "isNumericTable",
+        "Description": "Check if the data of the table is numeric"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Generate a file with the table values"
+      },
+      {
+        "Name": "setColumnValues",
+        "Description": "Set the values of a column table"
+      },
+      {
+        "Name": "setDescription",
+        "Description": "Set Table Header or Description."
+      },
+      {
+        "Name": "setRowValues",
+        "Description": "Set the values of a table row"
+      },
+      {
+        "Name": "setStudyCase",
+        "Description": "Set state and sample values. Internal function"
+      },
+      {
+        "Name": "showTable",
+        "Description": "View Table in console GUI or HTML"
+      },
+      {
+        "Name": "size",
+        "Description": "Size of the table. Overload of size function."
       }
     ]
   },
@@ -2339,6 +2402,22 @@
     "Name": "cTableResult",
     "Description": "cTableResult Methods",
     "Methods": [
+      {
+        "Name": "cTableResult",
+        "Description": "Abstrat class to store results into a cTable."
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Get cTable info in diferent types of variables"
+      },
+      {
+        "Name": "getCellData",
+        "Description": "Get table as cell array"
+      },
+      {
+        "Name": "getProperties",
+        "Description": "get the additional properties of a cTableResults"
+      },
       {
         "Name": "getColumnData",
         "Description": "Get a key/value array struct of a column table"
@@ -2406,22 +2485,6 @@
       {
         "Name": "size",
         "Description": "Size of the table. Overload of size function."
-      },
-      {
-        "Name": "cTableResult",
-        "Description": "Abstrat class to store results into a cTable."
-      },
-      {
-        "Name": "exportTable",
-        "Description": "Get cTable info in diferent types of variables"
-      },
-      {
-        "Name": "getCellData",
-        "Description": "Get table as cell array"
-      },
-      {
-        "Name": "getProperties",
-        "Description": "get the additional properties of a cTableResults"
       }
     ]
   },
@@ -2472,69 +2535,43 @@
     ]
   },
   {
+    "Name": "cTaesLab",
+    "Description": "cTaesLab Methods",
+    "Methods": [
+      {
+        "Name": "cTaesLab",
+        "Description": "Initialize a cTaesLab object"
+      },
+      {
+        "Name": "eq",
+        "Description": "Overload eq operator. Check if two class object are equal."
+      },
+      {
+        "Name": "getObjectId",
+        "Description": "Get the object identifier"
+      },
+      {
+        "Name": "ne",
+        "Description": "Overload ne operator. Check if two class objects are different."
+      },
+      {
+        "Name": "printError",
+        "Description": "Print error message. "
+      },
+      {
+        "Name": "printInfo",
+        "Description": "Print info message. Use fprintf syntax"
+      },
+      {
+        "Name": "printWarning",
+        "Description": "Print warning message. "
+      }
+    ]
+  },
+  {
     "Name": "cThermoeconomicModel",
     "Description": "cThermoeconomicModel Methods",
     "Methods": [
-      {
-        "Name": "setDefaultGraph",
-        "Description": "Set Default Graph. Internal package use only"
-      },
-      {
-        "Name": "setResultId",
-        "Description": "Set ResultId. Internal package use only"
-      },
-      {
-        "Name": "setSample",
-        "Description": "Set Resource Sample Name. Internal package use only"
-      },
-      {
-        "Name": "ListOfGraphs",
-        "Description": "Get the list of graph tables as cell array"
-      },
-      {
-        "Name": "ListOfTables",
-        "Description": "Get the list of tables as cell array"
-      },
-      {
-        "Name": "StudyCase",
-        "Description": "Get/display the study case names"
-      },
-      {
-        "Name": "exportResults",
-        "Description": "Export result tables into a structure using diferent formats."
-      },
-      {
-        "Name": "exportTable",
-        "Description": "Export tname into the selected varmode/format"
-      },
-      {
-        "Name": "getTableIndex",
-        "Description": "Get the table index of the results set"
-      },
-      {
-        "Name": "printResults",
-        "Description": "Print the result tables on console"
-      },
-      {
-        "Name": "saveResults",
-        "Description": "Save result tables in different file formats depending on file extension"
-      },
-      {
-        "Name": "saveTable",
-        "Description": "Save a result table into a file depending on extension"
-      },
-      {
-        "Name": "showTableIndex",
-        "Description": "View the index table of the results set"
-      },
-      {
-        "Name": "addExergyData",
-        "Description": "Set exergy data values to actual state"
-      },
-      {
-        "Name": "addResourceData",
-        "Description": "Set exergy data values to actual state"
-      },
       {
         "Name": "cThermoeconomicModel",
         "Description": "Create an instance of the class"
@@ -2671,8 +2708,16 @@
         "Name": "setDiagnosisMethod",
         "Description": "Set a new value of DiagnosisMethod parameter"
       },
+            {
+        "Name": "addExergyData",
+        "Description": "Set exergy data values to actual state"
+      },
       {
         "Name": "setExergyData",
+        "Description": "Set exergy data values to actual state"
+      },
+      {
+        "Name": "addResourceData",
         "Description": "Set exergy data values to actual state"
       },
       {
@@ -2778,6 +2823,58 @@
       {
         "Name": "wasteAnalysis",
         "Description": "Get the Waste Analysis cResultInfo object for the current state and waste flow"
+      },
+      {
+        "Name": "ListOfGraphs",
+        "Description": "Get the list of graph tables as cell array"
+      },
+      {
+        "Name": "ListOfTables",
+        "Description": "Get the list of tables as cell array"
+      },
+      {
+        "Name": "StudyCase",
+        "Description": "Get/display the study case names"
+      },
+      {
+        "Name": "exportResults",
+        "Description": "Export result tables into a structure using diferent formats."
+      },
+      {
+        "Name": "exportTable",
+        "Description": "Export tname into the selected varmode/format"
+      },
+      {
+        "Name": "getTableIndex",
+        "Description": "Get the table index of the results set"
+      },
+      {
+        "Name": "printResults",
+        "Description": "Print the result tables on console"
+      },
+      {
+        "Name": "saveResults",
+        "Description": "Save result tables in different file formats depending on file extension"
+      },
+      {
+        "Name": "saveTable",
+        "Description": "Save a result table into a file depending on extension"
+      },
+      {
+        "Name": "showTableIndex",
+        "Description": "View the index table of the results set"
+      },
+      {
+        "Name": "setDefaultGraph",
+        "Description": "Set Default Graph. Internal package use only"
+      },
+      {
+        "Name": "setResultId",
+        "Description": "Set ResultId. Internal package use only"
+      },
+      {
+        "Name": "setSample",
+        "Description": "Set Resource Sample Name. Internal package use only"
       }
     ]
   },
@@ -2978,6 +3075,14 @@
     "Description": "cWasteAnalysis Methods",
     "Methods": [
       {
+        "Name": "cWasteAnalysis",
+        "Description": "Create an instance of the class"
+      },
+      {
+        "Name": "buildResultInfo",
+        "Description": "Build/Get the cResultInfo object"
+      },
+      {
         "Name": "setDefaultGraph",
         "Description": "Set Default Graph. Internal package use only"
       },
@@ -2988,14 +3093,6 @@
       {
         "Name": "setSample",
         "Description": "Set Resource Sample Name. Internal package use only"
-      },
-      {
-        "Name": "buildResultInfo",
-        "Description": "Build/Get the cResultInfo object"
-      },
-      {
-        "Name": "cWasteAnalysis",
-        "Description": "Create an instance of the class"
       }
     ]
   },

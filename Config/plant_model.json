@@ -25,7 +25,9 @@
 			"required": [
 				"ProductiveStructure",
 				"ExergyStates"
-			]
+			],
+			"title": "DataModel",
+			"description": "TaesLab plant data model structure"
 		},
 		"ProductiveStructure": {
 			"type": "object",
@@ -50,7 +52,9 @@
 			"required": [
 				"flows",
 				"processes"
-			]
+			],
+			"title": "ProductiveStructure",
+			"description": "Productive structure of the plant"	
 		},
 		"Flow": {
 			"type": "object",
@@ -75,7 +79,9 @@
 			"required": [
 				"key",
 				"type"
-			]
+			],
+			"title": "Flow",
+			"description": "Definition of a flow in the productive structure"
 		},
 		"Process": {
 			"type": "object",
@@ -106,7 +112,9 @@
 				"fuel",
 				"product",
 				"type"
-			]
+			],
+			"title": "Process",
+			"description": "Definition of a process in the productive structure"
 		},
 		"ExergyStates": {
 			"type": "object",
@@ -121,7 +129,9 @@
 			},
 			"required": [
 				"States"
-			]
+			],
+			"title": "ExergyStates",
+			"description": "Collection of exergy states used in the plant model"
 		},
 		"State": {
 			"type": "object",
@@ -140,7 +150,9 @@
 			"required": [
 				"exergy",
 				"stateId"
-			]
+			],
+			"title": "State",
+			"description": "Exergy state definition"	
 		},
 		"Format": {
 			"type": "object",
@@ -155,7 +167,9 @@
 			},
 			"required": [
 				"definitions"
-			]
+			],
+			"title": "Format",
+			"description": "Format definitions for displaying data"
 		},
 		"FormatDefinition": {
 			"type": "object",
@@ -190,7 +204,9 @@
 				"precision",
 				"unit",
 				"width"
-			]
+			],
+			"title": "FormatDefinition",
+			"description": "Definition of a specific format for data display"
 		},
 		"ResourcesCost": {
 			"type": "object",
@@ -205,7 +221,9 @@
 			},
 			"required": [
 				"Samples"
-			]
+			],
+			"title": "ResourcesCost",
+			"description": "Resource cost definitions for different samples"
 		},
 		"Sample": {
 			"type": "object",
@@ -230,7 +248,9 @@
 			"required": [
 				"sampleId",
 				"flows"
-			]
+			],
+			"title": "Sample",
+			"description": "Sample data for resource costs"
 		},
 		"WasteDefinition": {
 			"type": "object",
@@ -245,7 +265,9 @@
 			},
 			"required": [
 				"wastes"
-			]
+			],
+			"title": "WasteDefinition",
+			"description": "Definition of waste allocations in the plant model"
 		},
 		"Wastes": {
 			"type": "object",
@@ -281,7 +303,9 @@
 			"required": [
 				"flow",
 				"type"
-			]
+			],
+			"title": "Wastes",
+			"description": "Definition of wastes in the plant model"
 		},
 		"WasteAllocation": {
 			"type": "object",
@@ -298,7 +322,9 @@
 			"required": [
 				"process",
 				"value"
-			]
+			],
+			"title": "WasteAllocation",
+			"description": "Allocation of waste to a specific process"
 		},
 		"Values": {
 			"type": "object",
@@ -315,19 +341,24 @@
 			"required": [
 				"key",
 				"value"
-			]
+			],
+			"title": "Values",
+			"description": "Key-value pairs representing values in the plant model"
 		},
 		"Keys": {
 			"type": "string",
-			"pattern": "^[A-Z][A-Za-z0-9]{1,7}$"
+			"pattern": "^[A-Z][A-Za-z0-9]{1,7}$",
+			"description": "Identifier key for flows and processes"
 		},
 		"Names": {
 			"type": "string",
-			"pattern": "^[A-Za-z]\\w{1,9}$"
+			"pattern": "^[A-Za-z]\\w{1,9}$",
+			"description": "Name identifier for samples"
 		},
 		"Text": {
             "type": "string",
-            "minLength": 2
+            "minLength": 2,
+			"description": "Textual data with a minimum length of 2 characters"
         }
 	}
 }

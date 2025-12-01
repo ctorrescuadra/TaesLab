@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ief</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Import/Export Functions
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>exportCSV</td>
+				<td>Saves a cell array as CSV file.</td>
+			</tr>
+			<tr>
+				<td>exportMAT</td>
+				<td>Save a valid cTaesLab object as MAT file.</td>
+			</tr>
+			<tr>
+				<td>importCSV</td>
+				<td>Read a CSV file and return its contents as a cell array</td>
+			</tr>
+			<tr>
+				<td>importMAT</td>
+				<td>Create a cTaesLab object from a previous saved MAT file.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>vf</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Validation Functions
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>inverseMatrixOperator</td>
+				<td>Calculate the inverse of the M-Matrix, I-A.</td>
+			</tr>
+			<tr>
+				<td>isFilename</td>
+				<td>Check if file name is valid for read/write mode.</td>
+			</tr>
+			<tr>
+				<td>isIndex</td>
+				<td>Check if a number belong to an index range.</td>
+			</tr>
+			<tr>
+				<td>isInteger</td>
+				<td>Check if the value is an integer number.</td>
+			</tr>
+			<tr>
+				<td>isMatlab</td>
+				<td>Identifies if the funcion has been executed in MATLAB.</td>
+			</tr>
+			<tr>
+				<td>isNonNegativeMatrix</td>
+				<td>Check if the matrix is square and non-negative.</td>
+			</tr>
+			<tr>
+				<td>isNonSingularMatrix</td>
+				<td>Check if the matrix I-A is non-singular.</td>
+			</tr>
+			<tr>
+				<td>isObject</td>
+				<td>Check if 'obj' is a valid cTaesLab object belong to a specific class.</td>
+			</tr>
+			<tr>
+				<td>isOctave</td>
+				<td>Identifies if the funcion has been executed in Octave.</td>
+			</tr>
+			<tr>
+				<td>isSquareMatrix</td>
+				<td>Checks if input A is a numeric square matrix.</td>
+			</tr>
+			<tr>
+				<td>isValid</td>
+				<td>Check if 'obj' is a valid TaesLab object.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>mof</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Matrix Operation Functions
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>divideCol</td>
+				<td>Divide each colums of matrix A by the corresponding element of vector x.</td>
+			</tr>
+			<tr>
+				<td>divideRow</td>
+				<td>Divide each row of matrix A by the corresponding element of vector x.</td>
+			</tr>
+			<tr>
+				<td>logicalMatrix</td>
+				<td>Convert a real matrix to logical with zero tolerance.</td>
+			</tr>
+			<tr>
+				<td>scaleCol</td>
+				<td>Multiplies each column of matrix A by the corresponding element of vector x.</td>
+			</tr>
+			<tr>
+				<td>scaleRow</td>
+				<td>Multiplies each row of matrix A by the corresponding element of vector x.</td>
+			</tr>
+			<tr>
+				<td>similarDemandMatrix</td>
+				<td>Compute the demand-driven adjacency matrix from the resource-driven matrix.</td>
+			</tr>
+			<tr>
+				<td>similarDemandOperator</td>
+				<td>Compute the demand-driven operator from the resource-drive operator.</td>
+			</tr>
+			<tr>
+				<td>similarResourceMatrix</td>
+				<td>Compute the resource-driven adjacency matrix from the demand-driven matrix.</td>
+			</tr>
+			<tr>
+				<td>similarResourceOperator</td>
+				<td>Compute the resource-driven operator from the demmand drive operator.</td>
+			</tr>
+			<tr>
+				<td>tolerance</td>
+				<td>Compute the relative tolerance value for a matrix.</td>
+			</tr>
+			<tr>
+				<td>transitiveClosure</td>
+				<td>Compute the transitive closure of a digraph.</td>
+			</tr>
+			<tr>
+				<td>vDivide</td>
+				<td>Element-wise right division. Overload operator rdivide when 0/0.</td>
+			</tr>
+			<tr>
+				<td>zerotol</td>
+				<td>Sets to zero the matrix values near to zero.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>muf</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Miscellaneous Functions
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>buildMessage</td>
+				<td>Builds a formatted error message for a given function.</td>
+			</tr>
+			<tr>
+				<td>fdisplay</td>
+				<td>Display a matrix A using C-like formatting.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>

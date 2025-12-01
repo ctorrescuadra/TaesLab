@@ -8,23 +8,31 @@
 		"csv-preview.numberFormat": "F4",
 		"data.preview.charts.plugin": "highcharts",
 		"json.schemas": [
+			
+
 			{
 				"fileMatch": [
 					"*_model.json"
 				],
-				"url": "./schemas/plant_model.json"
+				"url": "./Config/plant_model.json"
 			},
 			{
 				"fileMatch": [
 					"printformat.json"
 				],
-				"url": "./schemas/printformat_schema.json"
+				"url": "./Config/printformat_schema.json"
 			},
 			{
 				"fileMatch": [
 					"Contents.json"
 				],
-				"url": "./schemas/contents_schema.json"
+				"url": "./Config/contents_schema.json"
+			},
+			{
+				"fileMatch": [
+					"ClassInfo.json"
+				],
+				"url": "./Config/classinfo_schema.json"
 			}
 		],
 		"editor.indentSize": "tabSize",

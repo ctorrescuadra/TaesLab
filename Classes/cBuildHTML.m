@@ -66,7 +66,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function log=saveTable(obj,filename)
-        %saveTable - Save the table into a HTML file
+        %saveTable - Save the table into an HTML file
         %   Syntax:
         %     log = obj.saveTable(filename)
         %   Input Arguments:
@@ -96,7 +96,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %   Output Arguments:
         %     res - text string with the HTML head
         %
-            cssfile=fullfile(cType.ClassesPath,cType.CSSFILE);
+            cssfile=fullfile(cType.ConfigPath,cType.CSSFILE);
             csstext=fileread(cssfile);
             res = '<!DOCTYPE html>';
             res=[res,sprintf('\n<html>\n')];

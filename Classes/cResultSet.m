@@ -200,7 +200,7 @@ classdef(Abstract) cResultSet < cResultId
                 log.messageLog(cType.ERROR,cMessages.InvalidResultInfo)
                 return
             end
-            [fileType,ext]=cType.getFileType(filename);
+            [fileType,fileExt]=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.CSV
                     log=obj.saveAsCSV(filename);
@@ -217,7 +217,7 @@ classdef(Abstract) cResultSet < cResultId
                 case cType.FileType.MAT
                     log=exportMAT(obj,filename);
                 otherwise
-                    log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
+                    log.messageLog(cType.ERROR,cMessages.InvalidFileExt,upper(fileExt));
                     return
             end
             if log.status
@@ -269,7 +269,7 @@ classdef(Abstract) cResultSet < cResultId
         end
     
         function res=exportTable(obj,tname,varargin)
-        %exportTable - Export tname into the selected varmode/format
+        %exportTable - Export table into the selected varmode/format
         %   Syntax:
         %     obj.exportTable(tname,options)
         %   Input Arguments:

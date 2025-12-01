@@ -1,0 +1,1061 @@
+
+cBuildHTML Methods
+
+ Name            Description                             
+———————————————————————————————————————————————————————————
+ cBuildHTML      Build an instance of the object         
+ getMarkupHTML   Get the HTML text of the table          
+ saveTable       Save the table into a HTML file         
+ showTable       Show a normal table in the web browser  
+
+
+cBuildLaTeX Methods
+
+ Name           Description                                 
+——————————————————————————————————————————————————————————————
+ cBuildLaTeX    Create an instance of the class             
+ getLaTeXcode   Get the LaTeX code as string                
+ saveTable      Save the table as LaTeX code into filename  
+
+
+cBuildMarkdown Methods
+
+ Name              Description                                    
+————————————————————————————————————————————————————————————————————
+ cBuildMarkdown    Create an instance of the class                
+ getMarkdownCode   Get the Markdown code as string                
+ saveTable         Save the table as Markdown code into filename  
+
+
+cDataModel Methods
+
+ Name                 Description                                                               
+——————————————————————————————————————————————————————————————————————————————————————————————————
+ addExergyData        add a new  exergy data state                                              
+ addResourceData      Create a new cResourceData object and add to Resource samples             
+ buildExergyData      Set the exergy data values of a state                                     
+ buildResourceData    Create a new cResourceData object                                         
+ cDataModel           Create an instance of the class                                           
+ create               Create a cDataModel object from a file                                    
+ existSample          Check if sample is defined in ResourceState                               
+ existState           Check if state is defined in States                                       
+ getExergyData        Get the exergy data for a state                                           
+ getResourceData      Get the resource data for a sample                                        
+ getResultInfo        Get data model result info                                                
+ getTableInfo         Get information about a table                                             
+ getTablesDirectory   Get the tables directory                                                  
+ getWasteDefinition   Get Waste Data                                                            
+ saveDataModel        Save data model depending of filename extension                           
+ setExergyData        Set the exergy values of a state                                          
+ setFlowResource      Set the flow-resource value of a sample                                   
+ setProcessResource   Set the process-resource value of a sample                                
+ setWasteRecycled     Set the waste recycling ratios                                            
+ setWasteType         Set the waste type allocation method for Active Waste                     
+ setWasteValues       Set the waste table values                                                
+ showDataModel        View a table in a GUI Table                                               
+ updateModel          Update the Data Model if there is changes                                 
+ setDefaultGraph      Set Default Graph. Internal package use only                              
+ setResultId          Set ResultId. Internal package use only                                   
+ setSample            Set Resource Sample Name. Internal package use only                       
+ ListOfGraphs         Get the list of graph tables as cell array                                
+ ListOfTables         Get the list of tables as cell array                                      
+ StudyCase            Get/display the study case names                                          
+ exportResults        Export result tables into a structure using diferent formats.             
+ exportTable          Export table into the selected varmode/format                             
+ getTable             Get the table called name                                                 
+ getTableIndex        Get the table index of the results set                                    
+ printResults         Print the result tables on console                                        
+ saveResults          Save result tables in different file formats depending on file extension  
+ saveTable            Save a result table into a file depending on extension                    
+ showResults          View an individual table                                                  
+ showTableIndex       View the index table of the results set                                   
+
+
+cDataset Methods
+
+ Name        Description                                       
+—————————————————————————————————————————————————————————————————
+ addValues   Add a new value at the end of the dataset         
+ cDataset    Build an instance of the object                   
+ getValues   Get an element of the dataset                     
+ setValues   Set the values in position indicates by arg       
+ addKey      Add a new key if doesn't exists                   
+ existsKey   Check if key exists                               
+ getIndex    Get the corresponding index of a key              
+ getKey      Get the corresponding key(s) of a set of indexes  
+ getKeys     Get the keys of the dictionary                    
+ isIndex     Check if the index is valid.                      
+ length      Length of the dictionary                          
+ numel       Number of elements of the dictionary              
+ size        Size of the dictionary                            
+
+
+cDiagnosis Methods
+
+ Name                           Description                                          
+———————————————————————————————————————————————————————————————————————————————————————
+ buildResultInfo                Get cResultInfo object for thermoeconomic diagnosis  
+ cDiagnosis                     Create an object of the class                        
+ getDemandCorrectionCost        Get Demand Variation effective cost.                 
+ getDemandVariation             Get the system demand variation                      
+ getDemandVariationCost         Get the system demand variation cost                 
+ getDiagnosisTable              Get Diagnosis Table                                  
+ getExternalDisfunction         Get the external disfunction matrix                  
+ getInternalDisfunction         Get the internal disfunction matrix                  
+ getIrreversibilityTable        Build the irreversibility table                      
+ getIrreversibilityVariation    Get the unit process cost variation                  
+ getMalfunction                 Get the malfunction vector                           
+ getMalfunctionCost             Get the malfunction cost vector (MF*)                
+ getMalfunctionCostTable        Get the malfunction cost table                       
+ getMalfunctionTable            Get the Malfunction table                            
+ getOutputVariation             Get the system output variation                      
+ getUnitConsumptionVariation    Get the unit consumption variation                   
+ getUnitCostVariation           Get the unit process cost variation                  
+ getWasteMalfunctionCost        Get the waste cost variation (MR*)                   
+ getWasteMalfunctionCostTable   Get the waste malfunction cost table                 
+ getWasteVariation              Get waste variation                                  
+ setDefaultGraph                Set Default Graph. Internal package use only         
+ setResultId                    Set ResultId. Internal package use only              
+ setSample                      Set Resource Sample Name. Internal package use only  
+
+
+cDiagramFP Methods
+
+ Name              Description                                          
+——————————————————————————————————————————————————————————————————————————
+ buildResultInfo   Get cResultInfo object of the DiagramFP              
+ cDiagramFP        Build an instance of this class                      
+ getNodesTable     Get the nodes  of a  diagram                         
+ setDefaultGraph   Set Default Graph. Internal package use only         
+ setResultId       Set ResultId. Internal package use only              
+ setSample         Set Resource Sample Name. Internal package use only  
+
+
+cDictionary Methods
+
+ Name          Description                                       
+———————————————————————————————————————————————————————————————————
+ addKey        Add a new key if doesn't exists                   
+ cDictionary   Construct an instance of this class               
+ existsKey     Check if key exists                               
+ getIndex      Get the corresponding index of a key              
+ getKey        Get the corresponding key(s) of a set of indexes  
+ getKeys       Get the keys of the dictionary                    
+ isIndex       Check if the index is valid.                      
+ length        Length of the dictionary                          
+ numel         Number of elements of the dictionary              
+ size          Size of the dictionary                            
+
+
+cDigraph Methods
+
+ Name          Description                     
+—————————————————————————————————————————————————
+ cDigraph      Build an instance of the class  
+ showGraph     Show the graph in a window      
+ showGraphUI   Show the graph in a GUI app     
+
+
+cDigraphAnalysis Methods
+
+ Name                Description                                      
+————————————————————————————————————————————————————————————————————————
+ cDigraphAnalysis    Construct an instance of this class              
+ getComponentNames   Get the names of the strong components           
+ getGroupsInfo       Build the Node Groups table                      
+ getKernelInfo       Get the Kernel Table information                 
+ isProductive        Check if the graph is productive                 
+ isReachable         Check if node v is reachable from node u         
+ isStrongConnected   Check if nodes u,v belong to the same component  
+ plot                Plot the digraph                                 
+
+
+cExergyCost Methods
+
+ Name                           Description                                                        
+—————————————————————————————————————————————————————————————————————————————————————————————————————
+ buildResultInfo                Get the cResultInfo object for thermoeconomic analysis             
+ cExergyCost                    Creates an instance of the class                                   
+ getCostTableFP                 Get the FP Cost Table considering only internal irreversibilities  
+ getDirectCostTableFPR          Get FPR Cost Table with direct costs                               
+ getFlowsCost                   Get the exergy cost of flows                                       
+ getGeneralCostTableFPR         Get FPR Cost-Table with generalized costs                          
+ getIrreversibilityCostTables   Get Irreversibility Cost Tables for processes and flows            
+ getOpR                         Get the corresponding waste operator                               
+ getProcessCost                 Get processes cost values                                          
+ getProcessUnitCost             Get Process Unit Cost                                              
+ getResourcesCostDistribution   Get the resource Cost distribution tables                          
+ getSpectralRatio               Get the spectral ratio of the productive matrix                    
+ getStreamsCost                 Get the exergy cost of streams                                     
+ updateOperator                 Update an operator with the corresponding waste operator           
+ updateWasteOperators           Calculate the waste allocation ratios and cost operators.          
+ ExternalIrreversibility        Get the total external irreversibility (waste)                     
+ FlowProcessTable               Get the Flow-Process table                                         
+ InternalIrreversibility        Get the total internal irreversibility                             
+ setDefaultGraph                Set Default Graph. Internal package use only                       
+ setResultId                    Set ResultId. Internal package use only                            
+ setSample                      Set Resource Sample Name. Internal package use only                
+
+
+cExergyData Methods
+
+ Name          Description                     
+—————————————————————————————————————————————————
+ cExergyData   Build an instance of the class  
+
+
+cExergyModel Methods
+
+ Name                      Description                                          
+——————————————————————————————————————————————————————————————————————————————————
+ ExternalIrreversibility   Get the total external irreversibility (waste)       
+ FlowProcessTable          Get the Flow-Process table                           
+ InternalIrreversibility   Get the total internal irreversibility               
+ buildResultInfo           Get the cResultInfo object                           
+ cExergyModel              Create an instance of the class	                     
+ setDefaultGraph           Set Default Graph. Internal package use only         
+ setResultId               Set ResultId. Internal package use only              
+ setSample                 Set Resource Sample Name. Internal package use only  
+
+
+cFormatData Methods
+
+ Name                     Description                                
+———————————————————————————————————————————————————————————————————————
+ cFormatData              Create an instance of the class            
+ getFormat                Get the format of a type of variable       
+ getResultId              Get the ResultId of a table                
+ getTableProperties       Get the properties of a cTable             
+ getUnit                  Get the format of a type of variable       
+ getCellTables            Get the cell tables configuration          
+ getDataModelProperties   Get the data model properties              
+ getMatrixTables          Get the matrix tables configuration        
+ getResultIdTables        Get the tables of an specific resultId     
+ getSummaryTables         Get the summary tables configuration       
+ getTableDefinition       Get the properties of a table              
+ getTableId               Get tableId from dictionary. Internal use  
+ getTableInfo             Get the properties of a table              
+ getTablesDirectory       Get the tables directory                   
+
+
+cGraphCost Methods
+
+ Name          Description                      
+——————————————————————————————————————————————————
+ cGraphCost    Build an instance of the object  
+ showGraph     Show the graph in a window       
+ showGraphUI   Show the graph in a GUI app      
+
+
+cGraphCostRSC Methods
+
+ Name            Description                      
+————————————————————————————————————————————————————
+ cGraphCostRSC   Build an instance of the object  
+ showGraph       Show the graph in a window       
+ showGraphUI     Show the graph in a GUI app      
+
+
+cGraphDiagnosis Methods
+
+ Name              Description                      
+——————————————————————————————————————————————————————
+ cGraphDiagnosis   Build an instance of the object  
+ showGraph         Show the graph in a window       
+ showGraphUI       Show the graph in a GUI app      
+
+
+cGraphDiagramFP Methods
+
+ Name              Description                                   
+———————————————————————————————————————————————————————————————————
+ cGraphDiagramFP   Build an instance of the object               
+ edgesTable        Get a table with the edges of the digraph     
+ nodesTable        Get a table with the properties of the nodes  
+ showGraph         Show the graph in a window                    
+ showGraphUI       Show the graph in a GUI app                   
+
+
+cGraphRecycling Methods
+
+ Name              Description                        
+————————————————————————————————————————————————————————
+ cGraphRecycling   Build an instance of the object    
+ showGraph         Show the graph in a figure window  
+ showGraphUI       Show the graph in a GUI app        
+
+
+cGraphResults Methods
+
+ Name            Description                                                       
+—————————————————————————————————————————————————————————————————————————————————————
+ cGraphResults   Abstract class used to show graphs in interactive mode and apps.  
+
+
+cGraphSummary Methods
+
+ Name            Description                      
+————————————————————————————————————————————————————
+ cGraphSummary   Build an instance of the object  
+ showGraph       Show the graph in a window       
+ showGraphUI     Show the graph in a GUI app      
+
+
+cGraphWaste Methods
+
+ Name          Description                      
+——————————————————————————————————————————————————
+ cGraphWaste   Build an instance of the object  
+ showGraph     Show the graph in a window       
+ showGraphUI   Show the graph in a GUI app      
+
+
+cMessageBuilder Methods
+
+ Name              Description                          
+——————————————————————————————————————————————————————————
+ cMessageBuilder   Construct an instance of this class  
+ disp              Overload disp function               
+ getMessage        Get the message as text              
+
+
+cMessageLogger Methods
+
+ Name              Description                                                      
+——————————————————————————————————————————————————————————————————————————————————————
+ addLogger         Concatenate two message loggers                                  
+ cMessageLogger    Creates an instance of the class                                 
+ clearLogger       Clear the message logger                                         
+ messageLog        Add a message to the logger                                      
+ printLogger       Print the logger                                                 
+ printLoggerType   Print the messages of the logger of the specified type           
+ tableLogger       Build a table logger to use in apps                              
+ eq                Overload eq operator. Check if two class object are equal.       
+ getObjectId       Get the object identifier                                        
+ ne                Overload ne operator. Check if two class objects are different.  
+ printError        Print error message.                                             
+ printInfo         Print info message. Use fprintf syntax                           
+ printWarning      Print warning message.                                           
+
+
+cMessages Methods
+
+ Name        Description                                                              
+————————————————————————————————————————————————————————————————————————————————————————
+ ShowHelp    Get a string with the hyperlink to the help of the caller function       
+ Table       Get or show in console a table with all the messages or show in console  
+ cMessages   Static class which defines the TaesLab messages.                         
+
+
+cModelData Methods
+
+ Name             Description                                                   
+——————————————————————————————————————————————————————————————————————————————————
+ cModelData       Construct an instance of this class                           
+ getSampleNames   Get a cell array list with the names of the resource samples  
+ getStateNames    Get a cell array list with the names of the states            
+ isResource       Indicate is optional resource cost element exists             
+ isWaste          Indicate is optional waste element exists                     
+ saveAsJSON       Save data model as JSON file                                  
+ saveAsXML        Save data model as XML file                                   
+
+
+cModelResults Methods
+
+ Name              Description                                                             
+—————————————————————————————————————————————————————————————————————————————————————————————
+ cModelResults     Construct an instance of this class                                     
+ clearResults      Clear the result index in the container                                 
+ getModelResults   Get a cell array with the cResultInfo objects of the current state      
+ getResults        Get the cResultInfo from the container                                  
+ setResults        Store the cResultInfo in the results container using ResultId as index  
+
+
+cModelTable Methods
+
+ Name            Description                                     
+———————————————————————————————————————————————————————————————————
+ cModelTable     Construct an instance of this class             
+ getStructData   Get a struct with the table values              
+ getTableData    Get a cTable with the table model info.         
+ printTable      Print data on console, using cTable interface.  
+ size            Size of the table model. Overload size method   
+
+
+cParseStream Methods
+
+ Name                 Description                                           
+——————————————————————————————————————————————————————————————————————————————
+ cParseStream         Class with static methods to parse stream definition  
+ checkDuplicates      Check if the list has duplicate values                
+ checkListKeys        Check if a list of keys is valid                      
+ checkListNames       Check if a list of names is valid                     
+ checkName            Check if a name (state | sample) is valid             
+ checkNumericFormat   Check if a numeric format is valid                    
+ checkStream          Check if a fuel/product definition string is correct  
+ checkTextKey         Check if a text key is valid                          
+ getFlowsList         Get the list of flows in a FP definition string       
+ getStreamFlows       Get the input and output flows of a stream            
+ getStreams           Get the list of productive groups                     
+
+
+cProductiveDiagram Methods
+
+ Name                 Description                                          
+—————————————————————————————————————————————————————————————————————————————
+ buildResultInfo      Get cResultInfo object                               
+ cProductiveDiagram   Construct an instance of this class                  
+ getEdgesTable        Get the edges info of a diagram                      
+ getNodesTable        Get the nodes  of a  diagram                         
+ setDefaultGraph      Set Default Graph. Internal package use only         
+ setResultId          Set ResultId. Internal package use only              
+ setSample            Set Resource Sample Name. Internal package use only  
+
+
+cProductiveStructure Methods
+
+ Name                   Description                                                         
+——————————————————————————————————————————————————————————————————————————————————————————————
+ FinalProductFlows      Get the final product flows id                                      
+ FlowEdges              Get a structure array with the stream node names of the flow edges  
+ FuelStreams            Get the fuel streams id (including output and wastes)               
+ IncidenceMatrix        Get incidence matrices of the plant                                 
+ OutputProcesses        Get the id of processes with external outputs                       
+ ProductStreams         Get the product streams id (including resources)                    
+ ResourceFlows          Get the resource flows id                                           
+ ResourceProcesses      Get the id of processes with external resources                     
+ SystemOutputFlows      Get the system output flows id                                      
+ WasteData              Get default waste data info                                         
+ buildResultInfo        Build the cResultInfo object for PRODUCTIVE_STRUCTURE               
+ cProductiveStructure   Creates an instance of the class                                    
+ flows2Streams          Compute the exergy or cost of streams from flow values              
+ getFlowId              Get the Id of a flow given its key                                  
+ getFlowMatrix          Get the Structural Theory Flows Adjacency Matrix                    
+ getFlowProcessMatrix   Get the Flow-Process Adjacency Matrix (Flows, Processes)            
+ getFlowTypes           Get the flowId of type typeId                                       
+ getProcessId           Get the Id of a process given its key                               
+ getProcessMatrix       Get the Process Adjacency Matrix (logical FP table)                 
+ getProcessTypes        Get the process-id of type typeId                                   
+ getProductNames        Get the name of the final products flows                            
+ getProductiveMatrix    Get the Productive Adjacency Matrix (Streams, Flows, Processes)     
+ getResourceNames       Get the name of the resource flows                                  
+ getStreamMatrix        Get the Streams graph adjacency matrix                              
+ getStreamTypes         Get the stream-id of type typeId                                    
+ getWasteNames          Get the name of the waste flows                                     
+ isModelIO              Check if the model is pure Input-Output                             
+ setDefaultGraph        Set Default Graph. Internal package use only                        
+ setResultId            Set ResultId. Internal package use only                             
+ setSample              Set Resource Sample Name. Internal package use only                 
+
+
+cQueue Methods
+
+ Name           Description                                               
+————————————————————————————————————————————————————————————————————————————
+ add            Add an element at the end of the queue                    
+ addQueue       Add another queue at the end of this queue                
+ cQueue         Create a cQueue object. Initialize as a empty cell array  
+ clear          Clear the queue                                           
+ getContent     Get the content of the queue                              
+ length         Length of the queue. Overload length function             
+ numel          Number of elements of the queue. Overload numel function  
+ printContent   Print the content of the buffer                           
+ size           Size of the queue. Overload size function                 
+
+
+cReadModel Methods
+
+ Name           Description                                              
+———————————————————————————————————————————————————————————————————————————
+ cReadModel     Abstract class to implemenent the model reader classes.  
+ getDataModel   Get the data model object                                
+
+
+cReadModelCSV Methods
+
+ Name               Description                       
+————————————————————————————————————————————————————————
+ getDataModel       Get the data model object         
+ cReadModelCSV      Build an instance of the class    
+ printModelTables   Show the model tables on console  
+
+
+cReadModelJSON Methods
+
+ Name             Description                         
+————————————————————————————————————————————————————————
+ getDataModel     Get the data model object           
+ cReadModelJSON   Construct an instance of the class  
+
+
+cReadModelStruct Methods
+
+ Name               Description                                    
+—————————————————————————————————————————————————————————————————————
+ getDataModel       Get the data model object                      
+ cReadModelStruct   Abstract class to read structured data model.  
+
+
+cReadModelTable Methods
+
+ Name               Description                               
+————————————————————————————————————————————————————————————————
+ getDataModel       Get the data model object                 
+ cReadModelTable    Abstract class to read table data model.  
+ printModelTables   Show the model tables on console          
+
+
+cReadModelXLS Methods
+
+ Name               Description                       
+————————————————————————————————————————————————————————
+ getDataModel       Get the data model object         
+ printModelTables   Show the model tables on console  
+ cReadModelXLS      Build an instance of the class    
+
+
+cReadModelXML Methods
+
+ Name            Description                      
+————————————————————————————————————————————————————
+ getDataModel    Get the data model object        
+ cReadModelXML   Build an instance of the object  
+
+
+cResourceData Methods
+
+ Name                 Description                                                    
+———————————————————————————————————————————————————————————————————————————————————————
+ cResourceData        Creates an instance of the class                               
+ setFlowResource      Set the flow-resource values of the current sample             
+ setProcessResource   Set the process-resource value of the current sample           
+ setResourceCost      Calculate the resource cost properties for the current sample  
+
+
+cResultId Methods
+
+ Name              Description                                          
+——————————————————————————————————————————————————————————————————————————
+ cResultId         Abstract class to manage the result identification.  
+ setDefaultGraph   Set Default Graph. Internal package use only         
+ setResultId       Set ResultId. Internal package use only              
+ setSample         Set Resource Sample Name. Internal package use only  
+
+
+cResultInfo Methods
+
+ Name               Description                                                                 
+——————————————————————————————————————————————————————————————————————————————————————————————————
+ setDefaultGraph    Set Default Graph. Internal package use only                                
+ setResultId        Set ResultId. Internal package use only                                     
+ setSample          Set Resource Sample Name. Internal package use only                         
+ cResultInfo        Construct an instance of this class                                         
+ getResultInfo      Get cResultInfo object for cResultSet                                       
+ getTable           Get the table called name                                                   
+ getTableIndex      Get the Table Index                                                         
+ isSampleSummary    Check if the Samples Summary results are available                          
+ isStateSummary     Check if the States Summary results are available                           
+ showGraph          Show graph with default options                                             
+ summaryDiagnosis   Get the Fuel Impact/Malfunction Cost as a string including format and unit  
+ summaryTables      Get/Display available summary tables                                        
+ ListOfGraphs       Get the list of graph tables as cell array                                  
+ ListOfTables       Get the list of tables as cell array                                        
+ StudyCase          Get/display the study case names                                            
+ exportResults      Export result tables into a structure using diferent formats.               
+ exportTable        Export table into the selected varmode/format                               
+ printResults       Print the result tables on console                                          
+ saveResults        Save result tables in different file formats depending on file extension    
+ saveTable          Save a result table into a file depending on extension                      
+ showResults        View an individual table                                                    
+ showTableIndex     View the index table of the results set                                     
+
+
+cResultSet Methods
+
+ Name              Description                                                               
+———————————————————————————————————————————————————————————————————————————————————————————————
+ setDefaultGraph   Set Default Graph. Internal package use only                              
+ setResultId       Set ResultId. Internal package use only                                   
+ setSample         Set Resource Sample Name. Internal package use only                       
+ ListOfGraphs      Get the list of graph tables as cell array                                
+ ListOfTables      Get the list of tables as cell array                                      
+ StudyCase         Get/display the study case names                                          
+ cResultSet        Abstract class to manage the result sets.                                 
+ exportResults     Export result tables into a structure using diferent formats.             
+ exportTable       Export table into the selected varmode/format                             
+ getTable          Get the table called name                                                 
+ getTableIndex     Get the table index of the results set                                    
+ printResults      Print the result tables on console                                        
+ saveResults       Save result tables in different file formats depending on file extension  
+ saveTable         Save a result table into a file depending on extension                    
+ showResults       View an individual table                                                  
+ showTableIndex    View the index table of the results set                                   
+
+
+cResultTableBuilder Methods
+
+ Name                      Description                                
+————————————————————————————————————————————————————————————————————————
+ getFormat                 Get the format of a type of variable       
+ getResultId               Get the ResultId of a table                
+ getTableProperties        Get the properties of a cTable             
+ getUnit                   Get the format of a type of variable       
+ cResultTableBuilder       Create and instance of the class           
+ getCostResults            Get the thermoeconomic analysis result     
+ getDiagnosisResults       Get the thermoeconomic diagnosis results   
+ getDiagramFP              Get the diagram FP adjacency results       
+ getExergyResults          Generate the exergy results                
+ getProductiveDiagram      Get the productive diagram tables          
+ getProductiveStructure    Generate the productive structure results  
+ getSummaryResults         Get the cResultInfo for Summary Results    
+ getWasteAnalysisResults   Get the waste analysis results             
+ getCellTables             Get the cell tables configuration          
+ getDataModelProperties    Get the data model properties              
+ getMatrixTables           Get the matrix tables configuration        
+ getResultIdTables         Get the tables of an specific resultId     
+ getSummaryTables          Get the summary tables configuration       
+ getTableDefinition        Get the properties of a table              
+ getTableId                Get tableId from dictionary. Internal use  
+ getTableInfo              Get the properties of a table              
+ getTablesDirectory        Get the tables directory                   
+
+
+cSparseRow Methods
+
+ Name         Description                                          
+—————————————————————————————————————————————————————————————————————
+ cSparseRow   create an instance of the class                      
+ ctranspose   Overload ctranspose operator for cSparseRow objects  
+ disp         Overload display object for cSparseRow objects       
+ divideCol    Divide the columns of the matrix by a vector         
+ divideRow    Divide the rows of the matrix by a vector            
+ full         Overload full function for cSparseRow objects        
+ minus        Overload the minus operator for cSparseRow objects   
+ mtimes       Overload the mtimes operator for cSparseRow objects  
+ plus         Overload the plus operator for cSparseRow objects    
+ scaleCol     Scale the columns of the matrix by a vector          
+ scaleRow     Scale the rows of the matrix by a vector             
+ size         Overload size function for cSparseRow objects        
+ sparse       Overload sparse function for cSparseRow objects      
+ sum          Overload sum function for cSparseRow objects         
+ sumCols      Sum the columns of the matrices                      
+ sumRows      Sum the rows of the matrices                         
+ transpose    Overload transpose operator for cSparseRow objects   
+ uminus       Overload the uminus operator for cSparseRow objects  
+
+
+cSummaryOptions Methods
+
+ Name              Description                                             
+—————————————————————————————————————————————————————————————————————————————
+ cSummaryOptions   Build an instance of the class                          
+ checkId           Check the summary id option                             
+ checkName         Check the summary name option                           
+ defaultOption     Get the default summary option name for the data model  
+ isEnable          Check if model has summary enabled                      
+ isResources       Check if the model has resources summary available      
+ isStates          Check if the model has states summary available         
+
+
+cSummaryResults Methods
+
+ Name                         Description                                                         
+————————————————————————————————————————————————————————————————————————————————————————————————————
+ setDefaultGraph              Set Default Graph. Internal package use only                        
+ setResultId                  Set ResultId. Internal package use only                             
+ setSample                    Set Resource Sample Name. Internal package use only                 
+ buildResultInfo              Get cResultInfo object                                              
+ cSummaryResults              Build an instance of this class                                     
+ defaultSummaryTables         Get the default summary tables option name                          
+ getDefaultFlowVariables      Get the output flows keys                                           
+ getDefaultProcessVariables   Get the output processes keys                                       
+ getSummaryColumns            Get the column names of the summary tables                          
+ getValues                    Get dataset tables                                                  
+ isSampleSummary              Check if Samples Summary results are available                      
+ isStateSummary               Check if States Summary results are available                       
+ setSummaryTables             Fill the values of the summary tables with the values of the model  
+
+
+cSummaryTable Methods
+
+ Name            Description                                          
+————————————————————————————————————————————————————————————————————————
+ cSummaryTable   Create an instance of the class                      
+ setValues       Set the values of the table for each STATE/RESOURCE  
+
+
+cTable Methods
+
+ Name              Description                                     
+—————————————————————————————————————————————————————————————————————
+ cTable            Abstract class for tabular data.                
+ exportTable       Get table values in diferent formats            
+ getColumnData     Get a key/value array struct of a column table  
+ getColumnFormat   Get the format of each column table             
+ getColumnValues   Get the values of a column table                
+ getColumnWidth    Get the maximun width of each column            
+ getMatlabTable    Get cTable as Matlab table                      
+ getProperties     Get table properties                            
+ getStructData     Get table data as struct array                  
+ getStructTable    Get a structure with the table info             
+ isGraph           Check if the table has a graph associated       
+ isNumericColumn   Check if a column is numeric (base method)      
+ isNumericTable    Check if the data of the table is numeric       
+ saveTable         Generate a file with the table values           
+ setColumnValues   Set the values of a column table                
+ setDescription    Set Table Header or Description.                
+ setRowValues      Set the values of a table row                   
+ setStudyCase      Set state and sample values. Internal function  
+ showTable         View Table in console GUI or HTML               
+ size              Size of the table. Overload of size function.   
+
+
+cTableCell Methods
+
+ Name                  Description                                                      
+——————————————————————————————————————————————————————————————————————————————————————————
+ getColumnData         Get a key/value array struct of a column table                   
+ getColumnFormat       Get the format of each column table                              
+ getColumnWidth        Get the maximun width of each column                             
+ isGraph               Check if the table has a graph associated                        
+ isNumericColumn       Check if a column is numeric (base method)                       
+ isNumericTable        Check if the data of the table is numeric                        
+ saveTable             Generate a file with the table values                            
+ setColumnValues       Set the values of a column table                                 
+ setDescription        Set Table Header or Description.                                 
+ setRowValues          Set the values of a table row                                    
+ setStudyCase          Set state and sample values. Internal function                   
+ showTable             View Table in console GUI or HTML                                
+ size                  Size of the table. Overload of size function.                    
+ cTableCell            Create Cell Table object                                         
+ formatData            Apply format to data                                             
+ getColumnValues       Get the values of a specfic column                               
+ getDescriptionLabel   Get the description of the table                                 
+ getMatlabTable        Get table as Matlab table object                                 
+ getStructData         Get the table data as struct                                     
+ getStructTable        Get the table as a struct. Include properties                    
+ printTable            Display table on console or in a file in a pretty formatted way  
+ exportTable           Get cTable info in diferent types of variables                   
+ getCellData           Get table as cell array                                          
+ getProperties         get the additional properties of a cTableResults                 
+
+
+cTableData Methods
+
+ Name                  Description                                                      
+——————————————————————————————————————————————————————————————————————————————————————————
+ exportTable           Get table values in diferent formats                             
+ getColumnData         Get a key/value array struct of a column table                   
+ getColumnFormat       Get the format of each column table                              
+ getColumnValues       Get the values of a column table                                 
+ getColumnWidth        Get the maximun width of each column                             
+ getMatlabTable        Get cTable as Matlab table                                       
+ getProperties         Get table properties                                             
+ getStructData         Get table data as struct array                                   
+ isGraph               Check if the table has a graph associated                        
+ isNumericColumn       Check if a column is numeric (base method)                       
+ isNumericTable        Check if the data of the table is numeric                        
+ saveTable             Generate a file with the table values                            
+ setColumnValues       Set the values of a column table                                 
+ setDescription        Set Table Header or Description.                                 
+ setRowValues          Set the values of a table row                                    
+ setStudyCase          Set state and sample values. Internal function                   
+ showTable             View Table in console GUI or HTML                                
+ size                  Size of the table. Overload of size function.                    
+ cTableData            Construct an instance of this class                              
+ create                Create a cTableData from values                                  
+ formatData            Format the values of the table                                   
+ getDescriptionLabel   Get the description of each table for graph or printing          
+ getStructTable        Get table as a struct                                            
+ import                Create cTableData from file                                      
+ importMatlabTable     Import data from a MATLAB table into cTable object               
+ printTable            Display table on console or in a file in a pretty formatted way  
+
+
+cTableIndex Methods
+
+ Name                  Description                                                    
+————————————————————————————————————————————————————————————————————————————————————————
+ exportTable           Get table values in diferent formats                           
+ getColumnData         Get a key/value array struct of a column table                 
+ getColumnFormat       Get the format of each column table                            
+ getColumnValues       Get the values of a column table                               
+ getColumnWidth        Get the maximun width of each column                           
+ getMatlabTable        Get cTable as Matlab table                                     
+ getProperties         Get table properties                                           
+ getStructData         Get table data as struct array                                 
+ getStructTable        Get a structure with the table info                            
+ isGraph               Check if the table has a graph associated                      
+ isNumericColumn       Check if a column is numeric (base method)                     
+ isNumericTable        Check if the data of the table is numeric                      
+ saveTable             Generate a file with the table values                          
+ setColumnValues       Set the values of a column table                               
+ setDescription        Set Table Header or Description.                               
+ setRowValues          Set the values of a table row                                  
+ setStudyCase          Set state and sample values. Internal function                 
+ showTable             View Table in console GUI or HTML                              
+ size                  Size of the table. Overload of size function.                  
+ cTableIndex           create a instance of the class                                 
+ getDescriptionLabel   Get table description                                          
+ printTable            Print table on console or in a file in a pretty formatted way  
+
+
+cTableMatrix Methods
+
+ Name                     Description                                                        
+———————————————————————————————————————————————————————————————————————————————————————————————
+ getColumnData            Get a key/value array struct of a column table                     
+ getColumnFormat          Get the format of each column table                                
+ getColumnValues          Get the values of a column table                                   
+ getColumnWidth           Get the maximun width of each column                               
+ isGraph                  Check if the table has a graph associated                          
+ isNumericColumn          Check if a column is numeric (base method)                         
+ isNumericTable           Check if the data of the table is numeric                          
+ saveTable                Generate a file with the table values                              
+ setColumnValues          Set the values of a column table                                   
+ setDescription           Set Table Header or Description.                                   
+ setRowValues             Set the values of a table row                                      
+ setStudyCase             Set state and sample values. Internal function                     
+ showTable                View Table in console GUI or HTML                                  
+ size                     Size of the table. Overload of size function.                      
+ cTableMatrix             Create an instance of the class                                    
+ formatData               Apply Format to the data values                                    
+ getDescriptionLabel      Get the description of the table plus Unit and State               
+ getMatlabTable           Get the table as Matlab table                                      
+ getMatrixValues          Get the table data as Array                                        
+ getStructData            Get table as formatted structure                                   
+ getStructTable           Get table info as structure                                        
+ isFlowsTable             Check if table contains flows or processes                         
+ isGeneralCostTable       Check if table is general cost                                     
+ isResourceCostTable      Check if table is resource cost table                              
+ isSummaryTable           Check if table is a summary table                                  
+ isTotalMalfunctionCost   Check if table is total malfuction cost                            
+ isUnitCostTable          Check if table has unit costs                                      
+ printTable               Display a table on console or in a file in a pretty formatted way  
+ exportTable              Get cTable info in diferent types of variables                     
+ getCellData              Get table as cell array                                            
+ getProperties            get the additional properties of a cTableResults                   
+
+
+cTableResult Methods
+
+ Name              Description                                       
+———————————————————————————————————————————————————————————————————————
+ getColumnData     Get a key/value array struct of a column table    
+ getColumnFormat   Get the format of each column table               
+ getColumnValues   Get the values of a column table                  
+ getColumnWidth    Get the maximun width of each column              
+ getMatlabTable    Get cTable as Matlab table                        
+ getStructData     Get table data as struct array                    
+ getStructTable    Get a structure with the table info               
+ isGraph           Check if the table has a graph associated         
+ isNumericColumn   Check if a column is numeric (base method)        
+ isNumericTable    Check if the data of the table is numeric         
+ saveTable         Generate a file with the table values             
+ setColumnValues   Set the values of a column table                  
+ setDescription    Set Table Header or Description.                  
+ setRowValues      Set the values of a table row                     
+ setStudyCase      Set state and sample values. Internal function    
+ showTable         View Table in console GUI or HTML                 
+ size              Size of the table. Overload of size function.     
+ cTableResult      Abstrat class to store results into a cTable.     
+ exportTable       Get cTable info in diferent types of variables    
+ getCellData       Get table as cell array                           
+ getProperties     get the additional properties of a cTableResults  
+
+
+cTablesDefinition Methods
+
+ Name                     Description                                
+———————————————————————————————————————————————————————————————————————
+ cTablesDefinition        Create an instance of the class            
+ getCellTables            Get the cell tables configuration          
+ getDataModelProperties   Get the data model properties              
+ getMatrixTables          Get the matrix tables configuration        
+ getResultIdTables        Get the tables of an specific resultId     
+ getSummaryTables         Get the summary tables configuration       
+ getTableDefinition       Get the properties of a table              
+ getTableId               Get tableId from dictionary. Internal use  
+ getTableInfo             Get the properties of a table              
+ getTablesDirectory       Get the tables directory                   
+
+
+cTaesLab Methods
+
+ Name           Description                                                      
+———————————————————————————————————————————————————————————————————————————————————
+ cTaesLab       Initialize a cTaesLab object                                     
+ eq             Overload eq operator. Check if two class object are equal.       
+ getObjectId    Get the object identifier                                        
+ ne             Overload ne operator. Check if two class objects are different.  
+ printError     Print error message.                                             
+ printInfo      Print info message. Use fprintf syntax                           
+ printWarning   Print warning message.                                           
+
+
+cThermoeconomicModel Methods
+
+ Name                      Description                                                                     
+—————————————————————————————————————————————————————————————————————————————————————————————————————————————
+ setDefaultGraph           Set Default Graph. Internal package use only                                    
+ setResultId               Set ResultId. Internal package use only                                         
+ setSample                 Set Resource Sample Name. Internal package use only                             
+ ListOfGraphs              Get the list of graph tables as cell array                                      
+ ListOfTables              Get the list of tables as cell array                                            
+ StudyCase                 Get/display the study case names                                                
+ exportResults             Export result tables into a structure using diferent formats.                   
+ exportTable               Export table into the selected varmode/format                                   
+ getTableIndex             Get the table index of the results set                                          
+ printResults              Print the result tables on console                                              
+ saveResults               Save result tables in different file formats depending on file extension        
+ saveTable                 Save a result table into a file depending on extension                          
+ showTableIndex            View the index table of the results set                                         
+ addExergyData             Set exergy data values to actual state                                          
+ addResourceData           Set exergy data values to actual state                                          
+ cThermoeconomicModel      Create an instance of the class                                                 
+ dataInfo                  Get the data model cResultInfo object                                           
+ diagramFP                 Get the diagram FP cResultInfo object of rhe current state                      
+ exergyAnalysis            Get the ExergyAnalysis cResultInfo object for the current state                 
+ getExergyData             Get cExergyData object of a state                                               
+ getModelResults           Get a cell array of cResultInfo objects of the current state                    
+ getResourceData           Get the resource data cost values of sample                                     
+ getResultInfo             Get the cResultInfo with optional parameters                                    
+ getResultState            Get the cExergyCost object of each state                                        
+ getSampleId               Get the Sample Id given the resource sample name                                
+ getStateId                Get the State Id given the name.                                                
+ getTable                  Get a table called name, if its available                                       
+ getTableInfo              Get the properties of a table                                                   
+ getTablesDirectory        Create the tables directory of the active model                                 
+ getWasteId                Get the Waste flow Id                                                           
+ isDiagnosis               Check if diagnosis computation is available.                                    
+ isDirectCost              Check if Direct cost tables are selected                                        
+ isGeneralCost             Check if Generalized cost calculation is activated                              
+ isResourceCost            Check if the model has resources cost defined                                   
+ isSampleSummary           Check if Samples Summary results has been activated                             
+ isStateSummary            Check if States Summary results has been activated                              
+ isSummaryActive           Check if Summary has been activated                                             
+ isSummaryEnable           Check if Summary is enable                                                      
+ isWaste                   Check if model has waste defined                                                
+ productiveDiagram         Get the productive diagram cResultInfo object                                   
+ productiveStructure       Get the Productive Structure cResultInfo object                                 
+ saveDataModel             Save the data model in a file                                                   
+ saveDiagramFP             Save the Adjacency matrix of the Diagram FP in a file                           
+ saveProductiveDiagram     Save the productive diagram adjacency tables into a file                        
+ saveSummary               Save the summary tables into a filename                                         
+ setActiveWaste            Set a new waste flow for recycling analysis                                     
+ setCostTables             Set a new value of CostTables parameter                                         
+ setDebug                  Set debug control variable                                                      
+ setDiagnosisMethod        Set a new value of DiagnosisMethod parameter                                    
+ setExergyData             Set exergy data values to actual state                                          
+ setFlowResource           Set the resource cost of the flows                                              
+ setProcessResource        Set the resource cost of the processes                                          
+ setRecycling              Set Recycling parameter                                                         
+ setReferenceState         Set a new valid reference state from StateNames                                 
+ setResourceSample         Set a new valid ResourceSample from SampleNames                                 
+ setState                  Set a new valid state from StateNames                                           
+ setSummary                Set a new Summary available option                                              
+ setWasteRecycled          Set the waste recycling ratios                                                  
+ setWasteType              Set the waste type allocation method for Active Waste                           
+ setWasteValues            Set the waste table values                                                      
+ showDataModel             Show Data Model tables                                                          
+ showGraph                 Show a graph table.                                                             
+ showProperties            Show the values of the current parameters of the model                          
+ showResultInfo            Show or get a structure containig the results of the model                      
+ showResults               View an individual table                                                        
+ showSummary               Show Summary tables                                                             
+ showTablesDirectory       Show the list of available tables                                               
+ summaryDiagnosis          Get the diagnosis results summary                                               
+ summaryOptions            Get the available summary option names                                          
+ summaryResults            Get the Summary Results cResultInfo object                                      
+ thermoeconomicAnalysis    Get the Thermoeconomic Analysis cResultInfo object for the current state        
+ thermoeconomicDiagnosis   Get the Thermoeconomic Diagnosis cResultInfo object                             
+ toggleDebug               Toggle debug property                                                           
+ updateDataModel           Update the data model if have been changes                                      
+ wasteAllocation           Show waste information in console                                               
+ wasteAnalysis             Get the Waste Analysis cResultInfo object for the current state and waste flow  
+
+
+cType Methods
+
+ Name                   Description                                                       
+————————————————————————————————————————————————————————————————————————————————————————————
+ CostTablesOptions      Get a cell array with the Cost Tables Type options                
+ DiagnosisOptions       Get a cell array with the Diagnosis Type options                  
+ SummaryOptions         Get a cell array with the Summary Options                         
+ TableViewOptions       Get a cell array with the Table view options                      
+ TaesLabPath            Get the full path of the TaesLab installation                     
+ VarModeOptions         Get a cell array with the VarMode Type options                    
+ WasteTypeOptions       Get a cell array with the Waste Allocation Type options           
+ cType                  Static class to manage the constants of TaesLab                   
+ checkClassInfo         Check ClassInfo value                                             
+ checkCostTables        Check CostTable type text                                         
+ checkDiagnosisMethod   Check Diagnosis method type text                                  
+ checkDirColumns        Check Table Directory Columns names                               
+ checkFileExt           Check if filename has a valid extension                           
+ checkFlowTypes         Check if the Flows Type list is correct                           
+ checkGraphStyle        Check Graph Style value                                           
+ checkProcessTypes      Check if the Process Type list is correct                         
+ checkResourceTypes     Check if the Flows Type list is correct                           
+ checkSummaryOption     Check Summary type text                                           
+ checkTableView         Check TableView value                                             
+ checkVarMode           Check Variable display option                                     
+ checkWasteTypes        checkFlowTypes - Check if the Flows Type list is correct          
+ getClassInfo           Get the id of ClassInfo option                                    
+ getCostTables          Get id for CostTables option                                      
+ getDiagnosisMethod     Get id for Diagnosis Method option                                
+ getFileType            Get file type acording its extension (ext)                        
+ getFlowId              Get the internal code of a flow type text                         
+ getFormatId            Get internal code of format type text                             
+ getGraphStyle          Get the id of Graph Style option                                  
+ getIcon                Get app icons                                                     
+ getLine                Get a dash line of the given length                               
+ getNewline             Get the newline character depending on operating system           
+ getPathDelimiter       get the path delimiter                                            
+ getProcessId           Get the internal code of a process type text                      
+ getPropertiesList      Get the list of additional properties of cResultTables            
+ getResourcesId         Get internal code of a resources cost type text                   
+ getSummaryId           Get id for Summary option                                         
+ getTableView           Get id for TableView option                                       
+ getTaesImage           Get the full path of the Taes Welcome image                       
+ getTextErrorCode       Get the text of the corresponding error code                      
+ getVarMode             Get id for VarMode option                                         
+ getWasteId             Get internal code of a waste allocation type text                 
+ log2text               Get the text representation of a logical value. Used in GUI Apps  
+ tableCode              Display the key code of a table                                   
+
+
+cViewTable Methods
+
+ Name         Description                                 
+————————————————————————————————————————————————————————————
+ cViewTable   Create an instance of the class             
+ showTable    Shows the table values in a uitable object  
+
+
+cWasteAnalysis Methods
+
+ Name              Description                                          
+——————————————————————————————————————————————————————————————————————————
+ setDefaultGraph   Set Default Graph. Internal package use only         
+ setResultId       Set ResultId. Internal package use only              
+ setSample         Set Resource Sample Name. Internal package use only  
+ buildResultInfo   Build/Get the cResultInfo object                     
+ cWasteAnalysis    Create an instance of the class                      
+
+
+cWasteData Methods
+
+ Name              Description                                    
+————————————————————————————————————————————————————————————————————
+ cWasteData        Create an instance of the class                
+ existsWaste       Determine if waste key is defined              
+ getRecycleRatio   Get the recycle ratio value of a waste         
+ getType           Get the waste allocation type                  
+ getValues         Get the allocation ratios of a waste           
+ getWasteFlows     Get the waste name of the corresponding index  
+ getWasteIndex     Get the id of the corresponding waste key      
+ setRecycleRatio   Set the recycle ratio of a waste               
+ setType           Set the waste allocation type                  
+ setValues         Set the cost allocation values of a waste      
+ updateValues      Set the waste table values (internal use)      
+

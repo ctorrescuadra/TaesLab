@@ -1,35 +1,39 @@
-function [res, tbl] = getClassInfo(obj,info,filename)
+function [res, tbl] = getClassInfo(obj,info,outfile)
 %getClassInfo - Get class information using metaclass
-%   Syntex:
+%   Syntax:
 %      [res, tbl] = getClassInfo(obj,info,filename)
 %   Input Arguments:
 %      obj      - class name (string or char)
 %      info     - type of information to get. It could be:
-%                   cType.ClassInfo.PROPERTIES
-%                   cType.ClassInfo.METHODS
-%      filename - (optional) file name to save the information. If not
+%                   cType.ClassInfo.PROPERTIES 'Properties'
+%                   cType.ClassInfo.METHODS 'Methods'
+%      outfile - (optional) file name to save the information. If not
 %                 provided, the function only return the cTableData object
 %   Output Arguments:
-%      res  - cTableData object containing the class information
+%      res  - cTableData object containing the class information (Name, Description)
 %      tbl  - MATLAB table object containing the class information
+%       including  (Name, Description, DefiningClass, Access)
 %
 %   Examples:
+%      % Show the public methods of cThermoeconomicModel class
+%      getClassInfo('cThermoeconomicModel', cType.ClassInfo.METHODS)
 %      % Get public properties of cThermoeconomicModel class
 %      [res, tbl] = getClassInfo('cThermoeconomicModel', cType.ClassInfo.PROPERTIES);
 %      % Save public methods of cThermoeconomicModel class to a text file
 %      [res, tbl] = getClassInfo('cThermoeconomicModel', cType.ClassInfo.METHODS, 'cThermoeconomicModel_Methods.txt');
 %
     res=cTaesLab();
-    tbl=cType.EMPTY;
-    % Check Inputs
+    tbl=cTaesLab();
+    % Function not available in Octave
     if isOctave
         res.printError(cMessages.FunctionNotAvailable)
         return
     end
+    % Check input arguments
     try 
         narginchk(2,3)
     catch err
-        res.printError(err);
+        res.printError(err.message);
         res.printError(cMessages.NarginError);
         return
     end
@@ -48,12 +52,17 @@ function [res, tbl] = getClassInfo(obj,info,filename)
     end
     % Get metaclass information
     className = char(obj);
+    if strcmp(className,'Contents')
+        return
+    end
     mc = meta.class.fromName(className);
     if isempty(mc)
         res.printWarning(cMessages.ClassNotFound,className);
         return
     end
     % Prepare table info
+    VarNames={'Name','Description','DefiningClass','Access'};
+    BaseClasses={'handle','cTaesLab','cMessageLogger'};
     switch option
         case cType.ClassInfo.PROPERTIES
             cInfo = mc.PropertyList;
@@ -62,7 +71,6 @@ function [res, tbl] = getClassInfo(obj,info,filename)
             cInfo = mc.MethodList;
             Access={cInfo.Access}';
     end
-    VarNames={'Name','Description','DefiningClass','Access'};
     Name={cInfo.Name}';
     Description={cInfo.Description}';
     tmp={cInfo.DefiningClass}';
@@ -74,8 +82,12 @@ function [res, tbl] = getClassInfo(obj,info,filename)
     tbl.Properties.UserData = mc.Name;
     % Sort by Name for easier reading
     tbl = tbl(~strcmp(tbl.Name, 'empty'), :);
-    tbl = tbl(~ismember(tbl.DefiningClass, {'handle','cTaesLab','cMessageLogger'}), :);
     tbl = tbl(strcmp(tbl.Access, 'public'), :);
+    if ismember(className,BaseClasses)
+        tbl = tbl(~strcmp(tbl.DefiningClass,'handle'), :);
+    else
+        tbl = tbl(~ismember(tbl.DefiningClass, BaseClasses), :);
+    end
     tbl = sortrows(tbl, {'DefiningClass', 'Name'});
     % Create cTableData object
     if size(tbl,1)==0
@@ -93,16 +105,20 @@ function [res, tbl] = getClassInfo(obj,info,filename)
         if (nargout==0), printTable(res); end
         return
     end
-    fileType=cType.getFileType(filename);
+    if ~isFilename(outfile)
+        res.printError(cMessages.InvalidArgument,'outfile')
+        return
+    end
+    fileType=cType.getFileType(outfile);
     if fileType==cType.FileType.MHLP
-        saveAsHelpInfo(cMessageLogger,res,filename)
+        saveAsHelpInfo(cMessageLogger,res,outfile)
     else
-        saveTable(res,filename);
+        saveTable(res,outfile);
     end
 end
 
 function saveAsHelpInfo(log,tbl,filename)
-%saveAsContents - Save table in the .mhlp format
+%saveAsHelpInfo - Save table in the .mhlp format
 %   Syntax:
 %     saveAsHelpInfo(log,tbl,filename)
 %   Input Arguments:
@@ -112,7 +128,7 @@ function saveAsHelpInfo(log,tbl,filename)
 %
     % Determine the maximum length of first column
     cw = getColumnWidth(tbl);
-    fmt=sprintf('%s     %%-%ds - %%s\n','%%',cw(1));
+    fmt=sprintf('%s %%-%ds - %%s\n','%%    ',cw(1));
     % Open the file
     try
         fId = fopen(filename, 'w');

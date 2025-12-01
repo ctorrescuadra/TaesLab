@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>sm</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Set Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>setState</td>
+				<td>Set a new valid state from StateNames</td>
+			</tr>
+			<tr>
+				<td>setReferenceState</td>
+				<td>Set a new valid reference state from StateNames</td>
+			</tr>
+			<tr>
+				<td>setResourceSample</td>
+				<td>Set a new valid ResourceSample from SampleNames</td>
+			</tr>
+			<tr>
+				<td>setCostTables</td>
+				<td>Set a new value of CostTables parameter</td>
+			</tr>
+			<tr>
+				<td>setDiagnosisMethod</td>
+				<td>Set a new value of DiagnosisMethod parameter</td>
+			</tr>
+			<tr>
+				<td>setActiveWaste</td>
+				<td>Set a new waste flow for recycling analysis</td>
+			</tr>
+			<tr>
+				<td>setRecycling</td>
+				<td>Set Recycling parameter</td>
+			</tr>
+			<tr>
+				<td>setSummary</td>
+				<td>Set a new Summary available option</td>
+			</tr>
+			<tr>
+				<td>setDebug</td>
+				<td>Set debug control variable</td>
+			</tr>
+			<tr>
+				<td>toggleDebug</td>
+				<td>Toggle debug property</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>rim</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Result Info Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>productiveStructure</td>
+				<td>Get the Productive Structure cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>exergyAnalysis</td>
+				<td>Get the ExergyAnalysis cResultInfo object for the current state</td>
+			</tr>
+			<tr>
+				<td>thermoeconomicAnalysis</td>
+				<td>Get the Thermoeconomic Analysis cResultInfo object for the current state</td>
+			</tr>
+			<tr>
+				<td>productiveDiagram</td>
+				<td>Get the productive diagram cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>diagramFP</td>
+				<td>Get the diagram FP cResultInfo object of rhe current state</td>
+			</tr>
+			<tr>
+				<td>thermoeconomicDiagnosis</td>
+				<td>Get the Thermoeconomic Diagnosis cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>summaryDiagnosis</td>
+				<td>Get the diagnosis results summary</td>
+			</tr>
+			<tr>
+				<td>wasteAnalysis</td>
+				<td>Get the Waste Analysis cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>summaryResults</td>
+				<td>Get the Summary Results cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>dataInfo</td>
+				<td>Get the data model cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>getResultInfo</td>
+				<td>Get the cResultInfo with optional parameters</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>mim</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Model Info Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>showProperties</td>
+				<td>Show the values of the current parameters of the model</td>
+			</tr>
+			<tr>
+				<td>isDiagnosis</td>
+				<td>Check if diagnosis computation is available.</td>
+			</tr>
+			<tr>
+				<td>isDirectCost</td>
+				<td>Check if Direct cost tables are selected</td>
+			</tr>
+			<tr>
+				<td>isGeneralCost</td>
+				<td>Check if Generalized cost calculation are activated</td>
+			</tr>
+			<tr>
+				<td>isResourceCost</td>
+				<td>Check if the model has resources cost defined</td>
+			</tr>
+			<tr>
+				<td>isWaste</td>
+				<td>Check if model has waste defined</td>
+			</tr>
+			<tr>
+				<td>showResultInfo</td>
+				<td>Show or get a structure containig the results of the model</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>sim</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Summary Info Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>isSampleSummary</td>
+				<td>Check if Samples Summary results has been activated</td>
+			</tr>
+			<tr>
+				<td>isStateSummary</td>
+				<td>Check if States Summary results has been activated</td>
+			</tr>
+			<tr>
+				<td>isSummaryActive</td>
+				<td>Check if Summary has been activated</td>
+			</tr>
+			<tr>
+				<td>isSummaryEnable</td>
+				<td>Check if Summary is enable</td>
+			</tr>
+			<tr>
+				<td>summaryOptions</td>
+				<td>Get the available summary option names</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>tim</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Table Info Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>getTable</td>
+				<td>Get a table called name, if its available</td>
+			</tr>
+			<tr>
+				<td>getTableInfo</td>
+				<td>Get the properties of a table</td>
+			</tr>
+			<tr>
+				<td>getTablesDirectory</td>
+				<td>Create the tables directory of the active model</td>
+			</tr>
+			<tr>
+				<td>showTablesDirectory</td>
+				<td>Show the list of available tables</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>rsm</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Result Set Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>ListOfGraphs</td>
+				<td>Get the list of graph tables as cell array</td>
+			</tr>
+			<tr>
+				<td>ListOfTables</td>
+				<td>Get the list of tables as cell array</td>
+			</tr>
+			<tr>
+				<td>StudyCase</td>
+				<td>Get/display the study case names</td>
+			</tr>
+			<tr>
+				<td>exportResults</td>
+				<td>Export result tables into a structure using diferent formats.</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Export tname into the selected varmode/format</td>
+			</tr>
+			<tr>
+				<td>getTableIndex</td>
+				<td>Get the table index of the results set</td>
+			</tr>
+			<tr>
+				<td>printResults</td>
+				<td>Print the result tables on console</td>
+			</tr>
+			<tr>
+				<td>saveResults</td>
+				<td>Save result tables in different file formats depending on file extension</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Save a result table into a file depending on extension</td>
+			</tr>
+			<tr>
+				<td>saveDataModel</td>
+				<td>Save the data model in a file</td>
+			</tr>
+			<tr>
+				<td>saveDiagramFP</td>
+				<td>Save the Adjacency matrix of the Diagram FP in a file</td>
+			</tr>
+			<tr>
+				<td>saveProductiveDiagram</td>
+				<td>Save the productive diagram adjacency tables into a file</td>
+			</tr>
+			<tr>
+				<td>saveSummary</td>
+				<td>Save the summary tables into a filename</td>
+			</tr>
+			<tr>
+				<td>showTableIndex</td>
+				<td>View the index table of the results set</td>
+			</tr>
+			<tr>
+				<td>showDataModel</td>
+				<td>Show Data Model tables</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show a graph table.</td>
+			</tr>
+			<tr>
+				<td>showResults</td>
+				<td>View an individual table</td>
+			</tr>
+			<tr>
+				<td>showSummary</td>
+				<td>Show Summary tables</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>wm</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Waste Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>wasteAllocation</td>
+				<td>Show waste information in console</td>
+			</tr>
+			<tr>
+				<td>setWasteRecycled</td>
+				<td>Set the waste recycling ratios</td>
+			</tr>
+			<tr>
+				<td>setWasteType</td>
+				<td>Set the waste type allocation method for Active Waste</td>
+			</tr>
+			<tr>
+				<td>setWasteValues</td>
+				<td>Set the waste table values</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>rm</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Resource Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>addResourceData</td>
+				<td>addExergyData - Set exergy data values to actual state</td>
+			</tr>
+			<tr>
+				<td>getResourceData</td>
+				<td>Get the resource data cost values of sample</td>
+			</tr>
+			<tr>
+				<td>setFlowResource</td>
+				<td>Set the resource cost of the flows</td>
+			</tr>
+			<tr>
+				<td>setProcessResource</td>
+				<td>Set the resource cost of the processes</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>em</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Exergy Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>addExergyData</td>
+				<td>Set exergy data values to actual state</td>
+			</tr>
+			<tr>
+				<td>getExergyData</td>
+				<td>Get cExergyData object of a state</td>
+			</tr>
+			<tr>
+				<td>setExergyData</td>
+				<td>Set exergy data values to actual state</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>im</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Internal Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>updateDataModel</td>
+				<td>Update the data model if have been changes</td>
+			</tr>
+			<tr>
+				<td>getResultState</td>
+				<td>Get the cExergyCost object of each state</td>
+			</tr>
+			<tr>
+				<td>getModelResults</td>
+				<td>Get a cell array of cResultInfo objects of the current state</td>
+			</tr>
+			<tr>
+				<td>getSampleId</td>
+				<td>Get the Sample Id given the resource sample name</td>
+			</tr>
+			<tr>
+				<td>getStateId</td>
+				<td>Get the State Id given the name.</td>
+			</tr>
+			<tr>
+				<td>getWasteId</td>
+				<td>Get the Waste flow Id</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>

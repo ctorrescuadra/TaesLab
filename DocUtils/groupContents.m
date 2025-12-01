@@ -16,27 +16,38 @@ function groupContents(inFile, outFile)
 %
 
     log=cMessageLogger();
+    % Check input arguments and define default values
     scriptFolder = fileparts(mfilename('fullpath'));
-    if isempty(scriptFolder)
-        scriptFolder = pwd;
-    end
     defaultIn = fullfile(scriptFolder, 'Contents.xlsx');
-
+    % Define default input file
     if nargin < 1 || isempty(inFile)
         inFile = defaultIn;
     end
+    % Validate input file name
+    if ~isFilename(inFile)
+        log.printError(cMessages.InvalidArgument,'inFile')
+        return
+    end
+    [fileType,fileExt] = cType.getFileType(inFile);
+    if fileType ~= cType.FileType.XLSX
+        log.printError(cMessages.InvalidFileExt, fileExt);
+        return
+    end
     inFile = char(inFile);
-
+    % Define default output file
     if nargin < 2 || isempty(outFile)
         outFile = fullfile(fileparts(inFile), 'Contents.json');
     end
-    outFile = char(outFile);
-
-    % Basic checks
     if ~exist(inFile, 'file')
         log.printError(cMessages.FileNotFound, inFile);
         return
     end
+    % Validate output file name
+    if ~isFilename(outFile)
+        log.printError(cMessages.InvalidArgument,'outFile')
+        return
+    end
+    outFile = char(outFile);
     res=struct();
     % Read Index sheet
     sFolder=importXLSX(log,inFile,'Index');

@@ -3,7 +3,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 %   The LaTeX code includes:
 %    - Table environment
 %    - Booktabs package
-%    - Tabular column aligment
+%    - Tabular column alignment
 %    - Column Names as header
 %    - Row Names and Data as body
 %    - Table Description as caption code
@@ -17,7 +17,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 %   See also cTable
 %
     properties(Access=private)
-        tabular  % tablular code - column aligment  
+        tabular  % tabular code - column alignment  
         header   % header code - Colnames
         body     % body code - data 
         caption  % caption code - table description 
@@ -26,7 +26,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 
     methods
         function obj=cBuildLaTeX(tbl)
-        %cBuildLaTex - Create an instance of the class
+        %cBuildLaTeX - Create an instance of the class
         %   Syntax:
         %     obj = cBuildLaTeX(tbl)
         %   Input Arguments:

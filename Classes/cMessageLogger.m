@@ -12,6 +12,12 @@ classdef cMessageLogger < cTaesLab
 %     addLogger       - Concatenate two loggers
 %     clearLogger     - clear the messages of the logger
 %
+%   cMessageLogger methods (Inherited from cTaesLab):
+%     getObjectId  - Get the object identifier
+%	  printError   - Print error message.
+%	  printWarning - Print warning message.
+%	  printInfo    - Print info message.	
+%
 %   See also cQueue, cType, cMessages
 %
 	properties(Access=protected)

@@ -44,7 +44,8 @@
                 "summary",
                 "format"
             ],
-            "title": "PrintFormat"
+            "title": "PrintFormat",
+            "description": "TaesLab print format configuration"
         },
         "DataModel": {
             "type": "object",
@@ -80,7 +81,8 @@
                 "fixed",
                 "fields"
             ],
-            "title": "DataModel"
+            "title": "DataModel",
+            "description": "Definition of a data model in the print format configuration"   
         },
         "Table": {
             "type": "object",
@@ -136,7 +138,8 @@
                 "rsc",             
                 "fields"
             ],
-            "title": "Table"
+            "title": "Table",
+            "description": "Definition of a cTableCell in the print format configuration"
         },
         "Matrix": {
             "type": "object",
@@ -193,7 +196,8 @@
                 "rowTotal",
                 "colTotal"
             ],
-            "title": "Matrix"
+            "title": "Matrix",
+            "description": "Definition of a cTableMatrix in the print format configuration"
         },
         "Summary": {
             "type": "object",
@@ -249,7 +253,8 @@
                 "stable",
                 "rsc"
             ],
-            "title": "Summary"
+            "title": "Summary",
+            "description": "Definition of a cTableMatrix for summary data in the print format configuration"
         },
         "Format": {
             "type": "object",
@@ -274,7 +279,8 @@
                 "format",
                 "unit"
             ],
-            "title": "Format"
+            "title": "Format",
+            "description": "Definition of a format in the print format configuration"
         },
         "dmField": {
             "type": "object",
@@ -295,7 +301,8 @@
                 "name",
                 "datatype"
             ],
-            "title": "DataModelField"
+            "title": "DataModelField",
+            "description": "Definition of a data model field in the print format configuration"
         },
         "tField": {
             "type": "object",
@@ -316,7 +323,8 @@
                 "name",
                 "type"
             ],
-            "title": "TableField"
+            "title": "TableField",
+            "description": "Definition of a table field in the print format configuration"
         },
         "typeData": {
             "type": "integer",

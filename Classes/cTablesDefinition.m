@@ -56,7 +56,7 @@ classdef cTablesDefinition < cMessageLogger
         %   obj - cTableDefinition object
               
 			% load default configuration filename			
-			cfgfile=fullfile(cType.ClassesPath,cType.CFGFILE);
+			cfgfile=fullfile(cType.ConfigPath,cType.CFGFILE);
             config=importJSON(obj,cfgfile);
             if isempty(config)
                 return

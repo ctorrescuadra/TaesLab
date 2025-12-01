@@ -66,9 +66,9 @@ function BuildDocuments(folder,outfile)
         log.printError(cMessages.FileNotSaved,outfile);
         return
     end
-    fileType =cType.getFileType(outfile);
+    [fileType,fileExt] = cType.getFileType(outfile);
     if fileType < cType.FileType.TXT
-        log.printWarning(cMessages.NotAvailableType);
+        log.printWarning(cMessages.InvalidFileExt, upper(fileExt));
         return
     end
     % Build documentation tables

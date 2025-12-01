@@ -65,14 +65,14 @@ function res=ImportData(filename,varargin)
     end
     props=p.Results;
     % Import file depending extension
-    fileType=cType.getFileType(filename);
+    [fileType,fileExt]=cType.getFileType(filename);
     switch fileType  
         case cType.FileType.CSV
             res=importCSV(filename,props);
         case cType.FileType.XLSX
             res=importXLSX(filename,props);
         otherwise
-            res.printError(cMessages.InvalidFileExt,filename);
+            res.printError(cMessages.InvalidFileExt, upper(fileExt));
             return
     end
     if ~res.status

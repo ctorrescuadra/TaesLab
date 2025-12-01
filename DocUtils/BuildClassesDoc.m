@@ -18,6 +18,10 @@ function BuildClassesDoc(outfile)
 %   See also: getClassInfo, saveDocument
 %
     log=cTaesLab();
+    if isOctave
+        res.printError(cMessages.FunctionNotAvailable)
+        return
+    end
     % Set default output file if not provided
     if nargin < 1
         outfile = 'ClassesDoc.md';
@@ -35,9 +39,9 @@ function BuildClassesDoc(outfile)
         log.printError(cMessages.FileNotSaved,outfile);
         return
     end
-    fileType =cType.getFileType(outfile);
+    [fileType,fileExt] = cType.getFileType(outfile);
     if fileType < cType.FileType.TXT
-        log.printError(cMessages.NotAvailableType);
+        log.printError(cMessages.InvalidFileExt, upper(fileExt));
         return
     end
     % Scan 'Classes' directory for class files

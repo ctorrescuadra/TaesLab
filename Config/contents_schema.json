@@ -22,7 +22,9 @@
                 "Functions",
                 "Classes",
                 "Model"
-            ]
+            ],
+            "title": "Contents",
+            "description": "Types of TaesLab documentation content"
         },
         "Content": {
             "type": "object",
@@ -45,7 +47,9 @@
                         "ref": "#/definitions/Folder"
                     }
                 }
-            }
+            },
+            "title": "Content",
+            "description": "Documentation content type (Base, Functions, Classes, Model)"
         },
         "Folder": {
             "type": "array",
@@ -84,7 +88,9 @@
                         }
                     }
                 }
-            }
+            },
+            "title": "Folder",
+            "description": "Folder containing documentation files"
         },
         "Text": {
             "type": "string",

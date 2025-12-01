@@ -790,7 +790,7 @@ classdef cDataModel < cResultSet
                 return
 			end
 			% Save data model depending of fileType
-			fileType=cType.getFileType(filename);
+			[fileType,fileExt]=cType.getFileType(filename);
             switch fileType
 				case cType.FileType.JSON
 					log=saveAsJSON(obj.ModelData,filename);
@@ -809,7 +809,7 @@ classdef cDataModel < cResultSet
                 case cType.FileType.MAT
 					log=exportMAT(obj,filename);
 				otherwise
-					log.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
+					log.messageLog(cType.ERROR,cMessages.InvalidFileExt, upper(fileExt));
             end
             if log.status
 				log.messageLog(cType.INFO,cMessages.InfoFileSaved,obj.ResultName,filename);
@@ -840,7 +840,7 @@ classdef cDataModel < cResultSet
             end
             % Read the data model depending de file extension
             filename=char(filename);
-            fileType=cType.getFileType(filename);
+            [fileType,fileExt]=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.JSON
                     rdm=cReadModelJSON(filename);
@@ -851,7 +851,7 @@ classdef cDataModel < cResultSet
                 case cType.FileType.XLSX
                     rdm=cReadModelXLS(filename);
                 otherwise
-                    res.messageLog(cType.ERROR,cMessages.InvalidFileExt,filename);
+                    res.messageLog(cType.ERROR,cMessages.InvalidFileExt, upper(fileExt));
                     return
             end
             % Check if the model read is correct

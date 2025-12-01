@@ -1,19 +1,4 @@
 {
-    "json.schemas": [
-        {
-            "fileMatch": [
-                "/Classes/printformat.json"
-            ],
-            "url": "/Examples/Templates/printformat_schema.json"
-        },
-        {
-            "fileMatch": [
-                "/Classes/datamodel_config.json"
-            ],
-            "url": "/Examples/Templates/datamodel_schema.json"
-        },
-
-    ],
     "editor.codeActionsOnSave": {
 
     }

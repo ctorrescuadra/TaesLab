@@ -53,14 +53,14 @@ function res=ValidateModelTables(filename,varargin)
     param=p.Results;
     filename=char(filename);
     % Read the data model depending the file extension
-    [fileType,ext]=cType.getFileType(filename);
+    [fileType,fileExt]=cType.getFileType(filename);
     switch fileType
         case cType.FileType.CSV
             res=cReadModelCSV(filename);
         case cType.FileType.XLSX
             res=cReadModelXLS(filename);
         otherwise
-            res.printError(cMessages.InvalidFileExt,upper(ext));
+            res.printError(cMessages.InvalidFileExt,upper(fileExt));
             return
     end
     % Print log messages
@@ -83,14 +83,14 @@ end
 function saveDataModel(data,filename)
 %saveDataModel - Save the data model in a different format (JSON, XML)
     log=cTaesLab();
-    [fileType,ext]=cType.getFileType(filename);
+    [fileType,fileExt]=cType.getFileType(filename);
     switch fileType
         case cType.FileType.JSON
             log=saveAsJSON(data,filename);
         case cType.FileType.XML
             log=saveAsXML(data,filename);
         otherwise
-            log.printError(cMessages.InvalidFileExt,upper(ext));
+            log.printError(cMessages.InvalidFileExt,upper(fileExt));
             return
     end
     % Check if the file was saved

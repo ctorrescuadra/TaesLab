@@ -225,6 +225,7 @@ classdef cType
 		BasePath=fullfile(cType.TaesLabPath(),'Base');
 		ClassesPath=fullfile(cType.TaesLabPath(),'Classes');
 		FunctionsPath=fullfile(cType.TaesLabPath(),'Functions');
+		ConfigPath=fullfile(cType.TaesLabPath(),'Config');
 		DocsPath=fullfile(cType.TaesLabPath(),'Docs');
 		ExamplesPath=fullfile(cType.TaesLabPath(),'Examples');
 		% System constanst
@@ -783,14 +784,13 @@ classdef cType
 		%     icon - icon name
 		%   Output Arguments:
 		%     res - icon image
-			filename=cType.IconFile{icon};
-            path=fileparts(mfilename('fullpath'));         
+			filename=cType.IconFile{icon};       
             if isOctave
 				folder='icon32';
             else
                 folder='icon16';
             end
-		    file=strcat(path,filesep,folder,filesep,filename);
+		    file=fullfile(cType.ConfigPath,folder,filename);
 			res=imread(file);
 		end
 

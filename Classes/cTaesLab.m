@@ -1,25 +1,24 @@
 classdef  cTaesLab < handle
-    %TaesLab - Base class of the TaesLab toolbox.
-    %   Asign a unique objectId to each object and permit to set
-    %   the status of the class derived from it.
-    %   Provides methods to print error, warning and info messages,
-    %   Also provides equality (eq) and inequality (ne) operators 
-    %   to compare two objects of the same class.
-    %
-    %   cTaesLab properties
-    %     objectId - Unique object identifier 
-    %       int64
-    %     status - status of the object 
-    %       true | false
-    %       Default value is true
-    %
-    %   cTaesLab methods:
-    %     cTaesLab     - Initialize a cTaesLab object
-    %     getObjectId  - Get the object id
-    %     printError   - Print error message
-    %     printWarning - Print warning message
-    %     printInfo    - Print info message
-    % 
+%TaesLab - Base class of the TaesLab toolbox.
+%   Assign a unique objectId to each object and permit to set
+%   the status of the class derived from it.
+%   Provides methods to print error, warning and info messages,
+%   Also provides equality (eq) and inequality (ne) operators 
+%   to compare two objects of the same class.
+%
+%   cTaesLab properties
+%     objectId - Unique object identifier 
+%       int64
+%     status - status of the object 
+%       true | false (true)
+%
+%   cTaesLab methods:
+%     cTaesLab     - Initialize a cTaesLab object
+%     getObjectId  - Get the object id
+%     printError   - Print error message
+%     printWarning - Print warning message
+%     printInfo    - Print info message
+% 
     properties(Access=protected)
         objectId % Unique object Id
     end
@@ -28,7 +27,7 @@ classdef  cTaesLab < handle
         status=true  % Object status (default true)
     end
 
-    methods(Access=public)
+    methods
         function obj = cTaesLab(val)
         %cTaesLab - Initialize a cTaesLab object
         %   Syntax:

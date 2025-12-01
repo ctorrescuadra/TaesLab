@@ -8,7 +8,7 @@ function SaveClassesInfo(outfile)
 %
 %   Input Arguments:
 %     outfile - Output file name for the generated documentation (default: 'ClassesDoc.md')
-%      The file extension determines the format
+%       The file extension determines the format
 %
 %   Example:
 %     % Create a Markdown file with all the public methods of the classes.
@@ -17,6 +17,10 @@ function SaveClassesInfo(outfile)
 %   See also: buildClassInfo, saveDocument
 %
     log=cMessageLogger();
+    if isOctave
+        res.printError(cMessages.FunctionNotAvailable)
+        return
+    end
     % Read ClassInfo configuration file
     inPath=fileparts(mfilename('fullpath'));
     infile=fullfile(inPath,'ClassInfo.json');
@@ -38,9 +42,9 @@ function SaveClassesInfo(outfile)
         log.printError(cMessages.FileNotSaved,outfile);
         return
     end
-    fileType =cType.getFileType(outfile);
+    [fileType,fileExt] = cType.getFileType(outfile);
     if fileType < cType.FileType.TXT
-        log.printError(cMessages.NotAvailableType);
+        log.printError(cMessages.InvalidFileExt, upper(fileExt));
         return
     end
     % Generate output document

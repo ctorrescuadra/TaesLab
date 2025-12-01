@@ -1,0 +1,6928 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cBuildHTML</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cBuildHTML Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cBuildHTML</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>getMarkupHTML</td>
+				<td>Get the HTML text of the table</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Save the table into a HTML file</td>
+			</tr>
+			<tr>
+				<td>showTable</td>
+				<td>Show a normal table in the web browser</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cBuildLaTeX</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cBuildLaTeX Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cBuildLaTeX</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>getLaTeXcode</td>
+				<td>Get the LaTeX code as string</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Save the table as LaTeX code into filename</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cBuildMarkdown</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cBuildMarkdown Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cBuildMarkdown</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>getMarkdownCode</td>
+				<td>Get the Markdown code as string</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Save the table as Markdown code into filename</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cDataModel</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cDataModel Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cDataModel</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>create</td>
+				<td>Create a cDataModel object from a file</td>
+			</tr>
+			<tr>
+				<td>getExergyData</td>
+				<td>Get the exergy data for a state</td>
+			</tr>
+			<tr>
+				<td>buildExergyData</td>
+				<td>Set the exergy data values of a state</td>
+			</tr>
+			<tr>
+				<td>addExergyData</td>
+				<td>add a new  exergy data state</td>
+			</tr>
+			<tr>
+				<td>setExergyData</td>
+				<td>Set the exergy values of a state</td>
+			</tr>
+			<tr>
+				<td>getResourceData</td>
+				<td>Get the resource data for a sample</td>
+			</tr>
+			<tr>
+				<td>addResourceData</td>
+				<td>Create a new cResourceData object and add to Resource samples</td>
+			</tr>
+			<tr>
+				<td>buildResourceData</td>
+				<td>Create a new cResourceData object</td>
+			</tr>
+			<tr>
+				<td>setFlowResource</td>
+				<td>Set the flow-resource value of a sample</td>
+			</tr>
+			<tr>
+				<td>setProcessResource</td>
+				<td>Set the process-resource value of a sample</td>
+			</tr>
+			<tr>
+				<td>existSample</td>
+				<td>Check if sample is defined in ResourceState</td>
+			</tr>
+			<tr>
+				<td>existState</td>
+				<td>Check if state is defined in States</td>
+			</tr>
+			<tr>
+				<td>getTableInfo</td>
+				<td>Get information about a table</td>
+			</tr>
+			<tr>
+				<td>getTablesDirectory</td>
+				<td>Get the tables directory</td>
+			</tr>
+			<tr>
+				<td>getWasteDefinition</td>
+				<td>Get Waste Data</td>
+			</tr>
+			<tr>
+				<td>setWasteRecycled</td>
+				<td>Set the waste recycling ratios</td>
+			</tr>
+			<tr>
+				<td>setWasteType</td>
+				<td>Set the waste type allocation method for Active Waste</td>
+			</tr>
+			<tr>
+				<td>setWasteValues</td>
+				<td>Set the waste table values</td>
+			</tr>
+			<tr>
+				<td>getResultInfo</td>
+				<td>Get data model result info</td>
+			</tr>
+			<tr>
+				<td>showDataModel</td>
+				<td>View a table in a GUI Table</td>
+			</tr>
+			<tr>
+				<td>updateModel</td>
+				<td>Update the Data Model if there is changes</td>
+			</tr>
+			<tr>
+				<td>saveDataModel</td>
+				<td>Save data model depending of filename extension</td>
+			</tr>
+			<tr>
+				<td>exportResults</td>
+				<td>Export result tables into a structure using diferent formats.</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Export table into the selected varmode/format</td>
+			</tr>
+			<tr>
+				<td>getTable</td>
+				<td>Get the table called name</td>
+			</tr>
+			<tr>
+				<td>getTableIndex</td>
+				<td>Get the table index of the results set</td>
+			</tr>
+			<tr>
+				<td>ListOfGraphs</td>
+				<td>Get the list of graph tables as cell array</td>
+			</tr>
+			<tr>
+				<td>ListOfTables</td>
+				<td>Get the list of tables as cell array</td>
+			</tr>
+			<tr>
+				<td>printResults</td>
+				<td>Print the result tables on console</td>
+			</tr>
+			<tr>
+				<td>saveResults</td>
+				<td>Save result tables in different file formats depending on extension</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Save a result table into a file depending on extension</td>
+			</tr>
+			<tr>
+				<td>showResults</td>
+				<td>View an individual table</td>
+			</tr>
+			<tr>
+				<td>showTableIndex</td>
+				<td>View the index table of the results set</td>
+			</tr>
+			<tr>
+				<td>StudyCase</td>
+				<td>Get/display the study case names</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cDataset</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cDataset Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cDataset</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>addValues</td>
+				<td>Add a new value at the end of the dataset</td>
+			</tr>
+			<tr>
+				<td>getValues</td>
+				<td>Get an element of the dataset</td>
+			</tr>
+			<tr>
+				<td>setValues</td>
+				<td>Set the values in position indicates by arg</td>
+			</tr>
+			<tr>
+				<td>addKey</td>
+				<td>Add a new key if doesn't exists</td>
+			</tr>
+			<tr>
+				<td>existsKey</td>
+				<td>Check if key exists</td>
+			</tr>
+			<tr>
+				<td>getIndex</td>
+				<td>Get the corresponding index of a key</td>
+			</tr>
+			<tr>
+				<td>getKey</td>
+				<td>Get the corresponding key(s) of a set of indexes</td>
+			</tr>
+			<tr>
+				<td>getKeys</td>
+				<td>Get the keys of the dictionary</td>
+			</tr>
+			<tr>
+				<td>isIndex</td>
+				<td>Check if the index is valid. </td>
+			</tr>
+			<tr>
+				<td>length</td>
+				<td>Length of the dictionary</td>
+			</tr>
+			<tr>
+				<td>numel</td>
+				<td>Number of elements of the dictionary</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the dictionary</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cDiagnosis</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cDiagnosis Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cDiagnosis</td>
+				<td>Create an object of the class</td>
+			</tr>
+			<tr>
+				<td>buildResultInfo</td>
+				<td>Get cResultInfo object for thermoeconomic diagnosis</td>
+			</tr>
+			<tr>
+				<td>getDemandCorrectionCost</td>
+				<td>Get Demand Variation effective cost.</td>
+			</tr>
+			<tr>
+				<td>getDemandVariation</td>
+				<td>Get the system demand variation</td>
+			</tr>
+			<tr>
+				<td>getDemandVariationCost</td>
+				<td>Get the system demand variation cost</td>
+			</tr>
+			<tr>
+				<td>getDiagnosisTable</td>
+				<td>Get Diagnosis Table</td>
+			</tr>
+			<tr>
+				<td>getExternalDisfunction</td>
+				<td>Get the external disfunction matrix</td>
+			</tr>
+			<tr>
+				<td>getInternalDisfunction</td>
+				<td>Get the internal disfunction matrix</td>
+			</tr>
+			<tr>
+				<td>getIrreversibilityTable</td>
+				<td>Build the irreversibility table</td>
+			</tr>
+			<tr>
+				<td>getIrreversibilityVariation</td>
+				<td>Get the unit process cost variation</td>
+			</tr>
+			<tr>
+				<td>getMalfunction</td>
+				<td>Get the malfunction vector</td>
+			</tr>
+			<tr>
+				<td>getMalfunctionCost</td>
+				<td>Get the malfunction cost vector (MF*)</td>
+			</tr>
+			<tr>
+				<td>getMalfunctionCostTable</td>
+				<td>Get the malfunction cost table</td>
+			</tr>
+			<tr>
+				<td>getMalfunctionTable</td>
+				<td>Get the Malfunction table</td>
+			</tr>
+			<tr>
+				<td>getOutputVariation</td>
+				<td>Get the system output variation</td>
+			</tr>
+			<tr>
+				<td>getUnitConsumptionVariation</td>
+				<td>Get the unit consumption variation</td>
+			</tr>
+			<tr>
+				<td>getUnitCostVariation</td>
+				<td>Get the unit process cost variation</td>
+			</tr>
+			<tr>
+				<td>getWasteMalfunctionCost</td>
+				<td>Get the waste cost variation (MR*)</td>
+			</tr>
+			<tr>
+				<td>getWasteMalfunctionCostTable</td>
+				<td>Get the waste malfunction cost table</td>
+			</tr>
+			<tr>
+				<td>getWasteVariation</td>
+				<td>Get waste variation</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cDiagramFP</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cDiagramFP Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cDiagramFP</td>
+				<td>Build an instance of this class</td>
+			</tr>
+			<tr>
+				<td>buildResultInfo</td>
+				<td>Get cResultInfo object of the DiagramFP</td>
+			</tr>
+			<tr>
+				<td>getNodesTable</td>
+				<td>Get the nodes  of a  diagram</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cDictionary</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cDictionary Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cDictionary</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>addKey</td>
+				<td>Add a new key if doesn't exists</td>
+			</tr>
+			<tr>
+				<td>existsKey</td>
+				<td>Check if key exists</td>
+			</tr>
+			<tr>
+				<td>getIndex</td>
+				<td>Get the corresponding index of a key</td>
+			</tr>
+			<tr>
+				<td>getKey</td>
+				<td>Get the corresponding key(s) of a set of indexes</td>
+			</tr>
+			<tr>
+				<td>getKeys</td>
+				<td>Get the keys of the dictionary</td>
+			</tr>
+			<tr>
+				<td>isIndex</td>
+				<td>Check if the index is valid. </td>
+			</tr>
+			<tr>
+				<td>length</td>
+				<td>Length of the dictionary</td>
+			</tr>
+			<tr>
+				<td>numel</td>
+				<td>Number of elements of the dictionary</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the dictionary</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cDigraph</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cDigraph Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cDigraph</td>
+				<td>Build an instance of the class</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show the graph in a window</td>
+			</tr>
+			<tr>
+				<td>showGraphUI</td>
+				<td>Show the graph in a GUI app</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cDigraphAnalysis</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cDigraphAnalysis Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cDigraphAnalysis</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>getComponentNames</td>
+				<td>Get the names of the strong components</td>
+			</tr>
+			<tr>
+				<td>getGroupsInfo</td>
+				<td>Build the Node Groups table</td>
+			</tr>
+			<tr>
+				<td>getKernelInfo</td>
+				<td>Get the Kernel Table information</td>
+			</tr>
+			<tr>
+				<td>isProductive</td>
+				<td>Check if the graph is productive</td>
+			</tr>
+			<tr>
+				<td>isReachable</td>
+				<td>Check if node v is reachable from node u</td>
+			</tr>
+			<tr>
+				<td>isStrongConnected</td>
+				<td>Check if nodes u,v belong to the same component</td>
+			</tr>
+			<tr>
+				<td>plot</td>
+				<td>Plot the digraph</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cExergyCost</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cExergyCost Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cExergyCost</td>
+				<td>Creates an instance of the class</td>
+			</tr>
+			<tr>
+				<td>buildResultInfo</td>
+				<td>Get the cResultInfo object for thermoeconomic analysis</td>
+			</tr>
+			<tr>
+				<td>getCostTableFP</td>
+				<td>Get the FP Cost Table considering only internal irreversibilities</td>
+			</tr>
+			<tr>
+				<td>getDirectCostTableFPR</td>
+				<td>Get FPR Cost Table with direct costs</td>
+			</tr>
+			<tr>
+				<td>getFlowsCost</td>
+				<td>Get the exergy cost of flows</td>
+			</tr>
+			<tr>
+				<td>getGeneralCostTableFPR</td>
+				<td>Get FPR Cost-Table with generalized costs</td>
+			</tr>
+			<tr>
+				<td>getIrreversibilityCostTables</td>
+				<td>Get Irreversibility Cost Tables for processes and flows</td>
+			</tr>
+			<tr>
+				<td>getOpR</td>
+				<td>Get the corresponding waste operator</td>
+			</tr>
+			<tr>
+				<td>getProcessCost</td>
+				<td>Get processes cost values</td>
+			</tr>
+			<tr>
+				<td>getProcessUnitCost</td>
+				<td>Get Process Unit Cost</td>
+			</tr>
+			<tr>
+				<td>getResourcesCostDistribution</td>
+				<td>Get the resource Cost distribution tables</td>
+			</tr>
+			<tr>
+				<td>getSpectralRatio</td>
+				<td>Get the spectral ratio of the productive matrix</td>
+			</tr>
+			<tr>
+				<td>getStreamsCost</td>
+				<td>Get the exergy cost of streams</td>
+			</tr>
+			<tr>
+				<td>updateOperator</td>
+				<td>Update an operator with the corresponding waste operator</td>
+			</tr>
+			<tr>
+				<td>updateWasteOperators</td>
+				<td>Calculate the waste allocation ratios and cost operators.</td>
+			</tr>
+			<tr>
+				<td>ExternalIrreversibility</td>
+				<td>Get the total external irreversibility (waste)</td>
+			</tr>
+			<tr>
+				<td>FlowProcessTable</td>
+				<td>Get the Flow-Process table </td>
+			</tr>
+			<tr>
+				<td>InternalIrreversibility</td>
+				<td>Get the total internal irreversibility</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cExergyData</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cExergyData Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cExergyData</td>
+				<td>Build an instance of the class</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cExergyModel</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cExergyModel Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cExergyModel</td>
+				<td>Create an instance of the class	</td>
+			</tr>
+			<tr>
+				<td>buildResultInfo</td>
+				<td>Get the cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>FlowProcessTable</td>
+				<td>Get the Flow-Process table </td>
+			</tr>
+			<tr>
+				<td>InternalIrreversibility</td>
+				<td>Get the total internal irreversibility</td>
+			</tr>
+			<tr>
+				<td>ExternalIrreversibility</td>
+				<td>Get the total external irreversibility (waste)</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cFormatData</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cFormatData Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cFormatData</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>getFormat</td>
+				<td>Get the format of a type of variable</td>
+			</tr>
+			<tr>
+				<td>getResultId</td>
+				<td>Get the ResultId of a table</td>
+			</tr>
+			<tr>
+				<td>getTableProperties</td>
+				<td>Get the properties of a cTable</td>
+			</tr>
+			<tr>
+				<td>getUnit</td>
+				<td>Get the format of a type of variable</td>
+			</tr>
+			<tr>
+				<td>getCellTables</td>
+				<td>Get the cell tables configuration</td>
+			</tr>
+			<tr>
+				<td>getDataModelProperties</td>
+				<td>Get the data model properties</td>
+			</tr>
+			<tr>
+				<td>getMatrixTables</td>
+				<td>Get the matrix tables configuration</td>
+			</tr>
+			<tr>
+				<td>getResultIdTables</td>
+				<td>Get the tables of an specific resultId</td>
+			</tr>
+			<tr>
+				<td>getSummaryTables</td>
+				<td>Get the summary tables configuration</td>
+			</tr>
+			<tr>
+				<td>getTableDefinition</td>
+				<td>Get the properties of a table</td>
+			</tr>
+			<tr>
+				<td>getTableId</td>
+				<td>Get tableId from dictionary. Internal use</td>
+			</tr>
+			<tr>
+				<td>getTableInfo</td>
+				<td>Get the properties of a table</td>
+			</tr>
+			<tr>
+				<td>getTablesDirectory</td>
+				<td>Get the tables directory</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cGraphCost</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cGraphCost Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cGraphCost</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show the graph in a window</td>
+			</tr>
+			<tr>
+				<td>showGraphUI</td>
+				<td>Show the graph in a GUI app</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cGraphCostRSC</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cGraphCostRSC Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cGraphCostRSC</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show the graph in a window</td>
+			</tr>
+			<tr>
+				<td>showGraphUI</td>
+				<td>Show the graph in a GUI app</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cGraphDiagnosis</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cGraphDiagnosis Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cGraphDiagnosis</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show the graph in a window</td>
+			</tr>
+			<tr>
+				<td>showGraphUI</td>
+				<td>Show the graph in a GUI app</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cGraphDiagramFP</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cGraphDiagramFP Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cGraphDiagramFP</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>edgesTable</td>
+				<td>Get a table with the edges of the digraph</td>
+			</tr>
+			<tr>
+				<td>nodesTable</td>
+				<td>Get a table with the properties of the nodes</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show the graph in a window</td>
+			</tr>
+			<tr>
+				<td>showGraphUI</td>
+				<td>Show the graph in a GUI app</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cGraphRecycling</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cGraphRecycling Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cGraphRecycling</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show the graph in a figure window</td>
+			</tr>
+			<tr>
+				<td>showGraphUI</td>
+				<td>Show the graph in a GUI app</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cGraphResults</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cGraphResults Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cGraphResults</td>
+				<td>Abstract class used to show graphs in interactive mode and apps.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cGraphSummary</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cGraphSummary Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cGraphSummary</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show the graph in a window</td>
+			</tr>
+			<tr>
+				<td>showGraphUI</td>
+				<td>Show the graph in a GUI app</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cGraphWaste</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cGraphWaste Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cGraphWaste</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show the graph in a window</td>
+			</tr>
+			<tr>
+				<td>showGraphUI</td>
+				<td>Show the graph in a GUI app</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cMessageBuilder</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cMessageBuilder Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cMessageBuilder</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>getMessage</td>
+				<td>Get the message as text</td>
+			</tr>
+			<tr>
+				<td>disp</td>
+				<td>Overload disp function</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cMessageLogger</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cMessageLogger Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cMessageLogger</td>
+				<td>Creates an instance of the class</td>
+			</tr>
+			<tr>
+				<td>messageLog</td>
+				<td>Add a message to the logger</td>
+			</tr>
+			<tr>
+				<td>printLogger</td>
+				<td>Print the logger</td>
+			</tr>
+			<tr>
+				<td>addLogger</td>
+				<td>Concatenate two message loggers</td>
+			</tr>
+			<tr>
+				<td>clearLogger</td>
+				<td>Clear the message logger</td>
+			</tr>
+			<tr>
+				<td>printLoggerType</td>
+				<td>Print the messages of the logger of the specified type</td>
+			</tr>
+			<tr>
+				<td>tableLogger</td>
+				<td>Build a table logger to use in apps</td>
+			</tr>
+			<tr>
+				<td>getObjectId</td>
+				<td>Get the object identifier</td>
+			</tr>
+			<tr>
+				<td>printError</td>
+				<td>Print error message. </td>
+			</tr>
+			<tr>
+				<td>printInfo</td>
+				<td>Print info message. Use fprintf syntax</td>
+			</tr>
+			<tr>
+				<td>printWarning</td>
+				<td>Print warning message. </td>
+			</tr>
+			<tr>
+				<td>eq</td>
+				<td>Overload eq operator. Check if two class object are equal.</td>
+			</tr>
+			<tr>
+				<td>ne</td>
+				<td>Overload ne operator. Check if two class objects are different.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cMessages</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cMessages Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cMessages</td>
+				<td>Static class which defines the TaesLab messages.</td>
+			</tr>
+			<tr>
+				<td>ShowHelp</td>
+				<td>Get a string with the hyperlink to the help of the caller function</td>
+			</tr>
+			<tr>
+				<td>Table</td>
+				<td>Get or show in console a table with all the messages or show in console</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cModelData</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cModelData Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cModelData</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>getSampleNames</td>
+				<td>Get a cell array list with the names of the resource samples</td>
+			</tr>
+			<tr>
+				<td>getStateNames</td>
+				<td>Get a cell array list with the names of the states</td>
+			</tr>
+			<tr>
+				<td>isResource</td>
+				<td>Indicate is optional resource cost element exists</td>
+			</tr>
+			<tr>
+				<td>isWaste</td>
+				<td>Indicate is optional waste element exists</td>
+			</tr>
+			<tr>
+				<td>saveAsJSON</td>
+				<td>Save data model as JSON file</td>
+			</tr>
+			<tr>
+				<td>saveAsXML</td>
+				<td>Save data model as XML file</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cModelResults</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cModelResults Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cModelResults</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>clearResults</td>
+				<td>Clear the result index in the container</td>
+			</tr>
+			<tr>
+				<td>getModelResults</td>
+				<td>Get a cell array with the cResultInfo objects of the current state</td>
+			</tr>
+			<tr>
+				<td>getResults</td>
+				<td>Get the cResultInfo from the container</td>
+			</tr>
+			<tr>
+				<td>setResults</td>
+				<td>Store the cResultInfo in the results container using ResultId as index</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cModelTable</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cModelTable Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cModelTable</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>getStructData</td>
+				<td>Get a struct with the table values</td>
+			</tr>
+			<tr>
+				<td>getTableData</td>
+				<td>Get a cTable with the table model info.</td>
+			</tr>
+			<tr>
+				<td>printTable</td>
+				<td>Print data on console, using cTable interface.</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the table model. Overload size method</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cParseStream</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cParseStream Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cParseStream</td>
+				<td>Class with static methods to parse stream definition</td>
+			</tr>
+			<tr>
+				<td>checkDuplicates</td>
+				<td>Check if the list has duplicate values</td>
+			</tr>
+			<tr>
+				<td>checkListKeys</td>
+				<td>Check if a list of keys is valid</td>
+			</tr>
+			<tr>
+				<td>checkListNames</td>
+				<td>Check if a list of names is valid</td>
+			</tr>
+			<tr>
+				<td>checkName</td>
+				<td>Check if a name (state | sample) is valid</td>
+			</tr>
+			<tr>
+				<td>checkNumericFormat</td>
+				<td>Check if a numeric format is valid</td>
+			</tr>
+			<tr>
+				<td>checkStream</td>
+				<td>Check if a fuel/product definition string is correct</td>
+			</tr>
+			<tr>
+				<td>checkTextKey</td>
+				<td>Check if a text key is valid</td>
+			</tr>
+			<tr>
+				<td>getFlowsList</td>
+				<td>Get the list of flows in a FP definition string</td>
+			</tr>
+			<tr>
+				<td>getStreamFlows</td>
+				<td>Get the input and output flows of a stream</td>
+			</tr>
+			<tr>
+				<td>getStreams</td>
+				<td>Get the list of productive groups</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cProductiveDiagram</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cProductiveDiagram Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cProductiveDiagram</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>buildResultInfo</td>
+				<td>Get cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>getEdgesTable</td>
+				<td>Get the edges info of a diagram</td>
+			</tr>
+			<tr>
+				<td>getNodesTable</td>
+				<td>Get the nodes  of a  diagram</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cProductiveStructure</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cProductiveStructure Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cProductiveStructure</td>
+				<td>Creates an instance of the class</td>
+			</tr>
+			<tr>
+				<td>buildResultInfo</td>
+				<td>Build the cResultInfo object for PRODUCTIVE_STRUCTURE</td>
+			</tr>
+			<tr>
+				<td>FinalProductFlows</td>
+				<td>Get the final product flows id</td>
+			</tr>
+			<tr>
+				<td>FlowEdges</td>
+				<td>Get a structure array with the stream node names of the flow edges</td>
+			</tr>
+			<tr>
+				<td>FuelStreams</td>
+				<td>Get the fuel streams id (including output and wastes)</td>
+			</tr>
+			<tr>
+				<td>IncidenceMatrix</td>
+				<td>Get incidence matrices of the plant</td>
+			</tr>
+			<tr>
+				<td>OutputProcesses</td>
+				<td>Get the id of processes with external outputs</td>
+			</tr>
+			<tr>
+				<td>ProductStreams</td>
+				<td>Get the product streams id (including resources)</td>
+			</tr>
+			<tr>
+				<td>ResourceFlows</td>
+				<td>Get the resource flows id</td>
+			</tr>
+			<tr>
+				<td>ResourceProcesses</td>
+				<td>Get the id of processes with external resources</td>
+			</tr>
+			<tr>
+				<td>SystemOutputFlows</td>
+				<td>Get the system output flows id</td>
+			</tr>
+			<tr>
+				<td>WasteData</td>
+				<td>Get default waste data info</td>
+			</tr>
+			<tr>
+				<td>flows2Streams</td>
+				<td>Compute the exergy or cost of streams from flow values</td>
+			</tr>
+			<tr>
+				<td>getFlowId</td>
+				<td>Get the Id of a flow given its key</td>
+			</tr>
+			<tr>
+				<td>getFlowMatrix</td>
+				<td>Get the Structural Theory Flows Adjacency Matrix</td>
+			</tr>
+			<tr>
+				<td>getFlowProcessMatrix</td>
+				<td>Get the Flow-Process Adjacency Matrix (Flows, Processes)</td>
+			</tr>
+			<tr>
+				<td>getFlowTypes</td>
+				<td>Get the flowId of type typeId</td>
+			</tr>
+			<tr>
+				<td>getProcessId</td>
+				<td>Get the Id of a process given its key</td>
+			</tr>
+			<tr>
+				<td>getProcessMatrix</td>
+				<td>Get the Process Adjacency Matrix (logical FP table)</td>
+			</tr>
+			<tr>
+				<td>getProcessTypes</td>
+				<td>Get the process-id of type typeId</td>
+			</tr>
+			<tr>
+				<td>getProductNames</td>
+				<td>Get the name of the final products flows</td>
+			</tr>
+			<tr>
+				<td>getProductiveMatrix</td>
+				<td>Get the Productive Adjacency Matrix (Streams, Flows, Processes)</td>
+			</tr>
+			<tr>
+				<td>getResourceNames</td>
+				<td>Get the name of the resource flows</td>
+			</tr>
+			<tr>
+				<td>getStreamMatrix</td>
+				<td>Get the Streams graph adjacency matrix</td>
+			</tr>
+			<tr>
+				<td>getStreamTypes</td>
+				<td>Get the stream-id of type typeId</td>
+			</tr>
+			<tr>
+				<td>getWasteNames</td>
+				<td>Get the name of the waste flows</td>
+			</tr>
+			<tr>
+				<td>isModelIO</td>
+				<td>Check if the model is pure Input-Output</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cQueue</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cQueue Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cQueue</td>
+				<td>Create a cQueue object. Initialize as a empty cell array</td>
+			</tr>
+			<tr>
+				<td>add</td>
+				<td>Add an element at the end of the queue</td>
+			</tr>
+			<tr>
+				<td>addQueue</td>
+				<td>Add another queue at the end of this queue</td>
+			</tr>
+			<tr>
+				<td>clear</td>
+				<td>Clear the queue</td>
+			</tr>
+			<tr>
+				<td>getContent</td>
+				<td>Get the content of the queue</td>
+			</tr>
+			<tr>
+				<td>length</td>
+				<td>Length of the queue. Overload length function</td>
+			</tr>
+			<tr>
+				<td>numel</td>
+				<td>Number of elements of the queue. Overload numel function</td>
+			</tr>
+			<tr>
+				<td>printContent</td>
+				<td>Print the content of the buffer</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the queue. Overload size function</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cReadModel</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cReadModel Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cReadModel</td>
+				<td>Abstract class to implemenent the model reader classes.</td>
+			</tr>
+			<tr>
+				<td>getDataModel</td>
+				<td>Get the data model object</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cReadModelCSV</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cReadModelCSV Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>getDataModel</td>
+				<td>Get the data model object</td>
+			</tr>
+			<tr>
+				<td>cReadModelCSV</td>
+				<td>Build an instance of the class</td>
+			</tr>
+			<tr>
+				<td>printModelTables</td>
+				<td>Show the model tables on console</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cReadModelJSON</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cReadModelJSON Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cReadModelJSON</td>
+				<td>Construct an instance of the class</td>
+			</tr>
+			<tr>
+				<td>getDataModel</td>
+				<td>Get the data model object</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cReadModelStruct</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cReadModelStruct Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cReadModelStruct</td>
+				<td>Abstract class to read structured data model.</td>
+			</tr>
+			<tr>
+				<td>getDataModel</td>
+				<td>Get the data model object</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cReadModelTable</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cReadModelTable Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cReadModelTable</td>
+				<td>Abstract class to read table data model.</td>
+			</tr>
+			<tr>
+				<td>getDataModel</td>
+				<td>Get the data model object</td>
+			</tr>
+			<tr>
+				<td>printModelTables</td>
+				<td>Show the model tables on console</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cReadModelXLS</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cReadModelXLS Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cReadModelXLS</td>
+				<td>Build an instance of the class</td>
+			</tr>
+			<tr>
+				<td>getDataModel</td>
+				<td>Get the data model object</td>
+			</tr>
+			<tr>
+				<td>printModelTables</td>
+				<td>Show the model tables on console</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cReadModelXML</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cReadModelXML Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cReadModelXML</td>
+				<td>Build an instance of the object</td>
+			</tr>
+			<tr>
+				<td>getDataModel</td>
+				<td>Get the data model object</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cResourceData</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cResourceData Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cResourceData</td>
+				<td>Creates an instance of the class</td>
+			</tr>
+			<tr>
+				<td>setFlowResource</td>
+				<td>Set the flow-resource values of the current sample</td>
+			</tr>
+			<tr>
+				<td>setProcessResource</td>
+				<td>Set the process-resource value of the current sample</td>
+			</tr>
+			<tr>
+				<td>setResourceCost</td>
+				<td>Calculate the resource cost properties for the current sample</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cResultId</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cResultId Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cResultId</td>
+				<td>Abstract class to manage the result identification.</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cResultInfo</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cResultInfo Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cResultInfo</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>getResultInfo</td>
+				<td>Get cResultInfo object for cResultSet</td>
+			</tr>
+			<tr>
+				<td>getTable</td>
+				<td>Get the table called name</td>
+			</tr>
+			<tr>
+				<td>getTableIndex</td>
+				<td>Get the Table Index</td>
+			</tr>
+			<tr>
+				<td>isSampleSummary</td>
+				<td>Check if the Samples Summary results are available</td>
+			</tr>
+			<tr>
+				<td>isStateSummary</td>
+				<td>Check if the States Summary results are available</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show graph with default options</td>
+			</tr>
+			<tr>
+				<td>summaryDiagnosis</td>
+				<td>Get the Fuel Impact/Malfunction Cost as a string including format and unit</td>
+			</tr>
+			<tr>
+				<td>summaryTables</td>
+				<td>Get/Display available summary tables</td>
+			</tr>
+			<tr>
+				<td>ListOfGraphs</td>
+				<td>Get the list of graph tables as cell array</td>
+			</tr>
+			<tr>
+				<td>ListOfTables</td>
+				<td>Get the list of tables as cell array</td>
+			</tr>
+			<tr>
+				<td>StudyCase</td>
+				<td>Get/display the study case names</td>
+			</tr>
+			<tr>
+				<td>exportResults</td>
+				<td>Export result tables into a structure using diferent formats.</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Export tname into the selected varmode/format</td>
+			</tr>
+			<tr>
+				<td>printResults</td>
+				<td>Print the result tables on console</td>
+			</tr>
+			<tr>
+				<td>saveResults</td>
+				<td>Save result tables in different file formats depending on file extension</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Save a result table into a file depending on extension</td>
+			</tr>
+			<tr>
+				<td>showResults</td>
+				<td>View an individual table</td>
+			</tr>
+			<tr>
+				<td>showTableIndex</td>
+				<td>View the index table of the results set</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cResultSet</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cResultSet Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cResultSet</td>
+				<td>Abstract class to manage the result sets.</td>
+			</tr>
+			<tr>
+				<td>exportResults</td>
+				<td>Export result tables into a structure using diferent formats.</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Export tname into the selected varmode/format</td>
+			</tr>
+			<tr>
+				<td>getTable</td>
+				<td>Get the table called name</td>
+			</tr>
+			<tr>
+				<td>getTableIndex</td>
+				<td>Get the table index of the results set</td>
+			</tr>
+			<tr>
+				<td>printResults</td>
+				<td>Print the result tables on console</td>
+			</tr>
+			<tr>
+				<td>saveResults</td>
+				<td>Save result tables in different file formats depending on file extension</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Save a result table into a file depending on extension</td>
+			</tr>
+			<tr>
+				<td>showResults</td>
+				<td>View an individual table</td>
+			</tr>
+			<tr>
+				<td>showTableIndex</td>
+				<td>View the index table of the results set</td>
+			</tr>
+			<tr>
+				<td>ListOfGraphs</td>
+				<td>Get the list of graph tables as cell array</td>
+			</tr>
+			<tr>
+				<td>ListOfTables</td>
+				<td>Get the list of tables as cell array</td>
+			</tr>
+			<tr>
+				<td>StudyCase</td>
+				<td>Get/display the study case names</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cResultTableBuilder</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cResultTableBuilder Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cResultTableBuilder</td>
+				<td>Create and instance of the class</td>
+			</tr>
+			<tr>
+				<td>getCostResults</td>
+				<td>Get the thermoeconomic analysis result </td>
+			</tr>
+			<tr>
+				<td>getDiagnosisResults</td>
+				<td>Get the thermoeconomic diagnosis results</td>
+			</tr>
+			<tr>
+				<td>getDiagramFP</td>
+				<td>Get the diagram FP adjacency results</td>
+			</tr>
+			<tr>
+				<td>getExergyResults</td>
+				<td>Generate the exergy results</td>
+			</tr>
+			<tr>
+				<td>getProductiveDiagram</td>
+				<td>Get the productive diagram tables</td>
+			</tr>
+			<tr>
+				<td>getProductiveStructure</td>
+				<td>Generate the productive structure results</td>
+			</tr>
+			<tr>
+				<td>getSummaryResults</td>
+				<td>Get the cResultInfo for Summary Results</td>
+			</tr>
+			<tr>
+				<td>getWasteAnalysisResults</td>
+				<td>Get the waste analysis results</td>
+			</tr>
+			<tr>
+				<td>getCellTables</td>
+				<td>Get the cell tables configuration</td>
+			</tr>
+			<tr>
+				<td>getDataModelProperties</td>
+				<td>Get the data model properties</td>
+			</tr>
+			<tr>
+				<td>getMatrixTables</td>
+				<td>Get the matrix tables configuration</td>
+			</tr>
+			<tr>
+				<td>getResultIdTables</td>
+				<td>Get the tables of an specific resultId</td>
+			</tr>
+			<tr>
+				<td>getSummaryTables</td>
+				<td>Get the summary tables configuration</td>
+			</tr>
+			<tr>
+				<td>getTableDefinition</td>
+				<td>Get the properties of a table</td>
+			</tr>
+			<tr>
+				<td>getTableId</td>
+				<td>Get tableId from dictionary. Internal use</td>
+			</tr>
+			<tr>
+				<td>getTableInfo</td>
+				<td>Get the properties of a table</td>
+			</tr>
+			<tr>
+				<td>getTablesDirectory</td>
+				<td>Get the tables directory</td>
+			</tr>
+			<tr>
+				<td>getFormat</td>
+				<td>Get the format of a type of variable</td>
+			</tr>
+			<tr>
+				<td>getResultId</td>
+				<td>Get the ResultId of a table</td>
+			</tr>
+			<tr>
+				<td>getTableProperties</td>
+				<td>Get the properties of a cTable</td>
+			</tr>
+			<tr>
+				<td>getUnit</td>
+				<td>Get the format of a type of variable</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cSparseRow</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cSparseRow Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cSparseRow</td>
+				<td>create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>ctranspose</td>
+				<td>Overload ctranspose operator for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>disp</td>
+				<td>Overload display object for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>divideCol</td>
+				<td>Divide the columns of the matrix by a vector</td>
+			</tr>
+			<tr>
+				<td>divideRow</td>
+				<td>Divide the rows of the matrix by a vector</td>
+			</tr>
+			<tr>
+				<td>full</td>
+				<td>Overload full function for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>minus</td>
+				<td>Overload the minus operator for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>mtimes</td>
+				<td>Overload the mtimes operator for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>plus</td>
+				<td>Overload the plus operator for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>scaleCol</td>
+				<td>Scale the columns of the matrix by a vector</td>
+			</tr>
+			<tr>
+				<td>scaleRow</td>
+				<td>Scale the rows of the matrix by a vector</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Overload size function for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>sparse</td>
+				<td>Overload sparse function for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>sum</td>
+				<td>Overload sum function for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>sumCols</td>
+				<td>Sum the columns of the matrices</td>
+			</tr>
+			<tr>
+				<td>sumRows</td>
+				<td>Sum the rows of the matrices</td>
+			</tr>
+			<tr>
+				<td>transpose</td>
+				<td>Overload transpose operator for cSparseRow objects</td>
+			</tr>
+			<tr>
+				<td>uminus</td>
+				<td>Overload the uminus operator for cSparseRow objects</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cSummaryOptions</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cSummaryOptions Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cSummaryOptions</td>
+				<td>Build an instance of the class</td>
+			</tr>
+			<tr>
+				<td>checkId</td>
+				<td>Check the summary id option</td>
+			</tr>
+			<tr>
+				<td>checkName</td>
+				<td>Check the summary name option</td>
+			</tr>
+			<tr>
+				<td>defaultOption</td>
+				<td>Get the default summary option name for the data model</td>
+			</tr>
+			<tr>
+				<td>isEnable</td>
+				<td>Check if model has summary enabled</td>
+			</tr>
+			<tr>
+				<td>isResources</td>
+				<td>Check if the model has resources summary available</td>
+			</tr>
+			<tr>
+				<td>isStates</td>
+				<td>Check if the model has states summary available</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cSummaryResults</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cSummaryResults Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cSummaryResults</td>
+				<td>Build an instance of this class</td>
+			</tr>
+			<tr>
+				<td>buildResultInfo</td>
+				<td>Get cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>defaultSummaryTables</td>
+				<td>Get the default summary tables option name</td>
+			</tr>
+			<tr>
+				<td>getDefaultFlowVariables</td>
+				<td>Get the output flows keys</td>
+			</tr>
+			<tr>
+				<td>getDefaultProcessVariables</td>
+				<td>Get the output processes keys</td>
+			</tr>
+			<tr>
+				<td>getSummaryColumns</td>
+				<td>Get the column names of the summary tables</td>
+			</tr>
+			<tr>
+				<td>getValues</td>
+				<td>Get dataset tables</td>
+			</tr>
+			<tr>
+				<td>isSampleSummary</td>
+				<td>Check if Samples Summary results are available</td>
+			</tr>
+			<tr>
+				<td>isStateSummary</td>
+				<td>Check if States Summary results are available</td>
+			</tr>
+			<tr>
+				<td>setSummaryTables</td>
+				<td>Fill the values of the summary tables with the values of the model</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cSummaryTable</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cSummaryTable Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cSummaryTable</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>setValues</td>
+				<td>Set the values of the table for each STATE/RESOURCE</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cTable</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cTable Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cTable</td>
+				<td>Abstract class for tabular data.</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Get table values in diferent formats</td>
+			</tr>
+			<tr>
+				<td>getColumnData</td>
+				<td>Get a key/value array struct of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnFormat</td>
+				<td>Get the format of each column table</td>
+			</tr>
+			<tr>
+				<td>getColumnValues</td>
+				<td>Get the values of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnWidth</td>
+				<td>Get the maximun width of each column</td>
+			</tr>
+			<tr>
+				<td>getMatlabTable</td>
+				<td>Get cTable as Matlab table</td>
+			</tr>
+			<tr>
+				<td>getProperties</td>
+				<td>Get table properties</td>
+			</tr>
+			<tr>
+				<td>getStructData</td>
+				<td>Get table data as struct array</td>
+			</tr>
+			<tr>
+				<td>getStructTable</td>
+				<td>Get a structure with the table info</td>
+			</tr>
+			<tr>
+				<td>isGraph</td>
+				<td>Check if the table has a graph associated</td>
+			</tr>
+			<tr>
+				<td>isNumericColumn</td>
+				<td>Check if a column is numeric (base method)</td>
+			</tr>
+			<tr>
+				<td>isNumericTable</td>
+				<td>Check if the data of the table is numeric</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Generate a file with the table values</td>
+			</tr>
+			<tr>
+				<td>setColumnValues</td>
+				<td>Set the values of a column table</td>
+			</tr>
+			<tr>
+				<td>setDescription</td>
+				<td>Set Table Header or Description.</td>
+			</tr>
+			<tr>
+				<td>setRowValues</td>
+				<td>Set the values of a table row</td>
+			</tr>
+			<tr>
+				<td>setStudyCase</td>
+				<td>Set state and sample values. Internal function</td>
+			</tr>
+			<tr>
+				<td>showTable</td>
+				<td>View Table in console GUI or HTML</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the table. Overload of size function.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cTableCell</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cTableCell Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cTableCell</td>
+				<td>Create Cell Table object</td>
+			</tr>
+			<tr>
+				<td>formatData</td>
+				<td>Apply format to data</td>
+			</tr>
+			<tr>
+				<td>getColumnValues</td>
+				<td>Get the values of a specfic column</td>
+			</tr>
+			<tr>
+				<td>getDescriptionLabel</td>
+				<td>Get the description of the table</td>
+			</tr>
+			<tr>
+				<td>getMatlabTable</td>
+				<td>Get table as Matlab table object</td>
+			</tr>
+			<tr>
+				<td>getStructData</td>
+				<td>Get the table data as struct</td>
+			</tr>
+			<tr>
+				<td>getStructTable</td>
+				<td>Get the table as a struct. Include properties</td>
+			</tr>
+			<tr>
+				<td>printTable</td>
+				<td>Display table on console or in a file in a pretty formatted way</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Get cTable info in diferent types of variables</td>
+			</tr>
+			<tr>
+				<td>getCellData</td>
+				<td>Get table as cell array</td>
+			</tr>
+			<tr>
+				<td>getProperties</td>
+				<td>get the additional properties of a cTableResults</td>
+			</tr>
+			<tr>
+				<td>getColumnData</td>
+				<td>Get a key/value array struct of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnFormat</td>
+				<td>Get the format of each column table</td>
+			</tr>
+			<tr>
+				<td>getColumnWidth</td>
+				<td>Get the maximun width of each column</td>
+			</tr>
+			<tr>
+				<td>isGraph</td>
+				<td>Check if the table has a graph associated</td>
+			</tr>
+			<tr>
+				<td>isNumericColumn</td>
+				<td>Check if a column is numeric (base method)</td>
+			</tr>
+			<tr>
+				<td>isNumericTable</td>
+				<td>Check if the data of the table is numeric</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Generate a file with the table values</td>
+			</tr>
+			<tr>
+				<td>setColumnValues</td>
+				<td>Set the values of a column table</td>
+			</tr>
+			<tr>
+				<td>setDescription</td>
+				<td>Set Table Header or Description.</td>
+			</tr>
+			<tr>
+				<td>setRowValues</td>
+				<td>Set the values of a table row</td>
+			</tr>
+			<tr>
+				<td>setStudyCase</td>
+				<td>Set state and sample values. Internal function</td>
+			</tr>
+			<tr>
+				<td>showTable</td>
+				<td>View Table in console GUI or HTML</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the table. Overload of size function.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cTableData</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cTableData Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cTableData</td>
+				<td>Construct an instance of this class</td>
+			</tr>
+			<tr>
+				<td>create</td>
+				<td>Create a cTableData from values</td>
+			</tr>
+			<tr>
+				<td>import</td>
+				<td>Create cTableData from file</td>
+			</tr>
+			<tr>
+				<td>importMatlabTable</td>
+				<td>Import data from a MATLAB table into cTable object</td>
+			</tr>
+			<tr>
+				<td>formatData</td>
+				<td>Format the values of the table</td>
+			</tr>
+			<tr>
+				<td>getDescriptionLabel</td>
+				<td>Get the description of each table for graph or printing</td>
+			</tr>
+			<tr>
+				<td>getStructTable</td>
+				<td>Get table as a struct</td>
+			</tr>
+			<tr>
+				<td>printTable</td>
+				<td>Display table on console or in a file in a pretty formatted way</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Get table values in diferent formats</td>
+			</tr>
+			<tr>
+				<td>getColumnData</td>
+				<td>Get a key/value array struct of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnFormat</td>
+				<td>Get the format of each column table</td>
+			</tr>
+			<tr>
+				<td>getColumnValues</td>
+				<td>Get the values of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnWidth</td>
+				<td>Get the maximun width of each column</td>
+			</tr>
+			<tr>
+				<td>getMatlabTable</td>
+				<td>Get cTable as Matlab table</td>
+			</tr>
+			<tr>
+				<td>getProperties</td>
+				<td>Get table properties</td>
+			</tr>
+			<tr>
+				<td>getStructData</td>
+				<td>Get table data as struct array</td>
+			</tr>
+			<tr>
+				<td>isGraph</td>
+				<td>Check if the table has a graph associated</td>
+			</tr>
+			<tr>
+				<td>isNumericColumn</td>
+				<td>Check if a column is numeric (base method)</td>
+			</tr>
+			<tr>
+				<td>isNumericTable</td>
+				<td>Check if the data of the table is numeric</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Generate a file with the table values</td>
+			</tr>
+			<tr>
+				<td>setColumnValues</td>
+				<td>Set the values of a column table</td>
+			</tr>
+			<tr>
+				<td>setDescription</td>
+				<td>Set Table Header or Description.</td>
+			</tr>
+			<tr>
+				<td>setRowValues</td>
+				<td>Set the values of a table row</td>
+			</tr>
+			<tr>
+				<td>setStudyCase</td>
+				<td>Set state and sample values. Internal function</td>
+			</tr>
+			<tr>
+				<td>showTable</td>
+				<td>View Table in console GUI or HTML</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the table. Overload of size function.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cTableIndex</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cTableIndex Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cTableIndex</td>
+				<td>create a instance of the class</td>
+			</tr>
+			<tr>
+				<td>getDescriptionLabel</td>
+				<td>Get table description</td>
+			</tr>
+			<tr>
+				<td>printTable</td>
+				<td>Print table on console or in a file in a pretty formatted way</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Get table values in diferent formats</td>
+			</tr>
+			<tr>
+				<td>getColumnData</td>
+				<td>Get a key/value array struct of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnFormat</td>
+				<td>Get the format of each column table</td>
+			</tr>
+			<tr>
+				<td>getColumnValues</td>
+				<td>Get the values of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnWidth</td>
+				<td>Get the maximun width of each column</td>
+			</tr>
+			<tr>
+				<td>getMatlabTable</td>
+				<td>Get cTable as Matlab table</td>
+			</tr>
+			<tr>
+				<td>getProperties</td>
+				<td>Get table properties</td>
+			</tr>
+			<tr>
+				<td>getStructData</td>
+				<td>Get table data as struct array</td>
+			</tr>
+			<tr>
+				<td>getStructTable</td>
+				<td>Get a structure with the table info</td>
+			</tr>
+			<tr>
+				<td>isGraph</td>
+				<td>Check if the table has a graph associated</td>
+			</tr>
+			<tr>
+				<td>isNumericColumn</td>
+				<td>Check if a column is numeric (base method)</td>
+			</tr>
+			<tr>
+				<td>isNumericTable</td>
+				<td>Check if the data of the table is numeric</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Generate a file with the table values</td>
+			</tr>
+			<tr>
+				<td>setColumnValues</td>
+				<td>Set the values of a column table</td>
+			</tr>
+			<tr>
+				<td>setDescription</td>
+				<td>Set Table Header or Description.</td>
+			</tr>
+			<tr>
+				<td>setRowValues</td>
+				<td>Set the values of a table row</td>
+			</tr>
+			<tr>
+				<td>setStudyCase</td>
+				<td>Set state and sample values. Internal function</td>
+			</tr>
+			<tr>
+				<td>showTable</td>
+				<td>View Table in console GUI or HTML</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the table. Overload of size function.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cTableMatrix</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cTableMatrix Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cTableMatrix</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>formatData</td>
+				<td>Apply Format to the data values</td>
+			</tr>
+			<tr>
+				<td>getDescriptionLabel</td>
+				<td>Get the description of the table plus Unit and State</td>
+			</tr>
+			<tr>
+				<td>getMatlabTable</td>
+				<td>Get the table as Matlab table</td>
+			</tr>
+			<tr>
+				<td>getMatrixValues</td>
+				<td>Get the table data as Array</td>
+			</tr>
+			<tr>
+				<td>getStructData</td>
+				<td>Get table as formatted structure</td>
+			</tr>
+			<tr>
+				<td>getStructTable</td>
+				<td>Get table info as structure</td>
+			</tr>
+			<tr>
+				<td>isFlowsTable</td>
+				<td>Check if table contains flows or processes</td>
+			</tr>
+			<tr>
+				<td>isGeneralCostTable</td>
+				<td>Check if table is general cost</td>
+			</tr>
+			<tr>
+				<td>isResourceCostTable</td>
+				<td>Check if table is resource cost table</td>
+			</tr>
+			<tr>
+				<td>isSummaryTable</td>
+				<td>Check if table is a summary table</td>
+			</tr>
+			<tr>
+				<td>isTotalMalfunctionCost</td>
+				<td>Check if table is total malfuction cost</td>
+			</tr>
+			<tr>
+				<td>isUnitCostTable</td>
+				<td>Check if table has unit costs</td>
+			</tr>
+			<tr>
+				<td>printTable</td>
+				<td>Display a table on console or in a file in a pretty formatted way</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Get cTable info in diferent types of variables</td>
+			</tr>
+			<tr>
+				<td>getCellData</td>
+				<td>Get table as cell array</td>
+			</tr>
+			<tr>
+				<td>getProperties</td>
+				<td>get the additional properties of a cTableResults</td>
+			</tr>
+			<tr>
+				<td>getColumnData</td>
+				<td>Get a key/value array struct of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnFormat</td>
+				<td>Get the format of each column table</td>
+			</tr>
+			<tr>
+				<td>getColumnValues</td>
+				<td>Get the values of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnWidth</td>
+				<td>Get the maximun width of each column</td>
+			</tr>
+			<tr>
+				<td>isGraph</td>
+				<td>Check if the table has a graph associated</td>
+			</tr>
+			<tr>
+				<td>isNumericColumn</td>
+				<td>Check if a column is numeric (base method)</td>
+			</tr>
+			<tr>
+				<td>isNumericTable</td>
+				<td>Check if the data of the table is numeric</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Generate a file with the table values</td>
+			</tr>
+			<tr>
+				<td>setColumnValues</td>
+				<td>Set the values of a column table</td>
+			</tr>
+			<tr>
+				<td>setDescription</td>
+				<td>Set Table Header or Description.</td>
+			</tr>
+			<tr>
+				<td>setRowValues</td>
+				<td>Set the values of a table row</td>
+			</tr>
+			<tr>
+				<td>setStudyCase</td>
+				<td>Set state and sample values. Internal function</td>
+			</tr>
+			<tr>
+				<td>showTable</td>
+				<td>View Table in console GUI or HTML</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the table. Overload of size function.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cTableResult</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cTableResult Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cTableResult</td>
+				<td>Abstrat class to store results into a cTable.</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Get cTable info in diferent types of variables</td>
+			</tr>
+			<tr>
+				<td>getCellData</td>
+				<td>Get table as cell array</td>
+			</tr>
+			<tr>
+				<td>getProperties</td>
+				<td>get the additional properties of a cTableResults</td>
+			</tr>
+			<tr>
+				<td>getColumnData</td>
+				<td>Get a key/value array struct of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnFormat</td>
+				<td>Get the format of each column table</td>
+			</tr>
+			<tr>
+				<td>getColumnValues</td>
+				<td>Get the values of a column table</td>
+			</tr>
+			<tr>
+				<td>getColumnWidth</td>
+				<td>Get the maximun width of each column</td>
+			</tr>
+			<tr>
+				<td>getMatlabTable</td>
+				<td>Get cTable as Matlab table</td>
+			</tr>
+			<tr>
+				<td>getStructData</td>
+				<td>Get table data as struct array</td>
+			</tr>
+			<tr>
+				<td>getStructTable</td>
+				<td>Get a structure with the table info</td>
+			</tr>
+			<tr>
+				<td>isGraph</td>
+				<td>Check if the table has a graph associated</td>
+			</tr>
+			<tr>
+				<td>isNumericColumn</td>
+				<td>Check if a column is numeric (base method)</td>
+			</tr>
+			<tr>
+				<td>isNumericTable</td>
+				<td>Check if the data of the table is numeric</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Generate a file with the table values</td>
+			</tr>
+			<tr>
+				<td>setColumnValues</td>
+				<td>Set the values of a column table</td>
+			</tr>
+			<tr>
+				<td>setDescription</td>
+				<td>Set Table Header or Description.</td>
+			</tr>
+			<tr>
+				<td>setRowValues</td>
+				<td>Set the values of a table row</td>
+			</tr>
+			<tr>
+				<td>setStudyCase</td>
+				<td>Set state and sample values. Internal function</td>
+			</tr>
+			<tr>
+				<td>showTable</td>
+				<td>View Table in console GUI or HTML</td>
+			</tr>
+			<tr>
+				<td>size</td>
+				<td>Size of the table. Overload of size function.</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cTablesDefinition</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cTablesDefinition Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cTablesDefinition</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>getCellTables</td>
+				<td>Get the cell tables configuration</td>
+			</tr>
+			<tr>
+				<td>getDataModelProperties</td>
+				<td>Get the data model properties</td>
+			</tr>
+			<tr>
+				<td>getMatrixTables</td>
+				<td>Get the matrix tables configuration</td>
+			</tr>
+			<tr>
+				<td>getResultIdTables</td>
+				<td>Get the tables of an specific resultId</td>
+			</tr>
+			<tr>
+				<td>getSummaryTables</td>
+				<td>Get the summary tables configuration</td>
+			</tr>
+			<tr>
+				<td>getTableDefinition</td>
+				<td>Get the properties of a table</td>
+			</tr>
+			<tr>
+				<td>getTableId</td>
+				<td>Get tableId from dictionary. Internal use</td>
+			</tr>
+			<tr>
+				<td>getTableInfo</td>
+				<td>Get the properties of a table</td>
+			</tr>
+			<tr>
+				<td>getTablesDirectory</td>
+				<td>Get the tables directory</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cTaesLab</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cTaesLab Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cTaesLab</td>
+				<td>Initialize a cTaesLab object</td>
+			</tr>
+			<tr>
+				<td>eq</td>
+				<td>Overload eq operator. Check if two class object are equal.</td>
+			</tr>
+			<tr>
+				<td>getObjectId</td>
+				<td>Get the object identifier</td>
+			</tr>
+			<tr>
+				<td>ne</td>
+				<td>Overload ne operator. Check if two class objects are different.</td>
+			</tr>
+			<tr>
+				<td>printError</td>
+				<td>Print error message. </td>
+			</tr>
+			<tr>
+				<td>printInfo</td>
+				<td>Print info message. Use fprintf syntax</td>
+			</tr>
+			<tr>
+				<td>printWarning</td>
+				<td>Print warning message. </td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cThermoeconomicModel</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cThermoeconomicModel Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cThermoeconomicModel</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>dataInfo</td>
+				<td>Get the data model cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>diagramFP</td>
+				<td>Get the diagram FP cResultInfo object of rhe current state</td>
+			</tr>
+			<tr>
+				<td>exergyAnalysis</td>
+				<td>Get the ExergyAnalysis cResultInfo object for the current state </td>
+			</tr>
+			<tr>
+				<td>getExergyData</td>
+				<td>Get cExergyData object of a state</td>
+			</tr>
+			<tr>
+				<td>getModelResults</td>
+				<td>Get a cell array of cResultInfo objects of the current state</td>
+			</tr>
+			<tr>
+				<td>getResourceData</td>
+				<td>Get the resource data cost values of sample</td>
+			</tr>
+			<tr>
+				<td>getResultInfo</td>
+				<td>Get the cResultInfo with optional parameters</td>
+			</tr>
+			<tr>
+				<td>getResultState</td>
+				<td>Get the cExergyCost object of each state </td>
+			</tr>
+			<tr>
+				<td>getSampleId</td>
+				<td>Get the Sample Id given the resource sample name</td>
+			</tr>
+			<tr>
+				<td>getStateId</td>
+				<td>Get the State Id given the name.</td>
+			</tr>
+			<tr>
+				<td>getTable</td>
+				<td>Get a table called name, if its available</td>
+			</tr>
+			<tr>
+				<td>getTableInfo</td>
+				<td>Get the properties of a table</td>
+			</tr>
+			<tr>
+				<td>getTablesDirectory</td>
+				<td>Create the tables directory of the active model</td>
+			</tr>
+			<tr>
+				<td>getWasteId</td>
+				<td>Get the Waste flow Id</td>
+			</tr>
+			<tr>
+				<td>isDiagnosis</td>
+				<td>Check if diagnosis computation is available.</td>
+			</tr>
+			<tr>
+				<td>isDirectCost</td>
+				<td>Check if Direct cost tables are selected</td>
+			</tr>
+			<tr>
+				<td>isGeneralCost</td>
+				<td>Check if Generalized cost calculation is activated</td>
+			</tr>
+			<tr>
+				<td>isResourceCost</td>
+				<td>Check if the model has resources cost defined</td>
+			</tr>
+			<tr>
+				<td>isSampleSummary</td>
+				<td>Check if Samples Summary results has been activated</td>
+			</tr>
+			<tr>
+				<td>isStateSummary</td>
+				<td>Check if States Summary results has been activated</td>
+			</tr>
+			<tr>
+				<td>isSummaryActive</td>
+				<td>Check if Summary has been activated</td>
+			</tr>
+			<tr>
+				<td>isSummaryEnable</td>
+				<td>Check if Summary is enable</td>
+			</tr>
+			<tr>
+				<td>isWaste</td>
+				<td>Check if model has waste defined</td>
+			</tr>
+			<tr>
+				<td>productiveDiagram</td>
+				<td>Get the productive diagram cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>productiveStructure</td>
+				<td>Get the Productive Structure cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>saveDataModel</td>
+				<td>Save the data model in a file</td>
+			</tr>
+			<tr>
+				<td>saveDiagramFP</td>
+				<td>Save the Adjacency matrix of the Diagram FP in a file</td>
+			</tr>
+			<tr>
+				<td>saveProductiveDiagram</td>
+				<td>Save the productive diagram adjacency tables into a file</td>
+			</tr>
+			<tr>
+				<td>saveSummary</td>
+				<td>Save the summary tables into a filename</td>
+			</tr>
+			<tr>
+				<td>setActiveWaste</td>
+				<td>Set a new waste flow for recycling analysis</td>
+			</tr>
+			<tr>
+				<td>setCostTables</td>
+				<td>Set a new value of CostTables parameter</td>
+			</tr>
+			<tr>
+				<td>setDebug</td>
+				<td>Set debug control variable</td>
+			</tr>
+			<tr>
+				<td>setDiagnosisMethod</td>
+				<td>Set a new value of DiagnosisMethod parameter</td>
+			</tr>
+			<tr>
+				<td>addExergyData</td>
+				<td>Set exergy data values to actual state</td>
+			</tr>
+			<tr>
+				<td>setExergyData</td>
+				<td>Set exergy data values to actual state</td>
+			</tr>
+			<tr>
+				<td>addResourceData</td>
+				<td>Set exergy data values to actual state</td>
+			</tr>
+			<tr>
+				<td>setFlowResource</td>
+				<td>Set the resource cost of the flows</td>
+			</tr>
+			<tr>
+				<td>setProcessResource</td>
+				<td>Set the resource cost of the processes</td>
+			</tr>
+			<tr>
+				<td>setRecycling</td>
+				<td>Set Recycling parameter</td>
+			</tr>
+			<tr>
+				<td>setReferenceState</td>
+				<td>Set a new valid reference state from StateNames</td>
+			</tr>
+			<tr>
+				<td>setResourceSample</td>
+				<td>Set a new valid ResourceSample from SampleNames</td>
+			</tr>
+			<tr>
+				<td>setState</td>
+				<td>Set a new valid state from StateNames</td>
+			</tr>
+			<tr>
+				<td>setSummary</td>
+				<td>Set a new Summary available option</td>
+			</tr>
+			<tr>
+				<td>setWasteRecycled</td>
+				<td>Set the waste recycling ratios</td>
+			</tr>
+			<tr>
+				<td>setWasteType</td>
+				<td>Set the waste type allocation method for Active Waste</td>
+			</tr>
+			<tr>
+				<td>setWasteValues</td>
+				<td>Set the waste table values</td>
+			</tr>
+			<tr>
+				<td>showDataModel</td>
+				<td>Show Data Model tables</td>
+			</tr>
+			<tr>
+				<td>showGraph</td>
+				<td>Show a graph table. </td>
+			</tr>
+			<tr>
+				<td>showProperties</td>
+				<td>Show the values of the current parameters of the model</td>
+			</tr>
+			<tr>
+				<td>showResultInfo</td>
+				<td>Show or get a structure containig the results of the model</td>
+			</tr>
+			<tr>
+				<td>showResults</td>
+				<td>View an individual table</td>
+			</tr>
+			<tr>
+				<td>showSummary</td>
+				<td>Show Summary tables</td>
+			</tr>
+			<tr>
+				<td>showTablesDirectory</td>
+				<td>Show the list of available tables</td>
+			</tr>
+			<tr>
+				<td>summaryDiagnosis</td>
+				<td>Get the diagnosis results summary</td>
+			</tr>
+			<tr>
+				<td>summaryOptions</td>
+				<td>Get the available summary option names</td>
+			</tr>
+			<tr>
+				<td>summaryResults</td>
+				<td>Get the Summary Results cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>thermoeconomicAnalysis</td>
+				<td>Get the Thermoeconomic Analysis cResultInfo object for the current state</td>
+			</tr>
+			<tr>
+				<td>thermoeconomicDiagnosis</td>
+				<td>Get the Thermoeconomic Diagnosis cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>toggleDebug</td>
+				<td>Toggle debug property</td>
+			</tr>
+			<tr>
+				<td>updateDataModel</td>
+				<td>Update the data model if have been changes</td>
+			</tr>
+			<tr>
+				<td>wasteAllocation</td>
+				<td>Show waste information in console</td>
+			</tr>
+			<tr>
+				<td>wasteAnalysis</td>
+				<td>Get the Waste Analysis cResultInfo object for the current state and waste flow</td>
+			</tr>
+			<tr>
+				<td>ListOfGraphs</td>
+				<td>Get the list of graph tables as cell array</td>
+			</tr>
+			<tr>
+				<td>ListOfTables</td>
+				<td>Get the list of tables as cell array</td>
+			</tr>
+			<tr>
+				<td>StudyCase</td>
+				<td>Get/display the study case names</td>
+			</tr>
+			<tr>
+				<td>exportResults</td>
+				<td>Export result tables into a structure using diferent formats.</td>
+			</tr>
+			<tr>
+				<td>exportTable</td>
+				<td>Export tname into the selected varmode/format</td>
+			</tr>
+			<tr>
+				<td>getTableIndex</td>
+				<td>Get the table index of the results set</td>
+			</tr>
+			<tr>
+				<td>printResults</td>
+				<td>Print the result tables on console</td>
+			</tr>
+			<tr>
+				<td>saveResults</td>
+				<td>Save result tables in different file formats depending on file extension</td>
+			</tr>
+			<tr>
+				<td>saveTable</td>
+				<td>Save a result table into a file depending on extension</td>
+			</tr>
+			<tr>
+				<td>showTableIndex</td>
+				<td>View the index table of the results set</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cType</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cType Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>CostTablesOptions</td>
+				<td>Get a cell array with the Cost Tables Type options</td>
+			</tr>
+			<tr>
+				<td>DiagnosisOptions</td>
+				<td>Get a cell array with the Diagnosis Type options</td>
+			</tr>
+			<tr>
+				<td>SummaryOptions</td>
+				<td>Get a cell array with the Summary Options</td>
+			</tr>
+			<tr>
+				<td>TableViewOptions</td>
+				<td>Get a cell array with the Table view options</td>
+			</tr>
+			<tr>
+				<td>TaesLabPath</td>
+				<td>Get the full path of the TaesLab installation</td>
+			</tr>
+			<tr>
+				<td>VarModeOptions</td>
+				<td>Get a cell array with the VarMode Type options</td>
+			</tr>
+			<tr>
+				<td>WasteTypeOptions</td>
+				<td>Get a cell array with the Waste Allocation Type options</td>
+			</tr>
+			<tr>
+				<td>cType</td>
+				<td>Static class to manage the constants of TaesLab</td>
+			</tr>
+			<tr>
+				<td>checkClassInfo</td>
+				<td>Check ClassInfo value</td>
+			</tr>
+			<tr>
+				<td>checkCostTables</td>
+				<td>Check CostTable type text</td>
+			</tr>
+			<tr>
+				<td>checkDiagnosisMethod</td>
+				<td>Check Diagnosis method type text</td>
+			</tr>
+			<tr>
+				<td>checkDirColumns</td>
+				<td>Check Table Directory Columns names</td>
+			</tr>
+			<tr>
+				<td>checkFileExt</td>
+				<td>Check if filename has a valid extension</td>
+			</tr>
+			<tr>
+				<td>checkFlowTypes</td>
+				<td>Check if the Flows Type list is correct</td>
+			</tr>
+			<tr>
+				<td>checkGraphStyle</td>
+				<td>Check Graph Style value</td>
+			</tr>
+			<tr>
+				<td>checkProcessTypes</td>
+				<td>Check if the Process Type list is correct</td>
+			</tr>
+			<tr>
+				<td>checkResourceTypes</td>
+				<td>Check if the Flows Type list is correct</td>
+			</tr>
+			<tr>
+				<td>checkSummaryOption</td>
+				<td>Check Summary type text</td>
+			</tr>
+			<tr>
+				<td>checkTableView</td>
+				<td>Check TableView value</td>
+			</tr>
+			<tr>
+				<td>checkVarMode</td>
+				<td>Check Variable display option</td>
+			</tr>
+			<tr>
+				<td>checkWasteTypes</td>
+				<td>checkFlowTypes - Check if the Flows Type list is correct</td>
+			</tr>
+			<tr>
+				<td>getClassInfo</td>
+				<td>Get the id of ClassInfo option</td>
+			</tr>
+			<tr>
+				<td>getCostTables</td>
+				<td>Get id for CostTables option</td>
+			</tr>
+			<tr>
+				<td>getDiagnosisMethod</td>
+				<td>Get id for Diagnosis Method option</td>
+			</tr>
+			<tr>
+				<td>getFileType</td>
+				<td>Get file type acording its extension (ext)</td>
+			</tr>
+			<tr>
+				<td>getFlowId</td>
+				<td>Get the internal code of a flow type text</td>
+			</tr>
+			<tr>
+				<td>getFormatId</td>
+				<td>Get internal code of format type text</td>
+			</tr>
+			<tr>
+				<td>getGraphStyle</td>
+				<td>Get the id of Graph Style option</td>
+			</tr>
+			<tr>
+				<td>getIcon</td>
+				<td>Get app icons</td>
+			</tr>
+			<tr>
+				<td>getLine</td>
+				<td>Get a dash line of the given length</td>
+			</tr>
+			<tr>
+				<td>getNewline</td>
+				<td>Get the newline character depending on operating system</td>
+			</tr>
+			<tr>
+				<td>getPathDelimiter</td>
+				<td>get the path delimiter</td>
+			</tr>
+			<tr>
+				<td>getProcessId</td>
+				<td>Get the internal code of a process type text</td>
+			</tr>
+			<tr>
+				<td>getPropertiesList</td>
+				<td>Get the list of additional properties of cResultTables</td>
+			</tr>
+			<tr>
+				<td>getResourcesId</td>
+				<td>Get internal code of a resources cost type text</td>
+			</tr>
+			<tr>
+				<td>getSummaryId</td>
+				<td>Get id for Summary option</td>
+			</tr>
+			<tr>
+				<td>getTableView</td>
+				<td>Get id for TableView option</td>
+			</tr>
+			<tr>
+				<td>getTaesImage</td>
+				<td>Get the full path of the Taes Welcome image</td>
+			</tr>
+			<tr>
+				<td>getTextErrorCode</td>
+				<td>Get the text of the corresponding error code</td>
+			</tr>
+			<tr>
+				<td>getVarMode</td>
+				<td>Get id for VarMode option</td>
+			</tr>
+			<tr>
+				<td>getWasteId</td>
+				<td>Get internal code of a waste allocation type text</td>
+			</tr>
+			<tr>
+				<td>log2text</td>
+				<td>Get the text representation of a logical value. Used in GUI Apps</td>
+			</tr>
+			<tr>
+				<td>tableCode</td>
+				<td>Display the key code of a table</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cViewTable</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cViewTable Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cViewTable</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>showTable</td>
+				<td>Shows the table values in a uitable object</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cWasteAnalysis</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cWasteAnalysis Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cWasteAnalysis</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>buildResultInfo</td>
+				<td>Build/Get the cResultInfo object</td>
+			</tr>
+			<tr>
+				<td>setDefaultGraph</td>
+				<td>Set Default Graph. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setResultId</td>
+				<td>Set ResultId. Internal package use only</td>
+			</tr>
+			<tr>
+				<td>setSample</td>
+				<td>Set Resource Sample Name. Internal package use only</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>cWasteData</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			cWasteData Methods
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+			</thead>
+			<tr>
+				<td>cWasteData</td>
+				<td>Create an instance of the class</td>
+			</tr>
+			<tr>
+				<td>existsWaste</td>
+				<td>Determine if waste key is defined</td>
+			</tr>
+			<tr>
+				<td>getRecycleRatio</td>
+				<td>Get the recycle ratio value of a waste</td>
+			</tr>
+			<tr>
+				<td>getType</td>
+				<td>Get the waste allocation type</td>
+			</tr>
+			<tr>
+				<td>getValues</td>
+				<td>Get the allocation ratios of a waste</td>
+			</tr>
+			<tr>
+				<td>getWasteFlows</td>
+				<td>Get the waste name of the corresponding index</td>
+			</tr>
+			<tr>
+				<td>getWasteIndex</td>
+				<td>Get the id of the corresponding waste key</td>
+			</tr>
+			<tr>
+				<td>setRecycleRatio</td>
+				<td>Set the recycle ratio of a waste</td>
+			</tr>
+			<tr>
+				<td>setType</td>
+				<td>Set the waste allocation type</td>
+			</tr>
+			<tr>
+				<td>setValues</td>
+				<td>Set the cost allocation values of a waste</td>
+			</tr>
+			<tr>
+				<td>updateValues</td>
+				<td>Set the waste table values (internal use)</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>

@@ -353,7 +353,7 @@ classdef (Abstract) cTable < cMessageLogger
                 log.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
             end
-            [fileType,ext]=cType.getFileType(filename);
+            [fileType,fileExt]=cType.getFileType(filename);
             switch fileType
                 case cType.FileType.CSV
                     log=exportCSV(obj,filename);
@@ -376,7 +376,7 @@ classdef (Abstract) cTable < cMessageLogger
                 case cType.FileType.M
                     log=exportContents(obj,filename);
                 otherwise
-                    log.messageLog(cType.ERROR,cMessages.InvalidFileExt,ext);
+                    log.messageLog(cType.ERROR,cMessages.InvalidFileExt,upper(fileExt));
             end
             if log.status
                 log.messageLog(cType.INFO,cMessages.TableFileSaved,obj.Name, filename);
