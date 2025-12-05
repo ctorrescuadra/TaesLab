@@ -109,8 +109,7 @@ function [res, tbl] = getClassInfo(obj,info,outfile)
         res.printError(cMessages.InvalidArgument,'outfile')
         return
     end
-    fileType=cType.getFileType(outfile);
-    if fileType==cType.FileType.MHLP
+    if cType.checkFileType(outfile,cType.FileType.MHLP)
         saveAsHelpInfo(cMessageLogger,res,outfile)
     else
         saveTable(res,outfile);

@@ -1,5 +1,5 @@
 function res=ListResultTables(varargin)
-%ListResultTables - Display the list of the TaesLab result tables and their properties.
+%ListResultTables - List the results tables and their properties.
 %   If a cResultSet is provided, it shows the active tables of the result set.
 %    
 %   Syntax:

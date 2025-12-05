@@ -1,5 +1,5 @@
 function SaveDataModel(arg,filename)
-%SaveDataModel - Saves the data model tables into a file. 
+%SaveDataModel - Save the data model tables into a file. 
 %   The available formats are: XLSX, CSV, JSON, XML, and MAT.
 %   Displays a message about the status of the operation.
 %   Used as an interface for cDataModel/saveDataModel.

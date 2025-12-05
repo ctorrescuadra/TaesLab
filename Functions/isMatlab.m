@@ -1,5 +1,5 @@
 function res=isMatlab()
-%isMatlab - Identifies if the funcion has been executed in MATLAB.
+%isMatlab - Identifies if the function has been executed in MATLAB.
 %   This function is used to check if the code is running in MATLAB or Octave.
 %	
 %	Syntax:

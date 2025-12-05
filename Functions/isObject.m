@@ -20,5 +20,6 @@ function res=isObject(obj,class)
     if nargin~=2 || ~ischar(class) || isempty(class) || ~isa(obj,'cTaesLab')
         return
     end
+    % Validate object
     res = isValid(obj) && isa(obj,class);
 end

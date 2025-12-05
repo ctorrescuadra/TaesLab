@@ -17,13 +17,18 @@ function res=isNonNegativeMatrix(A,tol)
 %     res = isNonNegativeMatrix(A) % returns true
 %     B = [-1 2; 3 4];
 %     res = isNonNegativeMatrix(B) % returns false
-    
+%     C = [1 2; 3 -4e-10];
+%     res = isNonNegativeMatrix(C) % returns true
+%
+%   See also: isSquareMatrix, tolerance
+%
     %Chech input arguments
     res=false;
     try narginchk(1,2); catch, return; end
     if nargin == 1 || ~isnumeric(tol) || ~isscalar(tol) || tol<0
         tol = cType.EPS; % Default tolerance
     end
+    %Get relative tolerance and check squareness and non-negativity
     reltol=tolerance(A,tol);
     res=isSquareMatrix(A) && all(A(:))>=-reltol;
 end

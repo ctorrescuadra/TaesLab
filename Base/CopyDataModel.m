@@ -1,5 +1,5 @@
 function CopyDataModel(inputFile, outputFile)
-%CopyDataModel - Creates a copy of a data model file in another format
+%CopyDataModel - Create a copy of a data model file in another format.
 %   The formats supported for both input and output files are: XLSX, CSV, JSON, XML and MAT
 %
 %   Syntax:

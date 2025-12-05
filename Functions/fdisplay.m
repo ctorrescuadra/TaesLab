@@ -12,9 +12,9 @@ function fdisplay(A, fmt, label)
 %   specified format.
 %
 %   Syntax:
-%     FDISPLAY(A)
-%     FDISPLAY(A, fmt)
-%     FDISPLAY(A, fmt, label)
+%     fdisplay(A)
+%     fdisplay(A, fmt)
+%     fdisplay(A, fmt, label)
 %
 %   Input Arguments:
 %     A     - Numeric matrix to be displayed
@@ -23,6 +23,39 @@ function fdisplay(A, fmt, label)
 %
 %   Note: This function uses zerotol to set very small values to zero for better readability.
 %
+%   Examples:
+%     % Example 1: Display a matrix with default format
+%     A = [1.23456, 2.34567; 3.45678, 4.56789];
+%     fdisplay(A);
+%
+%     % Output:
+%     A=
+%     1.23456 2.34567
+%     3.45678 4.56789
+%
+%     % Example 2: Display a matrix with specific format and label
+%     A = [1.23456, 2.34567; 3.45678, 4.56789];
+%     fdisplay(A, '%.2f', 'MyMatrix');
+%
+%     % Output:
+%     MyMatrix
+%     1.23 2.35
+%     3.46 4.57
+%
+%   Example 3: Display an empty matrix
+%     A = [];
+%     fdisplay(A, '%.2f', 'EmptyMatrix');
+%
+%     % Output:
+%     EmptyMatrix = []
+
+%     Example 4: Display a scalar
+%     A = 3.14159;
+%     fdisplay(A, '%.2f', 'ScalarValue');
+%
+%     % Output:
+%     ScalarValue = 3.14
+% 
 %   See also zerotol, fprintf
 
     % Check Inputs
@@ -32,7 +65,6 @@ function fdisplay(A, fmt, label)
         msg=buildMessage(mfilename, ME.message);
         error(msg);
     end
-
     if nargin < 3
         label=inputname(1); % Get the variable name
         if isempty(label)

@@ -1,5 +1,5 @@
 function ShowGraph(arg,varargin)
-%ShowGraph - Display the graph associated with a results table.
+%ShowGraph - Show the graph associated to a results table.
 %	Depending on the graph, additional options could be used.
 %
 %   Syntax: 

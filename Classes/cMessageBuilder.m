@@ -1,4 +1,4 @@
-classdef cMessageBuilder < handle
+classdef cMessageBuilder
 %cMessageBuilder - Create a message for logger
 %   The message include the type of error, the class which cause the message and the text message
 %   There is three types of messages registered

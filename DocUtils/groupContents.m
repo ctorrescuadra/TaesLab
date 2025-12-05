@@ -28,12 +28,11 @@ function groupContents(inFile, outFile)
         log.printError(cMessages.InvalidArgument,'inFile')
         return
     end
-    [fileType,fileExt] = cType.getFileType(inFile);
-    if fileType ~= cType.FileType.XLSX
-        log.printError(cMessages.InvalidFileExt, fileExt);
+    inFile = char(inFile);
+    if ~cType.checkFileExt(inFile,cType.FileExt.XLSX)
+        log.printError(cMessages.InvalidInput, inFile);
         return
     end
-    inFile = char(inFile);
     % Define default output file
     if nargin < 2 || isempty(outFile)
         outFile = fullfile(fileparts(inFile), 'Contents.json');

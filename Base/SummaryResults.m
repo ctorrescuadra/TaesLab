@@ -1,5 +1,5 @@
 function res = SummaryResults(data,varargin)
-%SummaryResults - Get the summary results for a plant.
+%SummaryResults - Get the summary results of the plant.
 %   This function retrieves the summary tables to compare different states or samples of the model
 %   There are two types of Summary Result Tables:
 %     - STATES: Comparing cost values for the different states

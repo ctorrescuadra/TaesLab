@@ -8,24 +8,24 @@
         "Description": "Read Data Models",
         "Files": [
           {
+            "Name": "ValidateModelTables",
+            "Description": "Validate the table data model files."
+          },
+          {
+            "Name": "ReadDataModel",
+            "Description": "Read a data model file."
+          },
+          {
             "Name": "CopyDataModel",
-            "Description": "Creates a copy of a data model file in another format"
+            "Description": "Create a copy of a data model file in another format"
+          },
+          {
+            "Name": "ImportDataModel",
+            "Description": "Get a cDataModel object from a previously saved MAT file."
           },
           {
             "Name": "ImportData",
             "Description": "Import external data to a cTableData from CSV or XLSX files."
-          },
-          {
-            "Name": "ImportDataModel",
-            "Description": "Get a cDataModel object from a previous saved MAT file."
-          },
-          {
-            "Name": "ReadDataModel",
-            "Description": "Reads a data model file."
-          },
-          {
-            "Name": "ValidateModelTables",
-            "Description": "Validate the data tables of a data model file."
           }
         ]
       },
@@ -34,24 +34,20 @@
         "Description": "Thermoeconomic Results",
         "Files": [
           {
-            "Name": "DiagramFP",
-            "Description": "Get the FP diagrams for a plant state."
-          },
-          {
-            "Name": "ExergyAnalysis",
-            "Description": "Get the exergy analysis for a plant state."
-          },
-          {
-            "Name": "ProductiveDiagram",
-            "Description": "Get the productive diagrams of the plant."
+            "Name": "ThermoeconomicModel",
+            "Description": "Create a cThermoeconomicModel object from a data model."
           },
           {
             "Name": "ProductiveStructure",
             "Description": "Get the productive structure of the plant."
           },
           {
-            "Name": "SummaryResults",
-            "Description": "Get the summary results for a plant."
+            "Name": "ProductiveDiagram",
+            "Description": "Get the productive diagrams of the plant."
+          },
+          {
+            "Name": "ExergyAnalysis",
+            "Description": "Get the exergy analysis for a plant state."
           },
           {
             "Name": "ThermoeconomicAnalysis",
@@ -62,12 +58,16 @@
             "Description": "Compare two states of the plant and make a thermoeconomic diagnosis"
           },
           {
-            "Name": "ThermoeconomicModel",
-            "Description": "Creates a cThermoeconomicModel object from a data model file."
+            "Name": "DiagramFP",
+            "Description": "Get the FP diagrams for a plant state."
           },
           {
             "Name": "WasteAnalysis",
             "Description": "Waste recycling analysis of a plant state."
+          },
+          {
+            "Name": "SummaryResults",
+            "Description": "Get the summary results for a plant."
           }
         ]
       },
@@ -76,16 +76,12 @@
         "Description": "Save Results",
         "Files": [
           {
-            "Name": "ExportResults",
-            "Description": "Exports the results tables in different formats."
+            "Name": "SaveResults",
+            "Description": "Save the result tables into a file."
           },
           {
             "Name": "SaveDataModel",
-            "Description": "Saves the data model tables into a file."
-          },
-          {
-            "Name": "SaveResults",
-            "Description": "Save the result tables into a file."
+            "Description": "Save the data model tables into a file."
           },
           {
             "Name": "SaveSummary",
@@ -93,7 +89,7 @@
           },
           {
             "Name": "SaveTable",
-            "Description": "Saves a table into a file"
+            "Description": "Save the table into a file"
           }
         ]
       },
@@ -106,16 +102,20 @@
             "Description": "Display the list of the TaesLab result tables and their properties."
           },
           {
-            "Name": "ShowGraph",
-            "Description": "Display the graph associated with a results table."
-          },
-          {
             "Name": "ShowResults",
             "Description": "Show the results tables in different formats."
           },
           {
             "Name": "ShowTable",
-            "Description": "Display, export, or save a table object."
+            "Description": "Display, export, or save a table."
+          },
+          {
+            "Name": "ShowGraph",
+            "Description": "Display the graph associated with a results table."
+          },
+          {
+            "Name": "ExportResults",
+            "Description": "Exports the results tables into different formats."
           }
         ]
       },
@@ -124,16 +124,16 @@
         "Description": "GUI Functions",
         "Files": [
           {
-            "Name": "ResultsPanel",
-            "Description": "Graphical user interface for displaying results interactively."
+            "Name": "TaesTool",
+            "Description": "Compatible user interface App for MATLAB/Octave."
           },
           {
             "Name": "TaesPanel",
             "Description": "Graphical user interface for selecting thermoeconomic model parameters."
           },
           {
-            "Name": "TaesTool",
-            "Description": "Compatible user interface App for MATLAB/Octave."
+            "Name": "ResultsPanel",
+            "Description": "Graphical user interface for displaying results interactively."
           },
           {
             "Name": "ViewResults",
@@ -153,19 +153,27 @@
         "Files": [
           {
             "Name": "exportCSV",
-            "Description": "Saves a cell array as CSV file."
+            "Description": "Export cell array to CSV file."
+          },
+          {
+            "Name": "exportJSON",
+            "Description": "Export MATLAB structure to JSON file."
           },
           {
             "Name": "exportMAT",
-            "Description": "Save a valid cTaesLab object as MAT file."
+            "Description": "Export cTaesLab object to MAT file."
           },
           {
             "Name": "importCSV",
-            "Description": "Read a CSV file and return its contents as a cell array"
+            "Description": "Import CSV file contents as cell array."
+          },
+          {
+            "Name": "importJSON",
+            "Description": "Import JSON file and parse into MATLAB structure."
           },
           {
             "Name": "importMAT",
-            "Description": "Create a cTaesLab object from a previous saved MAT file."
+            "Description": "Import cTaesLab object from MAT file."
           }
         ]
       },
@@ -174,16 +182,12 @@
         "Description": "Validation Functions",
         "Files": [
           {
-            "Name": "inverseMatrixOperator",
-            "Description": "Calculate the inverse of the M-Matrix, I-A."
-          },
-          {
             "Name": "isFilename",
-            "Description": "Check if file name is valid for read/write mode."
+            "Description": "Validate if a filename is acceptable for read/write operations."
           },
           {
             "Name": "isIndex",
-            "Description": "Check if a number belong to an index range."
+            "Description": "Check if an integer value is within a valid index range."
           },
           {
             "Name": "isInteger",
@@ -191,7 +195,15 @@
           },
           {
             "Name": "isMatlab",
-            "Description": "Identifies if the funcion has been executed in MATLAB."
+            "Description": "Identifies if the function has been executed in MATLAB."
+          },
+          {
+            "Name": "isOctave",
+            "Description": "Identifies if the function has been executed in Octave."
+          },
+          {
+            "Name": "isSquareMatrix",
+            "Description": "Check if input is a numeric or logical square matrix."
           },
           {
             "Name": "isNonNegativeMatrix",
@@ -199,19 +211,11 @@
           },
           {
             "Name": "isNonSingularMatrix",
-            "Description": "Check if the matrix I-A is non-singular."
+            "Description": "Check if the matrix (I-A) is non-singular."
           },
           {
             "Name": "isObject",
             "Description": "Check if 'obj' is a valid cTaesLab object belong to a specific class."
-          },
-          {
-            "Name": "isOctave",
-            "Description": "Identifies if the funcion has been executed in Octave."
-          },
-          {
-            "Name": "isSquareMatrix",
-            "Description": "Checks if input A is a numeric square matrix."
           },
           {
             "Name": "isValid",
@@ -224,56 +228,60 @@
         "Description": "Matrix Operation Functions",
         "Files": [
           {
+            "Name": "vDivide",
+            "Description": "Element-wise division with NaN handling for 0/0 cases."
+          },
+          {
             "Name": "divideCol",
-            "Description": "Divide each colums of matrix A by the corresponding element of vector x."
+            "Description": "Divide each column of matrix A by corresponding element of vector x."
           },
           {
             "Name": "divideRow",
-            "Description": "Divide each row of matrix A by the corresponding element of vector x."
-          },
-          {
-            "Name": "logicalMatrix",
-            "Description": "Convert a real matrix to logical with zero tolerance."
+            "Description": "Divide each row of matrix A by corresponding element of vector x."
           },
           {
             "Name": "scaleCol",
-            "Description": "Multiplies each column of matrix A by the corresponding element of vector x."
+            "Description": "Multiply each column of matrix A by corresponding element of vector x."
           },
           {
             "Name": "scaleRow",
-            "Description": "Multiplies each row of matrix A by the corresponding element of vector x."
-          },
-          {
-            "Name": "similarDemandMatrix",
-            "Description": "Compute the demand-driven adjacency matrix from the resource-driven matrix."
-          },
-          {
-            "Name": "similarDemandOperator",
-            "Description": "Compute the demand-driven operator from the resource-drive operator."
-          },
-          {
-            "Name": "similarResourceMatrix",
-            "Description": "Compute the resource-driven adjacency matrix from the demand-driven matrix."
-          },
-          {
-            "Name": "similarResourceOperator",
-            "Description": "Compute the resource-driven operator from the demmand drive operator."
+            "Description": "Multiply each row of matrix A by corresponding element of vector x."
           },
           {
             "Name": "tolerance",
-            "Description": "Compute the relative tolerance value for a matrix."
-          },
-          {
-            "Name": "transitiveClosure",
-            "Description": "Compute the transitive closure of a digraph."
-          },
-          {
-            "Name": "vDivide",
-            "Description": "Element-wise right division. Overload operator rdivide when 0/0."
+            "Description": "Compute relative tolerance value for a matrix."
           },
           {
             "Name": "zerotol",
-            "Description": "Sets to zero the matrix values near to zero."
+            "Description": "Set matrix values near zero to exact zero."
+          },
+          {
+            "Name": "inverseMatrixOperator",
+            "Description": "Calculate the inverse of the M-Matrix (I-A)."
+          },
+          {
+            "Name": "logicalMatrix",
+            "Description": "Convert numeric matrix to logical with zero tolerance."
+          },
+          {
+            "Name": "similarDemandMatrix",
+            "Description": "Transform resource-driven matrix to demand-driven form."
+          },
+          {
+            "Name": "similarDemandOperator",
+            "Description": "Convert resource-driven operator to demand-driven operator."
+          },
+          {
+            "Name": "similarResourceMatrix",
+            "Description": "Compute resource-driven matrix from demand-driven matrix."
+          },
+          {
+            "Name": "similarResourceOperator",
+            "Description": "Compute resource-driven operator from demand-driven operator."
+          },
+          {
+            "Name": "transitiveClosure",
+            "Description": "Compute the transitive closure of a directed graph."
           }
         ]
       },
@@ -283,7 +291,7 @@
         "Files": [
           {
             "Name": "buildMessage",
-            "Description": "Builds a formatted error message for a given function."
+            "Description": "Build error messages for TaesLab functions."
           },
           {
             "Name": "fdisplay",
@@ -326,10 +334,6 @@
           {
             "Name": "cParseStream",
             "Description": "Class with static methods to parse stream definition"
-          },
-          {
-            "Name": "cMessageBuilder",
-            "Description": "Create a message for logger"
           }
         ]
       },
@@ -342,22 +346,6 @@
             "Description": "Abstract class to implemenent the model reader classes."
           },
           {
-            "Name": "cReadModelTable",
-            "Description": "Abstract class to read table data model."
-          },
-          {
-            "Name": "cModelTable",
-            "Description": "Class container for the values read by cReadModelTable"
-          },
-          {
-            "Name": "cReadModelCSV",
-            "Description": "Implements the cReadModelTable to read CSV data model files."
-          },
-          {
-            "Name": "cReadModelXLS",
-            "Description": "Implement the cReadModelTable to read XLSX data model files"
-          },
-          {
             "Name": "cReadModelStruct",
             "Description": "Abstract class to read structured data model."
           },
@@ -368,6 +356,22 @@
           {
             "Name": "cReadModelXML",
             "Description": "Implements the cReadModelStruct to read XML data model files."
+          },
+          {
+            "Name": "cReadModelTable",
+            "Description": "Abstract class to read table data model."
+          },
+          {
+            "Name": "cReadModelCSV",
+            "Description": "Implements the cReadModelTable to read CSV data model files."
+          },
+          {
+            "Name": "cReadModelXLS",
+            "Description": "Implement the cReadModelTable to read XLSX data model files"
+          },
+          {
+            "Name": "cModelTable",
+            "Description": "Class container for the values read by cReadModelTable"
           }
         ]
       },
@@ -387,13 +391,13 @@
             "Name": "cFormatData",
             "Description": "Get the format configuration data used to display tables of results."
           },
-                    {
+          {
             "Name": "cResultTableBuilder",
             "Description": "Build the cResultInfo objects for the calculation layer"
           },
           {
             "Name": "cResourceData",
-            "Description": "Gets and validates the external cost resources of a productive structure."
+            "Description": "Get and validate the external cost resources of a system."
           },
           {
             "Name": "cWasteData",
@@ -409,25 +413,25 @@
             "Name": "cResultId",
             "Description": "Abstract class to manage the result identification."
           },
-                    {
+          {
             "Name": "cResultSet",
             "Description": "Abstract class to manage the result sets."
-          },
-          {
-            "Name": "cResultInfo",
-            "Description": "Class to manage the result information and tables."
           },
           {
             "Name": "cDataModel",
             "Description": "Create the data model object."
           },
           {
-            "Name": "cModelData",
-            "Description": "Class container for the read data model."
-          },
-          {
             "Name": "cThermoeconomicModel",
             "Description": "Create the thermoeconomic model results object."
+          },
+          {
+            "Name": "cResultInfo",
+            "Description": "Class to manage the result information and tables."
+          },
+          {
+            "Name": "cModelData",
+            "Description": "Container class for the Data Model structure."
           },
           {
             "Name": "cModelResults",
@@ -452,28 +456,32 @@
             "Description": "Thermoeconomic diagnosis of a plant state change."
           },
           {
-            "Name": "cDigraphAnalysis",
-            "Description": "Analyze a directed graph (digraph)."
-          },
-          {
-            "Name": "cProductiveDiagram",
-            "Description": "Build the productive diagrams adjacency tables"
-          },
-          {
-            "Name": "cSummaryOptions",
-            "Description": "Determine the summary options depending on the data model"
+            "Name": "cWasteAnalysis",
+            "Description": "Analyze the potential cost saving of waste recycling."
           },
           {
             "Name": "cSummaryResults",
             "Description": "Get the summary results tables of the model."
           },
           {
+            "Name": "cSummaryOptions",
+            "Description": "Determine the summary options depending on the data model"
+          },
+          {
             "Name": "cSummaryTable",
             "Description": "Store the properties and values of each summary table."
           },
           {
-            "Name": "cWasteAnalysis",
-            "Description": "Analyze the potential cost saving of waste recycling."
+            "Name": "cDigraphAnalysis",
+            "Description": "Analyze a directed graph (digraph)."
+          },
+          {
+            "Name": "cDiagramFP",
+            "Description": "Build the Diagram FP adjacency tables."
+          },
+          {
+            "Name": "cProductiveDiagram",
+            "Description": "Build the productive diagrams adjacency tables"
           }
         ]
       },
@@ -486,28 +494,28 @@
             "Description": "Abstract class for tabular data."
           },
           {
-            "Name": "cTableCell",
-            "Description": "Implements cTableResult interface to store results as cell arrays."
+            "Name": "cTableIndex",
+            "Description": "Create a cTable with the index table of a cResultInfo."
           },
           {
             "Name": "cTableData",
             "Description": "Implement cTable to store data model tables."
           },
           {
-            "Name": "cTableIndex",
-            "Description": "Create a cTable with the index table of a cResultInfo."
+            "Name": "cTableResult",
+            "Description": "Abstrat class to store results into a cTable."
+          },
+          {
+            "Name": "cTableCell",
+            "Description": "Implements cTableResult interface to store results as cell arrays."
           },
           {
             "Name": "cTableMatrix",
             "Description": "Implements cTableResult interface to store matrix results."
           },
           {
-            "Name": "cTableResult",
-            "Description": "Abstrat class to store results into a cTable."
-          },
-          {
             "Name": "cTablesDefinition",
-            "Description": "Get the results tables properties."
+            "Description": "Create a cTable with the table's properties."
           }
         ]
       },
@@ -516,8 +524,8 @@
         "Description": "Graphs Classes",
         "Files": [
           {
-            "Name": "cDigraph",
-            "Description": "Plot the productive structure digraphs."
+            "Name": "cGraphResults",
+            "Description": "Abstract class used to show graphs in interactive mode and apps."
           },
           {
             "Name": "cGraphCost",
@@ -536,30 +544,30 @@
             "Description": "Plot the FP Diagram."
           },
           {
-            "Name": "cGraphRecycling",
-            "Description": "Plot the waste recycling cost graphs."
+            "Name": "cGraphWaste",
+            "Description": "Plot the Waste Allocation graph."
           },
           {
-            "Name": "cGraphResults",
-            "Description": "Abstract class used to show graphs in interactive mode and apps."
+            "Name": "cGraphRecycling",
+            "Description": "Plot the waste recycling cost graph."
           },
           {
             "Name": "cGraphSummary",
-            "Description": "Plot the summary graphs for selecting flows or processes."
+            "Description": "Plot the summary graphs."
           },
           {
-            "Name": "cGraphWaste",
-            "Description": "Plot the Waste Allocation Graph."
+            "Name": "cDigraph",
+            "Description": "Plot the productive structure digraphs."
           }
         ]
       },
       {
         "Name": "tcc",
-        "Description": "Table Conversion Conversion",
+        "Description": "Table Presentation Clases",
         "Files": [
           {
             "Name": "cBuildHTML",
-            "Description": "Convert a cTable object into HTML files."
+            "Description": "Convert a cTable object into an HTML file."
           },
           {
             "Name": "cBuildLaTeX",
@@ -577,19 +585,19 @@
       },
       {
         "Name": "dsc",
-        "Description": "Data Structures Classes",
+        "Description": "Utility Classes",
         "Files": [
           {
-            "Name": "cDataset",
-            "Description": "Class container to store objects and access them by key."
-          },
-          {
-            "Name": "cDiagramFP",
-            "Description": "Build the Diagram FP adjacency tables."
+            "Name": "cMessageBuilder",
+            "Description": "Create a message for logger"
           },
           {
             "Name": "cDictionary",
-            "Description": "Class container to store and access data by key or index."
+            "Description": "Implement a (key, id) dictionary for TaesLab."
+          },
+          {
+            "Name": "cDataset",
+            "Description": "Class container to store objects and access them by key."
           },
           {
             "Name": "cQueue",

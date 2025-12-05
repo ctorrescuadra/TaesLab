@@ -1,5 +1,5 @@
 function SaveTable(tbl,filename)
-%SaveTable - Saves a table into a file
+%SaveTable - Save the table content into a file.
 %   The available formats are XLSX, CSV, TXT, HTML, LaTeX, JSON, XML, and MAT.
 %   Displays a message about the status of the operation.
 %   Used as an interface for cTable/saveTable.

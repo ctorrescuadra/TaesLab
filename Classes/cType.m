@@ -221,13 +221,6 @@ classdef cType
 		Symbols=jsondecode('{"dash": "\u2014","delta": "\u0394"}');  
 		% Icon Files
 		IconFile={'ps.png','ea.png','ta.png','wa.png','td.png','pd.png','fp.png','sr.png','md.png','mr.png'};
-		% TaesLab Paths
-		BasePath=fullfile(cType.TaesLabPath(),'Base');
-		ClassesPath=fullfile(cType.TaesLabPath(),'Classes');
-		FunctionsPath=fullfile(cType.TaesLabPath(),'Functions');
-		ConfigPath=fullfile(cType.TaesLabPath(),'Config');
-		DocsPath=fullfile(cType.TaesLabPath(),'Docs');
-		ExamplesPath=fullfile(cType.TaesLabPath(),'Examples');
 		% System constanst
 		NEWLINE_PC='\r\n';    % Newline character for Windows
 		NEWLINE_UNIX='\n';    % Newline character for Unix (MAC)
@@ -691,6 +684,14 @@ classdef cType
 			path=fileparts(mfilename('fullpath'));
 			res=fileparts(path);
 		end
+
+		function res=ConfigPath()
+		%ConfigPath - Get the full path of the TaesLab configuration folder
+		%   Syntax:
+		%     res=cType.ConfigPath
+			res=fullfile(cType.TaesLabPath,'Config');
+		end
+		
 		function res=getLine(length)
 		%getLine - Get a dash line of the given length
 		%   Syntax:

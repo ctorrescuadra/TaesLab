@@ -1,5 +1,5 @@
 function res = buildMessage(functionName,message,varargin)  
-%buildMessage - Builds a formatted error message for a given function.
+%buildMessage - Build error messages for TaesLab functions.
 %   This function constructs a standardized error message that includes 
 %   the function name, and a custom message, using additional arguments.
 %   The message is formatted differently based on whether the environment is

@@ -1,5 +1,5 @@
 function res=isOctave()
-%isOctave - Identifies if the funcion has been executed in Octave.
+%isOctave - Identifies if the function has been executed in Octave.
 %	
 %	Syntax:
 %     res = isOctave;

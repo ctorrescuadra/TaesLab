@@ -16,5 +16,6 @@ function res = isValid(obj)
     res=false;
     %Check input arguments
     if nargin~=1, return; end
+    % Validate object
     res = isa(obj,'cTaesLab') && obj.status;
 end
