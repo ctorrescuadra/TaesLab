@@ -54,7 +54,7 @@ function B = scaleCol(A, x)
     % Get number of columns
     [~, nCols] = size(A);   
     % Validate scale vector dimensions
-    if ~isnumeric(x) || ~isvector(x) || ~islogical(x) || (nCols ~= length(x))
+    if ~(isnumeric(x) || islogical(x)) || ~isvector(x) || (nCols ~= length(x))
         msg = buildMessage(mfilename, cMessages.ScaleColsError);
         error(msg);
     end

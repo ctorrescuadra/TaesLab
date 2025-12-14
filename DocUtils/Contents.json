@@ -8,24 +8,24 @@
         "Description": "Read Data Models",
         "Files": [
           {
-            "Name": "ValidateModelTables",
-            "Description": "Validate the table data model files."
+            "Name": "ReadDataModel",
+            "Description": "Read and validate a thermoeconomic data model file."
           },
           {
-            "Name": "ReadDataModel",
-            "Description": "Read a data model file."
+            "Name": "ValidateModelTables",
+            "Description": "Validate and convert tabular data model files."
           },
           {
             "Name": "CopyDataModel",
-            "Description": "Create a copy of a data model file in another format"
+            "Description": "Copy and convert a data model file to a different format."
           },
           {
             "Name": "ImportDataModel",
-            "Description": "Get a cDataModel object from a previously saved MAT file."
+            "Description": "Load a cDataModel object from a MAT file."
           },
           {
             "Name": "ImportData",
-            "Description": "Import external data to a cTableData from CSV or XLSX files."
+            "Description": "Import external tabular data from CSV or Excel files."
           }
         ]
       },
@@ -39,35 +39,35 @@
           },
           {
             "Name": "ProductiveStructure",
-            "Description": "Get the productive structure of the plant."
+            "Description": "Extract and display productive structure information from a data model."
           },
           {
             "Name": "ProductiveDiagram",
-            "Description": "Get the productive diagrams of the plant."
+            "Description": "Generate graph adjacency tables for productive structure visualization."
           },
           {
             "Name": "ExergyAnalysis",
-            "Description": "Get the exergy analysis for a plant state."
+            "Description": "Perform exergy analysis for a specific plant operating state."
           },
           {
             "Name": "ThermoeconomicAnalysis",
-            "Description": "Perform the termoeconomic analysis of a plant state."
+            "Description": "Perform thermoeconomic cost analysis of a plant operating state."
           },
           {
             "Name": "ThermoeconomicDiagnosis",
-            "Description": "Compare two states of the plant and make a thermoeconomic diagnosis"
+            "Description": "Detect and quantify malfunctions by comparing plant operating states."
           },
           {
             "Name": "DiagramFP",
-            "Description": "Get the FP diagrams for a plant state."
+            "Description": "Generate annotated fuel-product diagrams with exergy flows and costs."
           },
           {
             "Name": "WasteAnalysis",
-            "Description": "Waste recycling analysis of a plant state."
+            "Description": "Analyze waste cost allocation and recycling optimization strategies."
           },
           {
             "Name": "SummaryResults",
-            "Description": "Get the summary results for a plant."
+            "Description": "Generate comparative summary tables across multiple operating conditions."
           }
         ]
       },
@@ -76,20 +76,20 @@
         "Description": "Save Results",
         "Files": [
           {
-            "Name": "SaveResults",
-            "Description": "Save the result tables into a file."
+            "Name": "SaveDataModel",
+            "Description": "Save thermoeconomic data model to file in various formats."
           },
           {
-            "Name": "SaveDataModel",
-            "Description": "Save the data model tables into a file."
+            "Name": "SaveResults",
+            "Description": "Export result tables to file in multiple formats."
           },
           {
             "Name": "SaveSummary",
-            "Description": "Save the summary results into a file."
+            "Description": "Export summary comparison tables for multiple states or cost samples."
           },
           {
             "Name": "SaveTable",
-            "Description": "Save the table into a file"
+            "Description": "Export a single table to file in various formats."
           }
         ]
       },
@@ -99,23 +99,23 @@
         "Files": [
           {
             "Name": "ListResultTables",
-            "Description": "Display the list of the TaesLab result tables and their properties."
-          },
-          {
-            "Name": "ShowResults",
-            "Description": "Show the results tables in different formats."
-          },
-          {
-            "Name": "ShowTable",
-            "Description": "Display, export, or save a table."
+            "Description": "Display catalog of available result tables and their properties."
           },
           {
             "Name": "ShowGraph",
-            "Description": "Display the graph associated with a results table."
+            "Description": "Display graphical visualizations of thermoeconomic analysis results."
+          },
+          {
+            "Name": "ShowResults",
+            "Description": "Display and save result tables from thermoeconomic analyses."
+          },
+          {
+            "Name": "ShowTable",
+            "Description": "Display, export, and save individual result tables."
           },
           {
             "Name": "ExportResults",
-            "Description": "Exports the results tables into different formats."
+            "Description": "Export result tables to various MATLAB data formats."
           }
         ]
       },

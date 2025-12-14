@@ -10,7 +10,6 @@ function BuildDocuments(folder,outfile)
 %   base functions
 %
 %   Syntax:
-%     Build
 %     BuildDocuments(folder,filename)
 %
 %   Input Arguments:

@@ -1,0 +1,197 @@
+{
+  "Format": {
+    "definitions": [
+      {
+        "key": "EXERGY",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "EXERGY_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "GENERALIZED_COST",
+        "width": 10,
+        "precision": 1,
+        "unit": "(kW)"
+      },
+      {
+        "key": "GENERALIZED_UNIT_COST",
+        "width": 10,
+        "precision": 4,
+        "unit": "(J/J)"
+      },
+      {
+        "key": "DIAGNOSIS",
+        "width": 10,
+        "precision": 2,
+        "unit": "(kW)"
+      }
+    ]
+  },
+  "ProductiveStructure": {
+    "flows": [
+      {
+        "key": "NGI",
+        "type": "RESOURCE"
+      },
+      {
+        "key": "E1",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "E2",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "E3",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "E4",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "E5",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "E6",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "E7",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "NGO",
+        "type": "OUTPUT"
+      },
+      {
+        "key": "WICE",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WGE",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WORC",
+        "type": "INTERNAL"
+      },
+      {
+        "key": "WN",
+        "type": "OUTPUT"
+      }
+    ],
+    "processes": [
+      {
+        "key": "IN",
+        "type": "PRODUCTIVE",
+        "fuel": "NGI",
+        "product": "E1+E2"
+      },
+      {
+        "key": "GEXP",
+        "type": "PRODUCTIVE",
+        "fuel": "E1+E5+E7",
+        "product": "E3+WGE"
+      },
+      {
+        "key": "NGD",
+        "type": "PRODUCTIVE",
+        "fuel": "E2+E3",
+        "product": "NGO+E4"
+      },
+      {
+        "key": "ICE",
+        "type": "PRODUCTIVE",
+        "fuel": "E4",
+        "product": "WICE+E5+E6"
+      },
+      {
+        "key": "ORC",
+        "type": "PRODUCTIVE",
+        "fuel": "E6",
+        "product": "WORC+E7"
+      },
+      {
+        "key": "GEN",
+        "type": "PRODUCTIVE",
+        "fuel": "WICE+WGE+WORC",
+        "product": "WN"
+      }
+    ]
+  },
+  "ExergyStates": {
+    "States": {
+      "stateId": "Reference",
+      "exergy": [
+        {
+          "key": "NGI",
+          "value": 366255
+        },
+        {
+          "key": "E1",
+          "value": 2652
+        },
+        {
+          "key": "E2",
+          "value": 363603
+        },
+        {
+          "key": "E3",
+          "value": 205
+        },
+        {
+          "key": "E4",
+          "value": 6079
+        },
+        {
+          "key": "E5",
+          "value": 222.7
+        },
+        {
+          "key": "E6",
+          "value": 670.5
+        },
+        {
+          "key": "E7",
+          "value": 75.5
+        },
+        {
+          "key": "NGO",
+          "value": 357729
+        },
+        {
+          "key": "WICE",
+          "value": 2349
+        },
+        {
+          "key": "WGE",
+          "value": 1789
+        },
+        {
+          "key": "WORC",
+          "value": 356.6
+        },
+        {
+          "key": "WN",
+          "value": 4494.6
+        }
+      ]
+    }
+  },
+  "WasteDefinition": [],
+  "ResourcesCost": []
+}

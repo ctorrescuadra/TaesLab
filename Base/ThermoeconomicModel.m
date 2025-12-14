@@ -42,6 +42,11 @@ function model=ThermoeconomicModel(arg,varargin)
 %
 %   Example:
 %     <a href="matlab:open ThermoeconomicModelDemo.mlx">Thermoeconomic Model Demo</a>
+%
+%   Theoretical Background:
+%     See: Torres, C. el al. "TaesLab: An Advanced Software Tool for Circular Thermoeconomics"
+%       36th International Conference on Efficiency, Cost, Optimization, Simulation and Environmental
+%       Impact of Energy Systems (ECOS 2023). DOI:10.52202/069564-0025
 %    
 %   See also cThermoeconomicModel
 %

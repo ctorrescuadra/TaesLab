@@ -78,7 +78,6 @@ classdef (Sealed) cProductiveDiagram < cResultId
             obj.NodesSFPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesSFPAT=cProductiveDiagram.edgesTable(productiveMatrix,nodenames);
             % Get Process Diagram (FP Table)
-            % Get Process Diagram
             da=ps.ProcessDigraph;
             if ~isValid(da)
                 obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);

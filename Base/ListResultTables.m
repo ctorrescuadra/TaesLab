@@ -1,42 +1,91 @@
-function res=ListResultTables(varargin)
-%ListResultTables - List the results tables and their properties.
-%   If a cResultSet is provided, it shows the active tables of the result set.
+function res = ListResultTables(varargin)
+%ListResultTables - Display catalog of available result tables and their properties.
+%   Lists all available result tables in the TaesLab system or shows the active
+%   tables for a specific result set object. This is useful for discovering what
+%   tables are available, understanding their purpose, and determining which tables
+%   support graphical representations. The function can display a comprehensive
+%   catalog of all defined tables or filter to show only tables present in a
+%   specific analysis result.
+%
+%   When called without a cResultSet object, displays the complete table catalog
+%   from cTablesDefinition. When called with a result object, shows only the
+%   tables that are actually present in that result set.
 %    
 %   Syntax:
-%     res=ListResultTables(Name,Values)
-%     res=ListResultTables(res,Name,Values)
+%     ListResultTables()
+%     ListResultTables(Name, Value)
+%     ListResultTables(resultObject)
+%     ListResultTables(resultObject, Name, Value)
+%     res = ListResultTables(...)
 %
 %   Input Arguments:
-%     res - cResultSet object (optional)
+%     resultObject - cResultSet object (optional)
+%       Any object derived from cResultSet including cModelResults, cResultInfo,
+%       cDataModel, or cThermoeconomicModel. When provided, the listing shows only
+%       the tables that exist in this specific result object. Without this argument,
+%       the function shows the complete catalog of all available table types.
 %
-%   Name-Values Arguments:
-%     Columns: Array of cells with the names of the columns to be displayed.
-%       'DESCRIPTION' Description of the table
-%       'RESULT_NAME' cResultInfo name of the table
-%       'GRAPH' - Indicates if it has graphical representation
-%       'TYPE' - Type of cTable
-%       'CODE' - Text of the code for cType.Tables
-%       'RESULT_CODE' - Text of the code for cType.ResultId
-%       If it is not selected, the default list of columns cType.DIR_COLS_DEFAULT is shown
-%     View: Selects how to show the table
-%       'CONSOLE' - display in the console (default)
-%       'GUI' - use a GUI table
-%       'HTML' - use a web browser
-%     ExportAs: Select the VarMode to get the table
-%       'NONE' - return the cTable object (default)
-%       'CELL' - return the table as array of cells
-%       'STRUCT' - returns the table as a structured array
-%       'TABLE' - returns a matlab table
-%     SaveAs: Name of the file where the table will be saved.
-%       array char | string
+%   Name-Value Arguments:
+%     Columns - Properties to display for each table
+%       cell array of char (default: cType.DIR_COLS_DEFAULT)
+%       Specifies which information columns to show for each table. Available columns:
+%         'DESCRIPTION' - Full description of table content and purpose
+%         'RESULT_NAME' - Name of the cResultInfo category containing the table
+%         'GRAPH'       - Indicates if table has graphical representation available
+%         'TYPE'        - Type of cTable (cTableCell, cTableMatrix, cTableData)
+%         'CODE'        - Internal code identifier from cType.Tables enumeration
+%         'RESULT_CODE' - Analysis type code from cType.ResultId enumeration
+%       If not specified, uses the default column set defined in cType.DIR_COLS_DEFAULT.
+%
+%     View - Display method for the table listing
+%       'CONSOLE' (default) | 'GUI' | 'HTML'
+%       Controls how the table catalog is presented:
+%         'CONSOLE' - Formatted text output in command window
+%         'GUI'     - Interactive table viewer window
+%         'HTML'    - Web browser display with styled formatting
+%       Default is 'CONSOLE' unless output is captured (nargout > 0).
+%
+%     ExportAs - Format for returned data when capturing output
+%       'NONE' (default) | 'CELL' | 'STRUCT' | 'TABLE'
+%       When the function output is assigned to a variable, controls the format:
+%         'NONE'   - Returns cTable object with full functionality
+%         'CELL'   - Cell array with headers and data
+%         'STRUCT' - Structured array with named fields
+%         'TABLE'  - MATLAB table object (requires R2013b+)
+%
+%     SaveAs - Save the table catalog to a file
+%       char array | string (default: empty - no save)
+%       File path for saving the table listing. Format is determined by extension:
+%       .xlsx, .csv, .json, .html, .tex, .md supported. Useful for documentation
+%       or external reference.
 %
 %   Output Arguments:
-%     res - Table with the selected columns in the format specified by ExportAs
+%     res - Table catalog data (only when output is captured)
+%       cTable object containing the table directory with selected columns.
+%       Format depends on 'ExportAs' parameter. If no output is requested,
+%       the table is displayed according to 'View' parameter instead.
 %
-%   Example:
+%   Examples:
+%     % Show complete catalog of all available tables in console
+%     ListResultTables()
+%
+%     % Show tables available in a specific result object
+%     results = model.thermoeconomicAnalysis();
+%     ListResultTables(results)
+%
+%     % Display with custom columns in HTML viewer
+%     ListResultTables('Columns', {'DESCRIPTION', 'GRAPH', 'TYPE'}, 'View', 'HTML')
+%
+%     % Capture table catalog as MATLAB table for processing
+%     tableCatalog = ListResultTables('ExportAs', 'TABLE');
+%
+%     % Export catalog to Excel file
+%     ListResultTables('SaveAs', 'table_catalog.xlsx')
+%
+%   Live Script Demo:
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %
-%   See also cTablesDefinition, cThermoeconomicModel
+%   See also cTablesDefinition, cResultSet, cThermoeconomicModel, ExportResults, ShowResults.
 %
     res=cTaesLab();
     % Check the variable arguments
@@ -81,7 +130,7 @@ function res=ListResultTables(varargin)
                 tbl=arg.getTableIndex;
         end
     else
-        ctd=cTablesDefinition;
+        ctd=cTablesDefinition; % Get the complete tables definition
         if ctd.status
             tbl=ctd.getTablesDirectory(param.Columns);
             if ~tbl.status

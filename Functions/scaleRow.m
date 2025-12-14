@@ -55,7 +55,7 @@ function B = scaleRow(A, x)
     % Get number of rows
     [nRows, ~] = size(A);    
     % Validate scale vector dimensions
-    if ~isnumeric(x) || ~isvector(x) || ~islogical(x) || (nRows ~= length(x))
+    if ~(isnumeric(x) || islogical(x)) || ~isvector(x) || (nRows ~= length(x))
         msg = buildMessage(mfilename, cMessages.ScaleRowsError);
         error(msg);
     end   

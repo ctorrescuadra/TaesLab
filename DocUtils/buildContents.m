@@ -17,7 +17,7 @@ function tbl=buildContents(folder,outfile)
 %     tbl = buildContents('Base')
 %      This command get a cTableData with the name and description of
 %      all *.m files of the 'Base' folder
-%     tbl = buildContents('Base','mFiles.txt)
+%     tbl = buildContents('Base','mFiles.txt')
 %      This command generate also a file called mFiles.txt
 %
 %   See also: cTableData/saveTable

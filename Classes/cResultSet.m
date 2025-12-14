@@ -318,23 +318,25 @@ classdef(Abstract) cResultSet < cResultId
                 return
             end
             % Check Folder and print info file
-            [~,name,ext]=fileparts(filename);
-            folder=strcat('.',filesep,name,'_csv');
+            [folder,name,ext]=fileparts(filename);
+            fname=strcat(name,'_csv');
+            tfolder=fullfile(folder,fname);
             %Write the info directory
             try
                 fid = fopen(filename, 'wt');
-                fprintf (fid, '%s', folder);
+                fprintf (fid, '%s', fname);
                 fclose (fid);
             catch err
                 log.messageLog(cType.ERROR,err.message)
                 log.messageLog(cType.ERROR,cMessages.FileNotSaved,filename);
                 return
             end
-            if ~exist(folder,'dir')
-                mkdir(folder);
+            if ~exist(tfolder,'dir')
+                mkdir(tfolder);
             end
             % Save Index file
-            fname=strcat(folder,filesep,'index',ext);
+            bname=strcat('index',ext);
+            fname=fullfile(tfolder,bname);
             slog=exportCSV(tidx.Values,fname);
             if ~slog.status
                 log.addLogger(slog);
@@ -343,7 +345,8 @@ classdef(Abstract) cResultSet < cResultId
             % Save each table in a file
             for i=1:tidx.NrOfRows
                 tbl=tidx.Content{i};
-                fname=strcat(folder,filesep,tbl.Name,ext);
+                bname=strcat(tbl.Name,ext);
+                fname=fullfile(tfolder,bname);
                 slog=exportCSV(tbl.Values,fname);
                 if ~slog.status
                     log.addLogger(slog);

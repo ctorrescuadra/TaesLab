@@ -1,4 +1,4 @@
-function [iopt,otext] = optionChoice(text, options,default_value)
+function [iopt,otext] = optionChoice(text, options, default_value)
 % optionChoice - Interactive option choose.
 %  Ask a question "text" with several "options".
 %  INPUT:

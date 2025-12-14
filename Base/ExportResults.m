@@ -1,33 +1,68 @@
-function res = ExportResults(arg,varargin)
-%ExportResults - Exports the results tables in different formats.
-%   - If no optional parameters are specified, the function returns a structure
-%     with all tables as cTable objects, equivalent to arg.Tables
-%   - If the option 'Table' is not used, the function returns a structure with all tables converted to the desired format.
+function res = ExportResults(arg, varargin)
+%ExportResults - Export result tables to various MATLAB data formats.
+%   Converts result tables from cResultSet objects into MATLAB-native formats
+%   for further processing, analysis, or integration with other tools. This 
+%   function provides flexible export options for individual tables or complete
+%   result sets, with optional formatting control.
+%
+%   By default, returns all tables as cTable objects in a structure. Specify
+%   'ExportAs' to convert tables to cell arrays, structs, or MATLAB table objects.
+%   Use 'Table' to export a single specific table instead of all results.
 %
 %   Syntax:
-%     res=ExportResults(arg,Name,Value)
+%     res = ExportResults(arg)
+%     res = ExportResults(arg, Name, Value)
 %  
 %   Input Arguments:
-%     arg - cResultSet object
+%     arg - cResultSet object containing result tables
+%       Any object derived from cResultSet (cModelResults, cResultInfo, cDataModel,
+%       cThermoeconomicModel). These objects contain collections of result tables
+%       that can be accessed and exported.
 %
 %   Name-Value Arguments:
-%     Table: Name of the table to export. If it is not selected, a structure with all result tables is created
-%       char array
-%     ExportAs: Select the output VarMode of the table/s.
-%       'NONE' - returns the cTable object (default).
-%       'CELL' - returns the table as an array of cells.
-%       'STRUCT' - returns the table as a structured array.
-%       'TABLE' - returns a MATLAB table object.
-%     Format: Use the Format definition to output the (numeric values) tables
+%     Table - Name of specific table to export
+%       char array | string (default: empty - export all tables)
+%       When specified, exports only the named table. If empty, exports all tables
+%       in the result set as a structure. Use ListResultTables to see available
+%       table names for a given result object.
+%
+%     ExportAs - Output format for table data
+%       'NONE' (default) | 'CELL' | 'STRUCT' | 'TABLE'
+%       Controls the MATLAB data type of exported tables:
+%         'NONE'   - Returns cTable objects (no conversion)
+%         'CELL'   - Cell array with headers and data
+%         'STRUCT' - Structured array with field names
+%         'TABLE'  - MATLAB table object (requires MATLAB R2013b+)
+%
+%     Format - Apply format definitions to numeric values
 %       true | false (default)
+%       When true, applies the format specification defined in the cTable object
+%       to convert numeric values to formatted strings (e.g., "12.34" instead of
+%       12.3456). Useful for presentation but loses numeric precision.
 %
 %   Output Arguments:
-%     res - The Table/s in the format specified by 'ExportAs' parameter
+%     res - Exported table data
+%       Single table: Exported in the format specified by 'ExportAs'
+%       Multiple tables: Structure with field names matching table names
+%       If 'Table' is specified, returns a single export of that table.
+%       If 'Table' is not specified, returns a structure containing all tables.
 %     
 %   Examples:
+%     % Export all tables as cell arrays
+%     results = ExportResults(modelResults, 'ExportAs', 'CELL');
+%
+%     % Export specific table as MATLAB table object
+%     costTable = ExportResults(costResults, 'Table', 'dcost', 'ExportAs', 'TABLE');
+%
+%     % Export all tables with formatting applied
+%     formattedData = ExportResults(data, 'ExportAs', 'STRUCT', 'Format', true);
+%
+%     % Get all tables as cTable objects (default)
+%     tableSets = ExportResults(model);
+%
 %     <a href="matlab:open TableInfoDemo.mlx">Tables Info Demo</a>
 %  
-%   See also cResultSet, cTable.
+%   See also cResultSet, cTable, ListResultTables, ShowResults, SaveResults.
 %
     res=cTaesLab();
     if nargin<1

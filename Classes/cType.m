@@ -208,9 +208,10 @@ classdef cType
         % TaesApp Tab Panels
         Panels=struct('WELCOME',1,'INDEX',2,'TABLES',3,'GRAPHS',4,'LOG',5);
         % File Extensions
-		FileType=struct('JSON',1,'XML',2,'XLSX',3,'CSV',4,'MAT',5,'TXT',6,'HTML',7,'LaTeX',8,'MD',9,'MCNT',10,'MHLP',11);
-		FileExt=struct('JSON','.json','XML','.xml','XLSX','.xlsx','CSV','.csv','MAT','.mat',...
+		FileType=struct('XLSX',1,'JSON',2,'CSV',3,'XML',4,'MAT',5,'TXT',6,'HTML',7,'LaTeX',8,'MD',9,'MCNT',10,'MHLP',11);
+		FileExt=struct('XLSX','.xlsx','JSON','.json','CSV','.csv','XML','.xml','MAT','.mat',...
 			'TXT','.txt','HTML','.html','LaTeX','.tex','MD','.md','MCNT','.m','MHLP','.mhlp');
+		DataFormat={'XLSX','JSON','CSV','XML','MAT'};
         % HTML/CCS style file
 		CSSFILE='styles.css';
         % Taess app welcome image
@@ -674,6 +675,18 @@ classdef cType
             res=strcmp(fext,ext);
         end
 
+		function res=getFileTypeId(text)
+		%getFileTypeId - Get the file TypeId of FileType option
+		%   Syntax:
+		%     res=cType.getFileTypeId(text)
+		%   Input Arguments:
+		%     text - File Type text
+		%   Output Arguments:
+		%     res - Graph Style type Id (empty if it doesn't exist)
+		%
+			res=cType.getTypeId(cType.FileType,text);
+		end
+		
 		%%%
 		% Other functions
 		%%%

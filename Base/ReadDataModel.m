@@ -94,7 +94,7 @@ function data = ReadDataModel(filename, varargin)
 %         printLogger(data);  % Display error messages
 %     end
 %
-%     % Live script demo:
+%   Live script demo:
 %       <a href="matlab:open ReadDataModelDemo.mlx">Read Model Demo</a>
 %
 %   Common Use Cases:
