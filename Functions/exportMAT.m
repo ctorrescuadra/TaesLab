@@ -76,7 +76,6 @@ function log = exportMAT(obj, filename)
 %
 %   See also: importMAT, save, load, SaveResults, SaveTable, exportJSON
 %
-    % Initialize message logger
     log = cMessageLogger();   
     % Validate input arguments (count, object type, filename, extension)
     if nargin ~= 2 || ~isObject(obj, 'cTaesLab') || ...

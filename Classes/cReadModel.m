@@ -42,8 +42,11 @@ classdef (Abstract) cReadModel < cMessageLogger
 				obj.messageLog(cType.ERROR,cMessages.FileNotFound, cfgfile);
 				return
 			end
-			[~,name,ext]=fileparts(cfgfile);
-            obj.ModelFile=strcat(pwd,filesep,name,ext);
+			[folder,name,ext]=fileparts(cfgfile);
+			if isempty(folder)
+				folder=pwd;
+			end
+            obj.ModelFile=strcat(folder,filesep,name,ext);
 			obj.ModelName=name;
 		end	
     end

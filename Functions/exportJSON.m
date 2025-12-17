@@ -77,7 +77,6 @@ function log = exportJSON(S, filename)
 %
 %   See also: jsonencode, fwrite, importJSON, exportCSV, isFilename
 %
-    % Initialize message logger
     log = cMessageLogger();   
     % Validate input argument count
     if nargin ~= 2

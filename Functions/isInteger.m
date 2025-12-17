@@ -25,7 +25,6 @@ function res = isInteger(val)
 %   
 %   See also: isscalar, isnumeric, floor
 %
-    % Default return value
     res = false;   
     % Validate input arguments
     if nargin ~= 1

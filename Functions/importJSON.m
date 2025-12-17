@@ -81,12 +81,7 @@ function res = importJSON(log, filename)
 %
 %   See also: jsondecode, fileread, exportJSON, cMessageLogger, ReadDataModel
 %
-%   Copyright (c) 2025 TaesLab
-%
-%
-    % Initialize with empty result
-    res = cType.EMPTY;
-    
+    res = cType.EMPTY;  
     % Read and parse JSON file
     try
         % Read entire file content as text
@@ -97,6 +92,5 @@ function res = importJSON(log, filename)
         % Log error details and file read failure
         log.messageLog(cType.ERROR, err.message);
         log.messageLog(cType.ERROR, cMessages.FileNotRead, filename);
-    end
-    
+    end   
 end

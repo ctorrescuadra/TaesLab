@@ -76,6 +76,7 @@ classdef cMessages
         FileSaved='File %s has been saved'
         % Data Model Info
         ValidDataModel='Data model %s is valid'
+        ValidDataModelPlus='Data model %s is valid. Time %d ms'
         ResultVarInfo='%s results available in workspace'
         ValidProductiveStructure='Productive Structure is valid'
         ValidFormatDefinition='Format Definition is valid'
@@ -233,6 +234,9 @@ classdef cMessages
         NoClassInfo='No public %s found for class %s'
         ClassNotFound='Class %s NOT found'
         NotAvailableType='No available document type'
+        NotModelsFound='No data models found'
+        SkipFileCopy='Data Model File %s exists. Skip to save it'
+        FolderNotExists='Backup folder %s does NOT exist'
     end
 
     methods(Static)

@@ -29,7 +29,6 @@ function res = isIndex(index, minIdx, maxIdx)
 %
 %   See also: isInteger, isscalar
 %
-    % Default return value
     res = false; 
     % Validate input arguments count
     if nargin ~= 3

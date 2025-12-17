@@ -39,6 +39,7 @@ classdef cType
 %    File Methods  
 %	  res=cType.getFileType(filename)
 %	  res=cType.checkFileExt(filename,ext)
+%     res=cType.getFileTypeId(text)
 %    Other methods:
 %     res=cType.TaesLabPath()
 %     res=cType.tableCode()
@@ -111,6 +112,10 @@ classdef cType
         % Options for diagnosis calculation
 		DiagnosisMethod=struct('NONE',0,'WASTE_EXTERNAL',1,'WASTE_INTERNAL',2);
 		DEFAULT_DIAGNOSIS='WASTE_EXTERNAL';
+		% Data Model Format Options
+		ModelFormat=struct('XLSX',1,'JSON',2,'CSV',3,'XML',4,'MAT',5);
+		DataModelExt={'.xlsx','.json','.csv','.xml','.mat'};
+		DEFAULT_MODEL_FORMAT='XLSX';
 		% Options for Table View
 		TableView=struct('NONE',0,'CONSOLE',1,'HTML',2,'GUI',3);
 		DEFAULT_TABLEVIEW='CONSOLE';
@@ -211,7 +216,6 @@ classdef cType
 		FileType=struct('XLSX',1,'JSON',2,'CSV',3,'XML',4,'MAT',5,'TXT',6,'HTML',7,'LaTeX',8,'MD',9,'MCNT',10,'MHLP',11);
 		FileExt=struct('XLSX','.xlsx','JSON','.json','CSV','.csv','XML','.xml','MAT','.mat',...
 			'TXT','.txt','HTML','.html','LaTeX','.tex','MD','.md','MCNT','.m','MHLP','.mhlp');
-		DataFormat={'XLSX','JSON','CSV','XML','MAT'};
         % HTML/CCS style file
 		CSSFILE='styles.css';
         % Taess app welcome image
@@ -260,7 +264,8 @@ classdef cType
         %     s   - type structure
 		%     key - type key
         %   Output Arguments:
-        %     id - type id
+        %     id - type id. 
+		% 	   If not exist returns cType.EMPTY
 		%
 			id=cType.EMPTY;
 			if ischar(key)
@@ -443,6 +448,18 @@ classdef cType
 			res=cType.getTypeId(cType.GraphStyles,text);
 		end
 
+		function res=getModelFormat(text)
+		%getGraphStyle - Get the id of Graph Style option
+		%   Syntax:
+		%     res=cType.getModelFormat(text)
+		%   Input Arguments:
+		%     text - Model Format type text
+		%   Output Arguments:
+		%     res - ModelFormat type Id (empty if it doesn't exist)
+		%
+			res=cType.getTypeId(cType.ModelFormat,text);
+		end
+
 		function [res,idx]=checkProcessTypes(list)
 		%checkProcessTypes - Check if the Process Type list is correct
 		%   Syntax:
@@ -579,6 +596,18 @@ classdef cType
 			res=cType.checkTypeKey(cType.GraphStyles,text);
 		end
 
+		function res=checkModelFormat(text)
+		%checkGraphStyle - Check Model Format text
+		%   Syntax:
+		%     res=cType.checkModelFormat(text)
+		%   Input Arguments:
+		%     text - Model Format type text.
+		%   Output Arguments:
+		%     res - true/false
+		%
+			res=cType.checkTypeKey(cType.ModelFormat,text);
+		end
+
 		function [res,missing]=checkDirColumns(fields)
 		%checkDirColumns - Check Table Directory Columns names
 		%   Syntax:
@@ -629,6 +658,11 @@ classdef cType
 		function res=VarModeOptions()
 		%VarModeOptions - Get a cell array with the VarMode Type options
 			res=fieldnames(cType.VarMode);
+		end
+
+		function res=ModelFormatOptions()
+		%ModelFormatOptions - Get a cell array with the data model format options
+			res=fieldnames(cType.ModelFormat);
 		end
 
 		function res=getPropertiesList(tobj)
@@ -682,7 +716,7 @@ classdef cType
 		%   Input Arguments:
 		%     text - File Type text
 		%   Output Arguments:
-		%     res - Graph Style type Id (empty if it doesn't exist)
+		%     res - File type Id (empty if it doesn't exist)
 		%
 			res=cType.getTypeId(cType.FileType,text);
 		end
@@ -703,6 +737,13 @@ classdef cType
 		%   Syntax:
 		%     res=cType.ConfigPath
 			res=fullfile(cType.TaesLabPath,'Config');
+		end
+
+		function res=ExamplesPath()
+		%ConfigPath - Get the full path of the TaesLab examples folder
+		%   Syntax:
+		%     res=cType.ConfigPath
+			res = fullfile(cType.TaesLabPath,'Examples','**');
 		end
 		
 		function res=getLine(length)

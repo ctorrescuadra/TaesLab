@@ -1,5 +1,5 @@
 function res = tolerance(A, tol)
-%tolerance - Compute relative tolerance value for a matrix.
+%TOLERANCE - Compute relative tolerance value for a matrix.
 %   Computes a relative tolerance value scaled by the magnitude of the matrix.
 %   The relative tolerance is the absolute tolerance multiplied by the maximum
 %   absolute value in the matrix (or 1, whichever is larger).
@@ -50,7 +50,7 @@ function res = tolerance(A, tol)
 %     4. Compute relative tolerance: res = tol * max(1, maxVal)
 %
 %   See also: zerotol, cType, abs, max
-%
+
     % Validate and set default tolerance
     if nargin < 2 || isempty(tol) || ~isscalar(tol) || tol < 0
         tol = cType.EPS;  % Default: 1.0e-8

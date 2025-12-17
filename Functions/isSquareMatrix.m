@@ -29,9 +29,7 @@ function res = isSquareMatrix(A)
 %
 %   See also: ismatrix, isnumeric, islogical, size
 %
-    % Default return value
     res = false;
-    
     % Validate input arguments count
     if nargin ~= 1
         return;
@@ -40,6 +38,5 @@ function res = isSquareMatrix(A)
     if (isnumeric(A) || islogical(A)) && ismatrix(A)
         [nRows, nCols] = size(A);
         res = (nRows == nCols) && (nRows > 0);
-    end
-    
+    end  
 end

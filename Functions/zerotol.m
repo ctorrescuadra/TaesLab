@@ -1,5 +1,5 @@
 function A = zerotol(A, tol)
-%zerotol - Set matrix values near zero to exact zero.
+%ZEROTOL - Set matrix values near zero to exact zero.
 %   Sets to zero all matrix elements whose absolute value is smaller than or
 %   equal to a relative tolerance. The relative tolerance is computed by
 %   scaling the absolute tolerance by the maximum magnitude in the matrix.
@@ -49,7 +49,7 @@ function A = zerotol(A, tol)
 %     3. Set elements to zero where abs(A(i,j)) <= relative_tolerance
 %
 %   See also: tolerance, logicalMatrix, abs
-%
+
     % Validate input matrix
     if nargin < 1 || ~ismatrix(A) || ~isnumeric(A)
         msg = buildMessage(mfilename, cMessages.InvalidArgument, cMessages.ShowHelp);

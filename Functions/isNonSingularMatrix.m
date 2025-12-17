@@ -41,7 +41,6 @@ function res = isNonSingularMatrix(A)
 %
 %   See also: isNonNegativeMatrix, isSquareMatrix, condest, cond, rcond
 %
-    % Default return value
     res = false;
     % Validate input arguments count
     if nargin ~= 1

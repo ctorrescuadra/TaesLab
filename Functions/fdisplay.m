@@ -48,7 +48,7 @@ function fdisplay(A, fmt, label)
 %
 %     % Output:
 %     EmptyMatrix = []
-
+%
 %     Example 4: Display a scalar
 %     A = 3.14159;
 %     fdisplay(A, '%.2f', 'ScalarValue');

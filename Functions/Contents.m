@@ -39,4 +39,5 @@
 %
 % Miscellaneous Functions
 %   buildMessage              - Build error messages for TaesLab functions.
-%   fdisplay                  - Display a matrix A using C-like formatting.
+%   fdisplay                  - Display a matrix reusing C-like formatting.
+%   filesInfo                 - Get information about files in a specified folder matching a pattern.

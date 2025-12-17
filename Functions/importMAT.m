@@ -80,7 +80,6 @@ function obj = importMAT(filename)
 %
 %   See also: exportMAT, load, isValid, isObject, importJSON
 %
-    % Initialize with invalid cTaesLab object (will be replaced if successful)
     obj = cTaesLab();   
     % Validate input argument count
     if nargin ~= 1

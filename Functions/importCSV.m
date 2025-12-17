@@ -62,7 +62,6 @@ function res = importCSV(filename)
 %
 %   See also: readcell, csv2cell, exportCSV, isOctave, isFilename
 %
-    % Initialize with empty cell array
     res = cType.EMPTY_CELL;    
     % Validate input argument count
     if nargin ~= 1

@@ -56,9 +56,7 @@ function res = isFilename(filename)
 %
 %   See also: fileparts, ischar, isstring, cType.FILE_PATTERN
 %
-    % Default return value
-    res = false;
-    
+    res = false; 
     % Validate input argument
     if nargin ~= 1 || isempty(filename) || ~(ischar(filename) || isstring(filename))
         return;

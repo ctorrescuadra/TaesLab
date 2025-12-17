@@ -43,6 +43,7 @@ classdef cDataModel < cResultSet
 %     setWasteType       - Modify the type of a waste
 %     setWasteValues     - Modify the allocation values of a waste
 %     setWasteRecycled   - Modify the recycling ratio of a waste
+%     getSummaryOption   - Get the default summary option
 %     getTablesDirectory - Get the tables directory 
 %     getTableInfo       - Get information about a table object
 %     getResultInfo      - Get the cResultInfo associated to the data model
@@ -711,6 +712,21 @@ classdef cDataModel < cResultSet
         %%%
         % Get Tables information
         %%%
+
+        %getSummaryOption - Get the default summary option
+        %   Depends on the number of states and resource samples
+        %   of the data model
+        %   Syntax:
+        %     obj.getSummaryOption
+        %   Output:
+        %     res - summary option text
+        %       'NONE' | 'STATES' | 'RESOURCES' | 'ALL'
+        %
+        function res = getSummaryOption(obj)
+            options = fieldnames(cType.SummaryId);
+            id = (obj.NrOfStates > 1) + 2 * (obj.NrOfSamples > 1) + 1;
+            res = options(id);
+        end
         function res=getTablesDirectory(obj,varargin)
         %getTablesDirectory - Get the tables directory
         %   Syntax:
@@ -835,7 +851,7 @@ classdef cDataModel < cResultSet
             res=cMessageLogger(cType.INVALID);
             %Check input arguments
             if nargin~=1 || isempty(filename) || ~isFilename(filename)
-                res.messageLog(cType.ERROR,cMessages.InvalidFileName);
+                res.messageLog(cType.ERROR,cMessages.InvalidInputFile,filename);
                 return
             end
             % Read the data model depending de file extension

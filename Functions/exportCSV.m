@@ -61,7 +61,6 @@ function log = exportCSV(values, filename)
 %
 %   See also: writecell, cell2csv, importCSV, isOctave, isFilename
 %
-    % Initialize message logger
     log = cMessageLogger();
     % Validate input argument count
     if nargin ~= 2

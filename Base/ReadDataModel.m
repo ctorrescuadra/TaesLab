@@ -118,10 +118,7 @@ function data = ReadDataModel(filename, varargin)
 %
 %   See also:
 %     SaveDataModel, ThermoeconomicModel, cDataModel, cReadModel,
-%     cReadModelJSON, cReadModelXML, cReadModelXLS, cReadModelCSV,
-%     isValid, printLogger, printResults
 %
-
     data = cTaesLab();   
     % Validate required input argument
     if nargin < 1
