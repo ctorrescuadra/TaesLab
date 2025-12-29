@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>index</title>
+		<style>
+a:link{
+    color:black;
+    text-decoration:none;
+}
+
+a:visited{
+    color:purple;
+    text-decoration:none;   
+}
+
+h3{
+    font-family:Arial, sans-serif; font-size:14px; font-weight:bold;
+}
+table{
+    border-collapse:collapse; border: solid thin;
+    font-family:Arial, sans-serif; font-size:12px;
+}
+
+td {
+    overflow:hidden; word-break:normal; 
+    padding:5px 5px; padding-left:5px; padding-right:20px;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+th {
+    text-align:left;font-weight:bold; 
+    overflow:hidden; word-break:normal;
+    padding:5px 5px; padding-left:5px; padding-right:20px; 
+    background-color: #e0e0e0;
+    border: solid thin; border-color: #b2b2b2;
+}
+
+td.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+th.num {
+    text-align: right;
+    padding-left:15px; padding-right:5px;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+td:first-child {
+    font-weight: bold;
+    background-color: #e0e0e0;  
+}		</style>
+	</head>
+	<body>
+		<h3>
+			Examples Index
+		</h3>
+		<table>
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+				<th class="num">Flows</th>
+				<th class="num">Processes</th>
+				<th class="num">Wastes</th>
+				<th class="num">Resources</th>
+				<th class="num">Outputs</th>
+				<th class="num">Products</th>
+				<th class="num">States</th>
+				<th class="num">Samples</th>
+				<th>Summary</th>
+			</thead>
+			<tr>
+				<td>H2SO4</td>
+				<td>H2SO4 production plant</td>
+				<td class="num">         19</td>
+				<td class="num">         10</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          0</td>
+				<td>NONE</td>
+			</tr>
+			<tr>
+				<td>amonia</td>
+				<td>amonia production plant</td>
+				<td class="num">         29</td>
+				<td class="num">         17</td>
+				<td class="num">          3</td>
+				<td class="num">          5</td>
+				<td class="num">          4</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          7</td>
+				<td>RESOURCES</td>
+			</tr>
+			<tr>
+				<td>bfgt</td>
+				<td>Blast Furnace Gas Turbine (Kotas book)</td>
+				<td class="num">         15</td>
+				<td class="num">          7</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          0</td>
+				<td>NONE</td>
+			</tr>
+			<tr>
+				<td>brc</td>
+				<td>Binary Rankine Cycle (Steam byproduct)</td>
+				<td class="num">         19</td>
+				<td class="num">         10</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          7</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>ccplant</td>
+				<td>Combined Cycle (simple version)</td>
+				<td class="num">         16</td>
+				<td class="num">          9</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td class="num">          8</td>
+				<td class="num">          1</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>ccpoly</td>
+				<td>Combined Cycle with cogeneration (Cold + Heat)</td>
+				<td class="num">         22</td>
+				<td class="num">         11</td>
+				<td class="num">          2</td>
+				<td class="num">          2</td>
+				<td class="num">          5</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td class="num">          0</td>
+				<td>NONE</td>
+			</tr>
+			<tr>
+				<td>cgam</td>
+				<td>Gas Turbine (CGAM Problem)</td>
+				<td class="num">         12</td>
+				<td class="num">          6</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          8</td>
+				<td class="num">          2</td>
+				<td>ALL</td>
+			</tr>
+			<tr>
+				<td>cgorc</td>
+				<td>Cascade Organic Rankine Cycle</td>
+				<td class="num">         23</td>
+				<td class="num">         12</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td class="num">          4</td>
+				<td class="num">          1</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>chloralkaly</td>
+				<td>Chloralkaly chemical plant</td>
+				<td class="num">         27</td>
+				<td class="num">         13</td>
+				<td class="num">          0</td>
+				<td class="num">          4</td>
+				<td class="num">          4</td>
+				<td class="num">          4</td>
+				<td class="num">          2</td>
+				<td class="num">          2</td>
+				<td>ALL</td>
+			</tr>
+			<tr>
+				<td>cicloComb</td>
+				<td>Combined Cycle (3-phase HRSG)</td>
+				<td class="num">         20</td>
+				<td class="num">         11</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td class="num">          8</td>
+				<td class="num">          1</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>cogen</td>
+				<td>Basic Cogeneration System (No Heat Waste)</td>
+				<td class="num">          9</td>
+				<td class="num">          5</td>
+				<td class="num">          0</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          2</td>
+				<td class="num">          6</td>
+				<td class="num">          1</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>ecos25</td>
+				<td>Amonia production plant (ECOS2025)</td>
+				<td class="num">         40</td>
+				<td class="num">         22</td>
+				<td class="num">          5</td>
+				<td class="num">          5</td>
+				<td class="num">          8</td>
+				<td class="num">          3</td>
+				<td class="num">         10</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>eggs</td>
+				<td>Chicken Farm example</td>
+				<td class="num">          5</td>
+				<td class="num">          3</td>
+				<td class="num">          0</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td>RESOURCES</td>
+			</tr>
+			<tr>
+				<td>gorc</td>
+				<td>Geothermal ORC</td>
+				<td class="num">         17</td>
+				<td class="num">          9</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          8</td>
+				<td class="num">          1</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>gpp</td>
+				<td>Geothermal power plant example</td>
+				<td class="num">         26</td>
+				<td class="num">         13</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td>RESOURCES</td>
+			</tr>
+			<tr>
+				<td>gturbo</td>
+				<td>Multistage Gas Turbine</td>
+				<td class="num">         19</td>
+				<td class="num">         10</td>
+				<td class="num">          2</td>
+				<td class="num">          3</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td class="num">          6</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>lithiumB</td>
+				<td>Lithium Brines processing</td>
+				<td class="num">         63</td>
+				<td class="num">         29</td>
+				<td class="num">         13</td>
+				<td class="num">         19</td>
+				<td class="num">         15</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td>RESOURCES</td>
+			</tr>
+			<tr>
+				<td>lithiumS</td>
+				<td>Lithium Spodumene Mineral processing</td>
+				<td class="num">        126</td>
+				<td class="num">         62</td>
+				<td class="num">         10</td>
+				<td class="num">         45</td>
+				<td class="num">         11</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td>NONE</td>
+			</tr>
+			<tr>
+				<td>ngep</td>
+				<td>Natural Gas Expnsion plant </td>
+				<td class="num">         35</td>
+				<td class="num">         16</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          3</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>orcerc</td>
+				<td>Combined ORC - ERC (Eyector Refrigeration System)</td>
+				<td class="num">         14</td>
+				<td class="num">          7</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          4</td>
+				<td class="num">          2</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>orcvcr</td>
+				<td>Combined ORC - VCR (Vapor Compressor Refrigeration)</td>
+				<td class="num">         16</td>
+				<td class="num">          8</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          4</td>
+				<td class="num">          2</td>
+				<td class="num">          6</td>
+				<td class="num">          2</td>
+				<td>ALL</td>
+			</tr>
+			<tr>
+				<td>pcb</td>
+				<td>PCB recycling plant</td>
+				<td class="num">         51</td>
+				<td class="num">         17</td>
+				<td class="num">          3</td>
+				<td class="num">         13</td>
+				<td class="num">          8</td>
+				<td class="num">          5</td>
+				<td class="num">          3</td>
+				<td class="num">          7</td>
+				<td>ALL</td>
+			</tr>
+			<tr>
+				<td>polygen</td>
+				<td>Polygeneration plant (Tesis Agudelo)</td>
+				<td class="num">         20</td>
+				<td class="num">         10</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          4</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td>RESOURCES</td>
+			</tr>
+			<tr>
+				<td>powerplant</td>
+				<td>Rankine Cycle Power Plant </td>
+				<td class="num">         23</td>
+				<td class="num">         11</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          5</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>rankine</td>
+				<td>Basic Rankine Cycle</td>
+				<td class="num">         10</td>
+				<td class="num">          5</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          6</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>rccp</td>
+				<td>Alternative ORC - ERC configration</td>
+				<td class="num">         19</td>
+				<td class="num">         10</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>rhorc</td>
+				<td>ORC with IHE and OFOH configuration</td>
+				<td class="num">         15</td>
+				<td class="num">          8</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          8</td>
+				<td class="num">          2</td>
+				<td>ALL</td>
+			</tr>
+			<tr>
+				<td>rorc</td>
+				<td>ORC with IHE</td>
+				<td class="num">         10</td>
+				<td class="num">          5</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          6</td>
+				<td class="num">          2</td>
+				<td>ALL</td>
+			</tr>
+			<tr>
+				<td>rvpc</td>
+				<td>Regenerative Rankine Cycle</td>
+				<td class="num">         14</td>
+				<td class="num">          7</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>scgp</td>
+				<td>Simple cogeneration plant </td>
+				<td class="num">         17</td>
+				<td class="num">          9</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          9</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>sofc</td>
+				<td>Regenerative Rankine Cycle</td>
+				<td class="num">         24</td>
+				<td class="num">         12</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">         16</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>steam</td>
+				<td>Regenerative Rankine Cycle with reheat</td>
+				<td class="num">         16</td>
+				<td class="num">          8</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>test</td>
+				<td>Test SSR </td>
+				<td class="num">          8</td>
+				<td class="num">          5</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>tgas</td>
+				<td>Simple Gas Turbine with cogeneration</td>
+				<td class="num">          9</td>
+				<td class="num">          5</td>
+				<td class="num">          1</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          8</td>
+				<td class="num">          3</td>
+				<td>ALL</td>
+			</tr>
+			<tr>
+				<td>tio</td>
+				<td>Basic Input-Output with waste allocation</td>
+				<td class="num">          8</td>
+				<td class="num">          4</td>
+				<td class="num">          1</td>
+				<td class="num">          2</td>
+				<td class="num">          3</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          0</td>
+				<td>NONE</td>
+			</tr>
+			<tr>
+				<td>tplcc</td>
+				<td>Three Pressure Level Combined Cycle</td>
+				<td class="num">         47</td>
+				<td class="num">         22</td>
+				<td class="num">          2</td>
+				<td class="num">          2</td>
+				<td class="num">          4</td>
+				<td class="num">          2</td>
+				<td class="num">          3</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+			<tr>
+				<td>vcr</td>
+				<td>Simple Refrigeration plant</td>
+				<td class="num">          8</td>
+				<td class="num">          4</td>
+				<td class="num">          2</td>
+				<td class="num">          1</td>
+				<td class="num">          3</td>
+				<td class="num">          1</td>
+				<td class="num">          6</td>
+				<td class="num">          0</td>
+				<td>STATES</td>
+			</tr>
+		</table>
+	<br>	</body>
+</html>

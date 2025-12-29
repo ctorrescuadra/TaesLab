@@ -83,21 +83,20 @@ function convertExamples(targetFormat,varargin)
     end
     param = p.Results;
     % Check target format
-    sourceFolder=cType.ExamplesPath;
     if isempty(param.SaveFolder)
         srcPath=true;
-        targetFolder=sourceFolder;
     elseif isfolder(param.SaveFolder)
         srcPath=false;
-        targetFolder=param.SaveFolder;
     else
         log.printError(cMessages.FolderNotExists,param.SaveFolder);
         return
     end
+    targetFolder=param.SaveFolder;
     % Find all Excel files matching *_model.xlsx pattern
-    modelFiles = dir(fullfile(sourceFolder,'*_model.xlsx'));
+    sourceFolder = fullfile(cType.EXAMPLES_FOLDER,'**');
+    modelFiles = filesInfo(sourceFolder,'*_model.xlsx');
     if isempty(modelFiles)
-        log.printError(cMessages.NoModelsFound);
+        log.printError(cMessages.NotModelsFound);
         return;
     end
     nFiles=length(modelFiles);

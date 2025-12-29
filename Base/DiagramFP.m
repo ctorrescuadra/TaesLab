@@ -11,7 +11,6 @@ function res=DiagramFP(data,varargin)
 %     • Process fuel and product values
 %     • Component-based grouping for complex systems
 %     • Both detailed and simplified kernel representations
-
 %   These tables support:
 %     • State-specific performance visualization
 %     • Exergy flow tracking through system
@@ -164,7 +163,7 @@ function res=DiagramFP(data,varargin)
 %      tfp - Table FP with exergy flows
 %		 Fuel-product table format
 %        exergy flows values in system units
-
+%
 %      ktfp - Kernel Table FP (simplified)
 %        Component-aggregated fuel-product table
 %        Reduced complexity for large systems

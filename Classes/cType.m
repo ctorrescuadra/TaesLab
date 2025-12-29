@@ -216,6 +216,9 @@ classdef cType
 		FileType=struct('XLSX',1,'JSON',2,'CSV',3,'XML',4,'MAT',5,'TXT',6,'HTML',7,'LaTeX',8,'MD',9,'MCNT',10,'MHLP',11);
 		FileExt=struct('XLSX','.xlsx','JSON','.json','CSV','.csv','XML','.xml','MAT','.mat',...
 			'TXT','.txt','HTML','.html','LaTeX','.tex','MD','.md','MCNT','.m','MHLP','.mhlp');
+		% Examples folders
+		EXAMPLES_FOLDER = 'Examples';
+		DEFAULT_EXAMPLE = 'cgam';
         % HTML/CCS style file
 		CSSFILE='styles.css';
         % Taess app welcome image
@@ -743,7 +746,7 @@ classdef cType
 		%ConfigPath - Get the full path of the TaesLab examples folder
 		%   Syntax:
 		%     res=cType.ConfigPath
-			res = fullfile(cType.TaesLabPath,'Examples','**');
+			res = fullfile(cType.TaesLabPath,'Examples');
 		end
 		
 		function res=getLine(length)

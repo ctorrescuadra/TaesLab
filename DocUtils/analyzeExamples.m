@@ -97,7 +97,7 @@ function tbl = analyzeExamples(varargin)
     end
     param = p.Results;  
     % Setup source folder
-    sourceFolder = fullfile('Examples','**');
+    sourceFolder = fullfile(cType.EXAMPLES_FOLDER,'**');
     mId=cType.getModelFormat(param.Format);
     pattern=strcat('*_model',cType.DataModelExt{mId});
     allModelFiles=filesInfo(sourceFolder,pattern);    
