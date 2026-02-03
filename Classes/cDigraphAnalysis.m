@@ -6,8 +6,8 @@ classdef cDigraphAnalysis < cMessageLogger
 %   and generates the kernel DAG representation for thermoeconomic productive structure analysis.
 %
 %   Key Features:
-%     - Transitive closure computation for reachability analysis
-%     - Strong connectivity analysis using Tarjan's algorithm
+%     - Transitive Closure computation for reachability analysis
+%     - Strong connectivity analysis using the Transitive Closure method
 %     - Kernel DAG generation by condensing strongly connected components
 %     - Productive graph validation (single source/sink requirements)
 %     - Component grouping and hierarchical structure identification
@@ -738,7 +738,7 @@ classdef cDigraphAnalysis < cMessageLogger
         %   into a single node. The kernel graph is a DAG.
         %   The kernel graph adjacency matrix is stored in obj.kG
         %   Syntax;
-        %     obj.getKernelMatrix()
+        %     obj.buildKernelMatrix()
         %    
             grps=obj.comps;
             ng=obj.NrOfComponents;
@@ -813,7 +813,9 @@ classdef cDigraphAnalysis < cMessageLogger
             fields={'Source','Target','Value'};
             res=cell2struct(tmp,fields,1);
         end
+    end
 
+    methods(Static)
         function G=tfp2ssr(A)
         %tfp2ssr - Tranform a Table FP into a SSR adjacency Matrix
         %   Syntax;
