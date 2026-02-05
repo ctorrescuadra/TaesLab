@@ -1,22 +1,22 @@
-%%{init: {"theme":"forest"}}%%
+%%{init: {'theme': 'forest', 'themeVariables': { 'fontSize': '24px'}}}%%
 graph LR
   %% Source node
   S(S) 
   
-  subgraph SCC1 [" "]
+  subgraph SCC1 ["SC1"]
     A((A))
     B((B)) 
-    A --> B
-    B --> A
+    A --40--> B
+    B --5---> A
   end
   
-  subgraph SCC2 [" "]
+  subgraph SCC2 ["SC2"]
     D((D))
     E((E))
     F((F))
-    D --> E
-    E --> F
-    F --> D
+    D --70---> E
+    E --12--> F
+    F --5--> D
   end
   
   %% Intermediate nodes
@@ -27,13 +27,13 @@ graph LR
   T(T)
   
   %% Connections between SCCs and other nodes
-  S --> A
-  S --> C
-  A --> D
-  C --> D
-  E --> G
-  F --> G
-  G --> T
+  S --45---> A
+  S --55--> C
+  B --30--> D
+  C --50--> D
+  E --50--> G
+  F --5---> G
+  G --50---> T
   
   %% Styling for SCCs
   classDef scc1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px

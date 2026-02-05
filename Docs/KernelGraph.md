@@ -296,20 +296,20 @@ graph LR
   %% Source node
   S(S) 
   
-  subgraph SCC1 [" "]
+  subgraph SCC1 ["SC1"]
     A((A))
     B((B)) 
-    A --> B
-    B --> A
+    A --40--> B
+    B --5---> A
   end
   
-  subgraph SCC2 [" "]
+  subgraph SCC2 ["SC2"]
     D((D))
     E((E))
     F((F))
-    D --> E
-    E --> F
-    F --> D
+    D --70---> E
+    E --12--> F
+    F --5--> D
   end
   
   %% Intermediate nodes
@@ -320,13 +320,13 @@ graph LR
   T(T)
   
   %% Connections between SCCs and other nodes
-  S --> A
-  S --> C
-  A --> D
-  C --> D
-  E --> G
-  F --> G
-  G --> T
+  S --45---> A
+  S --55--> C
+  B --30--> D
+  C --50--> D
+  E --50--> G
+  F --5---> G
+  G --50---> T
   
   %% Styling for SCCs
   classDef scc1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
@@ -367,12 +367,12 @@ graph LR
   T(T)
   
   %% DAG structure of the Kernel Graph
-  S --> SCC1
-  S --> C
-  SCC1 --> SCC2
-  C --> SCC2
-  SCC2 --> G
-  G --> T
+  S --45--> SCC1
+  S --55--> C
+  SCC1 --30--> SCC2
+  C --50--> SCC2
+  SCC2 --55--> G
+  G --50--> T
   
   %% Styling for different types of SCCs
   classDef sourceSCC fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
@@ -386,38 +386,14 @@ graph LR
   class C,G singleSCC
 ```
 
-### Matriz de Incidencia en MATLAB
+This also could be represented as a Sankey:
 
-Para el grafo del ejemplo anterior, definimos los nodos numerados como:
-- S(1), A(2), B(3), C(4), D(5), E(6), F(7), G(8), T(9)
-
-La **matriz de adyacencia** A en MATLAB sería:
-
-```matlab
-% Matriz de adyacencia del grafo SSR ejemplo
-% Nodos: S(1), A(2), B(3), C(4), D(5), E(6), F(7), G(8), T(9)
-A = [
-  0 1 0 1 0 0 0 0 0;  % S -> A, C
-  0 0 1 0 1 0 0 0 0;  % A -> B, D  
-  0 1 0 0 0 0 0 0 0;  % B -> A
-  0 0 0 0 1 0 0 0 0;  % C -> D
-  0 0 0 0 0 1 0 0 0;  % D -> E
-  0 0 0 0 0 0 1 0 0;  % E -> F
-  0 0 0 0 1 0 0 1 0;  % F -> D, G
-  0 0 0 0 0 0 0 0 1;  % G -> T
-  0 0 0 0 0 0 0 0 0;  % T (sink)
-];
-
-% Verificación: radio espectral > 0 debido a los ciclos
-rho = max(real(eig(A)));
-fprintf('Radio espectral ρ(A) = %.4f\n', rho);
-
-% Labels para los nodos
-nodeLabels = {'S', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'T'};
+```mermaid
+sankey-beta
+S,SC1,45
+S,C,55
+SC1,SC2,30
+C,SC2,50
+SC2,G,55
+G,T,50
 ```
-
-Esta matriz captura:
-- **Ciclo SCC₁**: A(2) ↔ B(3) 
-- **Ciclo SCC₂**: D(5) → E(6) → F(7) → D(5)
-- **Estructura DAG** entre SCCs: S → {A,B,C} → {D,E,F} → G → T
-
