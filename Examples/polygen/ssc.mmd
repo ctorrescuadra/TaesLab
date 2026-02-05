@@ -1,0 +1,47 @@
+%%{init: {"theme":"forest"}}%%
+graph LR
+  %% Source node
+  S(S) 
+  
+  subgraph SCC1 [" "]
+    A((A))
+    B((B)) 
+    A --> B
+    B --> A
+  end
+  
+  subgraph SCC2 [" "]
+    D((D))
+    E((E))
+    F((F))
+    D --> E
+    E --> F
+    F --> D
+  end
+  
+  %% Intermediate nodes
+  C((C))
+  G((G))
+  
+  %% Sink node
+  T(T)
+  
+  %% Connections between SCCs and other nodes
+  S --> A
+  S --> C
+  A --> D
+  C --> D
+  E --> G
+  F --> G
+  G --> T
+  
+  %% Styling for SCCs
+  classDef scc1 fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+  classDef scc2 fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+  classDef source fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px
+  classDef sink fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+  
+  class A,B scc1
+  class D,E,F scc2
+  class S source
+  class T sink
