@@ -5,10 +5,24 @@ This directory contains the sidebar configuration for the TaesLab GitHub Wiki.
 ## Files
 
 - `_Sidebar.md` - Defines the navigation menu and page order for the wiki
+- `deploy-sidebar.sh` - Automated deployment script
+- `README.md` - This file
 
 ## Deploying to Wiki
 
-To update the sidebar on the GitHub Wiki:
+### Automated Deployment (Recommended)
+
+Run the deployment script from the repository root:
+
+```bash
+./Wiki/deploy-sidebar.sh
+```
+
+This script will automatically clone (or update) the wiki repository, copy the sidebar, and push the changes.
+
+### Manual Deployment
+
+If you prefer to deploy manually:
 
 1. Clone the wiki repository:
    ```bash
