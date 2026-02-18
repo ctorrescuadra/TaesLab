@@ -32,14 +32,6 @@ classdef cDigraphAnalysis < cMessageLogger
 %       • DAG structure emerges from component condensation
 %       • Reveals feedback loops and circular dependencies
 %
-%   Applications in Thermoeconomics:
-%     - Productive structure validation (ProcessMatrix)
-%     - Fuel-Product tables analysis
-%     - Detection of circular dependencies in production chains
-%     - Hierarchical decomposition of energy systems
-%     - Kernel diagram generation for visualization
-%     - Structural optimization and simplification
-%
 %   cDigraphAnalysis Properties:
 %     NrOfNodes - Number of nodes of the  graph
 %       uint32
@@ -48,11 +40,11 @@ classdef cDigraphAnalysis < cMessageLogger
 %     GraphNodes - Node information for the complete SSR graph
 %       struct array including node name and group
 %     GraphEdges - Edge list for the complete SSR graph
-%       struct array including source node, target node and weigth      
+%       struct array including source node, target node and weight      
 %     KernelNodes - Node information for kernel DAG
 %       struct array including node name and group
 %     KernelEdges - Edge list for kernel DAG
-%       struct array including source node, target node and weigth
+%       struct array including source node, target node and weight
 %     isDAG - Indicate if graph is acyclic
 %       true | false
 %
@@ -69,7 +61,7 @@ classdef cDigraphAnalysis < cMessageLogger
 %   Design Pattern:
 %     Inherits from cMessageLogger for standardized error/warning reporting.
 %     Immutable analysis results - properties are read-only after construction.
-%     Internal caching of intermediate results (transitive closure, components).
+%     Internal caching of intermediate results (transitive closure, strong components map).
 %
 %   Graph Requirements:
 %     Input adjacency matrix must represent a productive graph:
@@ -78,22 +70,9 @@ classdef cDigraphAnalysis < cMessageLogger
 %       • First node treated as source (IN)
 %       • Last node treated as sink (OUT)
 %       • Intermediate nodes represent processes or flows
+%     The constructor transforms input to SSR format if needed, ensuring single source/sink structure.
 %
-%   Strong Component Detection:
-%     Uses efficient algorithm for component identification:
-%       • Tarjan's algorithm for linear-time complexity O(V+E)
-%       • Identifies maximal strongly connected subgraphs
-%       • Assigns unique component ID to each node
-%       • Enables fast component membership queries
-%
-%   Kernel DAG Construction:
-%     When cycles exist (isDAG = false):
-%       • Group nodes by strong component
-%       • Create meta-nodes for each component
-%       • Preserve inter-component connections
-%       • Result is guaranteed acyclic (DAG property)
-%
-%   Common Use Cases:
+%   TaesLab Applications:
 %     - Validating thermoeconomic productive structure topology
 %     - Identifying circular dependencies in production chains
 %     - Generating simplified kernel diagrams for complex systems
@@ -121,6 +100,7 @@ classdef cDigraphAnalysis < cMessageLogger
         kG             % Kernel Matrix
         tc             % Transitive Closure
         comps          % Graphs components
+        scmp           % Strongly Connected Component Map
     end
 
     methods
@@ -319,12 +299,6 @@ classdef cDigraphAnalysis < cMessageLogger
         %   directed edges in the graph. Uses precomputed transitive closure
         %   for O(1) query time, making repeated reachability tests efficient.
         %
-        %   Reachability is fundamental for:
-        %     • Verifying productive dependencies
-        %     • Analyzing flow paths and connectivity
-        %     • Identifying upstream/downstream relationships
-        %     • Validating graph structure
-        %
         %   Syntax:
         %     res = obj.isReachable(u, v)
         %
@@ -385,12 +359,8 @@ classdef cDigraphAnalysis < cMessageLogger
         %   they belong to the same strongly connected component. Nodes in
         %   the same component can reach each other through directed paths,
         %   indicating circular dependencies or feedback loops.
-        %
-        %   Strong connectivity reveals:
-        %     • Circular production dependencies
-        %     • Feedback loops in productive structure
-        %     • Groups requiring simultaneous equation solving
-        %     • Component boundaries for decomposition
+        %   Uses the precomputed strong component map for O(1) query time, making
+        %   repeated strong connectivity tests efficient.
         %
         %   Syntax:
         %     res = obj.isStrongConnected(u, v)
@@ -500,7 +470,6 @@ classdef cDigraphAnalysis < cMessageLogger
         %     • Exporting to graph layout software (yEd, Graphviz)
         %     • Hierarchical visualization of productive structure
         %     • Input for thermoeconomic cost calculations
-        %     • Structural analysis and optimization
         %
         %   See also:
         %     KernelEdges, KernelNodes, isDAG, getComponentNames
@@ -541,18 +510,13 @@ classdef cDigraphAnalysis < cMessageLogger
         %
         %   Use Cases:
         %     • Organizing nodes by component for analysis
-        %     • Identifying feedback loop participants
         %     • Coloring nodes by component in visualizations
-        %     • Decomposition-based optimization strategies
         %
         %   See also:
         %     getComponentNames, isStrongConnected, NrOfComponents 
         %
-            tmp=obj.GraphNodes;
-            names={tmp.Name};
-            idx=[tmp.Group];
-            grps=obj.kNodes(idx);
-            res=struct('Name',names,'Group',grps);
+            grps=obj.kNodes(obj.comps);
+            res=struct('Name',obj.nodes,'Group',grps);
         end
 
         function res=getComponentNames(obj)
@@ -704,8 +668,10 @@ classdef cDigraphAnalysis < cMessageLogger
         %   from every other node. A graph without cycles (DAG) has as many
         %   components as nodes.
         %   The components are calculated using the transitive closure
-        %   The components are stored in the property obj.comps
+        %   The strong component map is stored in obj.scmp, where each row corresponds to a component and
+        %   each column corresponds to a node. The value is 1 if the node belongs to the component, 0 otherwise.
         %   The name of strong components are stores in obj.kNodes
+        %
         %   Syntax:
         %     obj.getStrongComponents()
         %        
@@ -719,12 +685,13 @@ classdef cDigraphAnalysis < cMessageLogger
                     res(idx)=cnt;
                 end
             end
-            obj.comps=res;
             obj.NrOfComponents = max(res);
+            obj.scmp=sparse(res,1:n,true(n,1),obj.NrOfComponents,obj.NrOfNodes);
+            obj.comps=res;
             % Get the names of the kernel nodes
-            [~,jdx,idx]=unique(obj.comps);
-            cnames = obj.nodes(jdx);
-            nrg = accumarray(idx,1);
+            [~,jdx]=unique(res);
+            cnames = obj.nodes(jdx);  
+            nrg = sum(obj.scmp,2);
             tmp = find(nrg>1);
             for i=1:length(tmp)
                 cnames{tmp(i)}=['SC',num2str(i)];
@@ -736,17 +703,16 @@ classdef cDigraphAnalysis < cMessageLogger
         %buildKernelMatrix - Get the kernel graph adjacency matrix
         %   The kernel graph is obtained by collapsing each strongly connected component
         %   into a single node. The kernel graph is a DAG.
-        %   The kernel graph adjacency matrix is stored in obj.kG
-        %   Syntax;
+        %   The kernel graph is obtained using the algorithm:
+        %     kG = scmp * graph * scmp'
+        %   and removing self-loops: kG(1:nc+1:end)=0
+        %   
+        %   Syntax:
         %     obj.buildKernelMatrix()
-        %    
-            grps=obj.comps;
-            ng=obj.NrOfComponents;
-            [snodes,tnodes,vals]=find(obj.graph);
-            tmp1=grps(snodes);
-            tmp2=grps(tnodes);
-            sol=find(tmp2-tmp1);
-            obj.kG=sparse(tmp1(sol),tmp2(sol),vals(sol),ng,ng);
+        %
+            nc=size(obj.scmp,1);
+            obj.kG=obj.scmp*obj.graph*obj.scmp';
+            obj.kG(1:nc+1:end)=0;
         end
     end
 
