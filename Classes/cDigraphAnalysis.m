@@ -45,6 +45,8 @@ classdef cDigraphAnalysis < cMessageLogger
 %       struct array including node name and group
 %     KernelEdges - Edge list for kernel DAG
 %       struct array including source node, target node and weight
+%     topologicalOrder - Topological order of the graph nodes
+%       uint32 array (1×N)
 %     isDAG - Indicate if graph is acyclic
 %       true | false
 %
@@ -90,10 +92,10 @@ classdef cDigraphAnalysis < cMessageLogger
         GraphNodes         % Nodes of the graph      
         KernelNodes        % Nodes of the kernel DAG
         KernelEdges        % Edges of the kernel DAG
-        isDAG              % Digraph is Acycled
+        TopologicalOrder   % Topological order of the graph
     end
 
-    properties(Access=private)
+    properties(Access=public)
         graph          % Adjacency of the graph
         nodes          % Node Names
         kNodes         % Kernel Names
@@ -191,18 +193,28 @@ classdef cDigraphAnalysis < cMessageLogger
             % Get properties
 	        obj.tc = transitiveClosure(obj.graph);
             obj.getStrongComponents;
-            obj.isDAG=(obj.NrOfComponents == obj.NrOfNodes);
             obj.GraphEdges=cDigraphAnalysis.getEdgesTable(obj.graph,obj.nodes);
             obj.GraphNodes=cDigraphAnalysis.getNodesTable(obj.graph,obj.nodes,obj.comps);
             if obj.isDAG
-                [obj.kG,obj.kNodes] = deal(obj.graph,obj.nodes);
-                obj.KernelEdges=obj.GraphEdges;
-                obj.KernelNodes=obj.GraphNodes;
+                idx=topologicalOrder(obj.graph);
+                obj.kG=obj.graph(idx,idx);
+                obj.kNodes=obj.nodes(idx);
+                obj.TopologicalOrder=idx
             else
                 obj.buildKernelMatrix;
-                obj.KernelEdges=cDigraphAnalysis.getEdgesTable(obj.kG,obj.kNodes);
-                obj.KernelNodes=cDigraphAnalysis.getNodesTable(obj.kG,obj.kNodes,1:obj.NrOfComponents);
             end
+            obj.KernelEdges=cDigraphAnalysis.getEdgesTable(obj.kG,obj.kNodes);
+            obj.KernelNodes=cDigraphAnalysis.getNodesTable(obj.kG,obj.kNodes,1:obj.NrOfComponents);
+        end
+
+        function res = isDAG(obj)
+        %isDAG - Check if the graph is acyclic (DAG).
+        %   Returns true if the graph has no cycles (i.e., each node forms its own strong component)
+        %   and the diagonal of the adjacency matrix is zero (no self-loops).
+        %   Syntax:
+        %     res = obj.isDAG()
+        %
+            res = (obj.NrOfComponents == obj.NrOfNodes) && all(diag(obj.graph) == 0);
         end
 
         function [res,src,out]=isProductive(obj)
@@ -515,9 +527,12 @@ classdef cDigraphAnalysis < cMessageLogger
         %   See also:
         %     getComponentNames, isStrongConnected, NrOfComponents 
         %
-            grps=obj.kNodes(obj.comps);
-            res=struct('Name',obj.nodes,'Group',grps);
+            [idx,jdx]=find(obj.scmp');
+            grps=obj.kNodes(jdx);
+            names=obj.nodes(idx);
+            res=struct('Name',names,'Group',grps);
         end
+
 
         function res=getComponentNames(obj)
         %getComponentNames - Retrieve names of all strongly connected components.
@@ -551,6 +566,13 @@ classdef cDigraphAnalysis < cMessageLogger
         %
             idx=obj.comps(2:end-1);
             res=obj.kNodes(idx);
+        end
+
+        function [A,names]=getOrderGraph(obj)
+            idx=obj.TopologicalOrder;
+            A=cDigraphAnalysis.ssr2tfp(obj.graph(idx,idx));
+            tnodes=obj.nodes(idx);
+            names=[tnodes(2:end-1),'ENV'];
         end
 
         %%%%
@@ -705,14 +727,26 @@ classdef cDigraphAnalysis < cMessageLogger
         %   into a single node. The kernel graph is a DAG.
         %   The kernel graph is obtained using the algorithm:
         %     kG = scmp * graph * scmp'
-        %   and removing self-loops: kG(1:nc+1:end)=0
-        %   
+        %   and removing self-loops.
+        %   The Kernel Graph is reorder using its topological order
+        %   A topological order of the graph grouping the SCC is stored in obj.TopologicalOrder
+        %
         %   Syntax:
         %     obj.buildKernelMatrix()
         %
             nc=size(obj.scmp,1);
-            obj.kG=obj.scmp*obj.graph*obj.scmp';
-            obj.kG(1:nc+1:end)=0;
+            % Build the kernel graph adjacency matrix
+            mKG=obj.scmp*obj.graph*obj.scmp';
+            mKG(1:nc+1:end)=0;
+            % Get the topological order of the kernel graph
+            idx=topologicalOrder(mKG);
+            % Build the kernel graph info
+            obj.kG=mKG(idx,idx);
+            obj.kNodes=obj.kNodes(idx);
+            obj.scmp=obj.scmp(idx,:);
+            % Get a topological order of the graph (grouping SCC)
+            [idx,~]=find(obj.scmp');
+            obj.TopologicalOrder=idx;
         end
     end
 
@@ -783,7 +817,7 @@ classdef cDigraphAnalysis < cMessageLogger
 
     methods(Static)
         function G=tfp2ssr(A)
-        %tfp2ssr - Tranform a Table FP into a SSR adjacency Matrix
+        %tfp2ssr - Transform a Table FP into a SSR adjacency Matrix
         %   Syntax;
         %     G=tfp2ssr(A)
         %   Input Arguments:
@@ -794,7 +828,7 @@ classdef cDigraphAnalysis < cMessageLogger
             N=size(A,1);
 			G=[0 A(end,:);...
 			   zeros(N-1,1) A(1:end-1,:);...
-			   0 zeros(1,N)];
+			   zeros(1,N+1)];
         end
 
         function A=ssr2tfp(G)

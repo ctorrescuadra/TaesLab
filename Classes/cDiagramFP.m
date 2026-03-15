@@ -40,6 +40,8 @@ classdef (Sealed) cDiagramFP < cResultId
         TableKFP     % Kernel Table FP
         TableKCFP    % Kernel Cost Table FP
         GroupsTable  % Graph Components table
+        NodeWeight   % Node Weight
+        DigraphInfo  % Digraph Info
     end
 
     methods
@@ -74,6 +76,11 @@ classdef (Sealed) cDiagramFP < cResultId
             obj.NodesFP=eda.GraphNodes;
             obj.NodesKFP=eda.KernelNodes;
             obj.GroupsTable=eda.getGroupsInfo;
+            % Get Node Weights
+            idx=eda.TopologicalOrder;
+            weights=[1 exc.RecirculationFactor 1];
+            obj.NodeWeight=weights(idx);
+            obj.DigraphInfo=eda;
             % cResultId properties
             obj.ResultId=cType.ResultId.DIAGRAM_FP;
             obj.DefaultGraph=cType.Tables.DIGRAPH_FP;

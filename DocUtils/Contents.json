@@ -198,24 +198,24 @@
             "Description": "Identifies if the function has been executed in MATLAB."
           },
           {
-            "Name": "isOctave",
-            "Description": "Identifies if the function has been executed in Octave."
-          },
-          {
-            "Name": "isSquareMatrix",
-            "Description": "Check if input is a numeric or logical square matrix."
-          },
-          {
             "Name": "isNonNegativeMatrix",
             "Description": "Check if the matrix is square and non-negative."
           },
           {
-            "Name": "isNonSingularMatrix",
-            "Description": "Check if the matrix (I-A) is non-singular."
-          },
-          {
             "Name": "isObject",
             "Description": "Check if 'obj' is a valid cTaesLab object belong to a specific class."
+          },
+          {
+            "Name": "isOctave",
+            "Description": "Identifies if the function has been executed in Octave."
+          },
+          {
+            "Name": "isProductiveMatrix",
+            "Description": "Check if a matrix represents a productive matrix."
+          },
+          {
+            "Name": "isSquareMatrix",
+            "Description": "Check if input is a numeric or logical square matrix."
           },
           {
             "Name": "isValid",
@@ -228,10 +228,6 @@
         "Description": "Matrix Operation Functions",
         "Files": [
           {
-            "Name": "vDivide",
-            "Description": "Element-wise division with NaN handling for 0/0 cases."
-          },
-          {
             "Name": "divideCol",
             "Description": "Divide each column of matrix A by corresponding element of vector x."
           },
@@ -240,28 +236,24 @@
             "Description": "Divide each row of matrix A by corresponding element of vector x."
           },
           {
-            "Name": "scaleCol",
-            "Description": "Multiply each column of matrix A by corresponding element of vector x."
-          },
-          {
-            "Name": "scaleRow",
-            "Description": "Multiply each row of matrix A by corresponding element of vector x."
-          },
-          {
-            "Name": "tolerance",
-            "Description": "Compute relative tolerance value for a matrix."
-          },
-          {
-            "Name": "zerotol",
-            "Description": "Set matrix values near zero to exact zero."
-          },
-          {
             "Name": "inverseMatrixOperator",
             "Description": "Calculate the inverse of the M-Matrix (I-A)."
           },
           {
             "Name": "logicalMatrix",
             "Description": "Convert numeric matrix to logical with zero tolerance."
+          },
+          {
+            "Name": "npinv",
+            "Description": "Compute inverse of M-matrix (I - A) using Gauss-Jordan elimination."
+          },
+          {
+            "Name": "scaleCol",
+            "Description": "Multiply each column of matrix A by corresponding element of vector x."
+          },
+          {
+            "Name": "scaleRow",
+            "Description": "Multiply each row of matrix A by corresponding element of vector x."
           },
           {
             "Name": "similarDemandMatrix",
@@ -278,6 +270,32 @@
           {
             "Name": "similarResourceOperator",
             "Description": "Compute resource-driven operator from demand-driven operator."
+          },
+          {
+            "Name": "tolerance",
+            "Description": "Compute relative tolerance value for a matrix."
+          },
+          {
+            "Name": "vDivide",
+            "Description": "Element-wise division with NaN handling for 0/0 cases."
+          },
+          {
+            "Name": "zerotol",
+            "Description": "Set matrix values near zero to exact zero."
+          }
+        ]
+      },
+      {
+        "Name": "top",
+        "Description": "Graph Functions",
+        "Files": [
+          {
+            "Name": "dfs",
+            "Description": "Depth-First Search traversal of a graph"
+          },
+          {
+            "Name": "topologicalOrder",
+            "Description": "Get topological order indices of a DAG."
           },
           {
             "Name": "transitiveClosure",

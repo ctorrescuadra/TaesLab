@@ -21,7 +21,6 @@ classdef(Sealed) cProductiveStructure < cResultId
 %     Processes         - Processes info
 %     ProcessKeys       - Cell array of Processes Names (keys)
 %     ProcessMatrix     - Processes Matrix
-%     ProcessDigraph    - Process Digraph (cDigraphAnalysis)
 %     Streams           - Streams info
 %     StreamKeys      	- Cell array of Streams Names (keys)
 %     Waste             - Waste array structure (flow, stream, process) index
@@ -74,8 +73,7 @@ classdef(Sealed) cProductiveStructure < cResultId
         ProcessKeys       % Cell array of Processes Names (keys)
         StreamKeys        % Cell array of Streams Names (keys)
 		ProductiveTable   % Adjacency Matrix of Productive Structure
-        ProcessMatrix     % Processes Matrix
-		ProcessDigraph	  % Process Digraph (cDigraphAnalysis)	
+        ProcessMatrix     % Processes Matrix	
 	end
 
     properties(Access=private)
@@ -880,23 +878,24 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%     res = obj.checkGraphConnectivity	
 		%   Output Arguments:		
 		%     res - true | false indicating if the graph is ok
+		%     if false log the not reached nodes
 		
 			% Build the SSR graph adjacency matrix
 			tfp=obj.getProcessMatrix;
-			nodes=obj.ProcessKeys;
-			sc=cDigraphAnalysis(tfp,nodes);
-			[res,src,out]=sc.isProductive;
-			% Compute the transitive closure
-			% Log non-SSR nodes
+			ssr=cDigraphAnalysis.tfp2ssr(tfp);
+			src=dfs(ssr);
+			out=dfs(ssr',size(ssr,1));
+			res=all(src) & all(out);
 			if res
-				obj.ProcessDigraph=sc;
                 obj.ProcessMatrix=tfp;
 			else
+				src=find(~src);
 				for i=1:numel(src)
-					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,src{i});
+					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 				end
+				out=find(~out);
             	for i=1:numel(out)
-					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,out{i});
+					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
             	end
 			end
 		end

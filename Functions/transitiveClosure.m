@@ -8,7 +8,7 @@ function res = transitiveClosure(A)
 %     it efficient for small to medium-sized graphs. For large sparse graphs,
 %     consider using specialized graph libraries.
 %     Applications include determining connectivity, reachability, and
-%   dependency analysis in networked systems.
+%     dependency analysis in networked systems.
 %
 %   Syntax:
 %     res = transitiveClosure(A)
@@ -65,16 +65,14 @@ function res = transitiveClosure(A)
 %     - https://en.wikipedia.org/wiki/Floyd-Warshall_algorithm
 %
 
-    % Validate input argument count
+    %% Validate input argument count
     if nargin ~= 1
-        msg = buildMessage(mfilename, cMessages.NarginError, cMessages.ShowHelp);
-        error(msg);
-    end   
-    % Validate matrix is square
-    if ~isSquareMatrix(A)
-        msg = buildMessage(mfilename, cMessages.SquareMatrixError);
-        error(msg);
-    end   
+        error(buildMessage(mfilename, cMessages.NarginError, cMessages.ShowHelp));
+    end
+    % Check if it is a square non-negative matrix
+    if ~isNonNegativeMatrix(A)
+        error(buildMessage(mfilename, cMessages.NegativeMatrix));
+    end
     % Convert sparse to dense (required for logical operations)
     if issparse(A)
         res = full(A);
@@ -85,7 +83,7 @@ function res = transitiveClosure(A)
     if ~islogical(res)
         res = logicalMatrix(res);
     end
-    % Floyd-Warshall algorithm for transitive closure
+    %% Floyd-Warshall algorithm for transitive closure
     % For each intermediate vertex k, check if path i→k→j exists
     n = size(A, 1);
     for k = 1:n

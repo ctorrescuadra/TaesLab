@@ -1177,7 +1177,7 @@
 			"ttable": 1,
 			"resultId": 7,
 			"graph": 0,
-			"columns": 2,
+			"columns": 3,
 			"node": 0,
 			"rsc": false,
 			"fields": [
@@ -1190,6 +1190,11 @@
 					"name": "group",
 					"header": "Group",
 					"type": 2
+				},
+				{
+					"name": "weight",
+					"header": "Weight",
+					"type": 5
 				}
 			]
 		}

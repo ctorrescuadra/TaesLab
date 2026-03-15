@@ -23,12 +23,12 @@ function res=isNonNegativeMatrix(A,tol)
 %   See also: isSquareMatrix, tolerance
 %   
     res=false;
-    %Chech input arguments
+    % Check input arguments
     try narginchk(1,2); catch, return; end
     if nargin == 1 || ~isnumeric(tol) || ~isscalar(tol) || tol<0
         tol = cType.EPS; % Default tolerance
     end
     %Get relative tolerance and check squareness and non-negativity
     reltol=tolerance(A,tol);
-    res=isSquareMatrix(A) && all(A(:))>=-reltol;
+    res=isSquareMatrix(A) && all(A(:)>=-reltol);
 end

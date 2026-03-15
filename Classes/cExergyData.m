@@ -132,8 +132,8 @@ classdef cExergyData < cMessageLogger
 			mbE=divideCol(tAE,ET);
             mbS=divideCol(tAS,B);
 			opE=mbS*mbE+mbF(:,1:end-1)*mbP(1:end-1,:);
-			% Validate Productive Graph and log errors if apply
-			if isNonSingularMatrix(opE)
+			% Validate Productive Graph
+			if isProductiveMatrix(opE)
 				obj.ps=ps;
 				obj.FlowsExergy=B;
 				obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);

@@ -120,8 +120,9 @@ classdef cMessages
         ZeroProduct='Product of process %s is zero'
         ProcessNotActive='Process %s is not active'
         NoProductiveState='The data model is not productive for state %s'
-        SingularMatrix='The matrix is singular'
-        NegativeMatrix='The Matrix has negative elements'
+        SingularMatrix='Matrix is singular to working precision'
+        NegativeMatrix='Matrix it is not square and non-negative'
+        InverseCalculated='Inverse matrix calculated. rcond = %10.4e'
         % Diagnosis
         ExergyCostRequired='Input parameters are NOT cExergyCost objects'
         DiagnosisNotAvailable='Thermoeconomic Diagnosis is NOT available'

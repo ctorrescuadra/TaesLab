@@ -183,7 +183,7 @@ classdef cQueue < cTaesLab
         %     q = cQueue();  % Create empty queue
         %     fprintf('Initial count: %d\n', q.Count);  % Output: 0
         %
-        %   See also: add, clear, cTaesLab
+        %   See also: cTaesLab
         %
             obj.clear;
         end

@@ -147,7 +147,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         % Get the recirculation factor of the processes
             res=cType.EMPTY;
             if obj.status
-                res=zerotol(diag(obj.fpOperators.opCP)'-1);
+                res=diag(obj.fpOperators.opCP)';
             end
         end
     
@@ -579,14 +579,8 @@ classdef (Sealed) cExergyCost < cExergyModel
                 end
                 sol(i,:)=tmp/sum(tmp);
             end
-            % Check if waste operator is valid
             sol=scaleRow(sol,1-wt.RecycleRatio);
-            mS=sol*opCP(:,aR);
-            if ~isNonSingularMatrix(mS)
-                log.messageLog(cType.ERROR,cMessages.InvalidWasteOperator,obj.State);
-                return
-            end
-            % Update object values
+            % Update object values            
             wt.updateValues(sol);
             mRP=cSparseRow(aR,sol);
             obj.TableR=scaleRow(mRP,vP);

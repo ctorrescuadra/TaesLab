@@ -275,7 +275,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.ktfp=obj.getTableFP(cType.Tables.KTABLE_FP,dfp.TableKFP,dfp.kNames);
             tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dfp.TableCFP);
             tbl.kdcfp=obj.getTableFP(cType.Tables.KTABLE_COST_FP,dfp.TableKCFP,dfp.kNames);
-            tbl.grps=obj.getGroupsTable(cType.Tables.PROCESS_GROUP,dfp.GroupsTable);
+            tbl.grps=obj.getGroupsTable(cType.Tables.PROCESS_GROUP,dfp);
             % Build the cResultInfo
             res=cResultInfo(dfp,tbl);
         end
@@ -506,10 +506,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %   Output Arguments:
         %   res - cTableCell object
         %   
-            [td,tp]=obj.getTableProperties(name);
-            data={val.Group}';
-            rowNames={val.Name};
-            colNames=obj.getTableHeader(td);
+            [~,tp]=obj.getTableProperties(name);
+            data(:,1)={val.GroupsTable.Group};
+            data(:,2)=num2cell(val.NodeWeight');
+            rowNames={val.GroupsTable.Name};
+            colNames={'Node','Group','Weight'};
             res=cTableCell(data,rowNames,colNames,tp);
         end
 
