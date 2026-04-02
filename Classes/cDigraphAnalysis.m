@@ -813,9 +813,7 @@ classdef cDigraphAnalysis < cMessageLogger
             fields={'Source','Target','Value'};
             res=cell2struct(tmp,fields,1);
         end
-    end
-
-    methods(Static)
+        
         function G=tfp2ssr(A)
         %tfp2ssr - Transform a Table FP into a SSR adjacency Matrix
         %   Syntax;

@@ -65,9 +65,13 @@ function res=dfs(G,s)
     % Check if it is a square non-negative matrix
     if ~isNonNegativeMatrix(G)
         error(buildMessage(mfilename, cMessages.NegativeMatrix));
-    end  
-    % Get number of nodes in the graph
-    N = size(G, 1);   
+    end
+    % Get number of nodes in the graph 
+    N = size(G, 1); 
+    % Convert to logical matrix (handles zero tolerance)
+    if ~islogical(G)
+    G = logicalMatrix(G);
+    end
     % Initialize result array: false means unvisited, true means visited
     res = false(1, N);   
     %% Parameter Processing

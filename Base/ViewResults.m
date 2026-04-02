@@ -30,12 +30,12 @@ classdef ViewResults < matlab.apps.AppBase
         ContextMenu2      matlab.ui.container.ContextMenu
         SaveResultsMenu   matlab.ui.container.Menu
         ContextMenu3      matlab.ui.container.ContextMenu
-        SaveTableMenu     matlab.ui.container.Menu
-        Colorbar          matlab.ui.control.UIAxes          
+        SaveTableMenu     matlab.ui.container.Menu        
     end
 
     properties(Access = public)
         UIAxes            matlab.ui.control.UIAxes
+        Colorbar          
     end
 
     % Properties of TaesLab elements

@@ -43,6 +43,7 @@ classdef cGraphSummary < cGraphResults
 			if nargin < 3
 				options.Variables=cType.EMPTY_CELL;
                 options.Style=cType.DEFAULT_GRAPHSTYLE;
+                options.Cases=cType.EMPTY_CELL;
 			end
 			if ~isfield(options,'Variables')
                 options.Variables=cType.EMPTY_CELL;

@@ -873,30 +873,34 @@ classdef(Sealed) cProductiveStructure < cResultId
         function res=checkGraphConnectivity(obj)
 		%checkGraphConnectivity - Check the productive graph connectivity.
 		%   The function checks that all nodes are connected from the source (resources)
-		%   and	 that all nodes can reach the sink (final products).	
+		%   and	all nodes can reach the sink (final products).	
 		%   Syntax:	
 		%     res = obj.checkGraphConnectivity	
 		%   Output Arguments:		
 		%     res - true | false indicating if the graph is ok
-		%     if false log the not reached nodes
+		%     if false logs the non reached nodes
 		
 			% Build the SSR graph adjacency matrix
-			tfp=obj.getProcessMatrix;
-			ssr=cDigraphAnalysis.tfp2ssr(tfp);
-			src=dfs(ssr);
-			out=dfs(ssr',size(ssr,1));
-			res=all(src) & all(out);
-			if res
-                obj.ProcessMatrix=tfp;
+			N=obj.NrOfProcesses;
+			[tfp,src,out]=obj.getProcessMatrix;
+			ssr=[false,src,false;false(N,1),tfp,out;false(1,N+2)];
+			% Calculate nodes reached by src and nodes reaches out
+			rs=dfs(ssr,1);
+			rt=dfs(ssr',N+2);
+			res=all(rs) & all(rt);
+			if res % Build Process Matrix
+				obj.ProcessMatrix=[tfp,out;src,0];
 			else
-				src=find(~src);
-				for i=1:numel(src)
+				% Processes not reached from source
+				rs=~rs(2:end-1);
+				for i=find(rs)
 					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 				end
-				out=find(~out);
-            	for i=1:numel(out)
+				% Processes can not reach sink
+				rt=~rt(2:end-1);
+				for i=find(rt)
 					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
-            	end
+				end
 			end
 		end
     end

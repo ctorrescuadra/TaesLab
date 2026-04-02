@@ -141,17 +141,15 @@ classdef cExergyData < cMessageLogger
 				obj.AdjacencyTable=struct('AF',tAF,'AP',tAP,'AE',tAE,'AS',tAS);
 				obj.AdjacencyMatrix=struct('AF',mbF,'AP',mbP,'AE',mbE,'AS',mbS);
 				obj.ActiveProcesses= logical(~bypass);
-			else % Compute the transitive closure of the processes graph
-				A = mbS * mbE + mbF(:,1:end-1) * mbP(1:end-1,:);
-				E = eye(N+1) | logicalMatrix(mbP) * transitiveClosure(A) * logicalMatrix(mbF);
-                s=E(end,:);t=E(:,end);
-				% Log non-SSR process nodes
-				for i=find(~s)
-					if ~bypass(i)
-						obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,ps.ProcessKeys{i});
-					end
-				end
-            	for i=transpose(find(~t))
+            else % Find Non SSR process nodes
+				NS=ps.NrOfStreams;
+                % Search the nodes reach output
+				ssr=[0,mbP(end,:),0;zeros(NS,1),opE,mbF(:,end);zeros(1,NS+2)];
+				tmp=dfs(ssr',NS+2);
+                % Get the corresponding process
+                t=tmp(2:end-1)*tbl.AF;
+				% Log non-SSR process nodes 
+            	for i=find(~t)
 					if ~bypass(i)
 						obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,ps.ProcessKeys{i});
 					end

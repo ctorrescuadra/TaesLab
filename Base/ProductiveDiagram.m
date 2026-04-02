@@ -118,11 +118,6 @@ function res=ProductiveDiagram(data,varargin)
 %         % Analyze process connectivity
 %     end
 %
-%     % Example 7: Generate and display kernel graph using cDiagraphAnalisis/plot
-%     data = ReadDataModel('./Examples/cgam/cgam_model.json');
-%     dg = data.ProductiveStructure.ProcessDigraph;
-%     dg.plot(cType.DigraphType.KERNEL, 'CGAM Kernel Structure');
-%
 %   Common Use Cases:
 %     • Creating publication-quality productive structure diagrams
 %     • Visualizing complex plant topology for presentations

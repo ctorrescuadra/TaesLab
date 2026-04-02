@@ -72,7 +72,7 @@ function res=topologicalOrder(A)
         error(buildMessage(mfilename, cMessages.NarginError, cMessages.ShowHelp));
     end
     % Check if it is a square non-negative matrix
-    if ~isNonNegativeMatrix(G)
+    if ~isNonNegativeMatrix(A)
         error(buildMessage(mfilename, cMessages.NegativeMatrix));
     end 
     % Initialize arrays

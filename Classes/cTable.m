@@ -206,6 +206,15 @@ classdef (Abstract) cTable < cMessageLogger
             res=(obj.GraphType ~= cType.GraphType.NONE);
         end
 
+        function res=formatData(obj)
+        %formatData - formatData base method
+        %   Syntax:
+        %     res.formatData
+        %   Output Arguments:
+        %     res - Data values
+            res=obj.Data;
+        end
+
         function res=getColumnFormat(obj)
         %getColumnFormat - Get the format of each column table
         %   Syntax:

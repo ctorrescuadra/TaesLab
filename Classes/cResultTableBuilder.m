@@ -404,7 +404,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             ncols=numel(colNames)-1;
             % Fill Columns
             data=cell(nrows,ncols);
-            data(:,1)=ps.ProcessDigraph.getComponentNames;
+            data(:,1)=obj.processKeys(1:end-1);
             data(:,2)={prc.fuel};
             data(:,3)={prc.product};
             data(:,4)={prc.type};

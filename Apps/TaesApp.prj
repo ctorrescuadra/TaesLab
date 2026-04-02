@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="3463769365" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps\TaesApp.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps" name="TaesApp" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="199476012" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps\TaesApp.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps" name="TaesApp" target="target.mlapps" target-name="Package App">
     <param.appname>TaesApp</param.appname>
     <param.authnamewatermark>César Torres Cuadra</param.authnamewatermark>
     <param.email>ctorresc@unizar.es</param.email>
@@ -12,8 +12,8 @@
     </param.icons>
     <param.summary>TAES App</param.summary>
     <param.description>Thermoeconomic Analysis of Energy System</param.description>
-    <param.screenshot>C:\Users\ctorr\AppData\Local\Temp\tpd2a0e9be_d093_4455_a4a4_819d5e3ed380.png</param.screenshot>
-    <param.version>1.7</param.version>
+    <param.screenshot>${PROJECT_ROOT}\Resources\Splash_TAES.png</param.screenshot>
+    <param.version>1.8</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -41,17 +41,20 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Base\SaveTable.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cBuildHTML.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cBuildLaTeX.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cBuildMarkdown.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDataModel.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDataset.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDiagnosis.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDiagramFP.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDictionary.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDigraph.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cDigraphAnalysis.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyCost.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyData.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cExergyModel.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cFormatData.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphCost.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphCostRSC.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphDiagnosis.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphDiagramFP.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cGraphRecycling.m</file>
@@ -63,6 +66,7 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cMessages.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelData.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelResults.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cModelTable.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cParseStream.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cProductiveDiagram.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cProductiveStructure.m</file>
@@ -74,7 +78,6 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelTable.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelXLS.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cReadModelXML.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResourceCost.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResourceData.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResultId.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cResultInfo.m</file>
@@ -97,39 +100,45 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cViewTable.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cWasteAnalysis.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\cWasteData.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\icon16\md.png</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\icon16\ps.png</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\icon16\sr.png</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\icon16\ta.png</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\icon16\td.png</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\icon16\ts.png</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\icon16\wa.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\md.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\ps.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\sr.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\ta.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\td.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\ts.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\wa.png</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\buildMessage.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\dfs.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\divideCol.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\divideRow.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportCSV.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportJSON.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportMAT.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\importDataModel.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\importCSV.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\importJSON.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isFilename.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isIndex.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isInteger.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isMatlab.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isNonNegativeMatrix.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isNonSingularMatrix.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isObject.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isOctave.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isProductiveMatrix.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isSquareMatrix.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isValid.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\logicalMatrix.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\readModel.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\scaleCol.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\scaleRow.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\similarResourceOperator.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\tolerance.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\topologicalOrder.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\transitiveClosure.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\vDivide.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\zerotol.m</file>
     </fileset.depfun>
     <fileset.resources>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\printformat.json</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Classes\styles.css</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\printformat.json</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\styles.css</file>
     </fileset.resources>
     <fileset.package />
     <build-deliverables>

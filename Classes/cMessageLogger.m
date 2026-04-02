@@ -335,7 +335,7 @@ classdef cMessageLogger < cTaesLab
         %
             q = obj.logger;
             res = cell(q.Count, 3);
-            index = zeros(1, q.Count,'uin8');
+            index = zeros(1, q.Count,'uint8');
             for i = 1:q.Count
                 message = q.getContent(i);
                 res{i, 1} = cType.getTextErrorCode(message.Error);

@@ -62,7 +62,9 @@ classdef (Abstract) cGraphResults < cMessageLogger
             app.UIAxes.YGrid = 'on';
             app.UIAxes.YLimMode="auto";
             tmp=ylim(app.UIAxes);
-            app.UIAxes.YLim=[obj.BaseLine, tmp(2)];
+            if (tmp(1)>0)
+                app.UIAxes.YLim=[obj.BaseLine, tmp(2)];
+            end
             app.UIAxes.TickLabelInterpreter='none';
             app.UIAxes.Legend.Location='northeastoutside';
             app.UIAxes.Legend.Orientation='vertical';      
