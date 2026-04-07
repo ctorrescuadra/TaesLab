@@ -89,15 +89,11 @@ function res = ListResultTables(varargin)
 %
     res=cTaesLab();
     % Check the variable arguments
-    if nargin==0
-        isResultSet=false;
-    elseif isObject(varargin{1},'cResultSet')
+    isResultSet=false;
+    if isObject(varargin{1},'cResultSet')
         isResultSet=true;
         arg=varargin{1};
         varargin=varargin(2:end);
-    else
-        res.printError(cMessages.ResultSetRequired,cMessages.ShowHelp);
-        return
     end
     % Select View depending of nargout
     if nargout 
