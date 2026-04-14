@@ -4,7 +4,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
 %   of the recycling ratio of a waste.
 %
 %   cWasteAnalysis properties:
-%     Recycling    - Indicate if recycling is available (true | false)
+%     Recycling   - Indicate if recycling is available (true | false)
 %     OutputFlows - Output flows cell array
 %     wasteFlow   - Current waste flow key for recycling
 %     wasteTable  - cWasteData object
@@ -96,7 +96,7 @@ classdef (Sealed) cWasteAnalysis < cResultId
             if recycling
                 obj.recyclingAnalysis;
             end
-            % cResultI dProperties
+            % cResultId Properties
             obj.ResultId=cType.ResultId.WASTE_ANALYSIS;
             obj.DefaultGraph=cType.Tables.WASTE_ALLOCATION;
             obj.ModelName=fpm.ModelName;

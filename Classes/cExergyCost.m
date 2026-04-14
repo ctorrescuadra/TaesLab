@@ -15,6 +15,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     TableR                 - Waste Allocation Table
 %     RecycleRatio           - Recycle ratio of each waste
 %     WasteWeight            - Weight of each waste
+%     WasteAllocationRatios  - Waste Allocation Ratio
 %
 %   cExergyCost methods:
 %     cExergyCost                  - Create an instance of the class
@@ -46,6 +47,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         WasteTable             % cWasteData object
         TableR                 % Waste Allocation Table
         RecycleRatio           % Recycle ratio of each waste
+        WasteAllocationRatios  % Waste Allocation Ratios
     end
     
     properties(Access=private)
@@ -158,6 +160,11 @@ classdef (Sealed) cExergyCost < cExergyModel
                 opR=obj.fpOperators.opR;
                 res=diag(opR.mValues(:,opR.mRows))';
             end
+        end
+
+        function res=get.WasteAllocationRatios(obj)
+        % Get the waste allocation ratios 
+            res=obj.fpOperators.mRP.mValues;
         end
     
         function res=buildResultInfo(obj,fmt,options)
@@ -579,23 +586,25 @@ classdef (Sealed) cExergyCost < cExergyModel
                 end
                 sol(i,:)=tmp/sum(tmp);
             end
-            sol=scaleRow(sol,1-wt.RecycleRatio);
-            % Update object values            
-            wt.updateValues(sol);
+            % Update object values  
+            sol=scaleRow(sol,1-wt.RecycleRatio);        
             mRP=cSparseRow(aR,sol);
-            obj.TableR=scaleRow(mRP,vP);
-            obj.fpOperators.mRP=mRP;
+            obj.TableR=scaleRow(mRP,vP);          
             mKR=divideCol(obj.TableR,vP);
             opR=cExergyCost.getOpR(mKR,opP);
             wflows=obj.ps.Waste.flows;
+            wt.updateValues(sol);
+            obj.WasteTable=wt;
+            obj.fpOperators.mRP=mRP;
+            obj.fpOperators.opR=cExergyCost.getOpR(mRP,opCP);
             obj.pfOperators.mKR=mKR;
             obj.pfOperators.opR=opR;
-            obj.fpOperators.opR=cExergyCost.getOpR(mRP,opCP);
+            
             obj.flowOperators.opR=cSparseRow(wflows,opR.mValues*obj.mpL,M);
             obj.RecycleRatio=wt.RecycleRatio;
-            obj.WasteTable=wt;
         end 
     end
+    
     methods(Static)
         function res=updateOperator(op,opR)
         %updateOperator - Update an operator with the corresponding waste operator

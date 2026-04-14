@@ -1253,6 +1253,16 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             end
         end
 
+        function updateWasteTable(obj)
+        %updatewasteTable - update the waste data values with the values of the current state
+        %   Syntax:
+        %     obj.updateWasteTable
+        %
+            wt=obj.DataModel.WasteData;
+            wv=obj.fp1.WasteAllocationRatios;
+            wt.updateValues(wv);
+        end
+
         %%%
         % Resource Cost Methods
         %%%
@@ -1591,6 +1601,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 obj.setResults(res);
                 obj.printDebugInfo(cMessages.SetState,obj.State);
                 obj.setDiagramFP;
+                obj.updateWasteTable;
             end           
         end
 

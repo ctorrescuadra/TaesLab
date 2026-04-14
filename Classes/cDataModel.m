@@ -1034,7 +1034,7 @@ classdef cDataModel < cResultSet
                 end
 				% Waste Allocation
                 jdx=find(wd.TypeId==0);
-                idx=any(wd.Values);
+                idx=any(wd.Values,1);
                 if ~isempty(jdx) && any(idx)
                     index=cType.TableDataIndex.WASTEALLOC;
                     tp=tableData(index);

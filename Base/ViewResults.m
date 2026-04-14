@@ -88,7 +88,7 @@ classdef ViewResults < matlab.apps.AppBase
                 case cType.GraphType.RECYCLING
                     gr=cGraphRecycling(tbl);
                 case cType.GraphType.WASTE_ALLOCATION
-                    gr=CGraphWaste(tbl,info,false);
+                    gr=cGraphWaste(tbl,info,false);
             end
             gr.showGraphUI(app)           
         end
