@@ -13,3 +13,10 @@ Its main features are:
 - Calculation of direct and generalized exergy costs
 - Analysis of product and waste cost formation.
 - Thermo-economic diagnosis.
+
+## Documentation
+
+- **[Exergy Cost Theory](Docs/Exergy-Cost-Theory.md)** - Mathematical foundations and equations for thermoeconomic analysis
+- **[M-Matrix Theory](Docs/M-Matrix.md)** - Mathematical characterization and convergence properties
+- **[System Architecture](Docs/overview.md)** - TaesLab architecture and design patterns
+- **[Wiki](https://github.com/ctorrescuadra/TaesLab/wiki)** - Complete documentation and guides
