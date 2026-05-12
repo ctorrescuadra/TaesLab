@@ -17,7 +17,7 @@ classdef cGraphDiagramFP < cGraphResults
     end
 
     methods
-        function obj=cGraphDiagramFP(tbl)
+        function obj=cGraphDiagramFP(tbl,info)
         %cGraphDiagramFP - Build an instance of the object
         %   Syntax:
         %     obj = cGraphDiagramFP(tbl,info)
@@ -34,9 +34,10 @@ classdef cGraphDiagramFP < cGraphResults
             obj.Style=cType.GraphStyles.DIGRAPH;
             % Check input arguments
             if  isObject(tbl,'cTableMatrix')
-                mFP=cell2mat(tbl.Data(1:end-1,1:end-1));
-                EdgesTable=cGraphDiagramFP.edgesTable(mFP,tbl.RowNames);
-                NodesTable=cGraphDiagramFP.nodesTable(mFP,tbl.RowNames);
+                idx=[info.ActiveProcesses,true];
+                mFP=cell2mat(tbl.Data(idx,idx));
+                EdgesTable=cGraphDiagramFP.edgesTable(mFP,tbl.RowNames(idx));
+                NodesTable=cGraphDiagramFP.nodesTable(mFP,tbl.RowNames(idx));
             else
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
@@ -153,7 +154,7 @@ classdef cGraphDiagramFP < cGraphResults
             [~,jdx]=find(mFP(end,1:end-1));
             vnodes=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
             % Build Internal Nodes
-            inodes=nodes(1:end-2);
+            inodes=nodes(1:end-1);
             % Build Output Nodes
             [~,jdx]=find(mFP(1:end-1,end));
             wnodes=arrayfun(@(x) sprintf('OUT%d',x),1:numel(jdx),'UniformOutput',false);

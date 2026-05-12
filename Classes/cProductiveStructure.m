@@ -432,7 +432,8 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%   Output Arguments:
 		%     res - Array with the system output processes id
 		%
-			res=transpose(find(obj.ProcessMatrix(1:end-1,end)));
+			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE);
+			res=transpose(find(obj.ProcessMatrix(aP,end)));
 		end
 
 		function res=isModelIO(obj)
@@ -526,7 +527,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%
 			res=cType.EMPTY;
 			if nargin<2,return;end
-            stypes=obj.Streams.typeId;
+            stypes=[obj.Streams.typeId];
 			res=find(stypes==typeId);
 		end
 
@@ -882,23 +883,24 @@ classdef(Sealed) cProductiveStructure < cResultId
 		
 			% Build the SSR graph adjacency matrix
 			N=obj.NrOfProcesses;
-			[tfp,src,out]=obj.getProcessMatrix;
+			aR=obj.getProcessTypes(cType.Process.DISSIPATIVE);
+			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE);
+			[tfp,src,out]=obj.getProcessMatrix; 
+			out(aR)=false; %Disable dissipative processes
 			ssr=[false,src,false;false(N,1),tfp,out;false(1,N+2)];
 			% Calculate nodes reached by src and nodes reaches out
-			rs=dfs(ssr,1);
-			rt=dfs(ssr',N+2);
-			res=all(rs) & all(rt);
+			rs=dfs(ssr,1); rs=rs(2:end-1);
+			rt=dfs(ssr',N+2); rt=rt(2:end-1);
+			res=all(rs) & all(rt(aP)); 
 			if res % Build Process Matrix
 				obj.ProcessMatrix=[tfp,out;src,0];
 			else
 				% Processes not reached from source
-				rs=~rs(2:end-1);
-				for i=find(rs)
+				for i=find(~rs)
 					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 				end
 				% Processes can not reach sink
-				rt=~rt(2:end-1);
-				for i=find(rt)
+				for i=find(~rt)
 					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
 				end
 			end

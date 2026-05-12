@@ -1,44 +1,58 @@
+% cExergyData   Get and validates the exergy data values for a state of the plant
+%   This class made the following tasks:
+%    - Check that productive groups exergy are non-negative
+%    - Check that processes irreversibility are non-negative
+%    - Find active proceses
+%    - Build productive graph adjacency table
+%    - Check that final products are reacheable from active productive processes
+%
+%   cExergyData Properties:
+%       ps              - (cProductiveStructure) Productive Structure object.
+%       State           - (string) Name of the exergy state.
+%       FlowsExergy     - (double) Vector with the exergy of the flows.
+%       StreamsExergy   - (struct) Exergy of the streams.
+%       ProcessesExergy - (struct) Exergy of the processes.
+%       ActiveProcesses - (logical) Vector indicating active (not bypassed) processes.
+%       AdjacencyTable  - (struct) Adjacency Table of the productive graph.
+%       AdjacencyMatrix - (struct) Adjacency Matrix of the productive graph.
+%
+%   cExergyData Methods:
+%       cExergyData - Constructs an instance of the cExergyData class.
+%
+%   See also: cDataModel, cDataset, cProductiveStructure
+%
 classdef cExergyData < cMessageLogger
-%cExergyData - Get and validates the exergy data values for a state of the plant 
-%  	Check if these values are coherent with the productive
-%  	structure and get the exergy values for flows, streams and processes.
-%
-%   cExergyData properties:
-%     ps			  - Productive Structure
-%     State           - Exergy State
-%     FlowsExergy     - Exergy of Flows
-%     StreamsExergy   - Exergy of Streams
-%     ProcessesExergy - Exergy of Processes
-%     ActiveProcesses - Active Processes (not bypassed)
-%     AdjacencyTable  - Adjacency Table of the productive graph
-%	  AdjacencyMatrix - Adjacency Matrix of the productive graph
-%
-%   cExergyData methods:
-%     cExergyData     - Build an instance of the class
-%
-%   See also cDataModel, cDataset, cProductiveStructure
-%
 	properties(GetAccess=public,SetAccess=private)
-		ps				  % Productive Structure
-		State             % Exergy State
-        FlowsExergy       % Exergy of Flows
-        StreamsExergy     % Exergy of Streams
-        ProcessesExergy   % Exergy of Processes
-		ActiveProcesses   % Active Processes (not bypassed)
-		AdjacencyTable    % Adjacency Table of the productive graph
-		AdjacencyMatrix   % Adjacency Matrix of the productive graph
+		ps				  % (cProductiveStructure) Productive Structure object associated with the exergy data.
+		State             % (string) Name of the exergy state being analyzed.
+        FlowsExergy       % (double) Vector containing the exergy values of each flow.
+        StreamsExergy     % (struct) Struct with the exergy of productive streams (`E`) and total exergy of streams (`ET`).
+        ProcessesExergy   % (struct) Struct with the exergy of fuels (`vF`), products (`vP`), irreversibilities (`vI`), unit exergy costs (`vK`), and efficiencies (`vEf`) for each process.
+		ActiveProcesses   % (logical) Logical vector indicating which processes are active (true) or bypassed (false).
+		AdjacencyTable    % (struct) Struct containing the exergy-based adjacency tables (AF, AP, AE, AS).
+		AdjacencyMatrix   % (struct) Struct containing the exergy-based adjacency matrices (AF, AP, AE, AS) for demand-driven calculations.
     end
     
 	methods
 		function obj=cExergyData(ps,data)
-		%cExergyData - Build an instance of the class
+		% cExergyData   Constructs an instance of the cExergyData class.
+		%   This constructor initializes the object by validating the productive
+		%   structure and exergy data. It calculates the exergy of flows, streams,
+		%   and processes, and checks for consistency.
+		%
 		%   Syntax:
-        %     obj = cExergyData(ps,data)
+		%       obj = cExergyData(ps, data)
+		%
 		%   Input Arguments:
-		%     ps - cProductiveStructure object
-		%     data - ExergyState struct from cModelData containing exergy values
+		%       ps   - (cProductiveStructure) A valid productive structure object.
+		%       data - (struct) A struct containing the exergy state data, including
+		%              'stateId' and 'exergy' values for each flow.
+		%
 		%   Output Arguments:
-		%     obj - cExergyData object
+		%       obj  - (cExergyData) The constructed cExergyData object. If the
+		%              input data is invalid or inconsistent, the object's status
+		%              will be set to false.
+		%
 		
 			% Check arguments
 			if ~isObject(ps,'cProductiveStructure')
@@ -131,28 +145,24 @@ classdef cExergyData < cMessageLogger
 			mbP=divideCol(tAP,ET);
 			mbE=divideCol(tAE,ET);
             mbS=divideCol(tAS,B);
-			opE=mbS*mbE+mbF(:,1:end-1)*mbP(1:end-1,:);
-			% Validate Productive Graph
-			if isProductiveMatrix(opE)
+			% Build Productive Graph (logical Fuel-Product process table)
+			aP=ps.getProcessTypes(cType.Process.PRODUCTIVE); NP=numel(aP)+1;
+			tfp=logicalMatrix(mbP)*transitiveClosure(mbS*mbE)*logicalMatrix(mbF);
+			ssr=[tfp(aP,aP),tfp(aP,end);zeros(1,NP)];
+			% Check if final products are reacheable from no bypassed productive processses
+			sol=xor(dfs(ssr',NP),[bypass(aP),0]);
+			if all(sol)
 				obj.ps=ps;
 				obj.FlowsExergy=B;
 				obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);
 				obj.StreamsExergy=struct('ET',ET,'E',E);
 				obj.AdjacencyTable=struct('AF',tAF,'AP',tAP,'AE',tAE,'AS',tAS);
 				obj.AdjacencyMatrix=struct('AF',mbF,'AP',mbP,'AE',mbE,'AS',mbS);
-				obj.ActiveProcesses= logical(~bypass);
-            else % Find Non SSR process nodes
-				NS=ps.NrOfStreams;
-                % Search the nodes reach output
-				ssr=[0,mbP(end,:),0;zeros(NS,1),opE,mbF(:,end);zeros(1,NS+2)];
-				tmp=dfs(ssr',NS+2);
-                % Get the corresponding process
-                t=tmp(2:end-1)*tbl.AF;
-				% Log non-SSR process nodes 
-            	for i=find(~t)
-					if ~bypass(i)
-						obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,ps.ProcessKeys{i});
-					end
+				obj.ActiveProcesses=logical(~bypass);
+            else % Find Non SSR process nodes and log error
+            	for i=find(~sol)
+					idx=aP(i); 
+					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,ps.ProcessKeys{idx});
             	end
 				obj.messageLog(cType.ERROR,cMessages.NoProductiveState,obj.State);
 			end

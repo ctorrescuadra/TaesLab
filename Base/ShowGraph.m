@@ -154,7 +154,7 @@ function ShowGraph(arg,varargin)
 			gr = cDigraph(tbl, res.Info);		
 		case cType.GraphType.DIAGRAM_FP	
 			% Fuel-Product diagram visualization
-			gr = cGraphDiagramFP(tbl);			
+			gr = cGraphDiagramFP(tbl,res.Info);			
 		case cType.GraphType.SUMMARY
 			% Multi-state or multi-sample comparison summary graphs
 			gr = cGraphSummary(tbl, res.Info, param);		

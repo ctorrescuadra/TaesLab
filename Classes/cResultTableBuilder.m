@@ -271,9 +271,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.atcfp=obj.getAdjacencyTableFP(cType.Tables.DIGRAPH_COST_FP,dfp.EdgesCFP);
             tbl.katfp=obj.getAdjacencyTableFP(cType.Tables.KDIGRAPH_FP,dfp.EdgesKFP);
             tbl.katcfp=obj.getAdjacencyTableFP(cType.Tables.KDIGRAPH_COST_FP,dfp.EdgesKCFP);
-            tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,dfp.TableFP);
+            tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,dfp.TableFP,dfp.Names);
             tbl.ktfp=obj.getTableFP(cType.Tables.KTABLE_FP,dfp.TableKFP,dfp.kNames);
-            tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dfp.TableCFP);
+            tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dfp.TableCFP,dfp.Names);
             tbl.kdcfp=obj.getTableFP(cType.Tables.KTABLE_COST_FP,dfp.TableKCFP,dfp.kNames);
             tbl.grps=obj.getGroupsTable(cType.Tables.PROCESS_GROUP,dfp);
             % Build the cResultInfo

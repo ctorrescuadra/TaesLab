@@ -586,16 +586,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %        
             res=obj.getResults(cType.ResultId.PRODUCTIVE_DIAGRAM);
         end
-    
-        function res=diagramFP(obj)
-        %diagramFP - Get the diagram FP cResultInfo object of rhe current state
-        %   Syntax:
-        %     res = obj.diagramFP
-        %   Output Arguments:
-        %     res - cResultInfo with the diagram FP info
-        % 
-            res=obj.getResults(cType.ResultId.DIAGRAM_FP);
-        end
 
         function res=summaryResults(obj)
         %summaryResults - Get the Summary Results cResultInfo object
@@ -605,6 +595,22 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %     res - cResultInfo with summary results info
         %           
             res=obj.getResults(cType.ResultId.SUMMARY_RESULTS);
+        end
+
+        function res=diagramFP(obj)
+        %diagramFP - Get the diagram FP cResultInfo object of the current state
+        %   Syntax:
+        %     res = obj.diagramFP
+        %   Output Arguments:
+        %     res - cResultInfo with the diagram FP info
+        %
+            dfp=cDiagramFP(obj.fp1);
+            if dfp.status
+                res=getDiagramFP(obj.fmt,dfp);
+                obj.printDebugInfo(cMessages.ComputeDiagramFP)
+            else
+                dfp.printLogger;
+            end
         end
 
         function res=dataInfo(obj)
@@ -1600,7 +1606,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if res.status
                 obj.setResults(res);
                 obj.printDebugInfo(cMessages.SetState,obj.State);
-                obj.setDiagramFP;
                 obj.updateWasteTable;
             end           
         end
@@ -1753,23 +1758,6 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
                 obj.setResults(res);
             else
                 ra.printLogger;
-            end
-        end
-
-        function setDiagramFP(obj)
-        %setDiagramFP - Set the Diagram FP cResultInfo object
-        %   Syntax:
-        %     obj.setDiagramFP
-        %
-        %   See also cDiagramFP
-        %
-            dfp=cDiagramFP(obj.fp1);
-            if dfp.status
-                res=getDiagramFP(obj.fmt,dfp);
-                obj.setResults(res);
-                obj.printDebugInfo(cMessages.ComputeDiagramFP)
-            else
-                dfp.printLogger;
             end
         end
 

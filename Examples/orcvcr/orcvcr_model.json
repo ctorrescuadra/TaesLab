@@ -98,11 +98,11 @@
         "type": "OUTPUT"
       },
       {
-        "key": "QEXP",
+        "key": "QCND",
         "type": "WASTE"
       },
       {
-        "key": "QCND",
+        "key": "QEXP",
         "type": "WASTE"
       }
     ],
@@ -140,8 +140,8 @@
       {
         "key": "GEN",
         "type": "PRODUCTIVE",
-        "fuel": "WT-WC",
-        "product": "WN+WP"
+        "fuel": "WT",
+        "product": "WC+WP+WN"
       },
       {
         "key": "VEXP",
@@ -164,19 +164,19 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 617.2
+            "value": 684.6
           },
           {
             "key": "B2",
-            "value": 315.3
+            "value": 349.7
           },
           {
             "key": "B3",
-            "value": 246.9
+            "value": 273.8
           },
           {
             "key": "B4",
-            "value": 259.5
+            "value": 287.9
           },
           {
             "key": "B5",
@@ -196,7 +196,7 @@
           },
           {
             "key": "WT",
-            "value": 245.1
+            "value": 271.9
           },
           {
             "key": "WC",
@@ -204,11 +204,11 @@
           },
           {
             "key": "WP",
-            "value": 14.81
+            "value": 16.42
           },
           {
             "key": "QBLR",
-            "value": 491
+            "value": 545.8
           },
           {
             "key": "QEVP",
@@ -216,15 +216,15 @@
           },
           {
             "key": "WN",
-            "value": 0
+            "value": 20
+          },
+          {
+            "key": "QCND",
+            "value": 123.19999999999999
           },
           {
             "key": "QEXP",
             "value": 26.300000000000011
-          },
-          {
-            "key": "QCND",
-            "value": 115.70000000000005
           }
         ]
       },
@@ -233,19 +233,19 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 661.3
+            "value": 733.5
           },
           {
             "key": "B2",
-            "value": 339.1
+            "value": 376.1
           },
           {
             "key": "B3",
-            "value": 264.5
+            "value": 293.4
           },
           {
             "key": "B4",
-            "value": 278.1
+            "value": 308.4
           },
           {
             "key": "B5",
@@ -265,7 +265,7 @@
           },
           {
             "key": "WT",
-            "value": 246.2
+            "value": 273.1
           },
           {
             "key": "WC",
@@ -273,11 +273,11 @@
           },
           {
             "key": "WP",
-            "value": 15.86
+            "value": 17.59
           },
           {
             "key": "QBLR",
-            "value": 526
+            "value": 584.8
           },
           {
             "key": "QEVP",
@@ -285,15 +285,15 @@
           },
           {
             "key": "WN",
-            "value": 0
+            "value": 20
+          },
+          {
+            "key": "QCND",
+            "value": 130.00000000000011
           },
           {
             "key": "QEXP",
             "value": 26.300000000000011
-          },
-          {
-            "key": "QCND",
-            "value": 121.90000000000003
           }
         ]
       },
@@ -302,19 +302,19 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 617.2
+            "value": 684.6
           },
           {
             "key": "B2",
-            "value": 315.3
+            "value": 349.7
           },
           {
             "key": "B3",
-            "value": 246.9
+            "value": 273.8
           },
           {
             "key": "B4",
-            "value": 259.5
+            "value": 287.9
           },
           {
             "key": "B5",
@@ -334,7 +334,7 @@
           },
           {
             "key": "WT",
-            "value": 245.1
+            "value": 271.9
           },
           {
             "key": "WC",
@@ -342,11 +342,11 @@
           },
           {
             "key": "WP",
-            "value": 14.81
+            "value": 16.42
           },
           {
             "key": "QBLR",
-            "value": 491
+            "value": 545.8
           },
           {
             "key": "QEVP",
@@ -354,15 +354,15 @@
           },
           {
             "key": "WN",
-            "value": 0
+            "value": 20
+          },
+          {
+            "key": "QCND",
+            "value": 121.00000000000003
           },
           {
             "key": "QEXP",
             "value": 24.599999999999994
-          },
-          {
-            "key": "QCND",
-            "value": 113.49999999999997
           }
         ]
       },
@@ -371,19 +371,19 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 690.1
+            "value": 765.4
           },
           {
             "key": "B2",
-            "value": 387.3
+            "value": 429.6
           },
           {
             "key": "B3",
-            "value": 279.8
+            "value": 310.4
           },
           {
             "key": "B4",
-            "value": 293.5
+            "value": 325.5
           },
           {
             "key": "B5",
@@ -403,7 +403,7 @@
           },
           {
             "key": "WT",
-            "value": 246.3
+            "value": 273.1
           },
           {
             "key": "WC",
@@ -411,11 +411,11 @@
           },
           {
             "key": "WP",
-            "value": 15.94
+            "value": 17.68
           },
           {
             "key": "QBLR",
-            "value": 537.1
+            "value": 597
           },
           {
             "key": "QEVP",
@@ -423,15 +423,15 @@
           },
           {
             "key": "WN",
-            "value": 0
+            "value": 20
+          },
+          {
+            "key": "QCND",
+            "value": 180.10000000000002
           },
           {
             "key": "QEXP",
             "value": 30.300000000000011
-          },
-          {
-            "key": "QCND",
-            "value": 168.39999999999998
           }
         ]
       },
@@ -440,19 +440,19 @@
         "exergy": [
           {
             "key": "B1",
-            "value": 637.5
+            "value": 707.1
           },
           {
             "key": "B2",
-            "value": 336.5
+            "value": 373.3
           },
           {
             "key": "B3",
-            "value": 264.3
+            "value": 293.1
           },
           {
             "key": "B4",
-            "value": 276.2
+            "value": 306.3
           },
           {
             "key": "B5",
@@ -472,7 +472,7 @@
           },
           {
             "key": "WT",
-            "value": 244.2
+            "value": 270.8
           },
           {
             "key": "WC",
@@ -480,11 +480,80 @@
           },
           {
             "key": "WP",
-            "value": 13.87
+            "value": 15.39
           },
           {
             "key": "QBLR",
-            "value": 507.9
+            "value": 564.6
+          },
+          {
+            "key": "QEVP",
+            "value": 42.96
+          },
+          {
+            "key": "WN",
+            "value": 20
+          },
+          {
+            "key": "QCND",
+            "value": 127.5
+          },
+          {
+            "key": "QEXP",
+            "value": 26.300000000000011
+          }
+        ]
+      },
+      {
+        "stateId": "WN0",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 629.8
+          },
+          {
+            "key": "B2",
+            "value": 321.7
+          },
+          {
+            "key": "B3",
+            "value": 251.9
+          },
+          {
+            "key": "B4",
+            "value": 264.8
+          },
+          {
+            "key": "B5",
+            "value": 193.5
+          },
+          {
+            "key": "B6",
+            "value": 167.2
+          },
+          {
+            "key": "B7",
+            "value": 55.19
+          },
+          {
+            "key": "B8",
+            "value": 240.8
+          },
+          {
+            "key": "WT",
+            "value": 250.1
+          },
+          {
+            "key": "WC",
+            "value": 230
+          },
+          {
+            "key": "WP",
+            "value": 15.11
+          },
+          {
+            "key": "QBLR",
+            "value": 502.1
           },
           {
             "key": "QEVP",
@@ -495,33 +564,33 @@
             "value": 0
           },
           {
-            "key": "QEXP",
-            "value": 26.300000000000011
+            "key": "QCND",
+            "value": 117.10000000000002
           },
           {
-            "key": "QCND",
-            "value": 119.5
+            "key": "QEXP",
+            "value": 26.300000000000011
           }
         ]
       },
       {
-        "stateId": "W200",
+        "stateId": "WN200",
         "exergy": [
           {
             "key": "B1",
-            "value": 1165
+            "value": 1178
           },
           {
             "key": "B2",
-            "value": 595
+            "value": 601.4
           },
           {
             "key": "B3",
-            "value": 465.9
+            "value": 471
           },
           {
             "key": "B4",
-            "value": 489.8
+            "value": 495.1
           },
           {
             "key": "B5",
@@ -541,7 +610,7 @@
           },
           {
             "key": "WT",
-            "value": 462.6
+            "value": 467.6
           },
           {
             "key": "WC",
@@ -549,11 +618,11 @@
           },
           {
             "key": "WP",
-            "value": 27.94
+            "value": 28.25
           },
           {
             "key": "QBLR",
-            "value": 926.7
+            "value": 938.8
           },
           {
             "key": "QEVP",
@@ -564,12 +633,12 @@
             "value": 200
           },
           {
-            "key": "QEXP",
-            "value": 26.300000000000011
+            "key": "QCND",
+            "value": 177.70000000000005
           },
           {
-            "key": "QCND",
-            "value": 176.40000000000003
+            "key": "QEXP",
+            "value": 26.300000000000011
           }
         ]
       }
@@ -578,17 +647,8 @@
   "WasteDefinition": {
     "wastes": [
       {
-        "flow": "QEXP",
-        "type": "MANUAL",
-        "recycle": 0,
-        "values": {
-          "process": "CMP",
-          "value": 1
-        }
-      },
-      {
         "flow": "QCND",
-        "type": "MANUAL",
+        "type": "EXERGY",
         "recycle": 0,
         "values": [
           {
@@ -600,6 +660,15 @@
             "value": 0.42
           }
         ]
+      },
+      {
+        "flow": "QEXP",
+        "type": "EXERGY",
+        "recycle": 0,
+        "values": {
+          "process": "CMP",
+          "value": 1
+        }
       }
     ]
   },

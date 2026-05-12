@@ -133,35 +133,31 @@ classdef (Sealed) cWasteAnalysis < cResultId
             tmp=ps.FinalProductFlows;
             outputId=[tmp,idx];
             obj.OutputFlows=ps.FlowKeys(outputId);
-            % Save original values
-            wrc=obj.wasteTable.RecycleRatio(wId);
-            wval=obj.wasteTable.Values;
+            % Get flow cost values;
             sol=obj.modelFP;
+            mR=sol.flowOperators.opR.mValues(wId,:);
+            if obj.directCost
+                df=sol.getFlowsCost;
+            end
+            if obj.generalCost
+                gf=sol.getFlowsCost(obj.resourceData);
+            end
             % Generate the table
             x=(0:0.1:1)';
             yd=zeros(size(x,1),size(outputId,2));
-            yg=zeros(size(x,1),size(outputId,2));     
+            yg=zeros(size(x,1),size(outputId,2));
             for i=1:size(x,1)
-                wt.setRecycleRatio(obj.wasteFlow,x(i));
-                if ~isValid(sol.updateWasteOperators)
-                    continue
-                end
+                rf=x(i)/(1+mR(idx)*x(i)); %Recycling factor 
                 if obj.directCost
-                    fc=sol.getFlowsCost;
-                    yd(i,:)=fc.c(outputId);
+                    yd(i,:)=df.c(outputId)-df.c(idx)*rf*mR(outputId);
                 end
                 if obj.generalCost
-                    fc=sol.getFlowsCost(obj.resourceData);
-                    yg(i,:)=fc.c(outputId);
+                    yg(i,:)=gf.c(outputId)-gf.c(idx)*rf*mR(outputId);
                 end
             end
             % Set object variables
             obj.dValues=[x,yd];
             obj.gValues=[x,yg];
-            % Restore original values
-            wt.setRecycleRatio(obj.wasteFlow,wrc);
-            wt.updateValues(wval);
-            sol.updateWasteOperators;
         end
     end
 end

@@ -586,8 +586,14 @@ classdef (Sealed) cExergyCost < cExergyModel
                 end
                 sol(i,:)=tmp/sum(tmp);
             end
-            % Update object values  
-            sol=scaleRow(sol,1-wt.RecycleRatio);        
+            % Check Waste Allocation is valid
+            sol=scaleRow(sol,1-wt.RecycleRatio);
+            mS=sol*opCP(:,aR);
+            if ~isProductiveMatrix(mS)
+                log.messageLog(cType.ERROR,cMessages.InvalidWasteDefinition);
+                return
+            end
+            % Update object values     
             mRP=cSparseRow(aR,sol);
             obj.TableR=scaleRow(mRP,vP);          
             mKR=divideCol(obj.TableR,vP);
@@ -599,7 +605,6 @@ classdef (Sealed) cExergyCost < cExergyModel
             obj.fpOperators.opR=cExergyCost.getOpR(mRP,opCP);
             obj.pfOperators.mKR=mKR;
             obj.pfOperators.opR=opR;
-            
             obj.flowOperators.opR=cSparseRow(wflows,opR.mValues*obj.mpL,M);
             obj.RecycleRatio=wt.RecycleRatio;
         end 

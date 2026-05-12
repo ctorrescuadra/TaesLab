@@ -60,14 +60,16 @@ classdef (Sealed) cDiagramFP < cResultId
                 return
             end
             % Create the Table FP properties
-            obj.Names=exc.ps.ProcessKeys;
-            obj.TableFP=exc.TableFP;
-            eda = cDigraphAnalysis(exc.TableFP,obj.Names);
+            idx=[exc.ActiveProcesses,true];
+            obj.Names=exc.ps.ProcessKeys(idx);
+            obj.TableFP=exc.TableFP(idx,idx);
+            eda = cDigraphAnalysis(obj.TableFP,obj.Names);
             obj.EdgesFP=eda.GraphEdges;
             obj.EdgesKFP=eda.KernelEdges;
             [obj.TableKFP,obj.kNames]=getKernelInfo(eda);
             % Create the Cost Table FP properties
-            obj.TableCFP=exc.getCostTableFP;
+            tcfp=exc.getCostTableFP;
+            obj.TableCFP=tcfp(idx,idx);
             cda = cDigraphAnalysis(obj.TableCFP,obj.Names);
             obj.EdgesCFP=cda.GraphEdges;
             obj.EdgesKCFP=cda.KernelEdges;

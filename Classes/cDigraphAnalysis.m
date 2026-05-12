@@ -199,7 +199,7 @@ classdef cDigraphAnalysis < cMessageLogger
                 idx=topologicalOrder(obj.graph);
                 obj.kG=obj.graph(idx,idx);
                 obj.kNodes=obj.nodes(idx);
-                obj.TopologicalOrder=idx
+                obj.TopologicalOrder=idx;
             else
                 obj.buildKernelMatrix;
             end
