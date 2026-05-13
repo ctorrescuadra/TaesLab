@@ -89,7 +89,7 @@ classdef cMessages
         % Productive Structure messages
         DuplicatedFlow='There are duplicated flows in Dictionary'
         DuplicatedProcess='There are duplicated processses in Dictionary'
-        InvalidProductiveGraph='Invalid productive structure graph'
+        InvalidProductiveGraph='Invalid productive structure graph. See error log'
         InvalidFlowType='Invalid type %s for flow %s'
         InvalidProcessType='Invalid type %s for process %s'
         InvalidResourcesType='Invalid type %s for resource %s'
@@ -154,6 +154,10 @@ classdef cMessages
         SummaryNotAvailable='Summary Results NOT available'
         InvalidSummaryOption='Invalid summary option'
         InvalidSummaryData='Invalid summary dataset'
+        % Digraph Analysis
+        InvalidKernelGraph='Invalid Kernel Graph'
+        InvalidTableFP='Invalid Table FP'
+        InvalidCostTableFP='Invalid Cost Table FP'
         % Table messages
         InvalidConfigFile='Invalid config file %s'
         InvalidTableSize='Invalid table size (%d x %d)'

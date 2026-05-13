@@ -61,19 +61,29 @@ classdef (Sealed) cDiagramFP < cResultId
             end
             % Create the Table FP properties
             idx=[exc.ActiveProcesses,true];
-            obj.Names=exc.ps.ProcessKeys(idx);
-            obj.TableFP=exc.TableFP(idx,idx);
-            eda = cDigraphAnalysis(obj.TableFP,obj.Names);
+            names=exc.ps.ProcessKeys(idx);
+            tfp=exc.TableFP(idx,idx);
+            eda = cDigraphAnalysis(tfp,names);
+            if ~eda.status
+                obj.messageLog(cType.ERROR,cMessages.InvalidTableFP);
+                return
+            end
+            [obj.TableFP,obj.Names]=eda.getOrderTable;
             obj.EdgesFP=eda.GraphEdges;
             obj.EdgesKFP=eda.KernelEdges;
-            [obj.TableKFP,obj.kNames]=getKernelInfo(eda);
+            [obj.TableKFP,obj.kNames]=getKernelTable(eda);
             % Create the Cost Table FP properties
             tcfp=exc.getCostTableFP;
-            obj.TableCFP=tcfp(idx,idx);
-            cda = cDigraphAnalysis(obj.TableCFP,obj.Names);
+            tcfp=tcfp(idx,idx);
+            cda = cDigraphAnalysis(tcfp,obj.Names);
+            if ~cda.status
+                obj.messageLog(cType.ERROR,cMessages.InvalidCostTableFP);
+                return
+            end
+            obj.TableCFP=cda.getOrderTable;
             obj.EdgesCFP=cda.GraphEdges;
             obj.EdgesKCFP=cda.KernelEdges;
-            obj.TableKCFP=getKernelInfo(cda);
+            obj.TableKCFP=getKernelTable(cda);
             % Create the graph nodes properties and group tables
             obj.NodesFP=eda.GraphNodes;
             obj.NodesKFP=eda.KernelNodes;

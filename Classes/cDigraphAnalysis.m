@@ -52,11 +52,10 @@ classdef cDigraphAnalysis < cMessageLogger
 %
 %   cDigraphAnalysis Methods:
 %     cDigraphAnalysis - Construct graph analysis object from adjacency matrix
-%     isProductive - Validate productive graph structure (single source/sink)
 %     isReachable - Check if path exists between two nodes
 %     isStrongConnected - Test if two nodes are in same strong component
-%     getComponentNames - Retrieve names of strongly connected component groups
-%     getKernelInfo - Extract kernel DAG adjacency matrix and node names
+%     getKernelTable - Extract kernel DAG adjacency matrix and node names
+%     getOrderTable - Get ordered adjacency table and node names
 %     getGroupsInfo - Get detailed information about component groupings
 %     plot - Visualize graph structure with layout
 %
@@ -175,8 +174,8 @@ classdef cDigraphAnalysis < cMessageLogger
         %     isValid, cMessageLogger, cDigraph
         
             % Check Inputs
-            if ~isSquareMatrix(A)
-                obj.messageLog(cType.ERROR,cMessages.NonSquareMatrix,size(A));
+            if ~isNonNegativeMatrix(A)
+                obj.messageLog(cType.ERROR,cMessages.NegativeMatrix,size(A));
                 return
             end
             if nargin<2 || isempty(names)
@@ -192,16 +191,28 @@ classdef cDigraphAnalysis < cMessageLogger
             obj.NrOfNodes = numel(obj.nodes);
             % Get properties
 	        obj.tc = transitiveClosure(obj.graph);
+            if ~obj.isProductive
+                obj.messageLog(cType.ERROR,cMessages.InvalidProductiveGraph);
+                return
+            end
+
             obj.getStrongComponents;
             obj.GraphEdges=cDigraphAnalysis.getEdgesTable(obj.graph,obj.nodes);
             obj.GraphNodes=cDigraphAnalysis.getNodesTable(obj.graph,obj.nodes,obj.comps);
             if obj.isDAG
                 idx=topologicalOrder(obj.graph);
+                if isempty(idx)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidKernelGraph);
+                    return
+                end
                 obj.kG=obj.graph(idx,idx);
                 obj.kNodes=obj.nodes(idx);
                 obj.TopologicalOrder=idx;
             else
-                obj.buildKernelMatrix;
+                if ~obj.buildKernelMatrix
+                    obj.messageLog(cType.ERROR,cMessages.InvalidKernelGraph);
+                    return
+                end
             end
             obj.KernelEdges=cDigraphAnalysis.getEdgesTable(obj.kG,obj.kNodes);
             obj.KernelNodes=cDigraphAnalysis.getNodesTable(obj.kG,obj.kNodes,1:obj.NrOfComponents);
@@ -217,93 +228,6 @@ classdef cDigraphAnalysis < cMessageLogger
             res = (obj.NrOfComponents == obj.NrOfNodes) && all(diag(obj.graph) == 0);
         end
 
-        function [res,src,out]=isProductive(obj)
-        %isProductive - Validate productive graph structure requirements.
-        %   Tests whether the graph satisfies productive structure requirements:
-        %   all nodes must be reachable from the source (IN) and must reach
-        %   the sink (OUT). This ensures the graph represents a valid production
-        %   chain without isolated components or dead ends.
-        %
-        %   A productive graph guarantees:
-        %     • Every process receives inputs from upstream
-        %     • Every process contributes to final outputs
-        %     • No isolated or disconnected components exist
-        %     • Complete flow paths from resources to products
-        %
-        %   DAG graphs (no cycles) are always productive by construction.
-        %   Graphs with cycles require reachability verification.
-        %
-        %   Syntax:
-        %     res = obj.isProductive()
-        %     [res, src, out] = obj.isProductive()
-        %
-        %   Output Arguments:
-        %     res - Productive graph indicator
-        %       logical
-        %       true if graph is productive (all nodes properly connected)
-        %       false if isolated nodes or connectivity issues exist
-        %
-        %     src - Non-productive source nodes (optional)
-        %       cell array of char
-        %       Nodes that cannot reach the sink (OUT)
-        %       Empty if graph is productive
-        %       Indicates upstream dead ends
-        %
-        %     out - Non-productive sink nodes (optional)
-        %       cell array of char
-        %       Nodes not reachable from source (IN)
-        %       Empty if graph is productive
-        %       Indicates downstream isolated components
-        %
-        %   Examples:
-        %     % Example 1: Valid productive graph
-        %     A = [0 1 0; 0 0 1; 0 0 0];
-        %     obj = cDigraphAnalysis(A);
-        %     if obj.isProductive()
-        %         fprintf('Valid productive structure\n');
-        %     end
-        %
-        %     % Example 2: Detect non-productive nodes
-        %     A = [0 1 1 0; 0 0 0 1; 0 0 0 0; 0 0 0 0];
-        %     obj = cDigraphAnalysis(A);
-        %     [isProd, srcNodes, outNodes] = obj.isProductive();
-        %     if ~isProd
-        %         fprintf('Non-productive sources: %s\n', strjoin(srcNodes, ', '));
-        %         fprintf('Non-productive sinks: %s\n', strjoin(outNodes, ', '));
-        %     end
-        %
-        %   Use Cases:
-        %     • Validate productive structure before cost calculation
-        %     • Identify structural errors in plant model
-        %     • Verify all equipment contributes to production
-        %     • Detect isolated subsystems requiring correction
-        %
-        %   See also:
-        %     isReachable, isDAG
-        %     
-            src=cType.EMPTY_CELL;
-            out=cType.EMPTY_CELL;
-            % A DAG is always productive
-            if obj.isDAG
-                res=true;
-                return
-            end
-            % Check if all source nodes can reach all output nodes
-            s=obj.tc(1,:);
-            t=obj.tc(:,end);            
-            res=all(s) && all(t);
-            % Get the non-SSR nodes
-            if nargout==3
-                idx=find(~s);
-                if ~isempty(idx)
-                    src=obj.nodes(idx);
-                end
-                jdx=transpose(find(~t));
-                if ~isempty(jdx)
-                    out=obj.nodes(jdx);
-                end
-            end
-        end
 
         function res=isReachable(obj,u,v)
         %isReachable - Test if directed path exists between two nodes.
@@ -428,7 +352,7 @@ classdef cDigraphAnalysis < cMessageLogger
             end
         end
 
-        function [kA,kNames]=getKernelInfo(obj)
+        function [kA,kNames]=getKernelTable(obj)
         %getKernelInfo - Extract kernel DAG adjacency matrix and node names.
         %   Returns the kernel DAG representation in fuel-product (FP) table
         %   format, suitable for thermoeconomic analysis and visualization.
@@ -490,6 +414,23 @@ classdef cDigraphAnalysis < cMessageLogger
             kNames=[obj.kNodes(2:end-1) 'ENV'];
         end
 
+        function [A,names]=getOrderTable(obj)
+        %getOrderTable - Convert the graph in a FP tables ordered by its topology
+        %   The function retrieves the table values and the names ordered by ita topology order
+        %
+        %   Syntax:
+        %     [A, names] = obj.getOrderGraph;
+        %
+        %   Output Arguments:
+        %     A - Table FP values
+        %     names - Processes Names
+        %
+            idx=obj.TopologicalOrder;
+            A=cDigraphAnalysis.ssr2tfp(obj.graph(idx,idx));
+            tnodes=obj.nodes(idx);
+            names=[tnodes(2:end-1),'ENV'];
+        end
+
         function res=getGroupsInfo(obj)
         %getGroupsInfo - Get component group membership for all nodes.
         %   Returns a structure mapping each node to its strongly connected
@@ -532,49 +473,6 @@ classdef cDigraphAnalysis < cMessageLogger
             names=obj.nodes(idx);
             res=struct('Name',names,'Group',grps);
         end
-
-
-        function res=getComponentNames(obj)
-        %getComponentNames - Retrieve names of all strongly connected components.
-        %   Returns component names corresponding to internal nodes (excluding
-        %   IN and OUT). Each component represents either a single node (in DAG)
-        %   or a group of mutually reachable nodes (in cyclic graphs).
-        %
-        %   Syntax:
-        %     res = obj.getComponentNames()
-        %
-        %   Output Arguments:
-        %     res - Component names array
-        %       cell array of char (1×N where N = number of internal nodes)
-        %       Single-node components use original node name
-        %       Multi-node components named 'SC1', 'SC2', ... (Strong Component)
-        %       Order corresponds to internal node sequence
-        %
-        %   Examples:
-        %     % Example 1: List all components
-        %     obj = cDigraphAnalysis(A, names);
-        %     compNames = obj.getComponentNames();
-        %     fprintf('Components: %s\n', strjoin(compNames, ', '));
-        %
-        %     % Example 2: Identify multi-node components
-        %     compNames = obj.getComponentNames();
-        %     cycles = compNames(startsWith(compNames, 'SC'));
-        %     fprintf('Found %d cycles\n', length(cycles));
-        %
-        %   See also:
-        %     getGroupsInfo, NrOfComponents, KernelNodes
-        %
-            idx=obj.comps(2:end-1);
-            res=obj.kNodes(idx);
-        end
-
-        function [A,names]=getOrderGraph(obj)
-            idx=obj.TopologicalOrder;
-            A=cDigraphAnalysis.ssr2tfp(obj.graph(idx,idx));
-            tnodes=obj.nodes(idx);
-            names=[tnodes(2:end-1),'ENV'];
-        end
-
         %%%%
         % Plot function
         %%%%
@@ -633,7 +531,7 @@ classdef cDigraphAnalysis < cMessageLogger
             DEFAULT_TITLE='Digraph Analysis';
             % Check inputs
             if isOctave
-                obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
+                obj.messageLog(cType.WARNING,cMessages.GraphNotImplemented);
                 return
             end
             if nargin<2 || option<0
@@ -657,12 +555,7 @@ classdef cDigraphAnalysis < cMessageLogger
                 Edges=obj.GraphEdges;
                 layout='auto';
             end
-            % Build the digraph
-            endNodes=[{Edges.Source};{Edges.Target}]';
-            values=[Edges.Value]';
-            EdgesTable=table(endNodes,values,'VariableNames',{'EndNodes','Weight'});
-            NodesTable=struct2table(Nodes);
-            dg=digraph(EdgesTable,NodesTable,'omitselfloops');
+            dg=cDigraphAnalysis.digraph(Nodes,Edges);
             % Color by groups
 			grps=dg.Nodes.Group;
 			ng=max([grps;3]);
@@ -683,7 +576,88 @@ classdef cDigraphAnalysis < cMessageLogger
         end
     end
 
+    methods(Static)
+        function dg=digraph(nodes,edges)
+        %digraph - Get a MATLAB digraph object for the node and edges information
+        %   Syntax:
+        %     dg = cDigraphAnalysis.digraph(nodes,edges)
+        %   Input Arguments:
+        %     nodes: Nodes info (getNodesTable struct)
+        %     edges: Edges info (getEdgesTable struct)
+        %   Output Arguments:
+        %     dg: MATLAB digraph object
+        %   Notes:
+        %     This function is only available in MATLAB
+        %
+            if isOctave
+                obj.messageLog(cType.WARNING,cMessages.GraphNotImplemented);
+                return
+            end
+            % Build the digraph
+            endNodes=[{edges.Source};{edges.Target}]';
+            values=[edges.Value]';
+            EdgesTable=table(endNodes,values,'VariableNames',{'EndNodes','Weight'});
+            NodesTable=struct2table(nodes);
+            dg=digraph(EdgesTable,NodesTable,'omitselfloops');
+        end
+    end
+    
     methods(Access=private)
+        function res=isProductive(obj)
+        %isProductive - Validate productive graph structure requirements.
+        %   Tests whether the graph satisfies productive structure requirements:
+        %   all nodes must be reachable from the source (IN) and must reach
+        %   the sink (OUT). This ensures the graph represents a valid production
+        %   chain without isolated components or dead ends.
+        %
+        %   A productive graph guarantees:
+        %     • Every process receives inputs from upstream
+        %     • Every process contributes to final outputs
+        %     • No isolated or disconnected components exist
+        %     • Complete flow paths from resources to products
+        %
+        %   DAG graphs (no cycles) are always productive by construction.
+        %   Graphs with cycles require reachability verification.
+        %
+        %   Syntax:
+        %     res = obj.isProductive()
+        %
+        %   Output Arguments:
+        %     res - Productive graph indicator
+        %       logical
+        %       true if graph is productive (all nodes properly connected)
+        %       false if isolated nodes or connectivity issues exist
+        %    
+        %   Notes:
+        %      obj.logger includes the messages of nodes not reached from IN 
+        %      and nodes don't reach OUT
+        %
+        %   Use Cases:
+        %     • Validate productive structure before cost calculation
+        %     • Identify structural errors in plant model
+        %     • Verify all equipment contributes to production
+        %     • Detect isolated subsystems requiring correction
+        %
+        %   See also:
+        %     isReachable, isDAG
+        %     
+ 
+            % Check if all source nodes can reach all output nodes
+            s=obj.tc(1,:);  
+            t=obj.tc(:,end);            
+            res=all(s) && all(t);
+            if ~res
+                % Get the non-SSR source nodes
+                for idx=find(~s)
+                    obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.nodes{idx})
+                end
+                % Get the non-SSR sink nodes
+                for idx=transpose(find(~t))
+					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.nodes{idx});
+                end
+            end
+        end
+
         function getStrongComponents(obj)
         %getStrongComponents - Get the strong components of the graph
         %   A strong component is a maximal subgraph in which every node is reachable
@@ -721,7 +695,7 @@ classdef cDigraphAnalysis < cMessageLogger
             obj.kNodes=cnames;
         end
 
-        function buildKernelMatrix(obj)
+        function log=buildKernelMatrix(obj)
         %buildKernelMatrix - Get the kernel graph adjacency matrix
         %   The kernel graph is obtained by collapsing each strongly connected component
         %   into a single node. The kernel graph is a DAG.
@@ -734,12 +708,17 @@ classdef cDigraphAnalysis < cMessageLogger
         %   Syntax:
         %     obj.buildKernelMatrix()
         %
+            log=true;
             nc=size(obj.scmp,1);
             % Build the kernel graph adjacency matrix
             mKG=obj.scmp*obj.graph*obj.scmp';
             mKG(1:nc+1:end)=0;
             % Get the topological order of the kernel graph
             idx=topologicalOrder(mKG);
+            if isempty(idx)
+                log=false;
+                return
+            end
             % Build the kernel graph info
             obj.kG=mKG(idx,idx);
             obj.kNodes=obj.kNodes(idx);
@@ -813,11 +792,11 @@ classdef cDigraphAnalysis < cMessageLogger
             fields={'Source','Target','Value'};
             res=cell2struct(tmp,fields,1);
         end
-        
+
         function G=tfp2ssr(A)
         %tfp2ssr - Transform a Table FP into a SSR adjacency Matrix
         %   Syntax;
-        %     G=tfp2ssr(A)
+        %     G=cDigraphAnalysis.tfp2ssr(A)
         %   Input Arguments:
         %     A: Table FP
         %   Output Arguments:
@@ -832,7 +811,7 @@ classdef cDigraphAnalysis < cMessageLogger
         function A=ssr2tfp(G)
         %ssr2tfp - Transform a SSR adjacency matrix into Table FP
         %   Syntax;
-        %     G=tfp2ssr(A)
+        %     G=cDiagraphAnalysis.tfp2ssr(A)
         %   Input Arguments:
         %     G: Incidence matrix in SSR format        
         %   Output Arguments:
