@@ -152,7 +152,7 @@
       {
         "key": "CND",
         "type": "DISSIPATIVE",
-        "fuel": "(B2-B3)+(B8-B5)",
+        "fuel": "B2+B8-B3-B5",
         "product": "QCND"
       }
     ]

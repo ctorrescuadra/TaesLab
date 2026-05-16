@@ -104,7 +104,9 @@ classdef (Sealed) cResultTableBuilder < cFormatData
             tbl.eflows=obj.getFlowExergy(pm.FlowsExergy);
             tbl.estreams=obj.getStreamExergy(pm.StreamsExergy);
             tbl.eprocesses=obj.getTableCell(cType.Tables.PROCESS_EXERGY,pm.ProcessesExergy);
-            tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,pm.TableFP);
+            % Build Active TableFP
+            idx=[pm.ActiveProcesses,true];
+            tbl.tfp=obj.getTableFP(cType.Tables.TABLE_FP,pm.TableFP(idx,idx),obj.processKeys(idx));
             res=cResultInfo(pm,tbl);
             res.setResultId(cType.ResultId.THERMOECONOMIC_STATE);
             res.setDefaultGraph(cType.Tables.TABLE_FP);
@@ -140,6 +142,8 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         %
             tbl=struct();
             % Direct Cost Tables
+            idx=[mfp.ActiveProcesses,true];
+            pnames=obj.processKeys(idx);
             if options.DirectCost
                 dcost=mfp.getProcessCost;
                 ducost=mfp.getProcessUnitCost;
@@ -152,11 +156,11 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tbl.ducost=obj.getTableCell(cType.Tables.PROCESS_UNIT_COST,ducost);
                 tbl.dfcost=obj.getTableCell(cType.Tables.FLOW_EXERGY_COST,dfcost);
                 tbl.dscost=obj.getTableCell(cType.Tables.STREAM_EXERGY_COST,dscost);
-                tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dcfp);
+                tbl.dcfp=obj.getTableFP(cType.Tables.COST_TABLE_FP,dcfp(idx,idx),pnames);
                 tbl.dict=obj.getProcessICTable(cType.Tables.PROCESS_ICT,dict);
                 tbl.dfict=obj.getFlowICTable(cType.Tables.FLOW_ICT,dfict);
                 if mfp.isWaste
-                    tbl.dcfpr=obj.getTableFP(cType.Tables.COST_TABLE_FPR,dcfpr);
+                    tbl.dcfpr=obj.getTableFP(cType.Tables.COST_TABLE_FPR,dcfpr(idx,idx),pnames);
                 end
                 if length(mfp.ps.ResourceFlows)>1
                     [dfrsc,dprsc]=mfp.getResourcesCostDistribution;
@@ -180,7 +184,7 @@ classdef (Sealed) cResultTableBuilder < cFormatData
                 tbl.gscost=obj.getTableCell(cType.Tables.STREAM_GENERAL_COST,gscost);
                 tbl.gict=obj.getProcessICTable(cType.Tables.PROCESS_GENERAL_ICT,gict);
                 tbl.gfict=obj.getFlowICTable(cType.Tables.FLOW_GENERAL_ICT,gfict);
-                tbl.gcfp=obj.getTableFP(cType.Tables.GENERAL_COST_TABLE,gcfp);
+                tbl.gcfp=obj.getTableFP(cType.Tables.GENERAL_COST_TABLE,gcfp(idx,idx),pnames);
                 if length(mfp.ps.ResourceFlows)>1
                     [gfrsc,gprsc]=mfp.getResourcesCostDistribution(cz);
                     tbl.gfrsc=obj.getFlowRCDTable(cType.Tables.FLOW_RESOURCE_GENERAL_COST,gfrsc');

@@ -83,7 +83,7 @@ function [res, log, rcond] = inverseMatrixOperator(A,tol)
     rcond=sd(end)/sd(1);
     if rcond > tol % Compute the inverse
         SS=diag(1.0./sd);
-        res=V*SS*U';
+        res=zerotol(V*SS*U');
         log.messageLog(cType.INFO, cMessages.InverseCalculated,rcond);
     else % Log error for singular or ill-conditioned matrix
         log.messageLog(cType.ERROR,cMessages.SingularMatrix);

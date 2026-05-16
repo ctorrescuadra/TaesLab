@@ -144,6 +144,7 @@ classdef cMessages
         InvalidWasteOperator='The waste operator for State %s is singular or bad conditioned'
         InvalidWasteDefinition='Invalid waste definition. See error log.'
         % Resource messages
+        InvalidCostTableOption='Invalid Cost Table option. No Resource data available'
         InvalidResourceValue='Resource %s value is negative %f'
         InvalidZSize='Invalid resource process size %d'
         InvalidCSize='Invalid resource flow size %d'

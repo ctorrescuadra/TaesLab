@@ -223,6 +223,10 @@ function res = ThermoeconomicAnalysis(data, varargin)
     param.GeneralCost = bitget(pct, cType.GENERALIZED);
     
     % Load and apply resource cost data if generalized costs requested
+    if ~data.isResourceCost && param.GeneralCost
+        data.printError(cMessages.InvalidCostTableOption);
+        return
+    end
     if data.isResourceCost && param.GeneralCost
         if isempty(param.ResourceSample)
             param.ResourceSample = data.SampleNames{1};
