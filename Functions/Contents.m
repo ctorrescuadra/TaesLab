@@ -24,7 +24,6 @@
 % Matrix Operation Functions
 %   divideCol                 - Divide each column of matrix A by corresponding element of vector x.
 %   divideRow                 - Divide each row of matrix A by corresponding element of vector x.
-%   inverseMatrixOperator     - Calculate the inverse of a M-Matrix (I-A).
 %   logicalMatrix             - Convert numeric matrix to logical with zero tolerance.
 %   scaleCol                  - Multiply each column of matrix A by corresponding element of vector x.
 %   scaleRow                  - Multiply each row of matrix A by corresponding element of vector x.
@@ -35,9 +34,6 @@
 %   tolerance                 - Compute relative tolerance value for a matrix.
 %   vDivide                   - Element-wise division with NaN handling for 0/0 cases.
 %   zerotol                   - Set matrix values near zero to exact zero.
-%   npinv                     - Compute the inverse of a M-matrix I - A using Gauss-Jordan elimination.
-%   sminv                     - Compute the inverse of a M-matrix I - A using Sherman-Morrison rank-1 update
-%   nplu                      - Perform non-pivoting lu factorization of a M-matrix I-A
 %
 % Digraph Functions
 %   dfs                       - Depth-First Search traversal of a digraph

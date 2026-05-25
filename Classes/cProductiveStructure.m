@@ -886,8 +886,8 @@ classdef(Sealed) cProductiveStructure < cResultId
 			aR=obj.getProcessTypes(cType.Process.DISSIPATIVE);
 			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE);
 			[tfp,src,out]=obj.getProcessMatrix; 
-			out(aR)=false; %Disable dissipative processes
-			ssr=[false,src,false;false(N,1),tfp,out;false(1,N+2)];
+			pout=out; pout(aR)=false; %Disable dissipative processes
+			ssr=[false,src,false;false(N,1),tfp,pout;false(1,N+2)];
 			% Calculate nodes reached by src and nodes reaches out
 			rs=dfs(ssr,1); rs=rs(2:end-1);
 			rt=dfs(ssr',N+2); rt=rt(2:end-1);
