@@ -1,771 +1,532 @@
 classdef cDigraphAnalysis < cMessageLogger
-%cDigraphAnalysis - Analyze directed graph structure and compute strong connectivity.
-%   Performs graph-theoretic analysis of directed graphs (digraphs) to identify
-%   structural properties, connectivity patterns, and hierarchical relationships.
-%   This class computes transitive closure, identifies strongly connected components,
-%   and generates the kernel DAG representation for thermoeconomic productive structure analysis.
+%cDigraphAnalysis - Analyze the process digraph structure.
+%  This class provides a comprehensive toolkit for analyzing the structure of
+%  directed graphs, with a special focus on identifying strongly connected
+%  components (SCCs), determining topological order, and constructing a
+%  condensed kernel representation. It is designed to work with adjacency
+%  matrices and is particularly useful in the context of thermoeconomic
+%  analysis for modeling productive systems.
 %
-%   Key Features:
-%     - Transitive Closure computation for reachability analysis
-%     - Strong connectivity analysis using the Transitive Closure method
-%     - Kernel DAG generation by condensing strongly connected components
-%     - Productive graph validation (single source/sink requirements)
-%     - Component grouping and hierarchical structure identification
-%     • Graph visualization and export capabilities
+%  Key Features:
+%   - Strong Component Analysis: Implements the Kosaraju algorithm to
+%     efficiently find all strongly connected components in the graph.
+%   - Topological Sorting: Computes the topological order of the graph's
+%     nodes, which is essential for processing Directed Acyclic Graphs (DAGs).
+%   - Kernel Graph Construction: Creates a simplified "kernel" graph where
+%     each strongly connected component is condensed into a single node,
+%     revealing the overall acyclic structure of the system.
+%   - DAG Verification: Includes a method to quickly check if the graph is
+%     a DAG.
+%   - Rich Data Representation: Stores graph information in easily accessible
+%     tables for nodes and edges, for both the full graph and the kernel.
 %
-%   Graph representations supported:
-%     Full Graph - Original directed graph with all nodes and edges
-%       • Preserves complete connectivity information
-%       • May contain cycles and multiple paths
-%       • Used for reachability queries
+%  Typical Use Cases:
+%   - Analyzing the structure of industrial processes to identify circular
+%     dependencies (feedback loops).
+%   - Pre-processing a system model before performing calculations that
+%     require a specific topological order.
+%   - Simplifying a complex system into its fundamental components for
+%     high-level analysis.
 %
-%     Kernel DAG - Directed Acyclic Graph of strong components
-%       • Nodes represent strongly connected component groups
-%       • Edges show dependencies between components
-%       • Eliminates cycles through component condensation
-%       • Enables topological sorting and hierarchical analysis
+%  This class is used for structural analysis within the TaesLab toolbox
+%  to create the process diagram, enabling deeper insights into the
+%  connectivity and hierarchy of energy systems.
 %
-%   Strong Connectivity Analysis:
-%     Identifies groups of mutually reachable nodes (strong components):
-%       • Nodes within a component can reach each other
-%       • Components form a partition of the graph
-%       • DAG structure emerges from component condensation
-%       • Reveals feedback loops and circular dependencies
+%  See also: cProductiveStructure, cThermoeconomicModel, cDiagramFP
 %
-%   cDigraphAnalysis Properties:
-%     NrOfNodes - Number of nodes of the  graph
-%       uint32
-%     NrOfComponents - Number of strongly connected components
-%       uint32
-%     GraphNodes - Node information for the complete SSR graph
-%       struct array including node name and group
-%     GraphEdges - Edge list for the complete SSR graph
-%       struct array including source node, target node and weight      
-%     KernelNodes - Node information for kernel DAG
-%       struct array including node name and group
-%     KernelEdges - Edge list for kernel DAG
-%       struct array including source node, target node and weight
-%     topologicalOrder - Topological order of the graph nodes
-%       uint32 array (1×N)
-%     isDAG - Indicate if graph is acyclic
-%       true | false
+%    cDigraphAnalysis properties
+%      NrOfNodes          - Number of nodes in the SSR graph
+%      NrOfGroups         - Number of strongly connected components
+%      TopologicalOrder   - Topological order array (excluding source and sink)
+%      Groups             - Group assignment for each internal node
+%      GroupSize          - Size (node count) of each strongly connected component
+%      KernelTable        - Kernel graph adjacency matrix in FP table format
+%      KernelNodes        - Node labels for the kernel graph (including ENV)
 %
-%   cDigraphAnalysis Methods:
-%     cDigraphAnalysis - Construct graph analysis object from adjacency matrix
-%     isReachable - Check if path exists between two nodes
-%     isStrongConnected - Test if two nodes are in same strong component
-%     getKernelTable - Extract kernel DAG adjacency matrix and node names
-%     getOrderTable - Get ordered adjacency table and node names
-%     getGroupsInfo - Get detailed information about component groupings
-%     plot - Visualize graph structure with layout
+%    cDigraphAnalysis methods
+%      cDigraphAnalysis     - Construct graph analysis object from adjacency matrix
+%      isDAG                - Check if the graph is a Directed Acyclic Graph
+%      isProductive         - Check if the kernel graph represents a productive system
+%      getGroupsInfo        - Get the group assignment for each internal node
+%      getGroupsIndex       - Get the starting index of each group
+%      getTransitiveClosure - Compute the transitive closure of the graph
+%      getNodesTable        - Get the nodes table info of the full or kernel graph
+%      getEdgesTable        - Get the edges table info of the full or kernel graph
 %
-%   Design Pattern:
-%     Inherits from cMessageLogger for standardized error/warning reporting.
-%     Immutable analysis results - properties are read-only after construction.
-%     Internal caching of intermediate results (transitive closure, strong components map).
-%
-%   Graph Requirements:
-%     Input adjacency matrix must represent a productive graph:
-%       • Square matrix (N×N) for N nodes
-%       • Binary or weighted connections
-%       • First node treated as source (IN)
-%       • Last node treated as sink (OUT)
-%       • Intermediate nodes represent processes or flows
-%     The constructor transforms input to SSR format if needed, ensuring single source/sink structure.
-%
-%   TaesLab Applications:
-%     - Validating thermoeconomic productive structure topology
-%     - Identifying circular dependencies in production chains
-%     - Generating simplified kernel diagrams for complex systems
-%     - Structural analysis before exergy cost calculation
-%     - Detecting feedback loops requiring special treatment
-%     - Hierarchical decomposition of energy systems
-%
-%   See also:
-%     cDigraph, cProductiveDiagram, cExergyCost, cDiagramFP, cMessageLogger
-%
-    properties(GetAccess=public,SetAccess=private)
-        NrOfNodes          % Number of nodes in the graph
-        NrOfComponents     % Number of components
-        GraphEdges         % Edges of the graph
-        GraphNodes         % Nodes of the graph      
-        KernelNodes        % Nodes of the kernel DAG
-        KernelEdges        % Edges of the kernel DAG
-        TopologicalOrder   % Topological order of the graph
+	properties(Access=private)
+        mG          % Adjacency matrix of the graph
+        gNodes      % Nodes of the graph
+        kNodes      % Kernel Names
+        kG          % Kernel Matrix
+		groups      % Indicate the group the node belong
+        order       % Order of the nodes
+        nrg         % Size of each group
+	end
+
+	properties(GetAccess=public,SetAccess=private)
+        NrOfGroups        % Number of Strong Connected Components
+        NrOfNodes         % Number of Nodes of the SSR Graph
+        TopologicalOrder  % Topological Order array
+        Groups            % Groups index array
+        GroupSize         % Size of each group
+        GraphTable        % Graph FP Table ordered
+        GraphNodes        % Graph Nodes ordered
+        KernelTable       % Kernel Table
+        KernelNodes       % Kernel Nodes
     end
 
-    properties(Access=public)
-        graph          % Adjacency of the graph
-        nodes          % Node Names
-        kNodes         % Kernel Names
-        kG             % Kernel Matrix
-        tc             % Transitive Closure
-        comps          % Graphs components
-        scmp           % Strongly Connected Component Map
-    end
-
-    methods
-        function obj = cDigraphAnalysis(A,names)
-        %cDigraphAnalysis - Construct graph analysis object from adjacency matrix.
-        %   Creates a cDigraphAnalysis object that performs complete structural
-        %   analysis including transitive closure, strong component detection,
-        %   and kernel DAG generation. The constructor automatically computes
-        %   all graph properties and stores them for efficient querying.
-        %
-        %   The input adjacency matrix is transformed to SSR (Single Source-Sink
-        %   Representation) format by adding explicit IN and OUT nodes if needed.
-        %   This ensures the graph has a single source and single sink node,
-        %   required for productive structure analysis.
-        %
+	methods
+        function obj=cDigraphAnalysis(tfp,names)
+		%cDigraphAnalysis - Construct an instance of this class
+        %   creates a digraph analysis object from a FP Table and corresponding names.
+        %   It initializes the graph, finds strongly connected components,
+        %   builds the kernel graph, and prepares node/edge tables for
+        %   analysis and visualization.
         %   Syntax:
-        %     obj = cDigraphAnalysis(A)
-        %     obj = cDigraphAnalysis(A, names)
+        %       obj = cDigraphAnalysis(tfp, names) 
         %
         %   Input Arguments:
-        %     A - Adjacency matrix representing directed graph
-        %       numeric matrix (N×N)
-        %       These matrices could be contains logical values (ProductiveStructure/ProcessMatrix)
-        %       or nonnegative values (ExergyModel/TableFP)
-        %
-        %     names - Node names (optional)
-        %       cell array of char | string array
-        %       Length must equal size(A,1)
-        %       If omitted, generates default names 'N1', 'N2', ...
+        %     tfp   - A matrix representing the fuel-product table 
+        %     names - A cell array of strings with the names of the processes.
         %
         %   Output Arguments:
-        %     obj - cDigraphAnalysis object with computed properties
-        %       Valid object if construction successful (obj.status = true)
-        %       Invalid object if input validation fails (obj.status = false)
-        %       Check with isValid(obj) before using
+        %     obj - An instance of the cDigraphAnalysis class, fully
+        %           initialized with the structural analysis of the graph.
         %
-        %   Construction Process:
-        %     1. Validates adjacency matrix (must be square)
-        %     2. Validates or generates node names
-        %     3. Transforms to SSR format (adds IN/OUT nodes)
-        %     4. Computes transitive closure for reachability
-        %     5. Identifies strongly connected components
-        %     6. Determines if graph is DAG (acyclic)
-        %     7. Builds kernel DAG if cycles exist
-        %     8. Generates edge and node tables for visualization
-        %
-        %   Examples:
-        %     % Example 1: Simple linear chain
-        %     A = [0 1 0; 0 0 1; 0 0 0];
-        %     obj = cDigraphAnalysis(A);
-        %     % Creates DAG with default names N1, N2, N3
-        %
-        %     % Example 2: Graph with custom node names
-        %     A = [0 1 1; 0 0 1; 0 0 0];
-        %     names = {'Resource', 'Process', 'Product'};
-        %     obj = cDigraphAnalysis(A, names);
-        %
-        %     % Example 3: Graph with cycle requiring kernel DAG
-        %     A = [0 1 0; 0 0 1; 1 0 0];
-        %     obj = cDigraphAnalysis(A);
-        %     fprintf('Is DAG: %d, Components: %d\n', obj.isDAG, obj.NrOfComponents);
-        %
-        %   Error Conditions:
-        %     Returns invalid object if:
-        %       • Adjacency matrix is not square
-        %       • Node names array has incorrect length
-        %       • Node names are not strings or cell array
-        %
-        %   See also:
-        %     isValid, cMessageLogger, cDigraph
-        
+        %   See also: getStrongComponents, buildKernelGraph, tfp2ssr
+
             % Check Inputs
-            if ~isNonNegativeMatrix(A)
-                obj.messageLog(cType.ERROR,cMessages.NegativeMatrix,size(A));
+            if ~isNonNegativeMatrix(tfp)
+                obj.messageLog(cType.ERROR,cMessages.NegativeMatrix);
                 return
             end
             if nargin<2 || isempty(names)
                 names=arrayfun(@(x) sprintf('N%d',x),1:size(A,1),'UniformOutput',false);
             end
-            if (~iscellstr(names) && ~isstring(names)) || numel(names)~=size(A,1)
-                obj.messageLog(cType.ERROR,cMessages.InvalidNodeNames,numel(names),size(A,1));
+            if (~iscellstr(names) && ~isstring(names)) || numel(names)~=size(tfp,1)
+                obj.messageLog(cType.ERROR,cMessages.InvalidNodeNames,numel(names),size(tfp,1));
                 return
             end
             % Initialize variables
-            obj.graph = cDigraphAnalysis.tfp2ssr(A);
-            obj.nodes = ['IN',names(1:end-1),'OUT'];
-            obj.NrOfNodes = numel(obj.nodes);
-            % Get properties
-	        obj.tc = transitiveClosure(obj.graph);
-            if ~obj.isProductive
-                obj.messageLog(cType.ERROR,cMessages.InvalidProductiveGraph);
+            obj.mG=cDigraphAnalysis.tfp2ssr(tfp);
+            obj.gNodes=['IN',names(1:end-1),'OUT'];
+            % Find Strong Components
+            if ~obj.getStrongComponents
                 return
             end
+            % Build Kernel Graph
+            obj.buildKernelGraph;
+            % Build ordered Graph
+            idx=obj.order;
+            obj.GraphTable=cDigraphAnalysis.ssr2tfp(obj.mG(idx,idx));
+            obj.GraphNodes=[obj.gNodes(idx(2:end-1)),'ENV'];
+        end
 
-            obj.getStrongComponents;
-            obj.GraphEdges=cDigraphAnalysis.getEdgesTable(obj.graph,obj.nodes);
-            obj.GraphNodes=cDigraphAnalysis.getNodesTable(obj.graph,obj.nodes,obj.comps);
-            if obj.isDAG
-                idx=topologicalOrder(obj.graph);
-                if isempty(idx)
-                    obj.messageLog(cType.ERROR,cMessages.InvalidKernelGraph);
-                    return
-                end
-                obj.kG=obj.graph(idx,idx);
-                obj.kNodes=obj.nodes(idx);
-                obj.TopologicalOrder=idx;
-            else
-                if ~obj.buildKernelMatrix
-                    obj.messageLog(cType.ERROR,cMessages.InvalidKernelGraph);
-                    return
-                end
-            end
-            obj.KernelEdges=cDigraphAnalysis.getEdgesTable(obj.kG,obj.kNodes);
-            obj.KernelNodes=cDigraphAnalysis.getNodesTable(obj.kG,obj.kNodes,1:obj.NrOfComponents);
+        function res=get.TopologicalOrder(obj)
+        %get.TopologicalOrder - Getter for the TopologicalOrder property.
+        %   Return the topological sorted order of the graph's procecsss. 
+        %   This order is computed during the strong component analysis.  
+        %
+        %   Output Arguments:
+        %     res - A numeric array representing the topological order of
+        %           the processes. Not includes source and sink nodes.
+        %
+            res=obj.order(2:end-1)-1;
+        end
+
+        function res=get.Groups(obj)
+        %get.Groups - Getter for the Groups property.
+        %   Return the group assignment for each node in the graph.
+        %   Groups are identified during the strong component analysis.
+        %
+        %   Output Arguments:
+        %     res - A numeric array representing the group assignment of
+        %           each process. Not includes source and sink nodes.
+        %
+            res=obj.groups(obj.order(2:end))-1;
+        end
+
+        function res=get.GroupSize(obj)
+        %get.GroupSize - Getter for the GroupSize property.
+        %   Return the size (number of nodes) for each group in the graph.
+        %   Group sizes are computed during the strong component analysis.
+        %
+        %   Output Arguments:
+        %     res - A numeric array representing the size of each group
+        %           (number of nodes per group). Not includes source and sink nodes.
+        %
+            res=full(obj.nrg(2:end-1))';
         end
 
         function res = isDAG(obj)
         %isDAG - Check if the graph is acyclic (DAG).
-        %   Returns true if the graph has no cycles (i.e., each node forms its own strong component)
+        %   This method returns true if the graph has no cycles (i.e., each node forms its own strong component)
         %   and the diagonal of the adjacency matrix is zero (no self-loops).
+        %
         %   Syntax:
         %     res = obj.isDAG()
         %
-            res = (obj.NrOfComponents == obj.NrOfNodes) && all(diag(obj.graph) == 0);
-        end
-
-
-        function res=isReachable(obj,u,v)
-        %isReachable - Test if directed path exists between two nodes.
-        %   Determines whether node v can be reached from node u by following
-        %   directed edges in the graph. Uses precomputed transitive closure
-        %   for O(1) query time, making repeated reachability tests efficient.
-        %
-        %   Syntax:
-        %     res = obj.isReachable(u, v)
-        %
-        %   Input Arguments:
-        %     u - Source node name
-        %       char array | string
-        %       Must match a node name in the graph
-        %       Case-sensitive exact match required
-        %
-        %     v - Target node name
-        %       char array | string
-        %       Must match a node name in the graph
-        %       Case-sensitive exact match required
-        %
         %   Output Arguments:
-        %     res - Reachability indicator
-        %       logical
-        %       true if path exists from u to v
-        %       false if no path exists or node names invalid
+        %     res - A logical scalar (true or false).
         %
-        %   Performance:
-        %     • O(1) query time (uses precomputed transitive closure)
-        %     • Efficient for multiple queries
-        %     • No graph traversal needed
-        %
-        %   Examples:
-        %     % Example 1: Check simple path
-        %     A = [0 1 0; 0 0 1; 0 0 0];
-        %     obj = cDigraphAnalysis(A, {'A', 'B', 'C'});
-        %     if obj.isReachable('A', 'C')
-        %         fprintf('Path exists from A to C\n');
-        %     end
-        %
-        %     % Example 2: Verify fuel-product relationship
-        %     if obj.isReachable('Fuel', 'Product')
-        %         fprintf('Fuel contributes to Product\n');
-        %     end
-        %
-        %     % Example 3: Test bidirectional connectivity
-        %     if obj.isReachable('A', 'B') && obj.isReachable('B', 'A')
-        %         fprintf('Nodes A and B form a cycle\n');
-        %     end
-        %
-        %   See also:
-        %     isStrongConnected, isProductive, transitiveClosure
-        %   
-            res=false;
-            [~,udx]=ismember(u,obj.nodes);
-            [~,vdx]=ismember(v,obj.nodes);
-            if udx && vdx
-                res = obj.tc(vdx,udx);
-            end
+            res = (obj.NrOfGroups == obj.NrOfNodes) && all(diag(obj.mG) == 0);
         end
 
-        function res=isStrongConnected(obj,u,v)
-        %isStrongConnected - Test if two nodes belong to same strong component.
-        %   Determines whether nodes u and v are mutually reachable, meaning
-        %   they belong to the same strongly connected component. Nodes in
-        %   the same component can reach each other through directed paths,
-        %   indicating circular dependencies or feedback loops.
-        %   Uses the precomputed strong component map for O(1) query time, making
-        %   repeated strong connectivity tests efficient.
-        %
-        %   Syntax:
-        %     res = obj.isStrongConnected(u, v)
-        %
-        %   Input Arguments:
-        %     u - First node name
-        %       char array | string
-        %       Must match a node name in the graph
-        %
-        %     v - Second node name
-        %       char array | string
-        %       Must match a node name in the graph
-        %
-        %   Output Arguments:
-        %     res - Strong connectivity indicator
-        %       logical
-        %       true if u and v are in same strong component (mutually reachable)
-        %       false if in different components or node names invalid
-        %
-        %   Strong Component Properties:
-        %     • Equivalence relation: reflexive, symmetric, transitive
-        %     • Partitions graph into disjoint groups
-        %     • Single-node components in DAGs
-        %     • Multi-node components indicate cycles
-        %
-        %   Examples:
-        %     % Example 1: Detect cycle membership
-        %     A = [0 1 0; 0 0 1; 1 0 0];
-        %     obj = cDigraphAnalysis(A, {'A', 'B', 'C'});
-        %     if obj.isStrongConnected('A', 'C')
-        %         fprintf('A and C are in a cycle\n');
-        %     end
-        %
-        %     % Example 2: Identify feedback groups
-        %     if obj.isStrongConnected('Process1', 'Process2')
-        %         fprintf('Circular dependency detected\n');
-        %     end
-        %
-        %   Use Cases:
-        %     • Identifying circular production chains
-        %     • Grouping processes for simultaneous solving
-        %     • Detecting feedback requiring iterative methods
-        %     • Component-based decomposition strategies
-        %
-        %   See also:
-        %     isReachable, getComponentNames, NrOfComponents
-        %
-            res=false;
-            [~,udx]=ismember(u,obj.nodes);
-            [~,vdx]=ismember(v,obj.nodes);
-            if udx && vdx
-                res = (obj.comps(udx) == obj.comps(vdx));
-            end
-        end
-
-        function [kA,kNames]=getKernelTable(obj)
-        %getKernelInfo - Extract kernel DAG adjacency matrix and node names.
-        %   Returns the kernel DAG representation in fuel-product (FP) table
-        %   format, suitable for thermoeconomic analysis and visualization.
-        %   The kernel DAG condenses strongly connected components into single
-        %   nodes, creating an acyclic graph that preserves dependencies.
-        %
-        %   The kernel representation:
-        %     • Eliminates cycles through component condensation
-        %     • Preserves inter-component dependencies
-        %     • Enables hierarchical analysis and visualization
-        %     • Simplifies complex graphs for clearer understanding
-        %
-        %   Syntax:
-        %     [kA, kNames] = obj.getKernelInfo()
-        %
-        %   Output Arguments:
-        %     kA - Kernel adjacency matrix
-        %       numeric matrix (M×M where M = NrOfComponents)
-        %       Fuel-Product (FP) table format
-        %       Binary or weighted connections between components
-        %       Guaranteed acyclic (DAG property)
-        %       Row/column correspond to strong components
-        %
-        %     kNames - Kernel node names
-        %       cell array of char (1×M)
-        %       Fuel-Product format naming convention
-        %       Component names or 'SC1', 'SC2', ... for multi-node groups
-        %       Last element is 'ENV' (environment/sink)
-        %
-        %   FP Table Format:
-        %     Standard thermoeconomic format where:
-        %       • Rows represent processes (components)
-        %       • Columns represent flows
-        %       • Values indicate fuel/product relationships
-        %       • Compatible with cost calculation algorithms
-        %
-        %   Examples:
-        %     % Example 1: Extract kernel for visualization
-        %     A = [0 1 0 0; 0 0 1 0; 1 0 0 1; 0 0 0 0];
-        %     obj = cDigraphAnalysis(A);
-        %     [kMatrix, kNames] = obj.getKernelInfo();
-        %     fprintf('Kernel has %d nodes\n', length(kNames));
-        %
-        %     % Example 2: Export kernel for external analysis
-        %     [kA, kNames] = obj.getKernelInfo();
-        %     kernelTable = array2table(kA, 'VariableNames', kNames, ...
-        %                               'RowNames', kNames(1:end-1));
-        %
-        %   Use Cases:
-        %     • Generating simplified diagrams for complex systems
-        %     • Exporting to graph layout software (yEd, Graphviz)
-        %     • Hierarchical visualization of productive structure
-        %     • Input for thermoeconomic cost calculations
-        %
-        %   See also:
-        %     KernelEdges, KernelNodes, isDAG, getComponentNames
-        % 
-            kA=cDigraphAnalysis.ssr2tfp(full(obj.kG));
-            kNames=[obj.kNodes(2:end-1) 'ENV'];
-        end
-
-        function [A,names]=getOrderTable(obj)
-        %getOrderTable - Convert the graph in a FP tables ordered by its topology
-        %   The function retrieves the table values and the names ordered by ita topology order
-        %
-        %   Syntax:
-        %     [A, names] = obj.getOrderGraph;
-        %
-        %   Output Arguments:
-        %     A - Table FP values
-        %     names - Processes Names
-        %
-            idx=obj.TopologicalOrder;
-            A=cDigraphAnalysis.ssr2tfp(obj.graph(idx,idx));
-            tnodes=obj.nodes(idx);
-            names=[tnodes(2:end-1),'ENV'];
-        end
-
-        function res=getGroupsInfo(obj)
-        %getGroupsInfo - Get component group membership for all nodes.
-        %   Returns a structure mapping each node to its strongly connected
-        %   component group. This information is useful for understanding
-        %   graph decomposition, identifying circular dependencies, and
-        %   organizing nodes for hierarchical analysis.
-        %
-        %   Syntax:
-        %     res = obj.getGroupsInfo()
-        %
-        %   Output Arguments:
-        %     res - Node-to-group mapping structure
-        %       struct array with fields:
-        %         Name - Node name (char array)
-        %         Group - Component group name (char array)
-        %       Length equals total number of nodes (including IN/OUT)
-        %       Nodes in same group are mutually reachable
-        %
-        %   Examples:
-        %     % Example 1: Display component membership
-        %     obj = cDigraphAnalysis(A, names);
-        %     groups = obj.getGroupsInfo();
-        %     for i = 1:length(groups)
-        %         fprintf('%s -> %s\n', groups(i).Name, groups(i).Group);
-        %     end
-        %
-        %     % Example 2: Find nodes in specific component
-        %     groups = obj.getGroupsInfo();
-        %     component1 = {groups(strcmp({groups.Group}, 'SC1')).Name};
-        %
-        %   Use Cases:
-        %     • Organizing nodes by component for analysis
-        %     • Coloring nodes by component in visualizations
-        %
-        %   See also:
-        %     getComponentNames, isStrongConnected, NrOfComponents 
-        %
-            [idx,jdx]=find(obj.scmp');
-            grps=obj.kNodes(jdx);
-            names=obj.nodes(idx);
-            res=struct('Name',names,'Group',grps);
-        end
-        %%%%
-        % Plot function
-        %%%%
-        function plot(obj,option,text)
-        %plot - Visualize graph structure with interactive layout.
-        %   Creates a MATLAB figure displaying the directed graph with nodes
-        %   colored by component membership. Supports both full graph and
-        %   kernel DAG visualization, with optional edge weight display.
-        %
-        %   Visualization features:
-        %     • Automatic force-directed or hierarchical layout
-        %     • Component-based node coloring (each component unique color)
-        %     • Edge weight visualization with colormap
-        %     • Interactive graph exploration (zoom, pan, rotate)
-        %     • Node labels showing names
-        %
-        %   Not available in Octave (requires MATLAB graph plotting).
-        %
-        %   Syntax:
-        %     obj.plot()
-        %     obj.plot(option)
-        %     obj.plot(option, title)
-        %
-        %   Input Arguments:
-        %     option - Visualization type (optional)
-        %       cType.DigraphType enumeration (default: GRAPH)
-        %       GRAPH - Full graph without edge weights
-        %       KERNEL - Kernel DAG without edge weights  
-        %       GRAPH_WEIGHT - Full graph with edge weight colormap
-        %       KERNEL_WEIGHT - Kernel DAG with edge weight colormap
-        %
-        %     title - Figure title text (optional)
-        %       char array | string (default: 'Digraph Analysis')
-        %       Displayed at top of figure
-        %
-        %   Examples:
-        %     % Example 1: Simple graph visualization
-        %     obj = cDigraphAnalysis(A, names);
-        %     obj.plot();
-        %
-        %     % Example 2: Kernel DAG with custom title
-        %     obj.plot(cType.DigraphType.KERNEL, 'CGAM Kernel Structure');
-        %
-        %     % Example 3: Weighted graph with colorbar
-        %     obj.plot(cType.DigraphType.GRAPH_WEIGHT);
-        %
-        %   Interaction:
-        %     • Drag nodes to rearrange layout
-        %     • Click nodes to highlight connections
-        %     • Use zoom and pan tools
-        %     • Save figure as image (File → Save As)
-        %
-        %   See also:
-        %     GraphEdges, GraphNodes, KernelEdges, KernelNodes
-        %
-            DEFAULT_TITLE='Digraph Analysis';
-            % Check inputs
-            if isOctave
-                obj.messageLog(cType.WARNING,cMessages.GraphNotImplemented);
-                return
-            end
-            if nargin<2 || option<0
-                option=0;
-                text=DEFAULT_TITLE;
-            end
-            if nargin<3
-                text=DEFAULT_TITLE;
-            end
-            isKernel=bitget(option,1);
-            isColorBar=bitget(option,2);
-            % Get Node and Edge info
-            if isKernel
-                markerSize=cType.KMARKER_SIZE;
-                Nodes=obj.KernelNodes;
-                Edges=obj.KernelEdges;
-                layout='layered';
-            else
-                markerSize=cType.MARKER_SIZE;
-                Nodes=obj.GraphNodes;
-                Edges=obj.GraphEdges;
-                layout='auto';
-            end
-            dg=cDigraphAnalysis.digraph(Nodes,Edges);
-            % Color by groups
-			grps=dg.Nodes.Group;
-			ng=max([grps;3]);
-			colors=lines(ng);
-			Categories=colors(grps,:);
-            % Plot the digraph
-            if isColorBar
-    			r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
-			    plot(dg,"EdgeCData",dg.Edges.Weight,"EdgeColor","flat","LineWidth",1.5,...
-                    'NodeColor',Categories,'MarkerSize',markerSize,...
-                    'Interpreter','none','Layout',layout);
-                colormap(red2blue);
-			    colorbar();
-            else
-                plot(dg,'NodeColor',Categories,'MarkerSize',markerSize,'Interpreter','none','Layout',layout);
-            end
-            title(text,'fontsize',12);
-        end
-    end
-
-    methods(Static)
-        function dg=digraph(nodes,edges)
-        %digraph - Get a MATLAB digraph object for the node and edges information
-        %   Syntax:
-        %     dg = cDigraphAnalysis.digraph(nodes,edges)
-        %   Input Arguments:
-        %     nodes: Nodes info (getNodesTable struct)
-        %     edges: Edges info (getEdgesTable struct)
-        %   Output Arguments:
-        %     dg: MATLAB digraph object
-        %   Notes:
-        %     This function is only available in MATLAB
-        %
-            if isOctave
-                obj.messageLog(cType.WARNING,cMessages.GraphNotImplemented);
-                return
-            end
-            % Build the digraph
-            endNodes=[{edges.Source};{edges.Target}]';
-            values=[edges.Value]';
-            EdgesTable=table(endNodes,values,'VariableNames',{'EndNodes','Weight'});
-            NodesTable=struct2table(nodes);
-            dg=digraph(EdgesTable,NodesTable,'omitselfloops');
-        end
-    end
-    
-    methods(Access=private)
         function res=isProductive(obj)
-        %isProductive - Validate productive graph structure requirements.
-        %   Tests whether the graph satisfies productive structure requirements:
-        %   all nodes must be reachable from the source (IN) and must reach
-        %   the sink (OUT). This ensures the graph represents a valid production
-        %   chain without isolated components or dead ends.
-        %
-        %   A productive graph guarantees:
-        %     • Every process receives inputs from upstream
-        %     • Every process contributes to final outputs
-        %     • No isolated or disconnected components exist
-        %     • Complete flow paths from resources to products
-        %
-        %   DAG graphs (no cycles) are always productive by construction.
-        %   Graphs with cycles require reachability verification.
+        %isProductive - Check if the kernel graph represents a productive system.
+        %   This method returns true if every node in the
+        %   kernel graph (excluding the environment) has at least one
+        %   incoming and one outgoing edge. This is a structural check to
+        %   ensure that all components are integrated into the system.
         %
         %   Syntax:
         %     res = obj.isProductive()
         %
         %   Output Arguments:
-        %     res - Productive graph indicator
-        %       logical
-        %       true if graph is productive (all nodes properly connected)
-        %       false if isolated nodes or connectivity issues exist
-        %    
-        %   Notes:
-        %      obj.logger includes the messages of nodes not reached from IN 
-        %      and nodes don't reach OUT
+        %     res - A logical scalar (true or false).
         %
-        %   Use Cases:
-        %     • Validate productive structure before cost calculation
-        %     • Identify structural errors in plant model
-        %     • Verify all equipment contributes to production
-        %     • Detect isolated subsystems requiring correction
+            A=obj.kG(1:end-1,2:end);
+			in=sum(A,1);
+			out=sum(A,2);
+			res=(all(in) && all(out));
+		end
+
+        function res=getGroupsInfo(obj)
+        %getGroupsInfo - Get the group (component) for each internal node.
+        %   This method returns a struct array that maps each
+        %   internal node of the graph to its corresponding group (strongly
+        %   connected component) in the kernel graph.
         %
-        %   See also:
-        %     isReachable, isDAG
-        %     
- 
-            % Check if all source nodes can reach all output nodes
-            s=obj.tc(1,:);  
-            t=obj.tc(:,end);            
-            res=all(s) && all(t);
-            if ~res
-                % Get the non-SSR source nodes
-                for idx=find(~s)
-                    obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.nodes{idx})
-                end
-                % Get the non-SSR sink nodes
-                for idx=transpose(find(~t))
-					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.nodes{idx});
-                end
+        %   Syntax:
+        %     res = obj.getGroupsInfo()
+        %
+        %   Output Arguments:
+        %     res - A struct array with two fields:
+        %           'Name'  - The name of the internal node.
+        %           'Group' - The name of the kernel group it belongs to.
+        %
+            tmp=obj.groups(obj.order);
+            group=obj.kNodes(tmp);
+            res=struct('Name',obj.gNodes(2:end-1),'Group',group(2:end-1));
+        end
+
+        function res=getGroupIndex(obj)
+        %getGroupIndex - Get the starting index of each group.
+        %   Returns an array where each element is the starting index 
+        %   of the corresponding group in the ordered node list.
+        %
+        %   Syntax:
+        %     res = obj.getGroupIndex
+        %
+        %   Output Arguments:
+        %     res - Array of starting indices for each group
+        %
+            res=[1, 1+cumsum(obj.nrg(1:end-1))];
+        end
+
+        function res=getTransitiveClosure(obj,option)
+        %getTransitiveClosure - Compute the transitive closure of the graph.
+        %   This method calculates the transitive closure, which reveals all reachable nodes from
+        %   every other node. It can be computed for either the full graph or the kernel graph.
+        %
+        %   Syntax:
+        %     res = obj.getTransitiveClosure(option)
+        %
+        %   Input Arguments:
+        %     option - Specifies which graph to use (optional, default is KERNEL).
+        %              cType.Digraph.GRAPH:  Compute for the full graph.
+        %              cType.Digraph.KERNEL: Compute for the kernel graph.
+        %
+        %   Output Arguments:
+        %     res - The adjacency matrix of the transitive closure.
+        %
+            if nargin==1
+                option=cType.Digraph.KERNEL;
+            end
+            switch option
+                case cType.Digraph.GRAPH
+                    idx=obj.order;
+                    res=cDigraphAnalysis.transitiveClosure(obj.mG(idx,idx));
+                case cType.Digraph.KERNEL
+                    res=cDigraphAnalysis.transitiveClosure(obj.kG);
             end
         end
 
-        function getStrongComponents(obj)
-        %getStrongComponents - Get the strong components of the graph
-        %   A strong component is a maximal subgraph in which every node is reachable
-        %   from every other node. A graph without cycles (DAG) has as many
-        %   components as nodes.
-        %   The components are calculated using the transitive closure
-        %   The strong component map is stored in obj.scmp, where each row corresponds to a component and
-        %   each column corresponds to a node. The value is 1 if the node belongs to the component, 0 otherwise.
-        %   The name of strong components are stores in obj.kNodes
+        function res=getNodesTable(obj,option)
+        %getNodesTable - Get the nodes table for the graph.
+        %   This method returns a table containing all nodes in either the full graph
+        %   or the kernel graph, with node names and their corresponding group assignments.
         %
         %   Syntax:
-        %     obj.getStrongComponents()
-        %        
-            n=obj.NrOfNodes;
-            res=zeros(1,n); cnt=0;
-            % Find the strongly connected components
-            for u=1:n
-                if ~res(u)
-                    cnt=cnt+1;
-                    idx = obj.tc(u,:) & obj.tc(:,u)';  
-                    res(idx)=cnt;
-                end
+        %     res = obj.getNodesTable(option)
+        %
+        %   Input Arguments:
+        %     option - Specifies which graph to use.
+        %              cType.Digraph.GRAPH:  Get nodes table for the full graph.
+        %              cType.Digraph.KERNEL: Get nodes table for the kernel graph.
+        %
+        %   Output Arguments:
+        %     res - A struct containing the nodes information
+        %
+            switch option
+                case cType.Digraph.GRAPH
+                    res=cDigraphAnalysis.buildNodesTable(obj.GraphTable,obj.GraphNodes,obj.Groups);
+                case cType.Digraph.KERNEL
+                    res=cDigraphAnalysis.buildNodesTable(obj.KernelTable,obj.KernelNodes,1:obj.NrOfGroups-1);
             end
-            obj.NrOfComponents = max(res);
-            obj.scmp=sparse(res,1:n,true(n,1),obj.NrOfComponents,obj.NrOfNodes);
-            obj.comps=res;
-            % Get the names of the kernel nodes
-            [~,jdx]=unique(res);
-            cnames = obj.nodes(jdx);  
-            nrg = sum(obj.scmp,2);
-            tmp = find(nrg>1);
-            for i=1:length(tmp)
-                cnames{tmp(i)}=['SC',num2str(i)];
-            end
-            obj.kNodes=cnames;
         end
 
-        function log=buildKernelMatrix(obj)
-        %buildKernelMatrix - Get the kernel graph adjacency matrix
-        %   The kernel graph is obtained by collapsing each strongly connected component
-        %   into a single node. The kernel graph is a DAG.
-        %   The kernel graph is obtained using the algorithm:
-        %     kG = scmp * graph * scmp'
-        %   and removing self-loops.
-        %   The Kernel Graph is reorder using its topological order
-        %   A topological order of the graph grouping the SCC is stored in obj.TopologicalOrder
+        function res=getEdgesTable(obj,option)
+        %getEdgesTable - Get the edges table for the graph.
+        %   This method returns a table containing all edges in either the full graph
+        %   or the kernel graph, with source and target node and weight information.
         %
         %   Syntax:
-        %     obj.buildKernelMatrix()
+        %     res = obj.getEdgesTable(option)
         %
-            log=true;
-            nc=size(obj.scmp,1);
-            % Build the kernel graph adjacency matrix
-            mKG=obj.scmp*obj.graph*obj.scmp';
-            mKG(1:nc+1:end)=0;
-            % Get the topological order of the kernel graph
-            idx=topologicalOrder(mKG);
-            if isempty(idx)
-                log=false;
-                return
+        %   Input Arguments:
+        %     option - Specifies which graph to use.
+        %              cType.Digraph.GRAPH:  Get edges table for the full graph.
+        %              cType.Digraph.KERNEL: Get edges table for the kernel graph.
+        %
+        %   Output Arguments:
+        %     res - An struct containing the edges info
+        %
+            switch option
+                case cType.Digraph.GRAPH
+                    res=cDigraphAnalysis.buildEdgesTable(obj.GraphTable,obj.GraphNodes);
+                case cType.Digraph.KERNEL
+                    res=cDigraphAnalysis.buildEdgesTable(obj.KernelTable,obj.KernelNodes);
             end
-            % Build the kernel graph info
-            obj.kG=mKG(idx,idx);
-            obj.kNodes=obj.kNodes(idx);
-            obj.scmp=obj.scmp(idx,:);
-            % Get a topological order of the graph (grouping SCC)
-            [idx,~]=find(obj.scmp');
-            obj.TopologicalOrder=idx;
         end
+
     end
 
-    methods(Static,Access=private)
-        function res=getNodesTable(A,names,groups)
-        %getNodeTable - Build Node Table from adjacency matrix and groups.
-        %   Syntax;
-        %     res=cDigraphAnalysis.getNodeTable(A,names)
+    methods (Access=private)
+        function log=getStrongComponents(obj)
+        %getStrongComponents - Finds strong components using Kosaraju's algorithm.
+        %
+        %   This private method implements the two-pass Kosaraju algorithm
+        %   to find all strongly connected components (SCCs) in the graph.
+        %   It first performs a depth-first search (DFS) on the transpose
+        %   graph to determine the processing order, then a second DFS on
+        %   the original graph to identify the components.
+        %
+        %   The results (number of groups, group membership, and topological
+        %   order) are stored in the object's properties.
+        %
+        %   See also: dfSC
+        
+            %Find a postorder search of the reverse graph
+            log=false;
+            N=size(obj.mG,1);
+            [~,porder]=cDigraphAnalysis.dfSC(obj.mG',1:N);
+            if ~all(porder)
+                obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
+                return
+            end
+            %Find the strong connected groups
+	        [grp,ord]=cDigraphAnalysis.dfSC(obj.mG,porder);
+            if ~all(ord)
+                obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
+                return
+            end  
+            % Assign object variables
+            obj.NrOfNodes=N;
+            obj.NrOfGroups=max(grp);
+            obj.order=ord;
+            obj.groups=obj.NrOfGroups+1-grp;
+            log=true;
+        end
+
+        function buildKernelGraph(obj)
+        % buildKernelGraph - Constructs the kernel graph from strongly connected components.
+        %
+        %   This method builds the kernel (condensation) graph by condensing all
+        %   nodes within each strongly connected component (SCC) into a single node.
+        %   The kernel graph represents the DAG of SCCs and is used for higher-level
+        %   graph analysis.
+        %
+        %   For DAGs (acyclic graphs):
+        %     - The graph is reordered according to the topological order
+        %     - Each node is preserved individually
+        %     - Node groups have size 1
+        %
+        %   For graphs with cycles:
+        %     - Creates a condensation graph where each SCC becomes a single node
+        %     - Builds a sparse representation for efficiency
+        %     - Assigns special names to multi-node components (e.g., 'SC1', 'SC2')
+        %     - Tracks component sizes for later analysis
+        %
+        %   Output:
+        %     Updates object properties:
+        %       kG           - Kernel graph adjacency matrix
+        %       kNodes       - Node labels for the kernel graph
+        %       nrg          - Number of nodes in each group/component
+        %       KernelTable  - Table representation of kernel graph in FP Table format
+        %       KernelNodes  - Final node names including environment node
+        %
+        %   See also: getStrongComponents, ssr2tfp
+            N=obj.NrOfNodes;
+            NG=obj.NrOfGroups;
+            idx=obj.order;
+            if obj.isDAG %Order and copy the adjacency matrix
+                obj.kG=obj.mG(idx,idx);
+                obj.kNodes=obj.gNodes(ogj.order);
+                obj.nrg=ones(1,obj.NrOfNodes);
+            else
+                % Build Kernel Matrix
+                scmp=sparse(obj.groups,1:N,true(N,1),NG,N);
+                obj.kG=scmp*obj.mG*scmp';
+                obj.kG(1:NG+1:end)=0; % Set diagonal to 0 
+                obj.nrg = sum(scmp,2);      
+                % Build Kernel Nodes
+                [~,jdx]=unique(obj.groups);
+                obj.kNodes = obj.gNodes(jdx);  
+                tmp = find(obj.nrg>1);
+                for i=1:length(tmp)
+                    obj.kNodes{tmp(i)}=['SC',num2str(i)];
+                end
+            end
+            obj.KernelTable=cDigraphAnalysis.ssr2tfp(obj.kG);
+            obj.KernelNodes=[obj.kNodes(2:end-1),'ENV'];
+        end
+
+    end
+
+    methods (Static,Access=public)
+        function [group,order]=dfSC(G,nodes)
+		%dfSC - Performs a Depth-First Search for strong component analysis.
+        %   This static helper function performs a single pass of
+        %   depth-first search over the specified nodes of graph G.
+        %   It is used by `getStrongComponents` as part of the Kosaraju algorithm.
+        %
+        %   Syntax: 
+        %   [group, order] = cDigraphAnalysis.dfSC(G, nodes)      
+        %
+        %   Input Arguments:
+        %     G     - The adjacency matrix of the graph.
+        %     nodes - The order in which to visit the nodes.
+        %
+        %   Output Arguments:
+        %     group - An array indicating the group (component) of each node.
+        %     order - The post-order traversal of the nodes.
+        %
+            N=size(G,1);
+            stack=zeros(1,N,'int16'); scnt=0; % Stack for DFS traversal
+			order=zeros(1,N,'int16'); pcnt=0; % Post-order traversal result
+			group=zeros(1,N); gcnt=0;         % Group assignment for each node
+            
+            % Iterate through nodes in the specified order (from first pass)
+            for u=nodes
+                % If node 'u' has not been visited yet
+                if ~group(u)
+			        gcnt=gcnt+1;group(u)=gcnt; % Assign a new group ID
+                    scnt=scnt+1;stack(scnt)=u; % Push node to stack
+                    pcnt=pcnt+1;order(pcnt)=u; % Record node in traversal order
+                    
+                    % Standard iterative DFS loop
+                    while scnt>0
+				        v=stack(scnt); scnt=scnt-1; % Pop a node
+				        
+                        % Find all neighbors of the current node 'v'
+                        [~,idx]=find(G(v,:));
+				        
+                        % Visit all neighbors
+                        for w=idx
+                            % If neighbor 'w' has not been visited
+					        if ~group(w)
+			                    group(w)=gcnt; % Assign it to the current group
+                                scnt=scnt+1;stack(scnt)=w; % Push neighbor to stack
+                                pcnt=pcnt+1;order(pcnt)=w; % Record in traversal order
+					        end
+                        end
+                    end
+                end
+            end
+            order=order(N:-1:1); % Reverse to get the correct post-order
+        end
+
+        function G=tfp2ssr(A)
+        %tfp2ssr - Transform a Fuel-Product (FP) table to SSR format.
+        %   Converts a standard FP adjacency matrix into the Source-Sink
+        %   Representation (SSR) format used internally by this class.
+        %   SSR adds an explicit source node ('IN') and sink node ('OUT')
+        %   to handle system boundary flows.
+        %
+        %   Syntax:
+        %     G = cDigraphAnalysis.tfp2ssr(A)
+        %
+        %   Input Arguments:
+        %     A - Square adjacency matrix in FP format (N x N).
+        %
+        %   Output Arguments:
+        %     G - Adjacency matrix in SSR format ((N+1) x (N+1)).
+        %
+        %   See also: ssr2tfp
+        %
+            N=size(A,1);
+			G=[0 A(end,:);...
+			   zeros(N-1,1) A(1:end-1,:);...
+			   zeros(1,N+1)];
+        end
+
+        function A=ssr2tfp(G)
+        %ssr2tfp - Transform an SSR adjacency matrix back to FP table format.
+        %   Reverses the `tfp2ssr` operation, converting an internal
+        %   SSR-format matrix back into a standard Fuel-Product (FP) table.
+        %
+        %   Syntax:
+        %     A = cDigraphAnalysis.ssr2tfp(G)
+        %
+        %   Input Arguments:
+        %     G - Adjacency matrix in SSR format ((N+1) x (N+1)).
+        %
+        %   Output Arguments:
+        %     A - Adjacency matrix in FP format (N x N).
+        %
+        %   See also: tfp2ssr
+        %
+            A=[G(2:end-1,2:end);...
+               G(1,2:end)];
+        end
+
+        function res=buildNodesTable(A,names,groups)
+        %buildEdgesTable - Build Node Table from adjacency matrix and groups.
+        %
+        %   Syntax:
+        %     res=cDigraphAnalysis.buildNodesTable(A,names)
         %   Input Arguments:
         %     A - Adjacency Matrix in SSR format 
         %     names - Names of the internal nodes
         %     groups - Array with the group of each node
         %   Output Arguments:
         %     res - Struct with fields Name and Group, representing the node table
-        
-            % Get number of groups
-            ng=max(groups);
+        %
             % Internal nodes
-            inames=names(2:end-1);
-            igrp=groups(2:end-1);
+            ng=max(groups)+1;
+            inames=names(1:end-1);
+            igrp=groups(1:end-1)+1;
             % Source nodes
-            [~,jdx]=find(A(1,2:end-1));
+            [~,jdx]=find(A(end,1:end-1));
             snames=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
             sgrp=ones(1,numel(jdx));
             % Output nodes
-            idx=find(A(2:end-1,end));
+            idx=find(A(1:end-1,end));
             tnames=arrayfun(@(x) sprintf('OUT%d',x),1:numel(idx),'UniformOutput',false);
             tgrp=repmat(ng,1,numel(idx));
             % Node Table structure
             names=[snames,inames,tnames];
-            groups=[sgrp,igrp,tgrp];
+            grp=[sgrp,igrp,tgrp];
             fields={'Name','Group'};
-            tmp=[names;num2cell(groups)];
+            tmp=[names;num2cell(grp)];
             res=cell2struct(tmp,fields,1);
         end
 
-        function res=getEdgesTable(A,names)
-        %getEdgesTable - Build Edge Table from adjacency matrix
+        function res=buildEdgesTable(A,names)
+        %buildEdgesTable - Build Edge Table from adjacency matrix
         %   Syntax;
-        %     res=cDigraphAnalysis.getEdgesTable(A,names)
+        %     res=cDigraphAnalysis.buildEdgesTable(A,names)
         %   Input Arguments:
         %     A - Adjacency Matrix in SSR format
         %     names - Names of the internal nodes
@@ -773,17 +534,17 @@ classdef cDigraphAnalysis < cMessageLogger
         %     res - Struct with fields Source, Target and Value, representing the edge table
         
             % Internal Edges
-            [idx,jdx,ival]=find(A(2:end-1,2:end-1));
-            isource=names(idx+1);
-            itarget=names(jdx+1);
+            [idx,jdx,ival]=find(A(1:end-1,1:end-1));
+            isource=names(idx);
+            itarget=names(jdx);
             % Source Edges
-            [~,jdx,vval]=find(A(1,2:end-1));
+            [~,jdx,vval]=find(A(end,1:end-1));
             vsource=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
-            vtarget=names(jdx+1);
+            vtarget=names(jdx);
             % Output Edges
-            [idx,~,wval]=find(A(2:end-1,end));
+            [idx,~,wval]=find(A(1:end-1,end));
             wtarget=arrayfun(@(x) sprintf('OUT%d',x),1:numel(idx),'UniformOutput',false);
-            wsource=names(idx+1);
+            wsource=names(idx);
             % Build the Adjacency Matrix Table
             source=[vsource,isource,wsource];
             target=[vtarget,itarget,wtarget];
@@ -793,32 +554,39 @@ classdef cDigraphAnalysis < cMessageLogger
             res=cell2struct(tmp,fields,1);
         end
 
-        function G=tfp2ssr(A)
-        %tfp2ssr - Transform a Table FP into a SSR adjacency Matrix
-        %   Syntax;
-        %     G=cDigraphAnalysis.tfp2ssr(A)
-        %   Input Arguments:
-        %     A: Table FP
-        %   Output Arguments:
-        %     G: Incidence matrix in SSR format
+        function res = transitiveClosure(A)
+        %transitiveClosure - Computes transitive closure for ordered graph.
+        %   This method computes the transitive closure of a Digraph
+        %   more efficiently than a general-purpose algorithm like Floyd-Warshall 
+        %   by leveraging the topological order of the nodes.
+        %   The TC matrix is block upper triangular.
         %
-            N=size(A,1);
-			G=[0 A(end,:);...
-			   zeros(N-1,1) A(1:end-1,:);...
-			   zeros(1,N+1)];
-        end
-
-        function A=ssr2tfp(G)
-        %ssr2tfp - Transform a SSR adjacency matrix into Table FP
-        %   Syntax;
-        %     G=cDiagraphAnalysis.tfp2ssr(A)
-        %   Input Arguments:
-        %     G: Incidence matrix in SSR format        
-        %   Output Arguments:
-        %     A: Table FP
+        %   Syntax:
+        %     res = cDigraphAnalysis.transitiveClosure(A)
         %
-            A=[G(2:end-1,2:end);...
-               G(1,2:end)];
+        %   Input Arguments:
+        %     A - The adjacency matrix of the ordered SSR graph.
+        %
+        %   Output Arguments:
+        %     res - The transitive closure matrix of the digraph.
+        %
+            N = size(A, 1);
+            res = logical(A); % Start with the direct connections       
+            % Iterate through nodes in reverse topological order
+            for u = N:-1:1
+                % Find all nodes reachable from u
+                vfu = find(res(u, :));
+                if ~isempty(vfu)
+                    % Find all nodes that can reach u
+                    vru = find(res(:, u));           
+                    % For every pair (v, w) where v reaches u and u reaches w,
+                    % add an edge from v to w.
+                    for v = vru
+                        res(v, vfu) = true;
+                    end
+                end
+            end
+            res = eye(N) | res;  
         end
     end
 end

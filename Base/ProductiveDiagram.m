@@ -197,7 +197,7 @@ function res=ProductiveDiagram(data,varargin)
 %    ProductiveStructure, DiagramFP, ShowGraph, cDataModel, cProductiveDiagram,
 %    cDigraphAnalysis, cResultInfo, SaveResults, ReadDataModel
 %
-	res=cTaesLab();
+	res=cMessageLogger();
 	if nargin <1 || ~isObject(data,'cDataModel')
 	    res.printError(cMessages.DataModelRequired,cMessages.ShowHelp);
 		return
@@ -220,6 +220,7 @@ function res=ProductiveDiagram(data,varargin)
     else
         pd.printLogger;
         res.printError(cMessages.InvalidObject,class(pd));
+        return
     end 
     if ~res.status
 		res.printLogger;

@@ -40,11 +40,9 @@ classdef cDigraph < cGraphResults
 			% Build edges table
 			if isObject(info,'cDiagramFP')
 				obj.isDiagramFP=true;
-                edges=table(tbl.Data(:,1:2),cell2mat(tbl.Data(:,3)),'VariableNames',{'EndNodes','Weight'});
 				obj.Title=[tbl.Description,' [',tbl.State,']'];
 			elseif isObject(info,'cProductiveDiagram')
 				obj.isDiagramFP=false;
-                edges=table(tbl.Data(:,1:2),'VariableNames',{'EndNodes'});
 				obj.Title=tbl.Description;
 			else
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(info));
@@ -53,9 +51,7 @@ classdef cDigraph < cGraphResults
 			% Get the nodes table and build the digraph
 			obj.Name=tbl.Description;
 			obj.Style=cType.GraphStyles.DIGRAPH;
-			nodes=info.getNodesTable(tbl.Name);
-			tnodes=struct2table(nodes);
-			obj.xValues=digraph(edges,tnodes,'omitselfloops');
+			obj.xValues=info.getDigraph(tbl.Name);
 			% Color by groups
 			grps=obj.xValues.Nodes.Group;
 			ng=max([grps;3]);

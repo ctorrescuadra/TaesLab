@@ -85,10 +85,10 @@ function res=dfs(G,s)
     end    
     %% Algorithm Initialization
     % Create stack using int16 for memory efficiency with large graphs
-    stack = int16(N);   % Pre-allocate stack with maximum possible size
-    cnt = 1;            % Stack counter (top of stack index)
-    stack(cnt) = s;     % Push starting node onto stack
-    res(s) = true;      % Mark starting node as visited   
+    stack = zeros(1,N,'int16'); % Pre-allocate stack with maximum possible size
+    cnt = 1;                    % Stack counter (top of stack index)
+    stack(cnt) = s;             % Push starting node onto stack
+    res(s) = true;              % Mark starting node as visited   
     %% Depth-First Search Main Loop
     while cnt > 0
         % Pop node from stack

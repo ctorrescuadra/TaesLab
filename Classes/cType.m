@@ -207,7 +207,7 @@ classdef cType
 		ColumnFormat=struct('CHAR',1,'NUMERIC',2);
 		colType={'char','numeric'};
 		% Digraph types
-		DigraphType=struct('GRAPH',0,'KERNEL',1,'GRAPH_WEIGHT',2,'KERNEL_WEIGHT',3);
+		Digraph=struct('GRAPH',0,'KERNEL',1,'GRAPH_WEIGHT',2,'KERNEL_WEIGHT',3);
 		% Class Info types
 		ClassInfo=struct('PROPERTIES',1,'METHODS',2);
         % TaesApp Tab Panels
