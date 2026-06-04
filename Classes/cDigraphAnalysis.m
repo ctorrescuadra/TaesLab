@@ -394,59 +394,7 @@ classdef cDigraphAnalysis < cMessageLogger
 
     end
 
-    methods (Static,Access=public)
-        function [group,order]=dfSC(G,nodes)
-		%dfSC - Performs a Depth-First Search for strong component analysis.
-        %   This static helper function performs a single pass of
-        %   depth-first search over the specified nodes of graph G.
-        %   It is used by `getStrongComponents` as part of the Kosaraju algorithm.
-        %
-        %   Syntax: 
-        %   [group, order] = cDigraphAnalysis.dfSC(G, nodes)      
-        %
-        %   Input Arguments:
-        %     G     - The adjacency matrix of the graph.
-        %     nodes - The order in which to visit the nodes.
-        %
-        %   Output Arguments:
-        %     group - An array indicating the group (component) of each node.
-        %     order - The post-order traversal of the nodes.
-        %
-            N=size(G,1);
-            stack=zeros(1,N,'int16'); scnt=0; % Stack for DFS traversal
-			order=zeros(1,N,'int16'); pcnt=0; % Post-order traversal result
-			group=zeros(1,N); gcnt=0;         % Group assignment for each node
-            
-            % Iterate through nodes in the specified order (from first pass)
-            for u=nodes
-                % If node 'u' has not been visited yet
-                if ~group(u)
-			        gcnt=gcnt+1;group(u)=gcnt; % Assign a new group ID
-                    scnt=scnt+1;stack(scnt)=u; % Push node to stack
-                    pcnt=pcnt+1;order(pcnt)=u; % Record node in traversal order
-                    
-                    % Standard iterative DFS loop
-                    while scnt>0
-				        v=stack(scnt); scnt=scnt-1; % Pop a node
-				        
-                        % Find all neighbors of the current node 'v'
-                        [~,idx]=find(G(v,:));
-				        
-                        % Visit all neighbors
-                        for w=idx
-                            % If neighbor 'w' has not been visited
-					        if ~group(w)
-			                    group(w)=gcnt; % Assign it to the current group
-                                scnt=scnt+1;stack(scnt)=w; % Push neighbor to stack
-                                pcnt=pcnt+1;order(pcnt)=w; % Record in traversal order
-					        end
-                        end
-                    end
-                end
-            end
-            order=order(N:-1:1); % Reverse to get the correct post-order
-        end
-
+    methods(Static)
         function G=tfp2ssr(A)
         %tfp2ssr - Transform a Fuel-Product (FP) table to SSR format.
         %   Converts a standard FP adjacency matrix into the Source-Sink
@@ -490,6 +438,56 @@ classdef cDigraphAnalysis < cMessageLogger
             A=[G(2:end-1,2:end);...
                G(1,2:end)];
         end
+    end
+
+    methods (Static,Access=private)
+        function [group,order]=dfSC(G,nodes)
+		%dfSC - Performs a Depth-First Search for strong component analysis.
+        %   This static helper function performs a single pass of
+        %   depth-first search over the specified nodes of graph G.
+        %   It is used by `getStrongComponents` as part of the Kosaraju algorithm.
+        %
+        %   Syntax: 
+        %   [group, order] = cDigraphAnalysis.dfSC(G, nodes)      
+        %
+        %   Input Arguments:
+        %     G     - The adjacency matrix of the graph.
+        %     nodes - The order in which to visit the nodes.
+        %
+        %   Output Arguments:
+        %     group - An array indicating the group (component) of each node.
+        %     order - The post-order traversal of the nodes.
+        %
+            N=size(G,1);
+            stack=zeros(1,N,'int16'); scnt=0; % Stack for DFS traversal
+			order=zeros(1,N,'int16'); pcnt=0; % Post-order traversal result
+			group=zeros(1,N); gcnt=0; % Group assignment for each node           
+            % Iterate through nodes in the specified order (from first pass)
+            for u=nodes 
+                if group(u), continue; end
+                % If node 'u' has not been visited yet
+			    gcnt=gcnt+1;group(u)=gcnt; % Assign a new group ID
+                scnt=scnt+1;stack(scnt)=u; % Push node to stack
+                pcnt=pcnt+1;order(pcnt)=u; % Record node in traversal order
+                % Standard iterative DFS loop
+                while scnt>0
+				    v=stack(scnt); scnt=scnt-1; % Pop a node		        
+                    % Find all neighbors of the current node 'v'
+                    [~,idx]=find(G(v,:));  
+                    % Visit all neighbors
+                    for w=idx                          
+					    if ~group(w) % If neighbor 'w' has not been visited
+			                group(w)=gcnt; % Assign it to the current group
+                            scnt=scnt+1;stack(scnt)=w; % Push neighbor to stack
+                            pcnt=pcnt+1;order(pcnt)=w; % Record in traversal order
+					    end
+                    end
+                end
+            end
+            order=order(N:-1:1); % Reverse to get the correct post-order
+        end
+
+
 
         function res=buildNodesTable(A,names,groups)
         %buildEdgesTable - Build Node Table from adjacency matrix and groups.

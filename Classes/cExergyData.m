@@ -146,11 +146,12 @@ classdef cExergyData < cMessageLogger
 			mbE=divideCol(tAE,ET);
             mbS=divideCol(tAS,B);
 			% Build Productive Graph (logical Fuel-Product process table)
-			aP=ps.getProcessTypes(cType.Process.PRODUCTIVE); NP=numel(aP)+1;
+			idx=ps.getProcessTypes(cType.Process.PRODUCTIVE);
+			aP=intersect(idx,find(~bypass)); NP=numel(aP)+1;
 			tfp=logicalMatrix(mbP)*transitiveClosure(mbS*mbE)*logicalMatrix(mbF);
-			ssr=[tfp(aP,aP),tfp(aP,end);zeros(1,NP)];
+			ssr=[tfp(aP,aP),tfp(aP,end);false(1,NP)];
 			% Check if final products are reacheable from no bypassed productive processses
-			sol=xor(dfs(ssr',NP),[bypass(aP),0]);
+			sol=dfs(ssr',NP);
 			if all(sol)
 				obj.ps=ps;
 				obj.FlowsExergy=B;

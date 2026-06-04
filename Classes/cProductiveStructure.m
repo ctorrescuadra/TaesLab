@@ -881,29 +881,26 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%     res - true | false indicating if the graph is ok
 		%     if false logs the non reached nodes
 		
-			% Build the SSR graph adjacency matrix
+			% Get the Processes adjacency matrix
 			N=obj.NrOfProcesses;
-			aR=obj.getProcessTypes(cType.Process.DISSIPATIVE);
-			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE);
 			[tfp,src,out]=obj.getProcessMatrix; 
-			pout=out; pout(aR)=false; %Disable dissipative processes
-			ssr=[false,src,false;false(N,1),tfp,pout;false(1,N+2)];
-			% Calculate nodes reached by src and nodes reaches final products
-			rs=dfs(ssr,1); rs=rs(2:end-1);
-			rt=dfs(ssr',N+2); rt=rt(2:end-1);
-			res=all(rs) & all(rt(aP)); 
-			if res % Build Process Matrix
-				obj.ProcessMatrix=[tfp,out;src,0];
-			else
-				% Processes not reached from source
-				for i=find(~rs)
-					obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
-				end
-				% Processes can not reach sink
-				for i=find(~rt)
-					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
-				end
+			% Calculate nodes reached by src
+			ssr=[false,src,false;false(N,1),tfp,out;false(1,N+2)];
+			rs=dfs(ssr,1); rs=rs(2:end-1);			
+			for i=find(~rs) % Report invalid nodes
+				obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 			end
+			% Calculate final products reached by productive nodes
+			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE); NP=length(aP)+1;
+			ssr=[tfp(aP,aP),out(aP);false(1,NP)];
+			rt=dfs(ssr',NP);
+			for i=find(~rt)
+				obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
+			end
+			if obj.status
+				obj.ProcessMatrix=[tfp,out;src,0];
+			end
+			res=obj.status;
 		end
     end
 end

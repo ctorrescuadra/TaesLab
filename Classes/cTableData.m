@@ -1,64 +1,70 @@
 classdef cTableData < cTable
-%cTableData - Implement cTable to store data model tables.
-%   This class implements methods to manage data tables. It is derived from cTable.
+%cTableData - Concrete cTable subclass for data model tables.
+%   cTableData stores and presents input data tables (flows, processes, exergy
+%   states, etc.) that are read from data model files. It is derived from cTable
+%   and adds column-format detection, column-width calculation, and a
+%   formatted console/file printer.
+%
+%   Unlike cTableResult subclasses, cTableData does not carry thermoeconomic
+%   result metadata (Format, Unit, NodeType). Its State property is always set
+%   to the literal string 'DATA'.
 %
 %   cTableData properties (inherited from cTable):
 %     Data        - Cell array with the table data
-%     Values      - Cell array with the table data including row and column names
-%     RowNames    - Cell array with the row names
-%     ColNames    - Cell array with the column names
-%     NrOfRows    - Number of rows
-%     NrOfCols    - Number of columns
-%     Name        - Name of the table
-%     Description - Description of the table
-%     State       - State Name of the data     
-%     Sample       - Resource sample name
-%     Resources    - Contains reources info
-%     GraphType    - Graph Type associated to table
+%     Values      - Cell array with data including row and column names
+%     RowNames    - Cell array with row key names
+%     ColNames    - Cell array with column names
+%     NrOfRows    - Number of data rows
+%     NrOfCols    - Number of columns (including row-name column)
+%     Name        - Table identifier name
+%     Description - Table header or description text
+%     State       - Always 'DATA' for this class
+%     Sample      - Resource cost sample name
+%     Resources   - True if the table contains resource cost information
+%     GraphType   - Graph type associated with the table (see cType.GraphType)
 %
 %   cTableData methods:
-%     cTableData          - Construct an instance of this class
-%     create               - Create a cTableData from values (static method)
-%     import               - Import a cTableData from a file (static method)
-%     importMatlabTable    - Import data from a MATLAB table into cTableData (static method)
-%     getStructTable       - Get a table as struct
-%     printTable           - Print a table on console
-%     formatData           - Get formatted data
-%     getDescriptionLabel  - Get the title label for GUI presentation
+%     cTableData         - Constructor
+%     create             - Create a cTableData from a cell array (static)
+%     import             - Create a cTableData from a CSV or JSON file (static)
+%     importMatlabTable  - Create a cTableData from a MATLAB table object (static)
+%     getStructTable     - Return table data as a struct
+%     printTable         - Print the table to the console or a file
+%     formatData         - Return data with numeric columns right-justified as strings
+%     getDescriptionLabel - Return the description text used as table heading
 %
 %   cTableData methods (inherited from cTable):
-%     exportTable     - Get cTable info in diferent types of variables
-%     getCellData     - Get table as cell array
-%     getStructData   - Get table as struct array
-%     getMatlabTable  - Get table as a MATLAB table (if available)
-%     getColumnWidth  - Get the width of each column
-%     getColumnFormat - Get the format of each column (TEXT or NUMERIC)
-%     getStructTable  - get a structure with the table info
-%     setColumnValues - set the values of a column
-%     setRowValues    - set the values of a row
-%     setStudyCase    - Set state and sample values
-%     setDescription  - Set Table Header or Description 
-%     isNumericColumn - Check if a column is numeric
-%     isNumericTable  - Check if the table is numeric
-%     isGraph         - Check if the table is a graphic table
-%     showTable       - show the tables in diferent interfaces
-%     exportTable     - export table in diferent formats
-%     saveTable       - save a table into a file in diferent formats
+%     exportTable     - Export table in different variable formats
+%     getStructData   - Return table data as a struct array
+%     getMatlabTable  - Return table as a MATLAB table object (MATLAB only)
+%     getColumnValues - Return the values of a data column
+%     getColumnData   - Return a key/value struct array for a data column
+%     getColumnWidth  - Return the display width of each column
+%     getColumnFormat - Return the format code of each column (see cType.ColumnFormat)
+%     setColumnValues - Replace the values of one or more data columns
+%     setRowValues    - Replace the values of one or more data rows
+%     setStudyCase    - Set the State and Sample identifiers
+%     setDescription  - Set the table description text
+%     isNumericColumn - True if the specified column contains numeric data
+%     isNumericTable  - True if all data columns are numeric
+%     isGraph         - True if a graph type is associated with the table
+%     showTable       - Display the table (console, GUI or HTML)
+%     saveTable       - Save the table to a file (CSV, XLSX, JSON, XML, TXT, HTML, LaTeX, MD)
 %
-%   See also cTable
+%   See also cTable, cTableCell, cTableMatrix
 %
     methods
         function obj = cTableData(data,rowNames,colNames,props)
         %cTableData - Construct an instance of this class
         %   Syntax:
-        %     obj = cTableData(data,rowNames,colNames,properties)
+        %     obj = cTableData(data,rowNames,colNames,props)
         %   Input Arguments:
-        %   data - cell array containg data table
-        %   rowNames - cell array with the row names
-        %   colNames - cell array with the column names
-        %   properties - struct with additional table properties
-        %     Name - name of the table
-        %     Description - table description
+        %     data     - cell array containing the table data (NrOfRows x NrOfCols-1)
+        %     rowNames - cell array with the row key names
+        %     colNames - cell array with the column names (first entry is the row-key header)
+        %     props    - struct with additional table properties
+        %       Name        - table identifier name
+        %       Description - table header or description text
         %   Output Arguments:
         %     obj - cTableData object
         
@@ -86,15 +92,16 @@ classdef cTableData < cTable
         end
 
         function res=getStructTable(obj)
-        %getStructTable - Get table as a struct
+        %getStructTable - Return table information as a struct
+        %   Overrides cTable.getStructTable.
         %   Syntax:
-        %     res=obj.getStructTable
+        %     res = obj.getStructTable
         %   Output Arguments:
-        %     res - struct with table information
-        %       Name - Name of the table
-        %       Description - table Description
-        %       State - State of the data
-        %       Data - Data of the table as struct
+        %     res - struct with fields:
+        %       Name        - table identifier name
+        %       Description - table description text
+        %       State       - state label ('DATA')
+        %       Data        - table data as a struct array (see getStructData)
         %
             data=obj.getStructData;
             res=struct('Name',obj.Name,'Description',obj.Description,...
@@ -102,13 +109,14 @@ classdef cTableData < cTable
         end
 
         function res=formatData(obj)
-        %formatData - Format the values of the table
-        %   If values are numeric are converted to numeric strings
+        %formatData - Return data with numeric columns converted to right-justified strings
+        %   Non-numeric columns are returned unchanged. Numeric values are converted
+        %   with num2str and then right-padded to the column width.
         %   Syntax:
-        %     res = obj.formatData();
-        %   Output arguments:
-        %     res - cell array with formatted data
-        %   
+        %     res = obj.formatData()
+        %   Output Arguments:
+        %     res - cell array (NrOfRows x NrOfCols-1) with formatted data values
+        %
             res=obj.Data;
             cw=obj.getColumnWidth;
             for j=1:obj.NrOfCols-1
@@ -121,25 +129,27 @@ classdef cTableData < cTable
         end
 
         function res=getDescriptionLabel(obj)
-        %getDescriptionLabel - Get the description of each table for graph or printing
-        % Syntax:
-        %   res = obj.getDescriptionLabel();
-        % Output Arguments:
-        %   res - char array with table description 
+        %getDescriptionLabel - Return the description text used as the table heading
+        %   Called by printTable to obtain the line printed above the column headers.
+        %   Syntax:
+        %     res = obj.getDescriptionLabel()
+        %   Output Arguments:
+        %     res - char array with the table Description
         %
             res=obj.Description;
         end
 
         function printTable(obj,fid)
-        %printTable - Display table on console or in a file in a pretty formatted way
+        %printTable - Print the table in a formatted layout to the console or a file
+        %   Left-aligns text columns and right-aligns numeric columns. Prints the
+        %   description as a heading followed by a separator line.
         %   Syntax:
         %     obj.printTable(fid)
         %   Input Arguments:
-        %     fid - (optional) file Id parameter. 
-        %       If not provided table, is show in console
-        %       If provided, table is writen into a file defined by fid.
+        %     fid - (optional) file identifier returned by fopen.
+        %           If omitted, output goes to the console (stdout, fid=1).
         %   See also fopen
-        %   
+        %
             if nargin==1
                 fid=1;
             end
@@ -167,11 +177,11 @@ classdef cTableData < cTable
 
     methods(Access=private)
         function setProperties(obj,p)
-        %setProperties - Set the additional properties of the table
+        %setProperties - Set Name and Description and initialise column format and width
         %   Syntax:
-        %     setProperties(obj,p)
+        %     obj.setProperties(p)
         %   Input Arguments:
-        %     p - struct with the cTableCell properties
+        %     p - struct with fields Name and Description
         %
             obj.Name=p.Name;
             obj.Description=p.Description;
@@ -180,11 +190,12 @@ classdef cTableData < cTable
         end
 
         function setColumnFormat(obj)
-        %setColumnFormat - Define the format of each column (TEXT or NUMERIC)
-        %   Set the property fcol
-        %   It is used in printTable method
+        %setColumnFormat - Detect and store the format code of each column
+        %   Sets the protected property fcol. A column is NUMERIC (2) if every
+        %   data cell is numeric; otherwise it is TEXT (1).
         %   Syntax:
         %     obj.setColumnFormat
+        %   See also cType.ColumnFormat
         %
             tmp=cellfun(@isnumeric,obj.Values(2:end,:));
             if isrow(tmp)
@@ -195,9 +206,11 @@ classdef cTableData < cTable
         end
 
         function setColumnWidth(obj)
-        %setColumnWidth - Define the width of the columns
-        %   Set the property wcol
-        %   It is used in printTable method
+        %setColumnWidth - Compute and store the display width of each column
+        %   Sets the protected property wcol. For numeric columns the width is
+        %   the maximum of the formatted value length, the header length and
+        %   cType.DEFAULT_NUM_LENGHT, plus one. For text columns it is the
+        %   maximum string length across all cells (header included) plus two.
         %   Syntax:
         %     obj.setColumnWidth
             res=zeros(1,obj.NrOfCols);
@@ -217,18 +230,19 @@ classdef cTableData < cTable
     
     methods (Static,Access=public)
         function tbl=create(values,props)
-        %create - Create a cTableData from values
+        %create - Create a cTableData from a cell array of values
         %   Syntax:
         %     tbl = cTableData.create(values,props)
         %   Input Arguments:
-        %     values - cell array with the table values
-        %       First row with the column names
-        %       First column with the row names
-        %     props - struct with additional table properties
-        %       Name - name of the table
-        %       Description - table description
+        %     values - cell array where the first row contains column names and
+        %              the first column contains row key names; must have at
+        %              least 2 rows and 2 columns
+        %     props  - struct with table properties
+        %       Name        - table identifier name
+        %       Description - table description text
         %   Output Arguments:
-        %     tbl - cTableData object or cMessageLogger object if an error occurs
+        %     tbl - cTableData object, or a cMessageLogger with error status if
+        %           the input is invalid
         %
             tbl=cMessageLogger(cType.INVALID);
             if all(size(values)>1)   
@@ -242,19 +256,21 @@ classdef cTableData < cTable
         end
 
         function tbl=import(filename,props)
-        %import - Create cTableData from file
-        %   Valid formats: CSV, JSON.
-        %   In case of CSV file, first row must contain column names and first column row names.
-        %   In case of JSON file, it must contain a single JSON array object with field names as column names and field values as data.
+        %import - Create a cTableData by reading a CSV or JSON file
+        %   For CSV files: the first row must contain column names and the first
+        %   column must contain row key names.
+        %   For JSON files: the file must decode to a struct array where field
+        %   names are column names and values are the data.
         %   Syntax:
         %     tbl = cTableData.import(filename,props)
         %   Input Arguments:
-        %     filename - char array with the file name
-        %     props - struct with additional table properties
-        %       Name - name of the table
-        %       Description - table description
+        %     filename - path to the file to import (CSV or JSON)
+        %     props    - struct with table properties
+        %       Name        - table identifier name
+        %       Description - table description text
         %   Output Arguments:
-        %     tbl - cTableData object or cMessageLogger object if an error occurs
+        %     tbl - cTableData object, or a cMessageLogger with error status if
+        %           the file cannot be read or has an unsupported format
         %
             tbl=cMessageLogger();
             % Validate filename
@@ -284,13 +300,18 @@ classdef cTableData < cTable
         end
 
         function obj=importMatlabTable(T)
-        %importMatlabTable - Import data from a MATLAB table into cTable object
+        %importMatlabTable - Create a cTableData from a MATLAB table object
+        %   Not supported on Octave. If the MATLAB table has RowNames they are
+        %   used as row keys; otherwise the first variable is used as row keys.
+        %   The table's UserData property is mapped to Name and Description to
+        %   Description.
         %   Syntax:
-        %     obj= cTableData.importMatlabTable(mt)
+        %     obj = cTableData.importMatlabTable(T)
         %   Input Arguments:
-        %     mt - MATLAB table
+        %     T   - MATLAB table object (must have at least 2 rows and 2 columns)
         %   Output Arguments:
-        %     obj - cTableData object
+        %     obj - cTableData object, or a cMessageLogger with error status if
+        %           the input is invalid or the platform is Octave
         %
             obj=cMessageLogger();
             % Check Input Arguments 

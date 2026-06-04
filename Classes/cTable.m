@@ -1,69 +1,76 @@
 classdef (Abstract) cTable < cMessageLogger
-%cTable - Abstract class for tabular data.
-%   This is the base class for tables. It is not intended to be
-%   instantiated directly. Use cTableData, cTableCell or cTableMatrix instead.
-%   The table definition includes the row and column names, the values, a description,
-%   the state and sample names, and the graph type associated to the table, and other properties
-%   The class also includes common methods, applied to the derived classes to show, export and save
-%   the table in different formats.
+%cTable - Abstract base class for tabular data.
+%   cTable defines the common interface and shared implementation for all table
+%   types in TaesLab. It is not intended to be instantiated directly; use the
+%   concrete subclasses cTableData, cTableCell or cTableMatrix instead.
+%
+%   A cTable object holds row and column names, a data cell array, a description
+%   string, state/sample identifiers, and a graph-type tag. It provides methods
+%   to display, export and save the table in multiple formats.
 %
 %   cTable properties:
-%     NrOfCols  	 - Number of Columns
-%     NrOfRows     - Number of Rows
-%     RowNames     - Row Names (key codes)
-%     ColNames     - Column Names
-%     Data	       - Data values
-%     Values       - Table values
-%     Name         - Table Name
-%     Description  - Table Descripcion
-%     State        - State Name of values
-%     Sample       - Resource sample name
-%     Resources    - Contains reources info
-%     GraphType    - Graph Type associated to table
+%     NrOfCols    - Number of columns (including the row-name column)
+%     NrOfRows    - Number of data rows
+%     RowNames    - Row key names (1 x NrOfRows cell array)
+%     ColNames    - Column names  (1 x NrOfCols cell array)
+%     Data        - Data values   (NrOfRows x NrOfCols-1 cell array)
+%     Values      - Full table cell array: ColNames prepended, RowNames in col 1
+%     Name        - Table identifier name
+%     Description - Table header or description text
+%     State       - Thermodynamic state or data label associated with the table
+%     Sample      - Resource cost sample name
+%     Resources   - True if the table contains resource cost information
+%     GraphType   - Graph type associated with the table (see cType.GraphType)
 %
 %   cTable methods:
-%     getProperties   - Get table properties
-%     setStudyCase    - Set state and sample values
-%     setDescription  - Set Table Header or Description 
-%     showTable       - show the tables in diferent interfaces
-%     exportTable     - export table in diferent formats
-%     saveTable       - save a table into a file in diferent formats
-%     isNumericTable  - check if all data of the table are numeric
-%     isNumericColumn - check if a column data is numeric
-%     isGraph         - check if the table has a graph associated
-%     getColumnFormat - get the format of the columns
-%     getColumnWidth  - get the width of the columns
-%     getStructData   - get data as struct array
-%     getMatlabTable  - get data as MATLAB table
-%     getStructTable  - get a structure with the table info
-%     setColumnValues - set the values of a column
-%     setRowValues    - set the values of a row
+%     getProperties   - Return a struct with the main table properties
+%     setStudyCase    - Set the State and Sample identifiers
+%     setDescription  - Set the table description text
+%     showTable       - Display the table (console, GUI or HTML)
+%     exportTable     - Return table data in different variable formats
+%     saveTable       - Save the table to a file (CSV, XLSX, JSON, XML, TXT, HTML, LaTeX, MD, MAT)
+%     size            - Return table size (overloads built-in size)
+%     isNumericTable  - True if all data columns are numeric
+%     isNumericColumn - True if a specified column is numeric
+%     isGraph         - True if a graph type is associated with the table
+%     formatData      - Return raw data (base implementation; overridden by subclasses)
+%     getColumnFormat - Return the format code array for all columns
+%     getColumnWidth  - Return the display width array for all columns
+%     getColumnValues - Return the values of a data column as array or cell
+%     getColumnData   - Return a key/value struct array for a data column
+%     getStructData   - Return table data as a struct array
+%     getMatlabTable  - Return table as a MATLAB table object (MATLAB only)
+%     getStructTable  - Return a struct with table name, description and data
+%     setColumnValues - Replace the values of one or more data columns
+%     setRowValues    - Replace the values of one or more data rows
 %
-%   See also cTableData, cTableResult
+%   See also cTableData, cTableCell, cTableMatrix
 %
     properties(GetAccess=public, SetAccess=protected)
-        NrOfCols  	    % Number of Columns
-        NrOfRows        % Number of Rows
-        RowNames		% Row Names (key codes)
-        ColNames		% Column Names
-        Data			% Data values
-        Values          % Table values
-        Name            % Table Name
-        Description     % Table Descripcion
-        State           % State Name
-        Sample          % Sample Name
-        Resources=false % Contains resources info
-        GraphType=0     % Graph Type associated to table
+        NrOfCols        % Number of columns (including the row-name column)
+        NrOfRows        % Number of data rows
+        RowNames        % Row key names (1 x NrOfRows cell array)
+        ColNames        % Column names  (1 x NrOfCols cell array)
+        Data            % Data values   (NrOfRows x NrOfCols-1 cell array)
+        Values          % Full table cell array (ColNames + RowNames + Data)
+        Name            % Table identifier name
+        Description     % Table header or description text
+        State           % State or data label associated with the table
+        Sample          % Resource cost sample name
+        Resources=false % True if the table contains resource cost information
+        GraphType=0     % Graph type associated with the table (see cType.GraphType)
     end
     
     properties(Access=protected)
-        fcol            % Array with columns format
-        wcol            % Array with columns width
+        fcol            % Column format code array (see cType.ColumnFormat)
+        wcol            % Column display width array
     end
 
     methods
         function res=get.Values(obj)
-        % Get the table Values. Includes ColNames, RowNames and Data
+        %get.Values - Return the full table cell array
+        %   Combines ColNames (first row), RowNames (first column) and Data.
+        %   Returns cType.EMPTY_CELL if the object is invalid.
             res=cType.EMPTY_CELL;
             if obj.status
                 res=[obj.ColNames;[obj.RowNames',obj.Data]];
@@ -71,11 +78,12 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function res=getProperties(obj)
-        %getProperties - Get table properties
+        %getProperties - Return a struct with the main table properties
         %   Syntax:
-        %     res=obj.getProperties
+        %     res = obj.getProperties
         %   Output Arguments:
-        %     res - structure with table properties
+        %     res - struct with fields: Name, Description, State, Sample,
+        %           Resources, GraphType
         %
             res=struct('Name',obj.Name,'Description',obj.Description,...
                 'State',obj.State,'Sample',obj.Sample,'Resources',obj.Resources,...
@@ -83,12 +91,15 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function setStudyCase(obj,info)
-        %setStudyCase - Set state and sample values. Internal function
+        %setStudyCase - Set the State and Sample identifiers
+        %   Sets State from info.State. Sets Sample from info.Sample only when
+        %   the table carries resource cost information (Resources == true) and
+        %   the field exists; otherwise clears Sample.
         %   Syntax:
-        %     obj.setStudyCase(filename)
+        %     obj.setStudyCase(info)
         %   Input Arguments:
-        %     info - Struct with state and sample names
-        %   
+        %     info - struct with fields State (required) and Sample (optional)
+        %
             obj.State=info.State;
             if obj.Resources && isfield(info,'Sample')
                 obj.Sample=info.Sample;
@@ -98,29 +109,28 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function setDescription(obj,descr)
-        %setDescription - Set Table Header or Description.
-        %   Internal Use. Permite to reuse a table format with other names
+        %setDescription - Set the table description text
+        %   Allows reusing a table format definition with a different description.
         %   Syntax:
-        %     obj.setTableName(filename)
+        %     obj.setDescription(descr)
         %   Input Arguments:
-        %     description - Description/header of the table
+        %     descr - char array with the new description or header text
         %
             obj.Description=descr;
         end
 
         function showTable(obj,option)
-        %showTable - View Table in console GUI or HTML
-        %   Usually is called from cResultSet.showResults
-        %
+        %showTable - Display the table in the selected output interface
+        %   Typically called from cResultSet.showResults.
         %   Syntax:
         %     obj.showTable(option)
         %   Input Arguments:
-        %     option - select form to view a table
-        %       cType.TableView.NONE
-        %       cType.TableView.CONSOLE (default option)
-        %       cType.TableView.GUI
-        %       cType.TableView.HTML
-        %    
+        %     option - output interface selector (default: cType.TableView.CONSOLE)
+        %       cType.TableView.NONE    - do nothing
+        %       cType.TableView.CONSOLE - print to the console
+        %       cType.TableView.GUI     - display in a uitable GUI window
+        %       cType.TableView.HTML    - render in the system web browser
+        %
             if ~obj.status
                 printLogger(obj);
                 return
@@ -143,15 +153,17 @@ classdef (Abstract) cTable < cMessageLogger
         end
         
         function res=exportTable(obj,varmode,~)
-        %exportTable - Get table values in diferent formats
+        %exportTable - Return table data in different variable formats
         %   Syntax:
         %     res = obj.exportTable(varmode)
         %   Input Arguments:
-        %     options - VarMode options
-        %       cType.VarMode.NONE: Return a struct with the cTable objects
-        %       cType.VarMode.CELL: Return a struct with cell values
-        %       cType.VarMode.STRUCT: Return a struct with structured array values
-        %       cType.VarModel.TABLE: Return a struct of Matlab tables
+        %     varmode - output variable type (default: cType.VarMode.NONE)
+        %       cType.VarMode.NONE   - return the cTable object itself
+        %       cType.VarMode.CELL   - return a cell array (Values property)
+        %       cType.VarMode.STRUCT - return a struct array (via getStructData)
+        %       cType.VarMode.TABLE  - return a MATLAB table object (MATLAB only)
+        %   Output Arguments:
+        %     res - table data in the requested variable type
             if ~obj.status
                 printLogger(obj);
                 return
@@ -178,81 +190,87 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function res = isNumericTable(obj)
-        %isNumericTable - Check if the data of the table is numeric
+        %isNumericTable - True if all data columns are numeric
         %   Syntax:
         %     res = obj.isNumericTable
-        %   Output arguments:
-        %     res - true | false
+        %   Output Arguments:
+        %     res - logical scalar
             res=all(obj.fcol(2:end)-1);
         end
         
         function res = isNumericColumn(obj,idx)
-        %isNumericColumn - Check if a column is numeric (base method)
+        %isNumericColumn - True if the specified column contains numeric data
+        %   idx uses the full column index (1 = row-name column, 2 = first data column).
         %   Syntax:
         %     res = obj.isNumericColumn(idx)
         %   Input Arguments:
-        %     idx - data column number
-        %   Output arguments:
-        %     res - true | false
+        %     idx - column index (1-based, includes the row-name column)
+        %   Output Arguments:
+        %     res - logical scalar
+        %   See also cType.ColumnFormat
             res=(obj.fcol(idx)==cType.ColumnFormat.NUMERIC);
         end
 
         function res=isGraph(obj)
-        %isGraph - Check if the table has a graph associated
+        %isGraph - True if a graph type is associated with the table
         %   Syntax:
-        %     res=obj.isGraph
+        %     res = obj.isGraph
         %   Output Arguments:
-        %     res - true | false
+        %     res - logical scalar
             res=(obj.GraphType ~= cType.GraphType.NONE);
         end
 
         function res=formatData(obj)
-        %formatData - formatData base method
+        %formatData - Return the raw data cell array (base implementation)
+        %   Subclasses override this method to apply column-specific formatting.
         %   Syntax:
-        %     res.formatData
+        %     res = obj.formatData
         %   Output Arguments:
-        %     res - Data values
+        %     res - cell array identical to Data (no formatting applied)
             res=obj.Data;
         end
 
         function res=getColumnFormat(obj)
-        %getColumnFormat - Get the format of each column table
+        %getColumnFormat - Return the format code array for all columns
         %   Syntax:
         %     res = obj.getColumnFormat
         %   Output Arguments:
-        %     res - Cell array indicating the format of each column
+        %     res - numeric array (1 x NrOfCols) with cType.ColumnFormat codes
         %   See also cType.ColumnFormat
             res=obj.fcol;
         end
 
         function res=getColumnWidth(obj)
-        %getColumnWidth - Get the maximun width of each column
+        %getColumnWidth - Return the display width array for all columns
         %   Syntax:
         %     res = obj.getColumnWidth
         %   Output Arguments:
-        %     res - Vector array indicating the width of each column
+        %     res - numeric array (1 x NrOfCols) with the display width of each column
         %
             res=obj.wcol;
         end
         
         function res=getStructData(obj)
-        %getStructData - Get table data as struct array
+        %getStructData - Return table data as a struct array
         %   Syntax:
         %     res = obj.getStructData
         %   Output Arguments:
-        %     res - struct array containing the data of the table
-        %       Each column name is a field of the structure
+        %     res - struct array (NrOfRows x 1) where each field corresponds to
+        %           a column name (including the row-name column)
         %
             val = [obj.RowNames',obj.Data];
             res = cell2struct(val,obj.ColNames,2);
         end
     
         function res=getMatlabTable(obj)
-        %getMatlabTable - Get cTable as Matlab table
+        %getMatlabTable - Return the table as a MATLAB table object
+        %   Not supported on Octave (returns the cTable object instead).
+        %   The MATLAB table carries Name, State and GraphType as custom properties
+        %   and Description as the table Description.
         %   Syntax:
         %     res = obj.getMatlabTable
         %   Output Arguments:
-        %     res - Matlab table object with values of the cTable object
+        %     res - MATLAB table object, or the cTable object itself on Octave
             if ~obj.status
                 printLogger(obj)
                 return
@@ -270,24 +288,25 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function res=getStructTable(obj)
-        %getStructTable - Get a structure with the table info
+        %getStructTable - Return a struct with table name, description and data
         %   Syntax:
         %     res = obj.getStructTable
         %   Output Arguments:
-        %     res - struct with the data and info of the table
+        %     res - struct with fields: Name, Description, State, Data
+        %           (Data is a struct array as returned by getStructData)
             data=getStructData(obj);
             res=struct('Name',obj.Name,'Description',obj.Description,...
             'State',obj.State,'Data',data);
         end
 
         function res=getColumnValues(obj,idx)
-        %getColumnValues - Get the values of a column table
+        %getColumnValues - Return the values of a data column
         %   Syntax:
-        %     res = obj.setColumnValues(idx)
+        %     res = obj.getColumnValues(idx)
         %   Input Arguments:
-        %     idx - Column data index
+        %     idx - data column index (1 = first data column, excludes row-name column)
         %   Output Arguments:
-        %     value - array if column is numeric or cell array otherwise
+        %     res - numeric array if the column is numeric; cell array otherwise
             if isNumericColumn(obj,idx+1)
                 res=cell2mat(obj.Data(:,idx));
             else
@@ -296,13 +315,14 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function res=getColumnData(obj,idx)
-        %getColumnData - Get a key/value array struct of a column table
+        %getColumnData - Return a key/value struct array for a data column
         %   Syntax:
-        %     res = obj.setColumnData(idx)
+        %     res = obj.getColumnData(idx)
         %   Input Arguments:
-        %     idx - Column data index
+        %     idx - data column index (1 = first data column, excludes row-name column)
         %   Output Arguments:
-        %     res - array struct key/value         
+        %     res - struct array with fields 'key' (RowNames) and 'value' (column data);
+        %           empty array [] if the conversion fails
             try
                 res=cell2struct([obj.RowNames',obj.Data(:,idx)],cType.KEYVAL,2);
             catch
@@ -311,12 +331,12 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function log=setColumnValues(obj,idx,value)
-        %setColumnValues - Set the values of a column table
+        %setColumnValues - Replace the values of one or more data columns
         %   Syntax:
-        %     log = obj.setColumnValues(idx,values)
+        %     log = obj.setColumnValues(idx,value)
         %   Input Arguments:
-        %     idx - vector with columns index to replace
-        %     value - cell array with the values to replace
+        %     idx   - column index or index vector (data columns only)
+        %     value - cell array (NrOfRows x numel(idx)) with replacement values
         %   Output Arguments:
         %     log - cMessageLogger with the status of the operation
             log=cTaesLab();
@@ -328,12 +348,12 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function log=setRowValues(obj,idx,value)
-        %setRowValues - Set the values of a table row
+        %setRowValues - Replace the values of one or more data rows
         %   Syntax:
-        %     log = obj.setRowValues(idx,values)
+        %     log = obj.setRowValues(idx,value)
         %   Input Arguments:
-        %     idx - vector with rows index to replace
-        %     value - cell array with the values to replace
+        %     idx   - row index or index vector
+        %     value - cell array (numel(idx) x NrOfCols-1) with replacement values
         %   Output Arguments:
         %     log - cMessageLogger with the status of the operation
         %
@@ -413,21 +433,22 @@ classdef (Abstract) cTable < cMessageLogger
     
     methods(Access=protected)
         function log=exportCSV(obj,filename)
-        %exportCSV - save table values as CSV file
-        %   Input:
-        %     filename - name of the output file
-        %   Output:
-        %     log: cMessageLogger class containing status and messages
+        %exportCSV - Save table values as a CSV file
+        %   Input Arguments:
+        %     filename - path to the output file
+        %   Output Arguments:
+        %     log - cMessageLogger with status and error messages
         %
             log=exportCSV(obj.Values,filename);
         end
 
         function log=exportXLS(obj,filename)
-        %exportXLS - save table values as XLS file
-        %   Input:
-        %     filename - name of the output file
-        %   Output:
-        %     log: cMessageLogger class containing status and messages
+        %exportXLS - Save table values as an XLSX file
+        %   The table is written to a sheet named obj.Name.
+        %   Input Arguments:
+        %     filename - path to the output file
+        %   Output Arguments:
+        %     log - cMessageLogger with status and error messages
         %
             log=cMessageLogger();
             data=obj.Values;
@@ -449,11 +470,12 @@ classdef (Abstract) cTable < cMessageLogger
         end  
                
         function log=exportTXT(obj,filename)
-        %exportTXT - Save table as text file
-        %   Input:
-        %     filename - name of the output file
-        %   Output:
-        %     log: cMessageLogger class containing status and messages
+        %exportTXT - Save table as a plain-text file
+        %   Uses printTable to write a formatted layout.
+        %   Input Arguments:
+        %     filename - path to the output file
+        %   Output Arguments:
+        %     log - cMessageLogger with status and error messages
         %
             log=cMessageLogger();
             try
@@ -467,11 +489,12 @@ classdef (Abstract) cTable < cMessageLogger
         end
                 
         function log=exportHTML(obj,filename)
-        %exportHTML - save table as HTML file
-        %   Input:
-        %     filename - name of the output file
-        %   Output:
-        %     log: cMessageLogger class containing status and messages
+        %exportHTML - Save table as an HTML file
+        %   Delegates to cBuildHTML.
+        %   Input Arguments:
+        %     filename - path to the output file
+        %   Output Arguments:
+        %     log - cMessageLogger with status and error messages
         %
             log=cMessageLogger();
             html=cBuildHTML(obj);
@@ -483,11 +506,12 @@ classdef (Abstract) cTable < cMessageLogger
         end
     
         function log=exportLaTeX(obj,filename)
-        %exportLaTeX - generates the LaTex table code file of cTable object
-        %   Input:
-        %     filename - name of the output file
-        %   Output:
-        %     log: cMessageLogger class containing status and messages
+        %exportLaTeX - Save table as a LaTeX tabular file
+        %   Delegates to cBuildLaTeX.
+        %   Input Arguments:
+        %     filename - path to the output file
+        %   Output Arguments:
+        %     log - cMessageLogger with status and error messages
         %
             log=cMessageLogger();
             ltx=cBuildLaTeX(obj);
@@ -499,11 +523,12 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function log=exportMarkdown(obj,filename)
-        %exportMarkdown - generates the Markdown table code file of cTable object
-        %   Input:
-        %     filename - name of the output file
-        %   Output:
-        %     log: cMessageLogger class containing status and messages
+        %exportMarkdown - Save table as a Markdown file
+        %   Delegates to cBuildMarkdown.
+        %   Input Arguments:
+        %     filename - path to the output file
+        %   Output Arguments:
+        %     log - cMessageLogger with status and error messages
         %
             log=cMessageLogger();
             md=cBuildMarkdown(obj);
@@ -515,22 +540,24 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function log=exportJSON(obj,filename)
-        %exportJSON - save table as JSON file
-        %   Input:
-        %     filename - name of the output file
-        %   Output:
-        %     log: cMessageLogger class containing status and messages
+        %exportJSON - Save table as a JSON file
+        %   Serialises the struct returned by getStructTable.
+        %   Input Arguments:
+        %     filename - path to the output file
+        %   Output Arguments:
+        %     log - cMessageLogger with status and error messages
         %
             data=obj.getStructTable;
             log = exportJSON(data,filename);
         end
 
         function log=exportXML(obj,filename)
-        % save data model as XML file
-        %   Input:
-        %     filename - name of the output file
-        %   Output:
-        %     log: cMessageLogger class containing status and messages
+        %exportXML - Save table as an XML file
+        %   Serialises the struct returned by getStructTable using writestruct.
+        %   Input Arguments:
+        %     filename - path to the output file
+        %   Output Arguments:
+        %     log - cMessageLogger with status and error messages
         %
             log=cMessageLogger();
             data=obj.getStructTable;
@@ -543,7 +570,8 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function showTableGUI(obj)
-        %showTableGUI - View the values of the table (tbl) in a uitable graphic object
+        %showTableGUI - Display the table in a uitable GUI window
+        %   Delegates to cViewTable.
         %   Syntax:
         %     obj.showTableGUI
         %
@@ -556,7 +584,8 @@ classdef (Abstract) cTable < cMessageLogger
         end
     
         function showTableHTML(obj)
-        %showTableHTML - View a table in the web browser
+        %showTableHTML - Render the table in the system web browser
+        %   Delegates to cBuildHTML.
         %   Syntax:
         %     obj.showTableHTML
         %
@@ -569,11 +598,13 @@ classdef (Abstract) cTable < cMessageLogger
         end
 
         function status = checkTableSize(obj)
-        %checkTableSize - Check the size of the table
+        %checkTableSize - True if Data dimensions match NrOfRows and NrOfCols
+        %   Used during construction to validate that the supplied data array
+        %   is consistent with the row and column name arrays.
         %   Syntax:
         %     status = obj.checkTableSize
         %   Output Arguments:
-        %     status - true | false
+        %     status - logical scalar
         %
             status = (size(obj.Data,1)==obj.NrOfRows) && (size(obj.Data,2)==obj.NrOfCols-1);
         end  

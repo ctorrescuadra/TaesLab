@@ -14,14 +14,15 @@ classdef cFormatData < cTablesDefinition
 %     getTableProperties - Get the properties of a cTable
 %
 %   cFormatData methods (inherited from cTablesDefinition):
-%     getTablesDirectory - Get the a cTableData with the tables index
-%     getTableDefinition - Get configurarion properties of a table
-%     getTableInfo       - Get table info as a struct
-%     getTableId         - Get the TableId of a table
-%     getResultIdTables  - Get the tables configuration of a ResultId
-%     getCellTables      - Get the Cell tables configuration
-%     getMatrixTables    - Get the Matrix tables configuration     
-%     getSummaryTables   - Get the Summary tables configuration
+%     getTablesDirectory     - Get a cTableData with the tables index
+%     getTableDefinition     - Get configuration properties of a table
+%     getTableInfo           - Get table info as a struct
+%     getTableId             - Get the internal TableId of a table
+%     getResultIdTables      - Get the tables of a specific ResultId
+%     getDataModelProperties - Get the data model table properties
+%     getCellTables          - Get the cell tables configuration
+%     getMatrixTables        - Get the matrix tables configuration
+%     getSummaryTables       - Get the summary tables configuration
 %
 %   See also printformat.json, cTablesDefinition, cResultTableBuilder
 %
@@ -76,13 +77,13 @@ classdef cFormatData < cTablesDefinition
 		end
 				
 		function res=getUnit(obj,id)
-		%getUnit - Get the format of a type of variable
-		% 	Syntax:
-		%     format = obj.getUnit(id)
-		% 	Input Arguments:
+		%getUnit - Get the unit of a type of variable
+		%   Syntax:
+		%     res = obj.getUnit(id)
+		%   Input Arguments:
 		%     id - Variable type, see cType.Format
-		% 	Output Arguments:
-		%     res - char array with unit of the variable
+		%   Output Arguments:
+		%     res - char array with the unit label of the variable
 		%
 			res=obj.cfgTypes(id).unit;
 		end
@@ -112,7 +113,7 @@ classdef cFormatData < cTablesDefinition
 		%     name - name of the table
 		%   Output Arguments:
 		%     tdef  - definition struct of the table
-		%     tprop - properties on the cTable
+		%     tprop - properties of the cTable
 		%
 			tprop=cType.EMPTY;
 			% Get table definition
@@ -134,11 +135,13 @@ classdef cFormatData < cTablesDefinition
 
     methods(Access=protected)						
 		function res=getTableHeader(obj,tdef)
-		%getTableHeader - get the table header cell array
+		%getTableHeader - Get the table header cell array
+		%   Syntax:
+		%     res = obj.getTableHeader(tdef)
 		%   Input Arguments:
-		%     tdef - Table properties
+		%     tdef - table definition struct
 		%   Output Arguments:
-		%     res - cell array with the table header of each column
+		%     res - cell array with the header string for each column
 		%
 			units=obj.getTableUnits(tdef);
 			header={tdef.fields.header};
@@ -146,22 +149,26 @@ classdef cFormatData < cTablesDefinition
 		end
 			
 		function format=getTableFormat(obj,tdef)
-		%getTableFormat - get an array cell with the format (C-like) of columns table
+		%getTableFormat - Get a cell array with the C-like format of each table column
+		%   Syntax:
+		%     format = obj.getTableFormat(tdef)
 		%   Input Arguments:
-		%     tdef - Table definition struct
+		%     tdef - table definition struct
 		%   Output Arguments:
-		%     format - cell array with the format of the column table
+		%     format - cell array with the C-like format string of each column
 		%
 			idx=[tdef.fields.type];
 			format={obj.cfgTypes(idx).format};
         end
 	
 		function units=getTableUnits(obj,tdef)
-		%getTableUnits - get a cell array with the units for each table column
+		%getTableUnits - Get a cell array with the units for each table column
+		%   Syntax:
+		%     units = obj.getTableUnits(tdef)
 		%   Input Arguments:
-		%     tdef - Table definition struct
+		%     tdef - table definition struct
 		%   Output Arguments:
-		%     res - cell array with the units of each column
+		%     units - cell array with the unit label of each column
 		%
 			idx=[tdef.fields.type];
 			units={obj.cfgTypes(idx).unit};
@@ -170,10 +177,10 @@ classdef cFormatData < cTablesDefinition
         function tp=getCellTableProperties(obj,td)
 		%getCellTableProperties - Get the cTableCell properties from table definition
 		%   Input Arguments:
-		%     td - table definition strcuture
+		%     td - table definition structure
 		%   Output Arguments:
-		%     tp - struct witc cTableCell properties
-		% 
+		%     tp - struct with cTableCell properties
+		%
 			tp=struct('Name',td.key,...
 				      'Description',td.description,...
 					  'DataType',[],... 
@@ -194,10 +201,10 @@ classdef cFormatData < cTablesDefinition
         function tp=getMatrixTableProperties(obj,td)
 		%getMatrixTableProperties - Get the cTableMatrix properties from table definition
 		%   Input Arguments:
-		%     td - table definition strcuture
+		%     td - table definition structure
 		%   Output Arguments:
-		%     tp - struct witc cTableMatrix properties
-		% 
+		%     tp - struct with cTableMatrix properties
+		%
 			tp=struct('Name',td.key,...
 				      'Description',td.header,...  
                       'Unit',obj.getUnit(td.type),...

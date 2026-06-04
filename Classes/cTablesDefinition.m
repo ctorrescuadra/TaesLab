@@ -1,7 +1,7 @@
 classdef cTablesDefinition < cMessageLogger
 %cTablesDefinition - Get the results tables properties.
 %   This class provides methods to get information about the results tables
-%   definitions used in the TaasLab toolbox.
+%   definitions used in the TaesLab toolbox.
 %   The class reads the configuration file printconfig.json located in the
 %   Classes folder, which contains the tables properties.
 %   The tables definitions are stored in a cDataset object, which provides
@@ -23,20 +23,21 @@ classdef cTablesDefinition < cMessageLogger
 %   Derived classes: cFormatData
 %
 %   cTablesDefinition methods:
-%     cTablesDefinition - Create an instance of the class
-%     getTablesDirectory - Get the a cTableData with the tables index
-%     getTableDefinition - Get configurarion properties of a table
-%     getTableInfo       - Get table info as a struct
-%     getTableId         - Get the TableId of a table
-%     getResultIdTables  - Get the tables configuration of a ResultId
-%     getCellTables      - Get the Cell tables configuration
-%     getMatrixTables    - Get the Matrix tables configuration     
-%     getSummaryTables   - Get the Summary tables configuration
+%     cTablesDefinition      - Create an instance of the class
+%     getTablesDirectory     - Get a cTableData with the tables index
+%     getTableDefinition     - Get configuration properties of a table
+%     getTableInfo           - Get table info as a struct
+%     getTableId             - Get the internal TableId of a table
+%     getResultIdTables      - Get the tables of a specific ResultId
+%     getDataModelProperties - Get the data model table properties
+%     getCellTables          - Get the cell tables configuration
+%     getMatrixTables        - Get the matrix tables configuration
+%     getSummaryTables       - Get the summary tables configuration
 %
 %   See also cFormatData, printconfig.json
 %
     properties (Access=protected)
-        cfgDataModel    % Data model tables configurarion
+        cfgDataModel    % Data model tables configuration
         cfgTables 	    % Cell tables configuration
         cfgMatrices     % Matrix tables configuration
         cfgSummary      % Summary tables configuration
@@ -50,10 +51,11 @@ classdef cTablesDefinition < cMessageLogger
     methods
         function obj=cTablesDefinition()
         %cTablesDefinition - Create an instance of the class
-        % Syntax:
-        %   obj = cTablesDefinition();
-        % Output Arguments:
-        %   obj - cTableDefinition object
+        %   Syntax:
+        %     obj = cTablesDefinition();
+        %   Output Arguments:
+        %     obj - cTablesDefinition object
+        %
               
 			% load default configuration filename			
 			cfgfile=fullfile(cType.ConfigPath,cType.CFGFILE);
@@ -192,7 +194,7 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getResultIdTables(obj,id)
-        %getResultIdTables - Get the tables of an specific resultId
+        %getResultIdTables - Get the tables of a specific ResultId
         %   Syntax:
         %     res = obj.getResultIdTables(id)
         %   Input Arguments:
@@ -234,7 +236,7 @@ classdef cTablesDefinition < cMessageLogger
         %   Input Arguments:
         %     idx - Table index. Optional
         %   Output Arguments:
-        %     res - structed array with the configuration
+        %     res - struct array with the configuration
         %
             if nargin==2
                 res=obj.cfgMatrices(idx);
@@ -249,8 +251,8 @@ classdef cTablesDefinition < cMessageLogger
         %     res = obj.getCellTables(idx);
         %   Input Arguments:
         %     idx - Table index. Optional
-        %   Output Arguments:;
-        %     res - structed array with the tables configuration
+        %   Output Arguments:
+        %     res - struct array with the tables configuration
         %
             if nargin==2
                 res=obj.cfgTables(idx);
@@ -337,7 +339,7 @@ classdef cTablesDefinition < cMessageLogger
                             'type',cType.TableType.TABLE,...
                             'tableId',i);
             end
-            % Retrive information for matrix tables
+            % Retrieve information for matrix tables
             for i=1:NM
                 val=obj.cfgMatrices(i);
                 idx=td.getIndex(val.key);
@@ -381,8 +383,8 @@ classdef cTablesDefinition < cMessageLogger
         %   This info is used to build the Tables Directory cTable
         %   
         %   Syntax:
-        %     res = obj.buildTablesDirectory(col)
-        %   
+        %     obj.buildTablesDirectory()
+        %
             N=numel(obj.tableNames);
             M=numel(cType.DirColNames);
             % fill table data

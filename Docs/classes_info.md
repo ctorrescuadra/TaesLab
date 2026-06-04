@@ -8,80 +8,80 @@
 
  | Name                | Description                                              |
  |:------------------- |:-------------------------------------------------------- |
- | [cTaesLab][]        | Base class of the TaesLab toolbox.                      |
- | [cMessageBuilder][] | Create and print messages for cTaesLab objects.         |
- | [cMessageLogger][]  | Create and manage a message logger for cTaesLab objects.|
+ | [cTaesLab][]        | Base class of the TaesLab toolbox.                       |
+ | [cMessageBuilder][] | Create and print messages for cTaesLab objects.          |
+ | [cMessageLogger][]  | Create and manage a message logger for cTaesLab objects. |
 
 ### Static Classes
 
  | Name             | Description                                         |
  |:---------------- |:--------------------------------------------------- |
- | [cType][]        | Static class to manage the constants of TaesLab.   |
- | [cMessages][]    | Static class which defines the TaesLab messages.   |
- | [cParseStream][] | Static utility class to check and validate strings.|
+ | [cType][]        | Static class to manage the constants of TaesLab.    |
+ | [cMessages][]    | Static class which defines the TaesLab messages.    |
+ | [cParseStream][] | Static utility class to check and validate strings. |
 
 ### Read Data Model Classes
 
  | Name                 | Description                                                   |
  |:-------------------- |:------------------------------------------------------------- |
- | [cReadModel][]       | Abstract class to implement the model reader classes.        |
- | [cReadModelStruct][] | Abstract class to read a structured data model.              |
- | [cReadModelJSON][]   | Implements the cReadModel to read JSON data model files.     |
- | [cReadModelXML][]    | Implements the cReadModel to read XML data model files.      |
- | [cReadModelTable][]  | Abstract class to read a table data model.                   |
- | [cReadModelCSV][]    | Implements the cReadModel to read CSV data model files.      |
- | [cReadModelXLS][]    | Implements the cReadModel to read XLSX data model files.     |
- | [cModelTable][]      | Container class to store the values read by cReadModelTables.|
+ | [cReadModel][]       | Abstract class to implement the model reader classes.         |
+ | [cReadModelStruct][] | Abstract class to read a structured data model.               |
+ | [cReadModelJSON][]   | Implements the cReadModel to read JSON data model files.      |
+ | [cReadModelXML][]    | Implements the cReadModel to read XML data model files.       |
+ | [cReadModelTable][]  | Abstract class to read a table data model.                    |
+ | [cReadModelCSV][]    | Implements the cReadModel to read CSV data model files.       |
+ | [cReadModelXLS][]    | Implements the cReadModel to read XLSX data model files.      |
+ | [cModelTable][]      | Container class to store the values read by cReadModelTables. |
 
 ### Data Model Classes
 
  | Name                     | Description                                                          |
  |:------------------------ |:-------------------------------------------------------------------- |
- | [cProductiveStructure][] | Build the productive structure of a plant.                          |
- | [cExergyData][]          | Get and validate the exergy data values for a state of the plant.   |
- | [cFormatData][]          | Get the format configuration data used to display tables of results.|
- | [cResultTableBuilder][]  | Build the cResultInfo objects for the calculation layer.            |
- | [cResourceData][]        | Gets and validates the external cost resources of a system.         |
- | [cWasteData][]           | Store the waste data information.                                   |
+ | [cProductiveStructure][] | Build the productive structure of a plant.                           |
+ | [cExergyData][]          | Get and validate the exergy data values for a state of the plant.    |
+ | [cFormatData][]          | Get the format configuration data used to display tables of results. |
+ | [cResultTableBuilder][]  | Build the cResultInfo objects for the calculation layer.             |
+ | [cResourceData][]        | Gets and validates the external cost resources of a system.          |
+ | [cWasteData][]           | Store the waste data information.                                    |
 
 ### Result Info Classes
 
  | Name                     | Description                                           |
  |:------------------------ |:----------------------------------------------------- |
- | [cResultId][]            | Base class for the calculation layer classes.        |
- | [cResultSet][]           | Base class for results classes.                      |
- | [cResultInfo][]          | Container class for the application results.         |
- | [cDataModel][]           | Create the data model object.                        |
- | [cModelData][]           | Container class for the Data Model structure.        |
- | [cThermoeconomicModel][] | Create the thermoeconomic model results object.      |
- | [cModelResults][]        | Container class for the Thermoeconomic Model Results.|
+ | [cResultId][]            | Base class for the calculation layer classes.         |
+ | [cResultSet][]           | Base class for results classes.                       |
+ | [cResultInfo][]          | Container class for the application results.          |
+ | [cDataModel][]           | Create the data model object.                         |
+ | [cModelData][]           | Container class for the Data Model structure.         |
+ | [cThermoeconomicModel][] | Create the thermoeconomic model results object.       |
+ | [cModelResults][]        | Container class for the Thermoeconomic Model Results. |
 
 ### Thermoeconomic Analysis Classes
 
  | Name                   | Description                                                |
  |:---------------------- |:---------------------------------------------------------- |
- | [cExergyModel][]       | Build the Flow-Process exergy model.                      |
- | [cExergyCost][]        | Calculate the exergy cost of flows and processes.         |
- | [cDiagnosis][]         | Make a thermoeconomic diagnosis analysis.                 |
- | [cWasteAnalysis][]     | Analyze the potential cost saving of waste recycling.     |
- | [cDiagramFP][]         | Build the adjacency tables of the Diagram FP.             |
- | [cProductiveDiagram][] | Build the productive diagrams' adjacency tables.          |
- | [cSummaryResults][]    | Gets the summary results tables of the model.             |
- | [cSummaryOptions][]    | Determine the summary options depending on the data model.|
- | [cSummaryTable][]      | Stores the properties and values of each summary table.   |
- | [cDigraphAnalysis][]   | Analyze the productive structure digraph.                 |
+ | [cExergyModel][]       | Build the Flow-Process exergy model.                       |
+ | [cExergyCost][]        | Calculate the exergy cost of flows and processes.          |
+ | [cDiagnosis][]         | Make a thermoeconomic diagnosis analysis.                  |
+ | [cWasteAnalysis][]     | Analyze the potential cost saving of waste recycling.      |
+ | [cDiagramFP][]         | Build the adjacency tables of the Diagram FP.              |
+ | [cProductiveDiagram][] | Build the productive diagrams' adjacency tables.           |
+ | [cSummaryResults][]    | Gets the summary results tables of the model.              |
+ | [cSummaryOptions][]    | Determine the summary options depending on the data model. |
+ | [cSummaryTable][]      | Stores the properties and values of each summary table.    |
+ | [cDigraphAnalysis][]   | Analyze the productive structure digraph.                  |
 
 ### Result Tables Classes
 
  | Name                  | Description                                                              |
  |:--------------------- |:------------------------------------------------------------------------ |
- | [cTable][]            | Abstract class for tabular data.                                        |
- | [cTableIndex][]       | Create a cTable with the index table of a cResultInfo.                  |
- | [cTableData][]        | Implement a cTable to store data model tables.                          |
- | [cTableResult][]      | Abstract class to store results into a cTable.                          |
- | [cTableCell][]        | Implement a cTableResults interface to store the results as cell arrays.|
- | [cTableMatrix][]      | Implement a cTableResults interface to store the matrix results.        |
- | [cTablesDefinition][] | Read and store the tables format configuration file.                    |
+ | [cTable][]            | Abstract class for tabular data.                                         |
+ | [cTableIndex][]       | Create a cTable with the index table of a cResultInfo.                   |
+ | [cTableData][]        | Implement a cTable to store data model tables.                           |
+ | [cTableResult][]      | Abstract class to store results into a cTable.                           |
+ | [cTableCell][]        | Implement a cTableResults interface to store the results as cell arrays. |
+ | [cTableMatrix][]      | Implement a cTableResults interface to store the matrix results.         |
+ | [cTablesDefinition][] | Read and store the tables format configuration file.                     |
 
 ### Graph Presentation Classes
 
@@ -99,28 +99,28 @@
 
 ### Tables Conversion Classes
 
- | Name               | Description                                         |
- |:------------------ |:--------------------------------------------------- |
- | [cBuildHTML][]     | Convert a cTable object into HTML files.           |
- | [cBuildLaTeX][]    | Convert a cTable object into a LaTeX code table.   |
- | [cBuildMarkdown][] | Convert a cTable object into a Markdown code table.|
- | [cViewTable][]     | Show a result table using a GUI (uitable).         |
+ | Name                | Description                                          |
+ | :------------------ | :--------------------------------------------------- |
+ | [cBuildHTML][]      | Convert a cTable object into HTML files.             |
+ | [cBuildLaTeX][]     | Convert a cTable object into a LaTeX code table.     |
+ | [cBuildMarkdown][]  | Convert a cTable object into a Markdown code table.  |
+ | [cViewTable][]      | Show a result table using a GUI (uitable).           |
 
 ### Data Structures Classes
 
- | Name            | Description                                                         |
- |:--------------- |:------------------------------------------------------------------- |
- | [cQueue][]      | A simple FIFO queue based on a dynamic cell array.                 |
- | [cDictionary][] | Implement a (key/id) dictionary for TaesLab.                       |
- | [cDataset][]    | Creates a container to store data and to access it by key or index.|
- | [cSparseRow][]  | Store and operate with matrices that contain few non-null rows.    |
+ | Name             | Description                                                          |
+ | :--------------- | :------------------------------------------------------------------- |
+ | [cQueue][]       | A simple FIFO queue based on a dynamic cell array.                   |
+ | [cDictionary][]  | Implement a (key/id) dictionary for TaesLab.                         |
+ | [cDataset][]     | Creates a container to store data and to access it by key or index.  |
+ | [cSparseRow][]   | Store and operate with matrices that contain few non-null rows.      |
 
 ### Additional Files
 
- | Name                 | Description                                                    |
- |:-------------------- |:-------------------------------------------------------------- |
- | [printformat.json][] | Configuration file to define the format of the results tables.|
- | [styles.css][]       | CSS file to define the styles of the HTML tables.             |
+ | Name                  | Description                                                     |
+ | :-------------------- | :-------------------------------------------------------------- |
+ | [printformat.json][]  | Configuration file to define the format of the results tables.  |
+ | [styles.css][]        | CSS file to define the styles of the HTML tables.               |
 
 <!-- Reference Links - Classes Directory -->
 

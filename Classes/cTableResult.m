@@ -1,73 +1,81 @@
 classdef (Abstract) cTableResult < cTable
-%cTableResult - Abstrat class to store results into a cTable.
-%   This class is the base class to store results tables. It is derived from cTable.
-%   The class implements methods to export the table in different formats (cell, struct, table).
-%   The class also implements methods to get the table properties.
-%   Derived classes: cTableMatrix, cTableCell
+%cTableResult - Abstract base class to store thermoeconomic result tables.
+%   cTableResult extends cTable with additional properties (Format, Unit, NodeType)
+%   needed to represent computation results. It is not intended to be instantiated
+%   directly; use the concrete subclasses cTableCell or cTableMatrix instead.
 %
-%   cTableResults properties:
-%     Format   - Format of the table columns
-%     Unit     - Units of the table columns
-%     NodeType - Type of row key (see cType.NodeType)
+%   This class overrides exportTable to support formatted output (fmt flag) and
+%   provides getCellData and getProperties as result-specific operations.
+%
+%   Derived classes: cTableCell, cTableMatrix
+%
+%   cTableResult properties:
+%     Format   - Format string array for each data column
+%     Unit     - Unit label array for each data column
+%     NodeType - Row key node type (see cType.NodeType)
 %
 %   cTableResult properties (inherited from cTable):
 %     Data        - Cell array with the table data
-%     Values      - Cell array with the table data including row and column names
-%     RowNames    - Cell array with the row names
-%     ColNames    - Cell array with the column names
-%     NrOfRows    - Number of rows
-%     NrOfCols    - Number of columns
-%     Name        - Name of the table
-%     Description - Description of the table
-%     State       - State Name of the data
-%     Sample      - Resource sample name
-%     Resources   - Contains reources info
-%     GraphType   - Graph Type associated to table
+%     Values      - Cell array with data including row and column names
+%     RowNames    - Cell array with row key names
+%     ColNames    - Cell array with column names
+%     NrOfRows    - Number of data rows
+%     NrOfCols    - Number of columns (including row-name column)
+%     Name        - Table identifier name
+%     Description - Table header or description text
+%     State       - Thermodynamic state name associated with the data
+%     Sample      - Resource cost sample name
+%     Resources   - True if the table contains resource cost information
+%     GraphType   - Graph type associated with the table (see cType.GraphType)
 %
 %   cTableResult methods:
-%     exportTable   - Get cTable info in diferent types of variables
-%     getCellData   - Get table as cell array
-%     getProperties - Get the additional properties of a cTableResults
-%     
-%   cTableResult methods (inherited from cTable):
-%     getStructData   - Get table as struct array
-%     getMatlabTable  - Get table as a MATLAB table (if available)
-%     getColumnWidth  - Get the width of each column
-%     getColumnFormat - Get the format of each column (TEXT or NUMERIC)
-%     getStructTable  - get a structure with the table info
-%     setColumnValues - set the values of a column
-%     setRowValues    - set the values of a row
-%     setStudyCase    - Set state and sample values
-%     setDescription  - Set Table Header or Description 
-%     isNumericColumn - Check if a column is numeric
-%     isNumericTable  - Check if the table is numeric
-%     isGraph         - Check if the table is a graphic table
-%     showTable       - show the tables in diferent interfaces
-%     exportTable     - export table in diferent formats
-%     saveTable       - save a table into a file in diferent formats
+%     exportTable   - Export table in different variable formats (overrides cTable)
+%     getCellData   - Return table values as a cell array, optionally formatted
+%     getProperties - Return a struct with the result-specific table properties
 %
-%   See also cTable, cTableMatrix, cTableCell
+%   cTableResult methods (inherited from cTable):
+%     getStructData   - Return table data as a struct array
+%     getMatlabTable  - Return table as a MATLAB table object (MATLAB only)
+%     getColumnValues - Return the values of a data column
+%     getColumnData   - Return a key/value struct array for a data column
+%     getColumnWidth  - Return the display width of each column
+%     getColumnFormat - Return the format code of each column (see cType.ColumnFormat)
+%     getStructTable  - Return a struct with table name, description and data
+%     setColumnValues - Replace the values of one or more data columns
+%     setRowValues    - Replace the values of one or more data rows
+%     setStudyCase    - Set the State and Sample identifiers
+%     setDescription  - Set the table description text
+%     isNumericColumn - True if the specified column contains numeric data
+%     isNumericTable  - True if all data columns are numeric
+%     isGraph         - True if a graph type is associated with the table
+%     showTable       - Display the table (console, GUI or HTML)
+%     saveTable       - Save the table to a file (CSV, XLSX, JSON, XML, TXT, HTML, LaTeX, MD)
+%
+%   See also cTable, cTableCell, cTableMatrix
 %
     properties (GetAccess=public, SetAccess=protected)
-        Format    % Format of the table cells
-        Unit      % Units of the table cell
-        NodeType  % Type of Row key
+        Format    % Format string array for each data column
+        Unit      % Unit label array for each data column
+        NodeType  % Row key node type (see cType.NodeType)
     end
 
     methods
         function res=exportTable(obj,varmode,fmt)
-        %exportTable - Get cTable info in diferent types of variables
+        %exportTable - Export table data in different variable formats
+        %   Overrides cTable.exportTable to add optional formatted-output support
+        %   via the fmt flag.
         %   Syntax:
-        %     res=obj.exportTable(varmode,fmt)
+        %     res = obj.exportTable(varmode,fmt)
         %   Input Arguments:
-        %     varmode - type of variable
-        %       cType.VarMode.NONE (default) - return the cTableResult object
-        %       cType.VarMode.CELL           - return a cell array
-        %       cType.VarMode.STRUCT         - return a struct array
-        %       cType.VarMode.TABLE          - return a MATLAB table (if available)
-        %     fmt - use formatted data true | false (default)
+        %     varmode - Output variable type (default: cType.VarMode.NONE)
+        %       cType.VarMode.NONE   - return the cTableResult object (no conversion)
+        %       cType.VarMode.CELL   - return a cell array (via getCellData)
+        %       cType.VarMode.STRUCT - return a struct array (via getStructData)
+        %       cType.VarMode.TABLE  - return a MATLAB table object (MATLAB only)
+        %     fmt - Apply column formatting to numeric values: true | false (default)
+        %           Only used when varmode is CELL or STRUCT.
         %   Output Arguments:
-        %     res - table in the selected variable type   
+        %     res - Table data in the requested variable type
         %
             switch nargin
                 case 1
@@ -93,13 +101,15 @@ classdef (Abstract) cTableResult < cTable
         end
 
         function res=getCellData(obj,fmt)
-        %getCellData - Get table as cell array
+        %getCellData - Return table values as a cell array
         %   Syntax:
-        %     obj.getCellData(fmt)
+        %     res = obj.getCellData(fmt)
         %   Input Arguments:
-        %     fmt - (true/false) indicate is the numerical values of the table must be formatted
-        %   Output Argumenta
-        %     res - cell array with the table values
+        %     fmt - (optional) true to apply column formatting to numeric values;
+        %           false (default) to return raw values
+        %   Output Arguments:
+        %     res - cell array with column names in the first row, row names in
+        %           the first column, and data values in the remaining cells
             if nargin==1
                 fmt=false;
             end
@@ -111,11 +121,15 @@ classdef (Abstract) cTableResult < cTable
         end
 
         function res = getProperties(obj)
-        %getProperties - get the additional properties of a cTableResults
+        %getProperties - Return a struct with the result-specific table properties
+        %   Returns Format, Unit, NodeType and the inherited State and Sample fields.
+        %   The set of fields included in Format, Unit and NodeType is determined
+        %   by cType.getPropertiesList.
         %   Syntax:
-        %     obj.getProperties();
+        %     res = obj.getProperties()
         %   Output Arguments:
-        %     res - struct with the additional properties of the table
+        %     res - struct containing Format, Unit, NodeType, State and Sample
+        %
             res = struct();
             list=cType.getPropertiesList(obj);   
             for i = 1:numel(list)

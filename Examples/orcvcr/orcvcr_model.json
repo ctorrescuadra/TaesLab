@@ -152,7 +152,7 @@
       {
         "key": "CND",
         "type": "DISSIPATIVE",
-        "fuel": "B2+B8-B3-B5",
+        "fuel": "(B2-B3)+(B8-B5)",
         "product": "QCND"
       }
     ]
@@ -639,6 +639,144 @@
           {
             "key": "QEXP",
             "value": 26.300000000000011
+          }
+        ]
+      },
+      {
+        "stateId": "TA30",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 672
+          },
+          {
+            "key": "B2",
+            "value": 343.2
+          },
+          {
+            "key": "B3",
+            "value": 268.8
+          },
+          {
+            "key": "B4",
+            "value": 282.6
+          },
+          {
+            "key": "B5",
+            "value": 193.5
+          },
+          {
+            "key": "B6",
+            "value": 167.2
+          },
+          {
+            "key": "B7",
+            "value": 55.19
+          },
+          {
+            "key": "B8",
+            "value": 240.8
+          },
+          {
+            "key": "WT",
+            "value": 266.9
+          },
+          {
+            "key": "WC",
+            "value": 230
+          },
+          {
+            "key": "WP",
+            "value": 16.12
+          },
+          {
+            "key": "QBLR",
+            "value": 534.6
+          },
+          {
+            "key": "QEVP",
+            "value": 35.09
+          },
+          {
+            "key": "WN",
+            "value": 20
+          },
+          {
+            "key": "QCND",
+            "value": 121.69999999999999
+          },
+          {
+            "key": "QEXP",
+            "value": 26.300000000000011
+          }
+        ]
+      },
+      {
+        "stateId": "TA30V",
+        "exergy": [
+          {
+            "key": "B1",
+            "value": 937.3
+          },
+          {
+            "key": "B2",
+            "value": 478.7
+          },
+          {
+            "key": "B3",
+            "value": 374.9
+          },
+          {
+            "key": "B4",
+            "value": 394.1
+          },
+          {
+            "key": "B5",
+            "value": 276.7
+          },
+          {
+            "key": "B6",
+            "value": 239.1
+          },
+          {
+            "key": "B7",
+            "value": 78.91
+          },
+          {
+            "key": "B8",
+            "value": 344.4
+          },
+          {
+            "key": "WT",
+            "value": 372.2
+          },
+          {
+            "key": "WC",
+            "value": 328.9
+          },
+          {
+            "key": "WP",
+            "value": 22.48
+          },
+          {
+            "key": "QBLR",
+            "value": 745.6
+          },
+          {
+            "key": "QEVP",
+            "value": 50.17
+          },
+          {
+            "key": "WN",
+            "value": 20
+          },
+          {
+            "key": "QCND",
+            "value": 171.49999999999994
+          },
+          {
+            "key": "QEXP",
+            "value": 37.599999999999994
           }
         ]
       }

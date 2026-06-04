@@ -1,45 +1,85 @@
 classdef cTableIndex < cTable
-%cTableIndex - Create a cTable with the index table of a cResultInfo.
-%   
-%   cTableIndex constructor:
-%     obj = cTableIndex(res)
+%cTableIndex - Catalog table listing all result tables in a cResultInfo object.
+%   cTableIndex is a specialised read-only cTable that provides a three-column
+%   directory of the tables held by a cResultInfo. Each row corresponds to one
+%   result table and records its key name, human-readable description, and
+%   whether a graph can be plotted from it.
+%
+%   A cTableIndex is built automatically when a cResultInfo is constructed and
+%   is the object returned by cResultSet.getTableIndex. It supports all standard
+%   cTable display, export, and save operations, so it can be shown in the
+%   console, opened in the GUI viewer, or saved to any supported file format.
+%
+%   Table columns:
+%     Key         - Table key name (used in cResultInfo.Tables.<Key>)
+%     Description - Human-readable description of the table
+%     Graph       - 'true' if the table has an associated graph, 'false' otherwise
 %
 %   cTableIndex properties:
-%     Content - Cell array with the cResultInfo tables
-%     Info    - cResultId Info object
+%     Content - Cell array holding the cTable objects from the parent cResultInfo
+%     Info    - cResultId object with metadata about the parent result set
+%
+%   cTableIndex properties (inherited from cTable):
+%     Data        - Cell array with the table data (Description and Graph columns)
+%     Values      - Full table: [ColNames; RowNames', Data]
+%     RowNames    - Table key names (one per result table)
+%     ColNames    - {'Key', 'Description', 'Graph'}
+%     NrOfRows    - Number of result tables in the parent cResultInfo
+%     NrOfCols    - 3
+%     Name        - Table name (derived from the ResultId of the parent)
+%     Description - Name of the parent result set
+%     State       - Always 'INDEX'
+%     GraphType   - Always 0 (cTableIndex itself has no associated graph)
 %
 %   cTableIndex methods:
-%     printTable           - Print the index table on console
-%     getDescriptionLabel  - Get the title label for GUI presentation
+%     cTableIndex          - Construct an instance from a cResultInfo object
+%     printTable           - Print the index to console or a file
+%     getDescriptionLabel  - Return the display title for GUI presentation
 %
-%   cTable Methods
-%     showTable       - show the tables in diferent interfaces
-%     exportTable     - export table in diferent formats
-%     saveTable       - save a table into a file in diferent formats
-%     isNumericTable  - check if all data of the table are numeric
-%     isNumericColumn - check if a column data is numeric
-%     isGraph         - check if the table has a graph associated
-%     getColumnFormat - get the format of the columns
-%     getColumnWidth  - get the width of the columns
-%     getStructData   - get data as struct array
-%     getMatlabTable  - get data as MATLAB table
-%     getStructTable  - get a structure with the table info
+%   cTableIndex methods (inherited from cTable):
+%     showTable       - Display the index in console, GUI, or HTML
+%     exportTable     - Return the index in a selected variable format
+%     saveTable       - Save the index to a file (CSV, XLSX, HTML, …)
+%     isNumericTable  - Always false (all columns are text)
+%     isNumericColumn - Always false for all columns
+%     isGraph         - Always false
+%     getColumnFormat - Return column format vector (all CHAR)
+%     getColumnWidth  - Return column display widths
+%     getStructData   - Return data as struct array
+%     getMatlabTable  - Return data as MATLAB table object
+%     getStructTable  - Return a struct with table info and data
 %
-%   See also cTable
+%   Example:
+%     res = ExergyAnalysis(data);
+%     idx = res.getTableIndex;          % returns cTableIndex
+%     idx.showTable;                    % print to console
+%     idx.showTable(cType.TableView.HTML);
+%     idx.saveTable('index.xlsx');
+%
+%   See also cTable, cResultInfo, cResultSet
 %
     properties (GetAccess=public,SetAccess=private)
-        Content % Cell array with the cResultInfo tables
-        Info    % Info handle
+        Content % Cell array of cTable objects from the parent cResultInfo
+        Info    % cResultId object with metadata of the parent result set
     end
     methods
         function obj=cTableIndex(res)
-        %cTableIndex - create a instance of the class
+        %cTableIndex - Construct a catalog table from a cResultInfo object.
+        %   Reads all tables held by the cResultInfo and builds a three-column
+        %   cTable where each row describes one result table: its key name,
+        %   description string, and graph availability flag.
+        %   This constructor is called automatically inside cResultInfo and is
+        %   not intended for direct use by end users.
+        %
         %   Syntax:
         %     obj = cTableIndex(res)
         %   Input Arguments:
-        %     res - cResultInfo object
+        %     res - Source result container
+        %       cResultInfo object
+        %       Must be a valid cResultInfo with at least one result table
         %   Output Arguments:
         %     obj - cTableIndex object
+        %       Check obj.status before use
         % 
             % Check input parameters
             if ~isObject(res,'cResultInfo')
@@ -67,24 +107,35 @@ classdef cTableIndex < cTable
         end
 
         function res=getDescriptionLabel(obj)
-        %getDescriptionLabel - Get table description
+        %getDescriptionLabel - Return the display title used in GUI and HTML headers.
+        %   Appends ' - Table Index' to the parent result set name so that the
+        %   title clearly identifies the object type when shown in a GUI viewer
+        %   or an HTML page.
+        %
         %   Syntax:
         %     res = obj.getDescriptionLabel
         %   Output Arguments:
-        %     res - char array with the table description
+        %     res - char array of the form '<ResultName> - Table Index'
         %
             res=[obj.Description, ' - Table Index'];
         end
 
         function printTable(obj,fid)
-        %printTable - Print table on console or in a file in a pretty formatted way
+        %printTable - Print the index table with aligned columns.
+        %   Writes the table key, description, and graph flag for every result
+        %   table to the console or to an open file, using left-aligned columns
+        %   sized to the widest entry in each column.
+        %   Called internally by cTable.showTable when the CONSOLE view is selected.
+        %
         %   Syntax:
+        %     obj.printTable
         %     obj.printTable(fid)
         %   Input Arguments:
-        %     fId - optional parameter 
-        %       If not provided, table is show in console
-        %       If provided, table is writen to a file identified by fId
-        % See also fopen
+        %     fid - File identifier (optional)
+        %       positive integer returned by fopen
+        %       If omitted, output goes to stdout (console)
+        %
+        %   See also fopen, cTable.showTable
         %
             if nargin==1
                 fid=1;
