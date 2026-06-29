@@ -882,18 +882,16 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%     if false logs the non reached nodes
 		
 			% Get the Processes adjacency matrix
-			N=obj.NrOfProcesses;
 			[tfp,src,out]=obj.getProcessMatrix; 
 			% Calculate nodes reached by src
-			ssr=[false,src,false;false(N,1),tfp,out;false(1,N+2)];
-			rs=dfs(ssr,1); rs=rs(2:end-1);			
+			rs=bfs(tfp,find(src));		
 			for i=find(~rs) % Report invalid nodes
 				obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 			end
 			% Calculate final products reached by productive nodes
-			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE); NP=length(aP)+1;
-			ssr=[tfp(aP,aP),out(aP);false(1,NP)];
-			rt=dfs(ssr',NP);
+			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE);
+			gP=transpose(tfp(aP,aP)); tidx=transpose(find(out(aP)));
+			rt=bfs(gP,tidx);
 			for i=find(~rt)
 				obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
 			end

@@ -1,99 +1,123 @@
 classdef (Sealed) cExergyCost < cExergyModel
-%cExergyCost - Calculate the exergy cost of flows and processes.
-%   The class that provides the thermoeconomic analysis results of a state of the plant.
+%cExergyCost - Calculates the exergy cost of flows and processes for thermoeconomic analysis.
+%   This class extends cExergyModel by building the cost operators derived from the FP
+%   (Fuel-Product) table and the unit consumption vector. It supports both direct exergy
+%   cost (no monetary resources) and generalized exergy cost (with external resource costs
+%   and capital/O&M expenditures). Waste cost allocation is handled via cWasteData.
+%
+%   Two dual operator frameworks are provided:
+%     - FP framework (fpOperators): cost propagation from resources to products
+%     - PF framework (pfOperators): unit cost propagation from products to fuels
+%   A flow-level operator (flowOperators) is also built for flow-by-flow cost analysis.
 % 
 %   cExergyCost properties:
-%     SystemOutput           - System Output of processes
-%     FinalDemand            - Final Demand of processes
-%     Resources              - External resources of processes
-%     RecirculationFactor    - Recirculation factor of each process
-%     fpOperators            - Structure containing FP Operators (mFP, mRP, opCP,opCR)
-%     pfOperators            - Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
-%     flowOperators          - Flow operators structure (mG, opB, opI, opR)
-%     isWaste                - Indicate if system have wastes
-%     WasteTable             - cWasteData object
-%     TableR                 - Waste Allocation Table
-%     RecycleRatio           - Recycle ratio of each waste
-%     WasteWeight            - Weight of each waste
-%     WasteAllocationRatios  - Waste Allocation Ratio
+%     SystemOutput           - Column vector of process output exergy to the plant product (from TableFP last column)
+%     FinalDemand            - Effective final demand per process (equals SystemOutput, adjusted for waste recycling)
+%     Resources              - Row vector of external resource exergy consumed by each process (from TableFP last row)
+%     SystemUnitCost         - Ratio of total resource exergy to total final demand (plant-level unit cost)
+%     RecirculationFactor    - Diagonal of opCP; measures internal recirculation share per process
+%     fpOperators            - FP-framework operators: mFP (fuel/product ratios), mRP (waste allocation), opCP (cost operator), opR (waste cost operator)
+%     pfOperators            - PF-framework operators: mPF (product/fuel ratios), mKP (consumption-weighted), mKR (waste unit cost), opP (cost operator), opI (irreversibility operator), opR (waste cost operator)
+%     flowOperators          - Flow-level operators: mG (internal flow recirculation matrix), opB (Leontief inverse for flows), opR (waste flow cost operator)
+%     isWaste                - true if the system includes waste (dissipative) processes
+%     WasteTable             - cWasteData object defining waste allocation rules
+%     TableR                 - Exergy-weighted waste allocation matrix (cSparseRow)
+%     RecycleRatio           - Fraction of waste exergy recycled back as product, per waste process
+%     WasteWeight            - Diagonal weights of the waste cost operator (opR), one per waste process
+%     WasteAllocationRatios  - Normalized waste allocation ratios (rows: wastes, columns: productive processes)
 %
 %   cExergyCost methods:
 %     cExergyCost                  - Create an instance of the class
 %     buildResultInfo              - Build the cResultInfo object for THERMOECONOMIC_ANALYSIS
-%     getSpectralRatio             - Get the spectral ratio of the productive matrix
-%     getProcessCost               - Get cost of Processes
-%     getProcessUnitCost           - Get unit cost of Processes
-%     getFlowsCost                 - Get cost of flows
-%     getStreamsCost               - Get cost of productive groups
-%     getCostTableFP               - Get cost table FP
-%     getDirectCostTableFPR        - Get the direct cost FPR table
-%     getGeneralCostTableFPR       - Get the generalized cost FPR table
-%     getIrreversibilityCostTables - Get Irreversibility Cost Tables for processes and flows
-%     updateWasteOperators         - Update Waste Operator
+%     getSpectralRatio             - Get the spectral ratio of the productive structure matrix
+%     getProcessCost               - Get absolute cost of processes (direct or generalized)
+%     getProcessUnitCost           - Get unit cost of processes (direct or generalized)
+%     getFlowsCost                 - Get absolute and unit cost of flows (direct or generalized)
+%     getStreamsCost               - Get absolute and unit cost of productive streams
+%     getCostTableFP               - Get the direct FP cost table scaled by process unit costs
+%     getDirectCostTableFPR        - Get the direct-cost FPR table (with waste recycling rows)
+%     getGeneralCostTableFPR       - Get the generalized-cost FPR table (with external resource costs)
+%     getIrreversibilityCostTables - Get process and flow Irreversibility Cost Tables (ICT)
+%     getResourcesCostDistribution - Get resource cost distribution across flows and processes
+%     updateWasteOperators         - Recompute waste allocation ratios and all waste cost operators
 %  
 %   See also cResultId, cExergyModel, cResultInfo, cWasteData, cResourceData
 %
 	properties(GetAccess=public,SetAccess=private)
-        SystemOutput           % System Output of processes
-        FinalDemand            % Final Demand of processes
-        Resources              % External resources of processes
-        SystemUnitCost         % System Unit Consumption
-        RecirculationFactor    % Recirculation factor of each process
-        WasteWeight            % Weight of each waste
-        fpOperators            % Structure containing FP Operators (mFP, mRP, opCP,opCR)
-        pfOperators            % Structure containing PF Operators (mPF,mKP,mKR,opP,opI,opR)
-        flowOperators          % Flow operators structure (mG, opB, opI, opR)
-        isWaste=false          % Indicate if system have wastes
-        WasteTable             % cWasteData object
-        TableR                 % Waste Allocation Table
-        RecycleRatio           % Recycle ratio of each waste
-        WasteAllocationRatios  % Waste Allocation Ratios
+        SystemOutput           % (double) Column vector [Nx1] of process output exergy flowing to the plant product
+        FinalDemand            % (double) Column vector [Nx1] of effective final demand; equals SystemOutput, with waste rows scaled by RecycleRatio
+        Resources              % (double) Row vector [1xN] of external resource exergy consumed by each process
+        SystemUnitCost         % (double) Scalar plant-level unit exergy cost: sum(Resources)/sum(FinalDemand)
+        RecirculationFactor    % (double) Row vector [1xN] of internal recirculation factors (diagonal of opCP)
+        WasteWeight            % (double) Row vector [1xNR] of diagonal weights of the waste cost operator, one per waste process
+        fpOperators            % (struct) FP-framework cost operators: mFP, mRP, opCP, and (if waste) opR
+        pfOperators            % (struct) PF-framework cost operators: mPF, mKP, opP, opI, and (if waste) mKR, opR
+        flowOperators          % (struct) Flow-level operators: mG (recirculation), opB (Leontief inverse), and (if waste) opR
+        isWaste=false          % (logical) true when the system includes dissipative (waste) processes
+        WasteTable             % (cWasteData) Waste definition and allocation rules object
+        TableR                 % (cSparseRow) Exergy-weighted waste allocation matrix [NR x N]
+        RecycleRatio           % (double) Row vector [1xNR] of recycle fractions for each waste process
+        WasteAllocationRatios  % (double) Matrix [NR x N] of normalized waste allocation ratios
     end
     
     properties(Access=private)
-       mpL
+       mpL  % (double) Matrix mapping process products to flows: mP(1:N,:)*mL; used for flow ICT computation
     end
     
 	methods
 		function obj=cExergyCost(exd,wd)
-		%cExergyCost - Creates an instance of the class
+		%cExergyCost - Creates an instance of the cExergyCost class.
+        %   Builds all cost operators from the exergy model. When a cWasteData object
+        %   is provided and the system has waste processes, waste allocation ratios and
+        %   the corresponding waste cost operators are also initialized.
+        %
         %   Syntax:
-        %     obj=cExergyCost(exd,wd)
+        %     obj = cExergyCost(exd)
+        %     obj = cExergyCost(exd, wd)
         %   Input Arguments:
-		%     exd - cExergyData object
-        %     wd - cWasteData object (optional)
+		%     exd - (cExergyData) Validated exergy data for the state to analyze
+        %     wd  - (cWasteData) Waste definition object [optional]
         %   Output Arguments:
-        %     obj - cExergyCost object
+        %     obj - (cExergyCost) Constructed object; obj.status is false if initialization fails
         %
 			obj=obj@cExergyModel(exd);
-            % Check if the object is valid
+            % Abort if the base exergy model is invalid
             if ~obj.status
                 return
             end
-            % Set the ResultId property and initialize variables
             obj.ResultId=cType.ResultId.THERMOECONOMIC_ANALYSIS;
 			N=obj.NrOfProcesses;
             M=obj.NrOfFlows;
-            vK=obj.UnitConsumption;
-            vk1=zerotol(vK-1);
-            % Get Flow Operators;
+            vK=obj.UnitConsumption;   % Unit consumption vector (kj = Fj/Pj)
+            vk1=zerotol(vK-1);        % kj - 1; used to build the irreversibility operator opI
+            % --- Flow-level operators ---
+            % mG: internal recirculation matrix of flows (excludes resource and output rows)
+            % opB: Leontief inverse (eye - mG)^{-1}; maps final demands to total flow exergy
 			fpm=obj.FlowProcessModel;
             mG=fpm.mF(:,1:N)*fpm.mP(1:N,:)+fpm.mV;
             opB=eye(M)/(eye(M)-mG);
-            obj.mpL=fpm.mP(1:N,:)*fpm.mL;
+            obj.mpL=fpm.mP(1:N,:)*fpm.mL;  % Used later for flow ICT computation
             obj.flowOperators=struct('mG',mG,'opB',zerotol(opB));
-            % Get Process Operators
+            % --- PF-framework operators ---
+            % mPF: product-to-fuel unit flow ratios (normalized TableFP columns by fuel exergy)
+            % mKP: mPF scaled by unit consumption vK (the consumption matrix)
+            % opP: (eye - mKP)^{-1}; unit cost propagation operator
+            % opI: scaleRow(opP, vk1); maps irreversibilities to their unit cost contributions
             tfp=obj.TableFP;        
             mPF=divideCol(tfp(:,1:N),obj.FuelExergy);
             mKP=scaleCol(mPF,vK);
             opP=eye(N)/(eye(N)-mKP(1:N,:));
             opI=scaleRow(opP,vk1);
             obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
+            % --- FP-framework operators ---
+            % mFP: fuel-to-product unit flow ratios (normalized TableFP rows by product exergy)
+            % opCP: resource-equivalent of opP, adjusted for product scaling
             mFP=divideRow(tfp(1:N,:),obj.ProductExergy);
             opCP=similarResourceOperator(opP,obj.ProductExergy);
             obj.fpOperators=struct('mFP',mFP,'opCP',opCP);
             obj.DefaultGraph=cType.Tables.PROCESS_ICT;
-            % Initialize waste operators
+            % --- Waste operators (optional) ---
+            % Only initialized when a cWasteData object is provided and waste processes exist
             if (nargin==2) && (obj.NrOfWastes>0)
 				obj.isWaste=true;
                 setWasteTable(obj,wd)
@@ -106,7 +130,8 @@ classdef (Sealed) cExergyCost < cExergyModel
 		end
 
         function res=get.SystemOutput(obj)
-        % Get the system output exergy values vector
+        % Returns the last column of TableFP (rows 1:N), i.e. the exergy
+        % delivered by each process directly to the plant final product.
             res=cType.EMPTY;
             if obj.status
                 res=obj.TableFP(1:end-1,end);
@@ -114,7 +139,10 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
         
         function res=get.FinalDemand(obj)
-        % Get final demand vector of the system 
+        % Returns the effective final demand vector.
+        % For productive processes this equals SystemOutput.
+        % For waste (dissipative) processes the output is scaled by RecycleRatio
+        % to account for the fraction of waste exergy recovered as useful product.
             res=obj.SystemOutput;
             if obj.status && obj.isWaste
                 idx=obj.ps.Waste.processes;
@@ -123,7 +151,8 @@ classdef (Sealed) cExergyCost < cExergyModel
         end    
                 
         function res=get.Resources(obj)
-        % Get the exergy resources vector
+        % Returns the last row of TableFP (columns 1:N), i.e. the external
+        % resource exergy consumed by each process.
             res=cType.EMPTY;
             if obj.status
                 res=obj.TableFP(end,1:end-1);
@@ -131,13 +160,14 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
 
         function res=get.SystemUnitCost(obj)
-        %SystemUnitConsumption - Get the total unit consumption of the system 
-        %   It take into account waste recycling as final product
+        %SystemUnitCost - Get the plant-level unit exergy cost.
+        %   Computes the ratio of total resource exergy to total effective final demand,
+        %   accounting for waste recycling contributions to the final product.
         %
         %   Syntax:
-        %     res=obj.SystemUnitConsumption
+        %     res = obj.SystemUnitCost
         %   Output Arguments:
-        %     res - Total unit consumption value
+        %     res - (double) Scalar plant-level unit cost [kJ_resource / kJ_product]
         %  
             res=cType.EMPTY;
             if obj.status
@@ -146,7 +176,9 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
                     
         function res=get.RecirculationFactor(obj)
-        % Get the recirculation factor of the processes
+        % Returns the diagonal of opCP as a row vector.
+        % Each element quantifies the fraction of a process product cost that
+        % originates from internal recirculation rather than external resources.
             res=cType.EMPTY;
             if obj.status
                 res=diag(obj.fpOperators.opCP)';
@@ -154,7 +186,9 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
     
         function res=get.WasteWeight(obj)
-        % Get the waste weight.
+        % Returns the self-loop diagonal weights of the waste cost operator opR
+        % (one scalar per waste process). A weight > 1 indicates amplification
+        % of costs due to mutual waste allocation between processes.
             res=cType.EMPTY;
             if obj.isWaste
                 opR=obj.fpOperators.opR;
@@ -163,7 +197,8 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
 
         function res=get.WasteAllocationRatios(obj)
-        % Get the waste allocation ratios 
+        % Returns the normalized waste allocation matrix mRP.mValues [NR x N].
+        % Entry (i,j) gives the fraction of waste process i's cost assigned to process j.
             res=obj.fpOperators.mRP.mValues;
         end
     
@@ -185,132 +220,165 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
 
         function res=getSpectralRatio(obj)
-        %getSpectralRatio - Get the spectral ratio of the productive matrix
+        %getSpectralRatio - Get the spectral ratio of the productive structure matrix.
+        %   The spectral radius of mFP determines whether the cost equations have a
+        %   unique solution. A value < 1 guarantees convergence of the cost series.
+        %
         %   Syntax:
-        %     res=obj.getSpectralRatio
+        %     res = obj.getSpectralRatio
         %   Output Arguments:
-        %     res - Spectral Ratio value
+        %     res - (double) Spectral radius (absolute value of dominant eigenvalue of mFP)
         %
             N=obj.NrOfProcesses;
             res=abs(eigs(obj.mFP(:,1:N),1));
         end
    
         function res=getProcessCost(obj,rsc)
-		%getProcessCost - Get processes cost values
-        %   If resource cost is provided calculate the generalized cost
+		%getProcessCost - Get absolute cost of processes (direct or generalized).
+        %   Without rsc, computes the direct exergy cost (resources valued at their
+        %   exergy content). With rsc, computes the generalized cost including
+        %   external resource prices and capital/O&M expenditures (Z).
         %
         %   Syntax:
-        %     obj.getProcessCost(rsc)
+        %     res = obj.getProcessCost
+        %     res = obj.getProcessCost(rsc)
 		%   Input Arguments:
-		%     rsc - cResourceData object [optional]
+		%     rsc - (cResourceData) External resource cost data [optional]
 		%   Output Arguments:
-		%     res - structure containing cost values (CPE,CPZ,CPR,CP,CF,CR,Z)
+		%     res - (struct) Cost components per process:
+        %       Z   - capital/O&M cost vector (zero for direct cost)
+        %       CPE - cost due to resource exergy
+        %       CPZ - cost due to capital expenditures
+        %       CPR - cost allocated from waste processes
+        %       CP  - total product cost (CPE + CPZ + CPR)
+        %       CF  - fuel cost vector
+        %       CR  - waste cost received by each productive process
         %
             res=struct();
-            % Initialize variables
             czoption=(nargin==2);
 			N=obj.NrOfProcesses;
 			zero=zeros(1,N);
             aux=obj.fpOperators;
-			if czoption %Compute generalized cost
-                Ce=rsc.Ce;
-                res.Z=rsc.Z;
+			if czoption % Generalized cost: use external resource prices and Z
+                Ce=rsc.Ce;      % Resource cost vector (monetary or exergo-economic)
+                res.Z=rsc.Z;    % Capital/O&M cost per process
 				res.CPE=Ce * aux.opCP;
 				res.CPZ=res.Z * aux.opCP;
-			else % Compute direct cost
+			else % Direct cost: resource cost equals resource exergy from TableFP
                 res.Z=zero;
 				Ce=obj.TableFP(end,1:N);
 				res.CPE=Ce * aux.opCP;
 				res.CPZ=zero;
 			end
-            % Compute waste costs
+            % Waste cost allocation (only when dissipative processes are defined)
 			if obj.isWaste
-				res.CPR=(res.CPE+res.CPZ) * aux.opR;
+				res.CPR=(res.CPE+res.CPZ) * aux.opR;  % Cost received from waste allocation
 				res.CP=res.CPE + res.CPZ + res.CPR;
-				res.CR=res.CP * aux.mRP;
+				res.CR=res.CP * aux.mRP;               % Cost charged to waste processes
 			else
 				res.CPR=zero;
 				res.CP=res.CPE+res.CPZ;
 				res.CR=zero;
 			end
-            % Compute fuel cost
+            % Fuel cost: sum of resource cost and cost flowing in from other processes
 			res.CF= Ce+res.CP*obj.fpOperators.mFP(:,1:end-1);
 		end
 
         function res = getProcessUnitCost(obj,rsc)
-    	%getProcessUnitCost - Get Process Unit Cost
-        %   If resource cost is provided calculate the generalized cost
+    	%getProcessUnitCost - Get unit cost of processes (direct or generalized).
+        %   Without rsc, computes the direct unit exergy cost (ce = 1 for all resources).
+        %   With rsc, computes the generalized unit cost including external resource
+        %   unit prices (ce) and specific capital/O&M costs (zP).
         %
         %   Syntax:
-        %     obj.getProcessUnitCost(rsc)
+        %     res = obj.getProcessUnitCost
+        %     res = obj.getProcessUnitCost(rsc)
 		%   Input Arguments:
-		%     rsc - cResourceData object [optional]
-		%   Output:
-		%     res - structure containing cost values (cP,cPE,cPZ,cPR,cF,cR)
+		%     rsc - (cResourceData) External resource cost data [optional]
+		%   Output Arguments:
+		%     res - (struct) Unit cost components per process:
+        %       k   - unit consumption vector (kj = Fj/Pj)
+        %       cPE - unit cost due to resource exergy
+        %       cPZ - unit cost due to capital expenditures
+        %       cPR - unit cost allocated from waste processes
+        %       cP  - total unit product cost (cPE + cPZ + cPR)
+        %       cF  - unit fuel cost
+        %       cR  - unit waste cost charged to productive processes
         %
             res=struct();
-            % Initialize variables
             czoption=(nargin==2);
             N=obj.NrOfProcesses;
             zero=zeros(1,N);
             res.k=obj.UnitConsumption;
-            if czoption %Compute generalized cost
-                ce= rsc.ce;
-                ke=ce .* res.k;
+            if czoption % Generalized cost: use external unit resource prices and specific Z
+                ce= rsc.ce;             % Unit cost of each resource [cost/exergy]
+                ke=ce .* res.k;         % Resource unit cost weighted by consumption
                 res.cPE= ke * obj.pfOperators.opP;
                 res.cPZ= rsc.zP * obj.pfOperators.opP;
-            else % Compute direct cost
+            else % Direct cost: resources valued at unit exergy (ce from last row of mPF)
                 ce=obj.pfOperators.mPF(end,:);
                 ke=ce .* res.k;
                 res.cPE= ke * obj.pfOperators.opP;
                 res.cPZ= zero;
             end
-            % Compute waste costs
+            % Waste cost allocation (only when dissipative processes are defined)
             if obj.isWaste
                 res.cPR=(res.cPE+res.cPZ)*obj.pfOperators.opR;
                 res.cP=res.cPE+res.cPZ+res.cPR;
-                res.cR=res.cP*obj.pfOperators.mKR;
+                res.cR=res.cP*obj.pfOperators.mKR;  % Unit cost charged to waste processes
             else
                 res.cPR=zero;
                 res.cP=res.cPE+res.cPZ;
                 res.cR=zero;
             end
-            % Compute fuel cost
+            % Unit fuel cost: resource unit cost plus cost flowing in from other processes
             res.cF=ce+res.cP*obj.pfOperators.mPF(1:end-1,1:end);
         end  
 
         function res=getFlowsCost(obj,rsc)
-        %getFlowsCost - Get the exergy cost of flows
-        %   If resource cost is provided calculate the generalized cost
+        %getFlowsCost - Get the absolute and unit exergy cost of all flows.
+        %   Without rsc, computes the direct exergy cost using opB (Leontief inverse),
+        %   where each resource flow contributes with unit exergy cost = 1.
+        %   With rsc, computes the generalized cost using external resource unit prices
+        %   (c0) and capital/O&M specific costs (zP) distributed over flows.
         %
         %   Syntax:
-        %     res=obj.getFlowsCost(rsc)
+        %     res = obj.getFlowsCost
+        %     res = obj.getFlowsCost(rsc)
         %   Input Arguments:
-		%     rsc - cResourceData object [optional]
-        %   Output
-        %   res - cost of flows structure (B,CE,CZ,CR,C,cE,cZ,cR,c)
+		%     rsc - (cResourceData) External resource cost data [optional]
+        %   Output Arguments:
+        %     res - (struct) Cost components for each flow:
+        %       B   - flow exergy vector
+        %       cE  - unit cost due to resource exergy
+        %       CE  - absolute cost due to resource exergy (cE .* B)
+        %       cZ  - unit cost due to capital expenditures (zero for direct cost)
+        %       CZ  - total capital cost (cZ .* B)
+        %       cR  - unit cost allocated from waste flows
+        %       CR  - total waste cost (cR .* B)
+        %       c   - total unit cost (cE + cZ + cR)
+        %       C   - total absolute cost (CE + CZ + CR)
         %
             res=struct();
-            % Initialize variables
             czoption=(nargin==2);
             zero=zeros(1,obj.NrOfFlows);	   
             aux=obj.flowOperators;
             res.B=obj.FlowsExergy;
             fpm=obj.FlowProcessModel;
-            idx=obj.ps.ResourceFlows;
-            if czoption % Compute generalized cost
-                zB = rsc.zP * fpm.mP(1:end-1,:);
+            idx=obj.ps.ResourceFlows;  % Indices of external resource flows
+            if czoption % Generalized cost: propagate external unit prices through opB
+                zB = rsc.zP * fpm.mP(1:end-1,:);   % Capital cost distributed to flows via process-flow mapping
                 res.cE = rsc.c0(idx) * aux.opB(idx,:);
                 res.CE = res.cE .* res.B;
                 res.cZ = zB * aux.opB;  
                 res.CZ = res.cZ .* res.B;
-            else % Compute direct cost
+            else % Direct cost: each resource flow has unit cost = 1; sum rows of opB for resource rows
                 res.cE = sum(aux.opB(idx,:),1);
                 res.CE = res.cE .* res.B;
                 res.cZ = zero;
                 res.CZ = zero;
             end
-            % Compute waste costs
+            % Waste cost allocation across flows (only when dissipative processes are defined)
             if obj.isWaste
                 res.cR = (res.cE + res.cZ) * aux.opR;
                 res.CR = res.cR .* res.B;
@@ -325,28 +393,39 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
         
         function res=getStreamsCost(obj,fcost)
-        %getStreamsCost - Get the exergy cost of streams
-        %   Compute the direct or generalized cost depending on the values of flows cost
+        %getStreamsCost - Get the absolute and unit exergy cost of productive streams.
+        %   Aggregates flow costs into stream costs using flows2Streams, matching the
+        %   stream grouping defined by the productive structure. The presence of a CZ
+        %   field in fcost determines whether generalized costs are included.
         %
         %   Syntax:
-        %     res=obj.getStreamsCost(fcost) 
+        %     res = obj.getStreamsCost(fcost)
         %   Input Arguments:
-		%     fcost - Exergy cost of flows structure
-        %   Output
-        %     res - cost of flows structure (E,CE,CZ,CR,C,cE,cZ,cR,c)
+		%     fcost - (struct) Flow cost structure returned by getFlowsCost; must contain CE
+        %   Output Arguments:
+        %     res - (struct) Cost components for each productive stream:
+        %       E   - stream exergy vector
+        %       CE  - absolute cost due to resource exergy
+        %       cE  - unit cost due to resource exergy
+        %       CR  - absolute waste cost (zero if no waste)
+        %       cR  - unit waste cost (zero if no waste)
+        %       CZ  - absolute capital cost (only if fcost contains CZ)
+        %       cZ  - unit capital cost (only if fcost contains CZ)
+        %       C   - total absolute cost
+        %       c   - total unit cost
         %
             res=struct();
-            % Check input parameters and initialize variables
+            % Validate the input flow cost structure
             if (nargin~=2) || ~isstruct(fcost) || ~isfield(fcost,'CE')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument,'fcost');
                 return
             end
             zero=zeros(1,obj.NrOfStreams);
             res.E=obj.StreamsExergy.E;
-            % Compute costs
+            % Aggregate flow costs to stream level
             res.CE=obj.ps.flows2Streams(fcost.CE);
             res.cE=vDivide(res.CE,res.E);
-            % Compute waste costs
+            % Aggregate waste costs to stream level
             if obj.isWaste
                 res.CR=obj.ps.flows2Streams(fcost.CR);
                 res.cR=vDivide(res.CR,res.E);
@@ -354,7 +433,7 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res.CR=zero;
                 res.cR=zero;
             end
-            % Compute generalized costs
+            % Include capital cost if fcost was produced by a generalized cost calculation
             if isfield(fcost,'CZ')
                 res.CZ=obj.ps.flows2Streams(fcost.CZ);
                 res.cZ=vDivide(res.CZ,res.E);
@@ -367,37 +446,49 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
 
         function res = getCostTableFP(obj,ucost)
-        %getCostTableFP - Get the FP Cost Table considering only internal irreversibilities
+        %getCostTableFP - Get the FP Cost Table scaled by process unit costs.
+        %   Each row of TableFP is multiplied by the corresponding unit cost cPE,
+        %   so entries represent cost flows rather than exergy flows. The last row
+        %   (resources) is kept at scale 1 (resource exergy equals its direct cost).
+        %
         %   Syntax:
-        %     res=getCostTableFP(ucost)
+        %     res = obj.getCostTableFP
+        %     res = obj.getCostTableFP(ucost)
         %   Input Arguments:
-        %     ucost - Unit cost of product. If omitted is calculated
-        %   Output:
-        %     res - matrix containing the Direct Cost FP table values
+        %     ucost - (struct) Unit cost structure from getProcessUnitCost [optional]
+        %   Output Arguments:
+        %     res - (double) Matrix [N+1 x N+1] of cost-scaled FP table values
         %
             if nargin==1
                 ucost=obj.getProcessUnitCost;
             end
-            aux=[ucost.cPE,1];
+            aux=[ucost.cPE,1];  % Scale factor: unit cost for each process, 1 for resource row
             res=scaleRow(obj.TableFP,aux);
         end
 
         function res = getDirectCostTableFPR(obj,ucost)
-        %getDirectCostTableFPR - Get FPR Cost Table with direct costs
+        %getDirectCostTableFPR - Get the direct-cost FPR table.
+        %   Builds the FPR (Fuel-Product-Residue) cost table for direct exergy costs.
+        %   For waste processes, the product column is replaced by the recycled fraction
+        %   (TableFP * RecycleRatio) and the fuel columns by the waste allocation TableR.
+        %   Each productive row is scaled by the total unit product cost cP.
+        %
         %   Syntax:
+        %     res = obj.getDirectCostTableFPR
         %     res = obj.getDirectCostTableFPR(ucost)
         %   Input Arguments:
-        %     ucost - Unitary costs of processes. If ommited is calculated
-        %   Output: 
-        %     res - matrix containing the Direct Cost FPR table values
+        %     ucost - (struct) Unit cost structure from getProcessUnitCost [optional]
+        %   Output Arguments:
+        %     res - (double) Matrix [N+1 x N+1] of direct-cost FPR table values
         %
             if nargin==1
                 ucost=obj.getProcessUnitCost;
             end	
             N=obj.NrOfProcesses;
-            aux=obj.TableFP(end,:);
-            tmp=obj.TableFP(1:N,:);
+            aux=obj.TableFP(end,:);   % Resource row (unchanged)
+            tmp=obj.TableFP(1:N,:);   % Process rows (to be modified for waste)
             if obj.isWaste
+                % Replace waste process rows with allocation-weighted values
                 tR=obj.TableR;
                 recycle=scaleRow(obj.TableFP(tR.mRows,end),obj.RecycleRatio);
                 tmp(tR.mRows,:)=[tR.mValues,recycle];
@@ -406,155 +497,169 @@ classdef (Sealed) cExergyCost < cExergyModel
         end 
     
         function res = getGeneralCostTableFPR(obj,rsc,ucost)
-        %getGeneralCostTableFPR - Get FPR Cost-Table with generalized costs
-        %   Syntax:
-        %     res = obj.getGeneralizedCostTableFPR(rsc,ucost)
-        %   Input Arguments:
-        %     rsc - cResourceData object
-        %     ucost - Unitary costs of processes. If ommited is calculated
-        %   Output: 
-        %     res - matrix containing the Generalized Cost FPR table values
+        %getGeneralCostTableFPR - Get the generalized-cost FPR table.
+        %   Extends getDirectCostTableFPR by replacing the resource row with the
+        %   actual monetary (or exergo-economic) cost of resources: Ce = ce .* vF,
+        %   plus capital/O&M expenditures Z. Each productive row is scaled by the
+        %   generalized unit product cost cP.
         %
-            % Check inputs
+        %   Syntax:
+        %     res = obj.getGeneralCostTableFPR(rsc)
+        %     res = obj.getGeneralCostTableFPR(rsc, ucost)
+        %   Input Arguments:
+        %     rsc   - (cResourceData) External resource cost data
+        %     ucost - (struct) Generalized unit cost structure from getProcessUnitCost(rsc) [optional]
+        %   Output Arguments:
+        %     res - (double) Matrix [N+1 x N+1] of generalized-cost FPR table values
+        %
             if nargin<3
                 ucost=obj.getProcessUnitCost(rsc);
             end	
             N=obj.NrOfProcesses;
-            % Compute resource costs
-            Ce= rsc.ce .* obj.ProcessesExergy.vF(1:N);
+            % Resource row: monetary cost of process fuels plus capital expenditures
+            Ce= rsc.ce .* obj.ProcessesExergy.vF(1:N);  % Cost rate = unit price × fuel exergy
             aux=[Ce+rsc.Z,0];
             tmp=obj.TableFP(1:N,:);
-            % Compute waste costs
+            % Replace waste process rows with allocation-weighted values
             if obj.isWaste
                 tR=obj.TableR;
                 recycle=scaleRow(obj.TableFP(tR.mRows,end),obj.RecycleRatio);
                 tmp(tR.mRows,:)=[tR.mValues,recycle];
             end
-            % Get cost table FPR
             res=[scaleRow(tmp,ucost.cP);aux];
         end 
 
         function [pict,fict]=getIrreversibilityCostTables(obj,rsc)
-        %getIrreversibilityCostTables - Get Irreversibility Cost Tables for processes and flows
-        %   If resource cost is provided calculate the generalized tables
+        %getIrreversibilityCostTables - Get process and flow Irreversibility Cost Tables (ICT).
+        %   The ICT decomposes the cost of each process into contributions from the
+        %   irreversibilities of every other process. Entry (i,j) of pict gives the
+        %   unit cost charged to process j due to the irreversibility of process i.
+        %   Without rsc, the direct ICT is returned (cn = 1). With rsc, the generalized
+        %   ICT uses the minimum cost vector cn from getMinCost.
+        %   fict extends pict to the flow level via the process-to-flow mapping mpL.
         %
         %   Syntax:
-        %     [pict,fict]=obj.getIrreversibilityCostTables(rsc)
+        %     pict = obj.getIrreversibilityCostTables
+        %     pict = obj.getIrreversibilityCostTables(rsc)
+        %     [pict,fict] = obj.getIrreversibilityCostTables(rsc)
         %   Input Arguments:
-        %     rsc - cResourcesCost object [optional]
+        %     rsc  - (cResourceData) External resource cost data [optional]
         %   Output Arguments:
-        %     pict - matrix containing the values of the Process ICT table
-        %     fict - matrix containing the values of the Flows ICT table
+        %     pict - (double) Matrix [N+1 x N] of process ICT values; last row is cn
+        %     fict - (double) Matrix [N+1 x M] of flow ICT values; last row is cm
         %
             narginchk(1,2);
-            % Initialize variables
             N=obj.NrOfProcesses;
             M=obj.NrOfFlows;
             fpm=obj.FlowProcessModel;
             pf=obj.pfOperators;
             czoption=(nargin==2);
-            % Compute Process ICT
+            % Build the process-level ICT matrix:
+            % ict(i,j) = cost of process j attributed to irreversibility of process i
             if czoption
-                cn=obj.getMinCost(rsc);
-                ict=zerotol(scaleRow(pf.opI,cn));
+                cn=obj.getMinCost(rsc);           % Generalized minimum unit costs
+                ict=zerotol(scaleRow(pf.opI,cn)); % Scale opI rows by cn
             else
-                cn=ones(1,N);
+                cn=ones(1,N);                     % Direct cost: unit cost = 1 for all processes
                 ict=zerotol(pf.opI);
             end
-            % Add waste cost
+            % Add waste allocation cost contribution to ict
             if obj.isWaste
-                cin=cn+sum(ict);
+                cin=cn+sum(ict);         % Effective cost including irreversibility contributions
                 mopCR=scaleRow(pf.opR,cin);
                 ict=ict+mopCR;
             end
-            pict=[ict;cn];
+            pict=[ict;cn];  % Append the reference cost row (cn)
             if nargout==1
                 return
             end
-            % Compute Flows ICT 
+            % Project process ICT onto flows using mpL = mP(1:N,:)*mL
             if czoption
-                cm=rsc.c0*fpm.mL+cn*obj.mpL;  
+                cm=rsc.c0*fpm.mL+cn*obj.mpL;  % Generalized flow reference cost
             else
-                cm=ones(1,M);
+                cm=ones(1,M);                  % Direct cost: unit flow cost = 1
             end
-            fict=[ict*obj.mpL;cm];    	
+            fict=[ict*obj.mpL;cm];
         end
 
         function [frsc,prsc,idx]=getResourcesCostDistribution(obj,rsd)
-        %getResourcesCostDistribution - Get the resource Cost distribution tables
-        %   This table decompose the exergy cost due to each resource flows defined
-        %   in the cResourceData object.
-        %   If resource data is not provided, the exergy of the resource flows is used,
-        %   obtaining the exergy cost distribution table. If resource data is provided,
-        %   the generalized cost distribution table is obtained.
+        %getResourcesCostDistribution - Get the resource cost distribution across flows and processes.
+        %   Decomposes the exergy (or monetary) cost of each flow and process into
+        %   contributions from individual resource flows, using the Leontief operator opB.
+        %   Without rsd, each resource flow contributes with unit weight (direct exergy cost).
+        %   With rsd, each resource flow is weighted by its unit cost c0 (generalized cost).
         %
         %   Syntax:
-        %     [res,idx]=obj.getResourcesCostDistribution(rsd)
+        %     [frsc, prsc, idx] = obj.getResourcesCostDistribution
+        %     [frsc, prsc, idx] = obj.getResourcesCostDistribution(rsd)
         %   Input Arguments:
-        %     rsd - cResourceData object (optional)
+        %     rsd - (cResourceData) External resource cost data [optional]
         %   Output Arguments:
-        %     res - matrix containing the resource cost distribution values
-        %     idx - index of resource flows in the flows list
+        %     frsc - (double) Matrix [NR x M] of resource cost distribution over flows;
+        %            entry (r,j) is the cost of flow j attributed to resource r
+        %     prsc - (double) Matrix [NR x N] of resource cost distribution over processes
+        %     idx  - (integer) Indices of resource flows in the full flow list
         %
             narginchk(1,2);
-            % Initialize variables
             czoption=(nargin==2);
-            idx=obj.ps.ResourceFlows;
+            idx=obj.ps.ResourceFlows;   % Row indices of resource flows in opB
             opB=obj.flowOperators.opB;
             fpm=obj.FlowProcessModel;
-            % Compute Generalized or direct flow costs distribution
+            % Flow-level distribution: rows of opB for resource flows, optionally weighted by c0
             if czoption
-                c0=rsd.c0(idx);
-                frsc=scaleRow(opB(idx,:),c0);      
+                c0=rsd.c0(idx);               % Unit cost of each resource flow
+                frsc=scaleRow(opB(idx,:),c0); % Weight each resource row by its unit cost
             else
-                frsc=opB(idx,:);
+                frsc=opB(idx,:);              % Unit-weighted (direct exergy cost)
             end
-            % Compute process resource cost distribution
-            prsc=frsc*fpm.mF(:,1:end-1);  
+            % Project flow distribution onto processes via the flow-process mapping
+            prsc=frsc*fpm.mF(:,1:end-1);
         end
 
         function log=updateWasteOperators(obj)
-        %updateWasteOperators - Calculate the waste allocation ratios and cost operators.
-        %   The waste allocation ratios are calculated according to the waste definition
-        %   type. The waste cost operators are also calculated.
-        %   The waste allocation ratios are stored in the WasteTable property.
-        %   The waste cost operators are stored in the properties TableR, pfOperators, fpOperators and flowOperators.
-        %   The recycle ratio is stored in the RecycleRatio property.
-        %   The method returns a cMessageLogger object with error messages if any.
+        %updateWasteOperators - Recompute waste allocation ratios and all waste cost operators.
+        %   Iterates over each waste (dissipative) process and computes its allocation
+        %   vector according to the strategy defined in WasteTable (MANUAL, RESOURCES,
+        %   COST, EXERGY, IRREVERSIBILITY, or HYBRID). The resulting normalized allocation
+        %   matrix sol is then used to build the waste cost operators opR/mKR/mRP and
+        %   update the relevant operator structs.
+        %
+        %   This method is called automatically by the constructor when waste data is
+        %   provided, and can be called explicitly after modifying WasteTable externally.
         %
         %   Syntax:
-        %     obj.updateWasteOperators
+        %     log = obj.updateWasteOperators
         %   Output Arguments:
-        %     log - cMessageLogger with error messages
+        %     log - (cMessageLogger) Log object; check log.status for errors
         %
             log=cMessageLogger();
             if ~obj.isWaste
                 log.messageLog(cType.ERROR,cMessages.NoWasteModel);
                 return
             end
-            % Initialize variables
+            % Extract working variables
             wt=obj.WasteTable;
-            NR=wt.NrOfWastes;
+            NR=wt.NrOfWastes;       % Number of waste (dissipative) processes
             N=obj.NrOfProcesses;
             M=obj.NrOfFlows;
-            aR=wt.Processes;
-            aP=setdiff(1:N,aR);
-            tmp=zeros(1,N);
-            sol=zeros(NR,N);
-            % Variables for thermoeconomic model
+            aR=wt.Processes;        % Indices of waste processes
+            aP=setdiff(1:N,aR);     % Indices of productive processes
+            tmp=zeros(1,N);         % Scratch allocation vector for one waste process
+            sol=zeros(NR,N);        % Allocation matrix (NR rows, N columns)
+            % Cache operator references to avoid repeated struct field access
             tFP=obj.TableFP;
             mKP=obj.pfOperators.mKP;
             opP=obj.pfOperators.opP;
             opI=obj.pfOperators.opI;
             opCP=obj.fpOperators.opCP;
             vP=obj.ProductExergy;
-            % Compute direct exergy cost for type 2 allocation
+            % Pre-compute direct exergy cost vector only if COST-type allocation is used
             if (any(wt.TypeId==cType.WasteAllocation.COST))
                 cp=obj.computeCostR(aR);
             end
-            % Compute Waste table depending on waste definition type
+            % Build allocation row for each waste process according to its allocation type
             for i=1:NR
-                j=aR(i);
+                j=aR(i);  % Global process index for the i-th waste process
                 if ~obj.ActiveProcesses(j)
                     log.messageLog(cType.WARNING,cMessages.ProcessNotActive,obj.ps.ProcessKeys{j});
                     continue
@@ -562,19 +667,25 @@ classdef (Sealed) cExergyCost < cExergyModel
                 key=wt.Names{i};      
                 switch wt.TypeId(i)
                     case cType.WasteAllocation.MANUAL
+                        % User-specified allocation weights; zero out inactive processes
                         tmp=wt.getValues(key);
                         tmp(~obj.ActiveProcesses)=0.0;
                     case cType.WasteAllocation.RESOURCES  
+                        % Proportional to resource consumption weighted by cost operator opP
                         tmp(aP)=mKP(end,aP).*opP(aP,j)';
                     case cType.WasteAllocation.COST
+                        % Proportional to direct exergy cost times fuel received from waste j
                         tmp(aP)=cp(aP).*tFP(aP,j)';
                     case cType.WasteAllocation.EXERGY
+                        % Proportional to fuel exergy received by each process from waste j
                         tmp(aP)=tFP(aP,j)';            
                     case cType.WasteAllocation.IRREVERSIBILITY
+                        % Proportional to irreversibility cost attributed to waste j
                         tmp(aP)=opI(aP,j);
                         case cType.WasteAllocation.HYBRID
+                        % Hybrid: exergy proportion plus irreversibility contribution
                         tmp(aP)=tFP(aP,j)';
-                        tmp=tmp/sum(tmp);  
+                        tmp=tmp/sum(tmp);          % Normalize exergy part first
                         tmp(aP)=tmp(aP)+opI(aP,j)';
                     otherwise
                         log.messageLog(cType.ERROR,cMessages.InvalidWasteType,wt.Type{i},key);
@@ -584,51 +695,64 @@ classdef (Sealed) cExergyCost < cExergyModel
                     log.messageLog(cType.ERROR,cMessages.NoWasteAllocationValues,key);
                     return
                 end
-                sol(i,:)=tmp/sum(tmp);
+                sol(i,:)=tmp/sum(tmp);  % Normalize to obtain allocation ratios
             end
-            % Check Waste Allocation is valid
+            % Scale by (1 - RecycleRatio) so recycled fraction does not enter allocation
             sol=scaleRow(sol,1-wt.RecycleRatio);
+            % Verify that the waste-inclusive cost system still has a unique solution
             mS=sol*opCP(:,aR);
             if ~isProductiveMatrix(mS)
                 log.messageLog(cType.ERROR,cMessages.InvalidWasteDefinition);
                 return
             end
-            % Update object values     
-            mRP=cSparseRow(aR,sol);
-            obj.TableR=scaleRow(mRP,vP);          
-            mKR=divideCol(obj.TableR,vP);
-            opR=cExergyCost.getOpR(mKR,opP);
+            % Build sparse waste allocation matrices and update all operator structs
+            mRP=cSparseRow(aR,sol);             % Sparse allocation matrix mRP [NR x N]
+            obj.TableR=scaleRow(mRP,vP);         % Exergy-weighted allocation table
+            mKR=divideCol(obj.TableR,vP);        % Unit waste cost matrix
+            opR=cExergyCost.getOpR(mKR,opP);     % PF-framework waste cost operator
             wflows=obj.ps.Waste.flows;
             wt.updateValues(sol);
             obj.WasteTable=wt;
             obj.fpOperators.mRP=mRP;
-            obj.fpOperators.opR=cExergyCost.getOpR(mRP,opCP);
+            obj.fpOperators.opR=cExergyCost.getOpR(mRP,opCP);            % FP-framework waste operator
             obj.pfOperators.mKR=mKR;
             obj.pfOperators.opR=opR;
-            obj.flowOperators.opR=cSparseRow(wflows,opR.mValues*obj.mpL,M);
+            obj.flowOperators.opR=cSparseRow(wflows,opR.mValues*obj.mpL,M);  % Flow-level waste operator
             obj.RecycleRatio=wt.RecycleRatio;
         end 
     end
     
     methods(Static)
         function res=updateOperator(op,opR)
-        %updateOperator - Update an operator with the corresponding waste operator
+        %updateOperator - Add waste cost contributions to a base cost operator.
+        %   Computes op + op*opR, which accounts for the indirect cost amplification
+        %   caused by waste allocation back into the productive processes.
+        %
         %   Syntax:
-        %     res = cExergyCost.updateOperator(op,opR)
-        %   Input:
-        %     op - Operator
-        %     opR - Waste Operator
-        % 
+        %     res = cExergyCost.updateOperator(op, opR)
+        %   Input Arguments:
+        %     op  - (double) Base cost operator matrix
+        %     opR - (cSparseRow) Waste cost operator
+        %   Output Arguments:
+        %     res - (double) Updated operator: op + op*opR
+        %
             res=op+op*opR;
         end
 
         function res=getOpR(mR,opL)
-        %getOpR - Get the corresponding waste operator
+        %getOpR - Build the waste cost operator from an allocation matrix and a cost operator.
+        %   Solves the fixed-point equation for waste cost recycling:
+        %     opR = (I - mR.mValues * opL(:, mR.mRows))^{-1} * (mR.mValues * opL)
+        %   The result captures how waste costs propagate back through the system
+        %   via the allocation matrix mR and the base cost operator opL.
+        %
         %   Syntax:
-        %     res = cExergyCost.getOpR(mR,opL)
-        %   Input:
-        %     mR - Waste allocation matrix
-        %     opL - Cost Operator
+        %     res = cExergyCost.getOpR(mR, opL)
+        %   Input Arguments:
+        %     mR  - (cSparseRow) Sparse waste allocation matrix (fields: mValues, mRows, NR)
+        %     opL - (double) Base cost operator (opP or opCP depending on framework)
+        %   Output Arguments:
+        %     res - (cSparseRow) Waste cost operator with same sparsity pattern as mR
         %
             tmp=mR.mValues*opL;
             opR=(eye(mR.NR)-tmp(:,mR.mRows))\tmp;
@@ -638,9 +762,11 @@ classdef (Sealed) cExergyCost < cExergyModel
 
     methods(Access=private)
         function setWasteTable(obj,wd)
-        %setWasteTable -Set the Waste Table for the cExergyCost 
-        %   Input:
-        %     wd - cWasteData object
+        %setWasteTable - Validate and store the cWasteData object.
+        %   Called once from the constructor before updateWasteOperators.
+        %
+        %   Input Arguments:
+        %     wd - (cWasteData) Waste definition object to store
             if ~obj.isWaste
                 obj.messageLog(cType.ERROR,cMessages.NoWasteModel);
                 return
@@ -653,26 +779,34 @@ classdef (Sealed) cExergyCost < cExergyModel
         end
 
         function res=getMinCost(obj,rsc)
-        %getMinCost - Calculate the minimun cost of the flows
-        %   Input:
-        %     rsc - cost of external resources
-        %   Output:
-        %     res - Minimun cost of the flows
+        %getMinCost - Compute the minimum generalized unit cost vector.
+        %   Solves (ce + zF) * (I - mPF)^{-1} for the process-level minimum unit cost,
+        %   which is used as the reference cost vector cn in the generalized ICT.
+        %
+        %   Input Arguments:
+        %     rsc - (cResourceData) External resource cost data
+        %   Output Arguments:
+        %     res - (double) Row vector [1xN] of minimum generalized unit costs
             N=obj.NrOfProcesses;
             res=(rsc.ce+rsc.zF)/(eye(N)-obj.pfOperators.mPF(1:N,:));
         end
     
         function cp=computeCostR(obj,aR)
-	    %computeCostR - Compute production cost including waste allocation, using table FP info
-        %   Input:
-        %     aR - array with dissipative processes index
-        %   Output:
-        %     cp - production cost
+	    %computeCostR - Compute process unit costs accounting for waste fuel contributions.
+        %   Used internally during COST-type waste allocation to avoid circular dependency.
+        %   Modifies the consumption matrix by treating fuel received from waste processes
+        %   as a diagonal self-contribution, then solves the resulting linear system.
+        %
+        %   Input Arguments:
+        %     aR - (integer vector) Indices of waste (dissipative) processes
+        %   Output Arguments:
+        %     cp - (double) Row vector [1xN] of unit production costs including waste fuel
 		    N=obj.NrOfProcesses;
 		    tmp=zeros(N,N);
-		    aP=setdiff(1:N,aR);
-		    tmp(:,aP)=obj.pfOperators.mKP(1:N,aP);
-		    ke=obj.pfOperators.mKP(end,:);
+		    aP=setdiff(1:N,aR);                          % Productive process indices
+		    tmp(:,aP)=obj.pfOperators.mKP(1:N,aP);       % Fill productive columns of consumption matrix
+		    ke=obj.pfOperators.mKP(end,:);               % Resource row of the consumption matrix
+            % Add waste fuel contribution to the diagonal of productive process block
             tmp(aP, aP) = tmp(aP, aP) + diag(sum(obj.fpOperators.mFP(aP,aR),2));
 		    cp=ke/(eye(N)-tmp);
         end

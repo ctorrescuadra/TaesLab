@@ -316,26 +316,36 @@ classdef cDigraphAnalysis < cMessageLogger
         %   order) are stored in the object's properties.
         %
         %   See also: dfSC
-        
-            %Find a postorder search of the reverse graph
             log=false;
             N=size(obj.mG,1);
-            [~,porder]=cDigraphAnalysis.dfSC(obj.mG',1:N);
-            if ~all(porder)
-                obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
-                return
+            if isMatlab %Use Dulmage-Mendelsohn decomposition
+                [ord, ~, r] = dmperm(eye(N)+obj.mG);
+                obj.NrOfGroups = length(r) - 1; 
+                grp = zeros(1, N);
+                for k = 1:obj.NrOfGroups
+                    idx = ord(r(k) : r(k+1)-1); 
+                    grp(idx) = k;
+                end
+                obj.groups=grp;
+            else %Generic SC Kosajaru method
+                %Find a postorder search of the reverse graph
+                [~,porder]=cDigraphAnalysis.dfSC(obj.mG',1:N);
+                if ~all(porder)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
+                    return
+                end
+                %Find the strong connected groups
+	            [grp,ord]=cDigraphAnalysis.dfSC(obj.mG,porder);
+                if ~all(ord)
+                    obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
+                    return
+                end
+                obj.NrOfGroups=max(grp);
+                obj.groups=obj.NrOfGroups+1-grp;
             end
-            %Find the strong connected groups
-	        [grp,ord]=cDigraphAnalysis.dfSC(obj.mG,porder);
-            if ~all(ord)
-                obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
-                return
-            end  
             % Assign object variables
-            obj.NrOfNodes=N;
-            obj.NrOfGroups=max(grp);
+            obj.NrOfNodes=N;     
             obj.order=ord;
-            obj.groups=obj.NrOfGroups+1-grp;
             log=true;
         end
 
@@ -372,7 +382,7 @@ classdef cDigraphAnalysis < cMessageLogger
             idx=obj.order;
             if obj.isDAG %Order and copy the adjacency matrix
                 obj.kG=obj.mG(idx,idx);
-                obj.kNodes=obj.gNodes(ogj.order);
+                obj.kNodes=obj.gNodes(obj.order);
                 obj.nrg=ones(1,obj.NrOfNodes);
             else
                 % Build Kernel Matrix

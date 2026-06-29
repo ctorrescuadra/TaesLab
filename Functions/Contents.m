@@ -36,8 +36,7 @@
 %   zerotol                   - Set matrix values near zero to exact zero.
 %
 % Digraph Functions
-%   dfs                       - Depth-First Search traversal of a digraph
-%   topologicalOrder          - Get topological order indices of a DAG.
+%   bfs                       - Breath-First Search traversal of a digraph
 %   transitiveClosure         - Compute the transitive closure of a directed graph.
 %
 % Miscellaneous Functions
