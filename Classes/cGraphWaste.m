@@ -1,31 +1,37 @@
 classdef cGraphWaste < cGraphResults
-%cGraphWaste - Plot the Waste Allocation Graph.
-%   There is two graph methods to show the waste allocation
-%   - PieChart - active waste allocation is shown in a PieChart
-%   - BarGraph - all the waste flows allocation is show in a bar chart
-%   If graph is launched in a app BarPlot is always use
+%cGraphWaste - Plot the waste allocation pie chart or horizontal bar graph.
+%   Two rendering modes are available, selected by the option argument:
+%     PIE - Pie chart showing the allocation fractions of the currently
+%           active waste flow (slices below 1 % are hidden).
+%     BAR - Horizontal stacked bar chart showing the allocation of all waste
+%           flows simultaneously.
+%   When displayed inside an App Designer app the BAR layout is always used.
 %
-%   cGraphWaste methods:
-%     cGraphWaste  - Build an instance of the class
-%     showGraph    - Show the graph in a window 
-%     showGraphUI  - Show the graph in the graph pannel of a GUI app
+%   cGraphWaste Methods:
+%     cGraphWaste  - Construct a cGraphWaste from a waste allocation table
+%     showGraph    - Display the graph in a standalone figure window
+%     showGraphUI  - Display the horizontal bar graph in an App Designer graph panel
 %
 %   See also cGraphResults, cWasteAnalysis
 %
 	properties(Access=private)
-		isPieChart    %Pie Chart is used
+		isPieChart = false  % True when the constructor selected pie-chart rendering
 	end
     methods
         function obj = cGraphWaste(tbl,info,option)
-		%cGraphWaste - Build an instance of the object
+        %cGraphWaste - Construct a cGraphWaste from a waste allocation table
+        %
         %   Syntax:
-        %     obj = cGraphWaste(tbl,info,option)
+        %     obj = cGraphWaste(tbl, info)
+        %     obj = cGraphWaste(tbl, info, option)
         %   Input Arguments:
-        %     tbl - cTable with the data to show graphically
-        %     info - cWasteAnalysis object with additional info
-		%     option - (true/false) indicate if PieChart is used or not
-		%   Output Arguments:
-		%     obj - cGraphWaste object
+        %     tbl    - cTable containing the waste allocation percentage data
+        %     info   - cWasteAnalysis object providing the active waste flow name
+        %     option - Graph style selector (optional, default: cType.DEFAULT_GRAPHSTYLE):
+        %                cType.GraphStyles.PIE → pie chart for the active waste flow
+        %                any other style        → horizontal stacked bar for all waste flows
+        %   Output Arguments:
+        %     obj - cGraphWaste object (check obj.status before use)
         %
 			% Validate input arguments
 			if nargin < 2 || ~isObject(info,'cWasteAnalysis')
@@ -70,10 +76,13 @@ classdef cGraphWaste < cGraphResults
         end
 
         function showGraph(obj)
-		%showGraph - Show the graph in a window
+        %showGraph - Display the waste allocation graph in a standalone figure window
+        %   Renders a pie chart or a horizontal stacked bar graph depending
+        %   on the style selected during construction.
+        %
         %   Syntax:
         %     obj.showGraph
-		%
+        %
             if obj.isPieChart
                 obj.showPieChart;
             else
@@ -81,13 +90,15 @@ classdef cGraphWaste < cGraphResults
             end
         end
 
-		function showGraphUI(obj,app)
-		%showGraphUI - Show the graph in a GUI app
+        function showGraphUI(obj,app)
+        %showGraphUI - Display the waste allocation horizontal bar graph in an App Designer graph panel
+        %   Always uses the BAR layout regardless of the style passed to the constructor.
+        %
         %   Syntax:
         %     obj.showGraphUI(app)
-		%	Input Parameter:
-		%	  app - GUI app reference object
-		%
+        %   Input Arguments:
+        %     app - matlab.apps.AppBase object whose UIAxes hosts the graph
+        %
             if app.isColorbar
                 delete(app.Colorbar);
             end
@@ -115,10 +126,13 @@ classdef cGraphWaste < cGraphResults
 
     methods(Access=private)
         function showPieChart(obj)
-    	%showPieChart - Show the waste allocation pie chart
-		%   Syntax:
-		%     obj.showPieChart
-		%
+        %showPieChart - Render the active waste flow allocation as a pie chart
+        %   Slices with a contribution below 1 % are filtered out.
+        %   Uses percentage labels on MATLAB; plain pie on Octave.
+        %
+        %   Syntax:
+        %     obj.showPieChart
+        %
 			set(groot,'defaultTextInterpreter','none');
 			f=figure('name',obj.Name,...
 				'numbertitle','off',...
@@ -138,10 +152,12 @@ classdef cGraphWaste < cGraphResults
         end
         
         function showBarGraph(obj)
-		%showBarGraph - Show the waste allocation bar graph
-		%   Syntax:
-		%     obj.showBarGraph
-		%
+        %showBarGraph - Render all waste flows as a horizontal stacked bar graph
+        %   Each bar represents one waste flow; segments show allocation fractions.
+        %
+        %   Syntax:
+        %     obj.showBarGraph
+        %
 			set(groot,'defaultTextInterpreter','none');
         	f=figure('name',obj.Name,...
 				'numbertitle','off',...

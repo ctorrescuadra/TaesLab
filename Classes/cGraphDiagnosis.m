@@ -1,26 +1,32 @@
 classdef cGraphDiagnosis < cGraphResults
-%cGraphDiagnosis - Plot the diagnosis graphs.
-%   This class creates a stacked bar graph from a cTable object
-%   containing the diagnosis data of a productive structure.
+%cGraphDiagnosis - Plot the thermoeconomic diagnosis stacked bar graph.
+%   Builds a stacked bar chart from a diagnosis table where each bar represents
+%   a process (or component malfunction) and each coloured segment shows the
+%   exergy malfunction contribution from one process.
+%   Positive and negative malfunction values are displayed on the same bar
+%   through separate Octave-compatible rendering.
 %
-%   cGraphDiagnosis methods:
-%	  cGraphDiagnosis - Build an instance of the class
-%     showGraph       - Show the graph in a window 
-%     showGraphUI     - Show the graph in the graph pannel of a GUI app
+%   cGraphDiagnosis Methods:
+%     cGraphDiagnosis - Construct a cGraphDiagnosis from a diagnosis table
+%     showGraph       - Display the bar graph in a standalone figure window
+%     showGraphUI     - Display the bar graph in an App Designer graph panel
 %
 %   See also cGraphResults, cDiagnosis
 %
     methods
         function obj=cGraphDiagnosis(tbl,info,option)
-		%cGraphDiagnosis - Build an instance of the object
+        %cGraphDiagnosis - Construct a cGraphDiagnosis from a diagnosis table
+        %
         %   Syntax:
-        %     obj = cGraphDiagnosis(tbl,info)
+        %     obj = cGraphDiagnosis(tbl, info)
+        %     obj = cGraphDiagnosis(tbl, info, option)
         %   Input Arguments:
-        %     tbl    - cTable with the data to show graphically
-        %     info   - cDiagnosis object with additional info
-        %     option - (true/false) plot last bar (Demand Variation)
+        %     tbl    - cTable containing the diagnosis malfunction data
+        %     info   - cDiagnosis object providing method and state metadata
+        %     option - Logical flag controlling whether the last bar (Demand Variation)
+        %              is included (default: true; forced true for WASTE_EXTERNAL method)
         %   Output Arguments:
-        %     obj    - cGraphDiagnosis object
+        %     obj - cGraphDiagnosis object (check obj.status before use)
         %
             % Check input arguments
             if nargin==2
@@ -55,10 +61,12 @@ classdef cGraphDiagnosis < cGraphResults
         end
         
         function showGraph(obj)
-        %showGraph - Show the graph in a window
+        %showGraph - Display the diagnosis bar graph in a standalone figure window
+        %   Dispatches to graphDiagnosis_OC on Octave or graphDiagnosis_ML on MATLAB.
+        %
         %   Syntax:
         %     obj.showGraph
-		%
+        %
             if isOctave
                 graphDiagnosis_OC(obj)
             else
@@ -67,11 +75,12 @@ classdef cGraphDiagnosis < cGraphResults
         end
 
         function showGraphUI(obj,app)
-        %showGraphUI - Show the graph in a GUI app
+        %showGraphUI - Display the diagnosis bar graph in an App Designer graph panel
+        %
         %   Syntax:
         %     obj.showGraphUI(app)
-        %	Input Parameter:
-        %	  app - GUI app reference object
+        %   Input Arguments:
+        %     app - matlab.apps.AppBase object whose UIAxes hosts the graph
         %
         M=numel(obj.Legend);
         cm=turbo(M);
@@ -97,9 +106,13 @@ classdef cGraphDiagnosis < cGraphResults
 
     methods(Access=private)
         function graphDiagnosis_OC(obj)
-        %graphDiagnosis_OC - Show the diagnosis graph (Octave Version)
+        %graphDiagnosis_OC - Render the diagnosis stacked bar graph under Octave
+        %   Plots positive and negative values as two separate overlapping bar
+        %   series because Octave does not support the BarLayout stacked mode
+        %   with mixed-sign values.
+        %
         %   Syntax:
-        %     graphDiagnosis_OC(obj)
+        %     obj.graphDiagnosis_OC
         %
             M=numel(obj.Legend);
             cm=turbo(M);
@@ -120,9 +133,12 @@ classdef cGraphDiagnosis < cGraphResults
         end
         
         function graphDiagnosis_ML(obj)
-        %graphDiagnosis_ML - Show the diagnosis graph (Matlab version)
+        %graphDiagnosis_ML - Render the diagnosis stacked bar graph under MATLAB
+        %   Uses the built-in BarLayout stacked mode with a zero baseline
+        %   to display both positive and negative malfunction contributions.
+        %
         %   Syntax:
-        %     graphDiagnosis_ML(obj)
+        %     obj.graphDiagnosis_ML
         %
             M=numel(obj.Legend);
             cm=turbo(M);

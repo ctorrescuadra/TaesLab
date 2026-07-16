@@ -1,25 +1,33 @@
 classdef(Sealed) cDataset < cDictionary
-%cDataset - Class container to store objects and access them by key.
-%   This class implements a dataset for TaesLab.
-%   The keys are strings and the objects can be of any class.
-%   This class is used to store cExergyData, cExergyCost, and cResourceData objects
-%   and access by state name or sample name.
+%cDataset - Keyed container for storing and retrieving TaesLab data objects.
+%   cDataset extends cDictionary to associate a stored object (value) with
+%   each key in the dictionary.  Keys are non-empty, unique strings; values
+%   can be any MATLAB object.
 %
-%   cDataset methods:
-%     cDataset  - Build an instance of the object
-%     getValues - Get the object associated to an entry
-%     setValues - Set an object to an entry
-%     addValues - Add a new entry
+%   Within TaesLab, cDataset is used to hold per-state or per-sample data
+%   objects (e.g. cExergyData, cExergyCost, cResourceData), allowing lookup
+%   by the state name or sample name string as well as by numeric index.
 %
-%   cDataset methods (inherited from cDictionary):
-%     existsKey   - Check if a key exists in the dictionary
-%     getIndex    - Get the index of a key
-%     getKey      - Get the key associated to a index
-%     getKeys     - Get all the keys of the dictionary
-%     addKey      - Add a new key to the dictionary
-%     isIndex     - Check if an index is valid
+%   Individual entries can be read (getValues), replaced (setValues), or
+%   appended (addValues) after construction.  All methods that fail due to
+%   an invalid argument log an error through the cMessageLogger mechanism
+%   and return an object whose status is false.
 %
-%   See also cDictionary
+%   cDataset Methods:
+%     cDataset  - Construct a dataset from a list of key names
+%     getValues - Retrieve the object stored at a given key or index
+%     setValues - Replace the object stored at a given key or index
+%     addValues - Append a new key-value pair to the dataset
+%
+%   cDataset Methods (inherited from cDictionary):
+%     existsKey - Check whether a key string exists in the dictionary
+%     getIndex  - Return the numeric index associated with a key string
+%     getKey    - Return the key string associated with a numeric index
+%     getKeys   - Return all key strings as a cell array
+%     addKey    - Append a new key to the dictionary
+%     isIndex   - Check whether a numeric index is within the valid range
+%
+%   See also cDictionary, cMessageLogger
 %
     properties (Access=private)
         Values       % Cell array with the objects
@@ -27,13 +35,24 @@ classdef(Sealed) cDataset < cDictionary
   
     methods
         function obj=cDataset(list)
-        %cDataset - Build an instance of the object
+        %cDataset - Construct a dataset from a list of key names
+        %   Delegates key validation and storage to the cDictionary
+        %   constructor, then pre-allocates the internal cell array that
+        %   holds the associated value objects.  The object status is set
+        %   to false (invalid) when cDictionary construction fails, i.e.
+        %   when list is not a non-empty cell array of unique, non-empty
+        %   strings.
+        %
         %   Syntax:
         %     obj = cDataset(list)
+        %
         %   Input Arguments:
-        %     list - cell array containig the key values
+        %     list - Cell array of unique, non-empty key strings.
+        %            Each element becomes the key for one dataset entry.
+        %
         %   Output Arguments:
-        %     obj - cDataset object
+        %     obj  - cDataset object.  Use isValid(obj) to confirm
+        %            successful construction before operating on it.
         %
             obj=obj@cDictionary(list);
             % Validate object and initialize values
@@ -43,14 +62,25 @@ classdef(Sealed) cDataset < cDictionary
         end
  
         function res=getValues(obj,arg)
-        %getValues - Get an element of the dataset
-        %   Syntax: 
+        %getValues - Retrieve the object stored at a given key or index
+        %   Returns the value object associated with the specified entry.
+        %   The argument can be supplied either as a string key or as a
+        %   positive integer index; both forms are resolved internally.
+        %   If the argument is invalid (unknown key, out-of-range index,
+        %   or wrong type), an error is logged and a cMessageLogger with
+        %   status false is returned.
+        %
+        %   Syntax:
         %     res = obj.getValues(arg)
+        %
         %   Input Arguments:
-        %     arg - key or index of the values to retrive
+        %     arg - Key string (char) or numeric index (positive integer)
+        %           identifying the entry to retrieve.
+        %
         %   Output Arguments:
-        %     res - object with the required values
-        %  
+        %     res - The stored object for the requested entry, or a
+        %           cMessageLogger with status false if arg is invalid.
+        %
             res=cMessageLogger();
             idx=obj.validateArguments(arg);
             if idx
@@ -61,14 +91,26 @@ classdef(Sealed) cDataset < cDictionary
         end
 
         function log=setValues(obj,arg,val)
-        %setValues - Set the values in position indicates by arg
-        %   Syntax: 
-        %     res = obj.setValues(arg,val)
+        %setValues - Replace the object stored at a given key or index
+        %   Overwrites the value currently stored at the entry identified
+        %   by arg with the new object val.  Because cDataset is a handle
+        %   class, the update is visible through all references to the
+        %   same object without reassignment.
+        %   If arg is invalid (unknown key, out-of-range index, or wrong
+        %   type), an error is logged on the returned cMessageLogger and
+        %   the dataset is left unchanged.
+        %
+        %   Syntax:
+        %     log = obj.setValues(arg, val)
+        %
         %   Input Arguments:
-        %     arg - key or index of the values
-        %     val - object with the values to store
+        %     arg - Key string (char) or numeric index (positive integer)
+        %           identifying the entry to overwrite.
+        %     val - New object to store at the specified entry.
+        %
         %   Output Arguments:
-        %     log - cMessagesLog with status and messages
+        %     log - cMessageLogger with the operation status.  Check
+        %           log.status to verify whether the assignment succeeded.
         %
             log=cMessageLogger();
             idx=obj.validateArguments(arg);
@@ -80,15 +122,25 @@ classdef(Sealed) cDataset < cDictionary
         end
 
         function log=addValues(obj,key,val)
-        %addValues - Add a new value at the end of the dataset
-        %   Syntax: 
-        %     res = obj.addValues(key,val)
+        %addValues - Append a new key-value pair to the dataset
+        %   Registers key as a new dictionary entry (via cDictionary.addKey)
+        %   and appends val to the internal value array.  The new entry
+        %   receives the next available numeric index.
+        %   The operation fails, and an error is logged, when key already
+        %   exists in the dictionary or is not a valid non-empty string.
+        %
+        %   Syntax:
+        %     log = obj.addValues(key, val)
+        %
         %   Input Arguments:
-        %     key - key name
-        %     val - object with the values to store
+        %     key - Non-empty string key that does not yet exist in the
+        %           dataset.  Duplicate keys are rejected.
+        %     val - Object to associate with the new key.
+        %
         %   Output Arguments:
-        %     log - cMessagesLogger with status and messages
-        %        
+        %     log - cMessageLogger with the operation status.  Check
+        %           log.status to verify whether the entry was added.
+        %
             log=cMessageLogger();
             idx=obj.addKey(key);
             if idx
@@ -101,13 +153,24 @@ classdef(Sealed) cDataset < cDictionary
 
     methods(Access=private)
         function idx=validateArguments(obj,arg)
-        %validateArguments - Check if the arguments are valid
-        %   Syntax: 
+        %validateArguments - Resolve a key or index argument to a numeric index
+        %   Accepts either a string key or a positive integer index and
+        %   returns the corresponding numeric index within the dataset.
+        %   String arguments are looked up through cDictionary.getIndex;
+        %   numeric arguments are validated through cDictionary.isIndex.
+        %   Returns 0 when arg is neither a known key nor a valid index,
+        %   signalling the caller to report an error.
+        %
+        %   Syntax:
         %     idx = obj.validateArguments(arg)
+        %
         %   Input Arguments:
-        %     arg - key or index of the values
+        %     arg - Key string (char) or numeric index to validate.
+        %
         %   Output Arguments:
-        %     idx - index of the values or zero if its not valid
+        %     idx - Positive integer index into the Values array, or 0 if
+        %           arg is an unknown key, an out-of-range index, or has
+        %           an unsupported type.
         %
             idx=0;
             if ischar(arg)

@@ -305,12 +305,9 @@ classdef cDigraphAnalysis < cMessageLogger
     methods (Access=private)
         function log=getStrongComponents(obj)
         %getStrongComponents - Finds strong components using Kosaraju's algorithm.
-        %
-        %   This private method implements the two-pass Kosaraju algorithm
-        %   to find all strongly connected components (SCCs) in the graph.
-        %   It first performs a depth-first search (DFS) on the transpose
-        %   graph to determine the processing order, then a second DFS on
-        %   the original graph to identify the components.
+        %   Get the Strong Components information of the graph,
+        %   If Matlab is used Frobenius Normal Form via diagraph module is used
+        %   Otherwise the Korasaju Algorithm for SSC is used
         %
         %   The results (number of groups, group membership, and topological
         %   order) are stored in the object's properties.
@@ -318,34 +315,28 @@ classdef cDigraphAnalysis < cMessageLogger
         %   See also: dfSC
             log=false;
             N=size(obj.mG,1);
-            if isMatlab %Use Dulmage-Mendelsohn decomposition
-                [ord, ~, r] = dmperm(eye(N)+obj.mG);
-                obj.NrOfGroups = length(r) - 1; 
-                grp = zeros(1, N);
-                for k = 1:obj.NrOfGroups
-                    idx = ord(r(k) : r(k+1)-1); 
-                    grp(idx) = k;
-                end
-                obj.groups=grp;
+            if isMatlab %Get Frobenius Block Form using digraph module
+                [obj.order,obj.groups] = cDigraphAnalysis.fbfMatrix(obj.mG);
+                obj.NrOfGroups = max(obj.groups);
             else %Generic SC Kosajaru method
                 %Find a postorder search of the reverse graph
-                [~,porder]=cDigraphAnalysis.dfSC(obj.mG',1:N);
-                if ~all(porder)
+                [~, porder] = cDigraphAnalysis.dfSC(obj.mG',1:N);
+                if any(~porder)
                     obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
                     return
                 end
                 %Find the strong connected groups
-	            [grp,ord]=cDigraphAnalysis.dfSC(obj.mG,porder);
-                if ~all(ord)
+	            [grp, ord] = cDigraphAnalysis.dfSC(obj.mG,porder);
+                if any(~ord)
                     obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
                     return
                 end
-                obj.NrOfGroups=max(grp);
+                obj.order=ord;
+                obj.NrOfGroups=max(grp); 
                 obj.groups=obj.NrOfGroups+1-grp;
             end
             % Assign object variables
-            obj.NrOfNodes=N;     
-            obj.order=ord;
+            obj.NrOfNodes=N;
             log=true;
         end
 
@@ -451,6 +442,41 @@ classdef cDigraphAnalysis < cMessageLogger
     end
 
     methods (Static,Access=private)
+
+        function [order,group] = fbfMatrix(G)
+        %fbfMatrix - Computes the Frobenius Block Form (FBF) permutation of a productive Matrix
+        %   Computes a block upper triangular permutation of an adjacency matrix by identifying
+        %   and ordering the Strongly Connected Components (SCCs) in topological order.
+        %
+        %   Syntax:
+        %     [order, group] = fnfMatrix(A)
+        %
+        %   Input Arguments:
+        %     G - Adjacency matrix (n x n) of a directed graph.
+        %
+        %   Output Arguments:
+        %     order - Vector (1 x n) representing the row/column permutation indices.
+        %             A(order, order) yields the Frobenius Normal Form (block upper triangular).
+        %     group - Vector (1 x n) where group(i) is the SCC ID assigned to the original node i.
+        %             group(order) contains the ordered SCC group IDs in topological order.
+        %
+            % Create MATLAB digraph object
+            dg = digraph(logicalMatrix(G));    
+            % Find Strongly Connected Components (SCCs)
+            % 'groups' maps each original node index to an SCC ID number.
+            group = conncomp(dg,'Type','strong');
+            % Get condensation graph
+            kG = condensation(dg);
+            % Topological sort of the macro-components (SCCs)
+            korder = toposort(kG,"Order","stable"); 
+            % Build the final node-level permutation vector (1 x n)
+            % Map each SCC ID to its topological rank, then sort nodes by that rank
+            ngrps = length(korder);
+            rank = zeros(1, ngrps);
+            rank(korder) = 1:ngrps;
+            [~, order] = sort(rank(group));
+        end
+
         function [group,order]=dfSC(G,nodes)
 		%dfSC - Performs a Depth-First Search for strong component analysis.
         %   This static helper function performs a single pass of
@@ -496,8 +522,6 @@ classdef cDigraphAnalysis < cMessageLogger
             end
             order=order(N:-1:1); % Reverse to get the correct post-order
         end
-
-
 
         function res=buildNodesTable(A,names,groups)
         %buildEdgesTable - Build Node Table from adjacency matrix and groups.

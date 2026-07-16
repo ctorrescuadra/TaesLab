@@ -13,14 +13,14 @@
 %   cParseStream            - Static utility class to check and validate strings.
 %
 %  Read Model Classes
-%   cReadModel              - Abstract class to implement the model reader classes.
-%   cReadModelStruct        - Abstract class to read a structured data model.
-%   cReadModelJSON          - Implements the cReadModel to read JSON data model files.
-%   cReadModelXML           - Implements the cReadModel to read XML data model files.
-%   cReadModelTable         - Abstract class to read a table data model.
-%   cReadModelCSV           - Implements the cReadModel to read CSV data model files.
-%   cReadModelXLS           - Implements the cReadModel to read XLSX data model files.
-%   cModelTable             - Container class to store the values read by cReadModelTables.
+%   cReadModel              - Abstract base class for thermoeconomic data model readers.
+%   cReadModelStruct        - Abstract base class for structured-format model readers.
+%   cReadModelJSON          - Reads a JSON thermoeconomic data model file.
+%   cReadModelXML           - Reads an XML thermoeconomic data model file.
+%   cReadModelTable         - Abstract base class for tabular-format model readers.
+%   cReadModelCSV           - Reads a CSV-based thermoeconomic data model.
+%   cReadModelXLS           - Reads an XLSX thermoeconomic data model workbook.
+%   cModelTable             - Validated container for a single data model table.
 %
 %  Data Model Classes
 %   cProductiveStructure    - Build the productive structure of a plant.
@@ -37,7 +37,7 @@
 %   cThermoeconomicModel    - Create the thermoeconomic model results object.
 %   cResultInfo             - Container class for the application results.
 %   cModelData              - Container class for the Data Model structure.
-%   cModelResults           - Container class for the Thermoeconomic Model Results
+%   cModelResults           - Container class for the Thermoeconomic Model Results.
 %
 %  Thermoeconomic Analysis Classes
 %   cExergyModel            - Build the Flow-Process exergy model.

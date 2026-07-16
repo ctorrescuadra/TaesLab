@@ -10,23 +10,24 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %   - Show the results tables in console, as GUI tables or graphs
 %   - Export the results tables in different formats (Excel, CSV, HTML, MAT)
 %   The class is derived from cResultSet, and implements methods to manage the results tables.
+%   Ut is the main runtime interface used after a data model has been loaded.
 %
-%   cThermoeconomicModel properties (set/get):
-%     CurrentState    - Active Operation state name
-%     CurrentSample   - Active Resource sample name
-%     ReferenceState  - Active Reference state name
-%     CostTables      - Selected Cost Result Tables
-%     DiagnosisMethod - Method to calculate fuel impact of wastes
-%     Summary         - Summary Results Selected
-%     Recycling       - Recycling Analysis active (true | false)
-%     ActiveWaste     - Active waste flow name for Waste Analysis
+%   cThermoeconomicModel Properties (set/get):
+%     CurrentState    - Active operating state name
+%     CurrentSample   - Active resource-sample name
+%     ReferenceState  - Active reference-state name
+%     CostTables      - Selected cost-table mode
+%     DiagnosisMethod - Selected diagnosis method
+%     Summary         - Selected summary mode
+%     Recycling       - Enable or disable recycling analysis
+%     ActiveWaste     - Active waste-flow key used by waste analysis
 %
-%   cThermoeconomicModel properties (get only):
-%     DataModel       - cDataModel object
-%     StateNames      - cell array with the names of the defined states
-%     SampleNames     - cell array with the names of the defined resource samples
-%     WasteFlows      - cell array with the names of the waste flows
-%     ResourceData    - Current cResourceData object
+%   cThermoeconomicModel Properties (get only):
+%     DataModel       - Underlying cDataModel object
+%     StateNames      - Cell array with the available state names
+%     SampleNames     - Cell array with the available resource-sample names
+%     WasteFlows      - Cell array with the available waste-flow names
+%     ResourceData    - Current cResourceData object for the active sample
 %
 %   cThermoeconomicModel methods:
 %     Set Methods
@@ -121,7 +122,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 %      getStateId                - Get the State Id given the name.
 %      getWasteId                - Get the Waste flow Id
 %
-%   See also cResultSet, cResultId
+%   See also cResultSet, cResultId, cDataModel, cModelResults
 %
     properties(GetAccess=public,SetAccess=private)
         DataModel           % Data Model
@@ -158,14 +159,27 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
 
     methods
         function obj=cThermoeconomicModel(data,varargin)
-        %cThermoeconomicModel - Create an instance of the class
+        %cThermoeconomicModel - Construct a thermoeconomic model instance.
+        %   Validates the input cDataModel, initializes the internal result
+        %   container, loads the active state/sample configuration, and
+        %   computes the initial result set.
+        %
         %   Syntax:
-        %     model = cThermoeconomicModel(data)
+        %     obj = cThermoeconomicModel(data)
+        %     obj = cThermoeconomicModel(data,'Name',value,...)
+        %
         %   Input Arguments:
-        %     data - cDataModel object 
-        %     varargin - optional paramaters (see ThermoeconomicModel)
+        %     data     - Valid cDataModel object produced by the reader
+        %     varargin - Optional name-value pairs controlling the active
+        %                state, reference state, summary mode, cost mode,
+        %                diagnosis method, waste analysis, recycling, and
+        %                debug output
+        %
         %   Output Arguments:
-        %     obj - cThermoeconomicModel object
+        %     obj - cThermoeconomicModel object. Check isValid(obj) after
+        %           construction.
+        %
+        %   See also cDataModel, cModelResults
             % Check is data is a valid cDataModel object  
             if ~isObject(data,'cDataModel')
                 obj.printError(cMessages.InvalidObject,class(data));
@@ -283,22 +297,22 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Define get Properties
         %%%
         function res=get.StateNames(obj)
-        % Show a list of the available state names
+        %get.StateNames - Return the available operating state names.
             res=obj.DataModel.StateNames;
         end
     
         function res=get.SampleNames(obj)
-        % Show a list of the avaliable resource samples
+        %get.SampleNames - Return the available resource-sample names.
             res=obj.DataModel.SampleNames;
         end
     
         function res=get.WasteFlows(obj)
-        % Get waste flows list (cell array)
+        %get.WasteFlows - Return the available waste-flow names.
             res=obj.DataModel.WasteFlows;
         end
         
         function res=get.ResourceData(obj)
-        % Get the current values of resource data
+        %get.ResourceData - Return the resource-cost data for the active sample.
             res=obj.rsd;
         end
 
@@ -517,7 +531,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % get cResultInfo objects
         %%%
         function res=productiveStructure(obj)
-        %productiveStructure - Get the Productive Structure cResultInfo object
+        %productiveStructure - Return the productive-structure results.
         %   Syntax:
         %     res = obj.productiveStructure
         %   Output Arguments:
@@ -527,7 +541,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=exergyAnalysis(obj)
-        %exergyAnalysis - Get the ExergyAnalysis cResultInfo object for the current state 
+        %exergyAnalysis - Return the exergy-analysis results for the active state.
         %   Syntax:
         %     res = obj.exergyAnalysis
         %   Output Arguments:
@@ -537,7 +551,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=thermoeconomicAnalysis(obj)
-        %thermoeconomicAnalysis - Get the Thermoeconomic Analysis cResultInfo object for the current state
+        %thermoeconomicAnalysis - Return the thermoeconomic-analysis results.
         %   Syntax:
         %     res = obj.thermoeconomicAnalysis
         %   Output Arguments:
@@ -547,7 +561,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=wasteAnalysis(obj)
-        %wasteAnalysis - Get the Waste Analysis cResultInfo object for the current state and waste flow
+        %wasteAnalysis - Return the waste-analysis results for the active waste flow.
         %   Syntax:
         %     res = obj.wasteAnalysis
         %   Output Arguments:
@@ -557,7 +571,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=thermoeconomicDiagnosis(obj)
-        %thermoeconomicDiagnosis - Get the Thermoeconomic Diagnosis cResultInfo object
+        %thermoeconomicDiagnosis - Return the thermoeconomic-diagnosis results.
         %   Syntax:
         %     res = obj.thermoeconomicDiagnosis
         %   Output Arguments:
@@ -567,7 +581,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function summaryDiagnosis(obj)
-        %summaryDiagnosis - Get the diagnosis results summary
+        %summaryDiagnosis - Display the diagnosis summary for the current result set.
         %   Syntax:
         %     res = obj.summaryDiagnosis
         % 
@@ -578,7 +592,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=productiveDiagram(obj)
-        %productiveDiagram - Get the productive diagram cResultInfo object
+        %productiveDiagram - Return the productive-diagram results.
         %   Syntax:
         %     res = obj.productiveDiagram 
         %   Output Arguments:
@@ -588,7 +602,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=summaryResults(obj)
-        %summaryResults - Get the Summary Results cResultInfo object
+        %summaryResults - Return the summary-results object.
         %   Syntax:
         %     res = obj.summaryResults 
         %   Output Arguments:
@@ -598,7 +612,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=diagramFP(obj)
-        %diagramFP - Get the diagram FP cResultInfo object of the current state
+        %diagramFP - Return the diagram-FP results for the active state.
         %   Syntax:
         %     res = obj.diagramFP
         %   Output Arguments:
@@ -614,7 +628,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=dataInfo(obj)
-        %dataInfo - Get the data model cResultInfo object
+        %dataInfo - Return the data-model result object.
         %   Syntax:
         %     res = obj.dataInfo
         %   Output Arguments:
@@ -624,12 +638,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=getResultInfo(obj,arg)
-        %getResultInfo - Get the cResultInfo with optional parameters
-        %   If no arg it returns the model results of the current state
-        %   If arg is a ResultId number the function returns
-        %   the corresponding cResultInfo
-        %   If arg is a table name it returns the cResultInfo
-        %   that contains the table 
+        %getResultInfo - Return a result object by id or table name.
+        %   With no input, returns the model-result object for the current
+        %   active state. With a valid ResultId, returns the corresponding
+        %   cResultInfo. With a table name, returns the cResultInfo that
+        %   contains that table.
         %
         %   Syntax:
         %     res=obj.getResultInfo
@@ -659,8 +672,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=showResultInfo(obj)
-        %showResultInfo - Show or get a structure containig the results of the model
-        %   It shows the available results of the current model.
+        %showResultInfo - Return or display a structure with the model results.
+        %   Builds the current result set and converts it to a structure
+        %   keyed by the result-variable names defined in cType.
         %
         %   Syntax:
         %     obj.showResultInfo;

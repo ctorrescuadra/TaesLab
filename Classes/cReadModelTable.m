@@ -1,49 +1,73 @@
 classdef (Abstract) cReadModelTable < cReadModel
-%cReadModelTable - Abstract class to read table data model.
-%   It implements the common properties and methods of the model reader
-%   based on tables. The data model configuration is stored in the file
-%   printconfig.json, located in the Classes folder.
-%   The data from tables is stored in cModelTable objects, which are stored
-%   in the ModelTables property as a structure. Each table is identified by
-%   its name. The model is built from the data stored in these tables.
-%   Derived classes: cReadModelCSV and cReadmodelXLS.
-%   It is derived from cReadModel.
+%cReadModelTable - Abstract base class for tabular-format model readers.
+%   Extends cReadModel to handle data model files stored as spreadsheet or
+%   delimited-text tables (XLSX, CSV). Each sheet or file is loaded into a
+%   cModelTable object and stored in the ModelTables struct. The expected
+%   table layout is driven by the configuration in printformat.json.
 %
-%   cReadModelTable methods:
-%     getDataModelConfig - Get data model configuration
-%     buildModelData     - Build the cModelData from data tables
-%     printModelTables   - Show the model tables on console
+%   The reading pipeline follows three stages:
+%     1. Load printformat.json via getDataModelConfig to discover expected
+%        tables and their field definitions.
+%     2. Import each table into a cModelTable (done by the subclass).
+%     3. Call buildModelData to validate tables and assemble a cModelData.
 %
-%   See also cReadModel, cReadModelXLS, cReadModelCSV
+%   Concrete derived classes:
+%     cReadModelCSV - reads a directory of CSV files
+%     cReadModelXLS - reads a multi-sheet XLSX workbook
+%
+%   cReadModelTable Properties:
+%     ModelTables - Struct of cModelTable objects keyed by table name
+%
+%   cReadModelTable Methods:
+%     printModelTables - Display all model tables on the console
+%
+%   Protected Methods:
+%     getDataModelConfig - Load table configuration from printformat.json
+%     buildModelData     - Validate tables and assemble a cModelData object
+%
+%   See also cReadModel, cReadModelXLS, cReadModelCSV, cModelTable
 %
 	properties (Access=public)
-		ModelTables   % Model Tables
+		ModelTables   % Struct of cModelTable objects keyed by table name
 	end
 
     properties (Access=private)
-        ftype   % Flow types
-        fkeys   % Flow keys
-        ptype   % Process types
-        pkeys   % Processes keys
+        ftype   % Flow type indices (cType.FlowType values per flow)
+        fkeys   % Flow key strings (cell array, set by checkProductiveStructure)
+        ptype   % Process type indices (cType.ProcessType values per process)
+        pkeys   % Process key strings (cell array, set by checkProductiveStructure)
     end
 
     methods
         function printModelTables(obj)
-        %printModelTables - Show the model tables on console
-        %   Syntax:
-        %     printModelTables(obj)
+        %printModelTables - Display all loaded model tables on the console.
+        %   Iterates over every cModelTable stored in ModelTables and calls
+        %   printTable on each one.
         %
-            cellfun(@(x) printTable(x),struct2cell(obj.ModelTables));
+        %   Syntax:
+        %     obj.printModelTables()
+        %
+            cellfun(@(x) printTable(x), struct2cell(obj.ModelTables));
         end
     end
 
 	methods (Access=protected)
         function res=getDataModelConfig(obj)
-        %getDataModelConfig - Get data model configuration
+        %getDataModelConfig - Load the table layout configuration from printformat.json.
+        %   Reads the printformat.json configuration file and returns the
+        %   'datamodel' array describing each expected table: its name,
+        %   optional flag, and field definitions (name and datatype).
+        %   Returns cType.EMPTY and logs an error if the file cannot be read.
+        %
         %   Syntax:
-        %     res =obj.getDataModelConf();
+        %     res = obj.getDataModelConfig()
+        %
         %   Output Arguments:
-        %     res - struct array containing the data model configuration
+        %     res - Struct array with one element per expected table.
+        %           Each element has fields: name, optional, fields.
+        %           Returns cType.EMPTY on failure.
+        %
+        %   See also cType.CFGFILE, importJSON
         %
             res=cType.EMPTY;
 			cfgfile=fullfile(cType.ConfigPath,cType.CFGFILE);
@@ -55,13 +79,25 @@ classdef (Abstract) cReadModelTable < cReadModel
 		end
 
         function res=buildModelData(obj,tm)
-        %buildModelData - Build the cModelData from data tables
+        %buildModelData - Validate tables and assemble a cModelData object.
+        %   Validates the ProductiveStructure, ExergyStates, WasteDefinition,
+        %   and ResourcesCost sections in sequence. Each section check method
+        %   logs errors to the caller object. If all mandatory sections pass,
+        %   a cModelData is constructed and any accumulated messages are
+        %   merged into it. Returns an empty cMessageLogger on failure.
+        %
         %   Syntax:
         %     res = obj.buildModelData(tm)
+        %
         %   Input Arguments:
-        %     tm - Structure containing the cModelTable objects
+        %     tm  - Struct of cModelTable objects keyed by table name,
+        %           as populated by the subclass constructor
+        %
         %   Output Arguments:
-        %     res - cModelData object
+        %     res - cModelData object on success, or cMessageLogger
+        %           (invalid) on failure. Check isValid(res).
+        %
+        %   See also cModelData, cModelTable
         %
             res=cMessageLogger();
             % Check input
@@ -85,13 +121,25 @@ classdef (Abstract) cReadModelTable < cReadModel
 
     methods(Access=private)
         function res=checkProductiveStructure(obj,tm)
-        %checkProductiveStructure - check productive structure tables
+        %checkProductiveStructure - Validate Flows and Processes tables.
+        %   Checks that both the Flows and Processes tables are present and
+        %   valid in tm. Validates flow types against cType.FlowType and
+        %   process types against cType.ProcessType, logging an error for
+        %   each invalid entry. Also caches validated flow keys (fkeys),
+        %   flow type indices (ftype), process keys (pkeys), and process
+        %   type indices (ptype) for use by downstream check methods.
+        %
         %   Syntax:
         %     res = obj.checkProductiveStructure(tm)
+        %
         %   Input Arguments:
-        %     tm - cModelTable structure
+        %     tm  - Struct of cModelTable objects keyed by table name
+        %
         %   Output Arguments:
-        %     res - structure with the flows and process tables
+        %     res - Struct with fields 'flows' and 'processes' (struct arrays
+        %           suitable for cModelData), or cType.EMPTY on failure.
+        %
+        %   See also cType.checkFlowTypes, cType.checkProcessTypes
         %
             res=cType.EMPTY;
             % Flows table
@@ -143,13 +191,21 @@ classdef (Abstract) cReadModelTable < cReadModel
         end
 
         function res=checkExergyTable(obj,tm)
-        %checkExergyData - check Exergy table
-        %   Syntax: 
+        %checkExergyTable - Validate the Exergy table and build state data.
+        %   Checks that the Exergy table is present and that its row keys
+        %   match the flow keys cached by checkProductiveStructure. Builds
+        %   a struct array of exergy states, one per data column, each with
+        %   a stateId and an exergy field array keyed by flow key.
+        %
+        %   Syntax:
         %     res = obj.checkExergyTable(tm)
+        %
         %   Input Arguments:
-        %     tm - cModelTable structure
+        %     tm  - Struct of cModelTable objects keyed by table name
+        %
         %   Output Arguments:
-        %     res - structure array with the exergy states
+        %     res - Struct with field 'States' (struct array, one entry per
+        %           operating state), or cType.EMPTY on failure.
         %
             res=cType.EMPTY;
             % Check table status
@@ -178,14 +234,25 @@ classdef (Abstract) cReadModelTable < cReadModel
         end
 
         function res=checkWasteDefinition(obj,tm)
-        %checkWasteDefinition - check WasteDefinition and WasteAllocation tables
-        %   Syntax: 
+        %checkWasteDefinition - Validate WasteDefinition and WasteAllocation tables.
+        %   Returns cType.EMPTY (with an INFO message) when no WASTE flows
+        %   are defined in the productive structure. Otherwise builds default
+        %   waste entries and overrides them with data from the optional
+        %   WasteDefinition and WasteAllocation tables when present.
+        %
+        %   Syntax:
         %     res = obj.checkWasteDefinition(tm)
+        %
         %   Input Arguments:
-        %     tm - cModelTable structure
+        %     tm  - Struct of cModelTable objects keyed by table name
+        %
         %   Output Arguments:
-        %     res - structure array with the waste data 
-        %                 
+        %     res - Struct with field 'wastes' (struct array with flow, type,
+        %           recycle, and optional values fields), or cType.EMPTY
+        %           when no waste flows exist.
+        %
+        %   See also cType.DEFAULT_WASTE_ALLOCATION, cType.checkWasteTypes
+        %
             res=cType.EMPTY;
             % Check if the model has waste flows
             rid=find(obj.ftype==cType.Flow.WASTE);
@@ -288,14 +355,26 @@ classdef (Abstract) cReadModelTable < cReadModel
         end
         
         function res=checkResourcesCost(obj,tm)
-        %checkResourcesCost - Check resources cost table
-        %   Syntax: 
+        %checkResourcesCost - Validate the ResourcesCost table and build sample data.
+        %   Returns cType.EMPTY silently when the ResourcesCost table is
+        %   absent (the section is optional). When present, validates resource
+        %   types (FLOW / PROCESS) and cross-checks keys against the flow and
+        %   process keys cached by checkProductiveStructure. Builds a Samples
+        %   struct array, one entry per cost sample column.
+        %
+        %   Syntax:
         %     res = obj.checkResourcesCost(tm)
+        %
         %   Input Arguments:
-        %     tm - cModelTable structure
+        %     tm  - Struct of cModelTable objects keyed by table name
+        %
         %   Output Arguments:
-        %     res - structure array with the resource cost data
-        %     
+        %     res - Struct with field 'Samples' (struct array with sampleId,
+        %           flows, and optional processes fields), or cType.EMPTY
+        %           when the table is absent.
+        %
+        %   See also cType.checkResourceTypes
+        %
             res=cType.EMPTY;
             if ~isfield(tm,'ResourcesCost') || ~isValid(tm.ResourcesCost)
                 return

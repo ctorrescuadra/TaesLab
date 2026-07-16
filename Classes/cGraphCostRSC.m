@@ -1,36 +1,41 @@
 classdef cGraphCostRSC < cGraphResults
-%cGraphCostRSC - Plot the cost distribution due to resources graph.
-%  This class creates a stacked bar graph or a pie chart from a cTable object
-%  containing the resource-specific cost data of a productive structure.
-%  If a single flow or process is selected a pie chart is shown for that resource,
-%  otherwise a stacked bar graph is shown for all the selected resources.
+%cGraphCostRSC - Plot the resource-specific cost distribution graph.
+%   Creates either a stacked bar chart or a pie chart from a cTable containing
+%   resource-specific cost data, depending on the variables argument supplied
+%   to the constructor:
+%     - Single flow/process name  → pie chart for that variable
+%     - Cell array of names       → stacked bar chart for the listed variables
+%     - 'ALL'                     → stacked bar chart for all variables
+%     - Omitted or empty          → stacked bar chart for default system outputs
 %
-%   cGraphCostRSC methods:
-%     cGraphCostRSC  - Build an instance of the class
-%     showGraph      - Show the graph in a window
-%     showGraphUI    - Show the graph in the graph panel of a GUI app
+%   cGraphCostRSC Methods:
+%     cGraphCostRSC - Construct a cGraphCostRSC from a resource-cost table
+%     showGraph     - Display the graph in a standalone figure window
+%     showGraphUI   - Display the stacked bar graph in an App Designer graph panel
 %
 %   See also cGraphResults, cExergyCost
 %
     properties(Access=private)
-        isPieChart    %Pie Chart is used
+        isPieChart = false  % True when a single variable was requested and a pie chart is rendered
     end
 
     methods
         function obj=cGraphCostRSC(tbl,info,variables)
-        %cGraphCostRSC - Build an instance of the object
-        %   Syntax:
-        %     obj = cGraphRecycling(tbl)
-        %   Input Arguments:
-        %     tbl - cTable with the data to show graphically
-        %     info - cExergyCost object with additional information for the graph
-        %     variables - Variables to consider in the graph
-        %       cell array | array of chars
+        %cGraphCostRSC - Construct a cGraphCostRSC from a resource-cost table
         %
+        %   Syntax:
+        %     obj = cGraphCostRSC(tbl, info)
+        %     obj = cGraphCostRSC(tbl, info, variables)
+        %   Input Arguments:
+        %     tbl       - cTable containing the resource-specific cost data
+        %     info      - cExergyCost object providing productive structure metadata
+        %     variables - Variable selection (optional):
+        %                   omitted or empty  → default system output flows/processes
+        %                   cell array        → stacked bar for the listed names
+        %                   'ALL'             → stacked bar for every row in tbl
+        %                   char (single name)→ pie chart for that flow or process
         %   Output Arguments:
-        %    obj - cGraphCost object
-        %       if variables exist and is a string then a pie chart is shown for that variable
-        %       if variables do not exist or is a cell array then a stacked bar graph is shown
+        %     obj - cGraphCostRSC object (check obj.status before use)
         %   
             obj.Style = cType.GraphStyles.STACK;
             % Validate input arguments
@@ -102,7 +107,9 @@ classdef cGraphCostRSC < cGraphResults
         end
 
         function showGraph(obj)
-        %showGraph - Show the graph in a window
+        %showGraph - Display either the stacked bar graph or the pie chart in a standalone figure
+        %   The chart type is selected automatically based on the variables argument
+        %   passed to the constructor (pie chart for a single variable, bar otherwise).
         %   Syntax:
         %     obj.showGraph
         %
@@ -114,12 +121,15 @@ classdef cGraphCostRSC < cGraphResults
         end
         
         function showGraphUI(obj,app)
-        %showGraphUI - Show the graph in a GUI app
+        %showGraphUI - Display the stacked bar graph in an App Designer graph panel
+        %   Note: the GUI always uses the stacked bar layout regardless of the
+        %   chart type selected for the standalone showGraph.
+        %
         %   Syntax:
         %     obj.showGraphUI(app)
-		%	Input Arguments:
-		%	  app - GUI app reference object
-		%
+        %   Input Arguments:
+        %     app - matlab.apps.AppBase object whose UIAxes hosts the graph
+        %
             M=numel(obj.Legend);
             cm=turbo(M);
             if app.isColorbar
@@ -140,10 +150,10 @@ classdef cGraphCostRSC < cGraphResults
 
     methods(Access=private)
         function showBarGraph(obj)
-        %showBarGraph - Show the bar graph in a window
+        %showBarGraph - Display the resource-cost stacked bar graph in a standalone figure
         %   Syntax:
-        %     obj.showGraph
-		%
+        %     obj.showBarGraph
+        %
             M=numel(obj.Legend);
             cm=turbo(M);
             set(groot,'defaultTextInterpreter','none');
@@ -161,7 +171,9 @@ classdef cGraphCostRSC < cGraphResults
         end
 
         function showPieChart(obj)
-    	%showPieChart - Plot the resource cost in a pie chart
+        %showPieChart - Display the resource-cost contribution of a single variable as a pie chart
+        %   Slices with a contribution below 1 % are merged into the remainder and hidden.
+        %
         %   Syntax:
         %     obj.showPieChart
         %
@@ -186,15 +198,18 @@ classdef cGraphCostRSC < cGraphResults
     
     methods(Static,Access=private)
         function [res,idx]=getCategories(tbl,info)
-        %getCategories - Get the categories to show in the graph
+        %getCategories - Determine the default variable categories from the productive structure
+        %   Returns the system output flows when tbl is a flows table, or the
+        %   output processes otherwise.
+        %
         %   Syntax:
-        %     [res,idx] = cGraphCostRSC.getCategories(tbl,info)
+        %     [res, idx] = cGraphCostRSC.getCategories(tbl, info)
         %   Input Arguments:
-        %     tbl - cTable with the data to show graphically
-        %     info - cExergyCost object with additional information for the graph
+        %     tbl  - cTable containing the resource-specific cost data
+        %     info - cExergyCost object providing productive structure metadata
         %   Output Arguments:
-        %     res - Cell array with the categories to show
-        %     idx - Indices of the categories in the table
+        %     res - Cell array of default category name strings
+        %     idx - Logical or numeric index vector into the table rows
         %
             if tbl.isFlowsTable
                 idx=info.ps.SystemOutputFlows;

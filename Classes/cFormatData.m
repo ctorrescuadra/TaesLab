@@ -1,40 +1,69 @@
 classdef cFormatData < cTablesDefinition
-%cFormatData - Get the format configuration data used to display tables of results.
-%   This class loads the format configuration data from a struct, which
-%   should be obtained from a JSON file printconfig.json.
-%   The format configuration data contains the format definition of each type
-%   of variable, and the definition of each table used in TaesLab.
-%	cResultTableBuilder derives from this class.
-% 	
-%   cFormatData methods:
-%	  cFormatData        - Create an instance of the class
-%     getFormat          - Get the format of a variable type
-%     getUnit            - Get the units of a variable type
-%     getResultId        - Get the ResultId of a table
-%     getTableProperties - Get the properties of a cTable
+%cFormatData - Apply model-specific format overrides to the TaesLab table registry.
+%   cFormatData extends cTablesDefinition by overriding the default numeric
+%   formats and unit labels stored in cfgTypes with the values supplied by
+%   the model's Format section (cModelData.Format).
 %
-%   cFormatData methods (inherited from cTablesDefinition):
-%     getTablesDirectory     - Get a cTableData with the tables index
-%     getTableDefinition     - Get configuration properties of a table
-%     getTableInfo           - Get table info as a struct
-%     getTableId             - Get the internal TableId of a table
-%     getResultIdTables      - Get the tables of a specific ResultId
-%     getDataModelProperties - Get the data model table properties
-%     getCellTables          - Get the cell tables configuration
-%     getMatrixTables        - Get the matrix tables configuration
-%     getSummaryTables       - Get the summary tables configuration
+%   cTablesDefinition reads the global table definitions from cType.CFGFILE
+%   (printformat.json) and populates cfgTypes with toolbox-wide defaults.
+%   cFormatData replaces those defaults entry-by-entry using the per-variable
+%   definitions from the model file, so that every result table produced for
+%   that model uses the correct physical units and numeric precision.
 %
-%   See also printformat.json, cTablesDefinition, cResultTableBuilder
+%   Each format definition in cModelData.Format.definitions must supply:
+%     key       - Variable type key (must match a cType.Format identifier)
+%     width     - Total field width (must be > 1)
+%     precision - Number of decimal places (must be > 0 and < width)
+%     unit      - Physical unit label string
+%   A C-like format string  '%<width>.<precision>f'  is constructed and
+%   stored in cfgTypes for use by all downstream table-building methods.
+%
+%   cFormatData Methods:
+%     cFormatData        - Construct an instance from a cModelData format struct
+%     getFormat          - Return the C-like format string for a variable type
+%     getUnit            - Return the unit label for a variable type
+%     getResultId        - Return the ResultId associated with a table name
+%     getTableProperties - Return the definition and/or properties of a table
+%
+%   cFormatData Methods (inherited from cTablesDefinition):
+%     getTablesDirectory     - Return a cTableData listing all registered tables
+%     getTableDefinition     - Return the raw config struct for a named table
+%     getTableInfo           - Return a summary-info struct for a named table
+%     getTableId             - Return the dictionary index of a table name
+%     getResultIdTables      - Return the table names for a given ResultId
+%     getDataModelProperties - Return the data-model table configuration(s)
+%     getCellTables          - Return cell-table configuration struct(s)
+%     getMatrixTables        - Return matrix-table configuration struct(s)
+%     getSummaryTables       - Return summary-table configuration struct(s)
+%
+%   See also cTablesDefinition, cResultTableBuilder, cModelData
 %
 	methods
 		function obj=cFormatData(data)
-		%cFormatData - Create an instance of the class
+		%cFormatData - Construct an instance from a cModelData format struct
+		%   Calls the cTablesDefinition constructor to load the toolbox-wide
+		%   defaults, then iterates over data.definitions to override cfgTypes
+		%   with model-specific width, precision and unit values.
+		%   Construction sets the object status to false under any of the
+		%   following conditions:
+		%     - data is not a struct or lacks a 'definitions' field
+		%     - any definition is missing the required fields
+		%       (key, width, precision, unit)
+		%     - any definition has an unrecognised key (not in cType.Format)
+		%     - any definition has an invalid width/precision relationship
+		%       (width must be > 1, precision must be > 0, width > precision)
+		%
 		%   Syntax:
 		%     obj = cFormatData(data)
+		%
 		%   Input Arguments:
-		%	  data - Format struct from cModelData
+		%     data - Struct with a 'definitions' field containing an array of
+		%            format-definition structs (from cModelData.Format).
+		%            Each element must have fields: key, width, precision, unit.
+		%
 		%   Output Arguments:
-		%     obj - cFormatData object
+		%     obj  - cFormatData object.  Use isValid(obj) to confirm
+		%            successful construction before calling other methods.
 		%
 			% Check input
 			if ~isstruct(data) || ~isfield(data,'definitions') 
@@ -65,37 +94,57 @@ classdef cFormatData < cTablesDefinition
         end
 
 		function res=getFormat(obj,id)
-		%getFormat - Get the format of a type of variable
+		%getFormat - Return the C-like format string for a variable type
+		%   Returns the format string stored in cfgTypes(id).format, which
+		%   was built by the constructor as '%<width>.<precision>f' using the
+		%   model-specific values.  Example return value: '%8.3f'.
+		%
 		%   Syntax:
-		%     format = obj.getFormat(id)
+		%     res = obj.getFormat(id)
+		%
 		%   Input Arguments:
-		%     id - Variable type, see cType.Format
+		%     id  - Numeric format-type index (cType.Format value).
+		%
 		%   Output Arguments:
-		%     res - char array with the C-like format of the variable
+		%     res - Char string with the C-like format, e.g. '%8.3f'.
 		%
 			res=obj.cfgTypes(id).format;
 		end
 				
 		function res=getUnit(obj,id)
-		%getUnit - Get the unit of a type of variable
+		%getUnit - Return the physical unit label for a variable type
+		%   Returns the unit string stored in cfgTypes(id).unit, which was
+		%   set either from the toolbox default (cType.CFGFILE) or overridden
+		%   by the model-specific format definition.
+		%
 		%   Syntax:
 		%     res = obj.getUnit(id)
+		%
 		%   Input Arguments:
-		%     id - Variable type, see cType.Format
+		%     id  - Numeric format-type index (cType.Format value).
+		%
 		%   Output Arguments:
-		%     res - char array with the unit label of the variable
+		%     res - Char string with the unit label, e.g. 'kW' or ''.
 		%
 			res=obj.cfgTypes(id).unit;
 		end
 
 		function res=getResultId(obj,table)
-		%getResultId - Get the ResultId of a table
+		%getResultId - Return the ResultId associated with a table name
+		%   Looks up the table in the registry via getTableDefinition and
+		%   returns its resultId field.  Returns 0 when table is not a string
+		%   or is not registered, providing a safe sentinel the caller can
+		%   test without error.
+		%
 		%   Syntax:
 		%     res = obj.getResultId(table)
+		%
 		%   Input Arguments:
-		%     table - Name of the table (char)
+		%     table - Table name string to look up.
+		%
 		%   Output Arguments:
-		%     res - ResultId of the table (scalar numeric)
+		%     res   - Positive integer ResultId (cType.ResultId value) if the
+		%             table is registered; 0 otherwise.
 		%
 			res=0;
 			if nargin<2 || ~ischar(table),return;end
@@ -106,14 +155,30 @@ classdef cFormatData < cTablesDefinition
 		end
 		
 		function [tdef,tprop]=getTableProperties(obj,name)
-		%getTableProperties - Get the properties of a cTable
+		%getTableProperties - Return the definition and/or properties of a named table
+		%   Provides a two-level view of a table's configuration:
+		%     tdef  - Raw configuration struct from the JSON config file
+		%             (same as getTableDefinition).  Always computed.
+		%     tprop - Properties struct ready for passing to the cTable
+		%             constructor (cTableCell or cTableMatrix).  Only
+		%             computed when two output arguments are requested,
+		%             avoiding unnecessary work in single-output calls.
+		%   The type of tprop depends on the table category:
+		%     TABLE   → getCellTableProperties   → cTableCell properties
+		%     MATRIX  → getMatrixTableProperties  → cTableMatrix properties
+		%     SUMMARY → getSummaryTableProperties → cTableMatrix properties
+		%
 		%   Syntax:
-		%     [tdef,tprop] = obj.getTableProperties(name)
+		%     tdef          = obj.getTableProperties(name)
+		%     [tdef, tprop] = obj.getTableProperties(name)
+		%
 		%   Input Arguments:
-		%     name - name of the table
+		%     name  - Table name string to look up.
+		%
 		%   Output Arguments:
-		%     tdef  - definition struct of the table
-		%     tprop - properties of the cTable
+		%     tdef  - Raw configuration struct (see getTableDefinition).
+		%     tprop - cTable properties struct; only computed when requested.
+		%             Returns cType.EMPTY when the table type is unrecognised.
 		%
 			tprop=cType.EMPTY;
 			% Get table definition
@@ -135,13 +200,20 @@ classdef cFormatData < cTablesDefinition
 
     methods(Access=protected)						
 		function res=getTableHeader(obj,tdef)
-		%getTableHeader - Get the table header cell array
+		%getTableHeader - Return the column-header cell array for a table definition
+		%   Retrieves the unit label for each column via getTableUnits and
+		%   concatenates it with the field header string, producing entries
+		%   such as 'Exergy [kW]' when a unit is present or just 'Type' when
+		%   the unit label is empty.
+		%
 		%   Syntax:
 		%     res = obj.getTableHeader(tdef)
+		%
 		%   Input Arguments:
-		%     tdef - table definition struct
+		%     tdef - Table definition struct (from getTableDefinition).
+		%
 		%   Output Arguments:
-		%     res - cell array with the header string for each column
+		%     res  - 1×M cell array of column-header strings.
 		%
 			units=obj.getTableUnits(tdef);
 			header={tdef.fields.header};
@@ -149,37 +221,59 @@ classdef cFormatData < cTablesDefinition
 		end
 			
 		function format=getTableFormat(obj,tdef)
-		%getTableFormat - Get a cell array with the C-like format of each table column
+		%getTableFormat - Return the C-like format string for each column of a table
+		%   Maps the type index of each field in tdef to the corresponding
+		%   format entry in cfgTypes using vectorised indexing.
+		%
 		%   Syntax:
 		%     format = obj.getTableFormat(tdef)
+		%
 		%   Input Arguments:
-		%     tdef - table definition struct
+		%     tdef   - Table definition struct (from getTableDefinition).
+		%
 		%   Output Arguments:
-		%     format - cell array with the C-like format string of each column
+		%     format - 1×M cell array of C-like format strings, one per column.
 		%
 			idx=[tdef.fields.type];
 			format={obj.cfgTypes(idx).format};
         end
 	
 		function units=getTableUnits(obj,tdef)
-		%getTableUnits - Get a cell array with the units for each table column
+		%getTableUnits - Return the physical unit label for each column of a table
+		%   Maps the type index of each field in tdef to the corresponding
+		%   unit entry in cfgTypes using vectorised indexing.
+		%
 		%   Syntax:
 		%     units = obj.getTableUnits(tdef)
+		%
 		%   Input Arguments:
-		%     tdef - table definition struct
+		%     tdef  - Table definition struct (from getTableDefinition).
+		%
 		%   Output Arguments:
-		%     units - cell array with the unit label of each column
+		%     units - 1×M cell array of unit label strings, one per column.
 		%
 			idx=[tdef.fields.type];
 			units={obj.cfgTypes(idx).unit};
         end
 
         function tp=getCellTableProperties(obj,td)
-		%getCellTableProperties - Get the cTableCell properties from table definition
+		%getCellTableProperties - Build a cTableCell properties struct from a definition
+		%   Assembles the tp struct that is passed to the cTableCell constructor
+		%   by reading scalar flags from the definition (graph, node, number,
+		%   rsc) and deriving array properties (DataType, Unit, Format,
+		%   FieldNames) from the fields sub-array via getTableUnits and
+		%   getTableFormat.
+		%
+		%   Syntax:
+		%     tp = obj.getCellTableProperties(td)
+		%
 		%   Input Arguments:
-		%     td - table definition structure
+		%     td - Cell-table definition struct (from cfgTables).
+		%
 		%   Output Arguments:
-		%     tp - struct with cTableCell properties
+		%     tp - Struct with fields: Name, Description, DataType, Unit,
+		%          Format, FieldNames, ShowNumber, GraphType, NodeType,
+		%          Resources.
 		%
 			tp=struct('Name',td.key,...
 				      'Description',td.description,...
@@ -199,11 +293,22 @@ classdef cFormatData < cTablesDefinition
         end
 
         function tp=getMatrixTableProperties(obj,td)
-		%getMatrixTableProperties - Get the cTableMatrix properties from table definition
+		%getMatrixTableProperties - Build a cTableMatrix properties struct from a definition
+		%   Assembles the tp struct that is passed to the cTableMatrix
+		%   constructor for square numeric tables (FP tables, cost allocation
+		%   matrices).  Unit and Format are scalar values taken from cfgTypes
+		%   via td.type, and RowTotal/ColTotal control the totals row/column.
+		%
+		%   Syntax:
+		%     tp = obj.getMatrixTableProperties(td)
+		%
 		%   Input Arguments:
-		%     td - table definition structure
+		%     td - Matrix-table definition struct (from cfgMatrices).
+		%
 		%   Output Arguments:
-		%     tp - struct with cTableMatrix properties
+		%     tp - Struct with fields: Name, Description, Unit, Format,
+		%          GraphType, GraphOptions, Resources, SummaryType, NodeType,
+		%          RowTotal, ColTotal.
 		%
 			tp=struct('Name',td.key,...
 				      'Description',td.header,...  
@@ -219,12 +324,22 @@ classdef cFormatData < cTablesDefinition
         end
 
         function tp=getSummaryTableProperties(obj,td)
-		%getSummaryTableProperties - Get the cTableMatrix properties from summary table definition
+		%getSummaryTableProperties - Build a cTableMatrix properties struct for a summary table
+		%   Like getMatrixTableProperties, but sets SummaryType from td.stable
+		%   (instead of cType.SummaryId.NONE) and forces RowTotal and ColTotal
+		%   to false, since summary tables do not include totals rows/columns.
+		%
+		%   Syntax:
+		%     tp = obj.getSummaryTableProperties(td)
+		%
 		%   Input Arguments:
-		%     td - table definition structure
+		%     td - Summary-table definition struct (from cfgSummary).
+		%
 		%   Output Arguments:
-		%     tp - struct with cTableMatrix properties for summary table
-		% 
+		%     tp - Struct with fields: Name, Description, Unit, Format,
+		%          GraphType, GraphOptions, Resources, SummaryType, NodeType,
+		%          RowTotal (false), ColTotal (false).
+		%
 			tp=struct('Name',td.key,...
 				      'Description',td.header,...  
                       'Unit',obj.getUnit(td.type),...

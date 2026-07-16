@@ -1,32 +1,38 @@
 classdef cWasteData < cMessageLogger
-%cWasteData - Get the waste data information.
-%   This class is used to store and manage the waste data information.
-%   It is used by cExergyCost to perform the waste allocation and recycling
+%cWasteData - Store and manage waste flow allocation data for a productive structure.
+%   Validates waste definition data against the productive structure. Provides
+%   per-waste allocation type, manual allocation values, and recycle ratio
+%   management. Used by cExergyCost to perform waste allocation and recycling
 %   analysis.
 %
+%   The object is invalid if the data struct is malformed, waste keys do not
+%   match the productive structure, or allocation values are inconsistent.
+%
 %   cWasteData properties:
-%     NrOfWastes    - Number of wastes
-%     Names		    - Waste Flow names
-%     Flows         - Waste Flows Id
-%     Processes     - Dissipative Processes Id
-%     Type          - Waste Allocation types
-%     TypeId        - Waste Type Id
-%     Values        - Waste Allocation values
-%     RecycleRatio  - Recycle Ratio
+%     NrOfWastes    - Number of waste flows
+%     Names         - (1 x NrOfWastes cell array of char) Waste flow keys
+%     Flows         - (1 x NrOfWastes integer array) Waste flow indices
+%     Processes     - (1 x NrOfWastes integer array) Dissipative process indices
+%     Type          - (1 x NrOfWastes cell array of char) Waste allocation type names
+%     TypeId        - (1 x NrOfWastes integer array) Waste allocation type identifiers
+%     Values        - (NrOfWastes x NrOfProcesses double) Manual allocation values
+%     RecycleRatio  - (1 x NrOfWastes double) Recycle ratio for each waste flow
+%     ps            - cProductiveStructure object for the productive structure
 %
 %   cWasteData methods:
-%	  cWasteData      - Create an instance of the class
-%     getWasteFlows    - Get the waste flows key
-%     getWasteIndex    - Get the waste flows index
-%     existsWaste       - Check if a waste flow is defined
-%     getValues        - Get the allocation cost values of a waste
-%     getType          - Get the allocation type of a waste
-%     getRecycleRatio  - Get the recycling ratio of a waste
+%     cWasteData       - Construct an instance of this class
+%     getWasteFlows    - Get waste flow keys, optionally filtered by index
+%     getWasteIndex    - Get the index of a waste flow given its key
+%     existsWaste      - Check if a waste flow key is defined
+%     getValues        - Get the manual allocation values of a waste
+%     getType          - Get the allocation type name of a waste
+%     getRecycleRatio  - Get the recycle ratio of a waste
 %     setType          - Set the allocation type of a waste
-%     setValues        - Set the allocation calues of a waste
-%     setRecycleRatio  - Set the recycling ratio of a waste
+%     setValues        - Set the manual allocation values of a waste
+%     setRecycleRatio  - Set the recycle ratio of a waste
+%     updateValues     - Replace the full waste allocation matrix (internal use)
 %
-%   See also cDataModel
+%   See also cModelData, cExergyCost, cProductiveStructure
 %
 	properties (GetAccess=public,SetAccess=private)
         NrOfWastes      % Number of wastes
@@ -42,14 +48,27 @@ classdef cWasteData < cMessageLogger
     
 	methods
 		function obj=cWasteData(ps,data)
-		%cWasteData - Create an instance of the class
+		%cWasteData - Construct an instance of this class
+		%   Validates waste definition data against the productive structure.
+		%   Checks waste keys, allocation types, recycle ratios, and any manual
+		%   allocation values. The object is invalid if ps is not a valid
+		%   cProductiveStructure, the data struct is malformed, or any waste
+		%   definition contains an error.
+		%
 		%   Syntax:
-		%   	obj = cWasteData(ps,data)
-		% 	Input Arguments:
-		%     ps - cProductiveStructure object
-		%	  data - waste definition from cModelData
+		%     obj = cWasteData(ps, data)
+		%
+		%   Input Arguments:
+		%     ps   - cProductiveStructure object with a valid productive structure
+		%     data - (struct) Waste definition data with required field:
+		%              wastes - (1 x NrOfWastes struct array) with fields:
+		%                         flow    - waste flow key (char)
+		%                         type    - allocation type (char, see cType.WasteAllocation)
+		%                         recycle - recycle fraction [0,1] (optional, default 0)
+		%                         values  - manual allocation entries (optional)
+		%
 		%   Output Arguments:
-		%     obj - cWasteData object
+		%     obj  - cWasteData object; check isValid(obj) before use
 		%
 			% Check input arguments
             if ~isObject(ps,'cProductiveStructure')
@@ -151,13 +170,22 @@ classdef cWasteData < cMessageLogger
 		end
 
 		function res=getWasteFlows(obj,idx)
-		%getWasteFlows - Get the waste name of the corresponding index
+		%getWasteFlows - Get waste flow keys, optionally filtered by index
+		%   When called with no arguments returns all waste flow keys. When
+		%   called with an index returns the key for that waste.
+		%
 		%   Syntax:
-		%     res = obj.getWasteFlows  
+		%     res = obj.getWasteFlows
+		%     res = obj.getWasteFlows(idx)
+		%
 		%   Input Arguments:
-		%     idx - waste index to retrieve
+		%     idx - (integer, optional) Waste index in range [1, NrOfWastes]
+		%
 		%   Output Arguments:
-		%    res - cell array with the waste flows keys
+		%     res - (cell array of char) Waste flow key(s); cType.EMPTY_CELL if
+		%           idx is out of range
+		%
+		%   See also getWasteIndex, existsWaste
 		%
 			res=cType.EMPTY_CELL;
 			if nargin==1
@@ -170,13 +198,18 @@ classdef cWasteData < cMessageLogger
 		end
 			
 		function res=getWasteIndex(obj,key)
-		%getWasteIndex - Get the id of the corresponding waste key
+		%getWasteIndex - Get the index of a waste flow given its key
+		%
 		%   Syntax:
 		%     res = obj.getWasteIndex(key)
+		%
 		%   Input Arguments:
-		%     key - waste flow name
+		%     key - (char) Waste flow key to look up
+		%
 		%   Output Arguments:
-		%     res - waste flow id
+		%     res - (integer) Index of the waste flow; 0 if not found
+		%
+		%   See also existsWaste, getWasteFlows
 		%
 			res=0;
 			if ischar(key)
@@ -185,13 +218,19 @@ classdef cWasteData < cMessageLogger
 		end
 			
 		function res=existsWaste(obj,key)
-		%existsWaste - Determine if waste key is defined
+		%existsWaste - Check if a waste flow key is defined in this object
+		%
 		%   Syntax:
 		%     res = obj.existsWaste(key)
+		%
 		%   Input Arguments:
-		%    key - waste flow name
+		%     key - (char) Waste flow key to check
+		%
 		%   Output Arguments:
-		%    res - true | false
+		%     res - (logical) true if key is among the defined waste flows;
+		%           false otherwise
+		%
+		%   See also getWasteIndex, getWasteFlows
 		%
 			res=false;
 			if ischar(key)
@@ -200,13 +239,19 @@ classdef cWasteData < cMessageLogger
         end
 
 		function res=getValues(obj,arg)
-		%getValues - Get the allocation ratios of a waste
+		%getValues - Get the manual allocation values of a waste
+		%
 		%   Syntax:
 		%     res = obj.getValues(arg)
+		%
 		%   Input Arguments:
-		%     arg - waste key or id
+		%     arg - (char or integer) Waste flow key or index
+		%
 		%   Output Arguments:
-		%     res - vector with the allocation waste ratios of waste
+		%     res - (1 x NrOfProcesses double) Manual allocation values for
+		%           the specified waste; cType.EMPTY if arg is invalid
+		%
+		%   See also setValues, getType, getRecycleRatio
 		%
 			res=cType.EMPTY;
 			id=validateArg(obj,arg);
@@ -216,14 +261,21 @@ classdef cWasteData < cMessageLogger
 		end
 	
 		function status=setValues(obj,arg,val)
-		%setValues - Set the cost allocation values of a waste
+		%setValues - Set the manual allocation values of a waste
+		%   Sets the type to MANUAL and stores the allocation row vector. All
+		%   values must be non-negative and at least one must be positive.
+		%
 		%   Syntax:
-		%     res = obj.setValues(arg,val)
+		%     status = obj.setValues(arg, val)
+		%
 		%   Input Arguments:
-		%     arg - waste key name or id
-		%     val - Vector contains the allocation values
+		%     arg - (char or integer) Waste flow key or index
+		%     val - (1 x NrOfProcesses double) Allocation values (non-negative)
+		%
 		%   Output Arguments:
-		%     res - true | false
+		%     status - (logical) true if the values were accepted; false otherwise
+		%
+		%   See also getValues, setType, setRecycleRatio
 		%
 			status=false;
 			id=validateArg(obj,arg);
@@ -242,13 +294,19 @@ classdef cWasteData < cMessageLogger
 		end
 		
 		function res=getType(obj,arg)
-		%getType - Get the waste allocation type
+		%getType - Get the allocation type name of a waste
+		%
 		%   Syntax:
 		%     res = obj.getType(arg)
+		%
 		%   Input Arguments:
-		%     arg - waste key or id
+		%     arg - (char or integer) Waste flow key or index
+		%
 		%   Output Arguments:
-		%     res - waste type 
+		%     res - (char) Allocation type name (see cType.WasteAllocation);
+		%           cType.EMPTY_CHAR if arg is invalid
+		%
+		%   See also setType, getValues, getRecycleRatio
 		%
 			res=cType.EMPTY_CHAR;
 			id=validateArg(obj,arg);
@@ -258,14 +316,19 @@ classdef cWasteData < cMessageLogger
 		end
 	
 		function status=setType(obj,arg,type)
-		%setType - Set the waste allocation type
-		% 	Syntax:
-		%     res = obj.setType(arg,val)
+		%setType - Set the allocation type of a waste
+		%
+		%   Syntax:
+		%     status = obj.setType(arg, type)
+		%
 		%   Input Arguments:
-		%     arg - waste key name or id
-		%     type - waste type
+		%     arg  - (char or integer) Waste flow key or index
+		%     type - (char) Allocation type name (see cType.WasteAllocation)
+		%
 		%   Output Arguments:
-		%     res - true | false
+		%     status - (logical) true if the type was accepted; false otherwise
+		%
+		%   See also getType, setValues, setRecycleRatio
 		%
 			status=false;
 			id=validateArg(obj,arg);
@@ -281,13 +344,18 @@ classdef cWasteData < cMessageLogger
 		end            
 					
 		function res=getRecycleRatio(obj,arg)
-		%getRecycleRatio - Get the recycle ratio value of a waste
+		%getRecycleRatio - Get the recycle ratio of a waste
+		%
 		%   Syntax:
-		%     res = obj.RecycleRatio(arg)
+		%     res = obj.getRecycleRatio(arg)
+		%
 		%   Input Arguments:
-		%     arg - waste key or id
+		%     arg - (char or integer) Waste flow key or index
+		%
 		%   Output Arguments:
-		%     res - waste recycle ratio
+		%     res - (double) Recycle ratio in [0, 1]; cType.EMPTY if arg is invalid
+		%
+		%   See also setRecycleRatio, getValues, getType
 		%
 			res=cType.EMPTY;
 			id=validateArg(obj,arg);
@@ -298,13 +366,19 @@ classdef cWasteData < cMessageLogger
 		
 		function status=setRecycleRatio(obj,arg,val)
 		%setRecycleRatio - Set the recycle ratio of a waste
+		%
 		%   Syntax:
-		%     res = obj.setType(arg,val)
+		%     status = obj.setRecycleRatio(arg, val)
+		%
 		%   Input Arguments:
-		%     arg - waste key name or id
-		%     val - recycle ratio
+		%     arg - (char or integer) Waste flow key or index
+		%     val - (double) Recycle ratio; must be a scalar in [0, 1]
+		%
 		%   Output Arguments:
-		%     res - true | false
+		%     status - (logical) true if the ratio was accepted; false otherwise
+		%
+		%   See also getRecycleRatio, setType, setValues
+		%
 			status=false;
 			id=validateArg(obj,arg);
 			if id<1
@@ -317,13 +391,19 @@ classdef cWasteData < cMessageLogger
 		end			
 	
 		function status=updateValues(obj,val)
-		%updateValues - Set the waste table values (internal use)
+		%updateValues - Replace the full waste allocation matrix (internal use)
+		%   Replaces the Values matrix if val has the same dimensions. Used
+		%   internally by cExergyCost after waste recycling computation.
+		%
 		%   Syntax:
-		%     status=val=updateValues(val)
+		%     status = obj.updateValues(val)
+		%
 		%   Input Arguments:
-		%     val - Waste allocation matrix
+		%     val - (NrOfWastes x NrOfProcesses double) Waste allocation matrix
+		%
 		%   Output Arguments:
-		%     status - true | false
+		%     status - (logical) true if dimensions match and values were updated;
+		%              false otherwise
 		%
 			status=false;
 			if all(size(val)==size(obj.Values))
@@ -335,13 +415,16 @@ classdef cWasteData < cMessageLogger
 		
 	methods(Access=private)
 		function res=validateArg(obj,arg)
-		%validateArgument - Get the index of a waste key
-		% 	Syntax:
-		%     res = obj.validateArgument(arg)
+		%validateArg - Resolve a waste key or index to a validated waste index
+		%
+		%   Syntax:
+		%     res = obj.validateArg(arg)
+		%
 		%   Input Arguments:
-		%     arg - waste key or index
+		%     arg - (char) waste flow key; or (integer) waste index in [1, NrOfWastes]
+		%
 		%   Output Arguments:
-		%     res - waste key index
+		%     res - (integer) Validated waste index; cType.EMPTY if arg is invalid
 		%
 			res=cType.EMPTY;
 			if ischar(arg)

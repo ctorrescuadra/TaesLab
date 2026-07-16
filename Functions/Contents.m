@@ -2,25 +2,19 @@
 %   Version 1.8 (R2024b) 01-Oct-2025
 %
 % Import/Export Functions
+%   buildMessage              - Build error messages for TaesLab functions.
 %   exportCSV                 - Export cell array to CSV file.
 %   exportJSON                - Export MATLAB structure to JSON file.
 %   exportMAT                 - Export cTaesLab object to MAT file.
+%   fdisplay                  - Display a matrix A using C-like formatting.
 %   importCSV                 - Import CSV file contents as cell array.
 %   importJSON                - Import JSON file and parse into MATLAB structure.
 %   importMAT                 - Import cTaesLab object from MAT file.
-%
-% Validation Functions
-%   isFilename                - Validate if a filename is acceptable for read/write operations.
-%   isIndex                   - Check if an integer value is within a valid index range.
-%   isInteger                 - Check if the value is an integer number.
-%   isMatlab                  - Identifies if the function has been executed in MATLAB.
-%   isNonNegativeMatrix       - Check if the matrix is square and non-negative.
-%   isObject                  - Check if 'obj' is a valid cTaesLab object belong to a specific class.
-%   isOctave                  - Identifies if the function has been executed in Octave.
-%   isProductiveMatrix        - Check if a matrix represents a productive matrix.
-%   isSquareMatrix            - Check if input is a numeric or logical square matrix.
-%   isValid                   - Check if 'obj' is a valid TaesLab object.
-%
+
+% Search and Graph Functions
+%   bfs                       - Breath-First Search traversal of a digraph.
+%   transitiveClosure         - Compute the transitive closure of a digraph.
+
 % Matrix Operation Functions
 %   divideCol                 - Divide each column of matrix A by corresponding element of vector x.
 %   divideRow                 - Divide each row of matrix A by corresponding element of vector x.
@@ -35,10 +29,14 @@
 %   vDivide                   - Element-wise division with NaN handling for 0/0 cases.
 %   zerotol                   - Set matrix values near zero to exact zero.
 %
-% Digraph Functions
-%   bfs                       - Breath-First Search traversal of a digraph
-%   transitiveClosure         - Compute the transitive closure of a directed graph.
-%
-% Miscellaneous Functions
-%   buildMessage              - Build error messages for TaesLab functions.
-%   fdisplay                  - Display a matrix A using C-like formatting.
+% Validation Functions
+%   isFilename                - Validate if a filename is acceptable for read/write operations.
+%   isIndex                   - Check if an integer value is within a valid index range.
+%   isInteger                 - Check if the value is an integer number.
+%   isMatlab                  - Identifies if the function has been executed in MATLAB.
+%   isNonNegativeMatrix       - Check if the matrix is square and non-negative.
+%   isObject                  - Check if 'obj' is a valid cTaesLab object belong to a specific class.
+%   isOctave                  - Identifies if the function has been executed in Octave.
+%   isProductiveMatrix        - Check if a matrix represents a productive matrix.
+%   isSquareMatrix            - Check if input is a numeric or logical square matrix.
+%   isValid                   - Check if 'obj' is a valid TaesLab object.

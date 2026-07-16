@@ -1,16 +1,17 @@
 classdef cDigraph < cGraphResults
-%cDigraph - Plot the productive structure digraphs.
-%   This class creates a digraph object from a cTableCell object
-%   containing the adjacency table of a productive structure.
-%   It also needs a cProductiveDiagram or cDiagramFP object to get the
-%   nodes properties.
+%cDigraph - Plot the productive structure as a directed graph.
+%   Builds a MATLAB digraph from a cTableCell adjacency table and either a
+%   cProductiveDiagram or a cDiagramFP object that supplies node properties.
+%   When the source is a cDiagramFP the edges are coloured by exergy weight
+%   using a red-to-blue colormap; otherwise a plain layout is used.
+%   Not available under Octave.
 %
-%   cDigraph methods:
-%	  cDigraph    - Build an instance of the class
-%     showGraph   - show the graph in a window 
-%     showGraphUI - show the graph in the graph pannel of a GUI app
+%   cDigraph Methods:
+%     cDigraph    - Construct a cDigraph from an adjacency table and node info
+%     showGraph   - Display the directed graph in a standalone figure window
+%     showGraphUI - Display the directed graph in an App Designer graph panel
 %
-%   See also cGraphResults, cProductiveDiagram
+%   See also cGraphResults, cProductiveDiagram, cDiagramFP
 %
     properties(Access=private)
         MarkerSize = cType.MARKER_SIZE;
@@ -19,14 +20,18 @@ classdef cDigraph < cGraphResults
 
     methods
         function obj = cDigraph(tbl,info)
-		%cDigraph - Build an instance of the class
+        %cDigraph - Construct a directed-graph object from an adjacency table
+        %   The info argument determines whether an FP-diagram layout (edge
+        %   colouring by exergy weight) or a plain productive-structure layout
+        %   is used.  Logs an error and returns an invalid object on Octave.
+        %
         %   Syntax:
-        %     obj = cDigraph(tbl,info)
+        %     obj = cDigraph(tbl, info)
         %   Input Arguments:
-        %     tbl - cTable with the data to show graphically
-        %     info - cProductiveDiagram object with additional info
-		%   Output Arguments:
-		%     obj - cDigraph object
+        %     tbl  - cTableCell containing the adjacency data (rows = sources, cols = targets)
+        %     info - cProductiveDiagram or cDiagramFP supplying node group assignments
+        %   Output Arguments:
+        %     obj - cDigraph object (check obj.status before use)
         %
 			% Check input arguments
 			if isOctave
@@ -72,9 +77,12 @@ classdef cDigraph < cGraphResults
         end
 
         function showGraph(obj)
-		%showGraph - Show the graph in a window
+        %showGraph - Display the directed graph in a standalone figure window
+        %   Nodes are coloured by group using the HSV colormap.
+        %   FP-diagram graphs add an exergy-weight colorbar with a red-to-blue colormap.
+        %
         %   Syntax:
-        %     obj.showGraph()
+        %     obj.showGraph
 		
 			% Initilize figure/axes
  			f=figure('name',obj.Name,...
@@ -99,12 +107,13 @@ classdef cDigraph < cGraphResults
             title(obj.Title,'fontsize',14);
         end
 
-		function showGraphUI(obj,app)
-		%showGraphUI - Show the graph in a GUI app
+        function showGraphUI(obj,app)
+        %showGraphUI - Display the directed graph in an App Designer graph panel
+        %
         %   Syntax:
         %     obj.showGraphUI(app)
-		%	Input Parameter:
-		%	  app - GUI app reference object
+        %   Input Arguments:
+        %     app - matlab.apps.AppBase object whose UIAxes hosts the graph
 
 			% Clear previous graph
 			if app.isColorbar && ~obj.DiagramFP

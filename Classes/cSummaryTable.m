@@ -1,20 +1,27 @@
 classdef cSummaryTable < cTaesLab
-%cSummaryTable - Store the properties and values of each summary table.
-%   Each cSummaryTable is stored in a dataset element using 'Name' as key
-%   It is an internal class of cSummaryResults
+%cSummaryTable - Data container for one summary result table.
+%   cSummaryTable is an internal helper class of cSummaryResults.  It
+%   stores the definition metadata and a pre-allocated numeric matrix for
+%   a single summary table (e.g. exergy values across states, or
+%   generalised costs across resource samples).
 %
-%   cSummaryTable properties:
-%     TableDefinition - Table Definition
-%     Values          - Values of the table
-%     Name            - Name of the summary table
-%     Type            - Type of summary table (STATES/RESOURCES)
-%     Node            - Type of row names of the table (see cType.NODE_TYPE)
+%   Each instance is identified by its Name (taken from the table
+%   definition key) and is stored as one entry in the cDataset inside
+%   cSummaryResults.  The values matrix is filled column-by-column via
+%   setValues as the model iterates over states or resource samples.
 %
-%   cSummaryTable methods:
-%     cSummaryTable - Create an instance of the class
-%     setValues     - Set the values of the summary table for each state or resource
+%   cSummaryTable Properties:
+%     TableDefinition - Raw table definition struct (from printformat.json)
+%     Values          - Numeric matrix (NrOfRows × NrOfColumns)
+%     Name            - Table name string (= TableDefinition.key)
+%     Type            - Summary type: cType.STATES or cType.RESOURCES
+%     Node            - Row-name node type (cType.NodeType value)
 %
-%   See also cSummaryResults
+%   cSummaryTable Methods:
+%     cSummaryTable - Construct and pre-allocate the values matrix
+%     setValues     - Fill one column of the values matrix
+%
+%   See also cSummaryResults, cSummaryOptions
 %
     properties(GetAccess=public,SetAccess=private)
         TableDefinition   % Table Definition
@@ -26,14 +33,31 @@ classdef cSummaryTable < cTaesLab
 
     methods
         function obj = cSummaryTable(dm,td)
-        %cSummaryTable - Create an instance of the class
+        %cSummaryTable - Construct and pre-allocate the values matrix
+        %   Determines the matrix dimensions from the data model and the
+        %   table definition, then pre-allocates a zero matrix of the
+        %   correct size (NrOfRows × NrOfColumns).  The matrix is filled
+        %   later by cSummaryResults.setValues.
+        %
+        %   Number of columns is set by the summary type:
+        %     td.stable == cType.STATES    -> dm.NrOfStates
+        %     td.stable == cType.RESOURCES -> dm.NrOfSamples
+        %
+        %   Number of rows is set by the node type (td.node):
+        %     cType.NodeType.FLOW    -> dm.NrOfFlows
+        %     cType.NodeType.PROCESS -> dm.NrOfProcesses
+        %     cType.NodeType.ENV     -> dm.NrOfProcesses + 1
+        %
         %   Syntax:
-        %     obj = cSummaryTable(dm,td)
+        %     obj = cSummaryTable(dm, td)
+        %
         %   Input Arguments:
-        %     dm - cDataModel object
-        %     td - Table definition structure
+        %     dm  - cDataModel object providing the dimension counters.
+        %     td  - Table definition struct (from cFormatData.getSummaryTables)
+        %           with fields: key, stable, node, and formatting fields.
+        %
         %   Output Arguments:
-        %     obj - cSummaryTable object
+        %     obj - cSummaryTable object with Values pre-allocated to zeros.
         %
             % Determine the size of the table
             % Number of Columns
@@ -57,27 +81,32 @@ classdef cSummaryTable < cTaesLab
         end
 
         function res=get.Name(obj)
-        % Get Name property
+        %get.Name - Return the table name string from the definition key
             res=obj.TableDefinition.key;
         end
 
         function res=get.Type(obj)
-        % Get Type property
+        %get.Type - Return the summary type (cType.STATES or cType.RESOURCES)
             res=obj.TableDefinition.stable;
         end
 
         function res=get.Node(obj)
-        % Get Node property
+        %get.Node - Return the row-name node type (cType.NodeType value)
             res=obj.TableDefinition.node;
         end
 
         function setValues(obj,idx,val)
-        %setValues - Set the values of the table for each STATE/RESOURCE
+        %setValues - Fill one column of the values matrix
+        %   Assigns val to column idx of the pre-allocated Values matrix.
+        %   idx corresponds to the state index (Type = STATES) or the
+        %   resource-sample index (Type = RESOURCES).
+        %
         %   Syntax:
-        %     obj.setValues(idx,val)
+        %     obj.setValues(idx, val)
+        %
         %   Input Arguments:
-        %     idx - Number of column (STATE/RESOURCE) to update
-        %     val - Array with the values
+        %     idx - Positive integer column index (state or sample number).
+        %     val - Numeric column vector with one entry per table row.
         %
             obj.Values(:,idx)=val;
         end

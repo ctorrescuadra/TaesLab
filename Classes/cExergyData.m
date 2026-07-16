@@ -1,28 +1,31 @@
-% cExergyData   Gets and validates the exergy data values for a state of the plant.
-%   This class performs the following tasks:
-%    - Validate flow exergy values and map them to productive streams
-%    - Check that productive stream exergy values are non-negative
-%    - Compute fuel, product, irreversibility, unit cost, and efficiency for each process
-%    - Check that process irreversibilities are non-negative
-%    - Identify bypassed (inactive) processes where both fuel and product are zero
-%    - Check that final products are reachable from all active productive processes
-%
-%   cExergyData Properties:
-%       ps              - (cProductiveStructure) Productive Structure object.
-%       State           - (string) Name of the exergy state.
-%       FlowsExergy     - (double) Vector with the exergy of the flows.
-%       StreamsExergy   - (struct) Exergy of the streams.
-%       ProcessesExergy - (struct) Exergy of the processes.
-%       ActiveProcesses - (logical) Vector indicating active (not bypassed) processes.
-%       AdjacencyTable  - (struct) Adjacency Table of the productive graph.
-%       AdjacencyMatrix - (struct) Adjacency Matrix of the productive graph.
-%
-%   cExergyData Methods:
-%       cExergyData - Constructs an instance of the cExergyData class.
-%
-%   See also: cDataModel, cDataset, cProductiveStructure
-%
 classdef cExergyData < cMessageLogger
+%cExergyData - Validate exergy data and build the productive graph for a plant state.
+%   Validates flow exergy values provided in a state data struct against the
+%   productive structure, then computes all thermodynamic quantities required
+%   for thermoeconomic analysis:
+%     - Maps flow exergy values to productive streams
+%     - Checks non-negativity of stream and process irreversibilities
+%     - Computes fuel, product, irreversibility, unit exergy cost, and efficiency
+%     - Identifies bypassed (inactive) processes
+%     - Verifies that all active productive processes can reach the plant output
+%
+%   The object is invalid (isValid returns false) if any check fails.
+%
+%   cExergyData properties:
+%     ps              - cProductiveStructure object for the productive structure
+%     State           - Name of the exergy state being analysed
+%     FlowsExergy     - (1 x NrOfFlows double) Per-flow exergy values
+%     StreamsExergy   - Struct with stream net exergy (E) and total exergy (ET)
+%     ProcessesExergy - Struct with per-process vF, vP, vI, vK, and vEf vectors
+%     ActiveProcesses - (1 x NrOfProcesses logical) true for non-bypassed processes
+%     AdjacencyTable  - Struct of exergy-weighted adjacency tables (AF, AP, AE, AS)
+%     AdjacencyMatrix - Struct of demand-driven adjacency matrices (AF, AP, AE, AS)
+%
+%   cExergyData methods:
+%     cExergyData - Construct an instance of this class
+%
+%   See also cProductiveStructure, cDataModel, cMessageLogger
+%
 	properties(GetAccess=public,SetAccess=private)
 		ps				  % (cProductiveStructure) Productive Structure object associated with the exergy data.
 		State             % (string) Name of the exergy state being analyzed.
@@ -36,23 +39,24 @@ classdef cExergyData < cMessageLogger
     
 	methods
 		function obj=cExergyData(ps,data)
-		% cExergyData   Constructs an instance of the cExergyData class.
-		%   This constructor initializes the object by validating the productive
-		%   structure and exergy data. It calculates the exergy of flows, streams,
-		%   and processes, and checks for consistency.
+		%cExergyData - Construct an instance of this class
+		%   Validates the productive structure and exergy state data, builds all
+		%   thermodynamic quantities (streams, processes, adjacency tables), and
+		%   verifies productive graph connectivity. The object is invalid if any
+		%   check fails.
 		%
 		%   Syntax:
-		%       obj = cExergyData(ps, data)
+		%     obj = cExergyData(ps, data)
 		%
 		%   Input Arguments:
-		%       ps   - (cProductiveStructure) A valid productive structure object.
-		%       data - (struct) A struct containing the exergy state data, including
-		%              'stateId' and 'exergy' values for each flow.
+		%     ps   - cProductiveStructure object with a valid productive structure
+		%     data - (struct) Exergy state data with required fields:
+		%              stateId - name of the exergy state (char)
+		%              exergy  - (1 x NrOfFlows struct array) per-flow exergy
+		%                        entries with key and value fields
 		%
 		%   Output Arguments:
-		%       obj  - (cExergyData) The constructed cExergyData object. If the
-		%              input data is invalid or inconsistent, the object's status
-		%              will be set to false.
+		%     obj  - cExergyData object; check isValid(obj) before use
 		%
 		
 			% Validate input argument types
@@ -174,21 +178,21 @@ classdef cExergyData < cMessageLogger
 
 	methods(Access=private)
 		function log=isProductive(obj,m,pp)
-		%isProductive - Check if the state is thermodynamically productive.
-		%	Verifies that every active productive process can reach the plant output
-		%	(the sink node) in the stream-level adjacency graph, using a breath-first
-		%	search (BFS) starting from the sink. A process that neither feeds into
-		%	nor draws from any path to the sink is unreachable and causes an error.
-		%	
-		%	Input Arguments
-		%     m  - (struct) Demand-driven adjacency matrices of the productive graph
-		%              (fields: AF, AP, AE, AS)
-		%     pp - (integer vector) Indices of active productive processes
+		%isProductive - Check if the state is thermodynamically productive
+		%   Verifies that every active productive process can reach the plant
+		%   output (sink node) in the stream-level adjacency graph, using a
+		%   breadth-first search (BFS) starting from the sink. A process that
+		%   neither feeds into nor draws from any path to the sink is
+		%   unreachable and an error is logged for it.
 		%
-		%   Output Arguments
-		%     log - (logical) true if all active productive processes reach the output;
-		%           false otherwise. Error messages are appended to obj for each
-		%           process that does not reach the plant output.
+		%   Input Arguments:
+		%     m  - (struct) Demand-driven adjacency matrices with fields:
+		%            AF, AP, AE, AS
+		%     pp - (integer array) Indices of active productive processes
+		%
+		%   Output Arguments:
+		%     log - (logical) true if all active productive processes reach the
+		%           plant output; false if any process is unreachable
 		%
 			% Build the stream-level adjacency matrix by composing the process
 			% transitions, and the output stream index

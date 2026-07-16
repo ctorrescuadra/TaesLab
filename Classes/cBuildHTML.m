@@ -1,16 +1,29 @@
 classdef (Sealed) cBuildHTML < cMessageLogger
-%cBuildHTML - Convert a cTable object into HTML files.
-%   If a cTableIndex object is provided it create a HTML index page,
-%   which links HTML files of the cResultInfo tables. If a cTable object is
-%   provided it create a HTML page with the table.
+%cBuildHTML - Convert a cTable or cTableIndex object into an HTML document.
+%   cBuildHTML operates in two modes depending on the type of table passed
+%   to the constructor:
 %
-%cBuildHTML methods:
-%   cBuildHTML    - Build an instance of the object
-%   getMarkupHTML - Get the text string with the HTML page
-%   showTable     - Show the table in the default web browser
-%   saveTable     - Save the HTML table created by the object
+%   Normal table mode  (cTable input):
+%     Generates a self-contained HTML page containing a single styled
+%     table.  The page embeds the project CSS from the config folder so
+%     it renders consistently without external resources.
 %
-%   See also cTable
+%   Index table mode  (cTableIndex input + folder argument):
+%     Generates an HTML index page whose rows link to the individual HTML
+%     files of the tables listed in the cTableIndex.  Each link points to
+%     <folder>/<RowName>.html and opens in a new browser tab.
+%
+%   In both modes the resulting HTML string is available via getMarkupHTML.
+%   Normal tables can additionally be previewed in the system browser with
+%   showTable, or written to disk with saveTable.
+%
+%   cBuildHTML Methods:
+%     cBuildHTML    - Construct an instance from a cTable or cTableIndex
+%     getMarkupHTML - Return the complete HTML document as a char string
+%     showTable     - Preview the table in the default web browser
+%     saveTable     - Write the HTML document to a file
+%
+%   See also cTable, cTableIndex, cResultInfo
 %
     properties (Access=private)
         head         % HTML head
@@ -20,16 +33,27 @@ classdef (Sealed) cBuildHTML < cMessageLogger
     
     methods
         function obj=cBuildHTML(tbl,folder)
-        %cBuildHTML - Build an instance of the object
+        %cBuildHTML - Construct an instance from a cTable or cTableIndex object
+        %   Validates the input, determines the operating mode, and builds
+        %   the HTML head and body strings that compose the final document.
+        %   The object status is set to false when tbl is not a cTable.
+        %
         %   Syntax:
         %     obj = cBuildHTML(tbl)
-        %     obj = cBuildHTML(index_table, folder)
+        %     obj = cBuildHTML(tbl, folder)
+        %
         %   Input Arguments:
-        %     tbl - cTable object to convert
-        %     folder - Folder name where the files will be save if tbl is a cTableIndex
+        %     tbl    - cTable (or subclass) object to render as HTML.
+        %              When tbl is a cTableIndex and folder is provided,
+        %              index mode is activated (see class description).
+        %     folder - (optional) Relative or absolute folder path used to
+        %              build the href links in index mode.  Ignored when
+        %              tbl is not a cTableIndex.
+        %
         %   Output Arguments:
-        %     obj - cBuildHTML object
-        % 
+        %     obj    - cBuildHTML object.  Use isValid(obj) to confirm
+        %              successful construction before calling other methods.
+        %
             if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
                 return
@@ -44,20 +68,32 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function res=getMarkupHTML(obj)
-        %getMarkupHTML - Get the HTML text of the table
+        %getMarkupHTML - Return the complete HTML document as a char string
+        %   Concatenates the pre-built head and body sections into a full
+        %   HTML document (<!DOCTYPE html> ... </html>) ready for display
+        %   or file output.
+        %
         %   Syntax:
-        %     res = obj.getMarkupHTML
+        %     res = obj.getMarkupHTML()
+        %
         %   Output Arguments:
-        %     res - text string with the HTML page
+        %     res - Char string containing the complete HTML document.
         %
             res=[obj.head,obj.body];
         end
 
         function showTable(obj)
-        %showTable - Show a normal table in the web browser
+        %showTable - Preview the table in the default web browser
+        %   Passes the HTML document to MATLAB's web() function using the
+        %   'text://' protocol so the browser renders the content directly
+        %   without writing a file to disk.
+        %   This method is a no-op when the object was constructed in index
+        %   table mode (cTableIndex input), because index pages require
+        %   file-based links that cannot be resolved from an inline string.
+        %
         %   Syntax:
-        %     obj.showTable
-        %  
+        %     obj.showTable()
+        %
             if obj.isIndexTable
                 return
             end
@@ -66,13 +102,22 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function log=saveTable(obj,filename)
-        %saveTable - Save the table into an HTML file
+        %saveTable - Write the HTML document to a file
+        %   Opens filename for writing in text mode, writes the full HTML
+        %   string, and closes the file.  All I/O errors are caught and
+        %   reported through the returned cMessageLogger rather than
+        %   propagated as exceptions.
+        %
         %   Syntax:
         %     log = obj.saveTable(filename)
+        %
         %   Input Arguments:
-        %     filename - name of the file with html extension
+        %     filename - Path to the output file, including the .html
+        %                extension.  The file is created or overwritten.
+        %
         %   Output Arguments:
-        %     log - cMessageLogger object with status and messages
+        %     log - cMessageLogger with the operation status.  Check
+        %           log.status to verify whether the file was saved.
         %
             log=cMessageLogger();
             try
@@ -88,13 +133,21 @@ classdef (Sealed) cBuildHTML < cMessageLogger
 
     methods(Static,Access=private)
         function res=buildHead(tbl)
-        %buildHead - Build the HTML head of a table
+        %buildHead - Build the HTML <head> section for a table document
+        %   Reads the project CSS file from the config folder (cType.ConfigPath)
+        %   and embeds it inline in a <style> block so the resulting HTML
+        %   is self-contained and renders without external dependencies.
+        %
         %   Syntax:
         %     res = cBuildHTML.buildHead(tbl)
+        %
         %   Input Arguments:
-        %     tbl - cTable object
+        %     tbl - cTable object whose Name property is used as the
+        %           document <title>.
+        %
         %   Output Arguments:
-        %     res - text string with the HTML head
+        %     res - Char string with the complete <!DOCTYPE html><html><head>
+        %           block, ready to be prepended to a body section.
         %
             cssfile=fullfile(cType.ConfigPath,cType.CSSFILE);
             csstext=fileread(cssfile);
@@ -109,13 +162,22 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function res=buildTableBody(tbl)
-        %buoldTableBody - Build the HTML body of a normal table
+        %buildTableBody - Build the HTML <body> section for a normal data table
+        %   Renders the table title (via tbl.getDescriptionLabel), column
+        %   headers, and all data rows into an HTML <table> element.
+        %   Numeric columns receive the CSS class "num" for right-aligned
+        %   formatting; character columns are rendered without a class.
+        %   Cell data is obtained through tbl.formatData, which applies
+        %   the column-specific format strings defined in the cTable object.
+        %
         %   Syntax:
         %     res = cBuildHTML.buildTableBody(tbl)
+        %
         %   Input Arguments:
-        %     tbl - cTable object
+        %     tbl - cTable object (cTableCell, cTableMatrix, etc.) to render.
+        %
         %   Output Arguments:
-        %     res - text string with the HTML body
+        %     res - Char string with the complete <body>...</body></html> block.
         %
             cols=cell(1,tbl.NrOfCols);
             rows=cell(1,tbl.NrOfRows);
@@ -163,7 +225,25 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         end
 
         function res=buildIndexBody(tbl,folder)
-        %buildIndexBody - Build the HTML body a index table
+        %buildIndexBody - Build the HTML <body> section for an index table
+        %   Renders the cTableIndex as an HTML table where each row name
+        %   becomes a hyperlink pointing to <folder>/<RowName>.html.
+        %   Links are set to open in a new browser tab (target="_blank").
+        %   The two data columns from tbl.formatData are appended to each
+        %   row after the link cell.
+        %
+        %   Syntax:
+        %     res = cBuildHTML.buildIndexBody(tbl, folder)
+        %
+        %   Input Arguments:
+        %     tbl    - cTableIndex object providing row names, column names,
+        %              and formatted cell data.
+        %     folder - Relative or absolute folder path prepended to each
+        %              row name to form the href URL.
+        %
+        %   Output Arguments:
+        %     res - Char string with the complete <body>...</body></html> block.
+        %
             cols=cell(1,tbl.NrOfCols);
             rows=cell(1,tbl.NrOfRows);
             % Body and table head

@@ -1,31 +1,35 @@
 classdef cGraphDiagramFP < cGraphResults
-%cGraphDiagramFP - Plot the FP Diagram.
-%   This class creates a digraph object from a cTableMatrix object
-%   containing the FP adjacency table of a productive structure.
+%cGraphDiagramFP - Plot the Fuel-Product (FP) diagram as a directed graph.
+%   Builds a MATLAB digraph from a cTableMatrix containing the FP adjacency
+%   matrix of a productive structure.  Edge weights represent exergy flows
+%   and are mapped to a red-to-blue colormap.  Not available under Octave.
 %
-%   cGraphDiagramFP methods:
-%     cGraphDiagramFP - Build an instance of the class
-%     showGraph       - Show the graph in a window 
-%     showGraphUI     - Show the graph in the graph pannel of a GUI app
-%     edgesTable      - Get a table with the edges of the digraph
-%     nodesTable      - Get a table with the properties of the nodes
+%   cGraphDiagramFP Methods:
+%     cGraphDiagramFP - Construct a cGraphDiagramFP from an FP adjacency table
+%     showGraph       - Display the FP diagram in a standalone figure window
+%     showGraphUI     - Display the FP diagram in an App Designer graph panel
+%     edgesTable      - (Static) Build the MATLAB table of digraph edges
+%     nodesTable      - (Static) Build the MATLAB table of digraph nodes
 %
 %   See also cGraphResults, cDiagramFP
 %
     properties(Access=private)
-        Unit         % Unit of the values
+        Unit  % Physical unit string appended to the colorbar label (e.g. 'kW')
     end
 
     methods
         function obj=cGraphDiagramFP(tbl,info)
-        %cGraphDiagramFP - Build an instance of the object
+        %cGraphDiagramFP - Construct a cGraphDiagramFP from an FP adjacency table
+        %   Logs an error and returns an invalid object on Octave.
+        %
         %   Syntax:
-        %     obj = cGraphDiagramFP(tbl,info)
+        %     obj = cGraphDiagramFP(tbl, info)
         %   Input Arguments:
-        %     tbl - cTable with the data to show graphically
-        %     info - cExergyCost or cDiagramObject
+        %     tbl  - cTableMatrix containing the FP adjacency matrix
+        %     info - cResultId subclass that provides the ActiveProcesses index vector
+        %            (e.g. cDiagramFP or cExergyCost)
         %   Output Arguments:
-        %     obj - cGraphDiagramFP object
+        %     obj - cGraphDiagramFP object (check obj.status before use)
         %
             if isOctave
 				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
@@ -57,10 +61,12 @@ classdef cGraphDiagramFP < cGraphResults
         end
         
         function showGraph(obj)
-        %showGraph - Show the graph in a window
+        %showGraph - Display the FP diagram in a standalone figure window
+        %   Edge weights are mapped to a red-to-blue colormap; a colorbar is added.
+        %
         %   Syntax:
         %     obj.showGraph
-		%
+        %
             f=figure('name',obj.Name,...
                 'numbertitle','off',...
 				'units','normalized',...
@@ -79,11 +85,13 @@ classdef cGraphDiagramFP < cGraphResults
         end
 
         function showGraphUI(obj,app)
-        %showGraphUI - Show the graph in a GUI app
+        %showGraphUI - Display the FP diagram in an App Designer graph panel
+        %   Adds a colorbar labelled with the exergy unit string.
+        %
         %   Syntax:
         %     obj.showGraphUI(app)
-		%	Input Parameter:
-		%	  app - matlab.apps.AppBase object referencing the app
+        %   Input Arguments:
+        %     app - matlab.apps.AppBase object whose UIAxes hosts the graph
         %
             app.UIAxes.YLimMode="auto";
             r=(0:0.1:1); red2blue=[r.^0.4;0.2*(1-r);0.8*(1-r)]';
@@ -107,17 +115,18 @@ classdef cGraphDiagramFP < cGraphResults
 
     methods(Static)
         function res=edgesTable(mFP,nodes)
-        %edgesTable - Get a table with the edges of the digraph
+        %edgesTable - Build the MATLAB edges table for the FP digraph
+        %   Constructs source/target node pairs and exergy weights for three
+        %   edge classes: resource input edges (IN*→process), internal process
+        %   edges, and output edges (process→OUT*).
+        %
         %   Syntax:
-        %     res=cDiagramFP.edgesTable(mFP,nodes);
+        %     res = cGraphDiagramFP.edgesTable(mFP, nodes)
         %   Input Arguments:
-        %     mFP - FP matrix values
-        %     nodes - Cell Array with the process node names
+        %     mFP   - (n×n) numeric FP adjacency matrix (last row = resources, last col = outputs)
+        %     nodes - Cell array of process node name strings (length n-1)
         %   Output Arguments:
-        %     res - Matlab table containing the edges of the digraph
-        %      The tablet has the following fields
-        %        EndNodes - source and target nodes of the edge
-        %        Weight   - weight of the edge
+        %     res - MATLAB table with columns EndNodes (Nx2 cell) and Weight (Nx1 double)
         %
             % Build Internal Edges
             [idx,jdx,ival]=find(mFP(1:end-1,1:end-1));
@@ -139,17 +148,17 @@ classdef cGraphDiagramFP < cGraphResults
         end
 
         function res=nodesTable(mFP,nodes)
-        %nodesTable - Get a table with the properties of the nodes
+        %nodesTable - Build the MATLAB nodes table for the FP digraph
+        %   Assembles resource input nodes (IN*), internal process nodes, and
+        %   output nodes (OUT*), assigning each a Group value for colouring.
+        %
         %   Syntax:
-        %     res=cDiagramFP.nodesTable(mFP,nodes);
+        %     res = cGraphDiagramFP.nodesTable(mFP, nodes)
         %   Input Arguments:
-        %     mFP - FP matrix values
-        %     nodes - Cell Array with the process node names
+        %     mFP   - (n×n) numeric FP adjacency matrix
+        %     nodes - Cell array of process node name strings (length n-1)
         %   Output Arguments:
-        %     res - Matlab table containing the properties of the nodes
-        %      The tablet has the following fields
-        %        Name  - name of the node
-        %        Group - group of the node (colouring)
+        %     res - MATLAB table with columns Name (cell) and Group (numeric, see cType.NodeType)
             % Build Resource Nodes
             [~,jdx]=find(mFP(end,1:end-1));
             vnodes=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);

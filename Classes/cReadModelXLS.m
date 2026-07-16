@@ -1,33 +1,44 @@
 classdef (Sealed) cReadModelXLS < cReadModelTable
-%cReadModelXLS - Implement the cReadModelTable to read XLSX data model files
-%   This class read a XLSX file containing the thermoeconomic data
-%   and build the data model
+%cReadModelXLS - Reads an XLSX thermoeconomic data model workbook.
+%   Concrete implementation of cReadModelTable for XLSX format. Each
+%   expected data model section corresponds to a worksheet. Sheet names
+%   and field layouts are driven by printformat.json. Optional sheets
+%   are skipped silently when absent from the workbook.
 %
-%   cReadModelXLS Properties:
-%     ModelName   - Name of the model
-%     ModelData   - cModelData object       
-%     ModelFile   - File name of the model  
-%     ModelTables - cModelTable object 
+%   MATLAB uses sheetnames + readcell; Octave uses xlsopen + xls2oct.
 %
-%   cReadModelXLS methods:
-%     cReadModelXLS    - Build an instance of the class
-%     getDataModel     - Get the data model object
-%     printModelTables - Show the model tables on console
+%   cReadModelXLS Properties (inherited from cReadModel / cReadModelTable):
+%     ModelFile   - Absolute path of the source XLSX file
+%     ModelName   - Model name (file name without extension)
+%     ModelData   - Validated cModelData object
+%     ModelTables - Struct of cModelTable objects keyed by sheet name
 %
-%   See also cReadModel, cReadModelTable, cModelData, cModelTable.
+%   cReadModelXLS Methods:
+%     cReadModelXLS    - Construct an instance and read all worksheets
+%     getDataModel     - Build and return a cDataModel object (inherited)
+%     printModelTables - Display all loaded tables on the console (inherited)
+%
+%   See also cReadModel, cReadModelTable, cModelData, cModelTable
 %
     methods
         function obj = cReadModelXLS(filename)
-        %cReadModelXLS - Build an instance of the class
-        %   Read a XLSX file containing the data model
-
+        %cReadModelXLS - Construct an instance and read all XLSX worksheets.
+        %   Opens the workbook, discovers available sheet names, then
+        %   iterates over the tables defined in printformat.json and imports
+        %   each matching sheet into a cModelTable. Construction errors are
+        %   stored in the logger; check isValid(obj) after construction.
+        %
         %   Syntax:
-        %     obj = cReadNodelXLS(filename)
+        %     obj = cReadModelXLS(filename)
+        %
         %   Input Arguments:
-		%	  filename - xlsx file containig the model of the plant
+        %     filename - Path to the XLSX workbook file
+        %
         %   Output Arguments:
-        %     obj - cReadModel object
-		
+        %     obj - cReadModelXLS object
+        %
+        %   See also cReadModelXLS.getDataModel
+        %
             % Read configuration file
             config=getDataModelConfig(obj);
             if isempty(config)
@@ -87,15 +98,22 @@ classdef (Sealed) cReadModelXLS < cReadModelTable
 
     methods(Static,Access=private)
         function tbl=import(xls,wsht,props)
-        %import - Read sheet and store into a cModelTable object
+        %import - Read one worksheet and wrap it in a cModelTable.
+        %   Uses xls2oct (Octave) or readcell (MATLAB) to load the raw
+        %   cell array from the specified worksheet, then delegates
+        %   validation to cModelTable.
+        %
         %   Syntax:
-        %     tbl = import(xls,wsht,props)
+        %     tbl = cReadModelXLS.import(xls, wsht, props)
+        %
         %   Input Arguments:
-        %     xls   - XLSX filename
-        %     wsht  - Worksheet of the file to read
-        %     props - Properties of the table
+        %     xls   - Workbook handle (Octave) or XLSX file path (MATLAB)
+        %     wsht  - Worksheet name to read
+        %     props - Table definition struct from printformat.json
+        %
         %   Output Arguments:
-        %     res - cModelTable object
+        %     tbl - cModelTable object, or cMessageLogger on read error.
+        %           Check tbl.status before use.
         %
             tbl=cMessageLogger();
             % Read values from file

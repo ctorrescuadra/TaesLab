@@ -1,25 +1,40 @@
 classdef cSummaryOptions < cTaesLab
-%cSummaryOptions - Determine the summary options depending on the data model
-%   This class is used to determine the available summary options depending on the data model
-%   properties (number of states and number of samples). 
+%cSummaryOptions - Encode the available summary options for a data model.
+%   cSummaryOptions computes a 2-bit integer Id from the number of exergy
+%   states and resource samples, then derives the set of valid option names.
 %
-%   cSummaryOptions Properties
-%     Id    - Summary options Id (see cType.SummaryId)
-%     Names - Available summary options names
+%   The Id is built as:
+%     Id = (NrOfStates > 1) + 2*(NrOfSamples > 1)
 %
-%   cSummaryOptions Methods
-%     cSummaryOptions - Build an instance of the class
-%     checkId         - Check if the summary id is available
-%     checkName       - Check if the option name is available
-%     defaultOption   - Get the default summary option
-%     isEnabled       - Check if summary is enabled
-%     isStates        - Check if there are summary States
-%     isResources     - Check if there are summary Resources
+%   giving four possible values:
+%     0 (00b) - neither  -> ['NONE']
+%     1 (01b) - states   -> ['NONE', 'STATES']
+%     2 (10b) - samples  -> ['NONE', 'RESOURCES']
+%     3 (11b) - both     -> ['NONE', 'STATES', 'RESOURCES', 'ALL']
 %
-%   See also cSummaryResults
+%   This bitmask is also used by checkId to validate arbitrary Id values
+%   via bitwise AND.
+%
+%   cSummaryOptions Properties:
+%     Id    - 2-bit integer encoding the available summary types (0–3)
+%     Names - Cell array of available option name strings
+%
+%   cSummaryOptions Methods:
+%     cSummaryOptions - Construct from state and sample counts
+%     checkId         - Check whether a numeric summary Id is available
+%     checkName       - Check whether an option name string is available
+%     defaultOption   - Return the most complete available option name
+%     isEnable        - Return true if any summary option is available
+%     isStates        - Return true if state-summary is available
+%     isResources     - Return true if resource-summary is available
+%
+%   See also cSummaryResults, cType.SummaryId
 %
     properties(Constant,Access=private)
-        %Transition matrix
+        % tM - Transition matrix encoding valid options for each Id value.
+        %   Row (Id+1) contains a 1 in column j when cType.SummaryOptions{j}
+        %   is a valid choice for that Id.  Columns map to:
+        %     1=NONE, 2=STATES, 3=RESOURCES, 4=ALL
         tM=[1 0 0 0; 1 1 0 0; 1 0 1 0; 1 1 1 1];
     end
 
@@ -30,14 +45,20 @@ classdef cSummaryOptions < cTaesLab
     
     methods
         function obj=cSummaryOptions(NrOfStates,NrOfSamples)
-        %cSummaryOptions - Build an instance of the class
-        %   Syntax:   
-        %     obj = cSummaryOptions(NrOfStates,NrOfSamples)
-        %   Input Paramaters
-        %     NrOfStates - Number of States
-        %     NrOfSamples - Number of Samples
+        %cSummaryOptions - Construct from state and sample counts
+        %   Computes the 2-bit Id from the two boolean conditions
+        %   (NrOfStates > 1) and (NrOfSamples > 1), uses the transition
+        %   matrix tM to select the valid option names, and stores both.
+        %
+        %   Syntax:
+        %     obj = cSummaryOptions(NrOfStates, NrOfSamples)
+        %
+        %   Input Arguments:
+        %     NrOfStates  - Number of exergy states in the data model.
+        %     NrOfSamples - Number of resource-cost samples in the data model.
+        %
         %   Output Arguments:
-        %     obj - cSummaryOptions object
+        %     obj - cSummaryOptions object with Id and Names set.
         %
             fields=cType.SummaryOptions';
             N=length(fields);
@@ -48,13 +69,19 @@ classdef cSummaryOptions < cTaesLab
         end
 
         function res=checkId(obj,option)
-        %checkId - Check the summary id option
+        %checkId - Check whether a numeric summary Id is available
+        %   Uses bitwise AND to verify that all bits set in option are also
+        %   set in obj.Id, confirming the requested combination of summary
+        %   types is supported by this data model.
+        %
         %   Syntax:
         %     res = obj.checkId(option)
+        %
         %   Input Arguments:
-        %     option - Summary Id option to check
+        %     option - Numeric summary Id to validate (cType.SummaryId value).
+        %
         %   Output Arguments:
-        %     true | false
+        %     res    - Logical scalar: true if option is available, false otherwise.
         %
             res=false;
             if ~isInteger(option) || option<1
@@ -65,13 +92,18 @@ classdef cSummaryOptions < cTaesLab
         end
 
         function res=checkName(obj,option)
-        %checkName - Check the summary name option
+        %checkName - Check whether an option name string is available
+        %   Tests whether option appears in the Names cell array computed
+        %   at construction time for this data model.
+        %
         %   Syntax:
         %     res = obj.checkName(option)
+        %
         %   Input Arguments:
-        %     option - Summary name option to check
+        %     option - Option name string to validate (e.g. 'STATES').
+        %
         %   Output Arguments:
-        %     true | false
+        %     res    - Logical scalar: true if option is in Names, false otherwise.
         %
             res=false;
             if ~ischar(option)
@@ -81,41 +113,59 @@ classdef cSummaryOptions < cTaesLab
         end
 
         function res=defaultOption(obj)
-        %defaultOption - Get the default summary option name for the data model
+        %defaultOption - Return the most complete available option name
+        %   Returns the last element of Names, which is the option that
+        %   covers the most summary types for this data model (e.g. 'ALL'
+        %   when both states and samples are available, 'STATES' when only
+        %   states are available).
+        %
         %   Syntax:
-        %     res = obj.defaultOption
+        %     res = obj.defaultOption()
+        %
         %   Output Arguments:
-        %     res - Default option name
+        %     res - Option name string from Names (e.g. 'ALL', 'STATES',
+        %           'RESOURCES', or 'NONE').
         %
             res=obj.Names{end};
         end
 
         function res=isEnable(obj)
-        %isEnable - Check if model has summary enabled
+        %isEnable - Return true if any summary option is available
+        %   Equivalent to (obj.Id ~= 0): summary is disabled only when
+        %   the data model has a single state and a single cost sample.
+        %
         %   Syntax:
-        %     res = obj.isEnable
+        %     res = obj.isEnable()
+        %
         %   Output Arguments:
-        %     res - true | false
+        %     res - Logical scalar: true when Id > 0.
+        %
             res=logical(obj.Id);
         end
 
         function res=isStates(obj)
-        %isStates - Check if the model has states summary available
+        %isStates - Return true if state-summary is available
+        %   Tests bit 1 of Id (set when NrOfStates > 1 at construction).
+        %
         %   Syntax:
-        %     res = obj.isStates
+        %     res = obj.isStates()
+        %
         %   Output Arguments:
-        %     res - true | false
+        %     res - Logical scalar: true when the data model has > 1 state.
         %
             res=bitget(obj.Id,cType.STATES);
         end
 
         function res=isResources(obj)
-        %isResources - Check if the model has resources summary available
+        %isResources - Return true if resource-summary is available
+        %   Tests bit 2 of Id (set when NrOfSamples > 1 at construction).
+        %
         %   Syntax:
-        %     res = obj.isResources
+        %     res = obj.isResources()
+        %
         %   Output Arguments:
-        %     res - true | false
-        %   
+        %     res - Logical scalar: true when the data model has > 1 sample.
+        %
             res=bitget(obj.Id,cType.RESOURCES);
         end
     end

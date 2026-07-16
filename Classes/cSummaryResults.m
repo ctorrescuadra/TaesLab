@@ -1,25 +1,38 @@
 classdef (Sealed) cSummaryResults < cResultId
-%cSummaryResults - Get the summary results tables of the model.
-%   There is two types of summary tables
-%    STATES - Summarize the results for each state
-%    RESOURCES - Summarize the results for each resource sample
+%cSummaryResults - Compute and organise multi-state/multi-sample summary tables.
+%   cSummaryResults collects thermoeconomic result vectors from a
+%   cThermoeconomicModel and stores them in a cDataset of cSummaryTable
+%   objects, one per registered summary table name.
 %
-%   cSummaryResults properties:
-%     Tables     - List of the Summary Tabled created
-%     NrOfTables - Number of Tables
-% 
-%   cSummaryResults methods:
-%     cSummaryResults              - Build an instance of this class
-%     defaultSummaryTables         - Get the default summary tables option name
-%     getDefaultFlowVariables      - Get the output flows keys
-%     getDefaultProcessVariables   - Get the output processes keys
-%     getSummaryColumns            - Get the column names of the summary tables
-%     getValues                    - Get dataset tables
-%     isSampleSummary              - Check if Samples Summary results are available
-%     isStateSummary               - Check if States Summary results are available
-%     setSummaryTables             - Fill the values of the summary tables with the values of the model
+%   There are two independent summary types, which can be requested
+%   individually or together via the option argument:
+%     STATES    - Tabulates one result column per exergy state, allowing
+%                 comparison of exergy values, costs and efficiencies
+%                 across different operating conditions.
+%     RESOURCES - Tabulates one result column per resource-cost sample,
+%                 allowing sensitivity analysis to input cost variations.
 %
-%   See also cThermoeconomicModel, cSummaryTable, cSummaryOptions, cResultInfo, cResultId
+%   The available types depend on the data model (see cSummaryOptions).
+%   If the model has only one state and one sample, construction fails.
+%
+%   cSummaryResults Properties:
+%     Tables     - Cell array of summary table name strings created
+%     NrOfTables - Number of tables in the dataset
+%
+%   cSummaryResults Methods:
+%     cSummaryResults            - Construct and fill the summary dataset
+%     buildResultInfo            - Return the cResultInfo for display/export
+%     defaultSummaryTables       - Return the default summary option name
+%     getDefaultFlowVariables    - Return the system output flow keys
+%     getDefaultProcessVariables - Return the system output process keys
+%     getSummaryColumns          - Return column names for a summary type
+%     getValues                  - Retrieve a cSummaryTable by name or index
+%     isSampleSummary            - True if resource-sample tables were built
+%     isStateSummary             - True if state-comparison tables were built
+%     setSummaryTables           - Refill tables from an updated model
+%
+%   See also cThermoeconomicModel, cSummaryTable, cSummaryOptions,
+%            cResultInfo, cResultId
 %
     properties(GetAccess=public,SetAccess=private)
         Tables       % Names of Summary Tables created
@@ -36,18 +49,30 @@ classdef (Sealed) cSummaryResults < cResultId
 
     methods
         function obj = cSummaryResults(model,option)
-        %cSummaryResults - Build an instance of this class
+        %cSummaryResults - Construct and fill the summary dataset
+        %   Validates the model, determines the active summary option,
+        %   creates one cSummaryTable per registered summary table name,
+        %   then calls setSummaryTables to populate the values matrices.
+        %   Construction fails when:
+        %     - model is not a cThermoeconomicModel
+        %     - the data model has neither multiple states nor multiple samples
+        %     - option is provided but is not valid for this data model
+        %
         %   Syntax:
-        %     obj = cSummaryResults(model,option)
+        %     obj = cSummaryResults(model)
+        %     obj = cSummaryResults(model, option)
+        %
         %   Input Arguments:
-        %     model - cThermoeconomicModel object
-        %     option - Type of summary results to obtain (see cType.SummaryId)
-        %       STATES: State summary tables are obtained
-        %       RESOURCES: Resource summary table are obtained
-        %       ALL: Both type of tables are obtained
-        %       If it is missing is determined by the model.
+        %     model  - cThermoeconomicModel object to summarise.
+        %     option - (optional) Numeric summary Id (cType.SummaryId value):
+        %                cType.SummaryId.STATES    - state-comparison tables only
+        %                cType.SummaryId.RESOURCES - resource-sample tables only
+        %                cType.SummaryId.ALL       - both types
+        %              When omitted, the model's default summary option is used.
+        %
         %   Output Arguments:
-        %     obj - cSummaryResults object
+        %     obj - cSummaryResults object.  Use isValid(obj) to confirm
+        %           successful construction before calling other methods.
         %
             % Check Input Arguments:
             if ~isObject(model,'cThermoeconomicModel')
@@ -105,39 +130,56 @@ classdef (Sealed) cSummaryResults < cResultId
         end
 
         function res=get.NrOfTables(obj)
-        % Get Number of Tables
+        %get.NrOfTables - Return the number of summary tables in the dataset
             res=length(obj.ds);
         end
 
         function res=buildResultInfo(obj,fmt)
-        %buildResultInfo - Get cResultInfo object
+        %buildResultInfo - Return the cResultInfo for display and export
+        %   Delegates to cResultTableBuilder.getSummaryResults, which
+        %   converts each cSummaryTable in the dataset into a cTableMatrix.
+        %
         %   Syntax:
-        %     res=obj.buildResultInfo(fmt)
+        %     res = obj.buildResultInfo(fmt)
+        %
         %   Input Arguments:
-        %     fmt - cResultTableBuilder object
+        %     fmt - cResultTableBuilder object.
+        %
         %   Output Arguments:
-        %     res - cResultInfo object with the summary result
+        %     res - cResultInfo (SUMMARY_RESULTS) ready for ShowResults/SaveResults.
         %
             res=fmt.getSummaryResults(obj);
         end
 
         function res=defaultSummaryTables(obj)
-        %defaultSummaryTables - Get the default summary tables option name
+        %defaultSummaryTables - Return the default summary option name
+        %   Delegates to cSummaryOptions.defaultOption, returning the most
+        %   complete option available for this data model.
+        %
         %   Syntax:
-        %     res=obj.defaultSummaryTable
+        %     res = obj.defaultSummaryTables()
+        %
         %   Output Arguments:
-        %     res - Get the default summary option name
+        %     res - Option name string (e.g. 'ALL', 'STATES', 'RESOURCES').
         %
             res=obj.sopt.defaultOption;
         end
         
         function setSummaryTables(obj,model,option)
-        %setSummaryTables - Fill the values of the summary tables with the values of the model
+        %setSummaryTables - Refill summary tables from a (possibly updated) model
+        %   Dispatches to setStateTables and/or setResourceTables depending
+        %   on the bits set in option.  Can be called after model changes
+        %   (e.g. after setExergyData) to refresh the summary without
+        %   reconstructing the whole cSummaryResults object.
+        %
         %   Syntax:
-        %     obj.setSummaryTables(model,option)
+        %     obj.setSummaryTables(model)
+        %     obj.setSummaryTables(model, option)
+        %
         %   Input Arguments:
-        %     model - cThermoeconomicModel object
-        %     option - Type of summary result
+        %     model  - cThermoeconomicModel object.
+        %     option - (optional) Numeric summary Id.  Defaults to obj.option
+        %              when omitted.
         %
             if nargin==2
                 option=obj.option;
@@ -152,25 +194,37 @@ classdef (Sealed) cSummaryResults < cResultId
         end
     
         function res=getValues(obj,id)
-        %getValues - Get dataset tables
+        %getValues - Retrieve a cSummaryTable by name or index
+        %
         %   Syntax:
         %     res = obj.getValues(id)
+        %
         %   Input Arguments:
-        %     id - Id/Name of the table
-        % Output Arguments:
-        %     res - cSummaryTable
+        %     id  - Table name string or positive integer index.
+        %
+        %   Output Arguments:
+        %     res - cSummaryTable object for the requested entry, or a
+        %           cMessageLogger with status false if id is invalid.
         %
             res=getValues(obj.ds,id);
         end
 
         function res=getSummaryColumns(obj,type)
-        %getSummaryColumns - Get the column names of the summary tables
+        %getSummaryColumns - Return the column names for a given summary type
+        %   Maps the summary type to the appropriate name array from the
+        %   data model: state names for STATES tables, sample names for
+        %   RESOURCES tables.
+        %
         %   Syntax:
-        %     res = obj.getSummaryColumns(id)
+        %     res = obj.getSummaryColumns(type)
+        %
         %   Input Arguments:
-        %     type - Type of Summary Table (STATES/RESOURCES)
+        %     type - Summary type selector (cType.SummaryId value):
+        %              cType.SummaryId.STATES    -> dm.StateNames
+        %              cType.SummaryId.RESOURCES -> dm.SampleNames
+        %
         %   Output Arguments:
-        %     res - cell array with the columns names of the table
+        %     res  - Cell array of column name strings.
         %
             switch type
                 case cType.SummaryId.STATES
@@ -181,11 +235,15 @@ classdef (Sealed) cSummaryResults < cResultId
         end
     
         function res=getDefaultFlowVariables(obj)
-        %getDefaultFlowVariables - Get the output flows keys
+        %getDefaultFlowVariables - Return the system output flow key strings
+        %   Retrieves the indices of system output flows from the productive
+        %   structure and returns the corresponding key names.
+        %
         %   Syntax:
-        %     res = obj.getDefaultFlowVariables
+        %     res = obj.getDefaultFlowVariables()
+        %
         %   Output Arguments:
-        %     res - cell array with system output flows names
+        %     res - Cell array of flow key strings for system output flows.
         %
             ps=obj.dm.ProductiveStructure;
             id=ps.SystemOutputFlows;
@@ -193,11 +251,15 @@ classdef (Sealed) cSummaryResults < cResultId
         end
     
         function res=getDefaultProcessVariables(obj)
-        %getDefaultProcessVariables - Get the output processes keys
+        %getDefaultProcessVariables - Return the system output process key strings
+        %   Retrieves the indices of output processes from the productive
+        %   structure and returns the corresponding key names.
+        %
         %   Syntax:
-        %     res = obj.getDefaultFlowVariables
+        %     res = obj.getDefaultProcessVariables()
+        %
         %   Output Arguments:
-        %     res - cell array with system output processes names
+        %     res - Cell array of process key strings for output processes.
         %
             ps=obj.dm.ProductiveStructure;
             id=ps.OutputProcesses;
@@ -205,21 +267,27 @@ classdef (Sealed) cSummaryResults < cResultId
         end
 
         function res=isStateSummary(obj)
-        %isStateSummary - Check if States Summary results are available
+        %isStateSummary - Return true if state-comparison tables were built
+        %   Tests bit 1 (cType.STATES) of the active option.
+        %
         %   Syntax:
-        %     res = obj.isStateSummary
+        %     res = obj.isStateSummary()
+        %
         %   Output Arguments:
-        %     res - true | false
+        %     res - Logical scalar.
         %
             res=logical(bitget(obj.option,cType.STATES));
         end
 
         function res=isSampleSummary(obj)
-        %isSampleSummary - Check if Samples Summary results are available
+        %isSampleSummary - Return true if resource-sample tables were built
+        %   Tests bit 2 (cType.RESOURCES) of the active option.
+        %
         %   Syntax:
-        %     res = obj.isStateSummary
+        %     res = obj.isSampleSummary()
+        %
         %   Output Arguments:
-        %     res - true | false
+        %     res - Logical scalar.
         %
             res=logical(bitget(obj.option,cType.RESOURCES));
         end
@@ -241,7 +309,10 @@ classdef (Sealed) cSummaryResults < cResultId
         end
 
         function res=getDefaultSummaryGraph(obj)
-        %getDefaultSummaryGraph - Get default summary graph
+        %getDefaultSummaryGraph - Return the default graph table name
+        %   Selects the flow-unit-cost summary table for state summaries,
+        %   or the resource generalised flow-unit-cost table for resource
+        %   summaries.
             if bitget(obj.option,cType.STATES)
                 res=cType.Tables.SUMMARY_FLOW_UNIT_COST;
             else
@@ -250,11 +321,16 @@ classdef (Sealed) cSummaryResults < cResultId
         end
         
         function setStateTables(obj,model)
-        %setStateTable - set the values of the state dataset tables
+        %setStateTables - Fill state-summary tables from the model
+        %   Iterates over all states in the data model, runs the analysis
+        %   for each state, and writes the result vectors column-by-column
+        %   into the corresponding cSummaryTable objects.
+        %
         %   Syntax:
-        %     obj.setStates(model)  
+        %     obj.setStateTables(model)
+        %
         %   Input Arguments:
-        %     model - cThermoeconomicModel object
+        %     model - cThermoeconomicModel object.
         %
             if model.isResourceCost
                 rd=model.ResourceData;
@@ -309,11 +385,17 @@ classdef (Sealed) cSummaryResults < cResultId
         end
 
         function setResourceTables(obj,model)
-        %setStateTable - set the values of the resource dataset tables
+        %setResourceTables - Fill resource-summary tables from the model
+        %   Iterates over all resource-cost samples in the data model,
+        %   runs the generalised-cost analysis for each sample, and writes
+        %   the result vectors column-by-column into the corresponding
+        %   cSummaryTable objects.
+        %
         %   Syntax:
-        %     obj.setResourceTables(model)  
+        %     obj.setResourceTables(model)
+        %
         %   Input Arguments:
-        %     model - cThermoeconomicModel object
+        %     model - cThermoeconomicModel object.
         %
             rstate=model.getResultState;
             for j=1:model.DataModel.NrOfSamples

@@ -1,37 +1,38 @@
 classdef(Abstract) cResultSet < cResultId
-%cResultSet - Abstract class to manage the result sets.
-%   The results classes are cResultInfo, cDataModel and cThermoeconomicModel
-%   It provide methods to:
-%   - Show the results in console
-%   - Show the results in workspace
-%   - Show the results in graphic user interfaces
-%   - Save the results in files: XLSX, CSV, TXT LaTeX and HTML
+%cResultSet - Abstract class that provides the unified interface for all result containers.
+%   Concrete subclasses are cResultInfo, cDataModel, and cThermoeconomicModel.
+%   The class provides methods to:
+%     - Print result tables to the console
+%     - Display result tables in the workspace, a GUI, or an HTML view
+%     - Show graphs associated with result tables
+%     - Export result tables to MATLAB structures, cell arrays, or table objects
+%     - Save result tables to files: XLSX, CSV, TXT, LaTeX, HTML, Markdown, or MAT
 %
-%   cResultSet properties:
-%     ClassId - Result Set Id
-%       cType.ClassId.RESULT_INFO
-%       cType.ClassId.DATA_MODEL
-%       cTtpe.ClassId.RESULT_MODEL
-% 
-%   cResultSet methods:
-%     StudyCase        - Get the study case value names
-%     ListOfTables     - Get the table names from a result set
-%     LIstOfGraphs     - Get the graphic table names from a result set
-%     getTableIndex    - Get the table index from a result set
-%     printResults     - Print results on console
-%     showResults      - Show results in different interfaces
-%     showGraph        - Show the graph associated to a table
-%     showTableIndex   - Show the table index in different interfaces
-%     exportResults    - Export all the result Tables to another format
-%     saveResults      - Save all the result tables in an external file
-%     getTable         - Get a table of the result set by name
-%     saveTable        - Save the results in an external file 
-%     exportTable      - Export a table to another format
+%   cResultSet Properties:
+%     ClassId - Result set class identifier (see cType.ClassId)
+%       cType.ClassId.RESULT_INFO  - Analysis result produced by a computation module
+%       cType.ClassId.DATA_MODEL   - Data model read from an input file
+%       cType.ClassId.RESULT_MODEL - Configured thermoeconomic analysis model
+%
+%   cResultSet Methods:
+%     StudyCase        - Get the current state and sample names
+%     ListOfTables     - Get the names of all available tables
+%     ListOfGraphs     - Get the names of all graph-capable tables
+%     getTableIndex    - Get the table index in the selected format
+%     printResults     - Print all result tables on the console
+%     showResults      - Display a named table in the selected view
+%     showGraph        - Show the graph associated with a table
+%     showTableIndex   - Display the table index in the selected view
+%     exportResults    - Export all result tables to a MATLAB variable
+%     saveResults      - Save all result tables to an external file
+%     getTable         - Retrieve a named cTable object from the result set
+%     saveTable        - Save a single named table to an external file
+%     exportTable      - Export a single named table to a MATLAB variable
 %
 %   See also cResultId, cResultInfo, cThermoeconomicModel, cDataModel
 %
     properties(GetAccess=public,SetAccess=protected)
-        ClassId  % Class Id (see cType.ClassId)
+        ClassId  % Result set class identifier (see cType.ClassId)
     end
 
     methods
@@ -52,11 +53,11 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function res=ListOfTables(obj)
-        %ListOfTables - Get the list of tables as cell array
+        %ListOfTables - Get the names of all available tables in the result set
         %   Syntax:
-        %     obj.ListOfTables
+        %     res = obj.ListOfTables
         %   Output Arguments:
-        %     res - cell array with the table names
+        %     res - cell array of character vectors with the table names
         %
             res=cType.EMPTY_CELL;
             tmp=getResultInfo(obj);
@@ -66,11 +67,11 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function res=ListOfGraphs(obj)
-        %ListOfGraphs - Get the list of graph tables as cell array
+        %ListOfGraphs - Get the names of all graph-capable tables in the result set
         %   Syntax:
-        %     obj.ListOfTables
+        %     res = obj.ListOfGraphs
         %   Output Arguments:
-        %     res - cell array with the graph table names
+        %     res - cell array of character vectors with the graph table names
         %
             res=cType.EMPTY_CELL;
             tmp=getResultInfo(obj);
@@ -85,17 +86,21 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function res=getTableIndex(obj,varargin)
-        %getTableIndex - Get the table index of the results set
+        %getTableIndex - Get the index table listing all tables in the result set
+        %   When called without a varmode argument the returned cTableIndex contains
+        %   the cTable objects; otherwise the index is converted to the requested format.
+        %
         %   Syntax:
-        %     res=getTableIndex(obj,options)
+        %     res = obj.getTableIndex
+        %     res = obj.getTableIndex(varmode)
         %   Input Arguments:
-        %     options - VarMode options
-        %       cType.VarMode.NONE: cTable object
-        %       cType.VarMode.CELL: cell array
+        %     varmode - Output format (optional)
+        %       cType.VarMode.NONE:   cTableIndex object (default)
+        %       cType.VarMode.CELL:   cell array
         %       cType.VarMode.STRUCT: structured array
-        %       cType.VarModel.TABLE: Matlab table
+        %       cType.VarMode.TABLE:  MATLAB table
         %   Output Arguments:
-        %     res - Table Index info in the format selected
+        %     res - Table index in the requested format
         %
             tmp=getResultInfo(obj);
             res=getTableIndex(tmp,varargin{:});
@@ -111,17 +116,20 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function showResults(obj,name,varargin)
-        %showResults - View an individual table
-        %   If no parameters are provided print the result tables on console.
+        %showResults - Display a named table or print all tables to the console
+        %   When called without arguments all tables are printed on the console.
+        %   When a table name is provided, the table is shown in the selected view.
         %
         %   Syntax:
-        %     obj.showResults(table,option)
+        %     obj.showResults
+        %     obj.showResults(name)
+        %     obj.showResults(name, view)
         %   Input Arguments:
-        %     name - Name of the table
-        %     option - Table view option
-        %       cType.TableView.CONSOLE 
-        %       cType.TableView.GUI
-        %       cType.TableView.HTML (default)
+        %     name - Name of the table to display (character vector)
+        %     view - Output view (optional)
+        %       cType.TableView.CONSOLE - Print formatted text to the command window
+        %       cType.TableView.GUI     - Open in interactive table viewer
+        %       cType.TableView.HTML    - Render as HTML page (default)
         %
             if nargin==1
                 printResults(obj);
@@ -136,14 +144,15 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function showTableIndex(obj,varargin)
-        %showTableIndex - View the index table of the results set
+        %showTableIndex - Display the index table listing all available result tables
         %   Syntax:
-        %     obj.showTableIndex(option)
+        %     obj.showTableIndex
+        %     obj.showTableIndex(view)
         %   Input Arguments:
-        %     option - Table view option
-        %      cType.TableView.CONSOLE (default)
-        %      cType.TableView.GUI
-        %      cType.TableView.HTML
+        %     view - Output view (optional)
+        %       cType.TableView.CONSOLE - Print formatted text to the command window (default)
+        %       cType.TableView.GUI     - Open in interactive table viewer
+        %       cType.TableView.HTML    - Render as HTML page
         %   
             tbl=getTableIndex(obj);
             if tbl.status
@@ -154,18 +163,23 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function res=exportResults(obj,varmode,fmt)
-        %exportResults - Export result tables into a structure using diferent formats.
+        %exportResults - Export all result tables into a MATLAB structure using different formats.
+        %   When called without arguments the raw Tables struct (containing cTable objects)
+        %   is returned directly. Otherwise each table is converted to the requested format.
+        %
         %   Syntax:
-        %     res=obj.exportResults(varmode,fmt)
+        %     res = obj.exportResults
+        %     res = obj.exportResults(varmode)
+        %     res = obj.exportResults(varmode, fmt)
         %   Input Arguments:
-        %     varmode - result type (optional)
-        %      cType.VarMode.NONE: cTable object
-        %      cType.VarMode.CELL: cell array
-        %      cType.VarMode.STRUCT: structured array
-        %      cType.VarModel.TABLE: Matlab table
-        %     fmt - Format values (false/true)
-        % Output Arguments:
-        %   res - structure with the tables in the required format
+        %     varmode - Output format for each table (optional)
+        %       cType.VarMode.NONE:   cTable object (default, also used when nargin==1)
+        %       cType.VarMode.CELL:   cell array
+        %       cType.VarMode.STRUCT: structured array
+        %       cType.VarMode.TABLE:  MATLAB table
+        %     fmt - Logical flag to apply column format strings to values (default: false)
+        %   Output Arguments:
+        %     res - Struct whose fields are the exported tables
         %
             tmp=getResultInfo(obj);
             switch nargin
@@ -181,15 +195,22 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function log=saveResults(obj,filename)
-        %saveResults - Save result tables in different file formats depending on file extension
-        %   Accepted extensions: xlsx, csv, html, txt, tex
+        %saveResults - Save all result tables to a file; format is determined by the extension
+        %   Supported extensions:
+        %     .xlsx - Excel workbook, one worksheet per table
+        %     .csv  - Folder of CSV files, one file per table
+        %     .html - HTML index page with linked table files
+        %     .txt  - Plain-text file with all tables
+        %     .tex  - LaTeX file with all tables
+        %     .md   - Markdown file with all tables
+        %     .mat  - MATLAB binary file
         %
         %   Syntax:
-        %     log=obj.saveResults(filename)
+        %     log = obj.saveResults(filename)
         %   Input Arguments:
-        %     filename - File name. Extensión is used to determine the save mode.
+        %     filename - Output file path; the extension determines the save format
         %   Output Arguments:
-        %     log - cMessageLogger object with error messages
+        %     log - cMessageLogger object with status and error messages
         %
             log=cMessageLogger();
             if (nargin < 2) || ~isFilename(filename)
@@ -226,13 +247,15 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function res=getTable(obj,name)
-        %getTable - Get the table called name
+        %getTable - Retrieve a named table from the result set
+        %   Returns a cMessageLogger with an error if the name is not found.
+        %
         %   Syntax:
-        %     res=obj.getTable(name)
+        %     res = obj.getTable(name)
         %   Input Arguments:
-        %     name - Name of the table
+        %     name - Name of the table (character vector)
         %   Output Arguments:
-        %     res - cTable object
+        %     res - cTable object, or cMessageLogger on error
         %
             res=cMessageLogger();
             if (nargin < 2) || ~ischar(name) || isempty(name)
@@ -244,16 +267,15 @@ classdef(Abstract) cResultSet < cResultId
         end
     
         function log=saveTable(obj,tname,filename)
-        %saveTable - Save a result table into a file depending on extension
-        %   Valid extension depends of the result set
+        %saveTable - Save a single named table to a file; format is determined by the extension
         %
         %   Syntax:
-        %     obj.saveTable(tname, filename)
+        %     log = obj.saveTable(tname, filename)
         %   Input Arguments:
-        %     tname - name of the table
-        %     filename - name of the file with extension
+        %     tname    - Name of the table to save (character vector)
+        %     filename - Output file path; the extension determines the save format
         %   Output Arguments:
-        %     log - cMessageLogger, with the status of the action and error messages
+        %     log - cMessageLogger with the operation status and any error messages
         %
             log=cMessageLogger();
             if nargin < 3
@@ -269,20 +291,23 @@ classdef(Abstract) cResultSet < cResultId
         end
     
         function res=exportTable(obj,tname,varargin)
-        %exportTable - Export table into the selected varmode/format
+        %exportTable - Export a single named table to a MATLAB variable in the selected format
+        %   Returns a cMessageLogger with an error if the table name is not found.
+        %
         %   Syntax:
-        %     obj.exportTable(tname,options)
+        %     res = obj.exportTable(tname)
+        %     res = obj.exportTable(tname, varmode)
+        %     res = obj.exportTable(tname, varmode, fmt)
         %   Input Arguments:
-        %     tname - name of the table
-        %     options - optional parameters
-        %       varmode - result type
-        %        cType.VarMode.NONE: cTable object (default)
-        %        cType.VarMode.CELL: cell array
-        %        cType.VarMode.STRUCT: structured array
-        %        cType.VarModel.TABLE: Matlab table
-        %       fmt - Format values (false/true)
+        %     tname   - Name of the table (character vector)
+        %     varmode - Output format (optional)
+        %       cType.VarMode.NONE:   cTable object (default)
+        %       cType.VarMode.CELL:   cell array
+        %       cType.VarMode.STRUCT: structured array
+        %       cType.VarMode.TABLE:  MATLAB table
+        %     fmt - Logical flag to apply column format strings to values (default: false)
         %   Output Arguments:
-        %     res - the result table in the selected format
+        %     res - Table contents in the requested format, or cMessageLogger on error
         %
             res=cMessageLogger();
             if nargin < 2
@@ -300,15 +325,16 @@ classdef(Abstract) cResultSet < cResultId
 
     methods(Access=protected)
         function log=saveAsCSV(obj,filename)
-        %saveAsCSV - Save result tables as CSV files, each table in a file
-        %   Create a folder with all the tables and a file called "<filename>.csv" with the folder name
+        %saveAsCSV - Save result tables as CSV files, one file per table
+        %   Creates a subfolder named '<basename>_csv' containing one CSV file per table
+        %   plus an index CSV file, and writes a pointer file at the given filename.
         %
         %   Syntax:
-        %     log=obj.saveAsCSV(filename)
+        %     log = obj.saveAsCSV(filename)
         %   Input Arguments:
-        %     filename - Name of the file where the csv file information is stored
+        %     filename - Path to the pointer file (e.g. 'results.csv')
         %   Output Arguments:
-        %     log - cMessageLogget object with error messages
+        %     log - cMessageLogger object with the operation status and error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);
@@ -356,13 +382,16 @@ classdef(Abstract) cResultSet < cResultId
         end
         
         function log=saveAsXLS(obj,filename)
-        %saveAsXLS - Save the result tables in a Excel file, each table in a worksheet.
+        %saveAsXLS - Save all result tables in an Excel workbook, one worksheet per table
+        %   An 'Index' worksheet listing all tables is written first.
+        %   Compatible with both MATLAB (writecell) and Octave (oct2xls).
+        %
         %   Syntax:
-        %     log=obj.saveASXLS(filename)
+        %     log = obj.saveAsXLS(filename)
         %   Input Arguments:
-        %     filename - name of the worksheet file
+        %     filename - Output Excel file path (.xlsx)
         %   Output Arguments:
-        %     log - cMessageLogger object with error messages
+        %     log - cMessageLogger object with the operation status and error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);
@@ -425,15 +454,16 @@ classdef(Abstract) cResultSet < cResultId
         end
                 
         function log=saveAsHTML(obj,filename)
-        %saveAsHTML - Save result tables as HTML files.
-        %	Create a index file and a folder containing all the table files
+        %saveAsHTML - Save result tables as HTML files with an index page
+        %   Creates a subfolder named '<basename>_html' containing one HTML file per table,
+        %   and writes a linked index HTML page at the given filename.
         %
         %   Syntax:
-        %     log=obj.saveAsHTML(filename)
+        %     log = obj.saveAsHTML(filename)
         %   Input Arguments:
-        %     filename - Name of the index file
+        %     filename - Path to the HTML index file (e.g. 'results.html')
         %   Output Arguments:
-        %     log - cMessageLogger object with error messages
+        %     log - cMessageLogger object with the operation status and error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);
@@ -465,13 +495,15 @@ classdef(Abstract) cResultSet < cResultId
         end
         
         function log=saveAsTXT(obj,filename)
-        %saveAsTXT - Save the result tables if a formatted text file
+        %saveAsTXT - Save all result tables to a single formatted plain-text file
+        %   Each table is printed in sequence using its printTable formatter.
+        %
         %   Syntax:
-        %     log=saveAsTXT(filename)
+        %     log = obj.saveAsTXT(filename)
         %   Input Arguments:
-        %     filename - name of the worksheet file
+        %     filename - Output text file path (.txt)
         %   Output Arguments:
-        %     log - cMessageLogger object with save status and error messages
+        %     log - cMessageLogger object with the operation status and error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);
@@ -489,13 +521,15 @@ classdef(Abstract) cResultSet < cResultId
         end
         
         function log=saveAsLaTeX(obj,filename)
-        %saveAsLaTeX - Save the tables into a file in LaTeX format
+        %saveAsLaTeX - Save all result tables to a single LaTeX-formatted file
+        %   Each table is rendered via cBuildLaTeX and written in sequence.
+        %
         %   Syntax:
-        %     log=saveAsLaTeX(filename)
+        %     log = obj.saveAsLaTeX(filename)
         %   Input Arguments:
-        %     filename - name of the file
+        %     filename - Output LaTeX file path (.tex)
         %   Output Arguments:
-        %     log - cMessageLogger object with save status and error messages
+        %     log - cMessageLogger object with the operation status and error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);
@@ -517,13 +551,15 @@ classdef(Abstract) cResultSet < cResultId
         end
 
         function log=exportMarkdown(obj,filename)
-        %exportMarkdown - Export the result tables into a Markdown file
+        %exportMarkdown - Save all result tables to a single Markdown file
+        %   Each table is rendered via cBuildMarkdown and written in sequence.
+        %
         %   Syntax:
-        %     log=exportMarkdown(filename)
+        %     log = obj.exportMarkdown(filename)
         %   Input Arguments:
-        %     filename - name of the file
+        %     filename - Output Markdown file path (.md)
         %   Output Arguments:
-        %     log - cMessageLogger object with save status and error messages
+        %     log - cMessageLogger object with the operation status and error messages
         %
             log=cMessageLogger();
             tidx=getTableIndex(obj);

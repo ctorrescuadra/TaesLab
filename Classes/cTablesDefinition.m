@@ -1,40 +1,47 @@
 classdef cTablesDefinition < cMessageLogger
-%cTablesDefinition - Get the results tables properties.
-%   This class provides methods to get information about the results tables
-%   definitions used in the TaesLab toolbox.
-%   The class reads the configuration file printconfig.json located in the
-%   Classes folder, which contains the tables properties.
-%   The tables definitions are stored in a cDataset object, which provides
-%   methods to get the table properties.
-%   The class also builds a cTableData object containing the tables index,
-%   which can be printed on console or viewed in a GUI.
-%   The tables index contains the following columns:
-%     DESCRIPTION - Table description
-%     RESULT_NAME - ResultId name
-%     GRAPH       - true | false
-%     TYPE        - Type of table (TABLE, MATRIX, SUMMARY)
-%     CODE        - Table code name
-%     RESULT_CODE - ResultId code name
-%   The tables definitions can be retrieved by table name, and the properties
-%   of the table can be obtained as a struct.
-%   The class also provides methods to get the tables configuration of a
-%   specific ResultId, as well as the configuration of cell, matrix and
-%   summary tables.
-%   Derived classes: cFormatData
+%cTablesDefinition - Registry of result-table definitions for TaesLab.
+%   cTablesDefinition reads the toolbox configuration file (cType.CFGFILE)
+%   from the Config directory and builds an internal registry that maps
+%   every result table name to its properties and configuration struct.
 %
-%   cTablesDefinition methods:
-%     cTablesDefinition      - Create an instance of the class
-%     getTablesDirectory     - Get a cTableData with the tables index
-%     getTableDefinition     - Get configuration properties of a table
-%     getTableInfo           - Get table info as a struct
-%     getTableId             - Get the internal TableId of a table
-%     getResultIdTables      - Get the tables of a specific ResultId
-%     getDataModelProperties - Get the data model table properties
-%     getCellTables          - Get the cell tables configuration
-%     getMatrixTables        - Get the matrix tables configuration
-%     getSummaryTables       - Get the summary tables configuration
+%   The registry covers three categories of tables:
+%     TABLE   - Cell tables   (mixed text/numeric columns, cTableCell)
+%     MATRIX  - Matrix tables (square numeric matrices, cTableMatrix)
+%     SUMMARY - Summary tables (multi-state/sample comparisons)
 %
-%   See also cFormatData, printconfig.json
+%   Two lookup layers are maintained:
+%     1. tDictionary (cDictionary)  - maps table name → linear index
+%     2. tableIndex  (struct array) - holds name, description, resultId,
+%                                     type, tableId and graph flag per entry
+%
+%   In addition, a tables-directory cell array (tDirectory) is pre-built
+%   for fast construction of the cTableData directory returned by
+%   getTablesDirectory.
+%
+%   cTablesDefinition Properties (protected):
+%     cfgDataModel  - Data-model table configuration structs
+%     cfgTables     - Cell table configuration structs
+%     cfgMatrices   - Matrix table configuration structs
+%     cfgSummary    - Summary table configuration structs
+%     cfgTypes      - Format-type configuration structs
+%     tDictionary   - cDictionary mapping table names to indices
+%     tableIndex    - Struct array with per-table metadata
+%     tableNames    - Cell array of all registered table names
+%     tDirectory    - Pre-built cell matrix used by getTablesDirectory
+%
+%   cTablesDefinition Methods:
+%     cTablesDefinition      - Construct the registry by reading the config file
+%     getTablesDirectory     - Return a cTableData listing all registered tables
+%     getTableDefinition     - Return the raw config struct for a named table
+%     getTableInfo           - Return a summary-info struct for a named table
+%     getTableId             - Return the dictionary index of a table name
+%     getResultIdTables      - Return the names of all tables for a ResultId
+%     getDataModelProperties - Return the data-model table configuration(s)
+%     getCellTables          - Return cell-table configuration struct(s)
+%     getMatrixTables        - Return matrix-table configuration struct(s)
+%     getSummaryTables       - Return summary-table configuration struct(s)
+%
+%   See also cFormatData, cType.ResultId, cType.TableType
 %
     properties (Access=protected)
         cfgDataModel    % Data model tables configuration
@@ -50,11 +57,21 @@ classdef cTablesDefinition < cMessageLogger
 
     methods
         function obj=cTablesDefinition()
-        %cTablesDefinition - Create an instance of the class
+        %cTablesDefinition - Construct the registry by reading the config file
+        %   Reads cType.CFGFILE from the Config directory, populates the six
+        %   configuration struct arrays (cfgDataModel, cfgTables, cfgMatrices,
+        %   cfgSummary, cfgTypes), then runs two internal build steps:
+        %     1. buildTablesDictionary - creates tDictionary and tableIndex
+        %     2. buildTablesDirectory  - pre-builds tDirectory for fast lookup
+        %   Construction sets the object status to false when the config file
+        %   cannot be read or the dictionary build step detects inconsistencies.
+        %
         %   Syntax:
-        %     obj = cTablesDefinition();
+        %     obj = cTablesDefinition()
+        %
         %   Output Arguments:
-        %     obj - cTablesDefinition object
+        %     obj - cTablesDefinition object.  Use isValid(obj) to confirm
+        %           successful construction before calling other methods.
         %
               
 			% load default configuration filename			
@@ -76,20 +93,32 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getTablesDirectory(obj,cols)
-        %getTablesDirectory - Get the tables directory
-        %   Syntax: 
-        %     res=obj.getTablesDirectory(cols)
+        %getTablesDirectory - Return a cTableData listing all registered tables
+        %   Builds a cTableData whose rows are the registered table names and
+        %   whose columns are selected from the available directory columns.
+        %   When called with no output argument, the table is printed to the
+        %   console instead of being returned.
+        %
+        %   Available column identifiers (elements of cols):
+        %     'DESCRIPTION'  - Human-readable table description
+        %     'RESULT_NAME'  - Name of the associated ResultId
+        %     'GRAPH'        - Whether a graph view is available ('true'/'false')
+        %     'TYPE'         - Table category: 'TABLE', 'MATRIX', or 'SUMMARY'
+        %     'CODE'         - Internal table code name (cType.Tables field)
+        %     'RESULT_CODE'  - Internal ResultId code name (cType.ResultId field)
+        %
+        %   Syntax:
+        %     res = obj.getTablesDirectory()         % uses default columns
+        %     res = obj.getTablesDirectory(cols)     % custom column selection
+        %     obj.getTablesDirectory(...)            % prints to console
+        %
         %   Input Arguments:
-        %     cols - cell array with the column names to show
-        %       'DESCRIPTION': Table Description
-        %       'RESULT_NAME': Result Info
-        %       'GRAPH': true | false
-        %       'TYPE':  type of table
-        %       'CODE':  table code name
-        %       'RESULT_CODE': Result Info code name
-        %     if cols parameter is missing cType.DIR_COLS_DEFAULT is used
+        %     cols - (optional) Cell array of column identifier strings.
+        %            Defaults to cType.DIR_COLS_DEFAULT when omitted.
+        %
         %   Output Arguments:
-        %     res - cTableData containing the tables directory
+        %     res  - cTableData with the selected columns, or a cMessageLogger
+        %            with status false if any element of cols is invalid.
         %
             res=cMessageLogger();
             if nargin==1
@@ -115,14 +144,26 @@ classdef cTablesDefinition < cMessageLogger
         end
  
         function res=getTableInfo(obj,name)
-		%getTableInfo - Get the properties of a table
-		%   Syntax:
-		%     res = obj.getTableInfo(name)
-		%   Input Arguments:
-		%     name - Name of the table
-		%   Output Arguments:
-		%     res - Struct with the properties of the table
-		%
+		%getTableInfo - Return a summary-info struct for a named table
+        %   Looks up name in the registry and returns a struct with the
+        %   six directory-level properties of the table.  This is the
+        %   presentation-oriented counterpart of getTableDefinition, which
+        %   returns the raw configuration struct from the JSON file.
+        %   When called with no output argument, the struct is displayed
+        %   in the console via disp.
+        %
+        %   Syntax:
+        %     res = obj.getTableInfo(name)   % returns struct
+        %     obj.getTableInfo(name)          % displays struct in console
+        %
+        %   Input Arguments:
+        %     name - Table name string to look up.
+        %
+        %   Output Arguments:
+        %     res  - Struct with fields: Name, Description, TableCode,
+        %            ResultId, TableType, Graph.  Returns cType.EMPTY when
+        %            name is not a string or is not registered.
+        %
 			res=cType.EMPTY;
             % Check input arguments
             if nargin<2 || ~ischar(name)
@@ -148,13 +189,25 @@ classdef cTablesDefinition < cMessageLogger
 		end
 
         function res=getTableDefinition(obj,name)
-        %getTableDefinition - Get the properties of a table
+        %getTableDefinition - Return the raw configuration struct for a named table
+        %   Looks up name in the registry and returns the configuration struct
+        %   exactly as read from the JSON config file.  The struct fields
+        %   vary by table type:
+        %     TABLE   - fields from cfgTables  (e.g. key, description, cols)
+        %     MATRIX  - fields from cfgMatrices (e.g. key, header, rows)
+        %     SUMMARY - fields from cfgSummary  (e.g. key, header, stable)
+        %   For presentation-oriented metadata use getTableInfo instead.
+        %
         %   Syntax:
         %     res = obj.getTableDefinition(name)
+        %
         %   Input Arguments:
-        %     name - Name of the table
+        %     name - Table name string to look up.
+        %
         %   Output Arguments:
-        %     res - structure containing the table definition
+        %     res  - Configuration struct for the table, or cType.EMPTY when
+        %            name is not a string, is not registered, or has an
+        %            unrecognised table type.
         %
             res=cType.EMPTY;
             if nargin<2 || ~ischar(name)
@@ -178,13 +231,21 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getTableId(obj,name)
-        %getTableId - Get tableId from dictionary. Internal use
+        %getTableId - Return the dictionary index for a table name
+        %   Wraps cDictionary.getIndex on the internal tDictionary.
+        %   Intended for internal use by other methods that need a fast
+        %   numeric handle into tableIndex or tDirectory.
+        %
         %   Syntax:
         %     res = obj.getTableId(name)
+        %
         %   Input Arguments:
-        %     name - Table name
+        %     name - Table name string to look up.
+        %
         %   Output Arguments:
-        %     res - Internal table id
+        %     res  - Positive integer index if name is registered;
+        %            0 if name is unknown; cType.EMPTY if name is not
+        %            a string or is missing.
         %
             res=cType.EMPTY;
             if nargin<2 || ~ischar(name)
@@ -194,13 +255,20 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getResultIdTables(obj,id)
-        %getResultIdTables - Get the tables of a specific ResultId
+        %getResultIdTables - Return the names of all tables for a given ResultId
+        %   Scans the tableIndex for entries whose resultId field matches id
+        %   and returns their names as a cell array of strings.
+        %
         %   Syntax:
         %     res = obj.getResultIdTables(id)
+        %
         %   Input Arguments:
-        %     id - ResultId
+        %     id  - Numeric ResultId value (see cType.ResultId).
+        %
         %   Output Arguments:
-        %     res - cell array with the ResultId tables
+        %     res - Cell array of table name strings associated with id.
+        %           Returns cType.EMPTY_CELL when id is not numeric or
+        %           no tables are registered for that ResultId.
         %
             res=cType.EMPTY_CELL;
             if nargin<2 || ~isnumeric(id)
@@ -212,15 +280,22 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getDataModelProperties(obj,idx)
-        %getDataModelProperties - Get the data model properties
+        %getDataModelProperties - Return data-model table configuration struct(s)
+        %   Provides access to the cfgDataModel array, which defines the
+        %   tables used to present the input data (flows, processes, exergy
+        %   states, resources, waste definitions, format).
+        %
         %   Syntax:
-        %     res = obj.getDataModelProperties()
-        %     res = obj.getDataModelProperties(idx)
+        %     res = obj.getDataModelProperties()      % all entries
+        %     res = obj.getDataModelProperties(idx)   % single entry
+        %
         %   Input Arguments:
-        %     idx - Table index. Optional
+        %     idx - (optional) Positive integer index into cfgDataModel.
+        %           When omitted, the entire struct array is returned.
+        %
         %   Output Arguments:
-        %     res - struct with the table(s) properties
-        %           If idx is not provided, get and array structure with all tables
+        %     res - Configuration struct (scalar when idx is provided) or
+        %           struct array (when idx is omitted).
         %
             if nargin==2
                 res=obj.cfgDataModel(idx);
@@ -230,13 +305,22 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getMatrixTables(obj,idx)
-        %getMatrixTables - Get the matrix tables configuration
+        %getMatrixTables - Return matrix-table configuration struct(s)
+        %   Provides access to the cfgMatrices array, which defines the
+        %   square numeric tables (adjacency matrices, cost allocation
+        %   matrices, FP tables) used throughout the toolbox.
+        %
         %   Syntax:
-        %     res = obj.getMatrixTables(idx);
+        %     res = obj.getMatrixTables()       % all entries
+        %     res = obj.getMatrixTables(idx)    % single entry
+        %
         %   Input Arguments:
-        %     idx - Table index. Optional
+        %     idx - (optional) Positive integer index into cfgMatrices.
+        %           When omitted, the entire struct array is returned.
+        %
         %   Output Arguments:
-        %     res - struct array with the configuration
+        %     res - Configuration struct (scalar when idx provided) or
+        %           struct array (when idx is omitted).
         %
             if nargin==2
                 res=obj.cfgMatrices(idx);
@@ -246,13 +330,22 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getCellTables(obj,idx)
-        %getCellTables - Get the cell tables configuration
+        %getCellTables - Return cell-table configuration struct(s)
+        %   Provides access to the cfgTables array, which defines the
+        %   mixed text/numeric tables (process descriptions, efficiency
+        %   tables, cost summaries) used throughout the toolbox.
+        %
         %   Syntax:
-        %     res = obj.getCellTables(idx);
+        %     res = obj.getCellTables()       % all entries
+        %     res = obj.getCellTables(idx)    % single entry
+        %
         %   Input Arguments:
-        %     idx - Table index. Optional
+        %     idx - (optional) Positive integer index into cfgTables.
+        %           When omitted, the entire struct array is returned.
+        %
         %   Output Arguments:
-        %     res - struct array with the tables configuration
+        %     res - Configuration struct (scalar when idx provided) or
+        %           struct array (when idx is omitted).
         %
             if nargin==2
                 res=obj.cfgTables(idx);
@@ -262,15 +355,28 @@ classdef cTablesDefinition < cMessageLogger
         end
 
         function res=getSummaryTables(obj,option,rsc)
-        %getSummaryTables - Get the summary tables configuration
-        %   Syntax: 
-        %     res=obj.getSummaryTables(option,rsc)
+        %getSummaryTables - Return summary-table configuration struct(s)
+        %   Filters the cfgSummary array according to the requested summary
+        %   type and the resource-tables flag.
+        %
+        %   Syntax:
+        %     res = obj.getSummaryTables()             % all summary tables
+        %     res = obj.getSummaryTables(option)       % filtered by option
+        %     res = obj.getSummaryTables(option, rsc)  % filtered by option and rsc
+        %
         %   Input Arguments:
-        %     option - type of summary tables
-        %     rsc    - Resource tables (true/false)
+        %     option - (optional) Summary type selector (cType.SummaryId value):
+        %                cType.SummaryId.ALL       - all summary tables (default)
+        %                cType.SummaryId.STATES    - tables for multi-state comparison
+        %                cType.SummaryId.RESOURCES - tables for multi-sample comparison
+        %     rsc    - (optional) Logical flag used only with STATES option.
+        %              When true (default for ALL), includes resource-cost tables.
+        %              When false, excludes resource-cost tables from STATES results.
+        %
         %   Output Arguments:
-        %     res - struct array with the tables configuration
-        %          
+        %     res    - Struct array of summary-table configuration entries,
+        %              or cType.EMPTY_CELL if no matching entries are found.
+        %
             res=cType.EMPTY_CELL;
              % Get optional arguments
             switch nargin
@@ -304,10 +410,13 @@ classdef cTablesDefinition < cMessageLogger
 
     methods(Access=private)
 		function buildTablesDictionary(obj)
-        %buildTablesDictionary - build the tables dictionary
-        %   Tables dictionary is stored in obj.tDictionary
-        %   Syntax:
-        %     obj.buildTablesDictionary
+        %buildTablesDictionary - Build the tDictionary and tableIndex from config arrays
+        %   Iterates over cfgTables, cfgMatrices and cfgSummary, resolves each
+        %   table key against the cType.Tables enumeration, and fills the
+        %   tableIndex struct array with metadata (name, description, code,
+        %   resultId, graph, type, tableId).  Sets the object status to false
+        %   if any key cannot be resolved.
+        %   Results are stored in obj.tDictionary, obj.tableIndex, obj.tableNames.
         %
             % Create the index dataset
             tCodes=fieldnames(cType.Tables);
@@ -378,12 +487,11 @@ classdef cTablesDefinition < cMessageLogger
         end
  
         function buildTablesDirectory(obj)
-        %buildTablesDirectory - Store the tables index data info in a cell array
-        %   Tables index data info is stored in obj.tDirectory
-        %   This info is used to build the Tables Directory cTable
-        %   
-        %   Syntax:
-        %     obj.buildTablesDirectory()
+        %buildTablesDirectory - Pre-build the tDirectory cell matrix from tableIndex
+        %   Converts the tableIndex struct array into a plain N×M cell matrix
+        %   (N tables × M directory columns) for fast column-selection in
+        %   getTablesDirectory.  Column order follows cType.DirCols indices.
+        %   Result is stored in obj.tDirectory.
         %
             N=numel(obj.tableNames);
             M=numel(cType.DirColNames);

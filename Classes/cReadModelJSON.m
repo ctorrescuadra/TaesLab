@@ -1,37 +1,50 @@
 classdef (Sealed) cReadModelJSON < cReadModelStruct
-%cReadModelXML - Implement the cReadModelStruct to read JSON data model files.
-%   This class reads a JSON file containing the thermoeconomic data
-%   and store it into a structure data.
+%cReadModelJSON - Reads a JSON thermoeconomic data model file.
+%   Concrete implementation of cReadModelStruct for JSON format. Parses
+%   the JSON file with importJSON, then delegates struct-to-cModelData
+%   conversion to the protected buildModelData method inherited from
+%   cReadModelStruct.
 %
-%   cReadModelJSON Properties:
-%     - ModelName   - Name of the model
-%     - ModelData   - cModelData object
-%     - ModelFile   - File name of the model
+%   Compatible with both MATLAB and Octave.
 %
-%   cReadModelJSON methods:
-%     - cReadModelJSON - Build an instance of the class
-%     - getDataModel   - Get the data model object
+%   cReadModelJSON Properties (inherited from cReadModel):
+%     ModelFile - Absolute path of the source JSON file
+%     ModelName - Model name (file name without extension)
+%     ModelData - Validated cModelData object
 %
-%   See also cReadModel, cReadModelStruct
+%   cReadModelJSON Methods:
+%     cReadModelJSON - Construct an instance and parse the JSON file
+%     getDataModel   - Build and return a cDataModel object (inherited)
+%
+%   See also cReadModel, cReadModelStruct, cReadModelXML
 %
 	methods
-		function obj=cReadModelJSON(cfgfile)
-		%cReadModelJSON - Construct an instance of the class
-        %   Syntax:
-        %     obj=cReadModelJSON(cfgfile)
-        %   Input Arguments:
-		%	  cfgfile - json file containig the model of the plant
-        %   Output Arguments:
-        %     obj - cReadModelJSON object
-        % 
-			% Read configuration file
-            sd=importJSON(obj,cfgfile);
+		function obj = cReadModelJSON(cfgfile)
+		%cReadModelJSON - Construct an instance and parse the JSON model file.
+		%   Reads and decodes the specified JSON file. Construction succeeds
+		%   only if the file exists and contains valid JSON matching the
+		%   expected data model structure. Errors are stored in the object
+		%   logger; check isValid(obj) after construction.
+		%
+		%   Syntax:
+		%     obj = cReadModelJSON(cfgfile)
+		%
+		%   Input Arguments:
+		%     cfgfile - Character vector with the path to the JSON model file
+		%
+		%   Output Arguments:
+		%     obj - cReadModelJSON object
+		%
+		%   See also cReadModelJSON.getDataModel, importJSON
+		%
+			% Read and decode the JSON file
+            sd = importJSON(obj, cfgfile);
             if isempty(sd)
                 return;
             end
-            % Build Data Model
+            % Resolve file metadata and build the data model
             obj.setModelProperties(cfgfile);
-            obj.ModelData=obj.buildModelData(sd);
+            obj.ModelData = obj.buildModelData(sd);
         end
     end
 end

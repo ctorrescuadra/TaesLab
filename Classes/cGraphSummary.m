@@ -1,36 +1,41 @@
 classdef cGraphSummary < cGraphResults
-%cGraphSummary - Plot the summary graphs for selecting flows or processes.
-%   There is two graph methods to show the summary results
-%   - BarGraph: Values are show in bar graphs grouped by STATE or SAMPLE 
-%   - PlotGraph: Values are show in plot graphs
+%cGraphSummary - Plot multi-state or multi-sample summary cost graphs.
+%   Supports three graph styles selected via the options.Style field:
+%     BAR   - Grouped bar chart; each group is a variable, each bar is a state/sample
+%     STACK - Stacked bar chart; each bar is a variable, segments are states/samples
+%             (only available for resource/sample summaries)
+%     PLOT  - Line graph; X-axis enumerates states/samples, one line per variable
+%             (also used automatically when a single variable is selected)
 %
-%   cGraphSummary methods:
-%     cGraphSummary  - Build an instance of the class
-%     showGraph      - show the graph in a window 
-%     showGraphUI    - show the graph in the graph pannel of a GUI app
+%   cGraphSummary Methods:
+%     cGraphSummary - Construct a cGraphSummary from a summary table
+%     showGraph     - Display the graph in a standalone figure window
+%     showGraphUI   - Display the graph in an App Designer graph panel
 %
 %   See also cGraphResults, cSummaryResults
 %
 	properties(Access=private)
-		variables
-		cases
+		variables  % Cell array of all row (variable) names from the summary table
+		cases      % Cell array of all column (state/sample) names from the summary table
 	end
 
     methods
         function obj = cGraphSummary(tbl,info,options)
-		%cGraphSummary - Build an instance of the object
-        % 	Syntax:
-        %     obj = cGraphSummary(tbl,info,option)
+        %cGraphSummary - Construct a cGraphSummary from a summary cost table
+        %
+        %   Syntax:
+        %     obj = cGraphSummary(tbl, info)
+        %     obj = cGraphSummary(tbl, info, options)
         %   Input Arguments:
-        %     tbl - cTable with the data to show graphically
-        %     info - cSummaryResults object with additional info
-		%     options - struct containing the option values
-        %       Variables: cell array with the variables to show
-		%       Cases: cell array with the cases (STATES/SAMPLES) to show
-		%	    Style: graph style to use (BAR, STACK, PLOT)
-		%   Output Arguments:
-		%     obj - cGraphSummary object
-		%
+        %     tbl     - cTable containing the summary cost data (must be a summary table)
+        %     info    - cSummaryResults object providing default variable lists
+        %     options - Struct with optional fields (all default when omitted):
+        %                 Variables - cell array of variable names to show (default: output variables)
+        %                 Cases     - cell array of state/sample names to show (default: all)
+        %                 Style     - graph style: 'BAR', 'STACK', or 'PLOT' (default: cType.DEFAULT_GRAPHSTYLE)
+        %   Output Arguments:
+        %     obj - cGraphSummary object (check obj.status before use)
+        %
 			% Check input arguments
 			if nargin < 2 || ~isObject(info,'cSummaryResults')
 				obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
@@ -113,10 +118,13 @@ classdef cGraphSummary < cGraphResults
         end
 
         function showGraph(obj)
-		%showGraph - Show the graph in a window
+        %showGraph - Display the summary graph in a standalone figure window
+        %   Renders a grouped bar chart, stacked bar chart, or line graph
+        %   depending on the Style selected during construction.
+        %
         %   Syntax:
         %     obj.showGraph
-		%
+        %
 			set(groot,'defaultTextInterpreter','none');
 			f=figure('name',obj.Name,...
 			         'numbertitle','off',...
@@ -149,13 +157,14 @@ classdef cGraphSummary < cGraphResults
 			obj.setGraphParameters(ax);
         end
 
-		function showGraphUI(obj,app)
-		%showGraphUI - Show the graph in a GUI app
+        function showGraphUI(obj,app)
+        %showGraphUI - Display the summary graph in an App Designer graph panel
+        %
         %   Syntax:
         %     obj.showGraphUI(app)
-		%	Input Parameter:
-		%	  app - GUI app reference object
-		%
+        %   Input Arguments:
+        %     app - matlab.apps.AppBase object whose UIAxes hosts the graph
+        %
 			if app.isColorbar
 				delete(app.Colorbar);
 			end
@@ -182,17 +191,20 @@ classdef cGraphSummary < cGraphResults
     end
 
 	methods(Access=private)
-		function res=checkVariables(obj,tbl,info,var)
-		%checkVariables - Check Variables option
-		%   Syntax:
-		%     res=checkVariables(obj,tbl,info,var)
-		%   Input Arguments:
-		%     tbl - cTable with the data to show graphically
-		%     info - cSummaryResults object with additional info
-		%     var - cell array with the variables to show	
-		%   Output Arguments:
-		%     res - indices of the variables to show
-		%
+        function res=checkVariables(obj,tbl,info,var)
+        %checkVariables - Resolve the Variables option to a row-index vector
+        %   When var is empty the default output flow or process variables are
+        %   taken from the cSummaryResults object.
+        %
+        %   Syntax:
+        %     res = obj.checkVariables(tbl, info, var)
+        %   Input Arguments:
+        %     tbl  - cTable containing the summary cost data
+        %     info - cSummaryResults object providing default variable lists
+        %     var  - Cell array of requested variable name strings (may be empty)
+        %   Output Arguments:
+        %     res - Numeric index vector into obj.variables, or empty on failure
+        %
 			res=cType.EMPTY;
 			% If no variables are specified, get the output default variables
 			if isempty(var)
@@ -210,16 +222,19 @@ classdef cGraphSummary < cGraphResults
             res=find(ismember(obj.variables,var));
 		end
 
-		function res=checkCases(obj,style,var)
-		%checkCases - Check Cases option
-		%   Syntax:
-		%     res=checkCases(obj,style,var)
-		%   Input Arguments:
-		%     style - graph style
-		%     var - cell array with the cases to show
-		%   Output Arguments:
-		%     res - indices of the cases to show
-		%
+        function res=checkCases(obj,style,var)
+        %checkCases - Resolve the Cases option to a column-index vector
+        %   When var is empty all cases are selected; for STACK style the first
+        %   case (Total) is excluded automatically.
+        %
+        %   Syntax:
+        %     res = obj.checkCases(style, var)
+        %   Input Arguments:
+        %     style - Graph style identifier (see cType.GraphStyles)
+        %     var   - Cell array of requested state/sample name strings (may be empty)
+        %   Output Arguments:
+        %     res - Numeric index vector into obj.cases, or empty on failure
+        %
 			res=cType.EMPTY;
             if isempty(var)
 				%Remove first case (Total) for stack graphs

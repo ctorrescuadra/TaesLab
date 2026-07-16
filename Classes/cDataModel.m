@@ -1,68 +1,84 @@
 classdef cDataModel < cResultSet
-%cDataModel - Create the data model object.
-%   It receives the data from the cReadModel interface classes, then validates
-%   and dispatch the information to be used by the calculation algorithms.
-%   The data model includes the productive structure, exergy states, resource costs,
-%   waste definitions and format data.
+%cDataModel - Central validated data hub for a TaesLab thermoeconomic model.
+%   cDataModel receives raw model data from a cModelData object, validates
+%   every component in a strict sequential pipeline, and constructs the
+%   object graph consumed by all calculation algorithms.
 %
-%   cDataModel properties:
-%     NrOfFlows           - Number of flows
-%     NrOfProcesses       - Number of processes
+%   The construction pipeline proceeds in this order:
+%     1. cProductiveStructure  - topology of flows and processes
+%     2. cResultTableBuilder   - result format configuration
+%     3. cExergyData (dataset) - one entry per operating state
+%     4. cWasteData            - waste allocation definitions (if present)
+%     5. cResourceData (dataset) - one entry per cost sample (if present)
+%
+%   If any step fails, the object status is set to false and detailed
+%   error messages are accessible through the inherited cMessageLogger.
+%
+%   Because cDataModel inherits from cResultSet, the data-model tables
+%   (flows, processes, exergy states, resource costs, waste definitions)
+%   can be displayed or exported through the standard ShowResults /
+%   SaveResults pipeline without additional work.
+%
+%   cDataModel Properties:
+%     NrOfFlows           - Number of flows in the productive structure
+%     NrOfProcesses       - Number of processes in the productive structure
 %     NrOfWastes          - Number of waste flows
 %     NrOfResources       - Number of resource flows
-%     NrOfSystemOutputs   - Number of system outputs
-%     NrOfFinalProducts   - Number of final products
-%     NrOfStates          - Number of exergy data simulations
+%     NrOfSystemOutputs   - Number of system output flows
+%     NrOfFinalProducts   - Number of final product flows
+%     NrOfStates          - Number of exergy states (operating conditions)
 %     NrOfSamples         - Number of resource cost samples
-%     isWaste             - Indicate if the model has waste defined
-%     isResourceCost      - Indicate if the model has resource cost data
-%     isDiagnosis         - Indicate if the model has information to make diagnosis
-%     isSummary           - Indicate if the model has information to make summary reports
-%     StateNames          - State names
-%     SampleNames         - Resource sample names
-%     WasteFlows          - Waste Flow names
+%     isWaste             - True if waste allocation data is available
+%     isResourceCost      - True if resource cost data is available
+%     isDiagnosis         - True if more than one state exists (diagnosis enabled)
+%     isSummary           - True if multi-state or multi-sample data exists
+%     StateNames          - Cell array of exergy state names
+%     SampleNames         - Cell array of resource sample names
+%     WasteFlows          - Cell array of waste flow names
 %     ProductiveStructure - cProductiveStructure object
-%     FormatData          - cResultTableBuilder object
-%     WasteData           - cWasteData object
-%     ExergyData          - Dataset of cExergyData
-%     ResourceData        - Dataset of cResourceData
-%     ModelData           - cModelData object
+%     FormatData          - cResultTableBuilder object (result format config)
+%     WasteData           - cWasteData object (waste allocation)
+%     ExergyData          - cDataset of cExergyData objects (one per state)
+%     ResourceData        - cDataset of cResourceData objects (one per sample)
+%     ModelData           - cModelData object (raw validated input data)
 %
-%   cDataModel methods:
-%     cDataModel         - Create an instance of the class
-%     existState         - Check if a state name exists 
-%     existSample        - Check if a sample name exists
-%     getExergyData      - Get the cExergyData of a state
-%     setExergyData      - Set the exergy values of a state
-%     addExergyData      - Add a new exergy state
-%     getResourceData    - Get the cResourceData for a specific sample
-%     setFlowResource    - Set Flow-resource values of a sample
-%     setProcessResource - Set Process-resource values of a sample
-%     addResourceData    - Add a new resource sample
-%     getWasteDefinition - Get Waste definition info
-%     setWasteType       - Modify the type of a waste
-%     setWasteValues     - Modify the allocation values of a waste
-%     setWasteRecycled   - Modify the recycling ratio of a waste
-%     getSummaryOption   - Get the default summary option
-%     getTablesDirectory - Get the tables directory 
-%     getTableInfo       - Get information about a table object
-%     getResultInfo      - Get the cResultInfo associated to the data model
-%     showDataModel      - Show the data model
-%     saveDataModel      - Save the data model
+%   cDataModel Methods:
+%     cDataModel         - Construct the data model from a cModelData object
+%     existState         - Return the index of a state name, or 0 if absent
+%     existSample        - Return the index of a sample name, or 0 if absent
+%     getExergyData      - Retrieve the cExergyData object for a state
+%     setExergyData      - Replace the exergy values of an existing state
+%     addExergyData      - Append a new exergy state to the dataset
+%     getResourceData    - Retrieve the cResourceData object for a sample
+%     setFlowResource    - Replace flow-resource values for a sample
+%     setProcessResource - Replace process-resource values for a sample
+%     addResourceData    - Append a new resource cost sample to the dataset
+%     getWasteDefinition - Return (or display) the waste allocation data
+%     setWasteType       - Change the allocation method for a waste flow
+%     setWasteValues     - Change the allocation coefficients for a waste flow
+%     setWasteRecycled   - Change the recycling ratio for a waste flow
+%     getSummaryOption   - Return the recommended summary option string
+%     getTablesDirectory - Return a directory of available result tables
+%     getTableInfo       - Return metadata for a named result table
+%     getResultInfo      - Return the cResultInfo for the data-model tables
+%     showDataModel      - Display data-model tables in the selected interface
+%     saveDataModel      - Save the data model to a file
+%     create             - (Static) Construct a cDataModel directly from a file
 %
-%   cDataModel methods (inherited from cResultSet):
-%     ListOfTables     - Get the table names from a result set
-%     getTableIndex    - Get the table index from a result set
-%     printResults     - Print results on console
-%     showResults      - Show results in different interfaces
-%     showTableIndex   - Show the table index in different interfaces
-%     exportResults    - Export all the result Tables to another format
-%     saveResults      - Save all the result tables in an external file
-%     getTable         - Get a table of the result set by name
-%     saveTable        - Save the results in an external file 
-%     exportTable      - Export a table to another format
+%   cDataModel Methods (inherited from cResultSet):
+%     ListOfTables     - Return the table names from the result set
+%     getTableIndex    - Return the table index from the result set
+%     printResults     - Print results to the console
+%     showResults      - Display results in the selected interface
+%     showTableIndex   - Display the table index in the selected interface
+%     exportResults    - Export all result tables to another format
+%     saveResults      - Save all result tables to an external file
+%     getTable         - Retrieve a result table by name
+%     saveTable        - Save a single result table to an external file
+%     exportTable      - Export a single result table to another format
 %
-%   See also cResultSet, cProductiveStructure, cExergyData, cResultTableBuilder, cWasteData, cResourceData, cModelData
+%   See also cResultSet, cModelData, cProductiveStructure, cExergyData,
+%            cResultTableBuilder, cWasteData, cResourceData
 %
     properties(GetAccess=public, SetAccess=private)
         NrOfFlows               % Number of flows
@@ -95,13 +111,24 @@ classdef cDataModel < cResultSet
 
     methods
         function obj = cDataModel(dm)
-        %cDataModel - Create an instance of the class
+        %cDataModel - Construct the data model from a cModelData object
+        %   Executes the sequential validation pipeline described in the
+        %   class header.  Each step adds its messages to the object log
+        %   via addLogger so the full diagnostic trace is preserved.
+        %   Construction halts at the first fatal error; the object status
+        %   is set to false and no further steps are attempted.
+        %
         %   Syntax:
         %     obj = cDataModel(dm)
+        %
         %   Input Arguments:
-        %     dm - cModelData object with the data of the model
+        %     dm  - cModelData object carrying the validated raw model data
+        %           (productive structure, exergy states, resource costs,
+        %           waste definitions and format configuration).
+        %
         %   Output Arguments:
-        %     obj - cDataModel object
+        %     obj - cDataModel object.  Use isValid(obj) to confirm
+        %           successful construction before running analyses.
         %
             % Check Data Structure
             if ~isObject(dm,'cModelData')
@@ -336,25 +363,37 @@ classdef cDataModel < cResultSet
         % Get Data model information
         %%%
         function res=existState(obj,state)
-		%existState - Check if state is defined in States
+		%existState - Return the numeric index of a state name, or 0 if absent
+        %   Wraps cDataset.getIndex on the ExergyData dataset.  The return
+        %   value can be used directly in conditional expressions (0 is
+        %   falsy) or as an index into the dataset.
+        %
         %   Syntax:
         %     res = obj.existState(state)
+        %
         %   Input Arguments:
-        %     state - state name
+        %     state - State name string to look up.
+        %
         %   Output Arguments:
-        %     res - true | false
+        %     res   - Positive integer index if the state exists; 0 otherwise.
         %
 			res=obj.ExergyData.getIndex(state);
         end
 
 		function res=existSample(obj,sample)
-		%existSample - Check if sample is defined in ResourceState
+		%existSample - Return the numeric index of a sample name, or 0 if absent
+        %   Wraps cDataset.getIndex on the ResourceData dataset.  The return
+        %   value can be used directly in conditional expressions (0 is
+        %   falsy) or as an index into the dataset.
+        %
         %   Syntax:
-        %     res = obj.existState(sample)
+        %     res = obj.existSample(sample)
+        %
         %   Input Arguments:
-        %     sample - Resource sample name
+        %     sample - Resource sample name string to look up.
+        %
         %   Output Arguments:
-        %     res - true | false
+        %     res    - Positive integer index if the sample exists; 0 otherwise.
         %
 			res=obj.ResourceData.getIndex(sample);
         end
@@ -363,14 +402,21 @@ classdef cDataModel < cResultSet
         % Get/Set Exergy methods
         %%%
         function res=getExergyData(obj,state)
-        %getExergyData - Get the exergy data for a state
+        %getExergyData - Retrieve the cExergyData object for a state
+        %   Looks up state by key string or numeric index in the ExergyData
+        %   dataset and returns the corresponding cExergyData object.
+        %   If state is invalid, the dataset returns a cMessageLogger with
+        %   status false.
+        %
         %   Syntax:
         %     res = obj.getExergyData(state)
+        %
         %   Input Arguments:
-        %     state - state key name or id
-        %       char array | number
+        %     state - State name string (char) or positive integer index.
+        %
         %   Output Arguments:
-        %     res = cExergyData object
+        %     res   - cExergyData object for the requested state, or a
+        %             cMessageLogger with status false if state is invalid.
         %
             res=obj.ExergyData.getValues(state);
         end
@@ -421,14 +467,23 @@ classdef cDataModel < cResultSet
         end
 
         function log=setExergyData(obj,state,val)
-        %setExergyData - Set the exergy values of a state
-        %   Syntax: 
-        %     log = obj.setExergyData(state,val)
+        %setExergyData - Replace the exergy values of an existing state
+        %   Builds a new cExergyData object from val (via buildExergyData)
+        %   and stores it in the ExergyData dataset at the position
+        %   identified by state.  The state must already exist; use
+        %   addExergyData to append a new state.
+        %
+        %   Syntax:
+        %     log = obj.setExergyData(state, val)
+        %
         %   Input Arguments:
-        %     state - state to change 
-        %     val - array | struct with exergy values
+        %     state - Name (char) or numeric index of the state to update.
+        %     val   - Numeric array (1 × NrOfFlows) or struct with flow
+        %             key-value pairs containing the new exergy values.
+        %
         %   Output Arguments:
-        %     log - true | false status of the operation
+        %     log   - cMessageLogger with the operation status.  Check
+        %             log.status to verify whether the update succeeded.
         %
             log=cMessageLogger();
             ds=obj.ExergyData;
@@ -446,14 +501,23 @@ classdef cDataModel < cResultSet
         end
 
         function res=addExergyData(obj,state,val)
-        %addExergyData - add a new  exergy data state
-        %   Syntax: 
-        %     log = obj.addExergyData(state,val)
+        %addExergyData - Append a new exergy state to the dataset
+        %   Validates that state is a legal name and does not already exist,
+        %   builds the cExergyData object from val, and appends it to the
+        %   ExergyData dataset.  Use setExergyData to update an existing state.
+        %
+        %   Syntax:
+        %     res = obj.addExergyData(state, val)
+        %
         %   Input Arguments:
-        %     state - state to change 
-        %     val - array | struct with exergy values
+        %     state - New state name string.  Must satisfy cParseStream.checkName
+        %             and must not already exist in the dataset.
+        %     val   - Numeric array (1 × NrOfFlows) or struct with flow
+        %             key-value pairs containing the exergy values.
+        %
         %   Output Arguments:
-        %     log - true | false status of the operation
+        %     res   - The new cExergyData object on success, or a
+        %             cMessageLogger with status false if the operation fails.
         %
             res=cMessageLogger();
             ds=obj.ExergyData;
@@ -473,27 +537,41 @@ classdef cDataModel < cResultSet
         % Get/Set Resource Definition methods
         %%%
         function res=getResourceData(obj,sample)
-        %getResourceData - Get the resource data for a sample
+        %getResourceData - Retrieve the cResourceData object for a sample
+        %   Looks up sample by key string or numeric index in the ResourceData
+        %   dataset and returns the corresponding cResourceData object.
+        %   If sample is invalid, the dataset returns a cMessageLogger with
+        %   status false.
+        %
         %   Syntax:
         %     res = obj.getResourceData(sample)
+        %
         %   Input Arguments:
-        %     sample - Resource sample name key or id
-        %       char array | number
+        %     sample - Sample name string (char) or positive integer index.
+        %
         %   Output Arguments:
-        %     res - cResourceData object
+        %     res    - cResourceData object for the requested sample, or a
+        %              cMessageLogger with status false if sample is invalid.
         %
             res=obj.ResourceData.getValues(sample);
         end
 
         function log=setFlowResource(obj,sample,values)
-        %setFlowResource - Set the flow-resource value of a sample
+        %setFlowResource - Replace the flow-resource cost values of a sample
+        %   Retrieves the cResourceData object for sample and delegates to
+        %   its setFlowResource method.  Any validation errors from the
+        %   inner call are forwarded to the returned logger.
+        %
         %   Syntax:
-        %     log = obj.setFlowResourceData(sample,values)
+        %     log = obj.setFlowResource(sample, values)
+        %
         %   Input Arguments:
-        %     sample - Sample key/id
-        %     values - Array containing the flow-resource values
+        %     sample - Sample name string (char) or positive integer index.
+        %     values - Array containing the new flow-resource cost values.
+        %
         %   Output Arguments:
-        %     log - cMessageLogger with the operation status and errors
+        %     log    - cMessageLogger with the operation status.  Check
+        %              log.status to verify whether the update succeeded.
         %
             log=cMessageLogger();
             rsd=obj.getResourceData(sample);
@@ -506,14 +584,21 @@ classdef cDataModel < cResultSet
         end
 
         function log=setProcessResource(obj,sample,values)
-        %setProcessResource - Set the process-resource value of a sample
+        %setProcessResource - Replace the process-resource cost values of a sample
+        %   Retrieves the cResourceData object for sample and delegates to
+        %   its setProcessResource method.  Any validation errors from the
+        %   inner call are forwarded to the returned logger.
+        %
         %   Syntax:
-        %     log = obj.setProcessResourceData(sample,values)
+        %     log = obj.setProcessResource(sample, values)
+        %
         %   Input Arguments:
-        %     sample - Sample key/id
-        %     values - Array containing the process-resource values
+        %     sample - Sample name string (char) or positive integer index.
+        %     values - Array containing the new process-resource cost values.
+        %
         %   Output Arguments:
-        %     log - cMessageLogger with the operation status and errors
+        %     log    - cMessageLogger with the operation status.  Check
+        %              log.status to verify whether the update succeeded.
         %
             log=cMessageLogger();
             rsd=obj.getResourceData(sample);
@@ -584,15 +669,25 @@ classdef cDataModel < cResultSet
         end
 
         function rsd=addResourceData(obj,sample,rval,varargin)
-        %addResourceData - Create a new cResourceData object and add to Resource samples
+        %addResourceData - Append a new resource cost sample to the dataset
+        %   Validates that sample is a legal name and does not already exist,
+        %   builds the cResourceData object from rval (and optionally pval),
+        %   and appends it to the ResourceData dataset.
+        %
         %   Syntax:
-        %     res = obj.addResourceData(sample,rval,pval)
+        %     rsd = obj.addResourceData(sample, rval)
+        %     rsd = obj.addResourceData(sample, rval, pval)
+        %
         %   Input Arguments:
-        %     sample - name of the resource sample
-        %     rval - array | struct with the flow resource values
-        %     pval - array | struct with the processes resource values (optional)
+        %     sample   - New sample name string.  Must satisfy
+        %                cParseStream.checkName and must not already exist.
+        %     rval     - Numeric array or struct with flow resource cost values.
+        %     pval     - (optional) Numeric array or struct with process
+        %                resource cost values.
+        %
         %   Output Arguments:
-        %     log - true | false status of the operaton
+        %     rsd      - The new cResourceData object on success, or a
+        %                cMessageLogger with status false if the operation fails.
         %
             if nargin<3
                 return
@@ -615,13 +710,18 @@ classdef cDataModel < cResultSet
         % Get/Set Waste Analysis methods
         %%%
         function res=getWasteDefinition(obj)
-        %getWasteDefinition - Get Waste Data
+        %getWasteDefinition - Return (or display) the waste allocation data
+        %   When called with an output argument, returns the cWasteData object
+        %   directly.  When called with no output argument (interactive use),
+        %   displays the waste-definition and waste-allocation tables through
+        %   showResults / printTable.
+        %
         %   Syntax:
-        %     obj.getWasteDefinition;
-        %     res = obj.getWasteDefinition
+        %     wd  = obj.getWasteDefinition()    % returns cWasteData
+        %     obj.getWasteDefinition()           % displays tables in console
+        %
         %   Output Arguments:
-        %     res - (optional) cWasteData
-        %       If no output, it shows waste tables
+        %     res - cWasteData object (only when nargout > 0).
         %
             res=obj.WasteData;
             if nargout==0
@@ -635,14 +735,21 @@ classdef cDataModel < cResultSet
         end
 
         function log=setWasteType(obj,key,wtype)
-        %setWasteType - Set the waste type allocation method for Active Waste
-        %   Syntax: 
-        %     log = setWasteType(wtype)
+        %setWasteType - Change the cost-allocation method for a waste flow
+        %   Delegates to cWasteData.setType.  The new allocation type must
+        %   be a valid cType.WasteAllocation value.
+        %
+        %   Syntax:
+        %     log = obj.setWasteType(key, wtype)
+        %
         %   Input Arguments:
-        %     key - waste key 
-        %     wtype - waste allocation type
+        %     key   - Waste flow key string identifying the waste to modify.
+        %     wtype - Allocation type string (see cType.WasteAllocation).
+        %
         %   Output Arguments:
-        %     log - cTaesLab with the status of the operation
+        %     log   - cTaesLab object with the operation status.  Check
+        %             log.status to verify whether the change succeeded.
+        %
         %   See also cType.WasteAllocation
         %
             log=cTaesLab();
@@ -656,14 +763,20 @@ classdef cDataModel < cResultSet
         end
 
         function log=setWasteValues(obj,key,val)
-        %setWasteValues - Set the waste table values
+        %setWasteValues - Change the allocation coefficients for a waste flow
+        %   Delegates to cWasteData.setValues.  The vector val must have one
+        %   entry per productive process.
+        %
         %   Syntax:
-        %     log = obj.setWasteValues(val)
+        %     log = obj.setWasteValues(key, val)
+        %
         %   Input Arguments:
-        %     key - waste key 
-        %     val - vector containing the waste allocation values for processes
+        %     key - Waste flow key string identifying the waste to modify.
+        %     val - Numeric vector of allocation coefficients, one per process.
+        %
         %   Output Arguments:
-        %     log - cTaesLab with the status the operation
+        %     log - cTaesLab object with the operation status.  Check
+        %           log.status to verify whether the change succeeded.
         %
             log=cTaesLab();
             if nargin~=3
@@ -676,14 +789,20 @@ classdef cDataModel < cResultSet
         end
    
         function log=setWasteRecycled(obj,key,val)
-        %setWasteRecycled - Set the waste recycling ratios
+        %setWasteRecycled - Change the recycling ratio for a waste flow
+        %   Delegates to cWasteData.setRecycleRatio.  val must be a scalar
+        %   in [0, 1] representing the fraction of the waste that is recycled.
+        %
         %   Syntax:
-        %     log = obj.setWasteRecycled(val)
+        %     log = obj.setWasteRecycled(key, val)
+        %
         %   Input Arguments:
-        %     key - Waste key
-        %     val - Recycling ratio of the active waste
+        %     key - Waste flow key string identifying the waste to modify.
+        %     val - Scalar recycling ratio in the range [0, 1].
+        %
         %   Output Arguments:
-        %     log - cTaesLab with the status and messages of operation
+        %     log - cTaesLab object with the operation status.  Check
+        %           log.status to verify whether the change succeeded.
         %
             log=cTaesLab();
             if nargin~=3
@@ -696,13 +815,19 @@ classdef cDataModel < cResultSet
         end
 
         function log=updateModel(obj)
-        %updateModel - Update the Data Model if there is changes
-        %   Update cModelData and cResultInfo if changes have been made
-        %   by setExergy, setResources or setWaste methods
+        %updateModel - Rebuild internal data after setExergy/setResource/setWaste changes
+        %   Calls buildModelData to synchronise the cModelData object with
+        %   any modified exergy, resource or waste values, then calls
+        %   buildResultInfo to regenerate the result tables.
+        %   Must be called explicitly after any set* method to ensure the
+        %   data model and its presentation tables are consistent.
+        %
         %   Syntax:
-        %     obj.updateModel()
+        %     log = obj.updateModel()
+        %
         %   Output Arguments:
-        %     log - true | false status of the operation
+        %     log - Logical scalar: true if the model is still valid after
+        %           the rebuild, false if an error occurred.
         %
             buildModelData(obj);
             buildResultInfo(obj);
@@ -723,6 +848,20 @@ classdef cDataModel < cResultSet
         %       'NONE' | 'STATES' | 'RESOURCES' | 'ALL'
         %
         function res = getSummaryOption(obj)
+        %getSummaryOption - Return the recommended summary option string
+        %   Selects the appropriate cType.SummaryId key based on whether
+        %   the model has multiple states and/or multiple cost samples:
+        %     NrOfStates=1,  NrOfSamples=1  ->  'NONE'
+        %     NrOfStates>1,  NrOfSamples=1  ->  'STATES'
+        %     NrOfStates=1,  NrOfSamples>1  ->  'RESOURCES'
+        %     NrOfStates>1,  NrOfSamples>1  ->  'ALL'
+        %
+        %   Syntax:
+        %     res = obj.getSummaryOption()
+        %
+        %   Output Arguments:
+        %     res - 1×1 cell array containing the option string.
+        %
             options = fieldnames(cType.SummaryId);
             id = (obj.NrOfStates > 1) + 2 * (obj.NrOfSamples > 1) + 1;
             res = options(id);
@@ -773,28 +912,49 @@ classdef cDataModel < cResultSet
         end
 
         function showDataModel(obj,varargin)
-        %showDataModel - View a table in a GUI Table
+        %showDataModel - Display data-model tables in the selected interface
+        %   Delegates to showResults (inherited from cResultSet).  The
+        %   optional arguments control which table is shown and which
+        %   interface is used for presentation.
+        %
         %   Syntax:
-        %     obj.showDataModel(options)
+        %     obj.showDataModel()
+        %     obj.showDataModel(name)
+        %     obj.showDataModel(name, view)
+        %
         %   Input Arguments:
-        %     name - [optional] Name of the table
-        %       If is missing all tables are shown in the console
-        %     options - TableView option
-        %       cType.TableView.CONSOLE (default)
-        %       cType.TableView.GUI
-        %       cType.TableView.HTML
+        %     name - (optional) Name of the table to display.  When omitted,
+        %            all data-model tables are printed to the console.
+        %     view - (optional) Display interface selector:
+        %              cType.TableView.CONSOLE  (default)
+        %              cType.TableView.GUI
+        %              cType.TableView.HTML
         %
             showResults(obj,varargin{:})
         end
 
         function log=saveDataModel(obj,filename)
-		%SaveDataModel - Save data model depending of filename extension
-        %   Valid extension are: txt, csv, html, xlsx, json, xml, mat
+		%saveDataModel - Save the data model to a file
+        %   The output format is determined by the filename extension.
+        %   Supported extensions and their formats:
+        %     .json  - JSON (model structure)
+        %     .xml   - XML  (model structure)
+        %     .csv   - CSV  (result tables, one file per table)
+        %     .xlsx  - Excel workbook (one sheet per result table)
+        %     .txt   - Plain text
+        %     .html  - HTML pages
+        %     .tex   - LaTeX tables
+        %     .mat   - MATLAB binary (full object)
+        %
+        %   Syntax:
+        %     log = obj.saveDataModel(filename)
         %
         %   Input Arguments:
-        %     filename - name of the file including extension.
+        %     filename - Path to the output file, including the extension.
+        %
         %   Output Arguments:
-        %     log - cMessageLog including save status and messages
+        %     log      - cMessageLogger with the save status and any error
+        %                messages.  Check log.status to verify success.
         %
 			log=cMessageLogger();
 			% Check inputs

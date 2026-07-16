@@ -1,31 +1,46 @@
 classdef cReadModelCSV < cReadModelTable
-%cReadModelCSV - Implements the cReadModelTable to read CSV data model files.
-%   This class read a set of CSV files containing the thermoeconomic data
-%   and build the data model.
+%cReadModelCSV - Reads a CSV-based thermoeconomic data model.
+%   Concrete implementation of cReadModelTable for CSV format. The input
+%   file (cfgfile) is a plain-text file whose sole content is the path to
+%   a directory containing one CSV file per data model table. Table names
+%   and field layouts are driven by printformat.json. Optional tables are
+%   skipped silently when their CSV file is absent.
 %
-%   cReadModelCSV Properties:
-%     ModelName   - Name of the model
-%     ModelData   - cModelData object
-%     ModelFile   - File name of the model
-%     ModelTables - cModelTable object
-% 
-%   cReadModelCSV methods:
-%     cReadModelCSV    - Build an instance of the class
-%     getDataModel     - Get the data model object
-%     printModelTables - Show the model tables on console
-%   
-%   See also cReadModel, cReadModelTable, cModelData, cModelTable.
+%   Compatible with both MATLAB and Octave.
+%
+%   cReadModelCSV Properties (inherited from cReadModel / cReadModelTable):
+%     ModelFile   - Absolute path of the input descriptor file
+%     ModelName   - Model name (file name without extension)
+%     ModelData   - Validated cModelData object
+%     ModelTables - Struct of cModelTable objects keyed by table name
+%
+%   cReadModelCSV Methods:
+%     cReadModelCSV    - Construct an instance and read all CSV tables
+%     getDataModel     - Build and return a cDataModel object (inherited)
+%     printModelTables - Display all loaded tables on the console (inherited)
+%
+%   See also cReadModel, cReadModelTable, cModelData, cModelTable
 %
     methods
         function obj=cReadModelCSV(cfgfile)
-        %cReadModelCSV - Build an instance of the class
-        %   Read a CSV file containing the data model
+        %cReadModelCSV - Construct an instance and read all CSV tables.
+        %   Reads the folder path from cfgfile, then iterates over the
+        %   tables defined in printformat.json and imports each matching
+        %   CSV file into a cModelTable. Construction errors are stored
+        %   in the logger; check isValid(obj) after construction.
+        %
         %   Syntax:
-        %     obj=cReadModelCSV(cfgfile)
+        %     obj = cReadModelCSV(cfgfile)
+        %
         %   Input Arguments:
-		%	  cfgfile - csv file containig the model of the plant
-		%   Output Arguments:
-        %     obj - cReadModel object
+        %     cfgfile - Path to a plain-text descriptor file whose content
+        %               is the directory containing the CSV model files
+        %
+        %   Output Arguments:
+        %     obj - cReadModelCSV object
+        %
+        %   See also cReadModelCSV.getDataModel
+        %
         
             % Read data file
 			folder=fileread(cfgfile);
@@ -74,14 +89,20 @@ classdef cReadModelCSV < cReadModelTable
 
     methods(Static, Access=private)
         function tbl=import(filename,props)
-        %import - Read a file and store into a cModelTable object
+        %import - Read a CSV file and wrap it in a cModelTable.
+        %   Uses csv2cell (Octave) or readcell (MATLAB) to load the raw
+        %   cell array, then delegates validation to cModelTable.
+        %
         %   Syntax:
-        %     tbl = import(filename,props)
+        %     tbl = cReadModelCSV.import(filename, props)
+        %
         %   Input Arguments:
-        %     filename - CSV filename
-        %     props - Properties of the table
+        %     filename - Absolute path to the CSV file
+        %     props    - Table definition struct from printformat.json
+        %
         %   Output Arguments:
-        %     res - cModelTable object
+        %     tbl - cModelTable object, or cMessageLogger on read error.
+        %           Check tbl.status before use.
         %
             tbl=cMessageLogger();
             if isOctave

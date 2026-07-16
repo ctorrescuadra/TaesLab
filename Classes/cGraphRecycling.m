@@ -1,24 +1,27 @@
 classdef cGraphRecycling < cGraphResults
-%cGraphCost - Plot the waste recycling cost graphs.
-%   This class creates a line graph from a cTable object
-%   containing the recycling cost data of a productive structure.
+%cGraphRecycling - Plot the waste recycling cost line graph.
+%   Creates a line graph with diamond markers showing how the unit cost of
+%   selected flows or processes evolves as the waste recycling fraction varies
+%   from 0 % to 100 %.  The base line is 0 for general cost tables and 1 for
+%   unit-cost tables.
 %
-%   cGraphRecycling methods:
-%     cGraphRecycling - Build an instance of the class
-%     showGraph       - Show the graph in a figure window 
-%     showGraphUI     - Show the graph in the graph pannel of a GUI app
+%   cGraphRecycling Methods:
+%     cGraphRecycling - Construct a cGraphRecycling from a recycling cost table
+%     showGraph       - Display the line graph in a standalone figure window
+%     showGraphUI     - Display the line graph in an App Designer graph panel
 %
-%   See also cGraphResults
+%   See also cGraphResults, cWasteAnalysis
 %
     methods
         function obj = cGraphRecycling(tbl)
-		%cGraphRecycling - Build an instance of the object
+        %cGraphRecycling - Construct a cGraphRecycling from a recycling cost table
+        %
         %   Syntax:
         %     obj = cGraphRecycling(tbl)
         %   Input Arguments:
-        %     tbl - cTable with the data to show graphically
-		%   Output Arguments:
-		%     obj - cGraphRecycling object
+        %     tbl - cTable containing the recycling cost data (rows = variables, cols = recycling %)
+        %   Output Arguments:
+        %     obj - cGraphRecycling object (check obj.status before use)
         %
 			obj.Name='Recycling Cost Analysis';
 			obj.Title=[tbl.Description ' [',tbl.State,'/',tbl.ColNames{end},']'];
@@ -37,9 +40,9 @@ classdef cGraphRecycling < cGraphResults
         end
 
         function showGraph(obj)
- 		%showGraph - Show the graph in a figure window
+        %showGraph - Display the recycling cost line graph in a standalone figure window
         %   Syntax:
-        %     obj.showGraphUI(app)
+        %     obj.showGraph
 		    set(groot,'defaultTextInterpreter','none');
 			f=figure('name',obj.Name,...
                 'numbertitle','off',...
@@ -53,13 +56,14 @@ classdef cGraphRecycling < cGraphResults
 			obj.setGraphParameters(ax);
         end
 
-		function showGraphUI(obj,app)
-        %showGraphUI - Show the graph in a GUI app
+        function showGraphUI(obj,app)
+        %showGraphUI - Display the recycling cost line graph in an App Designer graph panel
+        %
         %   Syntax:
         %     obj.showGraphUI(app)
-		%	Input Parameter:
-		%	  app - GUI app reference object
-		%
+        %   Input Arguments:
+        %     app - matlab.apps.AppBase object whose UIAxes hosts the graph
+        %
 			if app.isColorbar
 				delete(app.Colorbar);
 			end

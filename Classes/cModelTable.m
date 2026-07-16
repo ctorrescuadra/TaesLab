@@ -1,27 +1,31 @@
 classdef (Sealed) cModelTable < cMessageLogger
-%cModelTable - Class container for the values read by cReadModelTable
-%   This class validate and store the data model values
-%   The table definition is provided by a struct with the table properties
-%   as read by cReadModelTables from the file printconfig.json.
-%   The table data is provided by a cell array read by cReadModelTables
-%   
-%   cModelTable properties:
-%     NrOfRows - Number of table rows
-%     NrOfCols - Number of table columns
-%     Values - Table data values
-%     Fields - Fields of the table
-%     Data   - Data of the table (without fields)
-%     Keys   - Keys or row names of the table data
-%     Name   - Name of the table
-%   
-%   cModelTable methods:
-%     cModelTable  - Construct an instance of this class
-%     getStructData - Get the values as struct
-%     getTableData  - Get the values as cTable
-%     printTable    - Print the table on console
-%     size          - Size of the table model. Overload size method
+%cModelTable - Validated container for a single data model table.
+%   Stores and validates one table read by a cReadModelTable subclass.
+%   The expected table layout (field names, data types, optional flag) is
+%   supplied as a props struct derived from printformat.json. The raw
+%   cell array is validated for missing values, correct field names, and
+%   per-column data types (KEY, CHAR, NUMERIC, or SAMPLE blocks).
 %
-%   See cReadModelTables, printconfig.json
+%   An object is invalid (isValid returns false) when required validation
+%   steps fail; all errors are accumulated in the object logger.
+%
+%   cModelTable Properties:
+%     NrOfRows - Number of data rows (excluding the header row)
+%     NrOfCols - Number of columns
+%     Values   - Full cell array including the header row
+%     Fields   - Header row: column field names (cell row vector)
+%     Data     - Data rows without the header (cell array)
+%     Keys     - First column of Data: row identifier strings
+%     Name     - Table name, from the props configuration struct
+%
+%   cModelTable Methods:
+%     cModelTable   - Construct an instance and validate the raw cell array
+%     getStructData - Return table data as a struct array
+%     getTableData  - Return table data as a cTableData object
+%     printTable    - Print the table on the console
+%     size          - Return table dimensions (overloads built-in size)
+%
+%   See also cReadModelTable, cReadModelXLS, cReadModelCSV
 %   
     properties(GetAccess=public,SetAccess=private)
         NrOfRows % Number of Rows
@@ -39,14 +43,24 @@ classdef (Sealed) cModelTable < cMessageLogger
 
     methods
         function obj=cModelTable(vals,props)
-        %cModelTable - Construct an instance of this class
-        %   Validate the table data and store the values
+        %cModelTable - Construct an instance and validate the raw cell array.
+        %   Validates that vals is a cell array and props is a struct with
+        %   the required fields (id, name, optional, fields). Checks for
+        %   missing values, verifies the column count, and runs per-column
+        %   type validation. Errors are stored in the logger; check
+        %   isValid(obj) after construction.
         %
         %   Syntax:
-        %     obj = cModelTable(table,props)
+        %     obj = cModelTable(vals, props)
+        %
         %   Input Arguments:
-        %     table - cell array with the table data
-        %     props - struct with the data model definition
+        %     vals  - Cell array with the raw table data. The first row
+        %             must contain the field names (column headers); the
+        %             remaining rows contain the data values.
+        %     props - Struct with the table definition as loaded from
+        %             printformat.json (fields: id, name, optional, fixed,
+        %             fields array with name and datatype per column)
+        %
         %   Output Arguments:
         %     obj   - cModelTable object
 
@@ -114,21 +128,33 @@ classdef (Sealed) cModelTable < cMessageLogger
         end
 
         function res=getStructData(obj)
-        %getStructData - Get a struct with the table values
+        %getStructData - Return table data as a struct array.
+        %   Converts the Data cell array to a struct array using the field
+        %   names from the Fields header row. Each struct element corresponds
+        %   to one data row.
+        %
         %   Syntax:
-        %     res = obj.getStructData();
-        %   Output parameter:
-        %     res - struct with the columns data
+        %     res = obj.getStructData()
+        %
+        %   Output Arguments:
+        %     res - Struct array with one element per data row, with field
+        %           names matching the table column headers.
         %
                 res=cell2struct(obj.Data,obj.Fields,2);
         end
 
         function res=getTableData(obj)
-        %getTableData - Get a cTable with the table model info.
+        %getTableData - Return table data wrapped in a cTableData object.
+        %   Creates a cTableData from the full Values cell array using the
+        %   table name and description from the props configuration struct.
+        %
         %   Syntax:
-        %     res = obj.getTableData
-        %   Output parameter:
-        %     res - cTable object
+        %     res = obj.getTableData()
+        %
+        %   Output Arguments:
+        %     res - cTableData object ready for display or export.
+        %
+        %   See also cTableData
         %
             p=struct('Name',obj.config.name,...
                 'Description',obj.config.descr,...
@@ -165,12 +191,19 @@ classdef (Sealed) cModelTable < cMessageLogger
 
     methods(Access=private)
         function log=validateTable(obj)
-        %validateTable - Check the table values
+        %validateTable - Validate field names and per-column data types.
+        %   Iterates over the field definitions in the props config struct
+        %   and checks each column against its declared datatype (KEY,
+        %   CHAR, NUMERIC, or SAMPLE). Field name mismatches and type
+        %   failures are logged to the returned logger.
+        %
         %   Syntax:
-        %     log = obj.validateTable(p)
+        %     log = obj.validateTable()
+        %
         %   Output Arguments:
-        %     log - cMessageLog with the validation status and error messages
-        
+        %     log - cMessageLogger containing any validation errors found.
+        %           Check log.status to determine if all columns passed.
+        %
             % Initilize variables            
             log=cMessageLogger();
             p=obj.config;
@@ -211,15 +244,18 @@ classdef (Sealed) cModelTable < cMessageLogger
         end
 
         function tst=checkMissingValues(obj,values)
-        %checkValues - Check if the values have missing values
+        %checkMissingValues - Check whether the cell array contains missing values.
+        %   Scans every column of values for empty cells or MATLAB missing
+        %   values. Logs a MissingValues error for each affected column.
+        %
         %   Syntax:
-        %     tst = cModelTable.checkMissingValues(log,table,values)
+        %     tst = obj.checkMissingValues(values)
+        %
         %   Input Arguments:
-        %     log    - cMessageLogger to log errors 
-        %     table  - Name of the table (char array)
-        %     values - Values to check
+        %     values - Cell array of raw table data (including header row)
+        %
         %   Output Arguments:
-        %     tst - true | false
+        %     tst - true when no missing values are found; false otherwise.
         %
             tst=true;
             %Search columns with missing cells
@@ -240,14 +276,22 @@ classdef (Sealed) cModelTable < cMessageLogger
 
     methods(Static,Access=private)
         function tst=validateKey(log,data)
-        %validateKey - Validate key data
+        %validateKey - Validate a KEY-type column.
+        %   Checks that every entry in data matches the required key pattern
+        %   and that no duplicates exist. Errors are logged to log.
+        %
         %   Syntax:
-        %     test = cModelTable.validateKey(log,data)
+        %     tst = cModelTable.validateKey(log, data)
+        %
         %   Input Arguments:
-        %     log   - logger to store messages
-        %     data  - field data
+        %     log  - cMessageLogger to receive error messages
+        %     data - Cell column vector of key strings to validate
+        %
         %   Output Arguments:
-        %     tst - true | false
+        %     tst  - true when all keys are valid and unique; false otherwise.
+        %
+        %   See also cParseStream.checkListKeys, cParseStream.checkDuplicates
+        %
 
             %Check if the keys has the correct pattern
             ier=cParseStream.checkListKeys(data);
@@ -267,13 +311,19 @@ classdef (Sealed) cModelTable < cMessageLogger
         end
 
         function tst=validateNumeric(data)
-        %validateNumeric - Validate numeric data
+        %validateNumeric - Validate a NUMERIC-type column.
+        %   Checks that every cell in data is numeric and that all values
+        %   are non-negative (within floating-point tolerance).
+        %
         %   Syntax:
-        %     test = cModelTable.validateNumeric(data)
+        %     tst = cModelTable.validateNumeric(data)
+        %
         %   Input Arguments:
-        %     data  - field data
+        %     data - Cell column vector expected to contain numeric scalars
+        %
         %   Output Arguments:
-        %     tst - true | false
+        %     tst  - true when all values are numeric and non-negative;
+        %            false otherwise.
         %
             tst=false;
             % Check if data column is numeric
@@ -287,14 +337,24 @@ classdef (Sealed) cModelTable < cMessageLogger
         end
 
         function tst=validateSample(log,data)
-        %validateSample - Validate numeric data block
+        %validateSample - Validate a SAMPLE-type column block.
+        %   Validates the header row of the sample block for valid and
+        %   unique sample names, then checks that all data cells are
+        %   numeric and non-negative. Errors are logged to log.
+        %
         %   Syntax:
-        %     test = cModelTable.validateSample(log,data)
+        %     tst = cModelTable.validateSample(log, data)
+        %
         %   Input Arguments:
-        %     data  - field data
-        %     log   - logger to store messages
+        %     log  - cMessageLogger to receive error messages
+        %     data - Cell array spanning the full sample block, including
+        %            the header row (sample names) and all data rows
+        %
         %   Output Arguments:
-        %     tst - true | false
+        %     tst  - true when all sample names are valid and all data
+        %            values are numeric and non-negative; false otherwise.
+        %
+        %   See also cParseStream.checkListNames, cParseStream.checkDuplicates
         %
             tst=true;
             % Check sample names

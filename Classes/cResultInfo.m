@@ -1,57 +1,63 @@
 classdef cResultInfo < cResultSet
-%cResultInfo - Class to manage the result information and tables.
-%   It stores the tables and the application class info, and provide methods to show them
-%   The diferent types (ResultId) of cResultInfo objects are defined in cType.ResultId
+%cResultInfo - Concrete result container that stores tables produced by a computation module.
+%   Each cResultInfo wraps a cResultId subclass (the computation result) together with
+%   the set of cTable objects it produced, and exposes the full cResultSet interface
+%   for display, export, and persistence.
+%   The different result types (ResultId) are defined in cType.ResultId.
 %
-%   cResultInfo properties:
-%     NrOfTables   - Number of tables
-%     Tables       - Struct containing the tables
-%     Info         - cResultId object containing the results
+%   cResultInfo Properties:
+%     NrOfTables - Number of tables in the result set
+%     Tables     - Struct whose fields are the cTable result objects, keyed by table name
+%     Info       - cResultId subclass object that produced the results
 %
-%   cResultInfo methods:
-%     cResultInfo      - Construct an instance of this class
-%     getResultInfo    - Get the result set object
-%     getTable         - Get a table of the result set
-%     getTableIndex    - Get the summary table of th results
-%     summaryDiagnosis - Get the summary diagnosis info
-%     summaryTables    - Get the available summary tables
-%     isStateSummary   - Check if States Summary is available
-%     isSampleSummary  - Check if Samples Summary is available
+%   cResultInfo Methods:
+%     cResultInfo      - Construct a cResultInfo from a cResultId and a tables struct
+%     getResultInfo    - Return this object (satisfies the cResultSet contract)
+%     getTable         - Retrieve a named cTable from the result set
+%     getTableIndex    - Get the table index in the selected format
+%     showGraph        - Show the default or named graph for these results
+%     summaryDiagnosis - Display or return the Fuel Impact and Technical Saving values
+%     summaryTables    - Display or return the available summary table options
+%     isStateSummary   - True when state-comparison summary tables are available
+%     isSampleSummary  - True when resource-sample summary tables are available
 %
-%   cResultInfo methods (inherited from cResultSet):
-%     StudyCase      - Get the study case value names
-%     ListOfTables   - get the table names from a result set
-%     printResults   - Print results on console
-%     showResults    - Show results in different interfaces
-%     showGraph      - Show the graph associated to a table
-%     showTableIndex - Show the table index in different interfaces
-%     exportResults  - Export all the result Tables to another format
-%     saveResults    - Save all the result tables in an external file
-%     saveTable      - Save the results in an external file 
-%     exportTable    - Export a table to another format
+%   cResultInfo Methods (inherited from cResultSet):
+%     StudyCase      - Get the current state and sample names
+%     ListOfTables   - Get the names of all available tables
+%     ListOfGraphs   - Get the names of all graph-capable tables
+%     printResults   - Print all result tables on the console
+%     showResults    - Display a named table in the selected view
+%     showTableIndex - Display the table index in the selected view
+%     exportResults  - Export all result tables to a MATLAB variable
+%     saveResults    - Save all result tables to an external file
+%     saveTable      - Save a single named table to an external file
+%     exportTable    - Export a single named table to a MATLAB variable
 %
 %   See also cResultSet, cResultTableBuilder, cTable
 %
     properties (GetAccess=public, SetAccess=private)
-        Tables       % Struct containing the tables
-        NrOfTables   % Number of tables
-        Info         % cResultId object containing the results
+        Tables       % Struct of cTable objects keyed by table name
+        NrOfTables   % Number of tables in the result set
+        Info         % cResultId subclass object that produced these results
     end
 
     properties (Access=private)
-        tableIndex   % cTableIndex object with tables information
+        tableIndex   % cTableIndex object that organises the tables for display
     end
 
     methods
         function obj=cResultInfo(info,tables)
-        %cResultInfo - Construct an instance of this class
+        %cResultInfo - Construct a cResultInfo from a computation result and its tables
+        %   Validates both arguments before storing them.  Sets ClassId, ResultId,
+        %   ModelName, State, Sample, and DefaultGraph from the supplied cResultId.
+        %
         %   Syntax:
-        %     obj = cResultInfo(info,tables)
+        %     obj = cResultInfo(info, tables)
         %   Input Arguments:
-        %     info - cResultId containing the results
-        %     tables - struct containig the result tables
+        %     info   - Valid cResultId subclass object produced by a computation module
+        %     tables - Struct containing the cTable result objects, keyed by table name
         %   Output Arguments:
-        %     obj - cResultInfo object
+        %     obj - cResultInfo object (check obj.status before use)
         
             % Check parameters
             if ~info.status
@@ -81,23 +87,28 @@ classdef cResultInfo < cResultSet
         end
 
         function res=getResultInfo(obj)
-        %getResultInfo - Get cResultInfo object for cResultSet
+        %getResultInfo - Return this cResultInfo (satisfies the cResultSet abstract contract)
+        %   Called internally by cResultSet methods to obtain the cResultInfo instance.
+        %
         %   Syntax:
-        %     res=obj.getResultInfo
+        %     res = obj.getResultInfo
         %   Output Arguments:
-        %     res - cResultInfo associated to the result set
+        %     res - This cResultInfo object
         %
             res=obj;
         end
 
         function res=getTable(obj,name)
-        %getTable - Get the table called name
+        %getTable - Retrieve a named table from the result set
+        %   Accepts the special name cType.TABLE_INDEX to return the table index.
+        %   Returns a cMessageLogger with an error if the name is not found.
+        %
         %   Syntax:
-        %     res=obj.getTable(name)
+        %     res = obj.getTable(name)
         %   Input Arguments:
-        %     name - Name of the table
+        %     name - Name of the table (character vector)
         %   Output Arguments:
-        %     res - cTable object
+        %     res - cTable object, or cMessageLogger on error
         %
             res = cMessageLogger();
             if nargin<2 || ~ischar(name) || isempty(name)
@@ -135,12 +146,17 @@ classdef cResultInfo < cResultSet
         end
 
         function showGraph(obj,graph)
-        %showGraph - Show graph with default options
+        %showGraph - Show the graph associated with a graph-capable table
+        %   When called without arguments the DefaultGraph table is used.
+        %   The appropriate graph class (cGraphCost, cGraphDiagnosis, cDigraph, etc.)
+        %   is selected automatically based on the table's GraphType property.
+        %
         %   Syntax:
-        %     obj.showGraph(graph, options)
+        %     obj.showGraph
+        %     obj.showGraph(graph)
         %   Input Arguments:
-        %     graph - graph table name [optional]
-        %   See also cGraphResults
+        %     graph - Name of a graph-capable table (optional, defaults to DefaultGraph)
+        %   See also cGraphCost, cGraphDiagnosis, cDigraph, cGraphDiagramFP, cGraphSummary
         %
             tbl = cTaesLab();
             res=getResultInfo(obj);
@@ -188,14 +204,16 @@ classdef cResultInfo < cResultSet
         end 
 
         function res=summaryDiagnosis(obj)
-        %summaryDiagnosis - Get the Fuel Impact/Malfunction Cost as a string including format and unit
-        %   If no output argument values are displayed on console
-        % 
+        %summaryDiagnosis - Return or display the Fuel Impact and Technical Saving for a diagnosis result
+        %   Only meaningful when ResultId is cType.ResultId.THERMOECONOMIC_DIAGNOSIS.
+        %   Returns an empty value for any other result type.
+        %   When called without an output argument the values are printed to the console.
+        %
         %   Syntax:
         %     obj.summaryDiagnosis
-        %     res=obj.summaryDiagnosis
+        %     res = obj.summaryDiagnosis
         %   Output Arguments:
-        %     res - Struct with diagnosis summary results
+        %     res - Struct with fields FuelImpact and TechnicalSaving (formatted strings)
         %  
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.THERMOECONOMIC_DIAGNOSIS
@@ -212,14 +230,16 @@ classdef cResultInfo < cResultSet
         end
 
         function res=summaryTables(obj)
-        %summaryTables - Get/Display available summary tables
-        %   If no output argument, the value is displayed in console
+        %summaryTables - Return or display the available summary table options
+        %   Only meaningful when ResultId is cType.ResultId.SUMMARY_RESULTS.
+        %   Returns an empty value for any other result type.
+        %   When called without an output argument the value is printed to the console.
         %
         %   Syntax:
         %     obj.summaryTables
-        %     res=obj.summaryTables;
+        %     res = obj.summaryTables
         %   Output Arguments:
-        %     res - Default Summary Option
+        %     res - Character vector describing the default summary table selection
         %
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
@@ -231,11 +251,14 @@ classdef cResultInfo < cResultSet
         end
 
         function res=isStateSummary(obj)
-        %isStateSummary - Check if the States Summary results are available
+        %isStateSummary - True when state-comparison summary tables are available
+        %   Only meaningful when ResultId is cType.ResultId.SUMMARY_RESULTS;
+        %   returns an empty value for any other result type.
+        %
         %   Syntax:
         %     res = obj.isStateSummary
         %   Output Arguments:
-        %     res - true | false
+        %     res - Logical true/false, or empty for non-summary result types
         %
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
@@ -244,11 +267,14 @@ classdef cResultInfo < cResultSet
         end
 
         function res=isSampleSummary(obj)
-        %isSampleSummary - Check if the Samples Summary results are available
+        %isSampleSummary - True when resource-sample summary tables are available
+        %   Only meaningful when ResultId is cType.ResultId.SUMMARY_RESULTS;
+        %   returns an empty value for any other result type.
+        %
         %   Syntax:
-        %     res = obj.isStateSummary
+        %     res = obj.isSampleSummary
         %   Output Arguments:
-        %     res - true | false
+        %     res - Logical true/false, or empty for non-summary result types
         %
             res=cType.EMPTY;
             if obj.status && obj.ResultId==cType.ResultId.SUMMARY_RESULTS
@@ -259,11 +285,14 @@ classdef cResultInfo < cResultSet
 
     methods(Access=private)
         function setStudyCase(obj,info)
-        %setStudyCase - Set state and resource sample properties for all result set tables
+        %setStudyCase - Propagate State and Sample names to all tables in the result set
+        %   Called once during construction; propagates the study case context to every
+        %   table in the tableIndex so that display methods can show the correct context.
+        %
         %   Syntax:
         %     obj.setStudyCase(info)
         %   Input Arguments:
-        %     info - struct with fields State and Sample
+        %     info - Struct with character-vector fields State and Sample
         %
             if ~isstruct(info) || ~all(isfield(info,{'State','Sample'})) || ...
                     ~ischar(info.State) || ~ischar(info.Sample)
@@ -276,13 +305,13 @@ classdef cResultInfo < cResultSet
         end
 
         function status=existTable(obj,name)
-        %existTable - Check if there is a table called name available on the result set
+        %existTable - True when a table with the given name exists in this result set
         %   Syntax:
-        %     status=obj.existTable(name)
+        %     status = obj.existTable(name)
         %   Input Arguments:
-        %     name - Name of the table
+        %     name - Table name to look up (character vector)
         %   Output Arguments:
-        %     status - true | false
+        %     status - Logical true if the table exists, false otherwise
         %
             status=false;
             if nargin<2 || ~ischar(name) || isempty(name)
@@ -292,11 +321,13 @@ classdef cResultInfo < cResultSet
         end
 
         function status=checkTables(obj,tables)
-        %checkTables - Check if the results set tables are valid
+        %checkTables - Validate all cTable objects in the tables struct
+        %   Returns false and logs errors if any table is invalid.
+        %
         %   Syntax:
-        %     status=obj.checkTables(tables)
+        %     status = obj.checkTables(tables)
         %   Input Arguments:
-        %     tables - struct containig the result tables
+        %     tables - Struct containing the cTable result objects
         %   Output Arguments:
         %     status - true | false
         %

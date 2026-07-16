@@ -1,24 +1,27 @@
 classdef cGraphCost < cGraphResults
-%cGraphCost - Plot the Irreversibility-cost graph.
-%   This class creates a stacked bar graph from a cTable object
-%   containing the irreversibility-cost data of a productive structure.
+%cGraphCost - Plot the irreversibility-cost stacked bar graph.
+%   Builds a stacked bar chart where each bar represents a flow or process
+%   and each coloured segment shows the contribution from one cost component
+%   (environment plus upstream processes).  The base line is 0 for general
+%   cost tables and 1 for unit-cost tables.
 %
-%   cGraphCost methods:
-%     cGraphCost  - Build an instance of the class
-%     showGraph   - Show the graph in a window 
-%     showGraphUI - Show the graph in the graph pannel of a GUI app
+%   cGraphCost Methods:
+%     cGraphCost  - Construct a cGraphCost from an irreversibility-cost table
+%     showGraph   - Display the bar graph in a standalone figure window
+%     showGraphUI - Display the bar graph in an App Designer graph panel
 %
 %   See also cGraphResults, cExergyCost
 %
     methods
         function obj=cGraphCost(tbl)
-        %cGraphCost - Build an instance of the object
+        %cGraphCost - Construct a cGraphCost from an irreversibility-cost table
+        %
         %   Syntax:
-        %     obj = cGraphRecycling(tbl)
+        %     obj = cGraphCost(tbl)
         %   Input Arguments:
-        %     tbl - cTable with the data to show graphically
+        %     tbl - cTable containing the irreversibility-cost data to visualise
         %   Output Arguments:
-        %     obj - cGraphCost object
+        %     obj - cGraphCost object (check obj.status before use)
         %
             % Build graph data
             obj.Name=tbl.Description;
@@ -42,10 +45,10 @@ classdef cGraphCost < cGraphResults
         end
         
         function showGraph(obj)
-        %showGraph - Show the graph in a window
+        %showGraph - Display the stacked bar graph in a standalone figure window
         %   Syntax:
         %     obj.showGraph
-		%
+        %
             M=numel(obj.Legend);
             cm=turbo(M);
             set(groot,'defaultTextInterpreter','none');
@@ -64,12 +67,12 @@ classdef cGraphCost < cGraphResults
         end
 
         function showGraphUI(obj,app)
-        %showGraphUI - Show the graph in a GUI app
+        %showGraphUI - Display the stacked bar graph in an App Designer graph panel
         %   Syntax:
         %     obj.showGraphUI(app)
-		%	Input Parameter:
-		%	  app - GUI app reference object
-		%
+        %   Input Arguments:
+        %     app - matlab.apps.AppBase object whose UIAxes hosts the graph
+        %
             M=numel(obj.Legend);
             cm=turbo(M);
             if app.isColorbar

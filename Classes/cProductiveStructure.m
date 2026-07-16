@@ -1,13 +1,19 @@
 classdef(Sealed) cProductiveStructure < cResultId
-%cProductiveStructure - Build the productive structure of a plant.
-%   Create the cProductiveStructure object a cModelData object.
-%   The productive structure includes information about:
-%   - Flows, Processes and Productive Groups (Streams)
-%   - The adjacency matrix of the productive graph
-%   The constructor checks the data model and build the productive structure.
-%   If the data model is not valid, the object status is set to false and
-%   the message log contains the errors found.	
-% 
+%cProductiveStructure - Build and validate the productive structure of a plant.
+%   Constructs the productive structure from a cModelData object by parsing
+%   and validating the ProductiveStructure section of the data model.
+%   The productive structure encodes:
+%     - Flows, Processes, and Productive Groups (Streams) with keys, types,
+%       and connectivity information
+%     - ProductiveTable: sparse adjacency matrices (AE, AS, AF, AP)
+%       representing all flow-stream and stream-process relationships
+%     - Flow and process key dictionaries for fast lookup by name
+%
+%   Validation is performed at construction time. If any error is found
+%   (duplicate keys, invalid flow/process types, disconnected graph, etc.)
+%   the object status is set to false and errors are recorded in the
+%   message log.
+%
 %   cProductiveStructure properties:
 %     NrOfProcesses     - Number of processes
 %     NrOfFlows         - Number of flows
@@ -15,19 +21,19 @@ classdef(Sealed) cProductiveStructure < cResultId
 %     NrOfWastes        - Number of wastes
 %     NrOfResources     - Number of resources
 %     NrOfFinalProducts - Number of final products
-%     NrOfSystemOutputs - Number of system output
-%     Flows             - Flows info
-%     FlowKeys          - Cell array of Flows Names (keys)
-%     Processes         - Processes info
-%     ProcessKeys       - Cell array of Processes Names (keys)
-%     ProcessMatrix     - Processes Matrix
-%     Streams           - Streams info
-%     StreamKeys      	- Cell array of Streams Names (keys)
-%     Waste             - Waste array structure (flow, stream, process) index
-%     ProductiveTable   - Adjacency Matrix of the productive structure graph
+%     NrOfSystemOutputs - Number of system outputs (final products + wastes)
+%     Flows             - Struct array with flow data (id, key, type, from, to)
+%     FlowKeys          - Cell array of flow keys
+%     Processes         - Struct array with process data (id, key, fuel, product, ...)
+%     ProcessKeys       - Cell array of process keys
+%     ProcessMatrix     - Logical process adjacency matrix (including ENV row/col)
+%     Streams           - Struct array with stream data (id, key, type, process)
+%     StreamKeys        - Cell array of stream keys
+%     Waste             - Struct with waste flow, stream, and process indices (dependent)
+%     ProductiveTable   - Struct of sparse adjacency matrices (AE, AS, AF, AP)
 %     
 %   cProductiveStructure methods:
-%     cProductiveStructure - Create an instance of the class
+%     cProductiveStructure - Construct an instance of the class
 %     buildResultInfo      - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
 %     WasteData            - Get the default waste data
 %     IncidenceMatrix      - Get the incidence matrices of the plant
@@ -55,7 +61,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 %     getProductiveMatrix  - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
 %     flows2Streams        - Compute the exergy or cost of streams from flow values                              
 %
-%   See also cDataModel, cResultId, cResultInfo
+%   See also cModelData, cResultId, cResultInfo, cMessageLogger
 %
 	properties(GetAccess=public,SetAccess=private)	
 		NrOfProcesses	  % Number of processes
@@ -84,14 +90,23 @@ classdef(Sealed) cProductiveStructure < cResultId
 
     methods
 		function obj = cProductiveStructure(dm)
-		%cProductiveStructure - Creates an instance of the class
+		%cProductiveStructure - Construct an instance of the class
+		%   Parses and validates the ProductiveStructure section of dm, building
+		%   all flows, processes, streams, and productive adjacency matrices.
+		%   The object is invalid if dm is not a valid cModelData, required
+		%   fields are missing, keys are duplicated, or the productive graph is
+		%   disconnected.
+		%
 		%   Syntax:
 		%     obj = cProductiveStructure(dm)
-		% 	Input Arguments:
-		%     dm - cModelData object	
+		%
+		%   Input Arguments:
+		%     dm  - cModelData object containing a valid ProductiveStructure
+		%           section with flows and processes fields
+		%
 		%   Output Arguments:
-		%     obj - cProductiveStructure object
-		
+		%     obj - cProductiveStructure object; check isValid(obj) before use
+		%
 			% Check/validate data model
             if ~isObject(dm,'cModelData')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(dm));
@@ -202,7 +217,15 @@ classdef(Sealed) cProductiveStructure < cResultId
 		% Public get properties
 		%%%%%
 		function res=get.Waste(obj)
-		% Get an array with flows defined as waste.
+		%Waste - Struct with the indices of waste flows, streams, and processes
+		%   Dependent property computed on demand. Returns cType.EMPTY if the
+		%   object is invalid or there are no waste flows.
+		%
+		%   Fields:
+		%     flows     - indices of flows with type WASTE
+		%     streams   - stream indices for the waste flows
+		%     processes - process indices for the waste streams
+		%
 			res=cType.EMPTY;
 			if obj.status
 				res.flows=getFlowTypes(obj,cType.Flow.WASTE);
@@ -216,22 +239,40 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%%%%%%
 		function res=buildResultInfo(obj,fmt)
 		%buildResultInfo - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
+		%   Delegates construction of the result container to the provided
+		%   cResultTableBuilder, which assembles the productive structure tables
+		%   according to the active format configuration.
+		%
 		%   Syntax:
-		%     res=obj.buildResultInfo(fmt)
+		%     res = obj.buildResultInfo(fmt)
+		%
 		%   Input Arguments:
-		%     fmt - cFormatData object
+		%     fmt - cResultTableBuilder object defining the output format
+		%
 		%   Output Arguments:
-		%     res - cResultInfo object
+		%     res - cResultInfo object containing the productive structure tables
+		%
+		%   See also cResultTableBuilder, cResultInfo
 		%
 			res=fmt.getProductiveStructure(obj);
 		end
 			
 		function res=WasteData(obj)
-		%WasteData - Get default waste data info
+		%WasteData - Get a default waste data template for this model
+		%   Returns a struct with default allocation settings for each waste
+		%   flow. Returns cType.EMPTY when there are no waste flows.
+		%
 		%   Syntax:
-		%     res=obj.WasteData
+		%     res = obj.WasteData
+		%
 		%   Output Arguments:
-		%     res - Waste data info structure
+		%     res - (struct) Waste template with field:
+		%             wastes - (1 x NrOfWastes struct array) with fields:
+		%               flow    - waste flow key (char)
+		%               type    - default allocation type (char)
+		%               recycle - default recycle fraction (0.0)
+		%
+		%   See also getWasteNames, cWasteData
 		%
 			res=cType.EMPTY;
 			if obj.NrOfWastes > 0
@@ -242,15 +283,22 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 	
 		function [res1,res2]=IncidenceMatrix(obj)
-		%IncidenceMatrix - Get incidence matrices of the plant
+		%IncidenceMatrix - Get the incidence matrices of the plant
+		%   Computes the Fuel (iAF) and Product (iAP) incidence matrices from the
+		%   productive table adjacency matrices. When called with one output,
+		%   returns the combined incidence matrix (iAF - iAP).
+		%
 		%   Syntax:
-		%     [res1,res2] = obj.IncidenceMatrix
-		%   Output Arguments:
-		%	  if output arguments are 2
-		%       res1 - Fuel Incidence Matrix
-		%       res2 - Product Incidence matrix
-		%     if output argument is 1
-		%       res1 - Incidence Matrix 
+		%     res1         = obj.IncidenceMatrix    % combined matrix
+		%     [res1,res2]  = obj.IncidenceMatrix    % fuel and product separately
+		%
+		%   Output Arguments (two outputs):
+		%     res1 - (NrOfProcesses x NrOfFlows sparse) Fuel incidence matrix
+		%     res2 - (NrOfProcesses x NrOfFlows sparse) Product incidence matrix
+		%
+		%   Output Arguments (one output):
+		%     res1 - (NrOfProcesses x NrOfFlows sparse) Combined incidence matrix
+		%            (fuel - product)
 		%
 			aE=obj.ProductiveTable.AE';
 			aS=obj.ProductiveTable.AS;
@@ -266,13 +314,21 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 
 		function [res,src,out]=getStreamMatrix(obj)
-		%getStreamMatrix - Get the Streams graph adjacency matrix
+		%getStreamMatrix - Get the stream-to-stream adjacency matrix
+		%   Returns the adjacency matrix of the stream graph, where entry (i,j)
+		%   is true if stream i feeds stream j. Optionally returns the resource
+		%   row vector and the output column vector for the environment process.
+		%
 		%   Syntax:
-		%     res = obj.getStreamMatrix
+		%     res           = obj.getStreamMatrix
+		%     [res,src,out] = obj.getStreamMatrix
+		%
 		%   Output Arguments:
-		%     res - streams adjacency matrix
-		%     src - external resources adjacency matrix
-		%     out - output streams adjacency matrix
+		%     res - (NrOfStreams x NrOfStreams logical sparse) Stream adjacency matrix
+		%     src - (1 x NrOfStreams logical sparse) Resource row (ENV inputs)
+		%     out - (NrOfStreams x 1 logical sparse) Output column (ENV outputs)
+		%
+		%   See also getFlowMatrix, getProcessMatrix, getProductiveMatrix
 		%
 			x=obj.ProductiveTable;
 			res=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
@@ -283,13 +339,22 @@ classdef(Sealed) cProductiveStructure < cResultId
         end
 	
 		function [res,src,out]=getFlowMatrix(obj)
-		%getFlowMatrix - Get the Structural Theory Flows Adjacency Matrix
+		%getFlowMatrix - Get the Structural Theory flow adjacency matrix
+		%   Returns the flow-to-flow adjacency matrix of the productive structure
+		%   as defined by Structural Theory of Energy Systems. Optionally returns
+		%   the resource row vector and the output column vector for the
+		%   environment process.
+		%
 		%   Syntax:
-		%     res = obj.getFlowMatrix
+		%     res           = obj.getFlowMatrix
+		%     [res,src,out] = obj.getFlowMatrix
+		%
 		%   Output Arguments:
-		%     res - flows adjacency matrix 
-		%     src - external resources adjacency matrix
-		%     out - output streams adjacency matrix
+		%     res - (NrOfFlows x NrOfFlows logical sparse) Flow adjacency matrix
+		%     src - (1 x NrOfFlows logical sparse) Resource row (ENV inputs)
+		%     out - (NrOfFlows x 1 logical sparse) Output column (ENV outputs)
+		%
+		%   See also getStreamMatrix, getProcessMatrix, getProductiveMatrix
 		%
 			x=obj.ProductiveTable;
 			xAP=x.AP*x.AS; xAF=x.AE*x.AF;
@@ -301,13 +366,23 @@ classdef(Sealed) cProductiveStructure < cResultId
         end
 		
 		function [res,src,out]=getProcessMatrix(obj)
-		%getProcessMatrix - Get the Process Adjacency Matrix (logical FP table)
+		%getProcessMatrix - Get the process adjacency matrix (logical FP table)
+		%   Returns the process-to-process adjacency matrix derived from the
+		%   transitive closure of the stream adjacency matrix. Entry (i,j) is
+		%   true if process i can reach process j. Optionally returns the
+		%   resource row and the output column for the environment process.
+		%
 		%   Syntax:
-		%     res = obj.getProcessMatrix
+		%     res           = obj.getProcessMatrix
+		%     [res,src,out] = obj.getProcessMatrix
+		%
 		%   Output Arguments:
-		%     res - process adjacency matrix 
-		%     src - external resources adjacency matrix
-		%     out - output streams adjacency matrix
+		%     res - (NrOfProcesses x NrOfProcesses logical) Process adjacency
+		%           matrix (ENV row/col excluded when three outputs requested)
+		%     src - (1 x NrOfProcesses logical) Resource row (ENV to processes)
+		%     out - (NrOfProcesses x 1 logical) Output column (processes to ENV)
+		%
+		%   See also getStreamMatrix, getFlowMatrix, getProductiveMatrix
 		%
 			x=obj.ProductiveTable;
 			tmp=x.AS*x.AE;
@@ -321,11 +396,19 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
         
         function res=getProductiveMatrix(obj)
-		%getProductiveMatrix - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
+		%getProductiveMatrix - Get the combined productive adjacency matrix
+		%   Returns the block adjacency matrix combining streams, flows, and
+		%   processes in a single square matrix. Used to build the SFPAT
+		%   productive diagram.
+		%
 		%   Syntax:
 		%     res = obj.getProductiveMatrix
+		%
 		%   Output Arguments:
-		%     res - logical matrix
+		%     res - ((NS+M+N) x (NS+M+N) logical sparse) Productive adjacency
+		%           matrix, where NS = NrOfStreams, M = NrOfFlows, N = NrOfProcesses
+		%
+		%   See also getStreamMatrix, getFlowMatrix, getFlowProcessMatrix
 		%
 			x=obj.ProductiveTable;
 			N=obj.NrOfProcesses;
@@ -337,11 +420,18 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 			
 		function res=getFlowProcessMatrix(obj)
-		%getFlowProcessMatrix - Get the Flow-Process Adjacency Matrix (Flows, Processes)
+		%getFlowProcessMatrix - Get the flow-process adjacency matrix
+		%   Returns the block adjacency matrix combining flows and processes in a
+		%   single square matrix. Used to build the FPAT flow-process diagram.
+		%
 		%   Syntax:
-		%     res = obj.FlowProcessMatrix
+		%     res = obj.getFlowProcessMatrix
+		%
 		%   Output Arguments:
-		%     res - logical matrix
+		%     res - ((M+N) x (M+N) logical sparse) Flow-process adjacency matrix,
+		%           where M = NrOfFlows, N = NrOfProcesses
+		%
+		%   See also getFlowMatrix, getProductiveMatrix
 		%
 			x=obj.ProductiveTable;
 			N=obj.NrOfProcesses;
@@ -350,11 +440,19 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 
 		function res=FlowEdges(obj)
-		%FlowEdges - Get a structure array with the stream node names of the flow edges
+		%FlowEdges - Get the source and target stream key for each flow
+		%   Returns a struct array with the source and target stream key for
+		%   each flow, suitable for building flow diagram edges.
+		%
 		%   Syntax:
 		%     res = obj.FlowEdges
+		%
 		%   Output Arguments:
-		%     res - struct(from,to) defining the flow edges
+		%     res - (1 x NrOfFlows struct array) Edge definitions with fields:
+		%             from - source stream key (char)
+		%             to   - target stream key (char)
+		%
+		%   See also getFlowMatrix, cProductiveDiagram
 		%
 			from=[obj.Flows.from];
 			to=[obj.Flows.to];
@@ -362,53 +460,83 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 
 		function res=ProductStreams(obj)
-		%ProductStreams - Get the product streams id (including resources)
+		%ProductStreams - Get the indices of product (internal output) streams
+		%   Returns the indices of streams whose typeId has the INTERNAL bit set,
+		%   i.e., streams that carry the product leaving a process.
+		%
 		%   Syntax:
 		%     res = obj.ProductStreams
+		%
 		%   Output Arguments:
-		%     res - Array with the product streams id
+		%     res - (1 x K integer array) Stream indices of product streams
+		%
+		%   See also FuelStreams, getStreamTypes
 		%
 			streamtypes=[obj.Streams.typeId];
 			res=find(bitget(streamtypes,cType.INTERNAL));
 		end
 	
 		function res=FuelStreams(obj)
-		%FuelStreams - Get the fuel streams id (including output and wastes)
+		%FuelStreams - Get the indices of fuel (external input) streams
+		%   Returns the indices of streams whose typeId does NOT have the
+		%   INTERNAL bit set, i.e., streams that carry the fuel entering a
+		%   process, including resource, output, and waste environment streams.
+		%
 		%   Syntax:
 		%     res = obj.FuelStreams
+		%
 		%   Output Arguments:
-		%     res - Array with the fuel streams id
+		%     res - (1 x K integer array) Stream indices of fuel streams
+		%
+		%   See also ProductStreams, getStreamTypes
 		%
 			streamtypes=[obj.Streams.typeId];	
 			res=find(~bitget(streamtypes,cType.INTERNAL));
 		end
 
 		function res=ResourceFlows(obj)
-		%ResourceFlows - Get the resource flows id
-		%   Syntax: 
-		%     res = ResourceFlows(obj)
+		%ResourceFlows - Get the indices of resource flows
+		%
+		%   Syntax:
+		%     res = obj.ResourceFlows
+		%
 		%   Output Arguments:
-		%     res - Array with the resource flows id
+		%     res - (1 x NrOfResources integer array) Indices of flows with
+		%           type RESOURCE
+		%
+		%   See also FinalProductFlows, SystemOutputFlows, getFlowTypes
 		%
 			res=getFlowTypes(obj,cType.Flow.RESOURCE);
 		end
 
 		function res=FinalProductFlows(obj)
-		%FinalProductFlows - Get the final product flows id
-		%   Syntax: 
-		%     res = FinalProductFlows(obj)
+		%FinalProductFlows - Get the indices of final product flows
+		%
+		%   Syntax:
+		%     res = obj.FinalProductFlows
+		%
 		%   Output Arguments:
-		%     res - Array with the final products flows id
+		%     res - (1 x NrOfFinalProducts integer array) Indices of flows
+		%           with type OUTPUT
+		%
+		%   See also ResourceFlows, SystemOutputFlows, getFlowTypes
 		%
 			res=getFlowTypes(obj,cType.Flow.OUTPUT);
 		end
 
 		function res=SystemOutputFlows(obj)
-		%SystemOutputFlows - Get the system output flows id
-		%   Syntax: 
-		%     res = SystemOutputFlows(obj)
+		%SystemOutputFlows - Get the indices of all system output flows
+		%   Returns the combined list of final product flows (OUTPUT type) and
+		%   waste flows (WASTE type).
+		%
+		%   Syntax:
+		%     res = obj.SystemOutputFlows
+		%
 		%   Output Arguments:
-		%     res - Array with the system output flows id
+		%     res - (1 x NrOfSystemOutputs integer array) Indices of all flows
+		%           that leave the system (OUTPUT + WASTE)
+		%
+		%   See also FinalProductFlows, ResourceFlows, getFlowTypes
 		%
 			out=getFlowTypes(obj,cType.Flow.OUTPUT);
 			waste=getFlowTypes(obj,cType.Flow.WASTE);
@@ -416,32 +544,47 @@ classdef(Sealed) cProductiveStructure < cResultId
         end
 
 		function res=ResourceProcesses(obj)
-		%ResourceProcesses - Get the id of processes with external resources
-		%   Syntax: 
-		%     res = ResourceProcesses(obj)
+		%ResourceProcesses - Get the indices of processes that consume external resources
+		%
+		%   Syntax:
+		%     res = obj.ResourceProcesses
+		%
 		%   Output Arguments:
-		%     res - Array with the resource processes id
+		%     res - (1 x K integer array) Indices of processes connected to at
+		%           least one resource flow
+		%
+		%   See also OutputProcesses, ResourceFlows
 		%
 			res=find(obj.ProcessMatrix(end,1:end-1));
 		end
 
 		function res=OutputProcesses(obj)
-		%OutputProcesses - Get the id of processes with external outputs
-		%   Syntax: 
-		%     res = OutputProcesses(obj)
+		%OutputProcesses - Get the indices of processes that produce system outputs
+		%
+		%   Syntax:
+		%     res = obj.OutputProcesses
+		%
 		%   Output Arguments:
-		%     res - Array with the system output processes id
+		%     res - (1 x K integer array) Indices of productive processes
+		%           connected to at least one final product flow
+		%
+		%   See also ResourceProcesses, FinalProductFlows
 		%
 			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE);
 			res=transpose(find(obj.ProcessMatrix(aP,end)));
 		end
 
 		function res=isModelIO(obj)
-		%isModelIO - Check if the model is pure Input-Output
+		%isModelIO - Check if the model is a pure Input-Output system
+		%   Returns true when no stream appears as both source and target of any
+		%   flow, i.e., there are no internal recycling connections between streams.
+		%
 		%   Syntax:
-		%     res=obj.isModelIO
+		%     res = obj.isModelIO
+		%
 		%   Output Arguments:
-		%     true | false
+		%     res - (logical) true if the model is pure Input-Output; false if
+		%           any stream is both source and target of flows
 		%
 			from=[obj.Flows.from];
 			to=[obj.Flows.to];
@@ -449,13 +592,20 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 	
 		function id=getProcessId(obj,key)
-		%getProcessId - Get the Id of a process given its key
+		%getProcessId - Get the index of a process given its key
+		%   Accepts a single key (char) or a cell array of keys. Returns 0 if
+		%   the key is not found or if any key in a cell array is missing.
+		%
 		%   Syntax:
 		%     id = obj.getProcessId(key)
+		%
 		%   Input Arguments:
-		%     key - process key
+		%     key - (char or cell array of char) Process key(s) to look up
+		%
 		%   Output Arguments:
-		%     id - Process Id
+		%     id  - (integer or integer array) Process index, or 0 if not found
+		%
+		%   See also getFlowId, ProcessKeys
 		%
 			id=0;
 			if nargin<2,return;end
@@ -468,13 +618,20 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 			
 		function id=getFlowId(obj,key)
-		% getFlowId - Get the Id of a flow given its key
+		%getFlowId - Get the index of a flow given its key
+		%   Accepts a single key (char) or a cell array of keys. Returns 0 if
+		%   the key is not found or if any key in a cell array is missing.
+		%
 		%   Syntax:
 		%     id = obj.getFlowId(key)
+		%
 		%   Input Arguments:
-		%     key - flow key
+		%     key - (char or cell array of char) Flow key(s) to look up
+		%
 		%   Output Arguments:
-		%     id - flow Id
+		%     id  - (integer or integer array) Flow index, or 0 if not found
+		%
+		%   See also getProcessId, FlowKeys
 		%
 			id=0;
 			if nargin<2,return;end		
@@ -502,13 +659,19 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 	
 		function res=getProcessTypes(obj,typeId)
-		%getProcessTypes - Get the process-id of type typeId
+		%getProcessTypes - Get the indices of processes of a given type
+		%
 		%   Syntax:
-		%     res = obj.getProcessTypes(TypeId)
+		%     res = obj.getProcessTypes(typeId)
+		%
 		%   Input Arguments:
-		%     typeId - Process type id
+		%     typeId - (integer) Process type identifier (see cType.Process)
+		%
 		%   Output Arguments:
-		%     res - Array with the ids of the processes of this type
+		%     res - (integer array) Indices of processes matching typeId;
+		%           returns cType.EMPTY if typeId is not provided
+		%
+		%   See also getFlowTypes, getStreamTypes, cType
 		%
 			res=cType.EMPTY;
 			if nargin<2,return;end
@@ -517,13 +680,19 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 	
 		function res=getStreamTypes(obj,typeId)
-		%getStreamTypes - Get the stream-id of type typeId
+		%getStreamTypes - Get the indices of streams of a given type
+		%
 		%   Syntax:
 		%     res = obj.getStreamTypes(typeId)
+		%
 		%   Input Arguments:
-		%     typeId - stream type id
+		%     typeId - (integer) Stream type identifier (see cType.Stream)
+		%
 		%   Output Arguments:
-		%     res - Array with the ids of the processes of this type
+		%     res - (integer array) Indices of streams matching typeId;
+		%           returns cType.EMPTY if typeId is not provided
+		%
+		%   See also getFlowTypes, getProcessTypes, cType
 		%
 			res=cType.EMPTY;
 			if nargin<2,return;end
@@ -552,24 +721,39 @@ classdef(Sealed) cProductiveStructure < cResultId
 		end
 
 		function res=getWasteNames(obj)
-		%getWasteNames - Get the name of the waste flows
+		%getWasteNames - Get the names of the waste flows
+		%
 		%   Syntax:
-		%     res = obj.getProductNames
-		%   Output Aguments
-		%     res - Cell Array with the waste flow names
+		%     res = obj.getWasteNames
+		%
+		%   Output Arguments:
+		%     res - (1 x NrOfWastes cell array of char) Waste flow keys
+		%
+		%   See also getResourceNames, getProductNames
 		%
 			  res=obj.FlowKeys(obj.Waste.flows);
 		end
 
 		function [E,ET]=flows2Streams(obj,val)
-		%flows2streams - Compute the exergy or cost of streams from flow values
+		%flows2Streams - Compute stream exergy or cost values from flow values
+		%   Projects a row vector of per-flow values onto the stream graph using
+		%   the productive table matrices, computing each stream's net exergy (or
+		%   cost) as the difference between entering and leaving flows. Applies
+		%   zerotol to suppress near-zero numerical noise.
+		%
 		%   Syntax:
-		%     res = obj.flows2Streams(values)
+		%     E       = obj.flows2Streams(val)
+		%     [E, ET] = obj.flows2Streams(val)
+		%
 		%   Input Arguments:
-		%     val - exergy/cost values
+		%     val - (1 x NrOfFlows numeric) Per-flow exergy or cost values
+		%
 		%   Output Arguments:
-		%     E  - exergy/cost of streams
-		%     ET - Total exergy of streams
+		%     E  - (1 x NrOfStreams numeric) Net exergy or cost of each stream
+		%     ET - (1 x NrOfStreams numeric) Total (entering) exergy per stream;
+		%          only computed when two output arguments are requested
+		%
+		%   See also ProductiveTable, ProductStreams, FuelStreams
 		%
 			tbl=obj.ProductiveTable;
 			BE=val*tbl.AE;
@@ -589,12 +773,18 @@ classdef(Sealed) cProductiveStructure < cResultId
 
 	methods(Access=private)
 		function createFlowsStructure(obj, data)
-		%CreateFlowsStructure - Check and create the flows structure array
+		%createFlowsStructure - Validate and populate the Flows struct array
+		%   Validates the flow type of each entry in data and assigns the Flows
+		%   property. Logs an error for each invalid flow type encountered.
+		%
 		%   Syntax:
-		%     log = obj.createFlowsStructure(data)
+		%     obj.createFlowsStructure(data)
+		%
 		%   Input Arguments:
-		%     data - Flows data strcture array
-		
+		%     data - (1 x NrOfFlows struct array) Raw flow data with fields:
+		%              key  - flow key string
+		%              type - flow type string (see cType.Flow)
+		%
 			% Create Flows structure array
 			M = length(data);
 			[tst,idx]=cType.checkFlowTypes({data.type});
@@ -612,12 +802,18 @@ classdef(Sealed) cProductiveStructure < cResultId
         end
 
         function createProcessesStructure(obj,data)
-		%CreateProcessesStructure - Check and create the processes structure array
+		%createProcessesStructure - Validate and populate the Processes struct array
+		%   Validates process types, fuel/product stream expressions, and flow
+		%   keys. Appends the synthetic ENV (environment) process. Logs errors
+		%   for any validation failure encountered.
+		%
 		%   Syntax:
-		%	  log = obj.createProcessesStructure(data)
+		%     obj.createProcessesStructure(data)
+		%
 		%   Input Arguments:
-		%	 data - Processes data structure array
-
+		%     data - (1 x NrOfProcesses struct array) Raw process data with
+		%            fields: key, type, fuel, product
+		%
 			% Initialize
 			N=length(data);
 			ptypes=zeros(1,N+1);

@@ -1,20 +1,35 @@
 classdef (Sealed) cBuildLaTeX < cMessageLogger
-%cBuildLaTeX - Convert cTable object into a LaTeX code table.
-%   The LaTeX code includes:
-%    - Table environment
-%    - Booktabs package
-%    - Tabular column alignment
-%    - Column Names as header
-%    - Row Names and Data as body
-%    - Table Description as caption code
-%    - Table name as label code
+%cBuildLaTeX - Convert a cTable object into a LaTeX table environment.
+%   cBuildLaTeX generates self-contained LaTeX code for a single table.
+%   The constructor parses the cTable object and pre-builds the five LaTeX
+%   fragments (tabular spec, header, body, caption, label) that are
+%   assembled on demand by getLaTeXcode.
 %
-%   cBuildLateX methods:
-%     cBuildLaTeX  - Create an instance of the class
-%     getLaTeXcode - Get a string with the LaTeX code
-%     saveTable    - Save the table into a tex file
+%   The generated code uses the following LaTeX conventions:
+%     - table environment with [H] placement (requires float package)
+%     - \caption and \label placed before the tabular block
+%     - \begin{tabular}{...} with per-column alignment:
+%         'l' (left)  for character/string columns
+%         'r' (right) for numeric columns
+%     - Horizontal rules from the booktabs package:
+%         \toprule above the header row
+%         \midrule between header and data rows
+%         \bottomrule below the last data row
+%     - Column names as the header row
+%     - Row names as the first cell of each data row
+%     - Table description as the \caption text
+%     - Table name as the \label key (prefixed with "tab:")
 %
-%   See also cTable
+%   Required LaTeX packages in the document preamble:
+%     \usepackage{booktabs}
+%     \usepackage{float}
+%
+%   cBuildLaTeX Methods:
+%     cBuildLaTeX  - Construct an instance from a cTable object
+%     getLaTeXcode - Return the complete LaTeX table as a char string
+%     saveTable    - Write the LaTeX code to a .tex file
+%
+%   See also cTable, cBuildHTML, cBuildMarkdown
 %
     properties(Access=private)
         tabular  % tabular code - column alignment  
@@ -26,13 +41,27 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
 
     methods
         function obj=cBuildLaTeX(tbl)
-        %cBuildLaTeX - Create an instance of the class
+        %cBuildLaTeX - Construct an instance from a cTable object
+        %   Parses the cTable object and builds the five internal LaTeX
+        %   fragments stored as private properties:
+        %     tabular  - column-alignment spec string for \begin{tabular}{...}
+        %     header   - header row with column names, separated by " & "
+        %     body     - cell array of formatted data rows
+        %     caption  - \caption{...} line using the table description
+        %     label    - \label{tab:<name>} line using the table name
+        %   Column widths and format codes are taken from the cTable object
+        %   to ensure consistent alignment between the header and data rows.
+        %   The object status is set to false when tbl is not a cTable.
+        %
         %   Syntax:
         %     obj = cBuildLaTeX(tbl)
+        %
         %   Input Arguments:
-        %     tbl - cTable object
+        %     tbl - cTable (or subclass) object to convert to LaTeX.
+        %
         %   Output Arguments:
-        %     obj - cBuildLaTeX object
+        %     obj - cBuildLaTeX object.  Use isValid(obj) to confirm
+        %           successful construction before calling other methods.
         %
             if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
@@ -67,11 +96,27 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         end
 
         function res=getLaTeXcode(obj)
-        %getLaTeXcode - Get the LaTeX code as string
+        %getLaTeXcode - Return the complete LaTeX table as a char string
+        %   Assembles the five pre-built fragments into a full LaTeX
+        %   table environment ready for inclusion in a .tex document:
+        %
+        %     \begin{table}[H]
+        %       \caption{...}   \label{tab:...}
+        %       \begin{tabular}{alignment}
+        %         \toprule
+        %         header row
+        %         \midrule
+        %         data rows
+        %         \bottomrule
+        %       \end{tabular}
+        %     \end{table}
+        %
         %   Syntax:
-        %     res=obj.getLaTeXcode()
+        %     res = obj.getLaTeXcode()
+        %
         %   Output Arguments:
-        %     res - text string with the LaTeX code
+        %     res - Char string containing the complete LaTeX table block,
+        %           including a trailing blank line after \end{table}.
         %
             res=sprintf('%s\n','\begin{table}[H]');
             res=[res,sprintf('%s\n',obj.caption)];
@@ -87,13 +132,23 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         end
 
         function log=saveTable(obj,filename)
-        %saveTable - Save the table as LaTeX code into filename
+        %saveTable - Write the LaTeX table code to a file
+        %   Opens filename for writing in text mode, writes the full LaTeX
+        %   string produced by getLaTeXcode, and closes the file.  All I/O
+        %   errors are caught and reported through the returned cMessageLogger
+        %   rather than propagated as exceptions.
+        %
         %   Syntax:
-        %     log=obj.saveTable(filename);
+        %     log = obj.saveTable(filename)
+        %
         %   Input Arguments:
-        %     filename - Name of the file
+        %     filename - Path to the output file.  Should use the .tex
+        %                extension.  The file is created or overwritten.
+        %
         %   Output Arguments:
-        %     log - cMessageLogger object with status and messages
+        %     log - cMessageLogger with the operation status.  Check
+        %           log.status to verify whether the file was saved.
+        %
             log=cMessageLogger();
             try
                 fId = fopen (filename, 'wt');

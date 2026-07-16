@@ -1,24 +1,30 @@
 classdef cResourceData < cMessageLogger
-%cResourceData - Gets and validates the external cost resources of a productive structure.
-%   This class reads, validates and stores the external cost resources based on the data
-%   provided by the model.
+%cResourceData - Read and validate the external resource costs for a productive structure.
+%   Stores and manages per-flow unit costs (c0) and per-process external costs (Z)
+%   for one resource cost sample. Once bound to a cExergyModel via setResourceCost,
+%   the cost-allocation properties (C0, ce, Ce, zP, zF) are computed and stored.
+%
+%   The object is invalid if the data struct is malformed, required keys are
+%   missing, or the total resource cost is zero.
 %
 %   cResourceData properties:
-%     Sample  - Resource sample name
-%     frsc    - Resource flows index
-%     c0      - Unit cost of external resources
-%     Z       - Cost associated to processes
-%     C0      - Cost associated to external resources
-%     ce      - Process Resource Unit Costs
-%     Ce      - Process Resource Cost
-%     zP      - Cost associated to process per unit of Product
-%     zF      - Cost associated to process per unit of Fuel
+%     Sample  - Resource cost sample name
+%     frsc    - Indices of resource flows in FlowKeys
+%     c0      - (1 x NrOfFlows double) Per-flow unit cost of external resources
+%     Z       - (1 x NrOfProcesses double) External cost allocated to each process
+%     C0      - (1 x NrOfFlows double) Absolute cost of external resource flows
+%     ce      - (1 x NrOfProcesses double) Resource unit cost per process
+%     Ce      - (1 x NrOfProcesses double) Absolute resource cost per process
+%     zP      - (1 x NrOfProcesses double) External cost per unit of process product
+%     zF      - (1 x NrOfProcesses double) External cost per unit of process fuel
 %
 %   cResourceData methods:
-%     cResourceData           - Creates an instance of the class
-%	  setFlowResource         - Set the unit cost of resource flows
-%     setProcessResource      - Set the values of external cost of processes
-%	  setResourceCost         - Set the properties of the resource costs (depending on exergy model)
+%     cResourceData      - Construct an instance of this class
+%     setFlowResource    - Set the unit cost of resource flows for the current sample
+%     setProcessResource - Set the external process costs for the current sample
+%     setResourceCost    - Compute cost-allocation properties for the current sample
+%
+%   See also cProductiveStructure, cExergyModel, cMessageLogger
 %
 	properties (GetAccess=public, SetAccess=private) 
 		Sample  % Resource sample name
@@ -38,15 +44,27 @@ classdef cResourceData < cMessageLogger
 	
     methods
 		function obj=cResourceData(ps,data)
-		%cResourceData - Creates an instance of the class
-        %   Syntax:
-		%     obj = cResourceData(ps,data)
+		%cResourceData - Construct an instance of this class
+		%   Reads and validates the resource cost sample data against the productive
+		%   structure. Initialises flow unit costs (c0) and process costs (Z). The
+		%   object is invalid if ps is not a valid cProductiveStructure, the data
+		%   struct is malformed, any resource key is unrecognised, or the total
+		%   resource cost is zero.
+		%
+		%   Syntax:
+		%     obj = cResourceData(ps, data)
+		%
 		%   Input Arguments:
-		%	  ps - cProductiveStructure object
-        %	  data - resource data sample
+		%     ps   - cProductiveStructure object with a valid productive structure
+		%     data - (struct) Resource cost sample with required fields:
+		%              sampleId  - sample name (char)
+		%              flows     - (struct array) flow cost entries with key/value fields
+		%            Optional field:
+		%              processes - (struct array) process cost entries with key/value fields
+		%
 		%   Output Arguments:
-		%     obj - cResourceData object
-		
+		%     obj  - cResourceData object; check isValid(obj) before use
+		%
 		    % Check arguments and initilize class
 			if ~isObject(ps,'cProductiveStructure')
 				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(ps));
@@ -90,14 +108,22 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setFlowResource(obj,values)
-        %setFlowResource - Set the flow-resource values of the current sample
-        %   Syntax:
-        %     log = obj.setFlowResource(values)
-        %   Input Arguments:
-        %     values - Array or key/value struct containing the flow-resource values
-        %   Output Arguments:
-        %     log - cMessageLogger with the operation status and errors
-        %
+		%setFlowResource - Set the unit cost of resource flows for the current sample
+		%   Accepts either a numeric array of all-flow unit costs or a key/value
+		%   struct array to update individual resource flows by name.
+		%
+		%   Syntax:
+		%     log = obj.setFlowResource(values)
+		%
+		%   Input Arguments:
+		%     values - (1 x NrOfFlows double) Unit cost array; or
+		%              (struct array) key/value pairs for individual resource flows
+		%
+		%   Output Arguments:
+		%     log - cMessageLogger object; check isValid(log) to verify success
+		%
+		%   See also setProcessResource, setResourceCost
+		%
             log=cMessageLogger();
 			% Check input values
             if isstruct(values)
@@ -112,14 +138,22 @@ classdef cResourceData < cMessageLogger
         end
 
         function log=setProcessResource(obj,values)
-        %setProcessResource - Set the process-resource value of the current sample
-        %   Syntax:
-        %     log = obj.setProcessResource(values)
-        %   Input Arguments:
-        %     values - Array or key value struct containing the process-resource values
-        %   Output Arguments:
-        %     log - cMessageLogger with the operation status and errors
-        %
+		%setProcessResource - Set the external process costs for the current sample
+		%   Accepts either a numeric array of all-process costs or a key/value
+		%   struct array to update individual processes by name.
+		%
+		%   Syntax:
+		%     log = obj.setProcessResource(values)
+		%
+		%   Input Arguments:
+		%     values - (1 x NrOfProcesses double) Process cost array; or
+		%              (struct array) key/value pairs for individual processes
+		%
+		%   Output Arguments:
+		%     log - cMessageLogger object; check isValid(log) to verify success
+		%
+		%   See also setFlowResource, setResourceCost
+		%
             log=cMessageLogger();
 			% Check input values
             if isstruct(values)
@@ -134,15 +168,21 @@ classdef cResourceData < cMessageLogger
         end
 
 		function log=setResourceCost(obj,exm)
-		%setResourceCost - Calculate the resource cost properties for the current sample
-		%	These properties are calculated based on the current exergy model.
+		%setResourceCost - Compute cost-allocation properties for the current sample
+		%   Uses the provided cExergyModel to compute the absolute resource costs
+		%   (C0, Ce) and the per-unit allocation vectors (ce, zP, zF). Must be
+		%   called after flow and process costs have been set.
 		%
 		%   Syntax:
-		%     log=obj.setResourceCost(exm)
+		%     log = obj.setResourceCost(exm)
+		%
 		%   Input Arguments:
-		%     exm - cExergyModel object
+		%     exm - cExergyModel object bound to the same productive structure
+		%
 		%   Output Arguments:
-		%     log - true|false indicating the status of the operation
+		%     log - cMessageLogger object; check isValid(log) to verify success
+		%
+		%   See also setFlowResource, setProcessResource, cExergyModel
 		%
 			log=cMessageLogger();
 			if ~isObject(exm,'cExergyModel')
@@ -166,13 +206,17 @@ classdef cResourceData < cMessageLogger
 
 	methods(Access=private)
 		function res=getResourceIndex(obj,key)
-		%getResourceIndex - Get the index of a resource key
+		%getResourceIndex - Get the index of a resource flow given its key
+		%
 		%   Syntax:
-		%     log=getResourceIndex(obj,exm)
+		%     res = obj.getResourceIndex(key)
+		%
 		%   Input Arguments:
-		%     key - Flow key
+		%     key - (char) Flow key to look up
+		%
 		%   Output Arguments:
-		%     res - Flow index
+		%     res - (integer) Flow index if the key identifies a resource flow;
+		%           0 if the key is not found or is not a resource flow
 		%
 			res=0;
 			id=obj.ps.getFlowId(key);
@@ -182,14 +226,18 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setFlowResourceData(obj,se)
- 		%setFlowResourceData - Set the unit cost of resource flows
-		%    Syntax:
-		%      log=setFlowsResourceData(obj,Z)
-		%    Input Arguments:
-		%      se - key/value structure with the unit cost of resource flows
-		%    Output Arguments:
-		%      log - cMessageLog object with messages and errors
-		%               
+		%setFlowResourceData - Validate and apply resource flow costs from key/value data
+		%
+		%   Syntax:
+		%     log = obj.setFlowResourceData(se)
+		%
+		%   Input Arguments:
+		%     se  - (struct array) Key/value pairs with fields key and value
+		%           for each resource flow
+		%
+		%   Output Arguments:
+		%     log - cMessageLogger object; check isValid(log) to verify success
+		%
 			log=cMessageLogger();
 			% Check input values
 			if ~all(isfield(se,cType.KEYVAL))
@@ -209,13 +257,17 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setFlowResourceValues(obj,c0)
-		%setFlowResourceValues - Set the unit cost of resources flows
+		%setFlowResourceValues - Validate and apply resource flow costs from a numeric array
+		%
 		%   Syntax:
-		%     log=setFlowResource(obj,Z)
+		%     log = obj.setFlowResourceValues(c0)
+		%
 		%   Input Arguments:
-		%     c0 - Resources flows unit cost values array
+		%     c0  - (1 x NrOfFlows double) Unit cost values for all flows; only
+		%           resource-flow positions are stored
+		%
 		%   Output Arguments:
-		%     log - cMessageLog object with messages and errors
+		%     log - cMessageLogger object; check isValid(log) to verify success
 		%
 			log=cMessageLogger();
 			% Check input values
@@ -239,14 +291,18 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setProcessResourceData(obj,sz)
-		%setProcessResourceData - Set the Resources cost of processes
-		%    Syntax:
-		%      log=setProcessResource(obj,Z)
-		%    Input Arguments:
-		%      sz - key/value structure with the resource cost of processes
-		%    Output Arguments:
-		%      log - cMessageLog object with messages and errors
-		%        
+		%setProcessResourceData - Validate and apply process costs from key/value data
+		%
+		%   Syntax:
+		%     log = obj.setProcessResourceData(sz)
+		%
+		%   Input Arguments:
+		%     sz  - (struct array) Key/value pairs with fields key and value
+		%           for each process cost entry
+		%
+		%   Output Arguments:
+		%     log - cMessageLogger object; check isValid(log) to verify success
+		%
 			log=cMessageLogger();
 			% Check input values
 			if ~all(isfield(sz,cType.KEYVAL))
@@ -266,13 +322,16 @@ classdef cResourceData < cMessageLogger
 		end
 
 		function log=setProcessResourceValues(obj,Z)
-		%setProcessResourceValues - Set the Resources cost of processes
-		%    Syntax:
-		%      log=setProcessResource(obj,Z)
-		%    Input Arguments:
-		%      Z - Resources cost processes values array
-		%    Output Arguments:
-		%      log - cMessageLog object with messages and errors
+		%setProcessResourceValues - Validate and apply process costs from a numeric array
+		%
+		%   Syntax:
+		%     log = obj.setProcessResourceValues(Z)
+		%
+		%   Input Arguments:
+		%     Z   - (1 x NrOfProcesses double) External cost values for all processes
+		%
+		%   Output Arguments:
+		%     log - cMessageLogger object; check isValid(log) to verify success
 		%
 			log=cMessageLogger();
 			% Check input values

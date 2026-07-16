@@ -228,6 +228,7 @@ classdef cMessages
         ScaleRowsError='Matrix must have the same number of rows than the scale vector'
         SquareMatrixError='Input must be a square matrix'
         NonNegativeMatrixError='Input matrix must be square and non-negative'
+        InvalidMMatrix='Invalid M-Matrix. I-A is singular'
         NonNumericalMatrixError='Input must be a numerical matrix'
         InvalidFormatError='Invalid numeric format expression.'
         InvalidLabelError='Label must be a character array'

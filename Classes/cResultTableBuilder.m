@@ -1,34 +1,49 @@
 classdef (Sealed) cResultTableBuilder < cFormatData
-%cResultTableBuilder - Build the cResultInfo objects for the calculation layer
-%   This class provide methods to obtain the cResultInfo object of each function application
-%   from the calculation layer.
+%cResultTableBuilder - Assemble cResultInfo objects from calculation-layer outputs.
+%   cResultTableBuilder sits at the top of the format hierarchy:
 %
-%   cResultTableBuilder methods:
-%     cResultTableBuilder    - Create an instance of the class
-%     getProductiveStructure - Get Productive Structure Results
-%     getExergyResults       - Get Exergy Analysis Results
-%     getCostResults         - Get Thermoeconomic Analysis Results
-%     getDiagnosisResults    - Get Diagnosis Results
-%     getDiagramFP           - Get Diagram FP Results 
-%     getProductiveDiagram   - Get Productive Diagram Results
-%     getSummaryResults      - Get Summary Results
+%     cTablesDefinition  (table registry from printformat.json)
+%          ↓
+%     cFormatData        (model-specific format/unit overrides)
+%          ↓
+%     cResultTableBuilder (structural keys + one builder per analysis type)
 %
-%   cResultTableBuilder methods (inherited from cFormatData):
-%     getFormat          - Get the format of a variable type
-%     getUnit            - Get the units of a variable type
-%     getResultId        - Get the ResultId of a table
-%     getTableProperties - Get the properties of a cTable
+%   The constructor stores the flow, stream, process and resource key arrays
+%   from a cProductiveStructure object.  These keys are reused by every
+%   private helper method as the row and column names of result tables.
 %
-%   cResultTableBuilder methods (inherited from cTablesDefinition):
-%     getTablesDirectory     - Get a cTableData with the tables index
-%     getTableDefinition     - Get configuration properties of a table
-%     getTableInfo           - Get table info as a struct
-%     getTableId             - Get the internal TableId of a table
-%     getResultIdTables      - Get the tables of a specific ResultId
-%     getDataModelProperties - Get the data model table properties
-%     getCellTables          - Get the cell tables configuration
-%     getMatrixTables        - Get the matrix tables configuration
-%     getSummaryTables       - Get the summary tables configuration
+%   Each public method accepts the computation object produced by one
+%   analysis type in the calculation layer and returns a fully populated
+%   cResultInfo containing the corresponding cTableCell / cTableMatrix
+%   objects, ready for display or export.
+%
+%   cResultTableBuilder Methods:
+%     cResultTableBuilder    - Construct from a cProductiveStructure and format data
+%     getProductiveStructure - Build the productive structure cResultInfo
+%     getExergyResults       - Build the exergy analysis cResultInfo
+%     getCostResults         - Build the thermoeconomic analysis cResultInfo
+%     getDiagnosisResults    - Build the thermoeconomic diagnosis cResultInfo
+%     getWasteAnalysisResults - Build the waste analysis cResultInfo
+%     getDiagramFP           - Build the FP diagram cResultInfo
+%     getProductiveDiagram   - Build the productive diagram cResultInfo
+%     getSummaryResults      - Build the summary results cResultInfo
+%
+%   cResultTableBuilder Methods (inherited from cFormatData):
+%     getFormat          - Return the C-like format string for a variable type
+%     getUnit            - Return the unit label for a variable type
+%     getResultId        - Return the ResultId associated with a table name
+%     getTableProperties - Return the definition and/or properties of a table
+%
+%   cResultTableBuilder Methods (inherited from cTablesDefinition):
+%     getTablesDirectory     - Return a cTableData listing all registered tables
+%     getTableDefinition     - Return the raw config struct for a named table
+%     getTableInfo           - Return a summary-info struct for a named table
+%     getTableId             - Return the dictionary index of a table name
+%     getResultIdTables      - Return the table names for a given ResultId
+%     getDataModelProperties - Return the data-model table configuration(s)
+%     getCellTables          - Return cell-table configuration struct(s)
+%     getMatrixTables        - Return matrix-table configuration struct(s)
+%     getSummaryTables       - Return summary-table configuration struct(s)
 %
 %   See also cFormatData, cTablesDefinition, cResultInfo
 %
@@ -42,15 +57,26 @@ classdef (Sealed) cResultTableBuilder < cFormatData
     
     methods
         function obj=cResultTableBuilder(ps,data)
-        %cResultTableBuilder - Create an instance of the class
+        %cResultTableBuilder - Construct from a cProductiveStructure and format data
+        %   Calls the cFormatData constructor to set up the table registry
+        %   and apply the model format overrides, then stores the structural
+        %   key arrays from ps as private properties for reuse by all
+        %   table-building helpers (row names, column names, edge lookups).
+        %   Construction fails if cFormatData construction fails or if ps is
+        %   not a valid cProductiveStructure object.
+        %
         %   Syntax:
-        %     obj = cResultTableBuilder(ps,data)
+        %     obj = cResultTableBuilder(ps, data)
+        %
         %   Input Arguments:
-        %     ps - cProductiveStructure object
-        %     data - cModelData object
+        %     ps   - cProductiveStructure object providing flow, stream,
+        %            process and resource key arrays and flow-edge data.
+        %     data - Format struct from cModelData (passed to cFormatData).
+        %
         %   Output Arguments:
-        %     obj - cResultTableBuilder object
-        %            
+        %     obj  - cResultTableBuilder object.  Use isValid(obj) to confirm
+        %            successful construction before calling build methods.
+        %
             obj=obj@cFormatData(data);
             % Check input object
             if ~obj.status
@@ -70,16 +96,21 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
         
         function res=getProductiveStructure(obj,ps)
-        %getProductiveStructure - Generate the productive structure results
+        %getProductiveStructure - Build the productive structure cResultInfo
+        %   Constructs three tables describing the plant topology and returns
+        %   them packaged in a cResultInfo object.
+        %
         %   Syntax:
         %     res = obj.getProductiveStructure(ps)
+        %
         %   Input Arguments:
-        %     ps - cProductiveStructure object
+        %     ps  - cProductiveStructure object.
+        %
         %   Output Arguments:
-        %     res - cResultInfo object (PRODUCTIVE_STRUCTURE) with the result tables:    
-        %       flows: plant flows
-        %       streams: plant productive groups
-        %       processes: plant processes
+        %     res - cResultInfo (PRODUCTIVE_STRUCTURE) containing:
+        %             flows     - Flow definitions (key, from-process, to-process, type)
+        %             streams   - Stream/productive-group definitions
+        %             processes - Process definitions (key, fuel, product, type)
         %
             tbl=struct();
             tbl.flows=obj.getFlowsTable(ps);
@@ -89,17 +120,22 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
         
         function res=getExergyResults(obj,pm)
-        %getExergyResults -  Generate the exergy results
+        %getExergyResults - Build the exergy analysis cResultInfo
+        %   Constructs tables for the exergy values of flows, streams and
+        %   processes, plus the active Fuel-Product (FP) table.
+        %
         %   Syntax:
         %     res = obj.getExergyResults(pm)
+        %
         %   Input Arguments:
-        %     pm - cExergyModel object
+        %     pm  - cExergyModel object.
+        %
         %   Output Arguments:
-        %     res - cResultInfo object (THERMOECONOMIC_STATE) with the result tables:
-        %       eflows: Exergy values of the flows
-        %       estreams: Exergy values of the productive groups
-        %       eprocesses: Exergy values of the processes
-        %       tfp: Exergy table FP
+        %     res - cResultInfo (THERMOECONOMIC_STATE) containing:
+        %             eflows    - Exergy values of all flows
+        %             estreams  - Exergy values of the productive groups
+        %             eprocesses - Exergy values of the processes
+        %             tfp       - Active Fuel-Product exergy table
         %
             tbl=struct();
             tbl.eflows=obj.getFlowExergy(pm.FlowsExergy);
@@ -114,32 +150,48 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
                   
         function res=getCostResults(obj,mfp,options)
-        %getCostResults - Get the thermoeconomic analysis result 
+        %getCostResults - Build the thermoeconomic analysis cResultInfo
+        %   Constructs direct and/or generalised cost tables depending on
+        %   the flags in options.  Resource-cost distribution tables are
+        %   added automatically when more than one resource flow exists.
+        %
         %   Syntax:
-        %     res = obj.getCostResults(exc,options)
+        %     res = obj.getCostResults(mfp, options)
+        %
         %   Input Arguments:
-        %     exc - cExergyCost object
-        %     options - structure containing the fields:
-        %       DirectCost - Direct Cost Tables will be obtained
-        %       GeneralCost - General Cost Tables will be obtained
-        %       ResourceCost - cResourceData object if generalized cost is required
+        %     mfp     - cExergyCost object carrying the cost calculation results.
+        %     options - Struct with the following fields:
+        %                 DirectCost    - logical; build direct cost tables
+        %                 GeneralCost   - logical; build generalised cost tables
+        %                 ResourcesCost - cResourceData object required when
+        %                                 GeneralCost is true
+        %
         %   Output Arguments:
-        %     res - cResultInfo object (THERMOECONOMIC_ANALYSIS) with the result tables:
-        %      Direct Cost tables:
-        %       dfcost: Direct Exergy Cost of flows
-        %       dcost: Direct Exergy cost of processes
-        %       udcost: Unit Direct Exergy Cost of processes table
-        %       dict: Irreversibility Cost Table 
-        %       dfict: Flows Irreversibility Cost Table
-        %       dcfp: Fuel-Product direct cost table
-        %       dcfpr: Fuel-Product direct cost table (includes waste)
-        %      Generalized Cost tables:
-        %       gcost: Generalized cost of processes 
-        %       ugcost: Unit Generalized Cost of processes
-        %       gfcost: Generalized Cost of flows
-        %       gcfp: Fuel-Product generalized cost table
-        %       gict: Irreversibility generalized cost table 
-        %       gfict: Flows Irreversibility generalized cost table
+        %     res - cResultInfo (THERMOECONOMIC_ANALYSIS) containing a subset
+        %           of the following tables, depending on the options flags:
+        %
+        %           Direct cost tables (options.DirectCost = true):
+        %             dcost  - Direct exergy cost of processes
+        %             ducost - Unit direct exergy cost of processes
+        %             dfcost - Direct exergy cost of flows
+        %             dscost - Direct exergy cost of streams
+        %             dcfp   - Fuel-Product direct cost table
+        %             dcfpr  - Fuel-Product direct cost table (with waste)
+        %             dict   - Process irreversibility cost table
+        %             dfict  - Flow irreversibility cost table
+        %             dfrsc  - Flow resource-cost distribution (multi-resource)
+        %             dprsc  - Process resource-cost distribution (multi-resource)
+        %
+        %           Generalised cost tables (options.GeneralCost = true):
+        %             gcost  - Generalised cost of processes
+        %             gucost - Unit generalised cost of processes
+        %             gfcost - Generalised cost of flows
+        %             gscost - Generalised cost of streams
+        %             gcfp   - Fuel-Product generalised cost table
+        %             gict   - Process irreversibility generalised cost table
+        %             gfict  - Flow irreversibility generalised cost table
+        %             gfrsc  - Flow resource-cost distribution (multi-resource)
+        %             gprsc  - Process resource-cost distribution (multi-resource)
         %
             tbl=struct();
             % Direct Cost Tables
@@ -196,19 +248,25 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getDiagnosisResults(obj,dgn)
-        %getDiagnosisResults - Get the thermoeconomic diagnosis results
+        %getDiagnosisResults - Build the thermoeconomic diagnosis cResultInfo
+        %   Constructs the malfunction, malfunction-cost, irreversibility,
+        %   total-malfunction-cost and fuel-impact tables from a cDiagnosis
+        %   object.
+        %
         %   Syntax:
         %     res = obj.getDiagnosisResults(dgn)
+        %
         %   Input Arguments:
-        %     dgn - cDiagnosis object
+        %     dgn - cDiagnosis object.
+        %
         %   Output Arguments:
-        %     res - cResultInfo object (THERMOECONOMIC_DIAGNOSIS) with the result tables
-        %       dgn: Diagnosis Summary
-        %       mf: Malfunction Table
-        %       mfc: Malfunction cost table
-        %       dit: Irreversibility Variation table
-        %       dft: Total Fuel Impact
-        %       tmfc: Total Malfunction Cost
+        %     res - cResultInfo (THERMOECONOMIC_DIAGNOSIS) containing:
+        %             dgn  - Diagnosis summary table
+        %             mf   - Malfunction table
+        %             mfc  - Malfunction cost table
+        %             dit  - Irreversibility variation table
+        %             tmfc - Total malfunction cost table
+        %             dft  - Fuel impact summary table
         %
             tbl.dgn=obj.getTableCell(cType.Tables.DIAGNOSIS,dgn.getDiagnosisTable);
             tbl.mf=obj.getMalfunctionTable(dgn);
@@ -220,21 +278,26 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getWasteAnalysisResults(obj,ra,param)
-        %getWasteAnalysisResults - Get the waste analysis results
+        %getWasteAnalysisResults - Build the waste analysis cResultInfo
+        %   Constructs waste-definition, waste-allocation and (optionally)
+        %   recycling-analysis tables.  Recycling tables are added only when
+        %   ra.Recycling is true and the corresponding cost flag is set.
+        %
         %   Syntax:
-        %     res = obj.getWasteAnalysisResults(ra,options)
+        %     res = obj.getWasteAnalysisResults(ra, param)
+        %
         %   Input Arguments:
-        %     ra - cWasteAnalysis object
-        %     options - structure containing the fields:
-        %       DirectCost - Direct Cost Tables will be obtained
-        %       GeneralCost - General Cost Tables will be obtained
-        %       ResourceCost - cResourceData object if generalized cost is required
+        %     ra    - cWasteAnalysis object carrying the analysis results.
+        %     param - Struct with the following fields:
+        %               DirectCost  - logical; build direct recycling table
+        %               GeneralCost - logical; build generalised recycling table
+        %
         %   Output Arguments:
-        %     res - cResultInfo object (WASTE_ANALYSIS) with the tables:
-        %       wd - Waste Definition
-        %       wa - Waste Allocation
-        %       rad - Recycling Analysis direct cost
-        %       rag - Recycling Analysis generalized cost
+        %     res - cResultInfo (WASTE_ANALYSIS) containing:
+        %             wd  - Waste definition table
+        %             wa  - Waste allocation table
+        %             rad - Recycling analysis direct cost table (if DirectCost)
+        %             rag - Recycling analysis generalised cost table (if GeneralCost)
         %
             tbl=struct();
             % Get Waste Definition and Allocation tables
@@ -261,15 +324,28 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getDiagramFP(obj,dfp)
-        %getDiagramFP - Get the diagram FP adjacency results
+        %getDiagramFP - Build the FP diagram cResultInfo
+        %   Constructs adjacency tables and FP matrix tables from a
+        %   cDiagramFP object for both the exergy and cost FP graphs,
+        %   in both full and kernel (k-) forms.
+        %
         %   Syntax:
-        %     res = obj.getDiagramFP(dfp) 
+        %     res = obj.getDiagramFP(dfp)
+        %
         %   Input Arguments:
-        %     dfp - cDiagramFP object
+        %     dfp - cDiagramFP object.
+        %
         %   Output Arguments:
-        %     res - cResultInfo object (DIAGRAM_FP) with the diagram FP tables
-        %       atfp - FP adjacency table
-        %       atcfp - FP cost adjacency table
+        %     res - cResultInfo (DIAGRAM_FP) containing:
+        %             atfp   - FP exergy adjacency table
+        %             atcfp  - FP cost adjacency table
+        %             katfp  - Kernel FP exergy adjacency table
+        %             katcfp - Kernel FP cost adjacency table
+        %             tfp    - FP exergy matrix table
+        %             ktfp   - Kernel FP exergy matrix table
+        %             dcfp   - FP direct cost matrix table
+        %             kdcfp  - Kernel FP direct cost matrix table
+        %             grps   - Process groups table
         %
             % Get FP adjacency tables
             tbl.atfp=obj.getAdjacencyTableFP(cType.Tables.DIGRAPH_FP,dfp.EdgesFP);
@@ -286,18 +362,24 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getProductiveDiagram(obj,pd)
-        %getProductiveDiagram - Get the productive diagram tables
+        %getProductiveDiagram - Build the productive diagram cResultInfo
+        %   Retrieves all table names registered under PRODUCTIVE_DIAGRAM
+        %   and constructs an adjacency table for each one by calling
+        %   getProductiveTable in a loop.
+        %
         %   Syntax:
         %     res = obj.getProductiveDiagram(pd)
+        %
         %   Input Arguments:
-        %     pd - cProductiveDiagram object
+        %     pd  - cProductiveDiagram object.
+        %
         %   Output Arguments:
-        %     res    - cResultInfo object (PRODUCTIVE_DIAGRAM) with the tables
-        %      fat   - Flow diagram adjacency table
-        %      fpat  - Flow-Process diagram adjacency table
-        %      sfpat - Productive diagram adjacency table
-        %      pat   - Process diagram adjacency table
-        %      kpat  - Kernel Process diagram adjacency table 
+        %     res - cResultInfo (PRODUCTIVE_DIAGRAM) containing:
+        %             fat   - Flow diagram adjacency table
+        %             fpat  - Flow-Process diagram adjacency table
+        %             sfpat - Productive diagram adjacency table
+        %             pat   - Process diagram adjacency table
+        %             kpat  - Kernel process diagram adjacency table
         %
             tbl=struct();
             tnames=obj.getResultIdTables(cType.ResultId.PRODUCTIVE_DIAGRAM);
@@ -309,31 +391,39 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getSummaryResults(obj,sr)
-        %getSummaryResults - Get the cResultInfo for Summary Results
+        %getSummaryResults - Build the summary results cResultInfo
+        %   Iterates over the datasets stored in the cSummaryResults object
+        %   and builds one cTableMatrix per dataset using the corresponding
+        %   summary-table properties.
+        %
         %   Syntax:
         %     res = obj.getSummaryResults(sr)
+        %
         %   Input Arguments:
-        %     sr - cSummaryResults object
+        %     sr  - cSummaryResults object.
+        %
         %   Output Arguments:
-        %     res - cResultInfo object (SUMMARY_RESULTS) with the tables
-        %      STATES
-        %       exergy - Exergy values of the model state
-        %       puk - Unit consumptions of processes
-        %       pI - Process irreversibility
-        %       dpc - Direct cost of processes
-        %       dpuc - Direct unit cost of processes
-        %       dfc - Direct cost of flows
-        %       dfuc - Direct unit cost of flows
-        %       gpc - Generalized cost of processes
-        %       gpuc - Generalized unit cost of processes
-        %       gfc - Generalized cost of flows
-        %       gfuc - Generalized unit cost of flows
-        %     RESOURCES
-        %       rgpc - Generalized cost of processes
-        %       rgpuc - Generalized unit cost of processes
-        %       rgfc - Generalized cost of flows
-        %       rgfuc - Generalized unit cost of flows 
-        %    
+        %     res - cResultInfo (SUMMARY_RESULTS) containing a subset of:
+        %
+        %           State-comparison tables:
+        %             exergy - Exergy values per state
+        %             puk    - Process unit consumptions per state
+        %             pI     - Process irreversibilities per state
+        %             dpc    - Direct cost of processes per state
+        %             dpuc   - Direct unit cost of processes per state
+        %             dfc    - Direct cost of flows per state
+        %             dfuc   - Direct unit cost of flows per state
+        %             gpc    - Generalised cost of processes per state
+        %             gpuc   - Generalised unit cost of processes per state
+        %             gfc    - Generalised cost of flows per state
+        %             gfuc   - Generalised unit cost of flows per state
+        %
+        %           Resource-sample comparison tables:
+        %             rgpc   - Generalised cost of processes per sample
+        %             rgpuc  - Generalised unit cost of processes per sample
+        %             rgfc   - Generalised cost of flows per sample
+        %             rgfuc  - Generalised unit cost of flows per sample
+        %
             tables=struct();
             for i=1:sr.NrOfTables
                 ds=sr.getValues(i);
@@ -566,13 +656,13 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getWasteAllocation(obj,wt)
-        %getWasteAllocation - Get the Waste Allocation Table
+        %getWasteAllocation - Build a cTableMatrix for the waste allocation table
         %   Syntax:
         %     res = obj.getWasteAllocation(wt)
         %   Input Arguments:
-        %     wt - cWasteTable object
+        %     wt  - cWasteTable object.
         %   Output Arguments:
-        %   res - cTableMatrix object
+        %     res - cTableMatrix object.
         %
             [~,tp]=obj.getTableProperties(cType.Tables.WASTE_ALLOCATION);
             flw=obj.flowKeys;
@@ -603,14 +693,14 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
          
         function res=getProcessICTable(obj,name,values)
-        %getProcessICTable - Get a cTableMatrix with the processes ICT
+        %getProcessICTable - Build a cTableMatrix for the process irreversibility cost table
         %   Syntax:
-        %     res = obj.getProcessICTable(name,values)
+        %     res = obj.getProcessICTable(name, values)
         %   Input Arguments:
-        %     name - table id
-        %     values - Processes ICT values
+        %     name   - Table name string (cType.Tables value).
+        %     values - Process ICT numeric matrix.
         %   Output Arguments:
-        %     res - cTableMatrix object
+        %     res - cTableMatrix object.
         %
             [~,tp]=obj.getTableProperties(name);
             rowNames=obj.processKeys;
@@ -703,13 +793,20 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getTotalMalfunctionCost(obj,dgn)
-        %getTotalMalfunctionCost - Get a cTableMatrix with the total malfunction cost values
+        %getTotalMalfunctionCost - Build a cTableMatrix for the total malfunction cost
+        %   Assembles a three-column table with malfunction cost (MF*),
+        %   waste malfunction cost (MR*), and demand correction cost (MPt*)
+        %   for each process.
+        %
         %   Syntax:
         %     res = obj.getTotalMalfunctionCost(dgn)
+        %
         %   Input Arguments:
-        %     dgn - cDiagnosis object
+        %     dgn - cDiagnosis object.
+        %
         %   Output Arguments:
-        %     res - cTableMatrix object      
+        %     res - cTableMatrix object.
+        %
             M=3;
             N=dgn.NrOfProcesses+1;
             [~,tp]=obj.getTableProperties(cType.Tables.TOTAL_MALFUNCTION_COST);
@@ -725,14 +822,20 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getFuelImpactSummary(obj,dgn)
-        %getFuelImpactSummary - Get a cTableMatrix with the fuel impact values
+        %getFuelImpactSummary - Build a cTableMatrix for the fuel impact summary
+        %   Assembles a three-column table with irreversibility variation
+        %   (ΔI), waste variation (ΔR), and demand variation (ΔPt) for
+        %   each process.
+        %
         %   Syntax:
-        %     res=obj.getFuelImpactSummary(dgn)
-        %  Input Arguments:
-        %     dgn - cDiagnosis object 
-        %  Output Arguments:
-        %    res - cTableMatrix object
-        %  
+        %     res = obj.getFuelImpactSummary(dgn)
+        %
+        %   Input Arguments:
+        %     dgn - cDiagnosis object.
+        %
+        %   Output Arguments:
+        %     res - cTableMatrix object.
+        %
             M=3;
             N=dgn.NrOfProcesses+1;
             [~,tp]=obj.getTableProperties(cType.Tables.FUEL_IMPACT);
@@ -751,14 +854,21 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getTableCell(obj,name,data)
-        %getTableCell - Get the corresponding cTableCell object of a table dataset
+        %getTableCell - Build a cTableCell from a named table definition and a data struct
+        %   Resolves the table definition (row names, column headers, format)
+        %   and fills the cell array from the struct fields listed in the
+        %   definition, then constructs the cTableCell object.
+        %
         %   Syntax:
-        %     res=obj.getTableCell(name,data)
+        %     res = obj.getTableCell(name, data)
+        %
         %   Input Arguments:
-        %     name - name of the table
-        %     data - table data structure
+        %     name - Table name string (cType.Tables value).
+        %     data - Struct whose fields match the column field names defined
+        %            in the table configuration (one numeric vector per field).
+        %
         %   Output Arguments:
-        %     res - cTableCell object
+        %     res  - cTableCell object.
         %
             [td,tp]=obj.getTableProperties(name);
             rowNames=obj.getNodeNames(td.node);
@@ -772,13 +882,25 @@ classdef (Sealed) cResultTableBuilder < cFormatData
         end
 
         function res=getNodeNames(obj,type)
-        %getNodeNames - Get the row names of the table using node type
+        %getNodeNames - Return the row-name array for a given node type
+        %   Maps a cType.NodeType value to the corresponding private key
+        %   array (flowKeys, streamKeys, processKeys) so that every table
+        %   builder uses the same row-name source without duplicating the
+        %   switch logic.
+        %
         %   Syntax:
-        %     res=obj.getNodeNames(type)
+        %     res = obj.getNodeNames(type)
+        %
         %   Input Arguments:
-        %     type - type of node
+        %     type - Node type selector (cType.NodeType value):
+        %              FLOW    → flowKeys
+        %              STREAM  → streamKeys
+        %              PROCESS → processKeys(1:end-1)  (excludes environment)
+        %              ENV     → processKeys           (includes environment)
+        %
         %   Output Arguments:
-        %     res - Cell array with the names of the rows
+        %     res  - Cell array of key strings, or cType.EMPTY_CELL if type
+        %            does not match any of the above cases.
         %
             res=cType.EMPTY_CELL;
             switch type

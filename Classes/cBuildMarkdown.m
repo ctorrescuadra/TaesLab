@@ -1,16 +1,31 @@
 classdef (Sealed) cBuildMarkdown < cMessageLogger
-%cBuildMarkdown - Convert cTable object into a Markdown code table.
-%   The Markdown code includes:
-%    - Table header with column names
-%    - Table separator row with alignment
-%    - Table body with row names and data
-%    - Optional table caption/description
-%    - Proper column alignment (left, center, right)
+%cBuildMarkdown - Convert a cTable object into a Markdown table.
+%   cBuildMarkdown generates GitHub-Flavored Markdown (GFM) table syntax
+%   from a cTable object.  The constructor parses the table and pre-builds
+%   the four fragments (header, separator, body, caption) that are
+%   assembled on demand by getMarkdownCode.
 %
-%   cBuildMarkdown methods:
-%     cBuildMarkdown    - Create an instance of the class
-%     getMarkdownCode   - Get a string with the Markdown code
-%     saveTable         - Save the table into a markdown file
+%   The generated Markdown follows this structure:
+%
+%     **Description (State)**          <- bold caption (if description exists)
+%                                          or plain table name otherwise
+%
+%     | col1  | col2  | col3  |        <- header row
+%     | :---- | ----: | :---- |        <- separator row with alignment
+%     | row1  | val   | val   |        <- data rows
+%     | row2  | val   | val   |
+%
+%   Column alignment in the separator row:
+%     ':---'  (left-aligned)  for character/string columns
+%     '---:'  (right-aligned) for numeric columns
+%
+%   Column widths are derived from the cTable object so that columns
+%   align consistently across header and data rows.
+%
+%   cBuildMarkdown Methods:
+%     cBuildMarkdown  - Construct an instance from a cTable object
+%     getMarkdownCode - Return the complete Markdown table as a char string
+%     saveTable       - Write the Markdown code to a file
 %
 %   See also cTable, cBuildLaTeX, cBuildHTML
 %
@@ -23,13 +38,27 @@ classdef (Sealed) cBuildMarkdown < cMessageLogger
 
     methods
         function obj=cBuildMarkdown(tbl)
-        %cBuildMarkdown - Create an instance of the class
+        %cBuildMarkdown - Construct an instance from a cTable object
+        %   Parses the cTable object and builds the four internal Markdown
+        %   fragments stored as private properties:
+        %     header    - pipe-delimited row of column names
+        %     separator - pipe-delimited alignment row (':---' or '---:')
+        %     body      - cell array of pipe-delimited data rows
+        %     caption   - bold description label, or plain table name if
+        %                 the table has no description
+        %   Column widths and format codes are taken from the cTable object
+        %   to ensure consistent alignment across header and data rows.
+        %   The object status is set to false when tbl is not a cTable.
+        %
         %   Syntax:
         %     obj = cBuildMarkdown(tbl)
+        %
         %   Input Arguments:
-        %     tbl - cTable object
+        %     tbl - cTable (or subclass) object to convert to Markdown.
+        %
         %   Output Arguments:
-        %     obj - cBuildMarkdown object
+        %     obj - cBuildMarkdown object.  Use isValid(obj) to confirm
+        %           successful construction before calling other methods.
         %
             if ~isObject(tbl,'cTable')
                 obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
@@ -75,11 +104,20 @@ classdef (Sealed) cBuildMarkdown < cMessageLogger
         end
 
         function res=getMarkdownCode(obj)
-        %getMarkdownCode - Get the Markdown code as string
+        %getMarkdownCode - Return the complete Markdown table as a char string
+        %   Assembles the four pre-built fragments into the full Markdown
+        %   block in the order: caption, header, separator, body rows,
+        %   followed by a trailing newline.
+        %   The caption is omitted when it is empty.
+        %
         %   Syntax:
-        %     res=obj.getMarkdownCode()
+        %     res = obj.getMarkdownCode()
+        %
         %   Output Arguments:
-        %     res - text string with the Markdown code
+        %     res - Char string containing the complete Markdown table,
+        %           ready to be embedded in a .md document or displayed
+        %           inline.  Returns cType.EMPTY_CHAR if the object is
+        %           empty.
         %
             res = cType.EMPTY_CHAR;         
             % Add caption if it exists
@@ -97,13 +135,22 @@ classdef (Sealed) cBuildMarkdown < cMessageLogger
         end
 
         function log=saveTable(obj,filename)
-        %saveTable - Save the table as Markdown code into filename
+        %saveTable - Write the Markdown table code to a file
+        %   Opens filename for writing in text mode, writes the full
+        %   Markdown string produced by getMarkdownCode, and closes the
+        %   file.  All I/O errors are caught and reported through the
+        %   returned cMessageLogger rather than propagated as exceptions.
+        %
         %   Syntax:
-        %     log=obj.saveTable(filename);
+        %     log = obj.saveTable(filename)
+        %
         %   Input Arguments:
-        %     filename - Name of the file (should have .md extension)
+        %     filename - Path to the output file.  Should use the .md
+        %                extension.  The file is created or overwritten.
+        %
         %   Output Arguments:
-        %     log - cMessageLogger object with status and messages
+        %     log - cMessageLogger with the operation status.  Check
+        %           log.status to verify whether the file was saved.
         %
             log=cMessageLogger();
             try
