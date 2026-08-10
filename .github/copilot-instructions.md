@@ -297,3 +297,10 @@ When modifying this codebase:
 4. Use `cMessages` constants for error text
 5. Check MATLAB/Octave compatibility for new features
 6. Validate flow keys and names using `cParseStream` methods
+
+<!-- mermaid-ai-skills:start -->
+## Mermaid Diagrams
+
+When the user asks to create, edit, or visualize a diagram, follow the
+instructions in `.github/instructions/mermaid.instructions.md`.
+<!-- mermaid-ai-skills:end -->

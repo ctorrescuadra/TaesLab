@@ -1,4 +1,4 @@
-classdef (Abstract) cGraphResults < cMessageLogger
+classdef (Abstract) cGraphResults < cTaesLab
 %cGraphResults - Abstract base class for all thermoeconomic graph objects.
 %   Provides the shared protected properties and axis-configuration helpers
 %   used by every concrete graph class.  Each subclass must implement

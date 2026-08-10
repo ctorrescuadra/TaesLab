@@ -35,7 +35,7 @@ classdef cGraphWaste < cGraphResults
         %
 			% Validate input arguments
 			if nargin < 2 || ~isObject(info,'cWasteAnalysis')
-				obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+				obj.printError(cMessages.InvalidArgument);
 				return
 			end
 			if nargin == 2
@@ -48,7 +48,7 @@ classdef cGraphWaste < cGraphResults
 				cols=tbl.ColNames(2:end);
 				idx=find(strcmp(cols,wf),1);
 				if isempty(idx)
-					obj.messageLog(cType.ERROR,cMessages.InvalidParameter);
+					obj.printError(cMessages.InvalidParameter);
 					return
 				end
 				x=cell2mat(tbl.Data(:,idx));

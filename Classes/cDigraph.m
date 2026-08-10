@@ -35,11 +35,11 @@ classdef cDigraph < cGraphResults
         %
 			% Check input arguments
 			if isOctave
-				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
+				obj.printError(cMessages.GraphNotImplemented);
 				return
 			end
 			if ~isObject(tbl,'cTableCell')
-				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(tbl));
+				obj.printError(cMessages.InvalidObject,class(tbl));
 				return
 			end
 			% Build edges table
@@ -50,7 +50,7 @@ classdef cDigraph < cGraphResults
 				obj.isDiagramFP=false;
 				obj.Title=tbl.Description;
 			else
-				obj.messageLog(cType.ERROR,cMessages.InvalidObject,class(info));
+				obj.printError(cMessages.InvalidObject,class(info));
 				return
 			end
 			% Get the nodes table and build the digraph

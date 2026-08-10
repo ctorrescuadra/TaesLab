@@ -161,8 +161,7 @@ classdef cExergyData < cMessageLogger
 			mA=struct('AF',mbF,'AP',mbP,'AE',mbE,'AS',mbS);
 			% Verify that every active productive process can reach the plant output
 			obj.ps=ps;
-			idx=ps.getProcessTypes(cType.Process.PRODUCTIVE);
-			aP=intersect(idx,find(~bypass)); % Indices of active productive processes
+			aP=ps.ProductiveProcesses & ~bypass; % Indices of active productive processes
 			if obj.isProductive(mA,aP)
 				obj.FlowsExergy=B;
 				obj.ProcessesExergy=struct('vF',vF,'vP',vP,'vI',vI,'vK',vK,'vEf',vEf);
@@ -178,7 +177,7 @@ classdef cExergyData < cMessageLogger
 
 	methods(Access=private)
 		function log=isProductive(obj,m,pp)
-		%isProductive - Check if the state is thermodynamically productive
+		%isProductive - Check if the state is productive
 		%   Verifies that every active productive process can reach the plant
 		%   output (sink node) in the stream-level adjacency graph, using a
 		%   breadth-first search (BFS) starting from the sink. A process that
@@ -194,27 +193,27 @@ classdef cExergyData < cMessageLogger
 		%     log - (logical) true if all active productive processes reach the
 		%           plant output; false if any process is unreachable
 		%
-			% Build the stream-level adjacency matrix by composing the process
-			% transitions, and the output stream index
-			mE=transpose(m.AF(:,1:end-1)*m.AP(1:end-1,:)+m.AS*m.AE);
-			tidx=transpose(find(m.AF(:,end)));
-			% BFS from the sink node
-			v=bfs(mE,tidx);
-			% For each active productive process pp(i):
-			%   x(i) = 1 if any of its fuel streams is reachable from the sink
-			%   y(i) = 1 if any of its product streams is reachable from the sink
-			% A process is productive only if both its fuel and product sides connect
-			% to a path that leads to the plant output
-			x=v*logicalMatrix(m.AF(:,pp));
-			y=logicalMatrix(m.AP(pp,:))*v';
-			sol= ~(x & y');  % Processes that fail to reach the output
-			% Log an error for each active productive process that cannot reach the plant output
-			if any(sol) 
-            	for i=find(sol)
-                    pname=obj.ps.ProcessKeys{pp(i)};
-					obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,pname);
-            	end
+			% Build the process-stream adjacency matrix 
+			N = obj.ps.NrOfProcesses+1;
+			NS = obj.ps.NrOfStreams+1;
+			tmp = logicalMatrix([m.AS*m.AE, m.AF; m.AP, zeros(N,N)]);
+			% Check if isequal to the reference stream-process matrix
+			% then the state is productive
+			spm = obj.ps.getStreamProcessMatrix;
+			if isequal(spm,tmp)
+				log = true;
+				return
 			end
+			% BFS from the sink node
+			mA = transpose(tmp(1:end-1,1:end-1)); 
+			out = transpose(full(tmp(1:end-1,end)));
+			v = cDigraphAnalysis.bfs(mA,out);
+			% Log productive nodes does not reach sink
+			fail = ~v(NS:end) & pp;
+            for i = find(fail)
+                pname=obj.ps.ProcessKeys{i};
+				obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,pname);
+            end
 			log=obj.status;
 		end
 	end

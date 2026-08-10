@@ -1,4 +1,4 @@
-classdef (Sealed) cBuildLaTeX < cMessageLogger
+classdef (Sealed) cBuildLaTeX < cTaesLab
 %cBuildLaTeX - Convert a cTable object into a LaTeX table environment.
 %   cBuildLaTeX generates self-contained LaTeX code for a single table.
 %   The constructor parses the cTable object and pre-builds the five LaTeX
@@ -64,7 +64,7 @@ classdef (Sealed) cBuildLaTeX < cMessageLogger
         %           successful construction before calling other methods.
         %
             if ~isObject(tbl,'cTable')
-                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                obj.printError(cMessages.InvalidArgument);
                 return
             end
             N=tbl.NrOfRows;

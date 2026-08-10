@@ -103,12 +103,12 @@ classdef cExergyModel < cResultId
 			M=exd.ps.NrOfFlows;
 			if exd.ps.isModelIO
 				mgV=sparse(M,M);
-				mgL=eye(M);
+				mgL=mgP;
 				tfp=mgP*tgF;
 			else
 				mgV=mat.AE*mat.AS;
-				mgL=eye(M)/(eye(M)-mgV);
-				tfp=mgP*mgL*tgF;
+				mgL=mgP/(eye(M)-mgV);
+				tfp=mgL*tgF;
 			end
 			% Build the normalized fuel adjacency matrix mgF0:
 			%   Divides each column of tbl.AF by its total process fuel (vF),
@@ -117,7 +117,7 @@ classdef cExergyModel < cResultId
 			AF0=divideCol(tbl.AF,vF);
 			mgF0=mat.AE*AF0;
 			% Store all matrices and copy data from the exergy data object
-			obj.FlowProcessModel=struct('mV',mgV,'mF',mgF,'mF0',mgF0,'mP',mgP,'mL',mgL);
+			obj.FlowProcessModel=struct('mV',mgV,'mF',mgF,'mF0',mgF0,'mP',mgP,'mgL',mgL);
 			obj.TableFP=full(tfp);
             obj.ps=exd.ps;
             obj.NrOfFlows=exd.ps.NrOfFlows;

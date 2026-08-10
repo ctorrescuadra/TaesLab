@@ -55,7 +55,7 @@ function [visited, index] = bfs(A, src)
         current = (current * A) & ~visited;       
         visited = visited | current;  % Update visited nodes with newly discovered nodes     
         index = index + 1;   % Increment BFS level counter
-    end   
+    end
     % If not all nodes are visited, set index to Inf (disconnected graph)
     if nargout==2
         if all(visited), index = index-1;else, index=Inf; end

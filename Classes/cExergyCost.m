@@ -96,7 +96,7 @@ classdef (Sealed) cExergyCost < cExergyModel
 			fpm=obj.FlowProcessModel;
             mG=fpm.mF(:,1:N)*fpm.mP(1:N,:)+fpm.mV;
             opB=eye(M)/(eye(M)-mG);
-            obj.mpL=fpm.mP(1:N,:)*fpm.mL;  % Used later for flow ICT computation
+            obj.mpL=fpm.mgL(1:N,:);  % Used later for flow ICT computation
             obj.flowOperators=struct('mG',mG,'opB',zerotol(opB));
             % --- PF-framework operators ---
             % mPF: product-to-fuel unit flow ratios (normalized TableFP columns by fuel exergy)
@@ -575,7 +575,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             % Project process ICT onto flows using mpL = mP(1:N,:)*mL
             if czoption
-                cm=rsc.c0*fpm.mL+cn*obj.mpL;  % Generalized flow reference cost
+                cm=rsc.c0*fpm.mL+cn*obj.mpL;   % Generalized flow reference cost
             else
                 cm=ones(1,M);                  % Direct cost: unit flow cost = 1
             end

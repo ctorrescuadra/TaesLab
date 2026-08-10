@@ -44,7 +44,8 @@ classdef(Sealed) cProductiveStructure < cResultId
 %     ResourceProcesses    - Get the Processes with external resources
 %     FinalProductFlows    - Get the Final Products Flows id
 %     SystemOutputFlows    - Get the System Output Flows id
-%     OutputProcesses      - Get the Processes with system outputs
+%     OutputProcesses      - Get the Processes Id with system outputs
+%	  ProductiveProcess    - Get logical array with productive processes
 %     isModelIO            - Check if model is pure Input-Output
 %	  getFlowId            - Get the Id of a flow given its key                                                                                                           
 %     getProcessId         - Get the Id of a process given its key                                               
@@ -385,16 +386,16 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%   See also getStreamMatrix, getFlowMatrix, getProductiveMatrix
 		%
 			x=obj.ProductiveTable;
-			tmp=x.AS*x.AE;
-			tc=transitiveClosure(tmp);
-			res=logical(x.AP*tc*x.AF);
+			tc=x.AS*x.AE>0;
+            a=cDigraphAnalysis.bfs(tc,x.AP);
+			res=(a*x.AF > 0);
 			if nargout>1
-				src=res(end,1:end-1);
-				out=res(1:end-1,end);
+				src=full(res(end,1:end-1));
+				out=full(res(1:end-1,end));
 				res=res(1:end-1,1:end-1);
 			end
 		end
-        
+
         function res=getProductiveMatrix(obj)
 		%getProductiveMatrix - Get the combined productive adjacency matrix
 		%   Returns the block adjacency matrix combining streams, flows, and
@@ -419,7 +420,33 @@ classdef(Sealed) cProductiveStructure < cResultId
 				 x.AP(1:end-1,:), zeros(N,M), zeros(N,N)];
 		end
 			
-		function res=getFlowProcessMatrix(obj)
+		function [res, src, out]=getStreamProcessMatrix(obj)
+		%getFlowProcessMatrix - Get the stream-process adjacency matrix
+		%   Returns the block adjacency matrix combining stream and processes in a
+		%   single square matrix. Used to check graph reachability
+		%
+		%   Syntax:
+		%     res = obj.getFlowProcessMatrix
+		%
+		%   Output Arguments:
+		%     res - ((M+N) x (M+N) logical sparse) Flow-process adjacency matrix,
+		%           where M = NrOfFlows, N = NrOfProcesses
+		%     src - (1 x (M+N) logical) Resource row (ENV to processes)
+		%     out - ((M+N) x 1 logical) Output column (processes to ENV)
+		%
+		%   See also getFlowMatrix, getProductiveMatrix
+		%
+			x=obj.ProductiveTable;
+			N=obj.NrOfProcesses+1;
+			res=[x.AS*x.AE>0, x.AF; x.AP, false(N,N)];
+			if nargout>1
+				src=full(res(end,1:end-1));
+				out=full(res(1:end-1,end));
+				res=res(1:end-1,1:end-1);
+			end
+		end
+
+		function res = getFlowProcessMatrix(obj)
 		%getFlowProcessMatrix - Get the flow-process adjacency matrix
 		%   Returns the block adjacency matrix combining flows and processes in a
 		%   single square matrix. Used to build the FPAT flow-process diagram.
@@ -429,7 +456,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%
 		%   Output Arguments:
 		%     res - ((M+N) x (M+N) logical sparse) Flow-process adjacency matrix,
-		%           where M = NrOfFlows, N = NrOfProcesses
+		%           where M = NrOfStreams, N = NrOfProcesses
 		%
 		%   See also getFlowMatrix, getProductiveMatrix
 		%
@@ -572,6 +599,20 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%
 			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE);
 			res=transpose(find(obj.ProcessMatrix(aP,end)));
+		end
+
+		function res=ProductiveProcesses(obj)
+		%ProductiveProcesses - Get a logical with the productive Processes
+		%	Internal use for checking connectivity.
+		%
+		%	Syntax:
+		%	  res = obj.ProductiveProcesses;
+		%
+		%	Output:
+		%     res - logical vector (1 x N+1) indicating if the process is productive
+		%	
+			ptypes = [obj.Processes(1:end-1).typeId];
+			res = (ptypes == cType.Process.PRODUCTIVE); 
 		end
 
 		function res=isModelIO(obj)
@@ -1070,29 +1111,31 @@ classdef(Sealed) cProductiveStructure < cResultId
         function res=checkGraphConnectivity(obj)
 		%checkGraphConnectivity - Check the productive graph connectivity.
 		%   The function checks that all nodes are connected from the source (resources)
-		%   and	all nodes can reach the sink (final products).	
+		%   and	all nodes can reach the sink (final products), using the Stream-Process graph	
 		%   Syntax:	
 		%     res = obj.checkGraphConnectivity	
 		%   Output Arguments:		
 		%     res - true | false indicating if the graph is ok
 		%     if false logs the non reached nodes
 		
-			% Get the Processes adjacency matrix
-			[tfp,src,out]=obj.getProcessMatrix; 
-			% Calculate nodes reached by src
-			rs=bfs(tfp,find(src));		
-			for i=find(~rs) % Report invalid nodes
+			% Get the Stream-Processes adjacency matrix
+			NS=obj.NrOfStreams+1;
+			[spm,src,out] = obj.getStreamProcessMatrix; 
+			% Get nodes reached by src
+			rs = cDigraphAnalysis.bfs(spm, src);
+			sfail=~rs(NS:end);	
+			for i = find(sfail) % Report invalid nodes
 				obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 			end
-			% Calculate final products reached by productive nodes
-			aP=obj.getProcessTypes(cType.Process.PRODUCTIVE);
-			gP=transpose(tfp(aP,aP)); tidx=transpose(find(out(aP)));
-			rt=bfs(gP,tidx);
-			for i=find(~rt)
+			% Get productive nodes that reach final product
+			rt = cDigraphAnalysis.bfs(spm', out');
+			tfail = ~rt(NS:end) & obj.ProductiveProcesses;
+			for i = find(tfail)
 				obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
 			end
+			% Get the Process Matrix
 			if obj.status
-				obj.ProcessMatrix=[tfp,out;src,0];
+				obj.ProcessMatrix=obj.getProcessMatrix;
 			end
 			res=obj.status;
 		end

@@ -1,4 +1,4 @@
-classdef (Sealed) cBuildHTML < cMessageLogger
+classdef (Sealed) cBuildHTML < cTaesLab
 %cBuildHTML - Convert a cTable or cTableIndex object into an HTML document.
 %   cBuildHTML operates in two modes depending on the type of table passed
 %   to the constructor:
@@ -55,7 +55,7 @@ classdef (Sealed) cBuildHTML < cMessageLogger
         %              successful construction before calling other methods.
         %
             if ~isObject(tbl,'cTable')
-                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                obj.printError(cMessages.InvalidArgument);
                 return
             end
             obj.isIndexTable=isa(tbl,'cTableIndex') && (nargin==2);

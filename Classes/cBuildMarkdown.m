@@ -1,4 +1,4 @@
-classdef (Sealed) cBuildMarkdown < cMessageLogger
+classdef (Sealed) cBuildMarkdown < cTaesLab
 %cBuildMarkdown - Convert a cTable object into a Markdown table.
 %   cBuildMarkdown generates GitHub-Flavored Markdown (GFM) table syntax
 %   from a cTable object.  The constructor parses the table and pre-builds
@@ -61,7 +61,7 @@ classdef (Sealed) cBuildMarkdown < cMessageLogger
         %           successful construction before calling other methods.
         %
             if ~isObject(tbl,'cTable')
-                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                obj.printError(cMessages.InvalidArgument);
                 return
             end
             % Initialize variables

@@ -1,8 +1,8 @@
-classdef cDigraphAnalysis < cMessageLogger
+classdef cDigraphAnalysis < cTaesLab
 %cDigraphAnalysis - Analyze the process digraph structure.
 %  This class provides a comprehensive toolkit for analyzing the structure of
 %  directed graphs, with a special focus on identifying strongly connected
-%  components (SCCs), determining topological order, and constructing a
+%  components (SCCs), build Frobenius Block Form, and constructing a
 %  condensed kernel representation. It is designed to work with adjacency
 %  matrices and is particularly useful in the context of thermoeconomic
 %  analysis for modeling productive systems.
@@ -10,13 +10,12 @@ classdef cDigraphAnalysis < cMessageLogger
 %  Key Features:
 %   - Strong Component Analysis: Implements the Kosaraju algorithm to
 %     efficiently find all strongly connected components in the graph.
-%   - Topological Sorting: Computes the topological order of the graph's
-%     nodes, which is essential for processing Directed Acyclic Graphs (DAGs).
+%   - Frobenius Block Form: Make a topological order of the graph, and reorder
+%     the adjacency matrix as a block triangular matrix. Each diagonal block is
+%     a strong component
 %   - Kernel Graph Construction: Creates a simplified "kernel" graph where
 %     each strongly connected component is condensed into a single node,
 %     revealing the overall acyclic structure of the system.
-%   - DAG Verification: Includes a method to quickly check if the graph is
-%     a DAG.
 %   - Rich Data Representation: Stores graph information in easily accessible
 %     tables for nodes and edges, for both the full graph and the kernel.
 %
@@ -40,6 +39,8 @@ classdef cDigraphAnalysis < cMessageLogger
 %      TopologicalOrder   - Topological order array (excluding source and sink)
 %      Groups             - Group assignment for each internal node
 %      GroupSize          - Size (node count) of each strongly connected component
+%      GraphTable         - Ordered FP table
+%      GraphNodes         - Ordered graph node labels
 %      KernelTable        - Kernel graph adjacency matrix in FP table format
 %      KernelNodes        - Node labels for the kernel graph (including ENV)
 %
@@ -61,6 +62,7 @@ classdef cDigraphAnalysis < cMessageLogger
 		groups      % Indicate the group the node belong
         order       % Order of the nodes
         nrg         % Size of each group
+        scmap       % Strong components map 
 	end
 
 	properties(GetAccess=public,SetAccess=private)
@@ -69,7 +71,7 @@ classdef cDigraphAnalysis < cMessageLogger
         TopologicalOrder  % Topological Order array
         Groups            % Groups index array
         GroupSize         % Size of each group
-        GraphTable        % Graph FP Table ordered
+        GraphTable        % Topological order of the graph adjacency Matrix
         GraphNodes        % Graph Nodes ordered
         KernelTable       % Kernel Table
         KernelNodes       % Kernel Nodes
@@ -97,14 +99,14 @@ classdef cDigraphAnalysis < cMessageLogger
 
             % Check Inputs
             if ~isNonNegativeMatrix(tfp)
-                obj.messageLog(cType.ERROR,cMessages.NegativeMatrix);
+                obj.printError(cMessages.NegativeMatrix);
                 return
             end
             if nargin<2 || isempty(names)
-                names=arrayfun(@(x) sprintf('N%d',x),1:size(A,1),'UniformOutput',false);
+                names=arrayfun(@(x) sprintf('N%d',x),1:size(tfp,1),'UniformOutput',false);
             end
             if (~iscellstr(names) && ~isstring(names)) || numel(names)~=size(tfp,1)
-                obj.messageLog(cType.ERROR,cMessages.InvalidNodeNames,numel(names),size(tfp,1));
+                obj.printError(cMessages.InvalidNodeNames,numel(names),size(tfp,1));
                 return
             end
             % Initialize variables
@@ -116,7 +118,7 @@ classdef cDigraphAnalysis < cMessageLogger
             end
             % Build Kernel Graph
             obj.buildKernelGraph;
-            % Build ordered Graph
+            % Get Frobenius Block Form Matrix
             idx=obj.order;
             obj.GraphTable=cDigraphAnalysis.ssr2tfp(obj.mG(idx,idx));
             obj.GraphNodes=[obj.gNodes(idx(2:end-1)),'ENV'];
@@ -143,7 +145,7 @@ classdef cDigraphAnalysis < cMessageLogger
         %     res - A numeric array representing the group assignment of
         %           each process. Not includes source and sink nodes.
         %
-            res=obj.groups(obj.order(2:end))-1;
+            res=obj.groups(obj.order(2:end-1))-1;
         end
 
         function res=get.GroupSize(obj)
@@ -243,13 +245,14 @@ classdef cDigraphAnalysis < cMessageLogger
             if nargin==1
                 option=cType.Digraph.KERNEL;
             end
-            switch option
-                case cType.Digraph.GRAPH
-                    idx=obj.order;
-                    res=cDigraphAnalysis.transitiveClosure(obj.mG(idx,idx));
-                case cType.Digraph.KERNEL
-                    res=cDigraphAnalysis.transitiveClosure(obj.kG);
+            tc=cDigraphAnalysis.tcdag(obj.kG);
+            if (option==cType.Digraph.KERNEL) || obj.isDAG
+                res=tc;
+            else % Compute full tc from kernel
+                tmp =logical(obj.scmap' * tc * obj.scmap);
+                res=tmp(obj.order,obj.order);
             end
+            res=res(2:end-1,2:end-1);
         end
 
         function res=getNodesTable(obj,option)
@@ -272,7 +275,7 @@ classdef cDigraphAnalysis < cMessageLogger
                 case cType.Digraph.GRAPH
                     res=cDigraphAnalysis.buildNodesTable(obj.GraphTable,obj.GraphNodes,obj.Groups);
                 case cType.Digraph.KERNEL
-                    res=cDigraphAnalysis.buildNodesTable(obj.KernelTable,obj.KernelNodes,1:obj.NrOfGroups-1);
+                    res=cDigraphAnalysis.buildNodesTable(obj.KernelTable,obj.KernelNodes,1:obj.NrOfGroups-2);
             end
         end
 
@@ -306,8 +309,7 @@ classdef cDigraphAnalysis < cMessageLogger
         function log=getStrongComponents(obj)
         %getStrongComponents - Finds strong components using Kosaraju's algorithm.
         %   Get the Strong Components information of the graph,
-        %   If Matlab is used Frobenius Normal Form via diagraph module is used
-        %   Otherwise the Korasaju Algorithm for SSC is used
+        %   this information permit to build the Frobenius Block Form of the adjacency matrix
         %
         %   The results (number of groups, group membership, and topological
         %   order) are stored in the object's properties.
@@ -315,27 +317,21 @@ classdef cDigraphAnalysis < cMessageLogger
         %   See also: dfSC
             log=false;
             N=size(obj.mG,1);
-            if isMatlab %Get Frobenius Block Form using digraph module
-                [obj.order,obj.groups] = cDigraphAnalysis.fbfMatrix(obj.mG);
-                obj.NrOfGroups = max(obj.groups);
-            else %Generic SC Kosajaru method
-                %Find a postorder search of the reverse graph
-                [~, porder] = cDigraphAnalysis.dfSC(obj.mG',1:N);
-                if any(~porder)
-                    obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
-                    return
-                end
-                %Find the strong connected groups
-	            [grp, ord] = cDigraphAnalysis.dfSC(obj.mG,porder);
-                if any(~ord)
-                    obj.messageLog(cType.ERROR,cMessages.InvalidDigraph);
-                    return
-                end
-                obj.order=ord;
-                obj.NrOfGroups=max(grp); 
-                obj.groups=obj.NrOfGroups+1-grp;
+            %Find a postorder search of the reverse graph
+            porder = cDigraphAnalysis.dfSC(obj.mG',1:N);
+            if any(~porder)
+                obj.printError(cMessages.InvalidDigraph);
+                return
             end
-            % Assign object variables
+            %Find the strong connected groups
+	        [ord, grp] = cDigraphAnalysis.dfSC(obj.mG,porder);
+            if any(~ord)
+                obj.printError(cMessages.InvalidDigraph);
+                return
+            end
+            obj.order=ord;
+            obj.NrOfGroups=max(grp); 
+            obj.groups=grp;
             obj.NrOfNodes=N;
             log=true;
         end
@@ -377,10 +373,10 @@ classdef cDigraphAnalysis < cMessageLogger
                 obj.nrg=ones(1,obj.NrOfNodes);
             else
                 % Build Kernel Matrix
-                scmp=sparse(obj.groups,1:N,true(N,1),NG,N);
-                obj.kG=scmp*obj.mG*scmp';
+                mscc=sparse(obj.groups,1:N,true(N,1),NG,N);
+                obj.kG=mscc*obj.mG*mscc';
                 obj.kG(1:NG+1:end)=0; % Set diagonal to 0 
-                obj.nrg = sum(scmp,2);      
+                obj.nrg = sum(mscc,2);      
                 % Build Kernel Nodes
                 [~,jdx]=unique(obj.groups);
                 obj.kNodes = obj.gNodes(jdx);  
@@ -389,6 +385,7 @@ classdef cDigraphAnalysis < cMessageLogger
                     obj.kNodes{tmp(i)}=['SC',num2str(i)];
                 end
             end
+            obj.scmap=mscc;
             obj.KernelTable=cDigraphAnalysis.ssr2tfp(obj.kG);
             obj.KernelNodes=[obj.kNodes(2:end-1),'ENV'];
         end
@@ -439,45 +436,53 @@ classdef cDigraphAnalysis < cMessageLogger
             A=[G(2:end-1,2:end);...
                G(1,2:end)];
         end
+
+        function res=bfs(G, src)
+        %BFS - Breadth-First Search for computing graph reachability
+        %   Implements an algebraic multisource reachability algorithm using 
+        %   iterative matrix multiplication. Starting from one or more source nodes,
+        %   this function determines all nodes reachable from those sources.
+        %
+        %   Syntax:
+        %     res = cDigraphAnalysis.bfs(G, src)
+        %
+        %   Input Arguments:
+        %     G   - Logical sparse matrix (N x N) containing the adjacency matrix 
+        %           of the graph. G(i,j) = true indicates an edge from node i to j.
+        %     src - Logical vector/array (M x N) indicating source nodes from which
+        %           to begin reachability analysis. src(i) = true marks node i as 
+        %           a starting point.
+        %
+        %   Output Arguments:
+        %     res - Logical vector (M x N) indicating all nodes reachable from the 
+        %           source nodes. res(j) = true if node j is reachable from any source.
+        %
+        %   Algorithm:
+        %     Iteratively expands the frontier of visited nodes by multiplying the
+        %     current frontier by the adjacency matrix until convergence (no new nodes).
+        %     It could be use to compute the transitive closure of graph
+        %
+        %   Example:
+        %     % Compute transitive closure of a directed graph
+        %     G = logical([0 1 0; 0 0 1; 0 0 0]);  % Adjacency matrix
+        %     N = size(G, 1);
+        %     src = speye(N);  % Transitive closure matrix
+        %     TC = cDigraphAnalysis.bfs(G, src);
+        %     % TC(i,j) = 1 means there is a path from i to j
+        %
+            visited = src;
+            current = src;
+            while any(current(:))
+                current = (current * G) & ~visited;
+                visited = visited | current;
+            end
+            res=full(visited);
+        end
+
     end
 
     methods (Static,Access=private)
-
-        function [order,group] = fbfMatrix(G)
-        %fbfMatrix - Computes the Frobenius Block Form (FBF) permutation of a productive Matrix
-        %   Computes a block upper triangular permutation of an adjacency matrix by identifying
-        %   and ordering the Strongly Connected Components (SCCs) in topological order.
-        %
-        %   Syntax:
-        %     [order, group] = fnfMatrix(A)
-        %
-        %   Input Arguments:
-        %     G - Adjacency matrix (n x n) of a directed graph.
-        %
-        %   Output Arguments:
-        %     order - Vector (1 x n) representing the row/column permutation indices.
-        %             A(order, order) yields the Frobenius Normal Form (block upper triangular).
-        %     group - Vector (1 x n) where group(i) is the SCC ID assigned to the original node i.
-        %             group(order) contains the ordered SCC group IDs in topological order.
-        %
-            % Create MATLAB digraph object
-            dg = digraph(logicalMatrix(G));    
-            % Find Strongly Connected Components (SCCs)
-            % 'groups' maps each original node index to an SCC ID number.
-            group = conncomp(dg,'Type','strong');
-            % Get condensation graph
-            kG = condensation(dg);
-            % Topological sort of the macro-components (SCCs)
-            korder = toposort(kG,"Order","stable"); 
-            % Build the final node-level permutation vector (1 x n)
-            % Map each SCC ID to its topological rank, then sort nodes by that rank
-            ngrps = length(korder);
-            rank = zeros(1, ngrps);
-            rank(korder) = 1:ngrps;
-            [~, order] = sort(rank(group));
-        end
-
-        function [group,order]=dfSC(G,nodes)
+        function [order,group]=dfSC(G,nodes)
 		%dfSC - Performs a Depth-First Search for strong component analysis.
         %   This static helper function performs a single pass of
         %   depth-first search over the specified nodes of graph G.
@@ -488,17 +493,17 @@ classdef cDigraphAnalysis < cMessageLogger
         %
         %   Input Arguments:
         %     G     - The adjacency matrix of the graph.
-        %     nodes - The order in which to visit the nodes.
+        %     nodes - The order in which the nodes of the graph are visited
         %
         %   Output Arguments:
-        %     group - An array indicating the group (component) of each node.
         %     order - The post-order traversal of the nodes.
+        %     group - An array indicating the group (component) of each node.
         %
             N=size(G,1);
             stack=zeros(1,N,'int16'); scnt=0; % Stack for DFS traversal
-			order=zeros(1,N,'int16'); pcnt=0; % Post-order traversal result
+			order=zeros(1,N); pcnt=0; % Post-order traversal result
 			group=zeros(1,N); gcnt=0; % Group assignment for each node           
-            % Iterate through nodes in the specified order (from first pass)
+            % Iterate through nodes in the specified order
             for u=nodes 
                 if group(u), continue; end
                 % If node 'u' has not been visited yet
@@ -521,6 +526,8 @@ classdef cDigraphAnalysis < cMessageLogger
                 end
             end
             order=order(N:-1:1); % Reverse to get the correct post-order
+            ngrp=max(group); % Reverse group number
+            group=ngrp+1-group;
         end
 
         function res=buildNodesTable(A,names,groups)
@@ -538,7 +545,7 @@ classdef cDigraphAnalysis < cMessageLogger
             % Internal nodes
             ng=max(groups)+1;
             inames=names(1:end-1);
-            igrp=groups(1:end-1)+1;
+            igrp=groups+1;
             % Source nodes
             [~,jdx]=find(A(end,1:end-1));
             snames=arrayfun(@(x) sprintf('IN%d',x),1:numel(jdx),'UniformOutput',false);
@@ -586,39 +593,27 @@ classdef cDigraphAnalysis < cMessageLogger
             res=cell2struct(tmp,fields,1);
         end
 
-        function res = transitiveClosure(A)
-        %transitiveClosure - Computes transitive closure for ordered graph.
-        %   This method computes the transitive closure of a Digraph
-        %   more efficiently than a general-purpose algorithm like Floyd-Warshall 
-        %   by leveraging the topological order of the nodes.
-        %   The TC matrix is block upper triangular.
-        %
+        function res= tcdag(A)
+        %TCDAG - Compute the transitive closure of a ordered DAG
+        %   Compute the transitive closure of a upper traingular matrix
+        %   
         %   Syntax:
-        %     res = cDigraphAnalysis.transitiveClosure(A)
-        %
+        %     res = cDiagraphAnalysis.tcdag(A)
         %   Input Arguments:
-        %     A - The adjacency matrix of the ordered SSR graph.
-        %
+        %     A - Upper tiangular matrix
         %   Output Arguments:
-        %     res - The transitive closure matrix of the digraph.
+        %     res - transitive closure matrix of A
         %
-            N = size(A, 1);
-            res = logical(A); % Start with the direct connections       
-            % Iterate through nodes in reverse topological order
-            for u = N:-1:1
-                % Find all nodes reachable from u
-                vfu = find(res(u, :));
-                if ~isempty(vfu)
-                    % Find all nodes that can reach u
-                    vru = find(res(:, u));           
-                    % For every pair (v, w) where v reaches u and u reaches w,
-                    % add an edge from v to w.
-                    for v = vru
-                        res(v, vfu) = true;
-                    end
-                end
+            n=size(A,1);
+            res=eye(n)>0;
+            for k = 2:n
+                % Find predecessors (nodes in 1:k-1 that point to node k)
+                idx = 1:k-1;
+                prev = A(idx,k)>0;
+                % Node k inherits reachability from its direct predecessors
+                % Vectorized OR operation across all predecessor rows in res
+                res(idx, k) = res(idx, k) | any(res(idx, prev), 2);
             end
-            res = eye(N) | res;  
         end
     end
 end

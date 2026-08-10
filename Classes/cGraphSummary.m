@@ -38,11 +38,11 @@ classdef cGraphSummary < cGraphResults
         %
 			% Check input arguments
 			if nargin < 2 || ~isObject(info,'cSummaryResults')
-				obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
+				obj.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
 				return
 			end
 			if ~tbl.isSummaryTable
-				obj.messageLog(cType.ERROR,cMessages.InvalidArgument,cMessages.ShowHelp);
+				obj.printError(cMessages.InvalidArgument,cMessages.ShowHelp);
 				return
 			end
 			if nargin < 3
@@ -67,13 +67,13 @@ classdef cGraphSummary < cGraphResults
 			% Check Variables option
 			idx=obj.checkVariables(tbl,info,options.Variables);
 			if  isempty(idx)
-				obj.messageLog(cType.ERROR,cMessages.InvalidParameter,'Variables');
+				obj.printError(cMessages.InvalidParameter,'Variables');
 				return
 			end
 			% Check Cases option
 			jdx=obj.checkCases(style,options.Cases);
 			if isempty(jdx)
-				obj.messageLog(cType.ERROR,cMessages.InvalidParameter,'Cases');
+				obj.printError(cMessages.InvalidParameter,'Cases');
 				return
 			end
 			data=tbl.Data(idx,jdx);

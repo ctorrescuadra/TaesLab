@@ -32,7 +32,7 @@ classdef cGraphDiagramFP < cGraphResults
         %     obj - cGraphDiagramFP object (check obj.status before use)
         %
             if isOctave
-				obj.messageLog(cType.ERROR,cMessages.GraphNotImplemented);
+				obj.printError(cMessages.GraphNotImplemented);
 				return
             end
             obj.Style=cType.GraphStyles.DIGRAPH;
@@ -43,7 +43,7 @@ classdef cGraphDiagramFP < cGraphResults
                 EdgesTable=cGraphDiagramFP.edgesTable(mFP,tbl.RowNames(idx));
                 NodesTable=cGraphDiagramFP.nodesTable(mFP,tbl.RowNames(idx));
             else
-                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                obj.printError(cMessages.InvalidArgument);
                 return
             end
             % Build the digraph

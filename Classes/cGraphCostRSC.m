@@ -40,14 +40,14 @@ classdef cGraphCostRSC < cGraphResults
             obj.Style = cType.GraphStyles.STACK;
             % Validate input arguments
             if ~isa(tbl,'cTable') || ~isa(info,'cExergyCost')
-                obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                obj.printError(cMessages.InvalidArgument);
                 return
             end
             % Build graph data
             if (nargin==2) || isempty(variables) % Plot system outputs/processes (default)
                 [res,idx]=cGraphCostRSC.getCategories(tbl,info);
                 if isempty(res)
-                    obj.messageLog(cType.ERROR,cMessages.InvalidArgument);
+                    obj.printError(cMessages.InvalidArgument);
                     return
                 end
                 obj.Categories=res;
@@ -58,7 +58,7 @@ classdef cGraphCostRSC < cGraphResults
                     obj.Categories=variables;
                     obj.yValues=cell2mat(tbl.Data(idx,1:end-1));
                 else
-                    obj.messageLog(cType.ERROR,cMessages.InvalidVariableNames);
+                    obj.printError(cMessages.InvalidVariableNames);
                     return
                 end
             elseif ischar(variables) 
@@ -69,12 +69,12 @@ classdef cGraphCostRSC < cGraphResults
                     obj.isPieChart=true; % Plot single variable as pie chart
                     [chk,idx]=ismember(variables,tbl.RowNames);
                     if ~chk
-                        obj.messageLog(cType.ERROR,cMessages.InvalidVariableNames);
+                        obj.printError(cMessages.InvalidVariableNames);
                         return
                     end
                 end
             else
-                obj.messageLog(cType.ERROR,cMessages.InvalidVariableNames);
+                obj.printError(cMessages.InvalidVariableNames);
                 return
             end
             % Set graph properties
