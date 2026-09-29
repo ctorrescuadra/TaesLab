@@ -59,16 +59,11 @@ function B = scaleRow(A, x)
         msg = buildMessage(mfilename, cMessages.ScaleRowsError);
         error(msg);
     end   
-    % Scale the matrix using optimized method based on sparsity
-    if issparse(A)
-        % For sparse matrices: diag(x) * A is more efficient
-        % spdiags creates a sparse diagonal matrix from vector x
-        B = spdiags(x(:), 0, nRows, nRows) * A;
+    % Check x is a column vector for correct broadcasting      
+    % Broadcast multiplication: each row multiplied by corresponding x element
+    if iscolumn(x)
+        B = A .* x;
     else
-        % For dense matrices: use broadcasting (element-wise multiplication)
-        % Ensure x is a column vector for correct broadcasting
-        if isrow(x), x = x'; end
-        % Broadcast multiplication: each row multiplied by corresponding x element
-        B = x .* A;
-    end   
+        B = A .* x';
+    end  
 end

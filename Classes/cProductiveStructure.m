@@ -14,6 +14,17 @@ classdef(Sealed) cProductiveStructure < cResultId
 %   the object status is set to false and errors are recorded in the
 %   message log.
 %
+%   Current implementation details:
+%     - Flow and process keys are checked through dedicated dictionaries before
+%       the graph is finalized.
+%     - Environment streams are created automatically for resource, output,
+%       and waste flows, and the synthetic ENV process is added internally.
+%     - The constructor validates connectivity in two stages: raw flow
+%       definitions are checked first, then the stream/process graph is tested
+%       for source-to-sink reachability.
+%     - The final productive topology is stored in ProductiveTable and in the
+%       derived StreamMatrix and ProcessMatrix matrices used downstream.
+%
 %   cProductiveStructure properties:
 %     NrOfProcesses     - Number of processes
 %     NrOfFlows         - Number of flows
@@ -33,34 +44,30 @@ classdef(Sealed) cProductiveStructure < cResultId
 %     ProductiveTable   - Struct of sparse adjacency matrices (AE, AS, AF, AP)
 %     
 %   cProductiveStructure methods:
-%     cProductiveStructure - Construct an instance of the class
-%     buildResultInfo      - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
-%     WasteData            - Get the default waste data
-%     IncidenceMatrix      - Get the incidence matrices of the plant
-%     FlowEdges            - Get the flow edges definition names 
-%     FuelStreams          - Get the Fuel streams ids
-%     ProductStreams       - Get the Product streams ids
-%     ResourceFlows        - Get the Resource Flows id
-%     ResourceProcesses    - Get the Processes with external resources
-%     FinalProductFlows    - Get the Final Products Flows id
-%     SystemOutputFlows    - Get the System Output Flows id
-%     OutputProcesses      - Get the Processes Id with system outputs
-%	  ProductiveProcess    - Get logical array with productive processes
-%     isModelIO            - Check if model is pure Input-Output
-%	  getFlowId            - Get the Id of a flow given its key                                                                                                           
-%     getProcessId         - Get the Id of a process given its key                                               
-%     getProcessMatrix     - Get the Process Adjacency Matrix (logical FP table)
-%     getFlowTypes  	   - Get the flowId of type typeId                                
-%     getProcessTypes      - Get the processId of type typeId                                                   
-%     getProductNames      - Get the name of the final products flows                                              
-%     getResourceNames     - Get the name of the resource flows
-%     getWasteNames        - Get the name of the waste flows
-%     getStreamTypes       - Get the stream-id of type typeId                                                    
-%     getFlowMatrix        - Get the Structural Theory Flows Adjacency Matrix                 
-%     getFlowProcessMatrix - Get the Flow-Process Adjacency Matrix (Flows, Processes)                                                      
-%     getStreamMatrix      - Get the Streams graph adjacency matrix
-%     getProductiveMatrix  - Get the Productive Adjacency Matrix (Streams, Flows, Processes)
-%     flows2Streams        - Compute the exergy or cost of streams from flow values                              
+%     cProductiveStructure     - Construct an instance of the class
+%     buildResultInfo          - Build the cResultInfo object for PRODUCTIVE_STRUCTURE
+%     WasteData                - Get the default waste data template for the model
+%     IncidenceMatrix          - Get the incidence matrices of the plant
+%     getStreamMatrix          - Get the stream-to-stream adjacency matrix
+%     FlowEdges                - Get the source and target stream key for each flow
+%     ProductStreams           - Get the product stream indices
+%     FuelStreams              - Get the fuel stream indices
+%     ResourceFlows            - Get the resource-flow indices
+%     FinalProductFlows        - Get the final-product-flow indices
+%     SystemOutputFlows        - Get the full system-output-flow indices
+%     ResourceProcesses        - Get processes connected to external resources
+%     OutputProcesses          - Get processes connected to output flows
+%     ProductiveProcesses      - Get the productive-process logical mask
+%     isModelIO                - Check if the model is pure input-output
+%     getProcessId             - Get the index of a process given its key
+%     getFlowId                - Get the index of a flow given its key
+%     getFlowTypes             - Get the indices of flows of a given type
+%     getProcessTypes          - Get the indices of processes of a given type
+%     getStreamTypes           - Get the indices of streams of a given type
+%     getProductNames          - Get the names of the final product flows
+%     getResourceNames         - Get the names of the resource flows
+%     getWasteNames            - Get the names of the waste flows
+%     flows2Streams            - Compute stream exergy or cost from flow values
 %
 %   See also cModelData, cResultId, cResultInfo, cMessageLogger
 %
@@ -80,6 +87,7 @@ classdef(Sealed) cProductiveStructure < cResultId
         ProcessKeys       % Cell array of Processes Names (keys)
         StreamKeys        % Cell array of Streams Names (keys)
 		ProductiveTable   % Adjacency Matrix of Productive Structure
+		StreamMatrix      % Productive Groups Matrix
         ProcessMatrix     % Processes Matrix	
 	end
 
@@ -335,136 +343,9 @@ classdef(Sealed) cProductiveStructure < cResultId
 			res=x.AS*x.AE+x.AF(:,1:end-1)*x.AP(1:end-1,:);
 			if nargout>1
 				src=x.AP(end,:);
-				out=x.AF(:,end);
+				out=([obj.Streams.typeId]==cType.Stream.OUTPUT);
 			end
         end
-	
-		function [res,src,out]=getFlowMatrix(obj)
-		%getFlowMatrix - Get the Structural Theory flow adjacency matrix
-		%   Returns the flow-to-flow adjacency matrix of the productive structure
-		%   as defined by Structural Theory of Energy Systems. Optionally returns
-		%   the resource row vector and the output column vector for the
-		%   environment process.
-		%
-		%   Syntax:
-		%     res           = obj.getFlowMatrix
-		%     [res,src,out] = obj.getFlowMatrix
-		%
-		%   Output Arguments:
-		%     res - (NrOfFlows x NrOfFlows logical sparse) Flow adjacency matrix
-		%     src - (1 x NrOfFlows logical sparse) Resource row (ENV inputs)
-		%     out - (NrOfFlows x 1 logical sparse) Output column (ENV outputs)
-		%
-		%   See also getStreamMatrix, getProcessMatrix, getProductiveMatrix
-		%
-			x=obj.ProductiveTable;
-			xAP=x.AP*x.AS; xAF=x.AE*x.AF;
-			res=x.AE*x.AS+xAF(:,1:end-1)*xAP(1:end-1,:);
-			if nargout>1
-				src=xAP(end,:);
-				out=xAF(:,end);
-			end
-        end
-		
-		function [res,src,out]=getProcessMatrix(obj)
-		%getProcessMatrix - Get the process adjacency matrix (logical FP table)
-		%   Returns the process-to-process adjacency matrix derived from the
-		%   transitive closure of the stream adjacency matrix. Entry (i,j) is
-		%   true if process i can reach process j. Optionally returns the
-		%   resource row and the output column for the environment process.
-		%
-		%   Syntax:
-		%     res           = obj.getProcessMatrix
-		%     [res,src,out] = obj.getProcessMatrix
-		%
-		%   Output Arguments:
-		%     res - (NrOfProcesses x NrOfProcesses logical) Process adjacency
-		%           matrix (ENV row/col excluded when three outputs requested)
-		%     src - (1 x NrOfProcesses logical) Resource row (ENV to processes)
-		%     out - (NrOfProcesses x 1 logical) Output column (processes to ENV)
-		%
-		%   See also getStreamMatrix, getFlowMatrix, getProductiveMatrix
-		%
-			x=obj.ProductiveTable;
-			tc=x.AS*x.AE>0;
-            a=cDigraphAnalysis.bfs(tc,x.AP);
-			res=(a*x.AF > 0);
-			if nargout>1
-				src=full(res(end,1:end-1));
-				out=full(res(1:end-1,end));
-				res=res(1:end-1,1:end-1);
-			end
-		end
-
-        function res=getProductiveMatrix(obj)
-		%getProductiveMatrix - Get the combined productive adjacency matrix
-		%   Returns the block adjacency matrix combining streams, flows, and
-		%   processes in a single square matrix. Used to build the SFPAT
-		%   productive diagram.
-		%
-		%   Syntax:
-		%     res = obj.getProductiveMatrix
-		%
-		%   Output Arguments:
-		%     res - ((NS+M+N) x (NS+M+N) logical sparse) Productive adjacency
-		%           matrix, where NS = NrOfStreams, M = NrOfFlows, N = NrOfProcesses
-		%
-		%   See also getStreamMatrix, getFlowMatrix, getFlowProcessMatrix
-		%
-			x=obj.ProductiveTable;
-			N=obj.NrOfProcesses;
-			M=obj.NrOfFlows;
-			NS=obj.NrOfStreams;
-			res=[zeros(NS,NS), x.AS, x.AF(:,1:end-1);...
-			     x.AE, zeros(M,M), zeros(M,N);...
-				 x.AP(1:end-1,:), zeros(N,M), zeros(N,N)];
-		end
-			
-		function [res, src, out]=getStreamProcessMatrix(obj)
-		%getFlowProcessMatrix - Get the stream-process adjacency matrix
-		%   Returns the block adjacency matrix combining stream and processes in a
-		%   single square matrix. Used to check graph reachability
-		%
-		%   Syntax:
-		%     res = obj.getFlowProcessMatrix
-		%
-		%   Output Arguments:
-		%     res - ((M+N) x (M+N) logical sparse) Flow-process adjacency matrix,
-		%           where M = NrOfFlows, N = NrOfProcesses
-		%     src - (1 x (M+N) logical) Resource row (ENV to processes)
-		%     out - ((M+N) x 1 logical) Output column (processes to ENV)
-		%
-		%   See also getFlowMatrix, getProductiveMatrix
-		%
-			x=obj.ProductiveTable;
-			N=obj.NrOfProcesses+1;
-			res=[x.AS*x.AE>0, x.AF; x.AP, false(N,N)];
-			if nargout>1
-				src=full(res(end,1:end-1));
-				out=full(res(1:end-1,end));
-				res=res(1:end-1,1:end-1);
-			end
-		end
-
-		function res = getFlowProcessMatrix(obj)
-		%getFlowProcessMatrix - Get the flow-process adjacency matrix
-		%   Returns the block adjacency matrix combining flows and processes in a
-		%   single square matrix. Used to build the FPAT flow-process diagram.
-		%
-		%   Syntax:
-		%     res = obj.getFlowProcessMatrix
-		%
-		%   Output Arguments:
-		%     res - ((M+N) x (M+N) logical sparse) Flow-process adjacency matrix,
-		%           where M = NrOfStreams, N = NrOfProcesses
-		%
-		%   See also getFlowMatrix, getProductiveMatrix
-		%
-			x=obj.ProductiveTable;
-			N=obj.NrOfProcesses;
-			res=[x.AE*x.AS,x.AE*x.AF(:,1:end-1);...
-				x.AP(1:end-1,:)*x.AS,zeros(N,N)];
-		end
 
 		function res=FlowEdges(obj)
 		%FlowEdges - Get the source and target stream key for each flow
@@ -613,7 +494,7 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%	
 			ptypes = [obj.Processes(1:end-1).typeId];
 			res = (ptypes == cType.Process.PRODUCTIVE); 
-		end
+        end
 
 		function res=isModelIO(obj)
 		%isModelIO - Check if the model is a pure Input-Output system
@@ -1119,25 +1000,68 @@ classdef(Sealed) cProductiveStructure < cResultId
 		%     if false logs the non reached nodes
 		
 			% Get the Stream-Processes adjacency matrix
-			NS=obj.NrOfStreams+1;
-			[spm,src,out] = obj.getStreamProcessMatrix; 
+            pt=obj.ProductiveTable;
+			spm=pt.AS*pt.AE+pt.AF(:,1:end-1)*pt.AP(1:end-1,:);
+			src=pt.AP(end,:);
+			out=([obj.Streams.typeId]==cType.Stream.OUTPUT);
 			% Get nodes reached by src
 			rs = cDigraphAnalysis.bfs(spm, src);
-			sfail=~rs(NS:end);	
+			sfail=~(rs * pt.AF(:,1:end-1));	
 			for i = find(sfail) % Report invalid nodes
 				obj.messageLog(cType.ERROR,cMessages.NodeNotReachedFromSource,obj.ProcessKeys{i});
 			end
 			% Get productive nodes that reach final product
-			rt = cDigraphAnalysis.bfs(spm', out');
-			tfail = ~rt(NS:end) & obj.ProductiveProcesses;
+            aP = obj.ProductiveProcesses;
+			rt = cDigraphAnalysis.bfs(spm', out);
+			tfail = ~(rt * pt.AP(1:end-1,:)') & aP;
 			for i = find(tfail)
 				obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,obj.ProcessKeys{i});
 			end
 			% Get the Process Matrix
 			if obj.status
+				obj.StreamMatrix=spm;
 				obj.ProcessMatrix=obj.getProcessMatrix;
 			end
 			res=obj.status;
 		end
+		
+		function [res,src,out]=getProcessMatrix(obj)
+		%getProcessMatrix - Get the process adjacency matrix (logical FP table)
+		%   Computes the process-to-process reachability matrix from the productive
+		%   stream graph using a multisource BFS. In the productive table:
+		%       AE -> flow-to-stream incidence, AS -> stream-to-flow incidence,
+		%       AF -> stream-to-process incidence, AP -> process-to-stream incidence.
+		%   The one-step stream adjacency is tc = AS*AE > 0. A multisource BFS from
+		%   all process source rows, a = bfs(tc, AP), computes the transitive closure
+		%   of reachable streams. Projecting back to processes with a*AF > 0 gives the
+		%   process adjacency matrix, equivalent to the algebraic form
+		%       res = AP * TC(AS*AE) * AF.
+		%   Entry (i,j) is true if process i can reach process j through connected
+		%   downstream streams. Optionally returns the resource row and output column
+		%   for the environment process.
+		%
+		%   Syntax:
+		%     res           = obj.getProcessMatrix
+		%     [res,src,out] = obj.getProcessMatrix
+		%
+		%   Output Arguments:
+		%     res - (NrOfProcesses x NrOfProcesses logical) Process adjacency
+		%           matrix (ENV row/col excluded when three outputs requested)
+		%     src - (1 x NrOfProcesses logical) Resource row (ENV to processes)
+		%     out - (NrOfProcesses x 1 logical) Output column (processes to ENV)
+		%
+		%   See also getStreamMatrix, getFlowMatrix, getProductiveMatrix
+		%
+			x=obj.ProductiveTable;
+			tc=x.AS*x.AE>0;
+            a=cDigraphAnalysis.bfs(tc,x.AP);
+			res=(a*x.AF > 0);
+			if nargout>1
+				src=full(res(end,1:end-1));
+				out=full(res(1:end-1,end));
+				res=res(1:end-1,1:end-1);
+			end
+		end
+
     end
 end

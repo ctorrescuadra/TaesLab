@@ -58,16 +58,11 @@ function B = scaleCol(A, x)
         msg = buildMessage(mfilename, cMessages.ScaleColsError);
         error(msg);
     end
-    % Scale the matrix using optimized method based on sparsity
-    if issparse(A)
-        % For sparse matrices: A * diag(x) is more efficient
-        % spdiags creates a sparse diagonal matrix from vector x
-        B = A * spdiags(x(:), 0, nCols, nCols);
+    % Check x is a row vector for correct broadcasting      
+    % Broadcast multiplication: each row multiplied by corresponding x element
+    if isrow(x)
+        B = A .* x;
     else
-        % For dense matrices: use broadcasting (element-wise multiplication)
-        % Ensure x is a row vector for correct broadcasting
-        if iscolumn(x), x = x'; end
-        % Broadcast multiplication: each column multiplied by corresponding x element
-        B = x .* A;
-    end  
+        B = A .* x';
+    end 
 end

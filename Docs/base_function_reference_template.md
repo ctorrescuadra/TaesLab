@@ -1,11 +1,18 @@
-# [FunctionName] Reference
+# TaesLab Base Function Reference Template
 
 **Version**: 1.8 (R2024b) 01-Oct-2025  
 **Location**: `Base/[FunctionName].m`
 
-## Function Overview
+## Purpose
 
-[Brief description of what the function does and its primary purpose]
+Use this template to document TaesLab base functions after the corresponding implementation or data-flow changes.
+
+This repository follows a layered design in which each base function typically:
+
+- validates the input object or filename,
+- delegates to a class or helper object,
+- returns a result container or table definition,
+- optionally displays or saves the output through the standard TaesLab UI.
 
 ### Category
 
@@ -13,9 +20,10 @@
 
 ### Key Features
 
-- **Feature 1**: [Description]
-- **Feature 2**: [Description]
-- **Feature 3**: [Description]
+- **Validation**: checks object type, model validity, and required arguments before execution.
+- **Model integration**: uses the current `cDataModel`, `cThermoeconomicModel`, or result-set objects from the active analysis workflow.
+- **Result packaging**: returns a `cResultInfo`, `cTable`, or other TaesLab data container for downstream presentation.
+- **Presentation/export**: supports the standard show/save workflow through `ShowResults`, `SaveResults`, or app-level interfaces.
 
 ---
 
@@ -92,11 +100,11 @@ output = FunctionName(input, 'Param1', value1, 'Param2', value2)
 
 When the function returns a `cResultInfo` object, it contains the following tables:
 
-| Table Name | Description | Type |
-|:---------- |:----------- |:---- |
-| `table1`   | [Description] | `cTableCell` |
-| `table2`   | [Description] | `cTableMatrix` |
-| `table3`   | [Description] | `cTableData` |
+|Table Name|Description|Type|
+|:---------|:----------|:---|
+|`table1`|[Description]|`cTableCell`|
+|`table2`|[Description]|`cTableMatrix`|
+|`table3`|[Description]|`cTableData`|
 
 ---
 

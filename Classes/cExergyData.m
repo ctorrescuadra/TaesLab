@@ -194,22 +194,19 @@ classdef cExergyData < cMessageLogger
 		%           plant output; false if any process is unreachable
 		%
 			% Build the process-stream adjacency matrix 
-			N = obj.ps.NrOfProcesses+1;
-			NS = obj.ps.NrOfStreams+1;
-			tmp = logicalMatrix([m.AS*m.AE, m.AF; m.AP, zeros(N,N)]);
+			spm = logicalMatrix(m.AS * m.AE + m.AF(:,1:end-1) * m.AP(1:end-1,:));
 			% Check if isequal to the reference stream-process matrix
 			% then the state is productive
-			spm = obj.ps.getStreamProcessMatrix;
+			tmp = obj.ps.StreamMatrix;
 			if isequal(spm,tmp)
 				log = true;
 				return
 			end
 			% BFS from the sink node
-			mA = transpose(tmp(1:end-1,1:end-1)); 
-			out = transpose(full(tmp(1:end-1,end)));
-			v = cDigraphAnalysis.bfs(mA,out);
+            out = full(logicalMatrix(m.AF(:,end)));
+			v = cDigraphAnalysis.bfs(spm',out');
 			% Log productive nodes does not reach sink
-			fail = ~v(NS:end) & pp;
+			fail = ~(v * m.AP(1:end-1,:)') & pp;
             for i = find(fail)
                 pname=obj.ps.ProcessKeys{i};
 				obj.messageLog(cType.ERROR,cMessages.OutputNotReachedFromNode,pname);

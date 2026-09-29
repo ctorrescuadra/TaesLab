@@ -72,5 +72,11 @@ function B = divideRow(A, x)
     x(nonZeroIdx) = 1.0 ./ x(nonZeroIdx);    
     % Scale the matrix by multiplied by reciprocal (equivalent to division)
     % For zero elements, x remains 0, so those rows become zero
-    B = scaleRow(A, x);    
+    % Check x is a row vector for correct broadcasting      
+    % Broadcast multiplication: each row multiplied by corresponding x element
+    if iscolumn(x)
+        B = A .* x;
+    else
+        B = A .* x';
+    end     
 end

@@ -71,5 +71,9 @@ function B = divideCol(A, x)
     x(nonZeroIdx) = 1.0 ./ x(nonZeroIdx); 
     % Scale the matrix by multiplied by reciprocal (equivalent to division)
     % For zero elements, x remains 0, so those columns become zero
-    B = scaleCol(A, x);   
+    if isrow(x)
+        B = A .* x;
+    else
+        B = A .* x';
+    end 
 end

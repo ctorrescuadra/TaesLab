@@ -171,7 +171,7 @@ classdef cDigraphAnalysis < cTaesLab
         %   Output Arguments:
         %     res - A logical scalar (true or false).
         %
-            res = (obj.NrOfGroups == obj.NrOfNodes) && all(diag(obj.mG) == 0);
+            res = (obj.NrOfGroups == obj.NrOfNodes) && ~any(diag(obj.mG));
         end
 
         function res=isProductive(obj)

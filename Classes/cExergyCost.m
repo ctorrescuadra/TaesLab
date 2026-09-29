@@ -60,9 +60,7 @@ classdef (Sealed) cExergyCost < cExergyModel
         WasteAllocationRatios  % (double) Matrix [NR x N] of normalized waste allocation ratios
     end
     
-    properties(Access=private)
-       mpL  % (double) Matrix mapping process products to flows: mP(1:N,:)*mL; used for flow ICT computation
-    end
+
     
 	methods
 		function obj=cExergyCost(exd,wd)
@@ -96,7 +94,6 @@ classdef (Sealed) cExergyCost < cExergyModel
 			fpm=obj.FlowProcessModel;
             mG=fpm.mF(:,1:N)*fpm.mP(1:N,:)+fpm.mV;
             opB=eye(M)/(eye(M)-mG);
-            obj.mpL=fpm.mgL(1:N,:);  % Used later for flow ICT computation
             obj.flowOperators=struct('mG',mG,'opB',zerotol(opB));
             % --- PF-framework operators ---
             % mPF: product-to-fuel unit flow ratios (normalized TableFP columns by fuel exergy)
@@ -573,13 +570,15 @@ classdef (Sealed) cExergyCost < cExergyModel
             if nargout==1
                 return
             end
+            
             % Project process ICT onto flows using mpL = mP(1:N,:)*mL
+            aux=fpm.mpL(1:N,:);
             if czoption
-                cm=rsc.c0*fpm.mL+cn*obj.mpL;   % Generalized flow reference cost
+                cm=rsc.c0*fpm.mL+cn*aux;   % Generalized flow reference cost
             else
-                cm=ones(1,M);                  % Direct cost: unit flow cost = 1
+                cm=ones(1,M);                         % Direct cost: unit flow cost = 1
             end
-            fict=[ict*obj.mpL;cm];
+            fict=[ict*aux;cm];
         end
 
         function [frsc,prsc,idx]=getResourcesCostDistribution(obj,rsd)
@@ -699,26 +698,23 @@ classdef (Sealed) cExergyCost < cExergyModel
             end
             % Scale by (1 - RecycleRatio) so recycled fraction does not enter allocation
             sol=scaleRow(sol,1-wt.RecycleRatio);
-            % Verify that the waste-inclusive cost system still has a unique solution
-            mS=sol*opCP(:,aR);
-            if ~isProductiveMatrix(mS)
-                log.messageLog(cType.ERROR,cMessages.InvalidWasteDefinition);
-                return
-            end
             % Build sparse waste allocation matrices and update all operator structs
-            mRP=cSparseRow(aR,sol);             % Sparse allocation matrix mRP [NR x N]
+            mRP=cSparseRow(aR,sol);              % Sparse allocation matrix mRP [NR x N]
             obj.TableR=scaleRow(mRP,vP);         % Exergy-weighted allocation table
             mKR=divideCol(obj.TableR,vP);        % Unit waste cost matrix
             opR=cExergyCost.getOpR(mKR,opP);     % PF-framework waste cost operator
             wflows=obj.ps.Waste.flows;
             wt.updateValues(sol);
             obj.WasteTable=wt;
+            % FP-framework waste operators
             obj.fpOperators.mRP=mRP;
-            obj.fpOperators.opR=cExergyCost.getOpR(mRP,opCP);            % FP-framework waste operator
+            obj.fpOperators.opR=cExergyCost.getOpR(mRP,opCP);            
             obj.pfOperators.mKR=mKR;
             obj.pfOperators.opR=opR;
-            obj.flowOperators.opR=cSparseRow(wflows,opR.mValues*obj.mpL,M);  % Flow-level waste operator
             obj.RecycleRatio=wt.RecycleRatio;
+            % Flow-level waste operator
+            aux=obj.FlowProcessModel.mpL(1:N,:);
+            obj.flowOperators.opR=cSparseRow(wflows,opR.mValues*aux,M);  
         end 
     end
     

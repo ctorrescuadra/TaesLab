@@ -13,23 +13,23 @@ classdef (Sealed) cProductiveDiagram < cResultId
 %   Each diagram type is stored as a pair of struct arrays (Nodes, Edges)
 %   that can be retrieved individually or as a MATLAB digraph object.
 %
-%   cProductiveDiagram properties:
-%     NodesFAT   - Flow diagram nodes
-%     EdgesFAT   - Flow diagram edges
-%     NodesPAT   - Process diagram nodes
-%     EdgesPAT   - Process diagram edges
-%     NodesFPAT  - Flow-Process diagram nodes
-%     EdgesFPAT  - Flow-Process diagram edges
-%     NodesSFPAT - Productive diagram (SFPAT) nodes
-%     EdgesSFPAT - Productive diagram (SFPAT) edges
-%     NodesKPAT  - Kernel Process diagram nodes
-%     EdgesKPAT  - Kernel Process diagram edges
+%   cProductiveDiagram public properties:
+%     NodesFAT   - Flow diagram nodes table
+%     EdgesFAT   - Flow diagram edges table
+%     NodesPAT   - Process diagram nodes table
+%     EdgesPAT   - Process diagram edges table
+%     NodesFPAT  - Flow-Process diagram nodes table
+%     EdgesFPAT  - Flow-Process diagram edges table
+%     NodesSFPAT - Productive diagram (stream-flow-process) nodes table
+%     EdgesSFPAT - Productive diagram (stream-flow-process) edges table
+%     NodesKPAT  - Kernel process diagram nodes table
+%     EdgesKPAT  - Kernel process diagram edges table
 %
-%   cProductiveDiagram methods:
-%     cProductiveDiagram - Construct an instance of this class
+%   cProductiveDiagram public methods:
+%     cProductiveDiagram - Construct an instance of the class from a cProductiveStructure
+%     getEdgesTable      - Return the edges struct for one supported diagram type
+%     getDigraph         - Build the MATLAB digraph object for one supported diagram type
 %     buildResultInfo    - Build the cResultInfo object for productive diagrams
-%     getEdgesTable      - Get the edges struct for a specified diagram type
-%     getDigraph         - Get the MATLAB digraph object for a diagram type
 %
 %   See also cResultId, cProductiveStructure, cDigraphAnalysis, cResultInfo
 %
@@ -44,6 +44,10 @@ classdef (Sealed) cProductiveDiagram < cResultId
         NodesSFPAT        % Productive (SFP) table
         NodesPAT          % Process nodes table
         NodesKPAT         % Kernel Process nodes table
+    end
+
+    properties(Access=private)
+        productiveTable   % Productive Table structure
     end
 
     methods
@@ -71,20 +75,21 @@ classdef (Sealed) cProductiveDiagram < cResultId
             end
             % Get Flows (FAT) info  
             nodenames=[ps.FlowKeys];
-            flowMatrix=ps.getFlowMatrix;
+            obj.productiveTable=ps.ProductiveTable;
+            flowMatrix=obj.getFlowMatrix;
             nodetypes=repmat({cType.NodeType.FLOW},1,ps.NrOfFlows);
             obj.NodesFAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesFAT=cProductiveDiagram.edgesTable(flowMatrix,nodenames);
             % Get Flow-Process node names
             nodenames=[ps.FlowKeys,ps.ProcessKeys(1:end-1)];
-            flowProcessMatrix=ps.getFlowProcessMatrix;
+            flowProcessMatrix=obj.getFlowProcessMatrix;
             nodetypes=[repmat({cType.NodeType.FLOW},1,ps.NrOfFlows),...
                    repmat({cType.NodeType.PROCESS},1,ps.NrOfProcesses)];
             obj.NodesFPAT=cProductiveDiagram.nodesTable(nodenames,nodetypes);
             obj.EdgesFPAT=cProductiveDiagram.edgesTable(flowProcessMatrix,nodenames);
             % Get Productive (PST) node names
             nodenames=[ps.StreamKeys,ps.FlowKeys,ps.ProcessKeys(1:end-1)];
-            productiveMatrix=ps.getProductiveMatrix;
+            productiveMatrix=obj.getProductiveMatrix;
             nodetypes=[repmat({cType.NodeType.STREAM},1,ps.NrOfStreams),...
                    repmat({cType.NodeType.FLOW},1,ps.NrOfFlows),...
                    repmat({cType.NodeType.PROCESS},1,ps.NrOfProcesses)];
@@ -221,6 +226,79 @@ classdef (Sealed) cProductiveDiagram < cResultId
         end
     end
 
+    methods(Access=private)
+        function [res,src,out]=getFlowMatrix(obj)
+		%getFlowMatrix - Get the Structural Theory flow adjacency matrix
+		%   Returns the flow-to-flow adjacency matrix of the productive structure
+		%   as defined by Structural Theory of Energy Systems. Optionally returns
+		%   the resource row vector and the output column vector for the
+		%   environment process.
+		%
+		%   Syntax:
+		%     res           = obj.getFlowMatrix
+		%     [res,src,out] = obj.getFlowMatrix
+		%
+		%   Output Arguments:
+		%     res - (NrOfFlows x NrOfFlows logical sparse) Flow adjacency matrix
+		%     src - (1 x NrOfFlows logical sparse) Resource row (ENV inputs)
+		%     out - (NrOfFlows x 1 logical sparse) Output column (ENV outputs)
+		%
+		%   See also getStreamMatrix, getProcessMatrix, getProductiveMatrix
+		%
+            x=obj.productiveTable;
+			xAP=x.AP*x.AS; xAF=x.AE*x.AF;
+			res=x.AE*x.AS+xAF(:,1:end-1)*xAP(1:end-1,:);
+			if nargout>1
+				src=xAP(end,:);
+				out=xAF(:,end);
+			end
+        end
+
+        function res=getProductiveMatrix(obj)
+		%getProductiveMatrix - Get the combined productive adjacency matrix
+		%   Returns the block adjacency matrix combining streams, flows, and
+		%   processes in a single square matrix. Used to build the SFPAT
+		%   productive diagram.
+		%
+		%   Syntax:
+		%     res = obj.getProductiveMatrix
+		%
+		%   Output Arguments:
+		%     res - ((NS+M+N) x (NS+M+N) logical sparse) Productive adjacency
+		%           matrix, where NS = NrOfStreams, M = NrOfFlows, N = NrOfProcesses
+		%
+		%   See also getStreamMatrix, getFlowMatrix, getFlowProcessMatrix
+		%
+			x=obj.productiveTable;
+			N=size(x.AP,1)-1;
+			M=size(x.AE,1);
+			NS=size(x.AS,1);
+			res=[zeros(NS,NS), x.AS, x.AF(:,1:end-1);...
+			     x.AE, zeros(M,M), zeros(M,N);...
+				 x.AP(1:end-1,:), zeros(N,M), zeros(N,N)];
+		end
+
+		function res = getFlowProcessMatrix(obj)
+		%getFlowProcessMatrix - Get the flow-process adjacency matrix
+		%   Returns the block adjacency matrix combining flows and processes in a
+		%   single square matrix. Used to build the FPAT flow-process diagram.
+		%
+		%   Syntax:
+		%     res = obj.getFlowProcessMatrix
+		%
+		%   Output Arguments:
+		%     res - ((M+N) x (M+N) logical sparse) Flow-process adjacency matrix,
+		%           where M = NrOfStreams, N = NrOfProcesses
+		%
+		%   See also getFlowMatrix, getProductiveMatrix
+		%
+			x=obj.productiveTable;
+			N=size(x.AP,1)-1;
+			res=[x.AE*x.AS,x.AE*x.AF(:,1:end-1);...
+				x.AP(1:end-1,:)*x.AS,zeros(N,N)];
+        end
+    end
+
     methods(Static,Access=private)
         function res=edgesTable(A,nodes)
         %edgesTable - Build an edges struct array from an adjacency matrix
@@ -290,5 +368,4 @@ classdef (Sealed) cProductiveDiagram < cResultId
             res=digraph(tedges,tnodes,"omitselfloops");
         end
     end
-
 end
