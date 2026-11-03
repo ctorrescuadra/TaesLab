@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.apptool" plugin-version="1.0">
-  <configuration build-checksum="2285592598" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps\TaesApp.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps" name="TaesApp" target="target.mlapps" target-name="Package App">
+  <configuration build-checksum="1361159749" file="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps\TaesApp.prj" location="C:\Users\ctorr\Documents\Proyectos\TaesLab\Apps" name="TaesApp" target="target.mlapps" target-name="Package App">
     <param.appname>TaesApp</param.appname>
     <param.authnamewatermark>César Torres Cuadra</param.authnamewatermark>
     <param.email>ctorresc@unizar.es</param.email>
@@ -13,7 +13,7 @@
     <param.summary>TAES App</param.summary>
     <param.description>Thermoeconomic Analysis of Energy System</param.description>
     <param.screenshot>${PROJECT_ROOT}\Resources\Splash_TAES.png</param.screenshot>
-    <param.version>1.8</param.version>
+    <param.version>1.9</param.version>
     <param.products.name />
     <param.products.id />
     <param.products.version />
@@ -108,7 +108,6 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\ts.png</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Config\icon16\wa.png</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\buildMessage.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\dfs.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\divideCol.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\divideRow.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\exportCSV.m</file>
@@ -123,16 +122,14 @@
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isNonNegativeMatrix.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isObject.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isOctave.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isProductiveMatrix.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isSquareMatrix.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\isValid.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\logicalMatrix.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\scaleCol.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\scaleRow.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\similarResourceOperator.m</file>
+      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\spectralRadius.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\tolerance.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\topologicalOrder.m</file>
-      <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\transitiveClosure.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\vDivide.m</file>
       <file>C:\Users\ctorr\Documents\Proyectos\TaesLab\Functions\zerotol.m</file>
     </fileset.depfun>
@@ -147,7 +144,14 @@
     <workflow />
     <matlab>
       <root>C:\Program Files\MATLAB\R2024b</root>
-      <toolboxes />
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
     </matlab>
     <platform>
       <unix>false</unix>

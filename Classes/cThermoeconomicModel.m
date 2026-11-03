@@ -317,12 +317,12 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=get.costTableId(obj)
-        % Get the current cost table Id
+        %get.costTable Get the current cost table Id
             res=cType.getCostTables(obj.CostTables);
         end
 
         function res=get.summaryId(obj)
-        % Get the current summary Id
+        %get.sumaryId Get the current summary Id
             res=cType.getSummaryId(obj.Summary);
         end
 
@@ -330,7 +330,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % Set methods
         %%%%
         function set.CurrentState(obj,state)
-        %Set a new valid current state from StateNames
+        %set.CurrentState - Set a new valid current state from StateNames
             if checkState(obj,state)
                 obj.State=state;
                 obj.CurrentState=state;
@@ -339,7 +339,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setState(obj,state)
-        %setState - Set a new valid state from StateNames
+        %setState - Set a new valid (current) state from StateNames
         %   Syntax:
         %     obj.setState(state)
         %     obj.CurrentState=state;
@@ -351,7 +351,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function set.ReferenceState(obj,state)
-        %Set a new valid reference state from StateNames
+        %set.ReferenceState - Set a new valid reference state from StateNames
             if checkReferenceState(obj,state)
                 obj.ReferenceState=state;
                 obj.printDebugInfo(cMessages.SetReferenceState,state);
@@ -372,7 +372,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function set.CurrentSample(obj,sample)
-        %Set currentResourceSample from SampleNames
+        %set.CurrentSample - Set current Resource Sample from SampleNames
             if obj.checkResourceSample(sample)
                 obj.Sample=sample;
                 obj.CurrentSample=sample;
@@ -394,7 +394,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function set.CostTables(obj,value)
-        %Set a new value of CostTables parameter
+        %set.CostTables - Set a new value of CostTables parameter
             if obj.checkCostTables(value)
                 obj.CostTables=value;
                 obj.triggerCostTablesChange;
@@ -414,7 +414,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function set.ActiveWaste(obj,value)
-        %Set a new waste flow for recycling analysis
+        %set.ActiveWaste - Set a new active waste flow for recycling analysis
         %
             if obj.checkActiveWaste(value)
                 obj.ActiveWaste=value;
@@ -424,7 +424,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function setActiveWaste(obj,value)
-        %setActiveWaste - Set a new waste flow for recycling analysis
+        %setActiveWaste - Set a new active waste flow for recycling analysis
         %   Syntax:
         %     setActiveWaste(obj,value)
         %     obj.ActiveWaste=value;
@@ -436,7 +436,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function set.DiagnosisMethod(obj,method)
-        % Set a new value of DiagnosisMethod parameter
+        %set.DiagnosisMethod - Set a new value of DiagnosisMethod parameter
         %
             if obj.checkDiagnosisMethod(method)
                 obj.DiagnosisMethod=method;
@@ -456,12 +456,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function set.Summary(obj,value)
-        %setSummary - Set a new Summary available option
-        %   Syntax:
-        %     model.setSummary(value)
-        %   Input Arguments:
-        %     value - Summary options
-        %       'NONE' | 'STATE' | 'RESOURCE' | 'ALL'     
+        %set.Summary - Set a new Summary available option 
         %
             if obj.checkSummary(value)
                 obj.Summary=value;
@@ -483,7 +478,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
     
         function set.Recycling(obj,value)
-        % Set Recycling parameter
+        %set.Recycling - Set Recycling parameter
             if obj.checkRecycling(value)
                 obj.Recycling=value;
                 if obj.Recycling
@@ -531,7 +526,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         % get cResultInfo objects
         %%%
         function res=productiveStructure(obj)
-        %productiveStructure - Return the productive-structure results.
+        %productiveStructure - Return the productive structure results.
         %   Syntax:
         %     res = obj.productiveStructure
         %   Output Arguments:
@@ -541,7 +536,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=exergyAnalysis(obj)
-        %exergyAnalysis - Return the exergy-analysis results for the active state.
+        %exergyAnalysis - Return the exergy analysis results for the active state.
         %   Syntax:
         %     res = obj.exergyAnalysis
         %   Output Arguments:
@@ -551,7 +546,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=thermoeconomicAnalysis(obj)
-        %thermoeconomicAnalysis - Return the thermoeconomic-analysis results.
+        %thermoeconomicAnalysis - Return the thermoeconomic analysis results.
         %   Syntax:
         %     res = obj.thermoeconomicAnalysis
         %   Output Arguments:
@@ -561,7 +556,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=wasteAnalysis(obj)
-        %wasteAnalysis - Return the waste-analysis results for the active waste flow.
+        %wasteAnalysis - Return the waste analysis results for the active waste flow.
         %   Syntax:
         %     res = obj.wasteAnalysis
         %   Output Arguments:
@@ -571,7 +566,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=thermoeconomicDiagnosis(obj)
-        %thermoeconomicDiagnosis - Return the thermoeconomic-diagnosis results.
+        %thermoeconomicDiagnosis - Return the thermoeconomic diagnosis results.
         %   Syntax:
         %     res = obj.thermoeconomicDiagnosis
         %   Output Arguments:
@@ -592,7 +587,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=productiveDiagram(obj)
-        %productiveDiagram - Return the productive-diagram results.
+        %productiveDiagram - Return the productive diagram results.
         %   Syntax:
         %     res = obj.productiveDiagram 
         %   Output Arguments:
@@ -602,7 +597,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=summaryResults(obj)
-        %summaryResults - Return the summary-results object.
+        %summaryResults - Return the summary results object.
         %   Syntax:
         %     res = obj.summaryResults 
         %   Output Arguments:
@@ -628,7 +623,7 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         end
 
         function res=dataInfo(obj)
-        %dataInfo - Return the data-model result object.
+        %dataInfo - Return the data model object.
         %   Syntax:
         %     res = obj.dataInfo
         %   Output Arguments:
@@ -1278,9 +1273,11 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
         %   Syntax:
         %     obj.updateWasteTable
         %
-            wt=obj.DataModel.WasteData;
-            wv=obj.fp1.WasteAllocationRatios;
-            wt.updateValues(wv);
+            if obj.fp1.isWaste
+                wt=obj.DataModel.WasteData;
+                wv=obj.fp1.WasteAllocationRatios;
+                wt.updateValues(wv);
+            end
         end
 
         %%%
@@ -1620,7 +1617,9 @@ classdef (Sealed) cThermoeconomicModel < cResultSet
             if res.status
                 obj.setResults(res);
                 obj.printDebugInfo(cMessages.SetState,obj.State);
-                obj.updateWasteTable;
+                if obj.fp1.isWaste
+                    obj.updateWasteTable;
+                end
             end           
         end
 

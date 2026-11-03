@@ -23,13 +23,13 @@ classdef (Sealed) cExergyCost < cExergyModel
 %     WasteTable             - cWasteData object defining waste allocation rules
 %     TableR                 - Exergy-weighted waste allocation matrix (cSparseRow)
 %     RecycleRatio           - Fraction of waste exergy recycled back as product, per waste process
-%     WasteWeight            - Diagonal weights of the waste cost operator (opR), one per waste process
 %     WasteAllocationRatios  - Normalized waste allocation ratios (rows: wastes, columns: productive processes)
 %
 %   cExergyCost methods:
 %     cExergyCost                  - Create an instance of the class
 %     buildResultInfo              - Build the cResultInfo object for THERMOECONOMIC_ANALYSIS
 %     getSpectralRatio             - Get the spectral ratio of the productive structure matrix
+%     getWasteWeight               - Get the spectral ratio of the waste penalization matrix
 %     getProcessCost               - Get absolute cost of processes (direct or generalized)
 %     getProcessUnitCost           - Get unit cost of processes (direct or generalized)
 %     getFlowsCost                 - Get absolute and unit cost of flows (direct or generalized)
@@ -49,7 +49,6 @@ classdef (Sealed) cExergyCost < cExergyModel
         Resources              % (double) Row vector [1xN] of external resource exergy consumed by each process
         SystemUnitCost         % (double) Scalar plant-level unit exergy cost: sum(Resources)/sum(FinalDemand)
         RecirculationFactor    % (double) Row vector [1xN] of internal recirculation factors (diagonal of opCP)
-        WasteWeight            % (double) Row vector [1xNR] of diagonal weights of the waste cost operator, one per waste process
         fpOperators            % (struct) FP-framework cost operators: mFP, mRP, opCP, and (if waste) opR
         pfOperators            % (struct) PF-framework cost operators: mPF, mKP, opP, opI, and (if waste) mKR, opR
         flowOperators          % (struct) Flow-level operators: mG (recirculation), opB (Leontief inverse), and (if waste) opR
@@ -59,8 +58,6 @@ classdef (Sealed) cExergyCost < cExergyModel
         RecycleRatio           % (double) Row vector [1xNR] of recycle fractions for each waste process
         WasteAllocationRatios  % (double) Matrix [NR x N] of normalized waste allocation ratios
     end
-    
-
     
 	methods
 		function obj=cExergyCost(exd,wd)
@@ -93,7 +90,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             % opB: Leontief inverse (eye - mG)^{-1}; maps final demands to total flow exergy
 			fpm=obj.FlowProcessModel;
             mG=fpm.mF(:,1:N)*fpm.mP(1:N,:)+fpm.mV;
-            opB=eye(M)/(eye(M)-mG);
+            opB=zerotol(eye(M)/(eye(M)-mG));
             obj.flowOperators=struct('mG',mG,'opB',zerotol(opB));
             % --- PF-framework operators ---
             % mPF: product-to-fuel unit flow ratios (normalized TableFP columns by fuel exergy)
@@ -103,7 +100,7 @@ classdef (Sealed) cExergyCost < cExergyModel
             tfp=obj.TableFP;        
             mPF=divideCol(tfp(:,1:N),obj.FuelExergy);
             mKP=scaleCol(mPF,vK);
-            opP=eye(N)/(eye(N)-mKP(1:N,:));
+            opP=zerotol(eye(N)/(eye(N)-mKP(1:N,:)));
             opI=scaleRow(opP,vk1);
             obj.pfOperators=struct('mPF',mPF,'mKP',mKP,'opP',opP,'opI',opI);
             % --- FP-framework operators ---
@@ -181,22 +178,14 @@ classdef (Sealed) cExergyCost < cExergyModel
                 res=diag(obj.fpOperators.opCP)';
             end
         end
-    
-        function res=get.WasteWeight(obj)
-        % Returns the self-loop diagonal weights of the waste cost operator opR
-        % (one scalar per waste process). A weight > 1 indicates amplification
-        % of costs due to mutual waste allocation between processes.
-            res=cType.EMPTY;
-            if obj.isWaste
-                opR=obj.fpOperators.opR;
-                res=diag(opR.mValues(:,opR.mRows))';
-            end
-        end
 
         function res=get.WasteAllocationRatios(obj)
         % Returns the normalized waste allocation matrix mRP.mValues [NR x N].
         % Entry (i,j) gives the fraction of waste process i's cost assigned to process j.
-            res=obj.fpOperators.mRP.mValues;
+            res=cType.EMPTY;
+            if obj.status && obj.isWaste
+                res=obj.fpOperators.mRP.mValues;
+            end
         end
     
         function res=buildResultInfo(obj,fmt,options)
@@ -216,8 +205,8 @@ classdef (Sealed) cExergyCost < cExergyModel
             res=fmt.getCostResults(obj,options);
         end
 
-        function res=getSpectralRatio(obj)
-        %getSpectralRatio - Get the spectral ratio of the productive structure matrix.
+        function res=getSpectralRadius(obj)
+        %getSpectralRatio - Get the spectral radius of the productive structure matrix.
         %   The spectral radius of mFP determines whether the cost equations have a
         %   unique solution. A value < 1 guarantees convergence of the cost series.
         %
@@ -227,7 +216,30 @@ classdef (Sealed) cExergyCost < cExergyModel
         %     res - (double) Spectral radius (absolute value of dominant eigenvalue of mFP)
         %
             N=obj.NrOfProcesses;
-            res=abs(eigs(obj.mFP(:,1:N),1));
+            res=spectralRadius(obj.fpOperators.mFP(:,1:N));
+        end
+
+        function res=getWasteWeight(obj)
+        %getWasteWeight - Get the waste penalization weight of the productive structure.
+        %   Evaluates the effective waste feedback matrix
+        %       mS = mRP.mValues * opCP(:, mRP.mRows)
+        %   to quantify the amplification of waste costs through the cost propagation
+        %   operator and the waste allocation matrix. This index is used to assess the
+        %   stability and intensity of the waste recycling loop.
+        %
+        %   Syntax:
+        %     res = obj.getWasteWeight
+        %   Output Arguments:
+        %     res - (double) Waste weight. If there is only one waste process, the
+        %           scalar value of mS is returned; otherwise, the spectral radius of
+        %           mS is returned.
+        %
+            res=0;
+            if obj.NrOfWastes<1,return;end         
+            mRP=obj.fpOperators.mRP;
+            opL=obj.fpOperators.opCP;
+            mS=mRP.mValues*opL(:,mRP.mRows);
+            res=spectralRadius(mS);
         end
    
         function res=getProcessCost(obj,rsc)

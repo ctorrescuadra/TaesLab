@@ -1,7 +1,5 @@
 # TaesLab Class Dependencies Analysis
 
-*Analysis Date: November 2, 2025*
-
 ## Executive Summary
 
 This document provides a comprehensive analysis of the class dependencies and architectural patterns in the TaesLab MATLAB toolbox for thermoeconomic analysis. The analysis reveals a sophisticated three-layer architecture with well-defined separation of concerns and a unique dual-role pattern for data management.
@@ -10,7 +8,7 @@ This document provides a comprehensive analysis of the class dependencies and ar
 
 TaesLab follows a **layered architecture** with clear separation of concerns:
 
-```
+```text
 Input Files → Data Layer → Computation Layer → Results Layer → Presentation Layer
      ↓            ↓            ↓               ↓              ↓
   Base/*.m  → cDataModel → cResultId* → cResultInfo → Show/Save.m
@@ -30,7 +28,7 @@ Input Files → Data Layer → Computation Layer → Results Layer → Presentat
 
 ### 2.1 Base Class Foundation
 
-```
+```text
 cTaesLab (handle)
 ├── cMessageLogger
 │   ├── cDataModel → cResultSet
@@ -53,16 +51,19 @@ cTaesLab (handle)
 ### 2.2 Key Inheritance Patterns
 
 **All classes inherit from `cTaesLab`** which provides:
+
 - Unique object IDs via `sequence` auto-increment
 - Status management (`status` property)
 - Basic message printing methods (`printError`, `printWarning`, `printInfo`)
 
 **Most classes inherit from `cMessageLogger`** which adds:
+
 - Message queue management (`cQueue`)
 - Detailed error logging and reporting
 - Logger concatenation capabilities
 
 **Result classes inherit from `cResultSet`** which provides:
+
 - Unified presentation interface
 - Consistent table access patterns
 - Standard export/save functionality
@@ -141,13 +142,15 @@ cDataModel < cResultSet < cResultId < cMessageLogger < cTaesLab
 
 This creates two distinct roles:
 
-**Data Warehouse Role**: Primary responsibility as central data hub
+**Data Warehouse Role**: Primary responsibility as central data hub:
+
 - `getExergyData(state)` - Serve thermodynamic data
 - `getResourceData(sample)` - Serve cost data  
 - `ProductiveStructure` - Serve system structure
 - Data validation and state management
 
 **Result Presentation Role**: Secondary capability through `cResultSet` inheritance
+
 - `showResults()` - Display data model tables
 - `exportResults()` - Export to various formats
 - `getTable(name)` - Access data tables
@@ -156,6 +159,7 @@ This creates two distinct roles:
 ### 4.2 Architectural Benefits
 
 **Unified Interface**: Same method patterns work across all result types:
+
 ```matlab
 ShowResults(dataModel);     % Works via cResultSet inheritance
 ShowResults(exergyResults); # Works via cResultInfo→cResultSet
@@ -172,17 +176,20 @@ ShowResults(exergyResults); # Works via cResultInfo→cResultSet
 ### 5.1 Three-Layer Result Architecture
 
 **Computation Layer** (`cResultId` derivatives):
+
 - `cExergyModel` - Flow-process exergy analysis
 - `cExergyCost` - Direct and generalized cost calculations
 - `cDiagnosis` - Comparative state analysis
 - `cSummaryResults` - Multi-state comparison tables
 
 **Organization Layer** (`cResultInfo`):
+
 - Contains multiple `cTable` objects
 - Provides unified table access interface
 - Manages table indexing and metadata
 
 **Presentation Layer** (`cResultSet`):
+
 - Abstract interface for all result containers
 - Standardized display and export methods
 - Consistent API across result types
@@ -198,18 +205,23 @@ Three specialized table types handle different presentation needs:
 ## 6. Key Design Patterns
 
 ### 6.1 Factory Pattern
+
 `readModel()` automatically detects file format and creates appropriate `cReadModel` implementation.
 
 ### 6.2 Template Method Pattern
+
 All analysis functions in `Base/` follow consistent execution patterns.
 
 ### 6.3 Observer Pattern
+
 Message logging system allows error accumulation and centralized reporting.
 
 ### 6.4 Strategy Pattern
+
 Multiple file format readers implement common `cReadModel` interface.
 
 ### 6.5 Composite Pattern
+
 Result sets contain collections of tables with unified access methods.
 
 ## 7. Dependencies and Relationships
@@ -217,16 +229,19 @@ Result sets contain collections of tables with unified access methods.
 ### 7.1 Core Dependencies
 
 **cTaesLab** → Foundation for all classes
+
 - Unique ID management
 - Basic status tracking
 - Message creation infrastructure
 
 **cMessageLogger** → Error handling layer
+
 - Message queue management
 - Error propagation and display
 - Status validation
 
 **cType/cMessages** → System constants
+
 - Error codes and message templates
 - File type definitions
 - Table and result identifiers
@@ -234,17 +249,20 @@ Result sets contain collections of tables with unified access methods.
 ### 7.2 Data Flow Dependencies
 
 **File Reading**:
-```
+
+```text
 Input Files → cReadModel → cModelData → cDataModel
 ```
 
 **Analysis Workflow**:
-```
+
+```text
 cDataModel → cExergyModel/cExergyCost → cResultInfo → Display/Export
 ```
 
 **Error Propagation**:
-```
+
+```text
 Object Classes → cMessageLogger → Base Functions → User Console
 ```
 
@@ -253,6 +271,7 @@ Object Classes → cMessageLogger → Base Functions → User Console
 ### 8.1 Object Validation Patterns
 
 Every operation uses standardized validation:
+
 ```matlab
 if ~isValid(obj) || ~isObject(obj, 'cExpectedClass')
     % Log error and return
@@ -270,6 +289,7 @@ end
 ### 8.3 Platform Compatibility
 
 MATLAB/Octave compatibility ensured through:
+
 - `isMatlab()` and `isOctave()` detection functions
 - Platform-specific implementations for advanced features
 - Fallback methods for Octave limitations
@@ -279,8 +299,9 @@ MATLAB/Octave compatibility ensured through:
 ### 9.1 Inheritance Cleanup
 
 Several classes currently inherit from `cMessageLogger` that could potentially inherit directly from `cTaesLab`:
+
 - `cDigraphAnalysis`
-- `cModelResults` 
+- `cModelResults`
 - Various `cGraph*` classes
 
 **Investigation needed**: Determine if these classes require message logging capabilities or could use simpler inheritance.
@@ -288,6 +309,7 @@ Several classes currently inherit from `cMessageLogger` that could potentially i
 ### 9.2 Error Handling Improvements
 
 The current system is robust but could benefit from:
+
 - Structured error codes for programmatic handling
 - Error severity levels beyond current three-tier system
 - Optional error callback mechanisms for GUI applications
@@ -295,6 +317,7 @@ The current system is robust but could benefit from:
 ### 9.3 Documentation Standards
 
 Maintain consistent documentation patterns:
+
 - All classes should document their inheritance chain
 - Method signatures should specify parameter validation
 - Examples should demonstrate error handling patterns

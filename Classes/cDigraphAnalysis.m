@@ -39,6 +39,7 @@ classdef cDigraphAnalysis < cTaesLab
 %      TopologicalOrder   - Topological order array (excluding source and sink)
 %      Groups             - Group assignment for each internal node
 %      GroupSize          - Size (node count) of each strongly connected component
+%      GroupWeight        - Relative mass/weight of each group
 %      GraphTable         - Ordered FP table
 %      GraphNodes         - Ordered graph node labels
 %      KernelTable        - Kernel graph adjacency matrix in FP table format
@@ -62,6 +63,7 @@ classdef cDigraphAnalysis < cTaesLab
 		groups      % Indicate the group the node belong
         order       % Order of the nodes
         nrg         % Size of each group
+        wgrp        % Group weight
         scmap       % Strong components map 
 	end
 
@@ -71,6 +73,7 @@ classdef cDigraphAnalysis < cTaesLab
         TopologicalOrder  % Topological Order array
         Groups            % Groups index array
         GroupSize         % Size of each group
+        GroupWeight       % Relative mass/weight of the group
         GraphTable        % Topological order of the graph adjacency Matrix
         GraphNodes        % Graph Nodes ordered
         KernelTable       % Kernel Table
@@ -133,7 +136,10 @@ classdef cDigraphAnalysis < cTaesLab
         %     res - A numeric array representing the topological order of
         %           the processes. Not includes source and sink nodes.
         %
-            res=obj.order(2:end-1)-1;
+            res=cType.EMPTY;
+            if obj.status
+                res=obj.order(2:end-1)-1;
+            end
         end
 
         function res=get.Groups(obj)
@@ -145,7 +151,10 @@ classdef cDigraphAnalysis < cTaesLab
         %     res - A numeric array representing the group assignment of
         %           each process. Not includes source and sink nodes.
         %
-            res=obj.groups(obj.order(2:end-1))-1;
+            res=cType.EMPTY;
+            if obj.status
+                res=obj.groups(obj.order(2:end-1))-1;
+            end
         end
 
         function res=get.GroupSize(obj)
@@ -157,7 +166,17 @@ classdef cDigraphAnalysis < cTaesLab
         %     res - A numeric array representing the size of each group
         %           (number of nodes per group). Not includes source and sink nodes.
         %
-            res=full(obj.nrg(2:end-1))';
+            res=cType.EMPTY;
+            if obj.status
+                res=full(obj.nrg(2:end-1))';
+            end
+        end
+
+        function res=get.GroupWeight(obj)
+            res=cType.EMPTY;
+            if obj.status
+                res=obj.wgrp(2:end-1);
+            end
         end
 
         function res = isDAG(obj)
@@ -208,8 +227,9 @@ classdef cDigraphAnalysis < cTaesLab
         %           'Group' - The name of the kernel group it belongs to.
         %
             tmp=obj.groups(obj.order);
+            nodes=obj.gNodes(obj.order);
             group=obj.kNodes(tmp);
-            res=struct('Name',obj.gNodes(2:end-1),'Group',group(2:end-1));
+            res=struct('Name',nodes(2:end-1),'Group',group(2:end-1));
         end
 
         function res=getGroupIndex(obj)
@@ -370,24 +390,24 @@ classdef cDigraphAnalysis < cTaesLab
             if obj.isDAG %Order and copy the adjacency matrix
                 obj.kG=obj.mG(idx,idx);
                 obj.kNodes=obj.gNodes(obj.order);
+                obj.GroupWeight=zeros(NG,1);
                 obj.nrg=ones(1,obj.NrOfNodes);
             else
                 % Build Kernel Matrix
-                mscc=sparse(obj.groups,1:N,true(N,1),NG,N);
-                obj.kG=mscc*obj.mG*mscc';
-                obj.kG(1:NG+1:end)=0; % Set diagonal to 0 
+                mscc = sparse(obj.groups,1:N,true(N,1),NG,N);
+                obj.kG = mscc*obj.mG*mscc';
+                obj.wgrp = diag(obj.kG) ./ sum(obj.kG,2);
+                obj.kG(1:NG+1:end) = 0; % Set diagonal to 0 
                 obj.nrg = sum(mscc,2);      
                 % Build Kernel Nodes
-                [~,jdx]=unique(obj.groups);
+                [~,jdx] = unique(obj.groups);
                 obj.kNodes = obj.gNodes(jdx);  
-                tmp = find(obj.nrg>1);
-                for i=1:length(tmp)
-                    obj.kNodes{tmp(i)}=['SC',num2str(i)];
-                end
+                tmp = (obj.nrg>1);
+                obj.kNodes(tmp) = strcat(obj.kNodes(tmp),'#');
             end
-            obj.scmap=mscc;
-            obj.KernelTable=cDigraphAnalysis.ssr2tfp(obj.kG);
-            obj.KernelNodes=[obj.kNodes(2:end-1),'ENV'];
+            obj.scmap = mscc;
+            obj.KernelTable = cDigraphAnalysis.ssr2tfp(obj.kG);
+            obj.KernelNodes = [obj.kNodes(2:end-1),'ENV'];
         end
 
     end

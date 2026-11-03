@@ -10,18 +10,15 @@
 %   importCSV                 - Import CSV file contents as cell array.
 %   importJSON                - Import JSON file and parse into MATLAB structure.
 %   importMAT                 - Import cTaesLab object from MAT file.
-
-% Search and Graph Functions
-%   bfs                       - Breath-First Search traversal of a digraph.
-%   transitiveClosure         - Compute the transitive closure of a digraph.
-
+%
 % Matrix Operation Functions
+%   logicalMatrix             - Convert numeric matrix to logical with zero tolerance.
 %   divideCol                 - Divide each column of matrix A by corresponding element of vector x.
 %   divideRow                 - Divide each row of matrix A by corresponding element of vector x.
-%   logicalMatrix             - Convert numeric matrix to logical with zero tolerance.
 %   scaleCol                  - Multiply each column of matrix A by corresponding element of vector x.
 %   scaleRow                  - Multiply each row of matrix A by corresponding element of vector x.
 %   similarDemandMatrix       - Transform resource-driven matrix to demand-driven form.
+%   spectralRadius            - Compute the spectral radius of a non-negative matrix
 %   similarDemandOperator     - Convert resource-driven operator to demand-driven operator.
 %   similarResourceMatrix     - Compute resource-driven matrix from demand-driven matrix.
 %   similarResourceOperator   - Compute resource-driven operator from demand-driven operator.
@@ -31,12 +28,11 @@
 %
 % Validation Functions
 %   isFilename                - Validate if a filename is acceptable for read/write operations.
+%   isObject                  - Check if 'obj' is a valid cTaesLab object belong to a specific class.
+%   isValid                   - Check if 'obj' is a valid TaesLab object.
 %   isIndex                   - Check if an integer value is within a valid index range.
 %   isInteger                 - Check if the value is an integer number.
 %   isMatlab                  - Identifies if the function has been executed in MATLAB.
-%   isNonNegativeMatrix       - Check if the matrix is square and non-negative.
-%   isObject                  - Check if 'obj' is a valid cTaesLab object belong to a specific class.
 %   isOctave                  - Identifies if the function has been executed in Octave.
-%   isProductiveMatrix        - Check if a matrix represents a productive matrix.
 %   isSquareMatrix            - Check if input is a numeric or logical square matrix.
-%   isValid                   - Check if 'obj' is a valid TaesLab object.
+%   isNonNegativeMatrix       - Check if the matrix is square and non-negative.
